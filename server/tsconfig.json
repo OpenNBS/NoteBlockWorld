@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json", // Extend the config options from the root
+  "extends": "../tsconfig.json", // Extend the config options from the root
   "compilerOptions": {
     // The following options are not required as they've been moved to the root tsconfig
     // "baseUrl": "./",
