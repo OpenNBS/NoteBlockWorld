@@ -1,8 +1,13 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import { useState } from "react";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import DefaultLayout from "../components/common/DefaultLayout";
+import Sidebar from "../components/common/Sidebar";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,9 +19,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <DefaultLayout
+          isSidebarOpen={sidebarOpen}
+          setSidebarOpen={(open: boolean) => setSidebarOpen(open)}
+        >
+          {children}
+        </DefaultLayout>
+      </body>
     </html>
   )
 }
