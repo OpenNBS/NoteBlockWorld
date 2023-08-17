@@ -3,11 +3,14 @@
 import { useState } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lato } from "next/font/google";
 import DefaultLayout from "../components/common/DefaultLayout";
 import Sidebar from "../components/common/Sidebar";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Lato({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
