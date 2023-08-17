@@ -60,7 +60,7 @@ const DefaultLayout = ({
         {/* Side bar menu */}
         <div
           className={`w-64 h-full
-                    m-0 z-20 bg-zinc-950
+                    m-0 z-20 bg-zinc-900
                     shadow-xl shadow-black md:shadow-none md:border-r md:border-zinc-800 rounded
                     fixed ${isSidebarOpen ? "left-0" : "-left-64"}
                     transition-all duration-[250ms]`}
@@ -71,7 +71,7 @@ const DefaultLayout = ({
         </div>
 
         {/* Navbar */}
-        <div className="fixed w-full flex flex-row justify-between items-center bg-zinc-950 border-b border-zinc-800 p-2 z-10">
+        <div className="fixed w-full flex flex-row justify-between items-center bg-zinc-900 border-b border-zinc-800 p-2 z-10">
           {/* Burger button */}
           <div className="block">
             <button
@@ -97,7 +97,7 @@ const DefaultLayout = ({
         <div
           className={`h-full ${
             isSidebarOpen ? "md:ml-64" : "ml-0"
-          } bg-zinc-950 pt-24 px-6 sm:px-10 transition-all duration-[250ms]`}
+          } bg-zinc-900 pt-24 px-6 sm:px-10 transition-all duration-[250ms]`}
         >
           {children}
         </div>
