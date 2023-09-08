@@ -25,8 +25,8 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="h-full">
+      <body className={inter.className + " h-full"}>
         <DefaultLayout
           isSidebarOpen={sidebarOpen}
           setSidebarOpen={(open: boolean) => setSidebarOpen(open)}
