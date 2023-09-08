@@ -7,7 +7,7 @@ import { Lato } from "next/font/google";
 import DefaultLayout from "../components/common/DefaultLayout";
 import Sidebar from "../components/common/Sidebar";
 
-const inter = Lato({
+const lato = Lato({
   subsets: ["latin"],
   weight: ["100", "300", "400", "700", "900"],
 });
@@ -26,7 +26,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="h-full">
-      <body className={inter.className + " h-full"}>
+      <body className={lato.className + " h-full"}>
         <DefaultLayout
           isSidebarOpen={sidebarOpen}
           setSidebarOpen={(open: boolean) => setSidebarOpen(open)}
