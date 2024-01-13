@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    image: mongo
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=noteblockwordpassword
+      - MONGO_INITDB_DATABASE=noteblockword
+      - MONGO_INITDB_USERNAME=noteblockworduser
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      - DB_URL=mongodb://db:27017/noteblockword
+      - DB_PASSWORD=noteblockwordpassword
+      - DB_USER=noteblockworduser
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - SERVER_URL=http://server:3000
+volumes:
+  mongodb_data:
