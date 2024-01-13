@@ -4,12 +4,16 @@ import { AppService } from './app.service';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SongModule } from './song/song.module';
+import { CommentModule } from './comment/comment.module';
+import { PlaylistModule } from './playlist/playlist.module';
+import { UserModule } from './user/user.module';
+import { AchievementModule } from './achievement/achievement.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
-    //DatabaseModule,
     ConfigModule.forRoot(),
-
+    //DatabaseModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,8 +28,12 @@ import { SongModule } from './song/song.module';
         };
       },
     }),
-
     SongModule,
+    CommentModule,
+    PlaylistModule,
+    UserModule,
+    AchievementModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
