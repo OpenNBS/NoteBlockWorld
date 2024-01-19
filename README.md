@@ -23,12 +23,18 @@ pnpm install
 
 configure the env variables in bash
 ```bash
-export MONGO_URL="mongodb://localhost:27017/noteblockworld"
+export DB_HOST="localhost:27017"
+export DB_PASSWORD="noteblockwordpassword"
+export DB_USER="noteblockworduser"
+export SERVER_URL="http://localhost:3000"
 ```
 
 or in windows
 ```bash
-set MONGO_URL="mongodb://localhost:27017/noteblockworld"
+set DB_HOST="mongodb://localhost:27017/noteblockword"
+set DB_PASSWORD="noteblockwordpassword"
+set DB_USER="noteblockworduser"
+set SERVER_URL="http://localhost:3000"
 ```
 
 then run the server
