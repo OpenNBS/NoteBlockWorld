@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
@@ -20,7 +20,11 @@ import { NotificationModule } from './notification/notification.module';
       useFactory: (
         configService: ConfigService,
       ): MongooseModuleFactoryOptions => {
-        const uri = configService.get<string>('MONGODB_URL');
+        const url = configService.get<string>('DB_HOST');
+        const password = configService.get<string>('DB_PASSWORD');
+        const user = configService.get<string>('DB_USER');
+        const uri = `mongodb://${user}:${password}@${url}`;
+        Logger.debug(uri);
         return {
           uri: uri,
           retryAttempts: 10,
