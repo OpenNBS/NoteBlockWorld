@@ -10,6 +10,12 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SongService } from './song.service';
+import {
+  GetSongQueryDto,
+  SongDto,
+  PatchSongDto,
+  DeleteSongDto,
+} from './dto/index';
 
 @Controller('song')
 @ApiTags('song')
@@ -66,8 +72,3 @@ export class SongController {
     }
   }
 }
-
-class GetSongQueryDto {}
-class SongDto {}
-class PatchSongDto {}
-class DeleteSongDto {}
