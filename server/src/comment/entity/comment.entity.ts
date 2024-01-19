@@ -4,7 +4,7 @@ import { UserDocument } from '../../user/entity/user.entity';
 import { SongDocument } from '../../song/entity/song.entity';
 
 @Schema()
-class Comment {
+export class Comment {
   @Prop({ type: Date, required: true })
   creationDate: Date;
 
