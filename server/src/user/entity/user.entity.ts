@@ -1,15 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-
-@Schema()
-class User {
-  @Prop({ type: Date, required: true })
+import { Schema as MongooseSchema } from 'mongoose';
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
+})
+export class User {
+  @Prop({ type: MongooseSchema.Types.Date, required: true })
   creationDate: Date;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ type: MongooseSchema.Types.Date, required: true })
   lastEdited: Date;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ type: MongooseSchema.Types.Date, required: true })
   lastLogin: Date;
 
   @Prop({ type: Number, required: true })
@@ -53,7 +62,7 @@ class User {
     threads?: string;
     twitch?: string;
     x?: string;
-    youube?: string;
+    youtube?: string;
   };
 
   @Prop({ type: Boolean, required: true, default: true })
