@@ -9,6 +9,7 @@ import { PlaylistModule } from './playlist/playlist.module';
 import { UserModule } from './user/user.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { NotificationModule } from './notification/notification.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { NotificationModule } from './notification/notification.module';
     UserModule,
     AchievementModule,
     NotificationModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
