@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  db-mongo:
+  mongodb:
     image: mongo
     volumes:
       - mongodb_data:/data/db
@@ -17,10 +17,10 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=noteblockworduser
       - ME_CONFIG_MONGODB_ADMINPASSWORD=noteblockwordpassword
-      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_SERVER=mongodb
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
     depends_on:
-      - db-mongo
+      - mongodb
   server-backend:
     build:
       context: ./server
@@ -28,9 +28,9 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - db-mongo
+      - mongodb
     environment:
-      - DB_HOST=db:27017
+      - DB_HOST=mongodb:27017
       - DB_PASSWORD=noteblockwordpassword
       - DB_USER=noteblockworduser
   web-frontend:
@@ -41,5 +41,7 @@ services:
       - 8080:8080
     environment:
       - SERVER_URL=http://server:3000
+    depends_on:
+      - server-backend
 volumes:
   mongodb_data:

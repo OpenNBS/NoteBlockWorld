@@ -8,4 +8,4 @@ RUN npm install
 
 EXPOSE 8080
 
-CMD ["npm", "run", "web:dev"]
+CMD ["npm", "run", "dev"]
