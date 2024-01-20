@@ -13,7 +13,10 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.development', '.env.production'],
+    }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -24,8 +27,14 @@ import { AuthModule } from './auth/auth.module';
         const url = configService.get<string>('DB_HOST');
         const password = configService.get<string>('DB_PASSWORD');
         const user = configService.get<string>('DB_USER');
+        if (!url || !password || !user) {
+          Logger.error(
+            'Missing DB config, define DB_HOST, DB_PASSWORD, DB_USER',
+          );
+          throw new Error('Missing DB config');
+        }
         const uri = `mongodb://${user}:${password}@${url}`;
-        Logger.debug(uri);
+        Logger.debug(`Connecting to ${uri}`);
         return {
           uri: uri,
           retryAttempts: 10,
