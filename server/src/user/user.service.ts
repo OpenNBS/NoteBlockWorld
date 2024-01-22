@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User, UserDocument } from './entity/user.entity';
+import { CreateUser } from './dto/CreateUser.dto';
 
 @Injectable()
 export class UserService {
-  public create(user_registered: UserDocument) {
-    throw new Error('Method not implemented.');
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+
+  public async create(user_registered: CreateUser) {
+    const user = new this.userModel(user_registered);
+    user.username = user_registered.username;
+    user.email = user_registered.email;
+    return await user.save();
   }
-  public findByEmail(email: string): UserDocument {
-    throw new Error('Method not implemented.');
+
+  public async findByEmail(email: string): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ email }).exec();
+    return user;
   }
 }

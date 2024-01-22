@@ -12,40 +12,40 @@ import { Schema as MongooseSchema } from 'mongoose';
   },
 })
 export class User {
-  @Prop({ type: MongooseSchema.Types.Date, required: true })
+  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   creationDate: Date;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: true })
+  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   lastEdited: Date;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: true })
+  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   lastLogin: Date;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   loginStreak: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   loginCount: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
   @Prop({ type: String, required: true })
   username: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, default: '#' })
   publicName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, default: '#' })
   description: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, default: '#' })
   profileImage: string;
 
-  @Prop({ type: Map, of: String, required: false })
+  @Prop({ type: Map, of: String, required: false, default: {} })
   socialLinks: {
     bandcamp?: string;
     discord?: string;
