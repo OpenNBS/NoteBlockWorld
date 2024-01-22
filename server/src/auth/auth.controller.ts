@@ -1,6 +1,8 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Logger, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -8,17 +10,15 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
-  @Get('signIn')
-  @ApiResponse({
-    status: 200,
-    description: 'Returns an OAuth Login Url to be used by the user',
-  })
-  @ApiOperation({
-    description: 'Authorize a client to access user data',
-    summary: 'Authorize',
-    tags: ['OAuth Authorize'],
-  })
-  public async login(): Promise<any> {
-    return await this.authService.signIn();
+  @Get('login/auth0')
+  @UseGuards(AuthGuard('auth0'))
+  public auth0Login() {
+    this.logger.log('Auth0 login');
+  }
+
+  @Get('auth0/callback')
+  @UseGuards(AuthGuard('auth0'))
+  public auth0Redirect(@Req() req: Request, @Res() res: Response) {
+    return this.authService.auth0Login(req, res);
   }
 }

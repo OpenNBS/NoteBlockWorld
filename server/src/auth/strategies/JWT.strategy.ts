@@ -1,37 +1,31 @@
-import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-
+import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  private static logger = new Logger(JwtStrategy.name);
-  constructor(
-    @Inject(ConfigService)
-    configService: ConfigService,
-  ) {
-    const JWT_SECRET = configService.get<string>('JWT_SECRET');
-    const JWT_EXPIRATION_TIME = configService.get<string>(
-      'JWT_EXPIRATION_TIME',
-    );
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+  constructor(@Inject(ConfigService) config: ConfigService) {
+    const JWT_SECRET = config.get('JWT_SECRET');
     if (!JWT_SECRET) {
-      JwtStrategy.logger.error('Missing JWT_SECRET, cannot sign tokens');
-      throw new Error('Missing JWT_SECRET');
-    }
-    if (!JWT_EXPIRATION_TIME) {
-      JwtStrategy.logger.warn(
-        'Missing JWT_EXPIRATION_TIME, using default of 1d',
-      );
+      Logger.error('JWT_SECRET is not set');
+      throw new Error('JWT_SECRET is not set');
     }
     super({
-      secretOrKey: JWT_SECRET,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      algorithms: ['HS256'],
+      secretOrKey: JWT_SECRET,
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any) {
-    return { accessToken, refreshToken, profile };
+  validate(req: Request, payload: any) {
+    const refreshToken = req.headers.authorization
+      ?.replace('Bearer', '')
+      .trim();
+
+    return {
+      ...payload,
+      refreshToken,
+    };
   }
 }

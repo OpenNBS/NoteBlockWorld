@@ -12,9 +12,10 @@ export class Auth0Strategy extends PassportStrategy(strategy, 'auth0') {
   ) {
     const ZERO_CLIENT_ID = configService.get<string>('ZERO_CLIENT_ID');
     const ZERO_CLIENT_SECRET = configService.get<string>('ZERO_CLIENT_SECRET');
-    if (!ZERO_CLIENT_ID || !ZERO_CLIENT_SECRET) {
+    const ZERO_DOMAIN = configService.get<string>('ZERO_DOMAIN');
+    if (!ZERO_CLIENT_ID || !ZERO_CLIENT_SECRET || !ZERO_DOMAIN) {
       Auth0Strategy.logger.error(
-        'Missing Auth0 config, define ZERO_CLIENT_ID, ZERO_CLIENT_SECRET',
+        'Missing Auth0 config, define ZERO_CLIENT_ID, ZERO_CLIENT_SECRE, ZERO_DOMAIN',
       );
       throw new Error('Missing Auth0 config');
     }
@@ -22,9 +23,10 @@ export class Auth0Strategy extends PassportStrategy(strategy, 'auth0') {
     super({
       clientID: ZERO_CLIENT_ID,
       clientSecret: ZERO_CLIENT_SECRET,
-      domain: 'dev-2q3x3q3z.us.auth0.com',
-      callbackURL: 'http://localhost:3000/auth/callback',
+      domain: ZERO_DOMAIN,
+      callbackURL: 'http://localhost:4000/api/v1/auth/auth0/callback',
       scope: 'user:read',
+      state: false,
     });
   }
 
