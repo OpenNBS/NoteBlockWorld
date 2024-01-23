@@ -54,7 +54,7 @@ function tintImage(image: HTMLImageElement, color: string): HTMLCanvasElement {
 
   ctx.drawImage(image, 0, 0);
 
-  ctx.globalCompositeOperation = "source-atop";
+  ctx.globalCompositeOperation = "color";
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -116,11 +116,13 @@ export default async function drawNotes(
     throw new Error("Could not get canvas context");
   }
 
-  // Set canvas size
-  //canvas.width = 1280;
-  //canvas.height = 720;
-
+  // Set canvas dimensions
   canvas.height = canvas.width / (16 / 9);
+
+  // Calculate effective zoom level
+  const scale = canvas.width / 1280;
+  const zoomFactor = 2 ** (zoomLevel - 1);
+  const effectiveZoomLevel = zoomFactor * scale;
 
   // Draw background
   ctx.fillStyle = "#fcfcfc";
@@ -128,7 +130,7 @@ export default async function drawNotes(
 
   // Draw darker vertical lines
   ctx.fillStyle = "#cccccc";
-  for (let i = 0; i < canvas.width; i += 8 * zoomLevel) {
+  for (let i = 0; i < canvas.width; i += 8 * effectiveZoomLevel) {
     ctx.fillRect(i, 0, 1, canvas.height);
   }
 
@@ -144,35 +146,36 @@ export default async function drawNotes(
         note,
         startTick,
         startLayer,
-        startTick + canvas.width / (zoomLevel * 8),
-        startLayer + canvas.height / (zoomLevel * 8)
+        startTick + canvas.width / (effectiveZoomLevel * 8),
+        startLayer + canvas.height / (effectiveZoomLevel * 8)
       )
     )
     .forEach((note) => {
       // Calculate position
-      const x = (note.tick - startTick) * 8 * zoomLevel;
-      const y = (note.layer - startLayer) * 8 * zoomLevel;
+      const x = (note.tick - startTick) * 8 * effectiveZoomLevel;
+      const y = (note.layer - startLayer) * 8 * effectiveZoomLevel;
       const overlayColor = instrumentColors[note.instrument % 16];
-
-      // Apply instrument tint
-      ctx.globalAlpha = 0.5;
 
       // Draw the note block
       ctx.drawImage(
         tintImage(noteBlockImage, overlayColor),
         x,
         y,
-        8 * zoomLevel,
-        8 * zoomLevel
+        8 * effectiveZoomLevel,
+        8 * effectiveZoomLevel
       );
-      ctx.globalAlpha = 1.0;
 
       // Draw the key text
       const keyText = getKeyText(note.key);
       ctx.fillStyle = "#ffffff";
-      ctx.font = `${3 * zoomLevel}px Tahoma`;
+      ctx.font = `${3 * effectiveZoomLevel}px Tahoma`;
       ctx.textAlign = "center";
-      ctx.fillText(keyText, x + 4 * zoomLevel, y + 4 * zoomLevel);
+      ctx.textBaseline = "middle";
+      ctx.fillText(
+        keyText,
+        x + 4 * effectiveZoomLevel,
+        y + 4 * effectiveZoomLevel
+      );
     });
 
   // Save the canvas as an image
