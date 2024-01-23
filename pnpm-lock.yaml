@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@encode42/nbs.js':
+        specifier: ^4.0.1
+        version: 4.0.1
     devDependencies:
       prettier:
         specifier: ^2.8.8
@@ -1623,6 +1627,10 @@ packages:
 
   /@emotion/unitless@0.8.1:
     resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
+    dev: false
+
+  /@encode42/nbs.js@4.0.1:
+    resolution: {integrity: sha512-APLA9VNdqY7+CPrCYq53n8DKNSzf2vyGYeJyj1AVWN22mjTr3uCnggXibtoPy+WcWndzuW5dhpKZ1TGoOpFqSg==}
     dev: false
 
   /@eslint-community/eslint-utils@4.4.0(eslint@8.46.0):
