@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import DefaultLayout from "../components/common/DefaultLayout";
 import Sidebar from "../components/common/Sidebar";
+import { AuthContextProvider } from "../context/login";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -22,17 +23,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
     <html lang="en" className="h-full">
       <body className={lato.className + " h-full"}>
-        <DefaultLayout
-          isSidebarOpen={sidebarOpen}
-          setSidebarOpen={(open: boolean) => setSidebarOpen(open)}
-        >
-          {children}
-        </DefaultLayout>
+        <AuthContextProvider>{children}</AuthContextProvider>
       </body>
     </html>
   );
