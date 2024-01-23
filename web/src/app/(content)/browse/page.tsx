@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import styled from "styled-components";
-import { TimespanButton } from "../components/common/TimespanButton";
-import SongCard from "../components/common/SongCard";
+import { TimespanButton } from "@web/src/components/common/TimespanButton";
+import SongCard from "@web/src/components/common/SongCard";
 
 const TimespanButtonGroup = () => {
   return (

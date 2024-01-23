@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import "./globals.css";
+import "@web/src/app/globals.css";
 import DefaultLayout from "../../components/common/DefaultLayout";
 import Sidebar from "../../components/common/Sidebar";
 
