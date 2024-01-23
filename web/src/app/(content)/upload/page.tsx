@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ThumbnailRenderer from "@web/src/components/common/ThumbnailRenderer";
 import { useState } from "react";
 import { styled } from "styled-components";
+import { Song, fromArrayBuffer } from "@encode42/nbs.js";
 
 const Input = styled.input.attrs({
   className:
@@ -60,7 +61,7 @@ const SongSelector = ({
   );
 };
 
-const UploadForm = () => {
+const UploadForm = ({ song }: { song: Song }) => {
   return (
     <form
       action="http://localhost:5000/upload"
@@ -71,7 +72,13 @@ const UploadForm = () => {
         {/* Title */}
         <div>
           <label htmlFor="name">Title*</label>
-          <Input type="text" name="title" id="title" className="" />
+          <Input
+            type="text"
+            name="title"
+            id="title"
+            value={song.meta.name}
+            className=""
+          />
         </div>
 
         {/* Description */}
@@ -81,6 +88,7 @@ const UploadForm = () => {
             name="description"
             id="description"
             className="block h-48 w-full rounded-lg bg-transparent border-2 border-zinc-500 p-2"
+            value={song.meta.description}
           />
         </div>
 
@@ -106,7 +114,13 @@ const UploadForm = () => {
           </div>
           <div className="flex-1">
             <label htmlFor="album">Original author </label>
-            <Input type="text" name="album" id="album" className="block" />
+            <Input
+              type="text"
+              name="album"
+              id="album"
+              value={song.meta.originalAuthor}
+              className="block"
+            />
             <p className="text-sm text-zinc-500">
               (Leave blank if it's an original song)
             </p>
@@ -146,11 +160,19 @@ const UploadForm = () => {
           <p>Thumbnail</p>
           <div className="flex flex-col items-center gap-6 h-80 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4">
             <ThumbnailRenderer
-              notes={[
-                { tick: 0, layer: 0, instrument: 0, key: 45 },
-                { tick: 2, layer: 2, instrument: 2, key: 47 },
-                { tick: 4, layer: 4, instrument: 4, key: 49 },
-              ]}
+              notes={song.layers
+                .map((layer) =>
+                  layer.notes.map((note, tick) => {
+                    const data = {
+                      tick: tick,
+                      layer: layer.id,
+                      key: note.key,
+                      instrument: note.instrument,
+                    };
+                    return data;
+                  })
+                )
+                .flat()}
             ></ThumbnailRenderer>
           </div>
         </div>
@@ -203,30 +225,28 @@ const UploadForm = () => {
 };
 
 const UploadPage = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [song, setSong] = useState<Song | null>(null);
 
-  const onUpload = async () => {
-    if (!file) {
+  const handleFileSelect = async (file: File) => {
+    const song = fromArrayBuffer(await file.arrayBuffer());
+
+    if (song.length <= 0) {
+      alert("Invalid song. Please try uploading a different file!");
       return;
     }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await fetch("http://localhost:4000/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-    console.log(data);
+    console.log(song);
+    setSong(song);
   };
 
   return (
     <main className="p-8 h-full w-full flex flex-col">
       <h1 className="text-3xl font-semibold">Upload song</h1>
       <div className="h-10" />
-      {!file ? <SongSelector onFileSelect={setFile} /> : <UploadForm />}
+      {!song ? (
+        <SongSelector onFileSelect={handleFileSelect} />
+      ) : (
+        <UploadForm song={song} />
+      )}
     </main>
   );
 };
