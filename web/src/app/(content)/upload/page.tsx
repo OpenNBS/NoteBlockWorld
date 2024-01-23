@@ -158,7 +158,7 @@ const UploadForm = ({ song }: { song: Song }) => {
         {/* Thumbnail */}
         <div>
           <p>Thumbnail</p>
-          <div className="flex flex-col items-center gap-6 h-80 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4">
+          <div className="flex flex-col items-center gap-6 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4">
             <ThumbnailRenderer
               notes={song.layers
                 .map((layer) =>

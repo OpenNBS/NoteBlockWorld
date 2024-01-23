@@ -6,6 +6,20 @@ interface ThumbnailRendererProps {
   notes: Note[];
 }
 
+const bgColors = [
+  "#77172e",
+  "#692b17",
+  "#7C4A03",
+  "#264D3B",
+  "#0C625D",
+  "#256377",
+  "#284255",
+  "#472E5B",
+  "#6C394F",
+  "#4B443A",
+  "#232427",
+];
+
 const ThumbnailRenderer = ({ notes }: ThumbnailRendererProps) => {
   const [zoomLevel, setZoomLevel] = useState(3);
   const [startTick, setStartTick] = useState(0);
@@ -42,45 +56,73 @@ const ThumbnailRenderer = ({ notes }: ThumbnailRendererProps) => {
   };
 
   return (
-    <div>
-      <label>
-        Zoom Level:
-        <input
-          type="range"
-          min="1"
-          max="5"
-          value={zoomLevel}
-          onChange={handleZoomChange}
-        />
-        {zoomLevel}
-      </label>
-      <br />
-      <label>
-        Start Tick:
-        <input
-          type="range"
-          min="0"
-          max={maxTick}
-          value={startTick}
-          onChange={handleStartTickChange}
-        />
-        {startTick}
-      </label>
-      <br />
-      <label>
-        Start Layer:
-        <input
-          type="range"
-          min="0"
-          max={maxLayer}
-          value={startLayer}
-          onChange={handleStartLayerChange}
-        />
-        {startLayer}
-      </label>
-      <br />
-      {<canvas ref={canvasRef} className={"w-full"}></canvas>}
-    </div>
+    <>
+      <div className="w-full grid grid-cols-[max-content_auto_7%] gap-y-2 gap-x-3 items-center align-middle">
+        <div>
+          <label>Zoom Level</label>
+        </div>
+        <div>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={zoomLevel}
+            onChange={handleZoomChange}
+            className="w-full"
+          />
+        </div>
+        <div>{zoomLevel}</div>
+
+        <div>
+          <label>Start Tick</label>
+        </div>
+        <div className="w-full">
+          <input
+            type="range"
+            min="0"
+            max={maxTick}
+            value={startTick}
+            onChange={handleStartTickChange}
+            className="w-full"
+          />
+        </div>
+        <div>{startTick}</div>
+
+        <div>
+          <label>Start Layer</label>
+        </div>
+        <div className="w-full">
+          <input
+            type="range"
+            min="0"
+            max={maxLayer}
+            value={startLayer}
+            onChange={handleStartLayerChange}
+            className="w-full"
+          />
+        </div>
+        <div>{startLayer}</div>
+      </div>
+
+      {/* Background Color */}
+      <div className="w-full flex flex-col gap-2">
+        <label>Background Color</label>
+        <div className="w-full flex flex-row flex-wrap gap-1.5 justify-center">
+          {bgColors.map((color, index) => (
+            <button
+              type="button"
+              key={index}
+              className={`w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30`}
+              style={{ backgroundColor: color }}
+              onClick={(e) => console.log(color)}
+            ></button>
+          ))}
+        </div>
+      </div>
+
+      {/* Canvas */}
+      <canvas ref={canvasRef} className={"w-full rounded-lg"}></canvas>
+    </>
   );
 };
 
