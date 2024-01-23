@@ -31,7 +31,14 @@ const SongSelector = ({
       className="flex flex-col items-center gap-6 h-fit w-[50vw] border-dashed border-4 border-zinc-700 p-8 mb-4"
       onDragOver={(e) => e.preventDefault()}
     >
-      <FontAwesomeIcon icon={faFileAudio} size="5x" className="text-zinc-600" />
+      <i>
+        <FontAwesomeIcon
+          icon={faFileAudio}
+          size="5x"
+          className="text-zinc-600"
+        />
+      </i>
+
       <div className="text-center">
         <p className="font-semibold text-xl">Drag and drop your song</p>
         <p className="text-zinc-400">or select a file below</p>
