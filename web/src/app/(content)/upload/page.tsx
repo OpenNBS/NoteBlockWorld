@@ -2,6 +2,7 @@
 
 import { faFileAudio, faFileWaveform } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ThumbnailRenderer from "@web/src/components/common/ThumbnailRenderer";
 import { useState } from "react";
 import { styled } from "styled-components";
 
@@ -143,7 +144,15 @@ const UploadForm = () => {
         {/* Thumbnail */}
         <div>
           <p>Thumbnail</p>
-          <div className="flex flex-col items-center gap-6 h-80 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4"></div>
+          <div className="flex flex-col items-center gap-6 h-80 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4">
+            <ThumbnailRenderer
+              notes={[
+                { tick: 0, layer: 0, instrument: 0, key: 45 },
+                { tick: 2, layer: 2, instrument: 2, key: 47 },
+                { tick: 4, layer: 4, instrument: 4, key: 49 },
+              ]}
+            ></ThumbnailRenderer>
+          </div>
         </div>
 
         {/* Visibility */}
