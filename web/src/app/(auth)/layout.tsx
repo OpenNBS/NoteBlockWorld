@@ -1,4 +1,4 @@
-import "./../globals.css";
+import './../globals.css';
 
 export default function LoginLayout({
   children,
@@ -6,8 +6,8 @@ export default function LoginLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className={"h-full"}>{children}</body>
+    <html lang='en' className='h-full'>
+      <body className={'h-full'}>{children}</body>
     </html>
   );
 }
