@@ -1,11 +1,15 @@
 {
   "tabWidth": 2,
-  "singleQuote": false,
-  "jsxSingleQuote": false,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
   "cssEnable": [
     "css",
     "less",
     "sass",
     "scss"
+  ],
+  "jsonEnable": [
+    "json",
+    "jsonc"
   ]
 }
