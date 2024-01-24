@@ -1,8 +1,8 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
-import axios from "../axios";
-type AuthProvider = "google" | "github";
+import React, { createContext, useEffect, useRef, useState } from 'react';
+import axios, { baseApiURL } from '../axios';
+type AuthProvider = 'google' | 'github';
 type AuthContextData = {
-  login: (provider: AuthProvider) => never | String;
+  login: (provider: AuthProvider) => never | string;
   logout: () => never | void;
   getToken: () => never | string;
 };
@@ -16,19 +16,19 @@ const AuthContext = createContext({} as AuthContextData);
 export const AuthContextProvider = ({
   children,
 }: AuthContextProviderProps): React.ReactElement => {
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>('');
 
   const login = (provider: AuthProvider): never | String => {
     let AuthURL;
     switch (provider) {
-      case "google":
-        AuthURL = axios + "/auth/google";
+      case 'google':
+        AuthURL = baseApiURL + '/auth/login/google';
         break;
-      case "github":
-        AuthURL = axios + "/auth/github";
+      case 'github':
+        AuthURL = baseApiURL + '/auth/login/github';
         break;
       default:
-        throw new Error("Invalid provider");
+        throw new Error('Invalid provider');
     }
     return AuthURL;
   };
@@ -41,7 +41,7 @@ export const AuthContextProvider = ({
 
   useEffect(() => {
     // load token from local storage
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
       setToken(token);
     }
@@ -57,7 +57,7 @@ export const AuthContextProvider = ({
 export const useAuth = (): AuthContextData => {
   const context = React.useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within a AuthProvider");
+    throw new Error('useAuth must be used within a AuthProvider');
   }
   return context;
 };
