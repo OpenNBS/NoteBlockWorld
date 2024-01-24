@@ -11,4 +11,8 @@ export class CreateUser {
   @IsString()
   @MaxLength(64)
   username: string;
+
+  constructor(partial: Partial<CreateUser>) {
+    Object.assign(this, partial);
+  }
 }

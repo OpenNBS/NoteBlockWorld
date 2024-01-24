@@ -27,7 +27,7 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
       redirect_uri: `${SERVER_URL}/auth/github/callback`,
-      scope: 'user:read',
+      scope: 'user:read,user:email',
       state: false,
     });
   }

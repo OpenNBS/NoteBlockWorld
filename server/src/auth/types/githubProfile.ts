@@ -57,3 +57,9 @@ export type GithubAccessToken = {
   accessToken: string;
   profile: Profile;
 };
+
+export type GithubEmailList = Array<{
+  email: string;
+  primary: string;
+  visibility: string;
+}>;
