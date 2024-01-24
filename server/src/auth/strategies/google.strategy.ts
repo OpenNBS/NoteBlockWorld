@@ -21,13 +21,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       );
       throw new Error('Missing Google config');
     }
-
+    const callbackURL = `${SERVER_URL}/api/v1/auth/google/callback`;
+    GoogleStrategy.logger.debug(`Google Login callbackURL ${callbackURL}`);
     super({
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${SERVER_URL}/auth/google/callback`,
-      scope: 'user:read',
-      state: false,
+      callbackURL: callbackURL,
+      scope: ['email', 'profile'],
     });
   }
 
