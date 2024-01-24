@@ -6,22 +6,22 @@ export interface Note {
 }
 
 const instrumentColors = [
-  "#1964ac",
-  "#3c8e48",
-  "#be6b6b",
-  "#bebe19",
-  "#9d5a98",
-  "#4d3c98",
-  "#bec65c",
-  "#be19be",
-  "#52908d",
-  "#bebebe",
-  "#1991be",
-  "#be2328",
-  "#be5728",
-  "#19be19",
-  "#be1957",
-  "#575757",
+  '#1964ac',
+  '#3c8e48',
+  '#be6b6b',
+  '#bebe19',
+  '#9d5a98',
+  '#4d3c98',
+  '#bec65c',
+  '#be19be',
+  '#52908d',
+  '#bebebe',
+  '#1991be',
+  '#be2328',
+  '#be5728',
+  '#19be19',
+  '#be1957',
+  '#575757',
 ];
 
 let noteBlockImage: HTMLImageElement | null = null;
@@ -43,10 +43,10 @@ function tintImage(image: HTMLImageElement, color: string): HTMLCanvasElement {
     return tintedImages[color];
   }
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
   if (!ctx) {
-    throw new Error("Could not get canvas context");
+    throw new Error('Could not get canvas context');
   }
 
   canvas.width = image.width;
@@ -54,11 +54,11 @@ function tintImage(image: HTMLImageElement, color: string): HTMLCanvasElement {
 
   ctx.drawImage(image, 0, 0);
 
-  ctx.globalCompositeOperation = "color";
+  ctx.globalCompositeOperation = 'color';
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.globalCompositeOperation = "destination-in";
+  ctx.globalCompositeOperation = 'destination-in';
   ctx.drawImage(image, 0, 0);
 
   tintedImages[color] = canvas;
@@ -85,18 +85,18 @@ function noteInBounds(
 function getKeyText(key: number): string {
   const octaves = Math.floor(key / 12);
   const notes = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
+    'C',
+    'C#',
+    'D',
+    'D#',
+    'E',
+    'F',
+    'F#',
+    'G',
+    'G#',
+    'A',
+    'A#',
+    'B',
   ];
   const note = notes[key % 12];
   return `${note}${octaves}`;
@@ -111,9 +111,9 @@ export default async function drawNotes(
   zoomLevel: number
 ) {
   // Get canvas context
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   if (!ctx) {
-    throw new Error("Could not get canvas context");
+    throw new Error('Could not get canvas context');
   }
 
   // Set canvas dimensions
@@ -125,18 +125,18 @@ export default async function drawNotes(
   const effectiveZoomLevel = zoomFactor * scale;
 
   // Draw background
-  ctx.fillStyle = "#fcfcfc";
+  ctx.fillStyle = '#fcfcfc';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw darker vertical lines
-  ctx.fillStyle = "#cccccc";
+  ctx.fillStyle = '#cccccc';
   for (let i = 0; i < canvas.width; i += 8 * effectiveZoomLevel) {
     ctx.fillRect(i, 0, 1, canvas.height);
   }
 
   // Load note block image if not loaded yet
-  if (!noteBlockImage || noteBlockImage.src !== "/note-block-grayscale.png") {
-    noteBlockImage = await loadImage("/note-block-grayscale.png");
+  if (!noteBlockImage || noteBlockImage.src !== '/note-block-grayscale.png') {
+    noteBlockImage = await loadImage('/note-block-grayscale.png');
   }
 
   // Iterate through note blocks and draw them
@@ -167,10 +167,10 @@ export default async function drawNotes(
 
       // Draw the key text
       const keyText = getKeyText(note.key);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = '#ffffff';
       ctx.font = `${3 * effectiveZoomLevel}px Tahoma`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.fillText(
         keyText,
         x + 4 * effectiveZoomLevel,
