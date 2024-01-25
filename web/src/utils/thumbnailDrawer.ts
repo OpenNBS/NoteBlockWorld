@@ -108,7 +108,9 @@ export default async function drawNotes(
   notes: Note[],
   startTick: number,
   startLayer: number,
-  zoomLevel: number
+  zoomLevel: number,
+  imgWidth: number = 1280,
+  imgHeight: number = 720
 ) {
   // Get canvas context
   const ctx = canvas.getContext('2d');
@@ -121,13 +123,13 @@ export default async function drawNotes(
 
   // Set canvas dimensions
   canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.width / (16 / 9);
+  canvas.height = canvas.width / (imgWidth / imgHeight);
 
   // Calculate effective zoom level
   const zoomFactor = 2 ** (zoomLevel - 1);
 
   // Set scale to draw image at correct thumbnail size
-  const scale = canvas.width / 1280;
+  const scale = canvas.width / imgWidth;
   ctx.scale(scale, scale);
   const width = canvas.width / scale;
   const height = canvas.height / scale;
