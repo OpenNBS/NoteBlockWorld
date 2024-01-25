@@ -48,4 +48,20 @@ export class AuthController {
   public googleRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.googleLogin(req, res);
   }
+
+  @Get('verify')
+  @ApiOperation({ summary: 'Verify user token' })
+  @ApiResponse({ status: 200, description: 'User token verified' })
+  @ApiResponse({ status: 401, description: 'User token not verified' })
+  @UseGuards(AuthGuard('jwt-refresh'))
+  public verify(
+    @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
+    // Not need for implementation, its handled by passport
+    this.authService.verifyToken(req, res);
+  }
 }

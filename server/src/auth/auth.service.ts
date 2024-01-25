@@ -19,6 +19,26 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
+  public verifyToken(req: Request, res: Response) {
+    const headers = req.headers;
+    const authorizationHeader = headers.authorization;
+    if (!authorizationHeader) {
+      return res.status(401).json({ message: 'No authorization header' });
+    }
+    const token = authorizationHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
+    try {
+      const decoded = this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_SECRET'),
+      });
+      return decoded;
+    } catch (error) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  }
+
   public async googleLogin(req: Request, res: Response) {
     const { user } = req as any;
     const { profile } = user;
