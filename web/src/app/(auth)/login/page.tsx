@@ -6,27 +6,29 @@ const CheckLogin = async () => {
   // get token from cookies
   const cookieStore = cookies();
   const token = cookieStore.get('token');
-
   // if token is not null, redirect to home page
-  if (token) {
-    redirect('/browser');
-  }
+  if (!token) return false;
 
-  // verify the token with the server
-  const res = await axiosInstance.get('/auth/verify', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  // if the token is valid, redirect to home page
-  if (res.status === 200) {
-    redirect('/browser');
+  if (!token.value) return false;
+
+  try {
+    // verify the token with the server
+    const res = await axiosInstance.get('/auth/verify', {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    });
+    // if the token is valid, redirect to home page
+    if (res.status === 200) return true;
+    else return false;
+  } catch {
+    return false;
   }
-  redirect('/login');
 };
 
-const Login = () => {
-  CheckLogin();
+const Login = async () => {
+  const isLogged = await CheckLogin();
+  if (isLogged) redirect('/browse');
   return (
     <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
       <LoginPage />
