@@ -117,6 +117,7 @@ export default async function drawNotes(
   }
 
   // Set canvas dimensions
+  canvas.width = canvas.offsetWidth;
   canvas.height = canvas.width / (16 / 9);
 
   // Calculate effective zoom level
