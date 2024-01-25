@@ -9,12 +9,12 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
+  public getHello(): string {
     return this.appService.getHello();
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt-refresh'))
   @Get('secure')
   getProtectedResource(@Res() res: Response) {
     return res.status(HttpStatus.OK).json(this.appService.getSecureResource());
