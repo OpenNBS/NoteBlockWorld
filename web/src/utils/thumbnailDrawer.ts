@@ -116,6 +116,9 @@ export default async function drawNotes(
     throw new Error('Could not get canvas context');
   }
 
+  // Disable anti-aliasing
+  ctx.imageSmoothingEnabled = false;
+
   // Set canvas dimensions
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.width / (16 / 9);
