@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const TimespanButtonGroup = () => {
   return (
-    <div className='flex flex-row gap-3 overflow-x-auto'>
+    <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
       <TimespanButton
         id='hour'
         isActive={true}
@@ -53,14 +53,14 @@ const TimespanButtonGroup = () => {
 
 const SongCardGroup = styled.div.attrs({
   className:
-    'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full items-center gap-4',
+    'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full items-center gap-4',
 })``;
 
 export default function Home() {
   return (
     <main>
       {/* FEATURED SONGS */}
-      <div className='flex flex-col md:flex-row justify-between gap-4'>
+      <div className='flex flex-col md:flex-row justify-between gap-4 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
         <div className='flex-0'>
           <TimespanButtonGroup />

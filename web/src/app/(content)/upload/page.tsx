@@ -28,7 +28,7 @@ const SongSelector = ({
 }) => {
   return (
     <div
-      className='flex flex-col items-center gap-6 h-fit w-[50vw] border-dashed border-4 border-zinc-700 p-8 mb-4'
+      className='flex flex-col items-center gap-6 h-fit border-dashed border-4 border-zinc-700 p-8 mb-4'
       onDragOver={(e) => e.preventDefault()}
     >
       <i>
@@ -75,7 +75,7 @@ const UploadForm = ({ song }: { song: Song }) => {
       method='POST'
       encType='multipart/form-data'
     >
-      <div className='flex flex-col h-fit w-1/2 gap-6'>
+      <div className='flex flex-col h-fit gap-6'>
         {/* Title */}
         <div>
           <label htmlFor='name'>Title*</label>
@@ -246,14 +246,16 @@ const UploadPage = () => {
   };
 
   return (
-    <main className='p-8 h-full w-full flex flex-col'>
-      <h1 className='text-3xl font-semibold'>Upload song</h1>
-      <div className='h-10' />
-      {!song ? (
-        <SongSelector onFileSelect={handleFileSelect} />
-      ) : (
-        <UploadForm song={song} />
-      )}
+    <main className='p-8 h-full w-full flex justify-center'>
+      <div className='w-[75vw] max-w-[768px]'>
+        <h1 className='text-3xl font-semibold'>Upload song</h1>
+        <div className='h-10' />
+        {!song ? (
+          <SongSelector onFileSelect={handleFileSelect} />
+        ) : (
+          <UploadForm song={song} />
+        )}
+      </div>
     </main>
   );
 };
