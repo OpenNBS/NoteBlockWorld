@@ -147,6 +147,7 @@ export default async function drawNotes(
   // Load note block image if not loaded yet
   if (!noteBlockImage || noteBlockImage.src !== '/note-block-grayscale.png') {
     noteBlockImage = await loadImage('/note-block-grayscale.png');
+    // TODO: note block image loading on every render is not ideal
   }
 
   // Iterate through note blocks and draw them
