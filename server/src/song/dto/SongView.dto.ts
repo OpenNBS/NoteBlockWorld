@@ -35,7 +35,7 @@ export class SongViewDto {
 
   // binary file data
   content: Buffer;
-  static fromSongDocument(song: SongDocument): SongViewDto {
+  public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
     return new SongViewDto({
       ...data,

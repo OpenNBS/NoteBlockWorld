@@ -7,12 +7,13 @@ import {
   MaxLength,
 } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
+import { SongDocument } from '../entity/song.entity';
 export class SongPreviewDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(64)
   @IsUUID()
-  uploader: HydratedDocument<UserDocument>;
+  uploader: Partial<HydratedDocument<UserDocument>>;
 
   @IsNotEmpty()
   @IsString()
@@ -33,4 +34,20 @@ export class SongPreviewDto {
   @IsNotEmpty()
   @IsUrl()
   coverImageUrl: string;
+
+  constructor(partial: Partial<SongPreviewDto>) {
+    Object.assign(this, partial);
+  }
+
+  public static fromSongDocument(song: SongDocument): SongPreviewDto {
+    const data = song.toJSON();
+    return new SongPreviewDto({
+      uploader: data.uploader,
+      title: data.title,
+      originalAuthor: data.originalAuthor,
+      duration: data.duration,
+      noteCount: data.noteCount,
+      coverImageUrl: data.coverImageUrl,
+    });
+  }
 }

@@ -3,33 +3,22 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
-  Param,
   Patch,
   Post,
-  Put,
   Query,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Request } from 'express';
-import { SongService } from './song.service';
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { GetSongQueryDto } from './dto/GetSongQuery.dto';
-import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { DeleteSongDto } from './dto/DeleteSong.dto';
+import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
+import { UploadSongDto } from './dto/UploadSongDto.dto';
+import { SongService } from './song.service';
 
 @Controller('song')
 @ApiTags('song')
@@ -44,18 +33,20 @@ export class SongController {
   @Get('/page')
   public async getSongByPage(
     @Query() query: PageQuery,
-  ): Promise<UploadSongDto[]> {
+  ): Promise<SongPreviewDto[]> {
     return await this.songService.getSongByPage(query);
   }
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiCookieAuth('token')
   public async createSong(@Body() body: UploadSongDto): Promise<UploadSongDto> {
     return await this.songService.createSong(body);
   }
 
   @Patch('/')
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiCookieAuth('token')
   public async patchSong(
     @Query('id') id: string,
     @Body() body: UploadSongDto,
@@ -65,13 +56,16 @@ export class SongController {
 
   @Delete('/')
   @UseGuards(AuthGuard('jwt-refresh'))
-  public async deleteSong(@Body() body: DeleteSongDto): Promise<UploadSongDto> {
-    return await this.songService.deleteSong(body);
+  @ApiCookieAuth('token')
+  public async deleteSong(@Query('id') id: string): Promise<UploadSongDto> {
+    return await this.songService.deleteSong(id);
   }
 
   @Post('/upload_song')
-  @ApiConsumes('multipart/form-data')
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiCookieAuth('token')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
   public async uploadSong(
     @Query('id') id: string,
     @UploadedFile() file: Express.Multer.File,
