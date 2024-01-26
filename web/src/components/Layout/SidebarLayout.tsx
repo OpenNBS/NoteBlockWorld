@@ -5,18 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
 
-type TDefaultLayoutProps = {
+type TSidebarLayoutProps = {
   children: React.ReactNode;
   isSidebarOpen: boolean;
   // eslint-disable-next-line no-unused-vars
   setSidebarOpen: (isOpen: boolean) => void;
 };
 
-const DefaultLayout = ({
+const SidebarLayout = ({
   children,
   isSidebarOpen,
   setSidebarOpen,
-}: TDefaultLayoutProps) => {
+}: TSidebarLayoutProps) => {
   const [showOverlay, setShowOverlay] = useState(true);
 
   const setSidebarState = useCallback(
@@ -100,4 +100,4 @@ const DefaultLayout = ({
   );
 };
 
-export default DefaultLayout;
+export default SidebarLayout;

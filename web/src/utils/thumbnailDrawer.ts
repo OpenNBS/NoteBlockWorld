@@ -108,7 +108,9 @@ export default async function drawNotes(
   notes: Note[],
   startTick: number,
   startLayer: number,
-  zoomLevel: number
+  zoomLevel: number,
+  imgWidth: number = 1280,
+  imgHeight: number = 720
 ) {
   // Get canvas context
   const ctx = canvas.getContext('2d');
@@ -116,27 +118,36 @@ export default async function drawNotes(
     throw new Error('Could not get canvas context');
   }
 
+  // Disable anti-aliasing
+  ctx.imageSmoothingEnabled = false;
+
   // Set canvas dimensions
-  canvas.height = canvas.width / (16 / 9);
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.width / (imgWidth / imgHeight);
 
   // Calculate effective zoom level
-  const scale = canvas.width / 1280;
   const zoomFactor = 2 ** (zoomLevel - 1);
-  const effectiveZoomLevel = zoomFactor * scale;
+
+  // Set scale to draw image at correct thumbnail size
+  const scale = canvas.width / imgWidth;
+  ctx.scale(scale, scale);
+  const width = canvas.width / scale;
+  const height = canvas.height / scale;
 
   // Draw background
   ctx.fillStyle = '#fcfcfc';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, width, height);
 
   // Draw darker vertical lines
   ctx.fillStyle = '#cccccc';
-  for (let i = 0; i < canvas.width; i += 8 * effectiveZoomLevel) {
-    ctx.fillRect(i, 0, 1, canvas.height);
+  for (let i = 0; i < width; i += 8 * zoomFactor) {
+    ctx.fillRect(i, 0, 1, height);
   }
 
   // Load note block image if not loaded yet
   if (!noteBlockImage || noteBlockImage.src !== '/note-block-grayscale.png') {
     noteBlockImage = await loadImage('/note-block-grayscale.png');
+    // TODO: note block image loading on every render is not ideal
   }
 
   // Iterate through note blocks and draw them
@@ -146,14 +157,14 @@ export default async function drawNotes(
         note,
         startTick,
         startLayer,
-        startTick + canvas.width / (effectiveZoomLevel * 8),
-        startLayer + canvas.height / (effectiveZoomLevel * 8)
+        startTick + width / (zoomFactor * 8),
+        startLayer + height / (zoomFactor * 8)
       )
     )
     .forEach((note) => {
       // Calculate position
-      const x = (note.tick - startTick) * 8 * effectiveZoomLevel;
-      const y = (note.layer - startLayer) * 8 * effectiveZoomLevel;
+      const x = (note.tick - startTick) * 8 * zoomFactor;
+      const y = (note.layer - startLayer) * 8 * zoomFactor;
       const overlayColor = instrumentColors[note.instrument % 16];
 
       // Draw the note block
@@ -161,21 +172,17 @@ export default async function drawNotes(
         tintImage(noteBlockImage, overlayColor),
         x,
         y,
-        8 * effectiveZoomLevel,
-        8 * effectiveZoomLevel
+        8 * zoomFactor,
+        8 * zoomFactor
       );
 
       // Draw the key text
       const keyText = getKeyText(note.key);
       ctx.fillStyle = '#ffffff';
-      ctx.font = `${3 * effectiveZoomLevel}px Tahoma`;
+      ctx.font = `${3 * zoomFactor}px Tahoma`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(
-        keyText,
-        x + 4 * effectiveZoomLevel,
-        y + 4 * effectiveZoomLevel
-      );
+      ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
     });
 
   // Save the canvas as an image
