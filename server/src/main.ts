@@ -23,7 +23,7 @@ async function bootstrap() {
     .setTitle('NoteBlockWorld API Backend')
     .setDescription('Backend application for NoteBlockWorld')
     .setVersion('1.0')
-    .addTag('main')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   const swaggerOptions: SwaggerCustomOptions = {
