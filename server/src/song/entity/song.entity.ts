@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { UserDocument } from '../../user/entity/user.entity';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 @Schema()
 class Song {
@@ -58,8 +58,9 @@ class Song {
   @Prop({ type: String, required: true })
   nbsFileUrl: string;
 
-  @Prop({ type: String, required: true })
-  content: string;
+  // binary file data
+  @Prop({ type: MongooseSchema.Types.Buffer, required: true })
+  content: Buffer;
 
   //@Prop({ type: Array<{id: number, event: string}> })
   //customInstruments: string;

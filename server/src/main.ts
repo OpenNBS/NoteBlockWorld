@@ -35,17 +35,18 @@ async function bootstrap() {
 
   const port = process.env.PORT || 4000;
 
-  await app.listen(port);
-
   logger.log('Open NoteBlockWorld API Backend🎶🌎🌍🌏 ');
-  logger.warn(`Application is running on: http://localhost:${port}`);
-  logger.warn(`See the documentation on: http://localhost:${port}/api/doc`);
+
+  await app.listen(port);
 
   return port;
 }
 
 bootstrap()
-  .then()
+  .then((port) => {
+    logger.warn(`Application is running on: http://localhost:${port}`);
+    logger.warn(`See the documentation on: http://localhost:${port}/api/doc`);
+  })
   .catch((error) => {
     logger.error(`Error: ${error}`);
   });

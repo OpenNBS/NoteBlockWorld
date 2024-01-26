@@ -15,17 +15,20 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { SongService } from './song.service';
-import {
-  GetSongQueryDto,
-  SongDto,
-  PatchSongDto,
-  DeleteSongDto,
-} from './dto/index';
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetSongQueryDto } from './dto/GetSongQuery.dto';
+import { UploadSongDto } from './dto/UploadSongDto.dto';
+import { DeleteSongDto } from './dto/DeleteSong.dto';
 
 @Controller('song')
 @ApiTags('song')
@@ -33,30 +36,34 @@ export class SongController {
   constructor(public readonly songService: SongService) {}
 
   @Get('/')
-  public async getSong(@Query() query: GetSongQueryDto): Promise<SongDto> {
+  public async getSong(
+    @Query() query: GetSongQueryDto,
+  ): Promise<UploadSongDto> {
     return await this.songService.getSong(query);
   }
 
   @Get('/page')
-  public async getSongByPage(@Query() query: PageQuery): Promise<SongDto[]> {
+  public async getSongByPage(
+    @Query() query: PageQuery,
+  ): Promise<UploadSongDto[]> {
     return await this.songService.getSongByPage(query);
   }
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
-  public async createSong(@Body() body: SongDto): Promise<SongDto> {
+  public async createSong(@Body() body: UploadSongDto): Promise<UploadSongDto> {
     return await this.songService.createSong(body);
   }
 
   @Patch('/')
   @UseGuards(AuthGuard('jwt-refresh'))
-  public async patchSong(@Body() body: PatchSongDto): Promise<SongDto> {
+  public async patchSong(@Body() body: UploadSongDto): Promise<UploadSongDto> {
     return await this.songService.patchSong(body);
   }
 
   @Delete('/')
   @UseGuards(AuthGuard('jwt-refresh'))
-  public async deleteSong(@Body() body: DeleteSongDto): Promise<SongDto> {
+  public async deleteSong(@Body() body: DeleteSongDto): Promise<UploadSongDto> {
     return await this.songService.deleteSong(body);
   }
 
@@ -66,7 +73,7 @@ export class SongController {
   public async uploadSong(
     @Query('id') id: string,
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<SongDto> {
+  ): Promise<UploadSongDto> {
     return await this.songService.uploadSong(id, file);
   }
 
