@@ -5,22 +5,32 @@ import {
   PatchSongDto,
   DeleteSongDto,
 } from './dto/index';
+import { PageQuery } from '@server/common/dto/PageQuery.dto';
 
 @Injectable()
 export class SongService {
-  deleteSong(body: DeleteSongDto): SongDto | PromiseLike<SongDto> {
+  verifySongName(name: string): boolean | PromiseLike<boolean> {
     throw new Error('Method not implemented.');
   }
-  patchSong(id: string, body: PatchSongDto): SongDto | PromiseLike<SongDto> {
+  uploadSong(
+    id: string,
+    file: Express.Multer.File,
+  ): SongDto | PromiseLike<SongDto> {
     throw new Error('Method not implemented.');
   }
-  createSong(body: SongDto): SongDto | PromiseLike<SongDto> {
+  public deleteSong(body: DeleteSongDto): SongDto | PromiseLike<SongDto> {
     throw new Error('Method not implemented.');
   }
-  getSongByPage(query: GetSongQueryDto): SongDto[] | PromiseLike<SongDto[]> {
+  public patchSong(body: PatchSongDto): SongDto | PromiseLike<SongDto> {
     throw new Error('Method not implemented.');
   }
-  getSong(query: GetSongQueryDto): SongDto | PromiseLike<SongDto> {
+  public createSong(body: SongDto): SongDto | PromiseLike<SongDto> {
+    throw new Error('Method not implemented.');
+  }
+  public getSongByPage(query: PageQuery): SongDto[] | PromiseLike<SongDto[]> {
+    throw new Error('Method not implemented.');
+  }
+  public getSong(query: GetSongQueryDto): SongDto | PromiseLike<SongDto> {
     throw new Error('Method not implemented.');
   }
 }
