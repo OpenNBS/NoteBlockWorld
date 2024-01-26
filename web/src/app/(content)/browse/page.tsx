@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const TimespanButtonGroup = () => {
   return (
-    <div className='flex flex-row gap-2 md:gap-3 overflow-x-scroll'>
+    <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
       <TimespanButton
         id='hour'
         isActive={true}
