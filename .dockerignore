@@ -1,0 +1,7 @@
+./server/dist
+./server/node_modules
+
+./web/node_modules
+./web/.next
+
+./node_modules
