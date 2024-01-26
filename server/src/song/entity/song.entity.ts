@@ -3,7 +3,7 @@ import { UserDocument } from '../../user/entity/user.entity';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 @Schema()
-class Song {
+export class Song {
   @Prop({ type: Date, required: true })
   uploadDate: Date;
 

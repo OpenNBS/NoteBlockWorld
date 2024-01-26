@@ -21,4 +21,11 @@ export class PageQuery {
   constructor(partial: Partial<PageQuery>) {
     Object.assign(this, partial);
   }
+
+  public static getApiExample(): PageQuery {
+    return {
+      page: '1',
+      limit: '10',
+    };
+  }
 }

@@ -29,6 +29,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetSongQueryDto } from './dto/GetSongQuery.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { DeleteSongDto } from './dto/DeleteSong.dto';
+import { SongViewDto } from './dto/SongView.dto';
 
 @Controller('song')
 @ApiTags('song')
@@ -36,9 +37,7 @@ export class SongController {
   constructor(public readonly songService: SongService) {}
 
   @Get('/')
-  public async getSong(
-    @Query() query: GetSongQueryDto,
-  ): Promise<UploadSongDto> {
+  public async getSong(@Query() query: GetSongQueryDto): Promise<SongViewDto> {
     return await this.songService.getSong(query);
   }
 
@@ -57,8 +56,11 @@ export class SongController {
 
   @Patch('/')
   @UseGuards(AuthGuard('jwt-refresh'))
-  public async patchSong(@Body() body: UploadSongDto): Promise<UploadSongDto> {
-    return await this.songService.patchSong(body);
+  public async patchSong(
+    @Query('id') id: string,
+    @Body() body: UploadSongDto,
+  ): Promise<UploadSongDto> {
+    return await this.songService.patchSong(id, body);
   }
 
   @Delete('/')
@@ -75,11 +77,5 @@ export class SongController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<UploadSongDto> {
     return await this.songService.uploadSong(id, file);
-  }
-
-  @Get('/verify-song-name')
-  @UseGuards(AuthGuard('jwt-refresh'))
-  public async verifySongName(@Query('name') name: string): Promise<boolean> {
-    return await this.songService.verifySongName(name);
   }
 }

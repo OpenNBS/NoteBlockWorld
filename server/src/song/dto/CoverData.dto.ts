@@ -35,4 +35,13 @@ export class CoverData {
     example: '#F0F0F0',
   })
   backgroundColor: string;
+
+  static getApiExample(): CoverData {
+    return {
+      zoomLevel: 3,
+      startTick: 0,
+      startLayer: 0,
+      backgroundColor: '#F0F0F0',
+    };
+  }
 }

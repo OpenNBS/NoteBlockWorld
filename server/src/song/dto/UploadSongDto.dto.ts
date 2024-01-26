@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsBoolean,
@@ -8,8 +9,8 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+import { SongDocument } from '../entity/song.entity';
 import { CoverData } from './CoverData.dto';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadSongDto {
   @IsNotEmpty()
@@ -73,24 +74,7 @@ export class UploadSongDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Cover data of the song',
-    example: {
-      zoomLevel: {
-        min: 1,
-        max: 5,
-        default: 3,
-      },
-      startTick: {
-        min: 0,
-        default: 1,
-      },
-      startLayer: {
-        min: 0,
-        default: 1,
-      },
-      backgroundColor: {
-        default: '#000000',
-      },
-    },
+    example: CoverData.getApiExample(),
   })
   coverData: CoverData;
 
@@ -103,5 +87,16 @@ export class UploadSongDto {
 
   constructor(partial: Partial<UploadSongDto>) {
     Object.assign(this, partial);
+  }
+
+  public static fromSongDocument(song: SongDocument): UploadSongDto {
+    const data = song.toJSON();
+    return new UploadSongDto({
+      allowDownload: song.allowDownload,
+      visibility: song.visibility,
+      title: song.title,
+      originalAuthor: song.originalAuthor,
+      description: song.description,
+    });
   }
 }
