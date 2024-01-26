@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+  private static logger = new Logger(JwtStrategy.name);
   constructor(@Inject(ConfigService) config: ConfigService) {
     const JWT_SECRET = config.get('JWT_SECRET');
     if (!JWT_SECRET) {
@@ -18,10 +19,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     });
   }
 
-  validate(req: Request, payload: any) {
-    const refreshToken = req.headers.authorization
-      ?.replace('Bearer', '')
-      .trim();
+  public validate(req: Request, payload: any) {
+    const refreshTokenHeader = req.headers?.authorization;
+    const refreshTokenCookie = req.cookies?.refresh_token;
+    const refreshToken = refreshTokenHeader
+      ? refreshTokenHeader.split(' ')[1]
+      : refreshTokenCookie;
+
+    if (!refreshToken) {
+      throw new Error('No refresh token');
+    }
+
+    JwtStrategy.logger.debug('refreshToken', refreshToken);
 
     return {
       ...payload,
