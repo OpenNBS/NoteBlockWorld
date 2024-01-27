@@ -3,10 +3,12 @@ import { SongService } from './song.service';
 import { SongController } from './song.controller';
 import { Song, SongSchema } from './entity/song.entity';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from '@server/auth/auth.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
+    AuthModule,
   ],
   providers: [SongService],
   controllers: [SongController],

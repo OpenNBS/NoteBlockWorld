@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { NotificationModule } from './notification/notification.module';
 import { AuthModule } from './auth/auth.module';
+import { ParseTokenPipe } from './song/parseToken';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ParseTokenPipe],
+  exports: [ParseTokenPipe],
 })
 export class AppModule {}

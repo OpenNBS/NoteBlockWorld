@@ -1,13 +1,14 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
+import { AppModule } from './app.module';
 import express = require('express');
-import { Logger } from '@nestjs/common';
+import { ParseTokenPipe } from './song/parseToken';
 
 const logger: Logger = new Logger('main.ts');
 
@@ -16,9 +17,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.use('/public', express.static('public'));
 
+  const parseTokenPipe = app.get<ParseTokenPipe>(ParseTokenPipe);
+
+  app.useGlobalGuards(parseTokenPipe);
+
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
-
   const config = new DocumentBuilder()
     .setTitle('NoteBlockWorld API Backend')
     .setDescription('Backend application for NoteBlockWorld')

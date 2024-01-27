@@ -148,4 +148,13 @@ export class AuthService {
     res.setHeader('Set-Cookie', [cookie, cookie_refresh, cookie_user]);
     res.redirect(frontEndURL + '/browse');
   }
+
+  public async getUserFromToken(token: string): Promise<UserDocument | null> {
+    const decoded = this.jwtService.decode(token) as TokenPayload;
+    if (!decoded) {
+      return null;
+    }
+    const user = await this.userService.findByID(decoded.id);
+    return user;
+  }
 }

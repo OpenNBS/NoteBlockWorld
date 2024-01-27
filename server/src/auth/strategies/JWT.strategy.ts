@@ -29,9 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     if (!refreshToken) {
       throw new Error('No refresh token');
     }
-
-    JwtStrategy.logger.debug('refreshToken', refreshToken);
-
     return {
       ...payload,
       refreshToken,
