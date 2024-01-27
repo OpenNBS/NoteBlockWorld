@@ -4,7 +4,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
 import { GetRequestToken } from './GetRequestUser';
 import { AppService } from './app.service';
-import { ParseTokenPipe } from './song/parseToken';
+import { UserDocument } from './user/entity/user.entity';
 
 @Controller()
 export class AppController {
@@ -19,7 +19,7 @@ export class AppController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @Get('secure')
   public getProtectedResource(
-    @GetRequestToken() user: any,
+    @GetRequestToken() user: UserDocument,
     @Res() res: Response,
   ) {
     return res
