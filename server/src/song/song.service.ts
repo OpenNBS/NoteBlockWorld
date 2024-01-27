@@ -7,18 +7,36 @@ import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { Song } from './entity/song.entity';
+import { UserDocument } from '@server/user/entity/user.entity';
 
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
   constructor(@InjectModel(Song.name) private userModel: Model<Song>) {}
   public async uploadSong(
-    id: string,
+    songId: string,
     file: Express.Multer.File,
+    user: UserDocument | null,
   ): Promise<UploadSongDto> {
-    const foundSong = await this.userModel.findById(id).exec();
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
+    const foundSong = await this.userModel.findById(songId).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    // is song from user?
+    if (foundSong.uploader._id !== user._id) {
+      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
+    }
+    // is song already uploaded?
+    if (foundSong.content) {
+      throw new HttpException('Song already uploaded', HttpStatus.CONFLICT);
+    }
+    // is a valid file?
+    if (!file) {
+      // TODO: check file type , use the NBS js library. This should be done before in the multer middleware
+      throw new HttpException('Invalid file', HttpStatus.BAD_REQUEST);
     }
     foundSong.content = file.buffer;
     const createdSong = await foundSong.save();
@@ -35,10 +53,18 @@ export class SongService {
   public async patchSong(
     id: string,
     body: UploadSongDto,
+    user: UserDocument | null,
   ): Promise<UploadSongDto> {
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
     const foundSong = await this.userModel.findById(id).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    // is song from user?
+    if (foundSong.uploader._id !== user._id) {
+      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
     }
     foundSong.allowDownload = body.allowDownload;
     foundSong.visibility = body.visibility;
@@ -49,8 +75,15 @@ export class SongService {
     const createdSong = await foundSong.save();
     return UploadSongDto.fromSongDocument(createdSong);
   }
-  public async createSong(body: UploadSongDto): Promise<UploadSongDto> {
+  public async createSong(
+    body: UploadSongDto,
+    user: UserDocument | null,
+  ): Promise<UploadSongDto> {
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
     const song = new this.userModel(body);
+    song.uploader = user;
     const createdSong = await song.save();
     return UploadSongDto.fromSongDocument(createdSong);
   }
@@ -67,11 +100,22 @@ export class SongService {
       .exec();
     return data.map((song) => SongPreviewDto.fromSongDocument(song));
   }
-  public async getSong(query: GetSongQueryDto): Promise<SongViewDto> {
+  public async getSong(
+    query: GetSongQueryDto,
+    user: UserDocument | null,
+  ): Promise<SongViewDto> {
     const { id } = query;
     const foundSong = await this.userModel.findById(id).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    if (foundSong.visibility === 'private') {
+      if (!user) {
+        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+      }
+      if (foundSong.uploader._id !== user._id) {
+        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+      }
     }
     return SongViewDto.fromSongDocument(foundSong);
   }
