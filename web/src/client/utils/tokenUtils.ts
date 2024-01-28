@@ -1,6 +1,7 @@
 export const getTokenLocal = (): string | never => {
   // get the token cookie
-  const token = document.cookie
+  const cookie = document.cookie;
+  const token = cookie
     .split('; ')
     .find((row) => row.startsWith('token'))
     ?.split('=')[1];
