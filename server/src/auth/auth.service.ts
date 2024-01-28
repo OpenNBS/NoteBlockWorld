@@ -42,8 +42,6 @@ export class AuthService {
   public async googleLogin(req: Request, res: Response) {
     const { user } = req as any;
     const { profile } = user;
-    this.logger.debug(`Auth Login Data ${JSON.stringify(user)}`);
-    this.logger.debug(`Auth Login Profile ${JSON.stringify(profile)}`);
     // verify if user exists
     const user_registered = await this.VerifyAndGetUser(user);
     return this.GenTokenRedirect(user_registered, res);
@@ -71,7 +69,6 @@ export class AuthService {
   public async githubLogin(req: Request, res: Response) {
     const user = req.user as GithubAccessToken;
     const { profile } = user;
-    console.log(`Auth Login Data ${JSON.stringify(user)}`);
     // verify if user exists
     const response = await axios.get('https://api.github.com/user/emails', {
       headers: {
@@ -91,8 +88,6 @@ export class AuthService {
   public async auth0Login(req: Request, res: Response) {
     const { user } = req as any;
     const { profile } = user;
-    this.logger.debug(`Auth Login Data ${JSON.stringify(user)}`);
-    this.logger.debug(`Auth Login Profile ${JSON.stringify(profile)}`);
     // verify if user exists
     let user_registered = await this.userService.findByEmail(user.email);
 
@@ -142,9 +137,9 @@ export class AuthService {
     // set the cookie in the response
     const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-    const cookie = `token=${token.access_token}; HttpOnly; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=None; Secure`;
-    const cookie_refresh = `refresh_token=${token.refresh_token}; HttpOnly; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=None; Secure`;
-    const cookie_user = `user=${userId}; HttpOnly; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=None; Secure`;
+    const cookie = `token=${token.access_token}; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
+    const cookie_refresh = `refresh_token=${token.refresh_token};  Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
+    const cookie_user = `user=${userId}; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
     res.setHeader('Set-Cookie', [cookie, cookie_refresh, cookie_user]);
     res.redirect(frontEndURL + '/browse');
   }
