@@ -1,36 +1,24 @@
-import axiosInstance from '@web/src/axios';
-import DefaultLayout from '@web/src/components/Layout/DefaultLayout';
-import UserProfile from '@web/src/components/User/UserProfile';
-import { UserProfileData } from '@web/src/types/User';
-import { cookies } from 'next/headers';
-
-const getUserData = async (id: string): Promise<UserProfileData | never> => {
-  try {
-    const res = await axiosInstance.get(`/user/?id=${id}`);
-    if (res.status === 200) return res.data as UserProfileData;
-    else throw new Error('Failed to get user data');
-  } catch {
-    throw new Error('Failed to get user data');
-  }
-};
+import UserProfile from '@web/src/client/components/User/UserProfile';
+import Layout from '@web/src/server/components/Layout/Layout';
+import { getUserProfileData } from '@web/src/server/util/user.util';
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
   try {
-    const userData = await getUserData(id);
+    const userData = await getUserProfileData(id);
     return (
       <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
-        <DefaultLayout>
+        <Layout>
           <UserProfile userData={userData} />
-        </DefaultLayout>
+        </Layout>
       </main>
     );
   } catch {
     return (
       <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
-        <DefaultLayout>
+        <Layout>
           <h1>Failed to get user data</h1>
-        </DefaultLayout>
+        </Layout>
       </main>
     );
   }
