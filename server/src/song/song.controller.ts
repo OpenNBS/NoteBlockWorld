@@ -22,7 +22,7 @@ import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongService } from './song.service';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { ParseTokenPipe } from './parseToken';
-
+import { SongDto } from './dto/Song.dto';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
@@ -50,7 +50,7 @@ export class SongController {
   public async createSong(
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongDto> {
+  ): Promise<SongDto> {
     return await this.songService.createSong(body, user);
   }
 
@@ -97,6 +97,6 @@ export class SongController {
     @UploadedFile() file: Express.Multer.File,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
-    return await this.songService.uploadSong(songId, file, user);
+    return await this.songService.uploadSong({ songId, file, user });
   }
 }

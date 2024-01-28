@@ -9,11 +9,10 @@ import {
 import { HydratedDocument } from 'mongoose';
 import { SongDocument } from '../entity/song.entity';
 export class SongPreviewDto {
-  @IsNotEmpty()
   @IsString()
   @MaxLength(64)
   @IsUUID()
-  uploader: Partial<HydratedDocument<UserDocument>>;
+  uploader?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -42,7 +41,7 @@ export class SongPreviewDto {
   public static fromSongDocument(song: SongDocument): SongPreviewDto {
     const data = song.toJSON();
     return new SongPreviewDto({
-      uploader: data.uploader,
+      uploader: data.uploader.toString(),
       title: data.title,
       originalAuthor: data.originalAuthor,
       duration: data.duration,
