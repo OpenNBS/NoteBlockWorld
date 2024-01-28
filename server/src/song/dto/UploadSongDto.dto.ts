@@ -14,16 +14,6 @@ import { CoverData } from './CoverData.dto';
 
 export class UploadSongDto {
   @IsNotEmpty()
-  @IsString()
-  @MaxLength(64)
-  @IsUUID()
-  @ApiProperty({
-    description: 'MongoDB ID of the uploader user',
-    example: '5f9d7a3b9d3e4a1b1c9d9d9d',
-  })
-  uploader: string;
-
-  @IsNotEmpty()
   @IsBoolean()
   @ApiProperty({
     default: false,

@@ -1,19 +1,35 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { UserDocument } from '../../user/entity/user.entity';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-
-@Schema()
+import { HydratedDocument, Schema as MongooseSchema, ObjectId } from 'mongoose';
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.__v;
+      // add _id as string
+      ret.id = doc._id.toString();
+      // hydrate uploader
+      //if (ret.uploader) {
+      //  ret.uploader = ret.uploader.toJSON();
+      //}
+    },
+  },
+})
 export class Song {
-  @Prop({ type: Date, required: true })
-  uploadDate: Date;
+  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
+  creationAt: Date;
 
-  @Prop({ type: String, required: true })
-  uploader: HydratedDocument<UserDocument>;
+  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
+  lastAt: Date;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'users' })
+  uploader: ObjectId;
+
+  @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   downloadCount: number;
 
   @Prop({
@@ -43,24 +59,25 @@ export class Song {
   @Prop({ type: String, required: true })
   description: string;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: false })
   duration: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: false })
   tempo: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: false })
   noteCount: number;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   coverImageUrl: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   nbsFileUrl: string;
 
   // binary file data
-  @Prop({ type: MongooseSchema.Types.Buffer, required: true })
+  @Prop({ type: MongooseSchema.Types.Buffer, required: false })
   content: Buffer;
+  song: import('mongoose').Types.ObjectId;
 
   //@Prop({ type: Array<{id: number, event: string}> })
   //customInstruments: string;

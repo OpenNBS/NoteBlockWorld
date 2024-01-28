@@ -1,60 +1,8 @@
-'use client';
-
-import SongCard from '@web/src/components/Song/SongCard';
-import { TimespanButton } from '@web/src/components/Song/TimespanButton';
-import styled from 'styled-components';
-
-const TimespanButtonGroup = () => {
-  return (
-    <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
-      <TimespanButton
-        id='hour'
-        isActive={true}
-        isDisabled={false}
-        onClick={() => {}}
-      >
-        past hour
-      </TimespanButton>
-      <TimespanButton
-        id='day'
-        isActive={false}
-        isDisabled={false}
-        onClick={() => {}}
-      >
-        past day
-      </TimespanButton>
-      <TimespanButton
-        id='week'
-        isActive={false}
-        isDisabled={false}
-        onClick={() => {}}
-      >
-        past week
-      </TimespanButton>
-      <TimespanButton
-        id='month'
-        isActive={false}
-        isDisabled={false}
-        onClick={() => {}}
-      >
-        past month
-      </TimespanButton>
-      <TimespanButton
-        id='year'
-        isActive={false}
-        isDisabled={false}
-        onClick={() => {}}
-      >
-        past year
-      </TimespanButton>
-    </div>
-  );
-};
-
-const SongCardGroup = styled.div.attrs({
-  className:
-    'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full items-center gap-4',
-})``;
+import SongCard from '@web/src/client/components/Song/SongCard';
+import {
+  SongCardGroup,
+  TimespanButtonGroup,
+} from '@web/src/server/components/Browser/componets';
 
 export default function Home() {
   return (

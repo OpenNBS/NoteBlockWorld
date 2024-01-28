@@ -2,15 +2,16 @@ import { UserDocument } from '@server/user/entity/user.entity';
 import { HydratedDocument } from 'mongoose';
 import { SongDocument } from '../entity/song.entity';
 export class SongViewDto {
-  uploadDate: Date;
+  creationDate: Date;
+  lastEdited: Date;
 
-  uploader: HydratedDocument<UserDocument>;
+  uploader?: string;
 
-  playCount: number;
+  playCount?: number;
 
-  downloadCount: number;
+  downloadCount?: number;
 
-  likeCount: number;
+  likeCount?: number;
 
   allowDownload: boolean;
 
@@ -23,23 +24,36 @@ export class SongViewDto {
 
   description: string;
 
-  duration: number;
+  duration?: number;
 
-  tempo: number;
+  tempo?: number;
 
-  noteCount: number;
+  noteCount?: number;
 
-  coverImageUrl: string;
+  coverImageUrl?: string;
 
-  nbsFileUrl: string;
+  nbsFileUrl?: string;
 
   // binary file data
-  content: Buffer;
+  content?: Buffer;
   public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
     return new SongViewDto({
-      ...data,
-      uploader: data.uploader.toJSON(),
+      uploader: data.uploader,
+      playCount: data.playCount,
+      downloadCount: data.downloadCount,
+      likeCount: data.likeCount,
+      allowDownload: data.allowDownload,
+      visibility: data.visibility,
+      title: data.title,
+      originalAuthor: data.originalAuthor,
+      description: data.description,
+      duration: data.duration,
+      tempo: data.tempo,
+      noteCount: data.noteCount,
+      coverImageUrl: data.coverImageUrl,
+      nbsFileUrl: data.nbsFileUrl,
+      content: data.content,
     });
   }
   constructor(song: Partial<SongDocument>) {
