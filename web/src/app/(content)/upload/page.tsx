@@ -3,7 +3,7 @@
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ThumbnailRenderer from '@web/src/components/Song/ThumbnailRenderer';
+import ThumbnailRenderer from '@web/src/client/components/Song/ThumbnailRenderer';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
