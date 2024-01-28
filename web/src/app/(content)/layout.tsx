@@ -1,6 +1,6 @@
 import '@web/src/app/globals.css';
 
-import NavbarLayout from '@web/src/server/components/Layout/Layout';
+import Layout from '@web/src/server/components/Layout/Layout';
 
 export default async function RootLayout({
   children,
@@ -11,7 +11,7 @@ export default async function RootLayout({
     return (
       <html lang='en' className='h-full min:h-screen'>
         <body className='h-full min:h-screen'>
-          <NavbarLayout>{children}</NavbarLayout>
+          <Layout>{children}</Layout>
         </body>
       </html>
     );
@@ -19,7 +19,7 @@ export default async function RootLayout({
     return (
       <html lang='en' className='h-full min:h-screen'>
         <body className='h-full min:h-screen'>
-          <NavbarLayout>{children}</NavbarLayout>
+          <Layout>{children}</Layout>
         </body>
       </html>
     );
