@@ -1,5 +1,3 @@
-import { faUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   SignInButton,
   SignOutButton,
@@ -31,7 +29,7 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
         {/* Navbar */}
         <div className='fixed w-full h-14 flex flex-row justify-between items-center bg-zinc-900 border-b border-zinc-700 p-2 z-10'>
           {/* Logo */}
-          <div className='flex-grow'>
+          <a className='flex-grow' href='/'>
             <Image
               src='/nbw-white.png'
               alt='NoteBlockWorld logo'
@@ -39,7 +37,7 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
               width={40}
               height={50}
             />
-          </div>
+          </a>
           {/* Sign in / Profile */}
           <NavLinks
             isUserLoggedIn={isLogged ? true : false}
