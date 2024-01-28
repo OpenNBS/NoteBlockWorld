@@ -15,7 +15,6 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
   const isLogged = await checkLogin();
   let userData = undefined;
   if (isLogged) {
-    console.log('User is logged in');
     userData = await getUserData();
   }
   return (
