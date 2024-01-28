@@ -5,6 +5,7 @@ import {
   Inject,
   Injectable,
   Logger,
+  StreamableFile,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
@@ -184,5 +185,33 @@ export class SongService {
       }
     }
     return SongViewDto.fromSongDocument(foundSong);
+  }
+
+  public async getSongFile(
+    id: string,
+    user: UserDocument | null,
+  ): Promise<StreamableFile> {
+    const foundSong = await this.songModel.findById(id).exec();
+    if (!foundSong) {
+      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    if (foundSong.visibility === 'private') {
+      if (!user) {
+        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+      }
+      if (foundSong.uploader.toString() !== user._id.toString()) {
+        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+      }
+    }
+    if (!foundSong.content) {
+      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    const buffer = Buffer.from(foundSong.content);
+    const streamableFile = new StreamableFile(buffer, {
+      type: 'audio/nbs',
+      disposition: 'attachment',
+      length: buffer.length,
+    });
+    return streamableFile;
   }
 }
