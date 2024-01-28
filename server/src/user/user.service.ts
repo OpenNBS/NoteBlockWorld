@@ -56,4 +56,12 @@ export class UserService {
       HttpStatus.BAD_REQUEST,
     );
   }
+
+  public async getHydratedUser(user: UserDocument) {
+    const hydratedUser = await this.userModel
+      .findById(user._id)
+      .populate('songs')
+      .exec();
+    return hydratedUser;
+  }
 }
