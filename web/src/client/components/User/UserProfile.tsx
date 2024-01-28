@@ -1,12 +1,5 @@
-import { UserProfileData } from '@web/src/types/User';
-
-type UserProfileProps = {
-  userData: UserProfileData;
-};
-
-import React from 'react';
-import { UserProfileData } from '@web/src/types/User';
-
+import { SocialLinksTypes, UserProfileData } from '@web/src/types/User';
+import Image from 'next/image';
 type UserProfileProps = {
   userData: UserProfileData;
 };
@@ -26,10 +19,12 @@ const UserProfile = ({ userData }: UserProfileProps) => {
   } = userData;
   return (
     <section className='w-full h-full'>
-      <img
+      <Image
         src={profileImage}
         alt={publicName}
         className='w-32 h-32 rounded-full'
+        width={128}
+        height={128}
       />
       <h1 className='text-2xl font-bold'>{publicName}</h1>
       <p className='text-gray-500'>{description}</p>
@@ -39,7 +34,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
       <p className='text-gray-500'>Following: {following}</p>
       <ul className='mt-4'>
         {Object.keys(socialLinks).map((key, index) => {
-          const link = socialLinks[key];
+          const link = socialLinks[key as SocialLinksTypes];
           if (!link) return null;
           return (
             <li key={index}>
