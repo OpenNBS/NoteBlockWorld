@@ -29,23 +29,27 @@ export type LoggedUserData = {
   id: string;
 };
 
-type SocialLinks = {
-  bandcamp?: string;
-  discord?: string;
-  facebook?: string;
-  github?: string;
-  instagram?: string;
-  reddit?: string;
-  snapchat?: string;
-  soundcloud?: string;
-  spotify?: string;
-  steam?: string;
-  telegram?: string;
-  tiktok?: string;
-  threads?: string;
-  twitch?: string;
-  x?: string;
-  youtube?: string;
+export enum SocialLinksTypes {
+  BANDCAMP = 'bandcamp',
+  DISCORD = 'discord',
+  FACEBOOK = 'facebook',
+  GITHUB = 'github',
+  INSTAGRAM = 'instagram',
+  REDDIT = 'reddit',
+  SNAPCHAT = 'snapchat',
+  SOUNDCLOUD = 'soundcloud',
+  SPOTIFY = 'spotify',
+  STEAM = 'steam',
+  TELEGRAM = 'telegram',
+  TIKTOK = 'tiktok',
+  THREADS = 'threads',
+  TWITCH = 'twitch',
+  X = 'x',
+  YOUTUBE = 'youtube',
+}
+
+export type SocialLinks = {
+  [K in SocialLinksTypes]?: string;
 };
 
 export type UserProfileData = {
