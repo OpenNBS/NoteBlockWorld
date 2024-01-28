@@ -64,4 +64,13 @@ export class UserService {
       .exec();
     return hydratedUser;
   }
+
+  public async getSelfUserData(user: UserDocument | null) {
+    if (!user)
+      throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
+    const usedData = await this.findByID(user._id.toString());
+    if (!usedData)
+      throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+    return usedData;
+  }
 }

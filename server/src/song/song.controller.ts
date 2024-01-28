@@ -14,7 +14,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
@@ -32,6 +38,7 @@ export class SongController {
   constructor(public readonly songService: SongService) {}
 
   @Get('/')
+  @ApiOperation({ summary: 'Get song info' })
   public async getSong(
     @Query() query: GetSongQueryDto,
     @GetRequestToken() user: UserDocument | null,
@@ -46,6 +53,7 @@ export class SongController {
   }
 
   @Get('/file')
+  @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
     @Query('id') id: string,
     @GetRequestToken() user: UserDocument | null,
@@ -54,6 +62,7 @@ export class SongController {
   }
 
   @Get('/page')
+  @ApiOperation({ summary: 'Get song info paginated' })
   public async getSongByPage(
     @Query() query: PageQuery,
   ): Promise<SongPreviewDto[]> {
@@ -64,6 +73,7 @@ export class SongController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @UseGuards(ParseTokenPipe)
+  @ApiOperation({ summary: 'Create a new song' })
   public async createSong(
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
@@ -74,6 +84,7 @@ export class SongController {
   @Patch('/')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiOperation({ summary: 'Update a song' })
   public async patchSong(
     @Query('id') id: string,
     @Body() body: UploadSongDto,
@@ -85,6 +96,7 @@ export class SongController {
   @Delete('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a song' })
   public async deleteSong(@Query('id') id: string): Promise<UploadSongDto> {
     return await this.songService.deleteSong(id);
   }
@@ -109,6 +121,7 @@ export class SongController {
       },
     }),
   )
+  @ApiOperation({ summary: 'Upload a song .nbs file to an existing song' })
   public async uploadSong(
     @Query('id') songId: string,
     @UploadedFile() file: Express.Multer.File,
