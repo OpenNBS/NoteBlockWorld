@@ -72,7 +72,6 @@ export class SongController {
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
-  @UseGuards(ParseTokenPipe)
   @ApiOperation({ summary: 'Create a new song' })
   public async createSong(
     @Body() body: UploadSongDto,
