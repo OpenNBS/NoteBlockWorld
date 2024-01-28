@@ -1,4 +1,4 @@
-import { UploadSong } from '@web/src/client/components/Song/UploadSong';
+import { UploadSongPage } from '@web/src/client/components/Song/UploadSong';
 import { checkLogin } from '@web/src/server/util/utils';
 import { redirect } from 'next/navigation';
 
@@ -10,7 +10,7 @@ async function UploadPage() {
       <div className='w-[75vw] max-w-[768px]'>
         <h1 className='text-3xl font-semibold'>Upload song</h1>
         <div className='h-10' />
-        <UploadSong />
+        <UploadSongPage />
       </div>
     </main>
   );

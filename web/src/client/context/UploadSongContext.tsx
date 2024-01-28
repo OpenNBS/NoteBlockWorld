@@ -31,7 +31,7 @@ type UploadSongContextType = {
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
-  {} as UploadSongContextType
+  null as unknown as UploadSongContextType
 );
 
 export const UploadSongProvider = ({
@@ -57,50 +57,53 @@ export const UploadSongProvider = ({
     },
   });
 
-  const submitSongSongData = async () => {
-    try {
-      const token = getTokenLocal();
-      const response = await axiosInstance.post(
-        '/songs',
-        {
-          ...formMethods.getValues(),
-          coverData: JSON.stringify(formMethods.getValues().coverData),
+  const submitSongSongData = async (): Promise<void | never> => {
+    const token = getTokenLocal();
+    const response = await axiosInstance.post(
+      '/song',
+      {
+        ...formMethods.getValues(),
+        coverData: JSON.stringify(formMethods.getValues().coverData),
+      },
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (response.status === 200) {
-        console.log('Song data submitted successfully');
-      } else {
-        console.log('Song data submission failed');
       }
-    } catch (err) {
-      console.log(err);
+    );
+    if (response.status === 200) {
+      console.log('Song data submitted successfully');
+    } else {
+      throw new Error('Song data submission failed');
     }
   };
-  const submitSongSongFile = async () => {
-    try {
-      const token = getTokenLocal();
-      const formData = new FormData();
-      formData.append('file', songFile as Blob);
-      const response = await axiosInstance.post('/songs/file', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      if (response.status === 200) {
-        console.log('Song file submitted successfully');
-      } else {
-        console.log('Song file submission failed');
-      }
-    } catch (err) {
-      console.log(err);
+  const submitSongSongFile = async (): Promise<void | never> => {
+    if (!song) return;
+
+    const token = getTokenLocal();
+    const formData = new FormData();
+    formData.append('file', new Blob([song?.toArrayBuffer()]), song?.meta.name);
+    const response = await axiosInstance.post('/song/upload_song', formData, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.status === 200) {
+      console.log('Song file submitted successfully');
+    } else {
+      throw new Error('Song file submission failed');
     }
   };
 
   const submitSong = async () => {
-    await submitSongSongData();
-    await submitSongSongFile();
+    try {
+      await submitSongSongData();
+      await submitSongSongFile();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const setSongHandler = (songFile: Song | null) => {
@@ -123,7 +126,7 @@ export const UploadSongProvider = ({
 
 export const useUploadSongProvider = () => {
   const context = useContext(UploadSongContext);
-  if (context === undefined) {
+  if (context === undefined || context === null) {
     throw new Error(
       'useUploadSongProvider must be used within a UploadSongProvider'
     );

@@ -27,8 +27,11 @@ const Option = styled.option.attrs({
 
 const SongSelector = () => {
   const { setSong } = useUploadSongProvider();
+  console.log(useUploadSongProvider());
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target.files);
+      console.log(setSong);
       if (!e.target.files) return;
       const file: File = e.target.files[0];
       const song = fromArrayBuffer(await file.arrayBuffer());
@@ -123,12 +126,14 @@ const ThumbnailInput = ({ song }: { song: Song }) => {
 };
 
 const UploadForm = () => {
-  const { formMethods, song } = useUploadSongProvider();
+  const { formMethods, submitSong, song } = useUploadSongProvider();
   return (
     <form
-      action='http://localhost:5000/upload'
-      method='POST'
-      encType='multipart/form-data'
+      className='flex flex-col gap-6'
+      onSubmit={formMethods.handleSubmit((data) => {
+        console.log(data);
+        submitSong();
+      })}
     >
       <div className='flex flex-col h-fit gap-6'>
         {/* Title */}
@@ -220,7 +225,7 @@ const UploadForm = () => {
         <div className='flex flex-row gap-8 justify-between'>
           <div className='flex-1'>
             <label htmlFor='visibility'>Visibility</label>
-            <Select name='visibility' id='visibility'>
+            <Select id='visibility' {...formMethods.register('visibility')}>
               <Option value='public'>Public</Option>
               <Option value='public'>Unlisted</Option>
               <Option value='private'>Private</Option>
@@ -228,7 +233,7 @@ const UploadForm = () => {
           </div>
           <div className='flex-1'>
             <label htmlFor='license'>License</label>
-            <Select name='license' id='license'>
+            <Select id='license'>
               <Option value='cc'>No license</Option>
               <Option value='cc'>Creative Commons CC BY 4.0</Option>
               <Option value='cc'>Public domain</Option>
@@ -241,8 +246,8 @@ const UploadForm = () => {
           <input
             type='checkbox'
             className='accent-blue scale-150 mr-3'
-            name='allowDownload'
             id='allowDownload'
+            {...formMethods.register('allowDownload')}
           />
           <label htmlFor='allowDownload'>
             Allow other users to download the NBS file
@@ -263,7 +268,7 @@ const UploadForm = () => {
   );
 };
 
-export const UploadSong = () => {
+const UploadSong = () => {
   const { song } = useUploadSongProvider();
 
   return <>{!song ? <SongSelector /> : <UploadForm />}</>;
