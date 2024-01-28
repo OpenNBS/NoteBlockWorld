@@ -1,6 +1,6 @@
-import { LoginPage } from './loginPage';
+import { checkLogin } from '@web/src/server/util/utils';
 import { redirect } from 'next/navigation';
-import { checkLogin } from '@web/src/server-side/utils';
+import { LoginPage } from './loginPage';
 
 const Login = async () => {
   const isLogged = await checkLogin();

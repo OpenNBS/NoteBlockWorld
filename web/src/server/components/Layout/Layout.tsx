@@ -4,7 +4,7 @@ import {
   UploadButton,
   UserGreeting,
 } from '@web/src/client/components/common/SignOutButton';
-import { checkLogin, getUserData } from '@web/src/server-side/utils';
+import { checkLogin, getUserData } from '@web/src/server/util/utils';
 import { LoggedUserData } from '@web/src/types/User';
 import Image from 'next/image';
 type TNavbarLayoutProps = {

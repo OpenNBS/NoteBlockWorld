@@ -1,6 +1,6 @@
-import axiosInstance from '../axios';
+import axiosInstance from '../../axios';
 import { cookies } from 'next/headers';
-import { LoggedUserData } from '../types/User';
+import { LoggedUserData } from '../../types/User';
 
 function getToken() {
   const cookieStore = cookies();
