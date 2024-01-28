@@ -23,12 +23,21 @@ async function bootstrap() {
 
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
+
   const config = new DocumentBuilder()
     .setTitle('NoteBlockWorld API Backend')
     .setDescription('Backend application for NoteBlockWorld')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
+  // enable cors
+  app.enableCors({
+    allowedHeaders: ['content-type', 'authorization'],
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   const document = SwaggerModule.createDocument(app, config);
   const swaggerOptions: SwaggerCustomOptions = {
     swaggerOptions: {
@@ -54,3 +63,6 @@ bootstrap()
   .catch((error) => {
     logger.error(`Error: ${error}`);
   });
+function cookieParser(): any {
+  throw new Error('Function not implemented.');
+}
