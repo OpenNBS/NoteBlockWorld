@@ -1,5 +1,11 @@
 import { faUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  SignInButton,
+  SignOutButton,
+  UploadButton,
+  UserGreeting,
+} from '@web/src/client/components/common/SignOutButton';
 import { checkLogin, getUserData } from '@web/src/server-side/utils';
 import { LoggedUserData } from '@web/src/types/User';
 import Image from 'next/image';
@@ -69,40 +75,13 @@ function NavLinks({
   userData?: LoggedUserData;
 }) {
   return (
-    <div className='grid grid-cols-2 gap-2 mr-10'>
-      {!isUserLoggedIn ? (
-        <a href='/login'>
-          <div className='flex justify-between items-center gap-2 px-1 border border-blue-500 h-8 rounded-full'>
-            <div className='h-6'>
-              <FontAwesomeIcon
-                icon={faUserCircle}
-                className='h-full text-blue-500'
-              />
-            </div>
-            <span className='text-sm mr-2 text-blue-400 font-semibold'>
-              Sign in
-            </span>
-          </div>
-        </a>
-      ) : null}
-      {isUserLoggedIn ? (
-        <p className='text-sm text-zinc-500 font-semibold'>
-          Logger as {userData?.username}
-        </p>
-      ) : null}
-      <a href='/upload'>
-        <div className='flex justify-between items-center gap-2 px-1 border border-green-500 h-8 rounded-full'>
-          <div className='h-6'>
-            <FontAwesomeIcon
-              icon={faUpload}
-              className='h-full text-green-500'
-            />
-          </div>
-          <span className='text-sm mr-2 text-green-500 font-semibold'>
-            Upload
-          </span>
-        </div>
-      </a>
+    <div className='flex flex-row gap-2'>
+      {!isUserLoggedIn && <SignInButton />}
+      {isUserLoggedIn && userData && (
+        <UserGreeting username={userData.username} />
+      )}
+      <UploadButton />
+      {isUserLoggedIn && <SignOutButton />}
     </div>
   );
 }
