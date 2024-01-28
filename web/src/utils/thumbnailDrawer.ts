@@ -167,6 +167,9 @@ export default async function drawNotes(
       const y = (note.layer - startLayer) * 8 * zoomFactor;
       const overlayColor = instrumentColors[note.instrument % 16];
 
+      if (!noteBlockImage) {
+        throw new Error('Note block image not loaded');
+      }
       // Draw the note block
       ctx.drawImage(
         tintImage(noteBlockImage, overlayColor),
