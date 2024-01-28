@@ -1,27 +1,11 @@
 import '@web/src/app/globals.css';
 
-import Layout from '@web/src/server/components/Layout/Layout';
+import NavbarLayout from '@web/src/server/components/Layout/NavbarLayout';
 
-export default async function RootLayout({
+export default async function ContentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  try {
-    return (
-      <html lang='en' className='h-full min:h-screen'>
-        <body className='h-full min:h-screen'>
-          <Layout>{children}</Layout>
-        </body>
-      </html>
-    );
-  } catch (e) {
-    return (
-      <html lang='en' className='h-full min:h-screen'>
-        <body className='h-full min:h-screen'>
-          <Layout>{children}</Layout>
-        </body>
-      </html>
-    );
-  }
+  return <NavbarLayout>{children}</NavbarLayout>;
 }
