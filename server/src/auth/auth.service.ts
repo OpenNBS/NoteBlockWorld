@@ -1,13 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUser } from '@server/user/dto/CreateUser.dto';
 import { User, UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
-import e, { Request, Response } from 'express';
+import axios from 'axios';
+import { Request, Response } from 'express';
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { TokenPayload, Tokens } from './types/token';
-import { CreateUser } from '@server/user/dto/CreateUser.dto';
-import axios from 'axios';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
