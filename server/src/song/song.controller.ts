@@ -24,14 +24,13 @@ import {
 import { GetRequestToken } from '@server/GetRequestUser';
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
+import type { Response } from 'express';
 import { GetSongQueryDto } from './dto/GetSongQuery.dto';
 import { SongDto } from './dto/Song.dto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { ParseTokenPipe } from './parseToken';
 import { SongService } from './song.service';
-import type { Response } from 'express';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
