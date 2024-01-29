@@ -1,6 +1,6 @@
 'use client';
 
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
+import { fromArrayBuffer } from '@encode42/nbs.js';
 import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
@@ -27,11 +27,8 @@ const Option = styled.option.attrs({
 
 const SongSelector = () => {
   const { setSong } = useUploadSongProvider();
-  console.log(useUploadSongProvider());
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.files);
-      console.log(setSong);
       if (!e.target.files) return;
       const file: File = e.target.files[0];
       const song = fromArrayBuffer(await file.arrayBuffer());
@@ -40,7 +37,6 @@ const SongSelector = () => {
         alert('Invalid song. Please try uploading a different file!');
         return;
       }
-      console.log(song);
       setSong(song);
     },
     [setSong]
@@ -57,7 +53,6 @@ const SongSelector = () => {
         alert('Invalid song. Please try uploading a different file!');
         return;
       }
-      console.log(song);
       setSong(song);
     },
     [setSong]
@@ -99,8 +94,9 @@ const SongSelector = () => {
   );
 };
 
-const ThumbnailInput = ({ song }: { song: Song }) => {
-  const { formMethods } = useUploadSongProvider();
+const ThumbnailInput = () => {
+  const { song } = useUploadSongProvider();
+  if (!song) return null;
   return (
     <div>
       <p>Thumbnail</p>
@@ -130,8 +126,7 @@ const UploadForm = () => {
   return (
     <form
       className='flex flex-col gap-6'
-      onSubmit={formMethods.handleSubmit((data) => {
-        console.log(data);
+      onSubmit={formMethods.handleSubmit(() => {
         submitSong();
       })}
     >
@@ -172,7 +167,13 @@ const UploadForm = () => {
         <div className='flex flex-row gap-8 justify-between'>
           <div className='flex-1'>
             <label htmlFor='artist'>Author</label>
-            <Input type='text' id='artist' value={'Replace with user name'} />
+            <Input
+              type='text'
+              id='artist'
+              value={'Replace with user name'}
+              disabled={true}
+              className='block'
+            />
           </div>
           <div className='flex-1'>
             <label htmlFor='album'>Original author </label>
@@ -219,7 +220,7 @@ const UploadForm = () => {
         </div>
 
         {/* Thumbnail */}
-        {song && <ThumbnailInput song={song} />}
+        {song && <ThumbnailInput />}
 
         {/* Visibility */}
         <div className='flex flex-row gap-8 justify-between'>
@@ -270,7 +271,6 @@ const UploadForm = () => {
 
 const UploadSong = () => {
   const { song } = useUploadSongProvider();
-
   return <>{!song ? <SongSelector /> : <UploadForm />}</>;
 };
 

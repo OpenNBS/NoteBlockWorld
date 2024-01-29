@@ -57,7 +57,7 @@ export const UploadSongProvider = ({
     },
   });
 
-  const submitSongData = async (): Promise<void | never> => {
+  const submitSongData = async (): Promise<string | never> => {
     const token = getTokenLocal();
     const response = await axiosInstance.post(
       '/song',
@@ -72,35 +72,49 @@ export const UploadSongProvider = ({
         },
       }
     );
-    if (response.status === 200) {
+    if (response.status === 201) {
       console.log('Song data submitted successfully');
+      const data = response.data;
+      console.log(data);
+      const id = data._id;
+      if (typeof id !== 'string') {
+        throw new Error('Song data submission failed');
+      }
+      return id;
     } else {
       throw new Error('Song data submission failed');
     }
   };
-  const submitSongSongFile = async (): Promise<void | never> => {
+  const submitSongFile = async (id: string): Promise<void | never> => {
     if (!song) return;
 
     const token = getTokenLocal();
     const formData = new FormData();
     formData.append('file', new Blob([song?.toArrayBuffer()]), song?.meta.name);
-    const response = await axiosInstance.post('/song/upload_song', formData, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    if (response.status === 200) {
+    const response = await axiosInstance.post(
+      `/song/upload_song?id=${id}`,
+      formData,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    if (response.status === 201) {
       console.log('Song file submitted successfully');
+      // go to my songs page
+      window.location.href = '/my-songs';
     } else {
+      console.log(response);
       throw new Error('Song file submission failed');
     }
   };
 
   const submitSong = async () => {
     try {
-      await submitSongData();
-      await submitSongFile();
+      const id = await submitSongData();
+      await submitSongFile(id);
     } catch (e) {
       console.error(e);
     }
