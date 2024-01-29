@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
+import StyledComponentsRegistry from '../lib/registry';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className='min-h-screen'>
-      <body className={lato.className + ' min-h-screen'}>{children}</body>
+      <body className={lato.className + ' min-h-screen'}>
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      </body>
     </html>
   );
 }
