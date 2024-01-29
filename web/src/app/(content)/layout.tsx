@@ -1,10 +1,10 @@
 import '@web/src/app/globals.css';
-import Layout from '@web/src/server/components/Layout/Layout';
+import NavbarLayout from '@web/src/server/components/Layout/NavbarLayout';
 
 export default async function ContentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Layout>{children}</Layout>;
+  return <NavbarLayout>{children}</NavbarLayout>;
 }

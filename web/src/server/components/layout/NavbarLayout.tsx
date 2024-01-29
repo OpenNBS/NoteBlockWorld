@@ -15,6 +15,7 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
   const isLogged = await checkLogin();
   let userData = undefined;
   if (isLogged) {
+    console.log('User is logged in');
     userData = await getUserData();
   }
   return (
@@ -49,14 +50,14 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
 
         {/* Footer */}
         <div className='w-full h-12 flex flex-row justify-center items-center bg-zinc-900 border-t border-zinc-700 p-2 z-10'>
-          <span className='text-sm text-zinc-500'>
+          <div className='text-sm text-zinc-500'>
             <p>
               © 2024{' '}
               <a href='https://opennbs.org/' className='underline'>
                 OpenNBS
               </a>
             </p>
-          </span>
+          </div>
         </div>
       </section>
     </>

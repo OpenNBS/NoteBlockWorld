@@ -1,8 +1,6 @@
-import SongCard from '@web/src/client/components/Song/SongCard';
-import {
-  SongCardGroup,
-  TimespanButtonGroup,
-} from '@web/src/server/components/Browser/componets';
+import SongCard from '@web/src/client/components/browse/SongCard';
+import SongCardGroup from '@web/src/client/components/browse/SongCardGroup';
+import { TimespanButtonGroup } from '@web/src/client/components/browse/TimespanButton';
 
 export default function Home() {
   return (

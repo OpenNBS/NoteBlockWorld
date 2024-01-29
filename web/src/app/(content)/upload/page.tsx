@@ -1,4 +1,4 @@
-import { UploadSongPage } from '@web/src/client/components/Song/UploadSong';
+import { UploadSongPage } from '@web/src/client/components/upload/UploadSong';
 import { checkLogin } from '@web/src/server/util/utils';
 import { redirect } from 'next/navigation';
 

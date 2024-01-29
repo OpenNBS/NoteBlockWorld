@@ -1,5 +1,4 @@
 import { SongType } from '@web/src/types/Song';
-import styled from 'styled-components';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

@@ -112,7 +112,7 @@ const ThumbnailRenderer = ({ notes }: ThumbnailRendererProps) => {
             <button
               type='button'
               key={index}
-              className={`w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30`}
+              className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30'
               style={{ backgroundColor: color }}
               onClick={(e) => console.log(color)}
             ></button>
