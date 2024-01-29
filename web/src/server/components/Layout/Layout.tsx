@@ -12,6 +12,11 @@ type TNavbarLayoutProps = {
 };
 
 async function Layout({ children }: TNavbarLayoutProps) {
+  const isLogged = await checkLogin();
+  let userData = undefined;
+  if (isLogged) {
+    userData = await getUserData();
+  }
   return (
     <>
       <section
