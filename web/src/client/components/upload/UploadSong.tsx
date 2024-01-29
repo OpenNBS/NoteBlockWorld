@@ -9,7 +9,7 @@ import {
   UploadSongProvider,
   useUploadSongProvider,
 } from '../../context/UploadSongContext';
-import ThumbnailRenderer from './ThumbnailRenderer';
+import ThumbnailRenderer from '@web/src/client/components/upload/ThumbnailRenderer';
 
 const Input = styled.input.attrs({
   className:
