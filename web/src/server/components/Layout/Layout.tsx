@@ -11,12 +11,7 @@ type TNavbarLayoutProps = {
   children: React.ReactNode;
 };
 
-async function NavbarLayout({ children }: TNavbarLayoutProps) {
-  const isLogged = await checkLogin();
-  let userData = undefined;
-  if (isLogged) {
-    userData = await getUserData();
-  }
+async function Layout({ children }: TNavbarLayoutProps) {
   return (
     <>
       <section
@@ -63,7 +58,7 @@ async function NavbarLayout({ children }: TNavbarLayoutProps) {
   );
 }
 
-export default NavbarLayout;
+export default Layout;
 function NavLinks({
   isUserLoggedIn,
   userData,
