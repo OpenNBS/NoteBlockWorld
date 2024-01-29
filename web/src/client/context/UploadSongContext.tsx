@@ -57,7 +57,7 @@ export const UploadSongProvider = ({
     },
   });
 
-  const submitSongSongData = async (): Promise<void | never> => {
+  const submitSongData = async (): Promise<void | never> => {
     const token = getTokenLocal();
     const response = await axiosInstance.post(
       '/song',
@@ -99,8 +99,8 @@ export const UploadSongProvider = ({
 
   const submitSong = async () => {
     try {
-      await submitSongSongData();
-      await submitSongSongFile();
+      await submitSongData();
+      await submitSongFile();
     } catch (e) {
       console.error(e);
     }
