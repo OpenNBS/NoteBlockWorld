@@ -38,7 +38,7 @@ export const LoginPage = () => {
         className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-orange-500 hover:text-orange-500 hover:transition-all duration-200 uppercase rounded-lg'
       >
         <FontAwesomeIcon icon={faGoogle} className='align-middle mr-2 h-5' />
-        <span className='flex-1'>Login with Google</span>
+        <span className='flex-1 text-nowrap'>Login with Google</span>
       </Link>
       {/* Login with Github */}
       <Link
