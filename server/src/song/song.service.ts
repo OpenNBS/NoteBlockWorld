@@ -79,7 +79,24 @@ export class SongService {
     user: UserDocument | null;
   }): Promise<UploadSongDto> {
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        {
+          error: {
+            user: 'User not found',
+          },
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (!file) {
+      throw new HttpException(
+        {
+          error: {
+            file: 'File not found',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const song = await this.createSongDocument(body, user);
     const loadedArrayBuffer = new ArrayBuffer(file.buffer.byteLength);
