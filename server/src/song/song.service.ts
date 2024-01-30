@@ -88,11 +88,12 @@ export class SongService {
       view[i] = file.buffer[i];
     }
     // is a valid file?
-    const nbsSong = NBS.fromArrayBuffer(loadedArrayBuffer);
+    const nbsSong = NBS.fromArrayBuffer(loadedArrayBuffer); // If this fails, it will return an empty song
     const { length, nbsVersion, meta, errors } = nbsSong;
-    this.logger.log({ length, nbsVersion, meta, errors });
-    const arrayBuffer = nbsSong.arrayBuffer;
+    this.logger.debug({ length, nbsVersion, meta, errors });
+    const arrayBuffer = nbsSong.arrayBuffer; // If the song file sended by the user is invalid, this will be null
     if (!arrayBuffer) {
+      // Then, we throw an error
       throw new HttpException('Invalid file', HttpStatus.BAD_REQUEST);
     }
     const newBuffer = Buffer.from(arrayBuffer);
