@@ -233,6 +233,9 @@ importers:
         specifier: ^5.1.3
         version: 5.1.3
     devDependencies:
+      '@shrutibalasa/tailwind-grid-auto-fit':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@types/react-modal':
         specifier: ^3.16.0
         version: 3.16.0
@@ -2600,6 +2603,10 @@ packages:
   /@rushstack/eslint-patch@1.3.2:
     resolution: {integrity: sha512-V+MvGwaHH03hYhY+k6Ef/xKd6RYlc4q8WBx+2ANmipHJcKuktNcI/NgEsJgdSUF6Lw32njT6OnrRsKYCdgHjYw==}
     dev: false
+
+  /@shrutibalasa/tailwind-grid-auto-fit@1.1.0:
+    resolution: {integrity: sha512-sh/Vmdz/xTVziUF9ZYDb5YpECApdK85KXSRIJY58GzmdUuum5QBE3jqDeNMjICEVaVOSrOnp+gqUWx8A9dmZjA==}
+    dev: true
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}

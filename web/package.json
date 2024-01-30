@@ -30,6 +30,7 @@
     "typescript": "^5.1.3"
   },
   "devDependencies": {
+    "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
     "@types/react-modal": "^3.16.0"
   }
 }
