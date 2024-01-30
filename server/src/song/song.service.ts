@@ -100,7 +100,7 @@ export class SongService {
     const noteCount = layers.reduce((acc, layer) => acc + layer.length, 0);
 
     // update song document
-    song.content = newBuffer;
+    song.rawFile = newBuffer;
     song.duration = nbsSong.length / 20;
     song.tempo = nbsSong.tempo;
     song.noteCount = noteCount;
@@ -189,10 +189,10 @@ export class SongService {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
     }
-    if (!foundSong.content) {
+    if (!foundSong.rawFile) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
-    const buffer = Buffer.from(foundSong.content);
+    const buffer = Buffer.from(foundSong.rawFile);
     const streamableFile = new StreamableFile(buffer, {
       type: 'audio/nbs',
       disposition: 'attachment',

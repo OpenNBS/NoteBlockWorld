@@ -76,7 +76,7 @@ export class Song {
 
   // binary file data
   @Prop({ type: MongooseSchema.Types.Buffer, required: false })
-  content: Buffer;
+  rawFile: Buffer;
   song: import('mongoose').Types.ObjectId;
 
   //@Prop({ type: Array<{id: number, event: string}> })

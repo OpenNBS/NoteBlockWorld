@@ -53,7 +53,7 @@ export class SongViewDto {
       noteCount: data.noteCount,
       coverImageUrl: data.coverImageUrl,
       nbsFileUrl: data.nbsFileUrl,
-      content: data.content,
+      rawFile: data.rawFile,
     });
   }
   constructor(song: Partial<SongDocument>) {
