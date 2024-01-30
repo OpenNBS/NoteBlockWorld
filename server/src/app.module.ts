@@ -34,7 +34,7 @@ import { ParseTokenPipe } from './song/parseToken';
           );
           throw new Error('Missing DB config');
         }
-        const uri = `mongodb://${user}:${password}@${url}`;
+        const uri = `mongodb+srv://${user}:${password}@${url}`;
         Logger.debug(`Connecting to ${uri}`);
         return {
           uri: uri,
