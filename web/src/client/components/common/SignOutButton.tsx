@@ -6,6 +6,7 @@ import {
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { signOut } from '../utils/login.util';
 
 export function SignInButton() {
   return (
@@ -26,16 +27,6 @@ export function SignInButton() {
 }
 
 export function SignOutButton() {
-  function signOut() {
-    // delete cookie
-    const cookiesToBeDeleted = ['refresh_token', 'user', 'token'];
-    cookiesToBeDeleted.forEach((cookie) => {
-      document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-    });
-    // redirect to home
-    window.location.href = '/';
-  }
-
   return (
     <a onClick={signOut}>
       <div className='flex justify-between items-center gap-2 px-1 border border-yellow-500 h-8 rounded-full'>
