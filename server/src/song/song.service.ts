@@ -17,40 +17,71 @@ import { SongDto } from './dto/Song.dto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { Song } from './entity/song.entity';
+import { SongDocument, Song as SongEntity } from './entity/song.entity';
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
   constructor(
-    @InjectModel(Song.name)
-    private songModel: Model<Song>,
+    @InjectModel(SongEntity.name)
+    private songModel: Model<SongEntity>,
     @Inject(UserService)
     private userService: UserService,
   ) {}
+
+  private async createSongDocument(
+    body: UploadSongDto,
+    user: UserDocument,
+  ): Promise<SongDocument> {
+    const foundSong = await this.songModel
+      .findOne({
+        title: body.title,
+        originalAuthor: body.originalAuthor,
+        uploader: user._id,
+      })
+      .exec();
+
+    if (foundSong) {
+      throw new HttpException(
+        {
+          message: 'Song already exists',
+          song: SongDto.fromSongDocument(foundSong),
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const { allowDownload, visibility, title, originalAuthor, description } =
+      body;
+    const song = new SongEntity();
+    const uploader = await this.userService.findByID(user._id.toString());
+    if (!uploader) {
+      throw new HttpException(
+        'user not found, contact an administrator',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    song.uploader = uploader._id as any;
+    song.allowDownload = allowDownload;
+    song.visibility = visibility;
+    song.title = title;
+    song.originalAuthor = originalAuthor;
+    song.description = description;
+    const createdSong = await this.songModel.create(song);
+    return createdSong;
+  }
   public async uploadSong({
-    songId,
     file,
     user,
+    body,
   }: {
-    songId: string;
+    body: UploadSongDto;
     file: Express.Multer.File;
     user: UserDocument | null;
   }): Promise<UploadSongDto> {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
-    const foundSong = await this.songModel.findById(songId).exec();
-    if (!foundSong) {
-      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-    }
-    // is song from user?
-    if (foundSong.uploader.toString() !== user._id.toString()) {
-      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
-    }
-    // is song already uploaded?
-    if (foundSong.content) {
-      throw new HttpException('Song already uploaded', HttpStatus.CONFLICT);
-    }
+    const song = await this.createSongDocument(body, user);
     const loadedArrayBuffer = new ArrayBuffer(file.buffer.byteLength);
     const view = new Uint8Array(loadedArrayBuffer);
     for (let i = 0; i < file.buffer.byteLength; ++i) {
@@ -69,11 +100,11 @@ export class SongService {
     const noteCount = layers.reduce((acc, layer) => acc + layer.length, 0);
 
     // update song document
-    foundSong.content = newBuffer;
-    foundSong.duration = nbsSong.length / 20;
-    foundSong.tempo = nbsSong.tempo;
-    foundSong.noteCount = noteCount;
-    const createdSong = await foundSong.save();
+    song.content = newBuffer;
+    song.duration = nbsSong.length / 20;
+    song.tempo = nbsSong.tempo;
+    song.noteCount = noteCount;
+    const createdSong = await song.save();
     return UploadSongDto.fromSongDocument(createdSong);
   }
   public async deleteSong(id: string): Promise<UploadSongDto> {
@@ -108,51 +139,6 @@ export class SongService {
 
     const createdSong = await foundSong.save();
     return UploadSongDto.fromSongDocument(createdSong);
-  }
-  public async createSong(
-    body: UploadSongDto,
-    user: UserDocument | null,
-  ): Promise<SongDto> {
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    }
-    // verify if song already exists, same title, same author
-    const foundSong = await this.songModel
-      .findOne({
-        title: body.title,
-        originalAuthor: body.originalAuthor,
-        uploader: user._id,
-      })
-      .exec();
-
-    if (foundSong) {
-      throw new HttpException(
-        {
-          message: 'Song already exists',
-          song: SongDto.fromSongDocument(foundSong),
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
-
-    const { allowDownload, visibility, title, originalAuthor, description } =
-      body;
-    const song = new Song();
-    const uploader = await this.userService.findByID(user._id.toString());
-    if (!uploader) {
-      throw new HttpException(
-        'user not found, contact an administrator',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-    song.uploader = uploader._id as any;
-    song.allowDownload = allowDownload;
-    song.visibility = visibility;
-    song.title = title;
-    song.originalAuthor = originalAuthor;
-    song.description = description;
-    const createdSong = await this.songModel.create(song);
-    return SongDto.fromSongDocument(createdSong);
   }
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
     const { page, limit } = query;

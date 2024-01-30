@@ -68,17 +68,6 @@ export class SongController {
     return await this.songService.getSongByPage(query);
   }
 
-  @Post('/')
-  @UseGuards(AuthGuard('jwt-refresh'))
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new song' })
-  public async createSong(
-    @Body() body: UploadSongDto,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<SongDto> {
-    return await this.songService.createSong(body, user);
-  }
-
   @Patch('/')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt-refresh'))
@@ -99,7 +88,18 @@ export class SongController {
     return await this.songService.deleteSong(id);
   }
 
-  @Post('/upload_song')
+  //@Post('/')
+  //@UseGuards(AuthGuard('jwt-refresh'))
+  //@ApiBearerAuth()
+  //@ApiOperation({ summary: 'Create a new song' })
+  //public async createSong(
+  //  @Body() body: UploadSongDto,
+  //  @GetRequestToken() user: UserDocument | null,
+  //): Promise<SongDto> {
+  //  return await this.songService.createSong(body, user);
+  //}
+
+  @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
@@ -119,12 +119,14 @@ export class SongController {
       },
     }),
   )
-  @ApiOperation({ summary: 'Upload a song .nbs file to an existing song' })
-  public async uploadSong(
-    @Query('id') songId: string,
+  @ApiOperation({
+    summary: 'Upload a .nbs file and sends the song data, creating a new song',
+  })
+  public async createSong(
     @UploadedFile() file: Express.Multer.File,
+    @Query() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
-    return await this.songService.uploadSong({ songId, file, user });
+    return await this.songService.uploadSong({ body, file, user });
   }
 }

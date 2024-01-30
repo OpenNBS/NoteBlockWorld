@@ -19,7 +19,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  public verifyToken(req: Request, res: Response) {
+  public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
     const authorizationHeader = headers.authorization;
     if (!authorizationHeader) {
@@ -33,7 +33,13 @@ export class AuthService {
       const decoded = this.jwtService.verify(token, {
         secret: this.configService.get('JWT_SECRET'),
       });
-      return decoded;
+      // verify if user exists
+      const user_registered = await this.userService.findByID(decoded.id);
+      if (!user_registered) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      } else {
+        return decoded;
+      }
     } catch (error) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
