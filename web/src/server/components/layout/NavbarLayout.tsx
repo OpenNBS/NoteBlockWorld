@@ -7,16 +7,22 @@ import {
 import { checkLogin, getUserData } from '@web/src/server/util/utils';
 import { LoggedUserData } from '@web/src/types/User';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 type TNavbarLayoutProps = {
   children: React.ReactNode;
 };
 
 async function Layout({ children }: TNavbarLayoutProps) {
-  const isLogged = await checkLogin();
-  let userData = undefined;
-  if (isLogged) {
-    console.log('User is logged in');
-    userData = await getUserData();
+  let isLogged;
+  let userData;
+  try {
+    isLogged = await checkLogin();
+    userData = undefined;
+    if (isLogged) {
+      userData = await getUserData();
+    }
+  } catch (e) {
+    redirect('/login?error=login');
   }
   return (
     <>
