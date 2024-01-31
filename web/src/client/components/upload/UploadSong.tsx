@@ -38,8 +38,6 @@ const SongSelector = () => {
 
   const handleFileDrop = useCallback(
     async (e: React.DragEvent<HTMLDivElement>) => {
-      // TODO: not working
-      // TODO: extract common logic with handleFileSelect
       e.preventDefault();
       if (!e.dataTransfer.files) return;
       const file = e.dataTransfer.files[0];
@@ -51,7 +49,7 @@ const SongSelector = () => {
   return (
     <div
       className='flex flex-col items-center gap-6 h-fit border-dashed border-4 border-zinc-700 p-8 mb-4'
-      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleFileDrop}
     >
       <i>
         <FontAwesomeIcon
@@ -78,7 +76,6 @@ const SongSelector = () => {
         accept='.nbs'
         className='z-[-1] absolute opacity-0'
         onChange={handleFileSelect}
-        onDrop={handleFileDrop}
       />
     </div>
   );
