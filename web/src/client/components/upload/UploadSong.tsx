@@ -1,6 +1,5 @@
 'use client';
 
-import { fromArrayBuffer } from '@encode42/nbs.js';
 import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
@@ -26,25 +25,15 @@ const Option = styled.option.attrs({
 })``;
 
 const SongSelector = () => {
-  const { setSong } = useUploadSongProvider();
-
-  const handleFile: (file: File) => void = async (file) => {
-    const song = fromArrayBuffer(await file.arrayBuffer());
-
-    if (song.length <= 0) {
-      alert('Invalid song. Please try uploading a different file!');
-      return;
-    }
-    setSong(song, file.name);
-  };
+  const { setFile } = useUploadSongProvider();
 
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) return;
       const file = e.target.files[0];
-      handleFile(file);
+      setFile(file);
     },
-    [setSong]
+    [setFile]
   );
 
   const handleFileDrop = useCallback(
@@ -54,9 +43,9 @@ const SongSelector = () => {
       e.preventDefault();
       if (!e.dataTransfer.files) return;
       const file = e.dataTransfer.files[0];
-      handleFile(file);
+      setFile(file);
     },
-    [setSong]
+    [setFile]
   );
 
   return (

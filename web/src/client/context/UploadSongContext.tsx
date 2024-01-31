@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from 'react';
 import { getTokenLocal } from '../utils/tokenUtils';
 import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
 import axiosInstance from '@web/src/axios';
-import { Song } from '@encode42/nbs.js';
+import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import type { Note } from '@web/src/utils/thumbnailDrawer';
 
 type CoverData = {
@@ -26,7 +26,8 @@ type UploadSongForm = {
 
 type UploadSongContextType = {
   song: Song | null;
-  setSong: (songFile: Song | null, filename: string | null) => void;
+  filename: string | null;
+  setFile: (file: File | null) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
 };
@@ -41,6 +42,7 @@ export const UploadSongProvider = ({
   children: React.ReactNode;
 }) => {
   const [song, setSong] = useState<Song | null>(null);
+  const [filename, setFilename] = useState<string | null>(null);
 
   const formMethods = useForm<UploadSongForm>({
     defaultValues: {
@@ -110,6 +112,7 @@ export const UploadSongProvider = ({
       throw new Error('Song data submission failed');
     }
   };
+
   const submitSong = async () => {
     try {
       await submitSongData();
@@ -118,10 +121,18 @@ export const UploadSongProvider = ({
     }
   };
 
-  const setSongHandler = (songFile: Song | null, filename: string | null) => {
-    if (!songFile) return;
-    setSong(songFile);
-    const { name, description, originalAuthor } = songFile.meta;
+  const setFileHandler = async (file: File | null) => {
+    if (!file) return;
+    const song = fromArrayBuffer(await file.arrayBuffer());
+
+    if (song.length <= 0) {
+      alert('Invalid song. Please try uploading a different file!');
+      return;
+    }
+    setSong(song);
+    setFilename(file.name);
+
+    const { name, description, originalAuthor } = song.meta;
     const title = name || filename?.replace('.nbs', '') || '';
     formMethods.setValue('title', title);
     formMethods.setValue('description', description);
@@ -133,7 +144,8 @@ export const UploadSongProvider = ({
       value={{
         submitSong,
         song,
-        setSong: setSongHandler,
+        filename,
+        setFile: setFileHandler,
         formMethods,
       }}
     >
