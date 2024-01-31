@@ -101,8 +101,10 @@ const ThumbnailInput = () => {
   return (
     <div>
       <p>Thumbnail</p>
-      <div className='flex flex-col items-center gap-6 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
-        <ThumbnailRenderer song={song}></ThumbnailRenderer>
+      <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+        <div className='flex flex-col items-center gap-6 w-full max-w-lg'>
+          <ThumbnailRenderer song={song} />
+        </div>
       </div>
     </div>
   );
