@@ -27,17 +27,22 @@ const Option = styled.option.attrs({
 
 const SongSelector = () => {
   const { setSong } = useUploadSongProvider();
+
+  const handleFile: (file: File) => void = async (file) => {
+    const song = fromArrayBuffer(await file.arrayBuffer());
+
+    if (song.length <= 0) {
+      alert('Invalid song. Please try uploading a different file!');
+      return;
+    }
+    setSong(song, file.name);
+  };
+
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) return;
-      const file: File = e.target.files[0];
-      const song = fromArrayBuffer(await file.arrayBuffer());
-
-      if (song.length <= 0) {
-        alert('Invalid song. Please try uploading a different file!');
-        return;
-      }
-      setSong(song, file.name);
+      const file = e.target.files[0];
+      handleFile(file);
     },
     [setSong]
   );
@@ -46,14 +51,8 @@ const SongSelector = () => {
     async (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       if (!e.dataTransfer.files) return;
-      const file: File = e.dataTransfer.files[0];
-      const song = fromArrayBuffer(await file.arrayBuffer());
-
-      if (song.length <= 0) {
-        alert('Invalid song. Please try uploading a different file!');
-        return;
-      }
-      setSong(song, file.name);
+      const file = e.dataTransfer.files[0];
+      handleFile(file);
     },
     [setSong]
   );
