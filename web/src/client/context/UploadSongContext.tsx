@@ -5,6 +5,7 @@ import { getTokenLocal } from '../utils/tokenUtils';
 import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
 import axiosInstance from '@web/src/axios';
 import { Song } from '@encode42/nbs.js';
+import { useRouter } from 'next/router';
 
 type CoverData = {
   zoomLevel: number;
@@ -39,7 +40,9 @@ export const UploadSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const router = useRouter();
   const [song, setSong] = useState<Song | null>(null);
+  const [error, setError] = useState<Record<string, string>>({});
   const formMethods = useForm<UploadSongForm>({
     defaultValues: {
       allowDownload: false,
@@ -57,12 +60,10 @@ export const UploadSongProvider = ({
     },
   });
 
-  const submitSongData = async (): Promise<string | never> => {
+  const submitSongData = async (): Promise<void> => {
     if (!song) throw new Error('Song file not found');
-    console.log(song);
     const fileData = new FormData();
     const arrayBuffer = song?.toArrayBuffer();
-    console.log(arrayBuffer);
     if (arrayBuffer.byteLength === 0) {
       throw new Error('Song file is empty');
     }
@@ -96,23 +97,28 @@ export const UploadSongProvider = ({
       }
     );
     if (response.status === 201) {
-      console.log('Song data submitted successfully');
       const data = response.data;
       console.log(data);
       const id = data._id;
       if (typeof id !== 'string') {
-        throw new Error('Song data submission failed');
+        setError({
+          submit: 'An error occurred while submitting the song',
+        });
       }
-      return id;
+      router.push(`/my-songs?selectedSong=${id}`);
     } else {
-      throw new Error('Song data submission failed');
+      const erro_body = (await response.data) as {
+        error: Record<string, string>;
+      };
+      setError(erro_body.error);
     }
   };
   const submitSong = async () => {
     try {
       await submitSongData();
     } catch (e) {
-      console.error(e);
+      if (e instanceof Error) setError({ submit: e.message });
+      else setError({ submit: 'An error occurred while submitting the song' });
     }
   };
 
