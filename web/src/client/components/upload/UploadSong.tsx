@@ -52,6 +52,7 @@ const SongSelector = () => {
       'application/octet-stream': ['.nbs'],
     },
     multiple: false,
+    noClick: true,
   });
 
   return (
