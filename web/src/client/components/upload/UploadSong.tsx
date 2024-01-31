@@ -165,11 +165,12 @@ const UploadForm = () => {
             />
           </div>
           <div className='flex-1'>
-            <label htmlFor='album'>Original author </label>
+            <label htmlFor='album'>Original author</label>
             <Input
               type='text'
               id='album'
               className='block'
+              placeholder='Replace with user name'
               {...formMethods.register('originalAuthor', {
                 maxLength: 64,
               })}
