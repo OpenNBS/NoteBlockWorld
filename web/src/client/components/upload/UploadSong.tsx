@@ -1,7 +1,6 @@
 'use client';
 
-import { fromArrayBuffer } from '@encode42/nbs.js';
-import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
@@ -10,6 +9,7 @@ import {
   useUploadSongProvider,
 } from '../../context/UploadSongContext';
 import ThumbnailRenderer from '@web/src/client/components/upload/ThumbnailRenderer';
+import { useDropzone } from 'react-dropzone';
 
 const Input = styled.input.attrs({
   className:
@@ -26,50 +26,48 @@ const Option = styled.option.attrs({
 })``;
 
 const SongSelector = () => {
-  const { setSong } = useUploadSongProvider();
-  const handleFileSelect = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      const file: File = e.target.files[0];
-      const song = fromArrayBuffer(await file.arrayBuffer());
+  const { setFile } = useUploadSongProvider();
 
-      if (song.length <= 0) {
-        alert('Invalid song. Please try uploading a different file!');
-        return;
-      }
-      setSong(song);
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) return;
+      const file = e.target.files[0];
+      setFile(file);
     },
-    [setSong]
+    [setFile]
   );
 
   const handleFileDrop = useCallback(
-    async (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if (!e.dataTransfer.files) return;
-      const file: File = e.dataTransfer.files[0];
-      const song = fromArrayBuffer(await file.arrayBuffer());
-
-      if (song.length <= 0) {
-        alert('Invalid song. Please try uploading a different file!');
-        return;
-      }
-      setSong(song);
+    (acceptedFiles: File[]) => {
+      if (!acceptedFiles) return;
+      const file = acceptedFiles[0];
+      setFile(file);
     },
-    [setSong]
+    [setFile]
   );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleFileDrop,
+    accept: {
+      'application/octet-stream': ['.nbs'],
+    },
+    multiple: false,
+    noClick: true,
+  });
 
   return (
     <div
-      className='flex flex-col items-center gap-6 h-fit border-dashed border-4 border-zinc-700 p-8 mb-4'
-      onDragOver={(e) => e.preventDefault()}
+      className={`flex flex-col items-center gap-6 h-fit p-8 mb-4 border-dashed border-4 ${
+        isDragActive ? 'border-blue-400' : 'border-zinc-700'
+      } transition-all duration-250 ease-in-out`}
+      {...getRootProps()}
     >
-      <i>
-        <FontAwesomeIcon
-          icon={faFileAudio}
-          size='5x'
-          className='text-zinc-600'
-        />
-      </i>
+      <FontAwesomeIcon
+        icon={faFileAudio}
+        className={`${
+          isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
+        } transition-all duration-250 ease-in-out h-20`}
+      />
 
       <div className='text-center'>
         <p className='font-semibold text-xl'>Drag and drop your song</p>
@@ -88,7 +86,7 @@ const SongSelector = () => {
         accept='.nbs'
         className='z-[-1] absolute opacity-0'
         onChange={handleFileSelect}
-        onDrop={handleFileDrop}
+        {...getInputProps()}
       />
     </div>
   );
@@ -100,22 +98,10 @@ const ThumbnailInput = () => {
   return (
     <div>
       <p>Thumbnail</p>
-      <div className='flex flex-col items-center gap-6 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
-        <ThumbnailRenderer
-          notes={song.layers
-            .map((layer) =>
-              layer.notes.map((note, tick) => {
-                const data = {
-                  tick: tick,
-                  layer: layer.id,
-                  key: note.key,
-                  instrument: note.instrument,
-                };
-                return data;
-              })
-            )
-            .flat()}
-        ></ThumbnailRenderer>
+      <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+        <div className='flex flex-col items-center gap-6 w-full max-w-lg'>
+          <ThumbnailRenderer song={song} />
+        </div>
       </div>
     </div>
   );
@@ -176,11 +162,12 @@ const UploadForm = () => {
             />
           </div>
           <div className='flex-1'>
-            <label htmlFor='album'>Original author </label>
+            <label htmlFor='album'>Original author</label>
             <Input
               type='text'
               id='album'
               className='block'
+              placeholder='Replace with user name'
               {...formMethods.register('originalAuthor', {
                 maxLength: 64,
               })}
@@ -270,8 +257,33 @@ const UploadForm = () => {
 };
 
 const UploadSong = () => {
-  const { song } = useUploadSongProvider();
-  return <>{!song ? <SongSelector /> : <UploadForm />}</>;
+  const { song, filename, setFile } = useUploadSongProvider();
+  return (
+    <>
+      <div className='flex flex-row flex-wrap justify-between items-center gap-8'>
+        <h1 className='text-3xl font-semibold'>Upload song</h1>
+
+        {song && (
+          <div className='flex flex-row gap-4 items-center text-zinc-500'>
+            <div className='flex flex-row gap-2 items-center'>
+              <FontAwesomeIcon icon={faFile} size='lg' />
+              <p className='text-md'>{filename}</p>
+            </div>
+            <button
+              className='px-3 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg text-white'
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Change file
+            </button>
+          </div>
+        )}
+      </div>
+      <div className='h-10' />
+      {!song ? <SongSelector /> : <UploadForm />}
+    </>
+  );
 };
 
 export const UploadSongPage = () => {

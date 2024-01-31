@@ -8,8 +8,6 @@ async function UploadPage() {
   return (
     <main className='p-8 h-full w-full flex justify-center'>
       <div className='w-[75vw] max-w-[768px]'>
-        <h1 className='text-3xl font-semibold'>Upload song</h1>
-        <div className='h-10' />
         <UploadSongPage />
       </div>
     </main>

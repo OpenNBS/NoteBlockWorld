@@ -4,7 +4,8 @@ import { createContext, useContext, useState } from 'react';
 import { getTokenLocal } from '../utils/tokenUtils';
 import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
 import axiosInstance from '@web/src/axios';
-import { Song } from '@encode42/nbs.js';
+import { Song, fromArrayBuffer } from '@encode42/nbs.js';
+import type { Note } from '@web/src/utils/thumbnailDrawer';
 import { useRouter } from 'next/router';
 
 type CoverData = {
@@ -26,7 +27,8 @@ type UploadSongForm = {
 
 type UploadSongContextType = {
   song: Song | null;
-  setSong: (songFile: Song | null) => void;
+  filename: string | null;
+  setFile: (file: File | null) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
 };
@@ -43,6 +45,8 @@ export const UploadSongProvider = ({
   const router = useRouter();
   const [song, setSong] = useState<Song | null>(null);
   const [error, setError] = useState<Record<string, string>>({});
+  const [filename, setFilename] = useState<string | null>(null);
+
   const formMethods = useForm<UploadSongForm>({
     defaultValues: {
       allowDownload: false,
@@ -113,6 +117,7 @@ export const UploadSongProvider = ({
       setError(erro_body.error);
     }
   };
+
   const submitSong = async () => {
     try {
       await submitSongData();
@@ -122,18 +127,33 @@ export const UploadSongProvider = ({
     }
   };
 
-  const setSongHandler = (songFile: Song | null) => {
-    if (!songFile) return;
-    setSong(songFile);
-    const { name, description, originalAuthor } = songFile.meta;
-    formMethods.setValue('title', name);
+  const setFileHandler = async (file: File | null) => {
+    if (!file) return;
+    const song = fromArrayBuffer(await file.arrayBuffer());
+
+    if (song.length <= 0) {
+      alert('Invalid song. Please try uploading a different file!');
+      return;
+    }
+    setSong(song);
+    setFilename(file.name);
+
+    const { name, description, originalAuthor } = song.meta;
+    const title = name || filename?.replace('.nbs', '') || '';
+    formMethods.setValue('title', title);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
   };
 
   return (
     <UploadSongContext.Provider
-      value={{ submitSong, song, setSong: setSongHandler, formMethods }}
+      value={{
+        submitSong,
+        song,
+        filename,
+        setFile: setFileHandler,
+        formMethods,
+      }}
     >
       {children}
     </UploadSongContext.Provider>

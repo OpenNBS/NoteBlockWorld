@@ -1,9 +1,10 @@
 import type { Note } from '@web/src/utils/thumbnailDrawer';
 import drawNotes from '@web/src/utils/thumbnailDrawer';
 import React, { useState, useEffect, useRef } from 'react';
+import { Song } from '@encode42/nbs.js';
 
 interface ThumbnailRendererProps {
-  notes: Note[];
+  song: Song;
 }
 
 const bgColors = [
@@ -20,12 +21,30 @@ const bgColors = [
   '#232427',
 ];
 
-const ThumbnailRenderer = ({ notes }: ThumbnailRendererProps) => {
+const getThumbnailNotes = (song: Song): Note[] => {
+  const notes = song.layers
+    .map((layer) =>
+      layer.notes.map((note, tick) => {
+        const data = {
+          tick: tick,
+          layer: layer.id,
+          key: note.key,
+          instrument: note.instrument,
+        };
+        return data;
+      })
+    )
+    .flat();
+  return notes;
+};
+
+const ThumbnailRenderer = ({ song }: ThumbnailRendererProps) => {
   const [zoomLevel, setZoomLevel] = useState(3);
   const [startTick, setStartTick] = useState(0);
   const [startLayer, setStartLayer] = useState(0);
   const canvasRef = useRef(null);
 
+  const notes = getThumbnailNotes(song);
   const maxTick = Math.max(...notes.map((note) => note.tick));
   const maxLayer = Math.max(...notes.map((note) => note.layer));
 
@@ -105,9 +124,9 @@ const ThumbnailRenderer = ({ notes }: ThumbnailRendererProps) => {
       </div>
 
       {/* Background Color */}
-      <div className='w-full flex flex-col gap-2'>
-        <label>Background Color</label>
-        <div className='w-full flex flex-row flex-wrap gap-1.5 justify-center'>
+      <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
+        <label className='basis-full sm:basis-auto'>Background Color</label>
+        <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
           {bgColors.map((color, index) => (
             <button
               type='button'
