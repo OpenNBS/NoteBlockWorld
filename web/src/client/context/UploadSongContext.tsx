@@ -5,6 +5,7 @@ import { getTokenLocal } from '../utils/tokenUtils';
 import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
 import axiosInstance from '@web/src/axios';
 import { Song } from '@encode42/nbs.js';
+import type { Note } from '@web/src/utils/thumbnailDrawer';
 
 type CoverData = {
   zoomLevel: number;
@@ -28,6 +29,7 @@ type UploadSongContextType = {
   setSong: (songFile: Song | null, filename: string | null) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
+  getThumbnailNotes: () => Note[];
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -40,6 +42,7 @@ export const UploadSongProvider = ({
   children: React.ReactNode;
 }) => {
   const [song, setSong] = useState<Song | null>(null);
+
   const formMethods = useForm<UploadSongForm>({
     defaultValues: {
       allowDownload: false,
@@ -126,9 +129,34 @@ export const UploadSongProvider = ({
     formMethods.setValue('originalAuthor', originalAuthor);
   };
 
+  const getThumbnailNotes = () => {
+    // TODO: move to utils or existing thumbnail modules
+    if (!song) return [];
+    const notes = song.layers
+      .map((layer) =>
+        layer.notes.map((note, tick) => {
+          const data = {
+            tick: tick,
+            layer: layer.id,
+            key: note.key,
+            instrument: note.instrument,
+          };
+          return data;
+        })
+      )
+      .flat();
+    return notes;
+  };
+
   return (
     <UploadSongContext.Provider
-      value={{ submitSong, song, setSong: setSongHandler, formMethods }}
+      value={{
+        submitSong,
+        song,
+        setSong: setSongHandler,
+        formMethods,
+        getThumbnailNotes,
+      }}
     >
       {children}
     </UploadSongContext.Provider>
