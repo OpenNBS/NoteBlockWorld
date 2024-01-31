@@ -43,3 +43,35 @@ body {
   opacity: 0;
   transform: scale(0.95);
 }
+
+/************** Scrollbar **************/
+
+body {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: --tw-bg-zinc-900 --tw-bg-zinc-500;
+}
+
+::-webkit-scrollbar {
+  @apply w-4;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-zinc-900;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-500 w-2 rounded-full border-4 border-solid border-transparent bg-clip-content;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-zinc-600;
+}
+
+/* Handle on active */
+::-webkit-scrollbar-thumb:active {
+  @apply bg-zinc-700;
+}
