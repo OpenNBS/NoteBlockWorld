@@ -37,7 +37,7 @@ const SongSelector = () => {
         alert('Invalid song. Please try uploading a different file!');
         return;
       }
-      setSong(song);
+      setSong(song, file.name);
     },
     [setSong]
   );
@@ -53,7 +53,7 @@ const SongSelector = () => {
         alert('Invalid song. Please try uploading a different file!');
         return;
       }
-      setSong(song);
+      setSong(song, file.name);
     },
     [setSong]
   );

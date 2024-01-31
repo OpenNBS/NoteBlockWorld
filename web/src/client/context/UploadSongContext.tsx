@@ -25,7 +25,7 @@ type UploadSongForm = {
 
 type UploadSongContextType = {
   song: Song | null;
-  setSong: (songFile: Song | null) => void;
+  setSong: (songFile: Song | null, filename: string | null) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
 };
@@ -116,11 +116,12 @@ export const UploadSongProvider = ({
     }
   };
 
-  const setSongHandler = (songFile: Song | null) => {
+  const setSongHandler = (songFile: Song | null, filename: string | null) => {
     if (!songFile) return;
     setSong(songFile);
     const { name, description, originalAuthor } = songFile.meta;
-    formMethods.setValue('title', name);
+    const title = name || filename?.replace('.nbs', '') || '';
+    formMethods.setValue('title', title);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
   };
