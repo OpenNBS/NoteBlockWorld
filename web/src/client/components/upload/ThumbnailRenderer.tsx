@@ -124,9 +124,9 @@ const ThumbnailRenderer = ({ song }: ThumbnailRendererProps) => {
       </div>
 
       {/* Background Color */}
-      <div className='w-full flex flex-col gap-2'>
-        <label>Background Color</label>
-        <div className='w-full flex flex-row flex-wrap gap-1.5 justify-center'>
+      <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
+        <label className='basis-full sm:basis-auto'>Background Color</label>
+        <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
           {bgColors.map((color, index) => (
             <button
               type='button'
