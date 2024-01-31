@@ -272,7 +272,7 @@ const UploadSong = () => {
             <button
               className='px-3 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg text-white'
               onClick={() => {
-                setFile(null);
+                window.location.reload();
               }}
             >
               Change file
