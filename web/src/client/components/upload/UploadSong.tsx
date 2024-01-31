@@ -62,15 +62,12 @@ const SongSelector = () => {
       } transition-all duration-250 ease-in-out`}
       {...getRootProps()}
     >
-      <i>
-        <FontAwesomeIcon
-          icon={faFileAudio}
-          size='5x'
-          className={`${
-            isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
-          } transition-all duration-250 ease-in-out`}
-        />
-      </i>
+      <FontAwesomeIcon
+        icon={faFileAudio}
+        className={`${
+          isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
+        } transition-all duration-250 ease-in-out h-20`}
+      />
 
       <div className='text-center'>
         <p className='font-semibold text-xl'>Drag and drop your song</p>
