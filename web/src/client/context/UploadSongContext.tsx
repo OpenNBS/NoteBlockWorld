@@ -29,7 +29,6 @@ type UploadSongContextType = {
   setSong: (songFile: Song | null, filename: string | null) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
-  getThumbnailNotes: () => Note[];
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -129,25 +128,6 @@ export const UploadSongProvider = ({
     formMethods.setValue('originalAuthor', originalAuthor);
   };
 
-  const getThumbnailNotes = () => {
-    // TODO: move to utils or existing thumbnail modules
-    if (!song) return [];
-    const notes = song.layers
-      .map((layer) =>
-        layer.notes.map((note, tick) => {
-          const data = {
-            tick: tick,
-            layer: layer.id,
-            key: note.key,
-            instrument: note.instrument,
-          };
-          return data;
-        })
-      )
-      .flat();
-    return notes;
-  };
-
   return (
     <UploadSongContext.Provider
       value={{
@@ -155,7 +135,6 @@ export const UploadSongProvider = ({
         song,
         setSong: setSongHandler,
         formMethods,
-        getThumbnailNotes,
       }}
     >
       {children}

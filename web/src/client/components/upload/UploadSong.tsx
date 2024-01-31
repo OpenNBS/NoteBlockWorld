@@ -49,6 +49,8 @@ const SongSelector = () => {
 
   const handleFileDrop = useCallback(
     async (e: React.DragEvent<HTMLDivElement>) => {
+      // TODO: not working
+      // TODO: extract common logic with handleFileSelect
       e.preventDefault();
       if (!e.dataTransfer.files) return;
       const file = e.dataTransfer.files[0];
@@ -94,12 +96,13 @@ const SongSelector = () => {
 };
 
 const ThumbnailInput = () => {
-  const { getThumbnailNotes } = useUploadSongProvider();
+  const { song } = useUploadSongProvider();
+  if (!song) return null;
   return (
     <div>
       <p>Thumbnail</p>
       <div className='flex flex-col items-center gap-6 w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
-        <ThumbnailRenderer notes={getThumbnailNotes()}></ThumbnailRenderer>
+        <ThumbnailRenderer song={song}></ThumbnailRenderer>
       </div>
     </div>
   );
