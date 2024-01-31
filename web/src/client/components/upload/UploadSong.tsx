@@ -9,6 +9,7 @@ import {
   useUploadSongProvider,
 } from '../../context/UploadSongContext';
 import ThumbnailRenderer from '@web/src/client/components/upload/ThumbnailRenderer';
+import { useDropzone } from 'react-dropzone';
 
 const Input = styled.input.attrs({
   className:
@@ -28,7 +29,7 @@ const SongSelector = () => {
   const { setFile } = useUploadSongProvider();
 
   const handleFileSelect = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) return;
       const file = e.target.files[0];
       setFile(file);
@@ -37,25 +38,36 @@ const SongSelector = () => {
   );
 
   const handleFileDrop = useCallback(
-    async (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if (!e.dataTransfer.files) return;
-      const file = e.dataTransfer.files[0];
+    (acceptedFiles: File[]) => {
+      if (!acceptedFiles) return;
+      const file = acceptedFiles[0];
       setFile(file);
     },
     [setFile]
   );
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleFileDrop,
+    accept: {
+      'application/octet-stream': ['.nbs'],
+    },
+    multiple: false,
+  });
+
   return (
     <div
-      className='flex flex-col items-center gap-6 h-fit border-dashed border-4 border-zinc-700 p-8 mb-4'
-      onDrop={handleFileDrop}
+      className={`flex flex-col items-center gap-6 h-fit p-8 mb-4 border-dashed border-4 ${
+        isDragActive ? 'border-blue-400' : 'border-zinc-700'
+      } transition-colors duration-200`}
+      {...getRootProps()}
     >
       <i>
         <FontAwesomeIcon
           icon={faFileAudio}
           size='5x'
-          className='text-zinc-600'
+          className={`${
+            isDragActive ? 'text-blue-400' : 'text-zinc-600'
+          } transition-colors duration-200`}
         />
       </i>
 
@@ -76,6 +88,7 @@ const SongSelector = () => {
         accept='.nbs'
         className='z-[-1] absolute opacity-0'
         onChange={handleFileSelect}
+        {...getInputProps()}
       />
     </div>
   );
