@@ -59,7 +59,7 @@ const SongSelector = () => {
     <div
       className={`flex flex-col items-center gap-6 h-fit p-8 mb-4 border-dashed border-4 ${
         isDragActive ? 'border-blue-400' : 'border-zinc-700'
-      } transition-colors duration-200`}
+      } transition-all duration-250 ease-in-out`}
       {...getRootProps()}
     >
       <i>
@@ -67,8 +67,8 @@ const SongSelector = () => {
           icon={faFileAudio}
           size='5x'
           className={`${
-            isDragActive ? 'text-blue-400' : 'text-zinc-600'
-          } transition-colors duration-200`}
+            isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
+          } transition-all duration-250 ease-in-out`}
         />
       </i>
 
