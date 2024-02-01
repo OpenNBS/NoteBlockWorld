@@ -42,7 +42,9 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^3.22.4",
+    "zod-validation-error": "^3.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
