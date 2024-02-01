@@ -52,9 +52,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
         </div>
 
         {/* Page content */}
-        <main className='bg-zinc-900 pt-24 px-6 sm:px-10 pb-10'>
-          {children}
-        </main>
+        <div className='bg-zinc-900 pt-24 px-6 sm:px-10 pb-10'>{children}</div>
 
         {/* Footer */}
         <div className='w-full h-12 flex flex-row justify-center items-center bg-zinc-900 border-t border-zinc-700 p-2 z-10'>
