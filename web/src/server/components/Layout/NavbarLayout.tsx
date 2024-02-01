@@ -25,17 +25,22 @@ async function Layout({ children }: TNavbarLayoutProps) {
     redirect('/login?error=login');
   }
   return (
-    <>
-      <section
-        className='w-full h-full flex flex-col justify-between items-center bg-zinc-900'
-        style={{
-          minHeight: '100vh',
-        }}
-      >
+    <div
+      className='w-full h-full flex flex-col justify-between items-center bg-zinc-900'
+      style={{
+        minHeight: '100vh',
+      }}
+    >
+      <header className='fixed w-full h-14 flex flex-row justify-between items-center bg-zinc-900 border-b border-zinc-700 p-2 z-10'>
         {/* Navbar */}
-        <div className='fixed w-full h-14 flex flex-row justify-between items-center bg-zinc-900 border-b border-zinc-700 p-2 z-10'>
+        <nav className='w-full flex flex-row justify-between items-center'>
+          {/* Sign in / Profile */}
+          <NavLinks
+            isUserLoggedIn={isLogged ? true : false}
+            userData={userData}
+          />
           {/* Logo */}
-          <a className='flex-grow' href='/'>
+          <a className='flex-grow flex justify-center' href='/'>
             <Image
               src='/nbw-white.png'
               alt='NoteBlockWorld logo'
@@ -49,24 +54,24 @@ async function Layout({ children }: TNavbarLayoutProps) {
             isUserLoggedIn={isLogged ? true : false}
             userData={userData}
           />
-        </div>
+        </nav>
+      </header>
 
-        {/* Page content */}
-        <div className='bg-zinc-900 pt-24 px-6 sm:px-10 pb-10'>{children}</div>
+      {/* Main content */}
+      <main className='pt-24 px-6 sm:px-10 pb-10'>{children}</main>
 
-        {/* Footer */}
-        <div className='w-full h-12 flex flex-row justify-center items-center bg-zinc-900 border-t border-zinc-700 p-2 z-10'>
-          <div className='text-sm text-zinc-500'>
-            <p>
-              © 2024{' '}
-              <a href='https://opennbs.org/' className='underline'>
-                OpenNBS
-              </a>
-            </p>
-          </div>
+      {/* Footer */}
+      <footer className='w-full h-12 flex flex-row justify-center items-center bg-zinc-900 border-t border-zinc-700 p-2 z-10'>
+        <div className='text-sm text-zinc-500'>
+          <p>
+            © {new Date().getFullYear()}{' '}
+            <a href='https://opennbs.org/' className='underline'>
+              OpenNBS
+            </a>
+          </p>
         </div>
-      </section>
-    </>
+      </footer>
+    </div>
   );
 }
 

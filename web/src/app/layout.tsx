@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className='min-h-screen'>
-      <body className={lato.className + ' min-h-screen'}>
+      <body className={lato.className + ' min-h-screen bg-zinc-900'}>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
