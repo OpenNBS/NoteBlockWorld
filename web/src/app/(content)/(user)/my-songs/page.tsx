@@ -1,4 +1,3 @@
-import Layout from '@web/src/server/components/layout/NavbarLayout';
 import { getUserSongs } from '@web/src/server/util/Song';
 import { checkLogin, getUserData } from '@web/src/server/util/utils';
 
@@ -12,9 +11,7 @@ const MySongsPage = async () => {
   }
   return (
     <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
-      <Layout>
-        <h1>My Songs</h1>
-      </Layout>
+      <h1>My Songs</h1>
     </main>
   );
 };
