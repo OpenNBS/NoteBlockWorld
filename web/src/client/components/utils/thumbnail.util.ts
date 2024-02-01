@@ -24,6 +24,21 @@ const instrumentColors = [
   '#575757',
 ];
 
+export const bgColors = [
+  '#ffffff',
+  '#77172e',
+  '#692b17',
+  '#7c4a03',
+  '#264d3b',
+  '#0c625d',
+  '#256377',
+  '#284255',
+  '#472e5b',
+  '#6c394f',
+  '#4b443a',
+  '#232427',
+];
+
 let noteBlockImage: HTMLImageElement | null = null;
 const tintedImages: Record<string, HTMLCanvasElement> = {};
 

@@ -1,12 +1,17 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
-import { getTokenLocal } from '../utils/tokenUtils';
-import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
-import axiosInstance from '@web/src/axios';
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
-import type { Note } from '@web/src/utils/thumbnailDrawer';
-import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axiosInstance from '@web/src/axios';
+import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormReturn,
+  useForm,
+} from 'react-hook-form';
+import { z as zod } from 'zod';
+import { getTokenLocal } from '../utils/tokenUtils';
 
 type CoverData = {
   zoomLevel: number;
@@ -23,14 +28,78 @@ type UploadSongForm = {
   description: string;
   coverData: CoverData;
   customInstruments: string[];
+  license: 'no_license' | 'cc_by_4' | 'public_domain';
+  tags: string;
+  category:
+    | 'Gaming'
+    | 'MoviesNTV'
+    | 'Anime'
+    | 'Vocaloid'
+    | 'Rock'
+    | 'Pop'
+    | 'Electronic'
+    | 'Ambient'
+    | 'Jazz'
+    | 'Classical';
 };
+
+const coverDataSchema = zod.object({
+  zoomLevel: zod.number().int().min(1).max(5),
+  startTick: zod.number().int().min(0),
+  startLayer: zod.number().int().min(0),
+  backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
+});
+
+const uploadSongFormSchema = zod.object({
+  allowDownload: zod.boolean(),
+  visibility: zod.union([zod.literal('public'), zod.literal('private')]),
+  title: zod
+    .string()
+    .max(64, {
+      message: 'Title must be less than 64 characters',
+    })
+    .min(1, {
+      message: 'Title must be at least 1 character',
+    }),
+  originalAuthor: zod
+    .string()
+    .max(64, {
+      message: 'Original author must be less than 64 characters',
+    })
+    .min(0),
+  description: zod.string().max(1024, {
+    message: 'Description must be less than 1024 characters',
+  }),
+  coverData: coverDataSchema,
+  customInstruments: zod.array(zod.string()),
+  license: zod.union([
+    zod.literal('no_license'),
+    zod.literal('cc_by_4'),
+    zod.literal('public_domain'),
+  ]),
+  category: zod.union([
+    zod.literal('Gaming'),
+    zod.literal('MoviesNTV'),
+    zod.literal('Anime'),
+    zod.literal('Vocaloid'),
+    zod.literal('Rock'),
+    zod.literal('Pop'),
+    zod.literal('Electronic'),
+    zod.literal('Ambient'),
+    zod.literal('Jazz'),
+    zod.literal('Classical'),
+  ]),
+});
 
 type UploadSongContextType = {
   song: Song | null;
   filename: string | null;
   setFile: (file: File | null) => void;
+  invalidFile: boolean;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
+  register: UseFormRegister<UploadSongForm>;
+  errors: FieldErrors<UploadSongForm>;
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -42,34 +111,26 @@ export const UploadSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const router = useRouter();
+  const router = {
+    push: (x: string) => {},
+  };
   const [song, setSong] = useState<Song | null>(null);
-  const [error, setError] = useState<Record<string, string>>({});
   const [filename, setFilename] = useState<string | null>(null);
-
+  const [invalidFile, setInvalidFile] = useState(false);
   const formMethods = useForm<UploadSongForm>({
-    defaultValues: {
-      allowDownload: false,
-      visibility: 'public',
-      title: '',
-      originalAuthor: '',
-      description: '',
-      coverData: {
-        zoomLevel: 1,
-        startTick: 0,
-        startLayer: 0,
-        backgroundColor: '#000000',
-      },
-      customInstruments: [],
-    },
+    resolver: zodResolver(uploadSongFormSchema),
   });
+  const {
+    register,
+    formState: { errors },
+  } = formMethods;
 
   const submitSongData = async (): Promise<void> => {
     if (!song) throw new Error('Song file not found');
     const fileData = new FormData();
     const arrayBuffer = song?.toArrayBuffer();
     if (arrayBuffer.byteLength === 0) {
-      throw new Error('Song file is empty');
+      return;
     }
     const blob = new Blob([arrayBuffer]);
 
@@ -105,16 +166,14 @@ export const UploadSongProvider = ({
       console.log(data);
       const id = data._id;
       if (typeof id !== 'string') {
-        setError({
-          submit: 'An error occurred while submitting the song',
-        });
+        return;
       }
       router.push(`/my-songs?selectedSong=${id}`);
     } else {
       const erro_body = (await response.data) as {
         error: Record<string, string>;
       };
-      setError(erro_body.error);
+      return;
     }
   };
 
@@ -122,17 +181,16 @@ export const UploadSongProvider = ({
     try {
       await submitSongData();
     } catch (e) {
-      if (e instanceof Error) setError({ submit: e.message });
-      else setError({ submit: 'An error occurred while submitting the song' });
+      console.log(e);
     }
   };
 
   const setFileHandler = async (file: File | null) => {
     if (!file) return;
     const song = fromArrayBuffer(await file.arrayBuffer());
-
     if (song.length <= 0) {
-      alert('Invalid song. Please try uploading a different file!');
+      setInvalidFile(true);
+      setSong(null);
       return;
     }
     setSong(song);
@@ -144,15 +202,26 @@ export const UploadSongProvider = ({
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
   };
+  useEffect(() => {
+    if (song) {
+      formMethods.setValue('coverData.zoomLevel', 1);
+      formMethods.setValue('coverData.startTick', 0);
+      formMethods.setValue('coverData.startLayer', 0);
+      formMethods.setValue('coverData.backgroundColor', '#ffffff');
+    }
+  }, [song]);
 
   return (
     <UploadSongContext.Provider
       value={{
+        formMethods,
+        register,
+        errors,
         submitSong,
         song,
+        invalidFile,
         filename,
         setFile: setFileHandler,
-        formMethods,
       }}
     >
       {children}
