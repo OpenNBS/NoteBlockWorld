@@ -8,6 +8,7 @@ import axios from 'axios';
 import { Request, Response } from 'express';
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { TokenPayload, Tokens } from './types/token';
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -91,6 +92,7 @@ export class AuthService {
     });
     return this.GenTokenRedirect(user_registered, res);
   }
+
   public async auth0Login(req: Request, res: Response) {
     const { user } = req as any;
     const { profile } = user;
