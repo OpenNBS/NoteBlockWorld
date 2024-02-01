@@ -1,7 +1,7 @@
 import { checkLogin } from '@web/src/server/util/utils';
 import { redirect } from 'next/navigation';
 import { LoginPage } from './loginPage';
-import { TokenRemover } from '@web/src/client/components/User/TokenRemover';
+import { TokenRemover } from '@web/src/client/components/user/TokenRemover';
 
 const Login = async () => {
   const isLogged = await checkLogin();
