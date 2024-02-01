@@ -1,4 +1,4 @@
-import Layout from '@web/src/server/components/layout/NavbarLayout';
+import Layout from '@web/src/server/components/Layout/NavbarLayout';
 import { getUserSongs } from '@web/src/server/util/Song';
 import { checkLogin, getUserData } from '@web/src/server/util/utils';
 
