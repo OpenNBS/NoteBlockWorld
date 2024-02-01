@@ -1,9 +1,27 @@
+import { Song } from '@encode42/nbs.js';
 export interface Note {
   tick: number;
   layer: number;
   key: number;
   instrument: number;
 }
+
+export const getThumbnailNotes = (song: Song): Note[] => {
+  const notes = song.layers
+    .map((layer) =>
+      layer.notes.map((note, tick) => {
+        const data = {
+          tick: tick,
+          layer: layer.id,
+          key: note.key,
+          instrument: note.instrument,
+        };
+        return data;
+      })
+    )
+    .flat();
+  return notes;
+};
 
 const instrumentColors = [
   '#1964ac',

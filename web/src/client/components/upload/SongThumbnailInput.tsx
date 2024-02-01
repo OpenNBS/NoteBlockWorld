@@ -1,8 +1,8 @@
+import { ThumbnailRendererCanvas } from '@web/src/client/components/upload/ThumbnailRenderer';
 import {
-  ThumbnailRendererCanvas,
+  bgColors,
   getThumbnailNotes,
-} from '@web/src/client/components/upload/ThumbnailRenderer';
-import { bgColors } from '@web/src/client/components/utils/thumbnail.util';
+} from '@web/src/client/components/utils/thumbnail.util';
 import { useMemo } from 'react';
 import { useUploadSongProvider } from '../../context/UploadSongContext';
 
