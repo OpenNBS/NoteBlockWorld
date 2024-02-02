@@ -88,17 +88,6 @@ export class SongController {
     return await this.songService.deleteSong(id);
   }
 
-  //@Post('/')
-  //@UseGuards(AuthGuard('jwt-refresh'))
-  //@ApiBearerAuth()
-  //@ApiOperation({ summary: 'Create a new song' })
-  //public async createSong(
-  //  @Body() body: UploadSongDto,
-  //  @GetRequestToken() user: UserDocument | null,
-  //): Promise<SongDto> {
-  //  return await this.songService.createSong(body, user);
-  //}
-
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
