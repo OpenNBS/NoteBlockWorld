@@ -1,6 +1,7 @@
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { baseApiURL } from '@web/src/axios';
+import { baseApiURL } from '@web/src/lib/axios';
+
 import Link from 'next/link';
 type AuthProvider = 'google' | 'github';
 

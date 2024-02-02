@@ -1,6 +1,6 @@
-import UserProfile from '@web/src/client/components/user/UserProfile';
-import Layout from '@web/src/server/components/layout/NavbarLayout';
-import { getUserProfileData } from '@web/src/server/util/user.util';
+import UserProfile from '@web/src/modules/user/components/UserProfile';
+import { getUserProfileData } from '@web/src/modules/user/features/user.util';
+import Layout from '../../../layout';
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;

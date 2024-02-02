@@ -1,5 +1,5 @@
-import { UploadSongPage } from '@web/src/client/components/upload/UploadSong';
-import { checkLogin } from '@web/src/server/util/utils';
+import { checkLogin } from '@web/src/modules/auth/features/auth.utils';
+import { UploadSongPage } from '@web/src/modules/upload/components/client/UploadSong';
 import { redirect } from 'next/navigation';
 
 async function UploadPage() {

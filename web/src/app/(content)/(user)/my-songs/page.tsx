@@ -1,5 +1,8 @@
-import { getUserSongs } from '@web/src/server/util/Song';
-import { checkLogin, getUserData } from '@web/src/server/util/utils';
+import {
+  checkLogin,
+  getUserData,
+} from '@web/src/modules/auth/features/auth.utils';
+import { getUserSongs } from '@web/src/modules/user/features/song.util';
 
 const MySongsPage = async () => {
   const isLogged = await checkLogin();
