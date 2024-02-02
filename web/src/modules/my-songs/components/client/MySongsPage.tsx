@@ -23,34 +23,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const SongRow = ({ song }: { song: MySongsSongDTO }) => {
   return (
     <TableRow key={song.id}>
+      {/* Thumbnail */}
+      <TableCell>
+        <div className='aspect-video my-1.5 max-h-28 object-cover rounded-lg relative'>
+          <img
+            src='/demo.png'
+            className='w-full h-full object-cover rounded-lg'
+          />
+          <div className='absolute bottom-0 right-0 m-1.5 px-1 py-0.5 bg-zinc-900/80 rounded-md'>
+            <span className='text-white font-semibold text-md'>
+              {song.duration}
+            </span>
+          </div>
+          <div className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'>
+            <FontAwesomeIcon
+              icon={faCirclePlay}
+              className='text-white w-12 h-12'
+            />
+          </div>
+        </div>
+      </TableCell>
+
       {/* Song */}
       <TableCell>
-        <div className='flex flex-row gap-4 items-center'>
-          <div className='w-56 my-1.5 object-cover rounded-lg relative'>
-            <img
-              src='/demo.png'
-              className='w-full h-full object-cover rounded-lg'
-            />
-            <div className='absolute bottom-0 right-0 m-1.5 px-1 py-0.5 bg-zinc-900/80 rounded-md'>
-              <span className='text-white font-semibold text-md'>
-                {song.duration}
-              </span>
-            </div>
-            <div className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'>
-              <FontAwesomeIcon
-                icon={faCirclePlay}
-                className='text-white w-12 h-12'
-              />
-            </div>
-          </div>
-          <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
-            <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
-              {song.title}
-            </span>
-            <p className='line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400'>
-              {song.description}
-            </p>
-          </div>
+        <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
+          <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
+            {song.title}
+          </span>
+          <p className='line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400'>
+            {song.description}
+          </p>
         </div>
       </TableCell>
 
@@ -142,7 +144,7 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
       <Table className='table-auto min-w-[600px] text-md text-center'>
         <TableHeader className='bg-zinc-700 rounded-lg'>
           <TableRow className='rounded-lg'>
-            <TableHead>Song</TableHead>
+            <TableHead colspan={2}>Song</TableHead>
             <TableHead>Visibility</TableHead>
             <TableHead>Created at</TableHead>
             <TableHead>Play count</TableHead>
