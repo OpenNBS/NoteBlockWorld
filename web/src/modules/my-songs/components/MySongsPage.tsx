@@ -148,8 +148,8 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
     <div className='flex flex-col h-full gap-12 justify-between'>
       <h1 className='text-3xl font-semibold uppercase flex-1'>My songs</h1>
       <div className='rounded-xl flex-grow'>
-        <Table className='min-w-[600px] text-md text-center h-full text-nowrap text-ellipsis'>
-          <TableHeader className='sticky top-14 z-10 border-t bg-zinc-900 border-x border-zinc-700'>
+        <Table className='min-w-[600px] text-md text-center h-full text-nowrap text-ellipsis border-separate border-spacing-1 border-blue-500 border'>
+          <TableHeader className='sticky top-14 z-10'>
             <TableRow className=''>
               <TableHead colSpan={2}>Song</TableHead>
               <TableHead>Visibility</TableHead>
@@ -158,20 +158,20 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className='border-x border-zinc-700'>
+          <TableBody className=''>
             {userSongs2.map((song) => (
               <SongRow key={song.id} song={song} />
             ))}
           </TableBody>
-          <TableFooter className='sticky bottom-0 border-t bg-zinc-900'>
+          <TableFooter className='sticky bottom-0'>
             <TableRow>
-              <TableCell colSpan={6}>
+              <TableHead colSpan={6}>
                 <div className='flex items-center justify-center gap-4 h-12'>
                   <span className='text-zinc-400'>
                     {1}–{30} of {36}
                   </span>
                 </div>
-              </TableCell>
+              </TableHead>
             </TableRow>
           </TableFooter>
         </Table>

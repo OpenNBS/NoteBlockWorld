@@ -20,11 +20,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead
-    ref={ref}
-    className={cn('[&_tr]:border-b border-zinc-400', className)}
-    {...props}
-  />
+  <thead ref={ref} className={cn('bg-zinc-900', className)} {...props} />
 ));
 TableHeader.displayName = 'TableHeader';
 
@@ -32,11 +28,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    className={cn('[&_tr:last-child]:border-0 border-zinc-400', className)}
-    {...props}
-  />
+  <tbody ref={ref} className={cn('', className)} {...props} />
 ));
 TableBody.displayName = 'TableBody';
 
@@ -46,10 +38,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn(
-      'border-t border-zinc-400 bg-zinc-100/50 font-medium [&>tr]:last:border-b-0 dark:bg-zinc-800/50',
-      className
-    )}
+    className={cn('bg-zinc-900 font-medium', className)}
     {...props}
   />
 ));
@@ -61,10 +50,7 @@ const TableRow = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tr
     ref={ref}
-    className={cn(
-      'border-b border-zinc-700 transition-colors hover:bg-zinc-100/50 data-[state=selected]:bg-zinc-100 dark:hover:bg-zinc-800/50 dark:data-[state=selected]:bg-zinc-800',
-      className
-    )}
+    className={cn('transition-colors hover:bg-zinc-950/50', className)}
     {...props}
   />
 ));
@@ -77,7 +63,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-3 align-middle font-semibold text-zinc-300 [&:has([role=checkbox])]:pr-0 dark:text-zinc-400',
+      'h-12 px-3 align-middle font-semibold text-zinc-300 border border-green-500',
       className
     )}
     {...props}
@@ -91,26 +77,11 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn(
-      'p-4 px-2 align-middle [&:has([role=checkbox])]:pr-0',
-      className
-    )}
+    className={cn('border border-blue-500 p-4 px-2 align-middle', className)}
     {...props}
   />
 ));
 TableCell.displayName = 'TableCell';
-
-const TableCaption = React.forwardRef<
-  HTMLTableCaptionElement,
-  React.HTMLAttributes<HTMLTableCaptionElement>
->(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    className={cn('mt-4 text-sm text-zinc-500 dark:text-zinc-400', className)}
-    {...props}
-  />
-));
-TableCaption.displayName = 'TableCaption';
 
 export {
   Table,
@@ -120,5 +91,4 @@ export {
   TableHead,
   TableRow,
   TableCell,
-  TableCaption,
 };
