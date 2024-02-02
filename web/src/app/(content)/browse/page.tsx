@@ -4,7 +4,7 @@ import { TimespanButtonGroup } from '@web/src/client/components/browse/TimespanB
 
 export default function Home() {
   return (
-    <main>
+    <>
       {/* FEATURED SONGS */}
       <div className='flex flex-col md:flex-row justify-between gap-4 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
@@ -36,6 +36,6 @@ export default function Home() {
         <SongCard />
         <SongCard />
       </SongCardGroup>
-    </main>
+    </>
   );
 }

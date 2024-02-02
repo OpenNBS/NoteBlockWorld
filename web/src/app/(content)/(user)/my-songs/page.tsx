@@ -10,9 +10,9 @@ const MySongsPage = async () => {
     userSongs = await getUserSongs(userData.id);
   }
   return (
-    <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
+    <div className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
       <h1>My Songs</h1>
-    </main>
+    </div>
   );
 };
 
