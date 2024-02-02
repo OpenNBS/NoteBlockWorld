@@ -11,7 +11,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DeleteButton, DownloadButton, EditButton } from './MySongsButtons';
-import { faEye, faEyeSlash, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCirclePlay,
+  faEye,
+  faEyeSlash,
+  faPlay,
+  faPlayCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SongRow = ({ song }: { song: MySongsSongDTO }) => {
@@ -30,11 +36,17 @@ const SongRow = ({ song }: { song: MySongsSongDTO }) => {
                 {song.duration}
               </span>
             </div>
+            <div className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'>
+              <FontAwesomeIcon
+                icon={faCirclePlay}
+                className='text-white w-12 h-12'
+              />
+            </div>
           </div>
           <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
-            <div className='line-clamp-2 text-ellipsis text-md font-medium leading-tight'>
+            <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
               {song.title}
-            </div>
+            </span>
             <p className='line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400'>
               {song.description}
             </p>
@@ -73,6 +85,7 @@ const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       </TableCell>
       <TableCell>
         <div className='flex flex-col items-center justify-center gap-3 text-xl'>
+          {/* TODO: add popups/tooltips */}
           <DownloadButton songId={song.id} />
           <EditButton songId={song.id} />
           <DeleteButton songId={song.id} />
