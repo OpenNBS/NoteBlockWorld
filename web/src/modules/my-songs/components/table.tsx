@@ -20,7 +20,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn('bg-zinc-900', className)} {...props} />
+  <thead ref={ref} className={cn('', className)} {...props} />
 ));
 TableHeader.displayName = 'TableHeader';
 
@@ -28,7 +28,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={cn('', className)} {...props} />
+  <tbody ref={ref} className={cn('last:border-0', className)} {...props} />
 ));
 TableBody.displayName = 'TableBody';
 
@@ -36,11 +36,7 @@ const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot
-    ref={ref}
-    className={cn('bg-zinc-900 font-medium', className)}
-    {...props}
-  />
+  <tfoot ref={ref} className={cn('font-medium', className)} {...props} />
 ));
 TableFooter.displayName = 'TableFooter';
 
@@ -63,7 +59,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-3 align-middle font-semibold text-zinc-300 border border-green-500',
+      'h-12 px-3 align-middle font-semibold bg-zinc-900 text-zinc-300 border-b border-t first:border-l last:border-r border-green-500',
       className
     )}
     {...props}
@@ -77,7 +73,10 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('border border-blue-500 p-4 px-2 align-middle', className)}
+    className={cn(
+      'border-b border-blue-500 p-4 px-2 align-middle first:border-l last:border-r',
+      className
+    )}
     {...props}
   />
 ));
