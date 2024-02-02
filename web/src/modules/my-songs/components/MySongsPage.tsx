@@ -147,7 +147,7 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
   return (
     <div className='flex flex-col h-full gap-12 justify-between'>
       <h1 className='text-3xl font-semibold uppercase flex-1'>My songs</h1>
-      <div className='rounded-xl flex-grow'>
+      <>
         <Table className='min-w-[600px] text-md text-center h-full text-nowrap text-ellipsis border-separate border-spacing-0'>
           <TableHeader className='sticky top-14 z-10'>
             <TableRow className=''>
@@ -175,7 +175,7 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
             </TableRow>
           </TableFooter>
         </Table>
-      </div>
+      </>
     </div>
   );
 };
