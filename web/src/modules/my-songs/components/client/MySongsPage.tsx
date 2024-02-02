@@ -6,6 +6,7 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -25,7 +26,7 @@ const SongRow = ({ song }: { song: MySongsSongDTO }) => {
     <TableRow key={song.id}>
       {/* Thumbnail */}
       <TableCell>
-        <div className='aspect-video my-1.5 max-h-28 object-cover rounded-lg relative'>
+        <div className='aspect-video my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative'>
           <img
             src='/demo.png'
             className='w-full h-full object-cover rounded-lg'
@@ -45,13 +46,17 @@ const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       </TableCell>
 
       {/* Song */}
-      <TableCell>
+      <TableCell className='text-wrap'>
         <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
           <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
             {song.title}
           </span>
-          <p className='line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400'>
-            {song.description}
+          <p
+            className={`line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400 ${
+              !song.description && 'italic'
+            }`}
+          >
+            {song.description || 'No description'}
           </p>
         </div>
       </TableCell>
@@ -128,8 +133,6 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
       id: '3',
       thumbnail: 'thumbnail',
       title: 'title',
-      description:
-        'This is a short description of the song. It contains a bit of text to show how it looks like.',
       visibility: 'public',
       createdAt: '2021-10-10 10:32',
       playCount: 84,
@@ -137,27 +140,41 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
     },
   ];
 
+  const userSongs2 = [...userSongs, ...userSongs, ...userSongs];
+
   return (
-    <>
-      <h1 className='text-3xl font-semibold uppercase'>My songs</h1>
-      <div className='h-10'></div>
-      <Table className='table-auto min-w-[600px] text-md text-center'>
-        <TableHeader className='bg-zinc-700 rounded-lg'>
-          <TableRow className='rounded-lg'>
-            <TableHead colspan={2}>Song</TableHead>
-            <TableHead>Visibility</TableHead>
-            <TableHead>Created at</TableHead>
-            <TableHead>Play count</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {userSongs.map((song) => (
-            <SongRow key={song.id} song={song} />
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <div className='flex flex-col h-full gap-12 justify-between'>
+      <h1 className='text-3xl font-semibold uppercase flex-1'>My songs</h1>
+      <div className='rounded-xl flex-grow'>
+        <Table className='min-w-[600px] text-md text-center h-full text-nowrap text-ellipsis'>
+          <TableHeader className='sticky top-14 z-10 border-t bg-zinc-900 border-x border-zinc-700'>
+            <TableRow className=''>
+              <TableHead colspan={2}>Song</TableHead>
+              <TableHead>Visibility</TableHead>
+              <TableHead>Created at</TableHead>
+              <TableHead>Play count</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className='border-x border-zinc-700'>
+            {userSongs2.map((song) => (
+              <SongRow key={song.id} song={song} />
+            ))}
+          </TableBody>
+          <TableFooter className='sticky bottom-0 border-t bg-zinc-900'>
+            <TableRow>
+              <TableCell colSpan={6}>
+                <div className='flex items-center justify-center gap-4 h-12'>
+                  <span className='text-zinc-400'>
+                    {1}–{30} of {36}
+                  </span>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+    </div>
   );
 };
 
