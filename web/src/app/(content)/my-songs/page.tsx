@@ -3,7 +3,7 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 import { getUserSongs } from '@web/src/modules/user/features/song.util';
-import Page from '@web/src/modules/my-songs/components/client/MySongsPage';
+import Page from '@web/src/modules/my-songs/components/MySongsPage';
 import { redirect } from 'next/navigation';
 import { MySongsSongDTO } from '@web/src/modules/my-songs/components/client/MySongs.context';
 

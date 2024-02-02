@@ -1,17 +1,19 @@
 // import { useMySongsProvider } from './MySongs.context';
-import { use, useMemo } from 'react';
-import { MySongsSongDTO } from './MySongs.context';
+import { MySongsSongDTO } from './client/MySongs.context';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { DeleteButton, DownloadButton, EditButton } from './MySongsButtons';
+} from './table';
+import {
+  DeleteButton,
+  DownloadButton,
+  EditButton,
+} from './client/MySongsButtons';
 import {
   faCirclePlay,
   faEye,
@@ -149,7 +151,7 @@ const MySongsPage = ({ userSongs }: { userSongs: MySongsSongDTO[] }) => {
         <Table className='min-w-[600px] text-md text-center h-full text-nowrap text-ellipsis'>
           <TableHeader className='sticky top-14 z-10 border-t bg-zinc-900 border-x border-zinc-700'>
             <TableRow className=''>
-              <TableHead colspan={2}>Song</TableHead>
+              <TableHead colSpan={2}>Song</TableHead>
               <TableHead>Visibility</TableHead>
               <TableHead>Created at</TableHead>
               <TableHead>Play count</TableHead>
