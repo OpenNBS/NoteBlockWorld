@@ -3,20 +3,23 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 import { getUserSongs } from '@web/src/modules/user/features/song.util';
+import Page from '@web/src/modules/my-songs/components/client/MySongsPage';
+import { redirect } from 'next/navigation';
+import { MySongsSongDTO } from '@web/src/modules/my-songs/components/client/MySongs.context';
 
 const MySongsPage = async () => {
+  // TODO: Next.js extends fetch() to memoize the result of multiple requests to the same URL.
+  // Can we use this to avoid the duplicate call to checkLogin()?
+  // https://nextjs.org/docs/app/building-your-application/caching#request-memoization
+
+  return <Page userSongs={[]} />;
   const isLogged = await checkLogin();
-  let userData = undefined;
-  let userSongs = undefined;
-  if (isLogged) {
-    userData = await getUserData();
-    userSongs = await getUserSongs(userData.id);
-  }
-  return (
-    <div className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
-      <h1>My Songs</h1>
-    </div>
-  );
+  if (!isLogged) redirect('/login?redirect=/my-songs');
+
+  let userData = await getUserData();
+  let userSongs = (await getUserSongs(userData.id)) as MySongsSongDTO[];
+
+  return <Page userSongs={userSongs} />;
 };
 
 export default MySongsPage;
