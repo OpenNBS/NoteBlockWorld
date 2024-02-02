@@ -20,7 +20,14 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn('', className)} {...props} />
+  <thead
+    ref={ref}
+    className={cn(
+      'first:[&_th]:rounded-tl-xl last:[&_th]:rounded-tr-xl',
+      className
+    )}
+    {...props}
+  />
 ));
 TableHeader.displayName = 'TableHeader';
 
@@ -28,7 +35,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={cn('last:border-0', className)} {...props} />
+  <tbody ref={ref} className={cn('', className)} {...props} />
 ));
 TableBody.displayName = 'TableBody';
 
@@ -36,7 +43,14 @@ const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className={cn('font-medium', className)} {...props} />
+  <tfoot
+    ref={ref}
+    className={cn(
+      'first:[&_th]:rounded-bl-2xl last:[&_th]:rounded-br-2xl',
+      className
+    )}
+    {...props}
+  />
 ));
 TableFooter.displayName = 'TableFooter';
 
