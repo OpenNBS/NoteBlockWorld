@@ -8,11 +8,13 @@ export type MySongsSongDTO = {
   id: string;
   thumbnail: ImageData;
   title: string;
+  description: string;
   author: string;
   originalAuthor: string;
   noteCount: number;
-  content: string;
+  duration: string;
   filename: string;
+  rawFile: Blob;
   createdAt: string;
   updatedAt: string;
   playCount: number;
