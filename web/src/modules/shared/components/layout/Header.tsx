@@ -22,11 +22,6 @@ export async function Header() {
     <header className='fixed w-full h-14 flex flex-row justify-between items-center bg-zinc-900 border-b border-zinc-700 p-2 z-10'>
       {/* Navbar */}
       <nav className='w-full flex flex-row justify-between items-center'>
-        {/* Sign in / Profile */}
-        <NavLinks
-          isUserLoggedIn={isLogged ? true : false}
-          userData={userData}
-        />
         {/* Logo */}
         <a className='flex-grow flex justify-center' href='/'>
           <Image
