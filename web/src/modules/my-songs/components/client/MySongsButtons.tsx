@@ -13,8 +13,9 @@ const DownloadButton = ({ songId }: { songId: string }) => {
       onClick={() => {
         console.log(`Download song with id: ${songId}`);
       }}
+      className='flex items-center justify-center w-5 h-5 hover:text-green-500 hover:scale-[1.25] transition-all duration-150'
     >
-      <FontAwesomeIcon icon={faDownload} />
+      <FontAwesomeIcon icon={faDownload} className='w-full h-full' />
     </button>
   );
 };
@@ -25,11 +26,9 @@ const EditButton = ({ songId }: { songId: string }) => {
       onClick={() => {
         console.log(`Edit song with id: ${songId}`);
       }}
+      className='flex items-center justify-center w-5 h-5 hover:text-blue-500 hover:scale-[1.25] transition-all duration-150'
     >
-      <FontAwesomeIcon
-        icon={faPencil}
-        className='hover:text-blue-500 transition-all duration-150'
-      />
+      <FontAwesomeIcon icon={faPencil} className='w-full h-full' />
     </button>
   );
 };
@@ -40,10 +39,11 @@ const DeleteButton = ({ songId }: { songId: string }) => {
       onClick={() => {
         console.log(`Delete song with id: ${songId}`);
       }}
+      className='flex items-center justify-center w-5 h-5 hover:text-red-500 hover:scale-[1.25] transition-all duration-150'
     >
-      <FontAwesomeIcon icon={faTrash} />
+      <FontAwesomeIcon icon={faTrash} className='w-full h-full' />
     </button>
   );
 };
 
-export { EditButton, DeleteButton };
+export { DownloadButton, EditButton, DeleteButton };

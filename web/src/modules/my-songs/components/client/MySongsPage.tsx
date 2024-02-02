@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DeleteButton, EditButton } from './MySongsButtons';
+import { DeleteButton, DownloadButton, EditButton } from './MySongsButtons';
 import { faEye, faEyeSlash, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -72,7 +72,8 @@ const SongRow = ({ song }: { song: MySongsSongDTO }) => {
         </div>
       </TableCell>
       <TableCell>
-        <div className='flex flex-row justify-center gap-2 text-xl'>
+        <div className='flex flex-col items-center justify-center gap-3 text-xl'>
+          <DownloadButton songId={song.id} />
           <EditButton songId={song.id} />
           <DeleteButton songId={song.id} />
         </div>
