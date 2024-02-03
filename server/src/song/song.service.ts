@@ -226,7 +226,6 @@ export class SongService {
   }): Promise<SongPageDto> {
     const { query, user } = arg0;
     if (!user) {
-      console.log(user);
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
     const page = parseInt(query.page.toString()) || 1;
