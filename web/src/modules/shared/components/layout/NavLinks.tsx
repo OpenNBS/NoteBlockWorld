@@ -1,5 +1,6 @@
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
-import { SignInButton, UploadButton, UserSettings } from './SignOutButton';
+import { SignInButton, UploadButton, UserMenuButton } from './SignOutButton';
+import { UserMenu } from './UserMenu';
 
 export function NavLinks({
   isUserLoggedIn,
@@ -13,7 +14,8 @@ export function NavLinks({
       {isUserLoggedIn && userData ? (
         <div className='flex items-center justify-center gap-7'>
           <UploadButton />
-          <UserSettings userData={userData} />
+
+          <UserMenu userData={userData}></UserMenu>
         </div>
       ) : (
         <SignInButton />
