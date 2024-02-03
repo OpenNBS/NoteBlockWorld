@@ -163,7 +163,6 @@ export const UploadSongProvider = ({
     );
     if (response.status === 201) {
       const data = response.data;
-      console.log(data);
       const id = data._id;
       if (typeof id !== 'string') {
         return;
