@@ -23,7 +23,9 @@ const PopoverContent = React.forwardRef<
         className
       )}
       {...props}
-    />
+    >
+      <PopoverPrimitive.Arrow width={10} height={5} className='fill-white' />
+    </PopoverPrimitive.Content>
   </PopoverPrimitive.Portal>
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
