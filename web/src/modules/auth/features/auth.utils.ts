@@ -19,7 +19,7 @@ export const checkLogin = async () => {
     // verify the token with the server
     const res = await axiosInstance.get('/auth/verify', {
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        authorization: `Bearer ${token.value}`,
       },
     });
     // if the token is valid, redirect to home page
@@ -41,7 +41,7 @@ export const getUserData = async (): Promise<LoggedUserData | never> => {
     // verify the token with the server
     const res = await axiosInstance.get('/user/me', {
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        authorization: `Bearer ${token.value}`,
       },
     });
     // if the token is valid, redirect to home page
