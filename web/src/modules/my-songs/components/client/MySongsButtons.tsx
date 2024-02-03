@@ -6,6 +6,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/navigation';
 
 const DownloadButton = ({ songId }: { songId: string }) => {
   return (
@@ -21,10 +22,12 @@ const DownloadButton = ({ songId }: { songId: string }) => {
 };
 
 const EditButton = ({ songId }: { songId: string }) => {
+  const router = useRouter();
   return (
     <button
       onClick={() => {
         console.log(`Edit song with id: ${songId}`);
+        router.push(`/songs/${songId}/edit/`);
       }}
       className='flex items-center justify-center w-5 h-5 hover:text-blue-500 hover:scale-[1.25] transition-all duration-150'
     >
