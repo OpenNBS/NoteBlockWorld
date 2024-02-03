@@ -33,7 +33,7 @@ export async function Header() {
             <Image
               src='/nbw-white.png'
               alt='NoteBlockWorld logo'
-              className='h-10 mx-auto my-2 duration-100'
+              className='h-10 mx-auto my-2 hover:animate-[bounce2_1s_infinite] duration-100'
               width={40}
               height={50}
             />

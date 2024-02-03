@@ -75,3 +75,23 @@ body {
 ::-webkit-scrollbar-thumb:active {
   @apply bg-zinc-700;
 }
+
+
+/************** Animations **************/
+
+@keyframes bounce2 {
+    25% {
+        transform-origin: center bottom;
+        transform: translateY(-12%) rotateZ(-4deg);
+        animation-timing-function: cubic-bezier(0.8,0,1,1);
+    }
+    0%, 50%, 100% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0,0,0.2,1);
+    }
+    75% {
+      transform-origin: center bottom;
+      transform: translateY(-12%) rotateZ(4deg);
+      animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+}
