@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './popover';
 export function UserMenu({ userData }: { userData: LoggedUserData }) {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
