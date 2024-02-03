@@ -1,5 +1,5 @@
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
-import { SignInButton, UploadButton, UserMenuButton } from './SignOutButton';
+import { SignInButton, UploadButton } from './SignOutButton';
 import { UserMenu } from './UserMenu';
 
 export function NavLinks({
