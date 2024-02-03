@@ -1,68 +1,32 @@
 'use client';
 
-import {
-  faSignOut,
-  faUpload,
-  faUserCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCloudUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { signOut } from '../../../auth/components/client/login.util';
+import { LoggedUserData } from '@web/src/modules/auth/types/User';
+import Link from 'next/link';
 
 export function SignInButton() {
   return (
-    <a href='/login'>
-      <div className='flex justify-between items-center gap-2 px-1 border border-blue-500 h-8 rounded-full'>
+    <Link href='/login'>
+      <div className='flex justify-between items-center gap-2 px-1 border border-blue-500 text-blue-500 h-8 rounded-full hover:border-blue-400 hover:text-blue-400 transition-colors duration-150'>
         <div className='h-6'>
-          <FontAwesomeIcon
-            icon={faUserCircle}
-            className='h-full text-blue-500'
-          />
+          <FontAwesomeIcon icon={faUserCircle} className='h-full' />
         </div>
-        <span className='text-sm mr-2 text-blue-400 font-semibold'>
-          Sign in
-        </span>
+        <span className='text-sm mr-2 font-semibold'>Sign in</span>
       </div>
-    </a>
-  );
-}
-
-export function SignOutButton() {
-  return (
-    <a onClick={signOut}>
-      <div className='flex justify-between items-center gap-2 px-1 border border-yellow-500 h-8 rounded-full'>
-        <div className='h-6'>
-          <FontAwesomeIcon
-            icon={faSignOut}
-            className='h-full border-yellow-500'
-          />
-        </div>
-        <span className='text-sm mr-2 border-yellow-400 font-semibold'>
-          Sign out
-        </span>
-      </div>
-    </a>
+    </Link>
   );
 }
 
 export function UploadButton() {
   return (
-    <a href='/upload'>
-      <div className='flex justify-between items-center gap-2 px-1 border border-green-500 h-8 rounded-full'>
-        <div className='h-6'>
-          <FontAwesomeIcon icon={faUpload} className='h-full text-green-500' />
-        </div>
-        <span className='text-sm mr-2 text-green-500 font-semibold'>
-          Upload
-        </span>
+    <Link href='/upload'>
+      <div className='h-8 w-8 p-1'>
+        <FontAwesomeIcon
+          icon={faCloudUpload}
+          className='h-full text-white hover:text-zinc-400 transition-colors duration-150'
+        />
       </div>
-    </a>
-  );
-}
-
-export function UserGreeting({ username }: { username: string }) {
-  return (
-    <p className='text-sm text-zinc-500 font-semibold'>
-      Logged in as {username}
-    </p>
+    </Link>
   );
 }
