@@ -26,11 +26,11 @@ import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
 import type { Response } from 'express';
 import { GetSongQueryDto } from './dto/GetSongQuery.dto';
-import { SongDto } from './dto/Song.dto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongService } from './song.service';
+import { SongPageDto } from './dto/SongPageDto';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
@@ -86,6 +86,22 @@ export class SongController {
   @ApiOperation({ summary: 'Delete a song' })
   public async deleteSong(@Query('id') id: string): Promise<UploadSongDto> {
     return await this.songService.deleteSong(id);
+  }
+
+  @Get('/my')
+  @ApiOperation({
+    summary: 'Get a list of songs from the authenticated user with pagination',
+  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt-refresh'))
+  public async getMySongsPage(
+    @Query() query: PageQuery,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<SongPageDto> {
+    return await this.songService.getMySongsPage({
+      query,
+      user,
+    });
   }
 
   @Post('/')

@@ -18,10 +18,10 @@ import { HydratedDocument, Schema as MongooseSchema, ObjectId } from 'mongoose';
 })
 export class Song {
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  creationAt: Date;
+  createdAt: Date;
 
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  lastAt: Date;
+  updatedAt: Date;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'users' })
   uploader: ObjectId;

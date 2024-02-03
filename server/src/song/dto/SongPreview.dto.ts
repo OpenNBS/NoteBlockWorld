@@ -1,4 +1,3 @@
-import { UserDocument } from '@server/user/entity/user.entity';
 import {
   IsNotEmpty,
   IsString,
@@ -6,9 +5,13 @@ import {
   IsUrl,
   MaxLength,
 } from 'class-validator';
-import { HydratedDocument } from 'mongoose';
 import { SongDocument } from '../entity/song.entity';
 export class SongPreviewDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
+
   @IsString()
   @MaxLength(64)
   @IsUUID()
@@ -34,19 +37,39 @@ export class SongPreviewDto {
   @IsUrl()
   coverImageUrl: string;
 
+  @IsNotEmpty()
+  createdAt: Date;
+  @IsNotEmpty()
+  updatedAt: Date;
+
+  @IsNotEmpty()
+  playCount: number;
+
+  @IsNotEmpty()
+  @IsString()
+  visibility: string;
+
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
   constructor(partial: Partial<SongPreviewDto>) {
     Object.assign(this, partial);
   }
 
   public static fromSongDocument(song: SongDocument): SongPreviewDto {
-    const data = song.toJSON();
     return new SongPreviewDto({
-      uploader: data.uploader.toString(),
-      title: data.title,
-      originalAuthor: data.originalAuthor,
-      duration: data.duration,
-      noteCount: data.noteCount,
-      coverImageUrl: data.coverImageUrl,
+      id: song._id.toString(),
+      uploader: song.uploader.toString(),
+      title: song.title,
+      originalAuthor: song.originalAuthor,
+      duration: song.duration,
+      noteCount: song.noteCount,
+      coverImageUrl: song.coverImageUrl,
+      createdAt: song.createdAt,
+      updatedAt: song.updatedAt,
+      playCount: song.playCount,
+      visibility: song.visibility,
     });
   }
 }

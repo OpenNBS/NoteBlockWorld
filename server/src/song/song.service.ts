@@ -18,6 +18,7 @@ import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongDocument, Song as SongEntity } from './entity/song.entity';
+import { SongPageDto } from './dto/SongPageDto';
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
@@ -161,8 +162,8 @@ export class SongService {
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
     const { page, limit } = query;
     const options = {
-      page: parseInt(page, 10) || 1,
-      limit: parseInt(limit, 10) || 10,
+      page: page || 1,
+      limit: limit || 10,
     };
     const data = await this.songModel
       .find()
@@ -217,5 +218,42 @@ export class SongService {
       length: buffer.length,
     });
     return streamableFile;
+  }
+
+  public async getMySongsPage(arg0: {
+    query: PageQuery;
+    user: UserDocument | null;
+  }): Promise<SongPageDto> {
+    const { query, user } = arg0;
+    if (!user) {
+      console.log(user);
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
+    const page = parseInt(query.page.toString()) || 1;
+    const limit = parseInt(query.limit.toString()) || 10;
+    const order = query.order ? query.order : false;
+    const sort = query.sort ? query.sort : 'createdAt';
+    const songData = await this.songModel
+      .find({
+        uploader: user._id,
+      })
+      .sort({
+        [sort]: order ? 1 : -1,
+      })
+      .skip(limit * (page - 1))
+      .limit(limit)
+      .exec();
+    const total = await this.songModel
+      .countDocuments({
+        uploader: user._id,
+      })
+      .exec();
+
+    return {
+      content: songData.map((song) => SongPreviewDto.fromSongDocument(song)),
+      page: page,
+      limit: limit,
+      total: total,
+    };
   }
 }

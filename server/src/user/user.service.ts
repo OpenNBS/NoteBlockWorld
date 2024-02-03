@@ -32,8 +32,8 @@ export class UserService {
   public getUserPaginated(query: PageQuery) {
     const { page, limit } = query;
     const options = {
-      page: parseInt(page, 10) || 1,
-      limit: parseInt(limit, 10) || 10,
+      page: page || 1,
+      limit: limit || 10,
     };
     return this.userModel.find({});
   }

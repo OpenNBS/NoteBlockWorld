@@ -1,31 +1,49 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class PageQuery {
   @IsNotEmpty()
-  @IsNumberString()
+  @IsNumber({
+    allowNaN: false,
+    allowInfinity: false,
+    maxDecimalPlaces: 0,
+  })
   @ApiProperty({
-    example: '1',
+    example: 1,
     description: 'page',
   })
-  page: string;
+  page: number;
 
   @IsNotEmpty()
-  @IsNumberString()
+  @IsNumber({
+    allowNaN: false,
+    allowInfinity: false,
+    maxDecimalPlaces: 0,
+  })
   @ApiProperty({
-    example: '10',
+    example: 20,
     description: 'limit',
   })
-  limit: string;
+  limit: number;
+
+  @IsString()
+  @ApiProperty({
+    example: 'field',
+    description: 'Sorts the results by the specified field.',
+    required: false,
+  })
+  sort?: string;
+
+  @IsBoolean()
+  @ApiProperty({
+    example: false,
+    description:
+      'Sorts the results in ascending order if true; in descending order if false.',
+    required: false,
+  })
+  order?: boolean;
 
   constructor(partial: Partial<PageQuery>) {
     Object.assign(this, partial);
-  }
-
-  public static getApiExample(): PageQuery {
-    return {
-      page: '1',
-      limit: '10',
-    };
   }
 }

@@ -14,10 +14,10 @@ export class SongDto {
   _id: string;
 
   @IsDate()
-  creationAt: Date;
+  createdAt: Date;
 
   @IsDate()
-  lastAt: Date;
+  updatedAt: Date;
 
   uploader: string | UserDocument;
 
@@ -72,8 +72,8 @@ export class SongDto {
   public static fromSongDocument = (song: SongDocument): SongDto => {
     return new SongDto({
       _id: song._id.toString(),
-      creationAt: song.creationAt,
-      lastAt: song.creationAt,
+      createdAt: song.createdAt,
+      updatedAt: song.updatedAt,
       uploader: song.uploader.toString(),
       playCount: song.playCount,
       downloadCount: song.downloadCount,

@@ -34,8 +34,10 @@ export class AuthService {
       const decoded = this.jwtService.verify(token, {
         secret: this.configService.get('JWT_SECRET'),
       });
+      console.log(decoded);
       // verify if user exists
       const user_registered = await this.userService.findByID(decoded.id);
+      console.log(user_registered);
       if (!user_registered) {
         return res.status(401).json({ message: 'Unauthorized' });
       } else {
