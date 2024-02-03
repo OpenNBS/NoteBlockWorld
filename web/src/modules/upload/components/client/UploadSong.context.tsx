@@ -10,86 +10,10 @@ import {
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
-import { z as zod } from 'zod';
+
 import { getTokenLocal } from '../../../../lib/axios/token.utils';
-
-type CoverData = {
-  zoomLevel: number;
-  startTick: number;
-  startLayer: number;
-  backgroundColor: string;
-};
-
-type UploadSongForm = {
-  allowDownload: boolean;
-  visibility: 'public' | 'private'; // Use a string literal type if the visibility can only be 'public' or 'private'
-  title: string;
-  originalAuthor: string;
-  description: string;
-  coverData: CoverData;
-  customInstruments: string[];
-  license: 'no_license' | 'cc_by_4' | 'public_domain';
-  tags: string;
-  category:
-    | 'Gaming'
-    | 'MoviesNTV'
-    | 'Anime'
-    | 'Vocaloid'
-    | 'Rock'
-    | 'Pop'
-    | 'Electronic'
-    | 'Ambient'
-    | 'Jazz'
-    | 'Classical';
-};
-
-const coverDataSchema = zod.object({
-  zoomLevel: zod.number().int().min(1).max(5),
-  startTick: zod.number().int().min(0),
-  startLayer: zod.number().int().min(0),
-  backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
-});
-
-const uploadSongFormSchema = zod.object({
-  allowDownload: zod.boolean(),
-  visibility: zod.union([zod.literal('public'), zod.literal('private')]),
-  title: zod
-    .string()
-    .max(64, {
-      message: 'Title must be less than 64 characters',
-    })
-    .min(1, {
-      message: 'Title must be at least 1 character',
-    }),
-  originalAuthor: zod
-    .string()
-    .max(64, {
-      message: 'Original author must be less than 64 characters',
-    })
-    .min(0),
-  description: zod.string().max(1024, {
-    message: 'Description must be less than 1024 characters',
-  }),
-  coverData: coverDataSchema,
-  customInstruments: zod.array(zod.string()),
-  license: zod.union([
-    zod.literal('no_license'),
-    zod.literal('cc_by_4'),
-    zod.literal('public_domain'),
-  ]),
-  category: zod.union([
-    zod.literal('Gaming'),
-    zod.literal('MoviesNTV'),
-    zod.literal('Anime'),
-    zod.literal('Vocaloid'),
-    zod.literal('Rock'),
-    zod.literal('Pop'),
-    zod.literal('Electronic'),
-    zod.literal('Ambient'),
-    zod.literal('Jazz'),
-    zod.literal('Classical'),
-  ]),
-});
+import { UploadSongForm } from '../../types';
+import { uploadSongFormSchema } from './uploadSongFrom.zod';
 
 type UploadSongContextType = {
   song: Song | null;
@@ -137,18 +61,11 @@ export const UploadSongProvider = ({
     fileData.append('file', blob, 'song.nbs');
 
     const formValues = formMethods.getValues();
-    const param = {
-      allowDownload: formValues.allowDownload.toString(),
-      visibility: formValues.visibility.toString(),
-      title: formValues.title,
-      originalAuthor: formValues.originalAuthor,
-      description: formValues.description,
-      zoomLevel: formValues.coverData.zoomLevel.toString(),
-      startTick: formValues.coverData.startTick.toString(),
-      startLayer: formValues.coverData.startLayer.toString(),
-      backgroundColor: formValues.coverData.backgroundColor.toString(),
-      customInstruments: formValues.customInstruments.toString(),
-    } as Record<string, string>;
+    const param: Record<string, string> = {};
+
+    Object.entries(formValues).forEach(([key, value]) => {
+      param[key] = value.toString();
+    });
     const query = new URLSearchParams(param);
     const token = getTokenLocal();
     const response = await axiosInstance.post(
@@ -207,6 +124,7 @@ export const UploadSongProvider = ({
       formMethods.setValue('coverData.startTick', 0);
       formMethods.setValue('coverData.startLayer', 0);
       formMethods.setValue('coverData.backgroundColor', '#ffffff');
+      formMethods.setValue('customInstruments', ['noteblock']);
     }
   }, [song]);
 
