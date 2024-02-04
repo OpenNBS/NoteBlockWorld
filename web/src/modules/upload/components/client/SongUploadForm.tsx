@@ -94,7 +94,13 @@ export const SongUploadForm = () => {
         </div>
 
         {/* Thumbnail */}
-        {song && <SongThumbnailInput />}
+
+        <div className='flex-1'>
+          <p>Thumbnail</p>
+          <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+            {song && <SongThumbnailInput />}
+          </div>
+        </div>
 
         {/* Visibility */}
         <div className='flex flex-row gap-8 justify-between'>
