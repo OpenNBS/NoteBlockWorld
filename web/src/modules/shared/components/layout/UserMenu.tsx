@@ -1,6 +1,15 @@
+import {
+  faCog,
+  faMusic,
+  faSignOutAlt,
+  faUpload,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { UserMenuButton } from '../client/UserMenuButton';
+import { UserMenuLink } from './UserMenuLink';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
+
 export function UserMenu({ userData }: { userData: LoggedUserData }) {
   return (
     <Popover>
@@ -8,51 +17,34 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-80'
+        className='w-fit bg-white shadow-lg rounded-lg px-8 text-neutral-900'
         sideOffset={10}
         align='end'
         alignOffset={-10}
       >
-        <div className='grid gap-4'>
+        <div className='flex flex-col'>
           <div className='space-y-2'>
-            <h4 className='font-medium leading-none'>Dimensions</h4>
-            <p className='text-sm text-muted-foreground'>
-              Set the dimensions for the layer.
-            </p>
+            <h4 className='font-medium leading-none'>
+              Logged as
+              <span className='text-sm text-muted-foreground font-normal pl-1'>
+                {userData.username}
+              </span>
+            </h4>
           </div>
-          <div className='grid gap-2'>
-            <div className='grid grid-cols-3 items-center gap-4'>
-              <label htmlFor='width'>Width</label>
-              <input
-                id='width'
-                defaultValue='100%'
-                className='col-span-2 h-8'
-              />
-            </div>
-            <div className='grid grid-cols-3 items-center gap-4'>
-              <label htmlFor='maxWidth'>Max. width</label>
-              <input
-                id='maxWidth'
-                defaultValue='300px'
-                className='col-span-2 h-8'
-              />
-            </div>
-            <div className='grid grid-cols-3 items-center gap-4'>
-              <label htmlFor='height'>Height</label>
-              <input
-                id='height'
-                defaultValue='25px'
-                className='col-span-2 h-8'
-              />
-            </div>
-            <div className='grid grid-cols-3 items-center gap-4'>
-              <label htmlFor='maxHeight'>Max. height</label>
-              <input
-                id='maxHeight'
-                defaultValue='none'
-                className='col-span-2 h-8'
-              />
-            </div>
+          <div className='flex flex-col'>
+            <UserMenuLink
+              href='/upload'
+              icon={faUpload}
+              label='Upload a Song'
+            />
+            <hr className='border-neutral-200 py-1' />
+            <UserMenuLink href='/my-profile' icon={faUser} label='My Profile' />
+            <hr className='border-neutral-200 py-1' />
+            <UserMenuLink href='/my-songs' icon={faMusic} label='My Songs' />
+            <hr className='border-neutral-200 py-1' />
+            <UserMenuLink href='/settings' icon={faCog} label='Settings' />
+            <hr className='border-neutral-200 py-1' />
+            <UserMenuLink href='/logout' icon={faSignOutAlt} label='Logout' />
           </div>
         </div>
       </PopoverContent>
