@@ -25,14 +25,21 @@ const MySongsContext = createContext<MySongsContextType>(
   {} as MySongsContextType
 );
 
-export const MySongProvider = ({ children }: { children: React.ReactNode }) => {
-  const [loadedSongs, setLoadedSongs] = useState<SongsFolder>({});
+export const MySongProvider = ({
+  InitialsongsFolder = {},
+  children,
+}: {
+  InitialsongsFolder: SongsFolder;
+  children: React.ReactNode;
+}) => {
+  const [loadedSongs, setLoadedSongs] =
+    useState<SongsFolder>(InitialsongsFolder);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, _] = useState<number>(20);
   const [page, setPage] = useState<SongsPage | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const putPage = async ({ key, page }: { key: number; page: SongsPage }) => {

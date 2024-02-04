@@ -14,6 +14,18 @@ import {
 import { TableCell, TableRow } from '../table';
 
 export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
+  const getDescription = (description: string | null) => {
+    const maxDisplayLength = 50;
+    if (description) {
+      const length = description.length;
+      if (length > maxDisplayLength) {
+        return description.slice(0, maxDisplayLength) + '...';
+      }
+      return description;
+    } else {
+      return 'No description';
+    }
+  };
   return (
     <TableRow key={song.id}>
       {/* Thumbnail */}
@@ -48,7 +60,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
               !song.description && 'italic'
             }`}
           >
-            {song.description || 'No description'}
+            {getDescription(song.description)}
           </p>
         </div>
       </TableCell>
