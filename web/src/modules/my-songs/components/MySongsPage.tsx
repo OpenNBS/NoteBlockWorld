@@ -44,13 +44,11 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
         [0]: firstPage,
         [1]: secondPage,
       } as SongsFolder;
-      console.log('data', data);
       return data;
     } else {
       const data = {
         [currentPage]: firstPage,
       };
-      console.log('data', data);
       return data;
     }
   } catch (error: unknown) {
@@ -60,7 +58,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
 }
 
 async function MySongsPage() {
-  const InitialsongsFolder: SongsFolder = await fetchSongsFolder();
+  const InitialsongsFolder: SongsFolder = await fetchSongsFolder(); // TODO: this breaks the provider pagination state
   return (
     <MySongProvider InitialsongsFolder={InitialsongsFolder}>
       <MySongsTable />
