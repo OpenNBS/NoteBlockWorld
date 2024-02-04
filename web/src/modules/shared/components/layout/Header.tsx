@@ -41,10 +41,7 @@ export async function Header() {
         </div>
         {/* Sign in / Profile */}
         <div className='flex-1'>
-          <NavLinks
-            isUserLoggedIn={isLogged ? true : false}
-            userData={userData}
-          />
+          <NavLinks isUserLoggedIn={isLogged} userData={userData} />
         </div>
       </nav>
     </header>
