@@ -14,7 +14,7 @@ export function NavLinks({
       <div className='flex items-center justify-center gap-7'>
         <UploadButton />
         {isUserLoggedIn && userData ? (
-          <UserMenu userData={userData}></UserMenu>
+          <UserMenu userData={userData} />
         ) : (
           <SignInButton />
         )}
