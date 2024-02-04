@@ -37,7 +37,7 @@ export function useSignOut() {
     /* We have to use window.location.href here,
        because next should clear the cached page in the client side
       */
-    window.location.href = '/login';
+    window.location.href = '/';
   }
   useEffect(() => {
     signOut();
