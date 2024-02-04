@@ -39,11 +39,12 @@ export const SongThumbnailInput = () => {
     <div className='flex flex-col items-center gap-6 w-full max-w-lg'>
       <div className='w-full grid grid-cols-[max-content_auto_7%] gap-y-2 gap-x-3 items-center align-middle'>
         <div>
-          <label>Zoom Level</label>
+          <label htmlFor='zoom-level'>Zoom Level</label>
         </div>
         <div>
           <input
             type='range'
+            id='zoom-level'
             className='w-full'
             {...register('coverData.zoomLevel', { value: 3, max: 5 })}
             max={5}
@@ -52,11 +53,12 @@ export const SongThumbnailInput = () => {
         <div>{zoomLevel}</div>
 
         <div>
-          <label>Start Tick</label>
+          <label htmlFor='start-tick'>Start Tick</label>
         </div>
         <div className='w-full'>
           <input
             type='range'
+            id='start-tick'
             className='w-full'
             {...register('coverData.startTick', { value: 0, max: maxTick })}
             max={maxTick}
@@ -65,11 +67,12 @@ export const SongThumbnailInput = () => {
         <div>{startTick}</div>
 
         <div>
-          <label>Start Layer</label>
+          <label htmlFor='start-layer'>Start Layer</label>
         </div>
         <div className='w-full'>
           <input
             type='range'
+            id='start-layer'
             min='0'
             className='w-full'
             {...register('coverData.startLayer', {
