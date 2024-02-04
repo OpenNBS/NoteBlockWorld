@@ -4,11 +4,8 @@ import { ErrorBallon } from '../../../shared/components/client/ErrorBallon';
 import { Input, Option, Select } from './FormElements';
 import { SongThumbnailInput } from './SongThumbnailInput';
 export const SongUploadForm = () => {
-  const { formMethods, errors, register, submitSong, song } =
+  const { formMethods, sendError, errors, register, submitSong, song } =
     useUploadSongProvider();
-  useEffect(() => {
-    console.log(errors, formMethods.getValues());
-  }, [errors]);
   return (
     <form
       className='flex flex-col gap-6'
@@ -16,6 +13,7 @@ export const SongUploadForm = () => {
         submitSong();
       })}
     >
+      {sendError && <ErrorBallon message={sendError} isVisible={!!sendError} />}
       <div className='flex flex-col h-fit gap-6'>
         {/* Title */}
         <div>

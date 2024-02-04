@@ -14,6 +14,7 @@ import {
 import { getTokenLocal } from '../../../../lib/axios/token.utils';
 import { UploadSongForm } from '../../types';
 import { uploadSongFormSchema } from './uploadSongFrom.zod';
+import { useRouter } from 'next/navigation';
 
 type UploadSongContextType = {
   song: Song | null;
@@ -24,6 +25,7 @@ type UploadSongContextType = {
   submitSong: () => void;
   register: UseFormRegister<UploadSongForm>;
   errors: FieldErrors<UploadSongForm>;
+  sendError: string | null;
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -35,12 +37,11 @@ export const UploadSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const router = {
-    push: (x: string) => {},
-  };
+  const router = useRouter();
   const [song, setSong] = useState<Song | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const [invalidFile, setInvalidFile] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
   });
@@ -87,8 +88,9 @@ export const UploadSongProvider = ({
       router.push(`/my-songs?selectedSong=${id}`);
     } else {
       const erro_body = (await response.data) as {
-        error: Record<string, string>;
+        message: string;
       };
+      setSendError(erro_body.message);
       return;
     }
   };
@@ -131,6 +133,7 @@ export const UploadSongProvider = ({
   return (
     <UploadSongContext.Provider
       value={{
+        sendError,
         formMethods,
         register,
         errors,
