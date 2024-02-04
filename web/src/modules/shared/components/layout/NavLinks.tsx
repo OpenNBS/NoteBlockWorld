@@ -11,15 +11,14 @@ export function NavLinks({
 }) {
   return (
     <div className='flex flex-row gap-2 justify-end'>
-      {isUserLoggedIn && userData ? (
-        <div className='flex items-center justify-center gap-7'>
-          <UploadButton />
-
+      <div className='flex items-center justify-center gap-7'>
+        <UploadButton />
+        {isUserLoggedIn && userData ? (
           <UserMenu userData={userData}></UserMenu>
-        </div>
-      ) : (
-        <SignInButton />
-      )}
+        ) : (
+          <SignInButton />
+        )}
+      </div>
     </div>
   );
 }
