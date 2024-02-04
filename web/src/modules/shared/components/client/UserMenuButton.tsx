@@ -1,6 +1,8 @@
 'use client';
+
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { RandomAvatar } from 'react-random-avatars';
+
 export function UserMenuButton({ userData }: { userData: LoggedUserData }) {
   return (
     <>

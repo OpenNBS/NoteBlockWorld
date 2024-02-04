@@ -6,6 +6,7 @@ import { SongThumbnailInput } from './SongThumbnailInput';
 export const SongUploadForm = () => {
   const { formMethods, sendError, errors, register, submitSong, song } =
     useUploadSongProvider();
+
   return (
     <form
       className='flex flex-col gap-6'
@@ -45,6 +46,7 @@ export const SongUploadForm = () => {
             isVisible={!!errors.description}
           />
         </div>
+
         {/* Author */}
         <div className='flex flex-row gap-8 justify-between'>
           <div className='flex-1'>
