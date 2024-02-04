@@ -2,15 +2,15 @@ import axiosInstance from '../../../lib/axios';
 import { cookies } from 'next/headers';
 import { LoggedUserData } from '../types/User';
 
-function getToken() {
+export function getTokenServer(): { value: string } | null {
   const cookieStore = cookies();
   const token = cookieStore.get('token');
-  return token;
+  return token as { value: string } | null;
 }
 
 export const checkLogin = async () => {
   // get token from cookies
-  const token = getToken();
+  const token = getTokenServer();
   // if token is not null, redirect to home page
   if (!token) return false;
   if (!token.value) return false;
@@ -32,7 +32,7 @@ export const checkLogin = async () => {
 
 export const getUserData = async (): Promise<LoggedUserData | never> => {
   // get token from cookies
-  const token = getToken();
+  const token = getTokenServer();
   // if token is not null, redirect to home page
   if (!token) throw new Error('No token found');
   if (!token.value) throw new Error('No token found');
