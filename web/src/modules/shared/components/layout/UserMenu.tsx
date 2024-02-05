@@ -8,7 +8,12 @@ import {
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { UserMenuButton } from '../client/UserMenuButton';
 import { UserMenuLink } from './UserMenuLink';
-import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  PopoverArrow,
+} from './popover';
 
 export function UserMenu({ userData }: { userData: LoggedUserData }) {
   return (
@@ -17,11 +22,16 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-fit bg-white shadow-lg rounded-lg px-8 text-neutral-900'
+        className='w-fit border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
         sideOffset={10}
         align='end'
         alignOffset={-10}
       >
+        <PopoverArrow
+          className='fill-zinc-600'
+          width={'1rem'}
+          height={'0.5rem'}
+        />
         <div className='flex flex-col'>
           <div className='space-y-2'>
             <h4 className='font-medium leading-none'>
