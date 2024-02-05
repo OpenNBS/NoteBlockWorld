@@ -29,7 +29,7 @@ export const MySongsTable = () => {
 
   return (
     <section className='flex flex-col h-full gap-12 justify-between w-full transition-all'>
-      <h1 className='text-3xl font-semibold uppercase flex-1'>My songs</h1>
+      <h1 className='text-3xl font-semibold flex-1 pt-8'>My songs</h1>
       {error && (
         <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
       )}
