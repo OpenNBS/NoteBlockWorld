@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useUploadSongProvider } from './UploadSong.context';
 import { ErrorBallon } from '../../../shared/components/client/ErrorBallon';
 import { Input, Option, Select } from './FormElements';
@@ -99,7 +98,6 @@ export const SongUploadForm = () => {
         </div>
 
         {/* Thumbnail */}
-
         <div className='flex-1'>
           <p>Thumbnail</p>
           <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
