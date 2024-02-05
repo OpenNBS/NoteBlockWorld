@@ -7,7 +7,7 @@ export function UserMenuButton({ userData }: { userData: LoggedUserData }) {
   return (
     <>
       <div className='h-8 w-8 relative'>
-        <RandomAvatar mode={'pattern'} name={userData.username} size={30} />
+        <RandomAvatar mode={'pattern'} name={userData.username} size={32} />
         {/*
         <img
         src='/bentroen.png'
