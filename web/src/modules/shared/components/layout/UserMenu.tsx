@@ -23,7 +23,7 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-fit p-0 border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
+        className='w-fit p-0 pb-2 border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
         sideOffset={10}
         align='end'
         alignOffset={-10}
@@ -57,8 +57,6 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
             <UserMenuLink href='/my-songs' icon={faMusic} label='My songs' />
             <UserMenuLink href='/logout' icon={faSignOutAlt} label='Log out' />
           </div>
-
-          <UserMenuSplitLine />
         </div>
       </PopoverContent>
     </Popover>
