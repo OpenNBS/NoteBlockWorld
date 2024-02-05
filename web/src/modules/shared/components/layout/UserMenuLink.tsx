@@ -15,7 +15,7 @@ const UserMenuLink = ({
   href: string;
   label: string;
 }) => (
-  <div className='cursor-pointer px-2 py-1.5 hover:bg-zinc-700 transition-colors duration-150'>
+  <button className='cursor-pointer px-2 py-1.5 hover:bg-zinc-700 transition-colors duration-150'>
     <Link href={href} passHref>
       <div className='flex flex-row items-center gap-2'>
         <div className='h-8 w-8 flex items-center justify-center'>
@@ -24,7 +24,7 @@ const UserMenuLink = ({
         <p>{label}</p>
       </div>
     </Link>
-  </div>
+  </button>
 );
 
 export { UserMenuSplitLine, UserMenuLink };
