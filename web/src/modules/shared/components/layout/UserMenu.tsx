@@ -7,13 +7,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { UserMenuButton } from '../client/UserMenuButton';
-import { UserMenuLink } from './UserMenuLink';
+import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
   PopoverArrow,
 } from './popover';
+import { RandomAvatar } from './RandomAvatar';
 
 export function UserMenu({ userData }: { userData: LoggedUserData }) {
   return (
@@ -22,7 +23,7 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-fit border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
+        className='w-fit p-0 border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
         sideOffset={10}
         align='end'
         alignOffset={-10}
@@ -32,30 +33,32 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
           width={'1rem'}
           height={'0.5rem'}
         />
-        <div className='flex flex-col'>
-          <div className='space-y-2'>
-            <h4 className='font-medium leading-none'>
-              Logged as
-              <span className='text-sm text-muted-foreground font-normal pl-1'>
-                {userData.username}
-              </span>
-            </h4>
+        <div className='min-w-48 max-w-64'>
+          {/* User */}
+          <div className='flex flex-row gap-2 items-center p-4 pb-2'>
+            <div className='h-8 w-8'>
+              <RandomAvatar
+                mode={'pattern'}
+                name={userData.username}
+                size={32}
+              />
+            </div>
+            <div className='flex-shrink min-w-0 flex flex-col leading-tight'>
+              <h4 className='truncate font-semibold'>{userData.username}</h4>
+              <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
+            </div>
           </div>
+
+          <UserMenuSplitLine />
+
+          {/* Links */}
           <div className='flex flex-col'>
-            <UserMenuLink
-              href='/upload'
-              icon={faUpload}
-              label='Upload a Song'
-            />
-            <hr className='border-neutral-200 py-1' />
-            <UserMenuLink href='/my-profile' icon={faUser} label='My Profile' />
-            <hr className='border-neutral-200 py-1' />
-            <UserMenuLink href='/my-songs' icon={faMusic} label='My Songs' />
-            <hr className='border-neutral-200 py-1' />
-            <UserMenuLink href='/settings' icon={faCog} label='Settings' />
-            <hr className='border-neutral-200 py-1' />
-            <UserMenuLink href='/logout' icon={faSignOutAlt} label='Logout' />
+            <UserMenuLink href='/my-profile' icon={faUser} label='Profile' />
+            <UserMenuLink href='/my-songs' icon={faMusic} label='My songs' />
+            <UserMenuLink href='/logout' icon={faSignOutAlt} label='Log out' />
           </div>
+
+          <UserMenuSplitLine />
         </div>
       </PopoverContent>
     </Popover>
