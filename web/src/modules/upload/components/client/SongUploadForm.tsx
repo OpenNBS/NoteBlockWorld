@@ -3,6 +3,9 @@ import { useUploadSongProvider } from './UploadSong.context';
 import { ErrorBallon } from '../../../shared/components/client/ErrorBallon';
 import { Input, Option, Select } from './FormElements';
 import { SongThumbnailInput } from './SongThumbnailInput';
+import InstrumentPicker from './InstrumentPicker';
+import { Instrument } from '@encode42/nbs.js';
+
 export const SongUploadForm = () => {
   const { formMethods, sendError, errors, register, submitSong, song } =
     useUploadSongProvider();
@@ -129,6 +132,13 @@ export const SongUploadForm = () => {
               message={errors.license?.message}
               isVisible={!!errors.license}
             />
+          </div>
+        </div>
+
+        <div className='flex-1'>
+          <label htmlFor='custom-instruments'>Custom instruments</label>
+          <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+            <InstrumentPicker />
           </div>
         </div>
 

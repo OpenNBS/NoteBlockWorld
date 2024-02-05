@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 export const Input = React.forwardRef<
@@ -22,7 +23,10 @@ export const Select = React.forwardRef<
     <select
       ref={ref}
       {...props}
-      className={`block h-12 w-full rounded-lg bg-transparent border-2 border-zinc-500 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
+      className={cn(
+        `block h-12 w-full rounded-lg bg-transparent border-2 border-zinc-500 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
+        props.className
+      )}
     />
   );
 });
