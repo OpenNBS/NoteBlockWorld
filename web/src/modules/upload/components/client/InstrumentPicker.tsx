@@ -20,7 +20,7 @@ const InstrumentTableHeader = ({
   return (
     <div
       className={cn(
-        'bg-zinc-800 border-zinc-600 border-2 px-2 py-1 rounded-md text-zinc-400 font-semibold',
+        'bg-zinc-800 border-zinc-600 border-2 px-2 py-1 text-zinc-400 font-semibold first:rounded-tl-lg last:rounded-tr-lg',
         className
       )}
     >
@@ -39,7 +39,7 @@ const InstrumentTableCell = ({
   return (
     <div
       className={cn(
-        'bg-zinc-900 border-zinc-700 border-2 px-2 py-1 rounded-md',
+        'bg-zinc-900 border-zinc-700 border-2 px-2 py-1',
         className
       )}
     >
@@ -61,7 +61,7 @@ const InstrumentTable = () => {
   return (
     <div className='flex flex-col w-full'>
       {/* Header */}
-      <div className='flex-shrink grid grid-cols-8 gap-1 pr-4'>
+      <div className='flex-shrink grid grid-cols-8 pr-4'>
         <InstrumentTableHeader className='text-right'>#</InstrumentTableHeader>
         <InstrumentTableHeader className='col-span-3'>
           Instrument
@@ -77,7 +77,10 @@ const InstrumentTable = () => {
       {/* Instruments */}
       <div className='overflow-y-scroll max-h-72 flex flex-col'>
         {instruments.map((instrument, i) => (
-          <div key={i} className='grid grid-cols-8 gap-1'>
+          <div
+            key={i}
+            className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
+          >
             <InstrumentTableCell className='col-span-1 text-right'>
               {instrument.id - song.instruments.firstCustomIndex + 1}
             </InstrumentTableCell>
@@ -96,7 +99,7 @@ const InstrumentTable = () => {
                 .toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
-              <Select className='h-9 py-0 px-1'>
+              <Select className='h-9 py-0 px-1 rounded-none'>
                 <Option value='none'>No sound</Option>
                 {sounds.map((sound, i) => (
                   <Option key={i} value={sound.name}>
