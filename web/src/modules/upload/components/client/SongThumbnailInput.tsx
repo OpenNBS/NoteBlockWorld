@@ -21,11 +21,14 @@ const ColorButton = ({
 
 export const SongThumbnailInput = () => {
   const { song, register, formMethods } = useUploadSongProvider();
-  const [zoomLevel, startTick, startLayer] = formMethods.watch([
-    'coverData.zoomLevel',
-    'coverData.startTick',
-    'coverData.startLayer',
-  ]);
+  const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
+    [
+      'coverData.zoomLevel',
+      'coverData.startTick',
+      'coverData.startLayer',
+      'coverData.backgroundColor',
+    ]
+  );
 
   const [notes, maxTick, maxLayer] = useMemo(() => {
     if (!song) return [[], 0, 0];
@@ -90,6 +93,7 @@ export const SongThumbnailInput = () => {
         zoomLevel={zoomLevel}
         startTick={startTick}
         startLayer={startLayer}
+        backgroundColor={backgroundColor}
       />
 
       {/* Background Color */}

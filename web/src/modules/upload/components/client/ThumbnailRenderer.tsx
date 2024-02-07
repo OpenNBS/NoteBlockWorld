@@ -25,20 +25,22 @@ type ThumbnailRendererCanvasProps = {
   zoomLevel: number;
   startTick: number;
   startLayer: number;
+  backgroundColor: string;
 };
 export const ThumbnailRendererCanvas = ({
   notes,
   zoomLevel,
   startTick,
   startLayer,
+  backgroundColor,
 }: ThumbnailRendererCanvasProps) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
-    drawFrame(canvas, notes, startTick, startLayer, zoomLevel);
-  }, [notes, startTick, startLayer, zoomLevel]);
+    drawFrame(canvas, notes, startTick, startLayer, zoomLevel, backgroundColor);
+  }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;
 };

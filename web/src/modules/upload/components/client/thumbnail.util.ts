@@ -135,6 +135,23 @@ function getKeyText(key: number): string {
   return `${note}${octaves}`;
 }
 
+function getLuma(color: string): number {
+  // source: https://stackoverflow.com/a/12043228/9045426
+
+  let c = color.substring(1); // strip #
+  let rgb = parseInt(c, 16); // convert rrggbb to decimal
+  let r = (rgb >> 16) & 0xff; // extract red
+  let g = (rgb >> 8) & 0xff; // extract green
+  let b = (rgb >> 0) & 0xff; // extract blue
+
+  let luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+  return luma;
+}
+
+function isDarkColor(color: string, threshold: number = 40): boolean {
+  return getLuma(color) < threshold;
+}
+
 // Create variable to store last callback id
 let lastId: number | null = null;
 
@@ -173,6 +190,7 @@ export async function drawNotes(
   startTick: number,
   startLayer: number,
   zoomLevel: number,
+  backgroundColor: string = '#fcfcfc',
   imgWidth: number = 1280,
   imgHeight: number = 720
 ) {
@@ -205,11 +223,18 @@ export async function drawNotes(
   ctx.clearRect(0, 0, width, height);
 
   // Draw background
-  ctx.fillStyle = '#fcfcfc';
+  ctx.fillStyle = backgroundColor;
   ctx.fillRect(0, 0, width, height);
 
-  // Draw darker vertical lines
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+  // Check if the background color is dark or light
+  const isDark = isDarkColor(backgroundColor, 90);
+  if (isDark) {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+  } else {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+  }
+
+  // Draw vertical lines
   for (let i = 0; i < width; i += 8 * zoomFactor) {
     ctx.fillRect(i, 0, 1, height);
   }
