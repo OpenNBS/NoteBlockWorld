@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
 import StyledComponentsRegistry from '../lib/registry';
+import NextTopLoader from 'nextjs-toploader';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -21,6 +22,14 @@ export default function RootLayout({
   return (
     <html lang='en' className='min-h-screen'>
       <body className={lato.className + ' min-h-screen bg-zinc-900'}>
+        <NextTopLoader
+          showSpinner={false}
+          crawlSpeed={1000}
+          speed={1000}
+          easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
+          height={3}
+          zIndex={100}
+        />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
