@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@encode42/nbs.js": "^4.0.3",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",

@@ -15,8 +15,5 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "^2.8.8"
-  },
-  "dependencies": {
-    "@encode42/nbs.js": "^4.0.1"
   }
 }
