@@ -61,7 +61,7 @@ const InstrumentTable = () => {
   return (
     <div className='flex flex-col w-full'>
       {/* Header */}
-      <div className='flex-shrink grid grid-cols-8 pr-4'>
+      <div className='flex-shrink grid grid-cols-8'>
         <InstrumentTableHeader className='text-right'>#</InstrumentTableHeader>
         <InstrumentTableHeader className='col-span-3'>
           Instrument
@@ -75,7 +75,7 @@ const InstrumentTable = () => {
       </div>
 
       {/* Instruments */}
-      <div className='overflow-y-scroll max-h-72 flex flex-col'>
+      <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
         {instruments.map((instrument, i) => (
           <div
             key={i}
