@@ -135,8 +135,39 @@ function getKeyText(key: number): string {
   return `${note}${octaves}`;
 }
 
+// Create variable to store last callback id
+let lastId: number | null = null;
+
+export function drawFrame(
+  canvas: HTMLCanvasElement,
+  notes: Note[],
+  startTick: number,
+  startLayer: number,
+  zoomLevel: number,
+  backgroundColor: string = '#fcfcfc',
+  imgWidth: number = 1280,
+  imgHeight: number = 720
+) {
+  // Store callback id
+  if (lastId) {
+    cancelAnimationFrame(lastId);
+  }
+  lastId = requestAnimationFrame(() =>
+    drawNotes(
+      canvas,
+      notes,
+      startTick,
+      startLayer,
+      zoomLevel,
+      backgroundColor,
+      imgWidth,
+      imgHeight
+    )
+  );
+}
+
 // Function to draw Minecraft note blocks on the canvas
-export default async function drawNotes(
+export async function drawNotes(
   canvas: HTMLCanvasElement,
   notes: Note[],
   startTick: number,
@@ -150,6 +181,10 @@ export default async function drawNotes(
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
+
+  // Random execution ID
+  const id = Math.random().toString(36).substring(7);
+  console.log(`Executing drawNotes with ID ${id}`);
 
   // Disable anti-aliasing
   ctx.imageSmoothingEnabled = false;
@@ -167,12 +202,14 @@ export default async function drawNotes(
   const width = canvas.width / scale;
   const height = canvas.height / scale;
 
+  ctx.clearRect(0, 0, width, height);
+
   // Draw background
   ctx.fillStyle = '#fcfcfc';
   ctx.fillRect(0, 0, width, height);
 
   // Draw darker vertical lines
-  ctx.fillStyle = '#cccccc';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
   for (let i = 0; i < width; i += 8 * zoomFactor) {
     ctx.fillRect(i, 0, 1, height);
   }
@@ -220,6 +257,8 @@ export default async function drawNotes(
       ctx.textBaseline = 'middle';
       ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
     });
+
+  console.log(`Finished drawNotes with ID ${id}`);
 
   // Save the canvas as an image
   //const image = new Image();

@@ -1,6 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 import type { Note } from './thumbnail.util';
-import drawNotes from './thumbnail.util';
+import { drawFrame } from './thumbnail.util';
 
 import { useEffect, useRef } from 'react';
 
@@ -37,7 +37,7 @@ export const ThumbnailRendererCanvas = ({
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
-    drawNotes(canvas, notes, startTick, startLayer, zoomLevel);
+    drawFrame(canvas, notes, startTick, startLayer, zoomLevel);
   }, [notes, startTick, startLayer, zoomLevel]);
 
   return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;
