@@ -55,8 +55,6 @@ const InstrumentTable = () => {
   const instruments = song.instruments.loaded.filter(
     (instrument) => !instrument.builtIn
   );
-  console.log(instruments);
-  if (!instruments) return null;
 
   return (
     <div className='flex flex-col w-full'>
@@ -119,6 +117,7 @@ const InstrumentPicker = () => {
   const { song } = useUploadSongProvider();
   if (!song) return null;
 
+  // TODO: this is re-running when the thumbnail sliders are changed. Why?
   console.log(song);
 
   return song.instruments.loaded.length === 0 ? (

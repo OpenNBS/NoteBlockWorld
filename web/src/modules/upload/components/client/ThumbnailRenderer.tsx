@@ -1,7 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 import type { Note } from './thumbnail.util';
 import { drawFrame } from './thumbnail.util';
-
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
@@ -20,6 +19,7 @@ export const getThumbnailNotes = (song: Song): Note[] => {
     .flat();
   return notes;
 };
+
 type ThumbnailRendererCanvasProps = {
   notes: Note[];
   zoomLevel: number;
@@ -27,6 +27,7 @@ type ThumbnailRendererCanvasProps = {
   startLayer: number;
   backgroundColor: string;
 };
+
 export const ThumbnailRendererCanvas = ({
   notes,
   zoomLevel,
