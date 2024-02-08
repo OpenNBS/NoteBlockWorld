@@ -11,7 +11,10 @@ import {
   DownloadButton,
   EditButton,
 } from '../client/MySongsButtons';
-import { TableCell, TableRow } from '../table';
+
+const TableCell = ({ children }: { children: React.ReactNode }) => {
+  return <div className='p-2'>{children}</div>;
+};
 
 export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
   const getDescription = (description: string | null) => {
@@ -27,9 +30,12 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
     }
   };
   return (
-    <TableRow className='grid grid-cols-8' key={song.id}>
+    <article
+      className='grid grid-cols-8 border border-zinc-700 border-t-0 last:border-b-0 hover:bg-zinc-950/50 transition-colors duration-150 [&>div]:p-2 [&>div]:my-auto'
+      key={song.id}
+    >
       {/* Thumbnail */}
-      <TableCell className='col-span-1'>
+      <div className='col-span-1'>
         <div className='aspect-video my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative'>
           <img
             src='/demo.png'
@@ -47,10 +53,10 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
             />
           </div>
         </div>
-      </TableCell>
+      </div>
 
       {/* Song */}
-      <TableCell className='col-span-3 text-wrap'>
+      <div className='col-span-3 text-wrap'>
         <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
           <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
             {song.title}
@@ -63,10 +69,10 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
             {getDescription(song.description)}
           </p>
         </div>
-      </TableCell>
+      </div>
 
       {/* Visibility */}
-      <TableCell>
+      <div>
         <div className='flex flex-col items-center gap-1'>
           <FontAwesomeIcon
             icon={song.visibility === 'private' ? faEyeSlash : faEye}
@@ -76,34 +82,34 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
             {song.visibility.charAt(0).toUpperCase() + song.visibility.slice(1)}
           </span>
         </div>
-      </TableCell>
+      </div>
 
       {/* Created at */}
-      <TableCell>
+      <div>
         {new Date(song.createdAt).toLocaleDateString('en-US', {
           day: 'numeric',
           month: 'short',
           year: 'numeric',
         })}
-      </TableCell>
+      </div>
 
       {/* Play count */}
-      <TableCell>
+      <div>
         <div className='flex flex-row items-center justify-center gap-1.5'>
           <FontAwesomeIcon icon={faPlay} className='text-sm w-2.5' />
           <span className='text-lg font-bold'>{song.playCount}</span>
         </div>
-      </TableCell>
+      </div>
 
       {/* Actions */}
-      <TableCell>
+      <div>
         <div className='flex flex-col items-center justify-center gap-3 text-xl'>
           {/* TODO: add popups/tooltips */}
           <DownloadButton songId={song.id} />
           <EditButton songId={song.id} />
           <DeleteButton songId={song.id} />
         </div>
-      </TableCell>
-    </TableRow>
+      </div>
+    </article>
   );
 };
