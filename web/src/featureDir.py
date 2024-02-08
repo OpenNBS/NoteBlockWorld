@@ -20,17 +20,8 @@ def create_futureDir(feature_name):
 
 
 features = [
-    "auth",
-    "shared",
-    # songs
-    "upload",
-    "browse",
-    "my-songs",  # list all songs uploaded by the user
-    "edit-song",  # edit song details
-    "listen",  # listen to a song
-    # users
-    "user",
-    "edit-profile",
+    "song",
+    "song-edit",
 ]
 
 for feature in features:
