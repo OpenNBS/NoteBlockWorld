@@ -1,6 +1,8 @@
-function SongPage({ params }: { params: { id: string } }) {
+import { SongPage } from '@web/src/modules/song/components/SongPages';
+
+function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  return <h1>Edit song {id}</h1>;
+  return <SongPage id={id} />;
 }
 
-export default SongPage;
+export default Page;
