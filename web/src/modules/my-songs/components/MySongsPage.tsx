@@ -1,7 +1,7 @@
 import axiosInstance from '@web/src/lib/axios';
 import { SongsFolder, SongsPage } from '../types';
 import { MySongProvider } from './client/MySongs.context';
-import { MySongsTable } from './client/MySongsTable';
+import { MySongsPageComponent, MySongsTable } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
 
 async function fetchSongsPage(
@@ -68,7 +68,7 @@ async function MySongsPage() {
       pageSizeInit={20}
       InitialsongsFolder={InitialsongsFolder}
     >
-      <MySongsTable />
+      <MySongsPageComponent />
     </MySongProvider>
   );
 }
