@@ -17,7 +17,7 @@ const LoadingRows = () => (
   <>
     {Array.from({ length: 10 }).map((_, i) => (
       <TableRow key={i}>
-        <TableCell colSpan={6}>Loading...</TableCell>
+        <TableCell>Loading...</TableCell>
       </TableRow>
     ))}
   </>
@@ -25,7 +25,7 @@ const LoadingRows = () => (
 
 const EmptyRow = () => (
   <TableRow>
-    <TableCell colSpan={6}>No songs found.</TableCell>
+    <TableCell>No songs found.</TableCell>
   </TableRow>
 );
 
@@ -63,8 +63,8 @@ export const MySongsTable = () => {
       )}
       <Table className='w-[90vw] text-md text-center h-full text-nowrap text-ellipsis border-separate border-spacing-0'>
         <TableHeader className='sticky top-14 z-10'>
-          <TableRow className=''>
-            <TableHead colSpan={2}>Song</TableHead>
+          <TableRow className='grid grid-cols-8'>
+            <TableHead className='col-span-4'>Song</TableHead>
             <TableHead>Visibility</TableHead>
             <TableHead>Created at</TableHead>
             <TableHead>Play count</TableHead>
@@ -77,8 +77,8 @@ export const MySongsTable = () => {
           {!isLoading && page && <SongRows page={page} />}
         </TableBody>
         <TableFooter className='sticky bottom-0'>
-          <TableRow>
-            <TableHead colSpan={4}>
+          <TableRow className='grid grid-cols-2'>
+            <TableHead>
               <div className='flex items-center justify-center gap-4 h-12'>
                 <button
                   onClick={prevpage}
@@ -96,7 +96,7 @@ export const MySongsTable = () => {
                 </button>
               </div>
             </TableHead>
-            <TableHead colSpan={2}>
+            <TableHead>
               <div className='flex items-center justify-center gap-4 h-12'>
                 <label htmlFor='page' className='text-zinc-400'>
                   Page

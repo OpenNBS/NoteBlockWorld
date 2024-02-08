@@ -27,9 +27,9 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
     }
   };
   return (
-    <TableRow key={song.id}>
+    <TableRow className='grid grid-cols-8' key={song.id}>
       {/* Thumbnail */}
-      <TableCell>
+      <TableCell className='col-span-1'>
         <div className='aspect-video my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative'>
           <img
             src='/demo.png'
@@ -50,7 +50,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       </TableCell>
 
       {/* Song */}
-      <TableCell className='text-wrap'>
+      <TableCell className='col-span-3 text-wrap'>
         <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
           <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
             {song.title}
@@ -94,6 +94,8 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
           <span className='text-lg font-bold'>{song.playCount}</span>
         </div>
       </TableCell>
+
+      {/* Actions */}
       <TableCell>
         <div className='flex flex-col items-center justify-center gap-3 text-xl'>
           {/* TODO: add popups/tooltips */}
