@@ -41,14 +41,8 @@ export class SongController {
   public async getSong(
     @Query() query: GetSongQueryDto,
     @GetRequestToken() user: UserDocument | null,
-    @Res() res: Response,
   ): Promise<SongViewDto> {
-    const file = await this.songService.getSong(query, user);
-    res.set({
-      'Content-Type': 'audio/nbs',
-      'Content-Disposition': 'attachment; filename="song.nbs"',
-    });
-    return file;
+    return await this.songService.getSong(query, user);
   }
 
   @Get('/file')
@@ -56,7 +50,11 @@ export class SongController {
   public async getSongFile(
     @Query('id') id: string,
     @GetRequestToken() user: UserDocument | null,
+    @Res() res: Response,
   ): Promise<StreamableFile> {
+    res.set({
+      'Content-Disposition': 'attachment; filename="song.nbs"',
+    });
     return await this.songService.getSongFile(id, user);
   }
 

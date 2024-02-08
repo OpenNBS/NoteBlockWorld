@@ -31,11 +31,6 @@ export class SongViewDto {
   noteCount?: number;
 
   coverImageUrl?: string;
-
-  nbsFileUrl?: string;
-
-  // binary file data
-  content?: Buffer;
   public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
     return new SongViewDto({
@@ -52,8 +47,6 @@ export class SongViewDto {
       tempo: data.tempo,
       noteCount: data.noteCount,
       coverImageUrl: data.coverImageUrl,
-      nbsFileUrl: data.nbsFileUrl,
-      rawFile: data.rawFile,
     });
   }
   constructor(song: Partial<SongDocument>) {
