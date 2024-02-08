@@ -4,8 +4,9 @@ import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
 import { SongRow } from './SongRow';
 
-const LoadingRows = () =>
-  Array.from({ length: 10 }).map((_, i) => <div key={i}>Loading...</div>);
+const Loading = () => <div>Loading...</div>; // TODO: replace with loading skeleton
+
+const NoSongs = () => <div>You haven't uploaded any song yet!</div>;
 
 const SongRows = ({ page }: { page: SongsPage }) => {
   const { content } = page;
@@ -50,7 +51,7 @@ const MySongsTablePaginator = () => {
 };
 
 export const MySongsTable = () => {
-  const { page, isLoading } = useMySongsProvider();
+  const { page } = useMySongsProvider();
 
   useEffect(() => {
     console.log('page', page);
@@ -68,11 +69,7 @@ export const MySongsTable = () => {
       </div>
 
       {/* Content */}
-      <div>
-        {isLoading && <LoadingRows />}
-        {!isLoading && !page && <div>No songs found.</div>}
-        {!isLoading && page && <SongRows page={page} />}
-      </div>
+      {page && <SongRows page={page} />}
 
       {/* Footer (pagination) */}
       <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
@@ -83,7 +80,7 @@ export const MySongsTable = () => {
 };
 
 export const MySongsPageComponent = () => {
-  const { error } = useMySongsProvider();
+  const { error, page, isLoading } = useMySongsProvider();
 
   return (
     <section className='flex flex-col h-full gap-12 justify-between w-full transition-all'>
@@ -92,7 +89,7 @@ export const MySongsPageComponent = () => {
         <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
       )}
       <div className='flex flex-col gap-12 w-full'>
-        <MySongsTable />
+        {isLoading ? <Loading /> : page ? <MySongsTable /> : <NoSongs />}
       </div>
     </section>
   );
