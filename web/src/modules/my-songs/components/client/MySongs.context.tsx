@@ -46,7 +46,7 @@ export const MySongProvider = ({
   // eslint-disable-next-line no-unused-vars
   const [pageSize, _] = useState<number>(pageSizeInit);
   const [page, setPage] = useState<SongsPage | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const putPage = async ({ key, page }: { key: number; page: SongsPage }) => {
