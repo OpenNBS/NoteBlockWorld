@@ -12,16 +12,45 @@ const SongRows = ({ page }: { page: SongsPage }) => {
   return content.map((song) => <SongRow key={song.id} song={song} />);
 };
 
+const MySongsTablePaginator = () => {
+  const { nextpage, prevpage, gotoPage, totalPages, currentPage } =
+    useMySongsProvider();
+
+  return (
+    <div className='flex items-center justify-center gap-4 h-12'>
+      <button
+        onClick={prevpage}
+        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        disabled={currentPage === 0}
+      >
+        Previous
+      </button>
+      <button
+        onClick={nextpage}
+        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+      <div className='w-10'></div>
+      <div className='flex items-center justify-center gap-4 h-12'>
+        <label htmlFor='page' className='text-zinc-400'>
+          Page
+        </label>
+        <input
+          type='number'
+          value={currentPage}
+          onChange={(e) => gotoPage(Number(e.target.value))}
+          className={`block w-8 rounded-lg bg-transparent border-2 border-zinc-500 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 `}
+        />
+        <span className='text-zinc-400'>{`of ${totalPages}`}</span>
+      </div>
+    </div>
+  );
+};
+
 export const MySongsTable = () => {
-  const {
-    page,
-    nextpage,
-    prevpage,
-    gotoPage,
-    totalPages,
-    currentPage,
-    isLoading,
-  } = useMySongsProvider();
+  const { page, isLoading } = useMySongsProvider();
 
   useEffect(() => {
     console.log('page', page);
@@ -47,52 +76,7 @@ export const MySongsTable = () => {
 
       {/* Footer (pagination) */}
       <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
-        <div className='flex items-center justify-center gap-4 h-12'>
-          <button
-            onClick={prevpage}
-            className='disabled:opacity-50 disabled:cursor-not-allowed'
-            disabled={currentPage === 0}
-          >
-            Previous
-          </button>
-          <button
-            onClick={nextpage}
-            className='disabled:opacity-50 disabled:cursor-not-allowed'
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-          <div className='w-10'></div>
-          <div className='flex items-center justify-center gap-4 h-12'>
-            <button
-              onClick={prevpage}
-              className='disabled:opacity-50 disabled:cursor-not-allowed'
-              disabled={currentPage === 0}
-            >
-              Previous
-            </button>
-            <button
-              onClick={nextpage}
-              className='disabled:opacity-50 disabled:cursor-not-allowed'
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-            <div className='w-10'></div>
-            <div className='flex items-center justify-center gap-4 h-12'>
-              <label htmlFor='page' className='text-zinc-400'>
-                Page
-              </label>
-              <input
-                type='number'
-                value={currentPage}
-                onChange={(e) => gotoPage(Number(e.target.value))}
-                className={`block w-8 rounded-lg bg-transparent border-2 border-zinc-500 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 `}
-              />
-              <span className='text-zinc-400'>{`of ${totalPages}`}</span>
-            </div>
-          </div>
-        </div>
+        <MySongsTablePaginator />
       </div>
     </div>
   );
