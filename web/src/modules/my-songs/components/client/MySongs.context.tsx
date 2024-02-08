@@ -25,19 +25,26 @@ const MySongsContext = createContext<MySongsContextType>(
   {} as MySongsContextType
 );
 
+type MySongProviderProps = {
+  InitialsongsFolder?: SongsFolder;
+  children?: React.ReactNode;
+  totalPagesInit?: number;
+  currentPageInit?: number;
+  pageSizeInit?: number;
+};
 export const MySongProvider = ({
   InitialsongsFolder = {},
   children,
-}: {
-  InitialsongsFolder: SongsFolder;
-  children: React.ReactNode;
-}) => {
+  totalPagesInit = 0,
+  currentPageInit = 0,
+  pageSizeInit = 20,
+}: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(totalPagesInit);
+  const [currentPage, setCurrentPage] = useState<number>(currentPageInit);
   // eslint-disable-next-line no-unused-vars
-  const [pageSize, _] = useState<number>(20);
+  const [pageSize, _] = useState<number>(pageSizeInit);
   const [page, setPage] = useState<SongsPage | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +69,7 @@ export const MySongProvider = ({
         key: currentPage,
         page: data,
       });
-      setTotalPages(~~(data.total / pageSize));
+      setTotalPages(Math.ceil(data.total / pageSize));
       setPage(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
