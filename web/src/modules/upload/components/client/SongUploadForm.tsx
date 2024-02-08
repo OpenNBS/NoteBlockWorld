@@ -146,10 +146,13 @@ export const SongUploadForm = () => {
             type='checkbox'
             className='accent-blue scale-150 mr-3'
             id='allowDownload'
+            defaultChecked={true}
+            disabled={true}
             {...register('allowDownload')}
           />
           <label htmlFor='allowDownload'>
-            Allow other users to download the NBS file
+            Allow other users to download the NBS file{' '}
+            <span className='text-zinc-400 italic'>(Coming soon!)</span>
           </label>
           <ErrorBallon
             message={errors.allowDownload?.message}

@@ -120,8 +120,11 @@ const InstrumentPicker = () => {
   // TODO: this is re-running when the thumbnail sliders are changed. Why?
   console.log(song);
 
-  return song.instruments.loaded.length === 0 ? (
-    <p className='text-center'>Sounds pretty vanilla!</p>
+  const customInstrumentCount =
+    song.instruments.loaded.length - song.instruments.firstCustomIndex;
+
+  return customInstrumentCount === 0 ? (
+    <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
   ) : (
     <InstrumentTable />
   );
