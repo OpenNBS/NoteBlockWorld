@@ -146,6 +146,7 @@ export const SongUploadForm = () => {
             type='checkbox'
             className='accent-blue scale-150 mr-3'
             id='allowDownload'
+            defaultChecked={true}
             {...register('allowDownload')}
           />
           <label htmlFor='allowDownload'>
