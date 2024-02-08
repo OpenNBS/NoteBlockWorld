@@ -27,7 +27,7 @@ const EditButton = ({ songId }: { songId: string }) => {
     <button
       onClick={() => {
         console.log(`Edit song with id: ${songId}`);
-        router.push(`/songs/${songId}/edit/`);
+        router.push(`/song/${songId}/edit/`);
       }}
       className='flex items-center justify-center w-5 h-5 hover:text-blue-500 hover:scale-[1.25] transition-all duration-150'
     >
