@@ -20,7 +20,8 @@ export async function Header() {
     redirect('/login?error=login');
   }
   return (
-    <header className='fixed w-full h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 px-6 sm:px-10 z-10'>
+    // calc(3.5rem - 3px) = h-14 minus height of the loading bar
+    <header className='fixed w-full h-[calc(3.5rem-3px)] mt-[3px] pt-[5px] flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 px-6 sm:px-10 z-10'>
       {/* Navbar */}
       <nav className='w-full flex flex-row justify-between items-center max-w-screen-xl'>
         {/* Logo */}
