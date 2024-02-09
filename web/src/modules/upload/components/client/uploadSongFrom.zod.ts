@@ -16,7 +16,7 @@ export const uploadSongFormSchema = zod.object({
       message: 'Title must be less than 64 characters',
     })
     .min(1, {
-      message: 'Title must be at least 1 character',
+      message: 'Title is required',
     }),
   originalAuthor: zod
     .string()
