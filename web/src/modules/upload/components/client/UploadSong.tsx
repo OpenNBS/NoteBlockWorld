@@ -9,7 +9,7 @@ import {
 import { SongSelector } from './SongSelector';
 import { SongUploadForm } from './SongUploadForm';
 
-const UploadSong = () => {
+const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
   const { song, filename } = useUploadSongProvider();
   return (
     <>
@@ -35,15 +35,23 @@ const UploadSong = () => {
         )}
       </div>
       <div className='h-10' />
-      {!song ? <SongSelector /> : <SongUploadForm />}
+      {!song ? (
+        <SongSelector />
+      ) : (
+        <SongUploadForm defaultAuthorName={defaultAuthorName} />
+      )}
     </>
   );
 };
 
-export const UploadSongPage = () => {
+export const UploadSongPage = ({
+  defaultAuthorName,
+}: {
+  defaultAuthorName: string;
+}) => {
   return (
     <UploadSongProvider>
-      <UploadSong />
+      <UploadSong defaultAuthorName={defaultAuthorName} />
     </UploadSongProvider>
   );
 };

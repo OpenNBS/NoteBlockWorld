@@ -5,7 +5,11 @@ import { SongThumbnailInput } from './SongThumbnailInput';
 import InstrumentPicker from './InstrumentPicker';
 import { Instrument } from '@encode42/nbs.js';
 
-export const SongUploadForm = () => {
+export const SongUploadForm = ({
+  defaultAuthorName,
+}: {
+  defaultAuthorName: string;
+}) => {
   const { formMethods, sendError, errors, register, submitSong, song } =
     useUploadSongProvider();
 
@@ -56,7 +60,7 @@ export const SongUploadForm = () => {
             <Input
               type='text'
               id='artist'
-              value={'Replace with user name'}
+              value={defaultAuthorName}
               disabled={true}
               className='block'
             />
@@ -67,7 +71,6 @@ export const SongUploadForm = () => {
               type='text'
               id='album'
               className='block'
-              placeholder='Replace with user name'
               {...register('originalAuthor', {
                 maxLength: 64,
               })}
