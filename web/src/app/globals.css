@@ -95,3 +95,12 @@ body {
       animation-timing-function: cubic-bezier(0.8,0,1,1);
   }
 }
+
+
+/************** Loading bar **************/
+
+#nprogress {
+  /* See: https://github.com/rstacruz/nprogress/issues/56#issuecomment-41505532 */
+  position: relative;
+  z-index: 9999;
+}
