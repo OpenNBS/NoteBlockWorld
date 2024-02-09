@@ -19,6 +19,7 @@ import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongDocument, Song as SongEntity } from './entity/song.entity';
 import { SongPageDto } from './dto/SongPageDto';
+
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
@@ -70,6 +71,7 @@ export class SongService {
     const createdSong = await this.songModel.create(song);
     return createdSong;
   }
+
   public async uploadSong({
     file,
     user,
@@ -126,6 +128,7 @@ export class SongService {
     const createdSong = await song.save();
     return UploadSongDto.fromSongDocument(createdSong);
   }
+
   public async deleteSong(id: string): Promise<UploadSongDto> {
     const foundSong = await this.songModel.findById(id).exec();
     if (!foundSong) {
@@ -134,6 +137,7 @@ export class SongService {
     await this.songModel.deleteOne({ _id: id }).exec();
     return UploadSongDto.fromSongDocument(foundSong);
   }
+
   public async patchSong(
     id: string,
     body: UploadSongDto,
@@ -159,6 +163,7 @@ export class SongService {
     const createdSong = await foundSong.save();
     return UploadSongDto.fromSongDocument(createdSong);
   }
+
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
     const { page, limit } = query;
     const options = {
@@ -172,6 +177,7 @@ export class SongService {
       .exec();
     return data.map((song) => SongPreviewDto.fromSongDocument(song));
   }
+
   public async getSong(
     query: GetSongQueryDto,
     user: UserDocument | null,
