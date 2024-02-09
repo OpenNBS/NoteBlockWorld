@@ -24,8 +24,8 @@ export default function RootLayout({
       <body className={lato.className + ' min-h-screen bg-zinc-900'}>
         <NextTopLoader
           showSpinner={false}
-          crawlSpeed={1000}
-          speed={1000}
+          crawlSpeed={700}
+          speed={700}
           easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
           height={3}
         />
