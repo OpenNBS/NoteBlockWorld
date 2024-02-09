@@ -108,12 +108,7 @@ export class SongController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload Song',
-    schema: {
-      type: 'object',
-      properties: {
-        file: { type: 'string', format: 'binary' },
-      },
-    },
+    type: UploadSongDto,
   })
   @UseInterceptors(
     FileInterceptor('file', {
@@ -127,7 +122,7 @@ export class SongController {
   })
   public async createSong(
     @UploadedFile() file: Express.Multer.File,
-    @Query() body: UploadSongDto,
+    @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
     return await this.songService.uploadSong({ body, file, user });

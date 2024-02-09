@@ -13,6 +13,13 @@ import { SongDocument } from '../entity/song.entity';
 import { CoverData } from './CoverData.dto';
 
 export class UploadSongDto {
+  @ApiProperty({
+    description: 'The file to upload',
+    type: 'file',
+  })
+  @IsNotEmpty()
+  file: Express.Multer.File;
+
   @IsNotEmpty()
   @IsBoolean()
   @ApiProperty({

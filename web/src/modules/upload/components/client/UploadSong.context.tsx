@@ -51,46 +51,45 @@ export const UploadSongProvider = ({
   } = formMethods;
 
   const submitSongData = async (): Promise<void> => {
-    if (!song) throw new Error('Song file not found');
-    const fileData = new FormData();
+    // Get song file from state
+    if (!song) {
+      throw new Error('Song file not found');
+    }
     const arrayBuffer = song?.toArrayBuffer();
     if (arrayBuffer.byteLength === 0) {
-      return;
+      throw new Error('Song file is invalid');
     }
     const blob = new Blob([arrayBuffer]);
 
-    fileData.append('file', blob, 'song.nbs');
-
+    // Build form data
+    const formData = new FormData();
+    formData.append('file', blob, 'song.nbs');
     const formValues = formMethods.getValues();
-    const param: Record<string, string> = {};
-
     Object.entries(formValues).forEach(([key, value]) => {
-      param[key] = value.toString();
+      formData.append(key, value.toString());
     });
-    const query = new URLSearchParams(param);
+
+    // Get authorization token from local storage
     const token = getTokenLocal();
-    const response = await axiosInstance.post(
-      `/song?${query.toString()}`,
-      fileData,
-      {
-        headers: {
-          authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+
+    // Send request
+    const response = await axiosInstance.post(`/song`, formData, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    // Handle response
     if (response.status === 201) {
       const data = response.data;
-      const id = data._id;
-      if (typeof id !== 'string') {
-        return;
-      }
+      const id = data._id as string;
       router.push(`/my-songs?selectedSong=${id}`);
     } else {
-      const erro_body = (await response.data) as {
+      const error_body = (await response.data) as {
         message: string;
       };
-      setSendError(erro_body.message);
+      setSendError(error_body.message);
       return;
     }
   };
@@ -99,7 +98,7 @@ export const UploadSongProvider = ({
     try {
       await submitSongData();
     } catch (e) {
-      console.log(e);
+      console.log(e); // TODO: handle error
     }
   };
 
