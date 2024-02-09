@@ -23,9 +23,9 @@ export class UploadSongDto {
   @IsNotEmpty()
   @IsBoolean()
   @ApiProperty({
-    default: false,
+    default: true,
     description: 'Whether the song can be downloaded by other users',
-    example: false,
+    example: true,
   })
   allowDownload: boolean;
 
