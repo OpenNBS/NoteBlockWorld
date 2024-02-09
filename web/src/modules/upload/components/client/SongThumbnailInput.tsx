@@ -50,6 +50,7 @@ export const SongThumbnailInput = () => {
             id='zoom-level'
             className='w-full'
             {...register('coverData.zoomLevel', { value: 3, max: 5 })}
+            min={1}
             max={5}
           />
         </div>
