@@ -6,7 +6,7 @@ import { SongRow } from './SongRow';
 
 const Loading = () => <div>Loading...</div>; // TODO: replace with loading skeleton
 
-const NoSongs = () => <div>You haven't uploaded any song yet!</div>;
+const NoSongs = () => <div>You haven&apos;t uploaded any song yet!</div>;
 
 const SongRows = ({ page }: { page: SongsPage }) => {
   const { content } = page;
