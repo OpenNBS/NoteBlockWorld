@@ -12,7 +12,6 @@ import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 import { Model } from 'mongoose';
-import { GetSongQueryDto } from './dto/GetSongQuery.dto';
 import { SongDto } from './dto/Song.dto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
@@ -179,10 +178,9 @@ export class SongService {
   }
 
   public async getSong(
-    query: GetSongQueryDto,
+    id: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
-    const { id } = query;
     const foundSong = await this.songModel.findById(id).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);

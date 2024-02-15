@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Query,
@@ -25,7 +26,6 @@ import { GetRequestToken } from '@server/GetRequestUser';
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
 import type { Response } from 'express';
-import { GetSongQueryDto } from './dto/GetSongQuery.dto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
@@ -36,13 +36,13 @@ import { SongPageDto } from './dto/SongPageDto';
 export class SongController {
   constructor(public readonly songService: SongService) {}
 
-  @Get('/')
+  @Get('/:id')
   @ApiOperation({ summary: 'Get song info' })
   public async getSong(
-    @Query() query: GetSongQueryDto,
+    @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongViewDto> {
-    return await this.songService.getSong(query, user);
+    return await this.songService.getSong(id, user);
   }
 
   @Get('/file')
