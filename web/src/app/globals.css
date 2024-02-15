@@ -47,7 +47,6 @@ body {
 /************** Scrollbar **************/
 
 body {
-  overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: --tw-bg-zinc-900 --tw-bg-zinc-500;
 }
@@ -58,7 +57,7 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  @apply bg-zinc-900;
+  @apply bg-zinc-800/50 rounded-full;
 }
 
 /* Handle */
