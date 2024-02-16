@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from '@web/src/lib/axios';
 import SongDetails from './SongDetails';
-import { SongPageView } from '../types';
+import { SongPageView } from '../types/song.type';
 
 const UploaderBadge = () => {
   return (

@@ -20,4 +20,8 @@ export type SongPageView = {
   duration: number;
   minutesSpent: number;
   fileSize: number;
+  loop: boolean;
+  loopStartTick: number;
+  timeSignature: number;
+  compatible: boolean;
 };

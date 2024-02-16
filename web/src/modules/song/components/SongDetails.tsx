@@ -1,4 +1,4 @@
-import { SongPageView } from '../types';
+import { SongPageView } from '../types/song.type';
 
 type SongDetailsProps = {
   song: SongPageView;
