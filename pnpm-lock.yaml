@@ -15,8 +15,8 @@ importers:
   server:
     dependencies:
       '@encode42/nbs.js':
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: 6.0.0-alpha3
+        version: 6.0.0-alpha3
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -178,8 +178,8 @@ importers:
   web:
     dependencies:
       '@encode42/nbs.js':
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: 6.0.0-alpha3
+        version: 6.0.0-alpha3
       '@fortawesome/free-brands-svg-icons':
         specifier: ^6.4.2
         version: 6.4.2
@@ -1861,8 +1861,8 @@ packages:
     resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
     dev: false
 
-  /@encode42/nbs.js@4.0.3:
-    resolution: {integrity: sha512-JgFS4JnqfeAETUffXhzzPVUuckIOKs1+uw/BmGDHJkc0Fh6yGi+NZYn13jid/cPETCb9L1S0hIcdZC1wD3snjQ==}
+  /@encode42/nbs.js@6.0.0-alpha3:
+    resolution: {integrity: sha512-Api8YLtWO2DgrEF/oJttpYW7fbag57+5ie6GGob4Cej8TDjr7F1S2Wc4zHKR/Gr1BdcbjumXMSymhIvOoAUXIA==}
     engines: {node: '>=18', pnpm: '>=8'}
     dev: false
 
