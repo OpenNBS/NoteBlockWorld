@@ -1,4 +1,10 @@
-import { faDownload, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faDownload,
+  faHeart,
+  faPlus,
+  faShare,
+  faThumbsUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from '@web/src/lib/axios';
 import SongDetails from './SongDetails';
@@ -13,6 +19,31 @@ const UploaderBadge = () => {
         <p className='text-sm text-zinc-400'>410 followers</p>
       </div>
     </div>
+  );
+};
+
+const LikeButton = () => {
+  return (
+    <div className='flex flex-row gap-1'>
+      <button className='uppercase px-2 py-1 h-full rounded-md text-sm font-bold bg-red-600 hover:bg-red-500 [&_div]:hover:scale-150 [&_div]:active:scale-90 [&_div]:transition-all [&_div]:duration-100'>
+        <div className='flex flex-row items-center gap-2'>
+          <FontAwesomeIcon icon={faHeart} />
+          {/* 23 */}
+        </div>
+      </button>
+      <CountBalloon count={23} />
+    </div>
+  );
+};
+
+const ShareButton = () => {
+  return (
+    <button className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-gray-600 hover:bg-gray-500'>
+      <div className='flex flex-row items-center gap-2'>
+        <FontAwesomeIcon icon={faShare} />
+        <div>Share</div>
+      </div>
+    </button>
   );
 };
 
@@ -68,21 +99,25 @@ export async function SongPage({ id }: { id: string }) {
         <h1 className='text-xl font-bold'>{song.title}</h1>
 
         {/* Uploader and actions */}
-        <div className='flex flex-row justify-start items-center gap-8 w-full'>
+        <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
           <UploaderBadge />
           <FollowButton />
           <div className='flex-grow'></div>
-          <DownloadButton />
+          <div className='flex flex-row gap-4'>
+            <LikeButton />
+            <ShareButton />
+            <DownloadButton />
+          </div>
         </div>
 
-        {/* Views and upload date */}
+        {/* Views, upload date, description */}
         <div className='flex flex-col p-3 gap-2 bg-zinc-800 rounded-xl'>
           <div className='text-sm text-zinc-300'>221 views • 2 days ago</div>
           <p className='leading-tight'>{song.description}</p>
         </div>
       </div>
 
-      {/* Right side - song details */}
+      {/* Right panel - song details */}
       <div className='col-span-full lg:col-span-3'>
         <SongDetails song={song} />
       </div>
