@@ -2,6 +2,7 @@ import { faDownload, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from '@web/src/lib/axios';
 import SongDetails from './SongDetails';
+import { SongPageView } from '../types';
 
 const UploaderBadge = () => {
   return (
@@ -57,7 +58,7 @@ const CountBalloon = ({ count }: { count: number }) => {
 };
 
 export async function SongPage({ id }: { id: string }) {
-  const { data: song } = await axios.get(`/song/${id}`);
+  const { data: song } = await axios.get<SongPageView>(`/song/${id}`);
 
   return (
     <div className='grid grid-cols-8 gap-12'>

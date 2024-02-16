@@ -1,0 +1,23 @@
+export type SongPageView = {
+  id: string;
+  uploader: string;
+  title: string;
+  originalAuthor: string;
+  description: string;
+  midiFileName: string;
+  coverImageUrl: string;
+  downloadUrl: string;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
+  playCount: number;
+  visibility: 'public' | 'private';
+  allowDownload: boolean;
+  noteCount: number;
+  tickCount: number;
+  layerCount: number;
+  tempo: number;
+  duration: number;
+  minutesSpent: number;
+  fileSize: number;
+};
