@@ -1,6 +1,7 @@
 import { faDownload, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from '@web/src/lib/axios';
+import SongDetails from './SongDetails';
 
 const UploaderBadge = () => {
   return (
@@ -59,7 +60,7 @@ export async function SongPage({ id }: { id: string }) {
   const { data: song } = await axios.get(`/song/${id}`);
 
   return (
-    <div className='grid grid-cols-8'>
+    <div className='grid grid-cols-8 gap-12'>
       <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
         <img src={`/demo.png`} className='rounded-xl' />
 
@@ -78,6 +79,11 @@ export async function SongPage({ id }: { id: string }) {
           <div className='text-sm text-zinc-300'>221 views • 2 days ago</div>
           <p className='leading-tight'>{song.description}</p>
         </div>
+      </div>
+
+      {/* Right side - song details */}
+      <div className='col-span-full lg:col-span-3'>
+        <SongDetails song={song} />
       </div>
     </div>
   );
