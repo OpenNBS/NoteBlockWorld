@@ -48,7 +48,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>MIDI file name</SongDetailsCell>
-          <SongDetailsCell>{song.midiFileName}</SongDetailsCell>
+          <SongDetailsCell>{song.midiFileName || '--'}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Category</SongDetailsCell>
@@ -69,6 +69,12 @@ const SongDetails = ({ song }: SongDetailsProps) => {
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
+          <SongDetailsCell>Note block compatible</SongDetailsCell>
+          <SongDetailsCell>
+            <div className='mr-2 h-4 w-4 rounded-full bg-green-500'></div>Yes
+          </SongDetailsCell>
+        </SongDetailsRow>
+        <SongDetailsRow>
           <SongDetailsCell>Note count</SongDetailsCell>
           <SongDetailsCell>
             {song.noteCount.toLocaleString('en-US')}
@@ -77,9 +83,9 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         <SongDetailsRow>
           <SongDetailsCell>Instrument count</SongDetailsCell>
           <SongDetailsCell>
-            12
+            {song.vanillaInstrumentCount + song.customInstrumentCount}
             <span className='font-normal text-zinc-400 ml-2'>
-              (3 vanilla, 2 custom)
+              {`(${song.vanillaInstrumentCount} vanilla, ${song.customInstrumentCount} custom)`}
             </span>
           </SongDetailsCell>
         </SongDetailsRow>
@@ -94,16 +100,26 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         <SongDetailsRow>
           <SongDetailsCell>Tempo</SongDetailsCell>
           <SongDetailsCell>
-            {song.tempo} t/s{' '}
+            {song.tempo} ticks per second
             <span className='font-normal text-zinc-400 ml-2'>
               ({song.tempo * 15} BPM)
             </span>
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
+          <SongDetailsCell>Time signature</SongDetailsCell>
+          <SongDetailsCell>{song.timeSignature}</SongDetailsCell>
+        </SongDetailsRow>
+        <SongDetailsRow>
           <SongDetailsCell>Running time</SongDetailsCell>
           <SongDetailsCell>
             {formatTime(song.tickCount / song.tempo)}
+          </SongDetailsCell>
+        </SongDetailsRow>
+        <SongDetailsRow>
+          <SongDetailsCell>Loop</SongDetailsCell>
+          <SongDetailsCell>
+            {song.loop ? `Yes (to tick ${song.loopStartTick})` : 'No'}
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>

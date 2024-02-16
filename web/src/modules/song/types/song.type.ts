@@ -1,27 +1,41 @@
 export type SongPageView = {
+  // Auto-generated
   id: string;
   uploader: string;
+  coverImageUrl: string;
+  downloadUrl: string;
+  createdAt: Date;
+
+  // From song document update
+  playCount: number;
+  likeCount: number;
+
+  // From upload form -> updates NBS file
   title: string;
   originalAuthor: string;
   description: string;
-  midiFileName: string;
-  coverImageUrl: string;
-  downloadUrl: string;
-  category: string;
-  createdAt: Date;
+
+  // From upload form -> updates song document
   updatedAt: Date;
-  playCount: number;
+  category: string;
   visibility: 'public' | 'private';
   allowDownload: boolean;
+
+  // From upload form -> Read/calculate from NBS file
+  // (Immutable!)
+  fileSize: number;
+  compatible: boolean;
+  midiFileName: string;
   noteCount: number;
+  vanillaInstrumentCount: number;
+  customInstrumentCount: number;
   tickCount: number;
   layerCount: number;
   tempo: number;
+  tempoRange: number[];
+  timeSignature: number;
   duration: number;
-  minutesSpent: number;
-  fileSize: number;
   loop: boolean;
   loopStartTick: number;
-  timeSignature: number;
-  compatible: boolean;
+  minutesSpent: number;
 };
