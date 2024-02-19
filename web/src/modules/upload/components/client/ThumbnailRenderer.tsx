@@ -4,12 +4,13 @@ import { drawFrame } from './thumbnail.util';
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
-  const notes = song.layers
-    .map((layer) =>
-      layer.notes.map((note, tick) => {
+  const notes = song.layers.get
+    .map((layer, layerId) =>
+      Array.from(layer.notes).map((tick) => {
+        const [tickNumber, note] = tick;
         const data = {
-          tick: tick,
-          layer: layer.id,
+          tick: tickNumber,
+          layer: layerId,
           key: note.key,
           instrument: note.instrument,
         };
