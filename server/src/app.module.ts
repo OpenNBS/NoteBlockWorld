@@ -11,6 +11,8 @@ import { AchievementModule } from './achievement/achievement.module';
 import { NotificationModule } from './notification/notification.module';
 import { AuthModule } from './auth/auth.module';
 import { ParseTokenPipe } from './song/parseToken';
+import { FileController } from './file/file.controller';
+import { FileService } from './file/file.service';
 
 @Module({
   imports: [
@@ -51,8 +53,8 @@ import { ParseTokenPipe } from './song/parseToken';
     NotificationModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ParseTokenPipe],
+  controllers: [AppController, FileController],
+  providers: [AppService, ParseTokenPipe, FileService],
   exports: [ParseTokenPipe],
 })
 export class AppModule {}
