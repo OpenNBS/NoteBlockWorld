@@ -86,21 +86,21 @@ export class SongController {
     return await this.songService.deleteSong(id);
   }
 
-  @Get('/my')
-  @ApiOperation({
-    summary: 'Get a list of songs from the authenticated user with pagination',
-  })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt-refresh'))
-  public async getMySongsPage(
-    @Query() query: PageQuery,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<SongPageDto> {
-    return await this.songService.getMySongsPage({
-      query,
-      user,
-    });
-  }
+  // @Get('/my')
+  // @ApiOperation({
+  //   summary: 'Get a list of songs from the authenticated user with pagination',
+  // })
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard('jwt-refresh'))
+  // public async getMySongsPage(
+  //   @Query() query: PageQuery,
+  //   @GetRequestToken() user: UserDocument | null,
+  // ): Promise<SongPageDto> {
+  //   return await this.songService.getMySongsPage({
+  //     query,
+  //     user,
+  //   });
+  // }
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
