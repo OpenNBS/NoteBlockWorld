@@ -51,7 +51,7 @@ export class SongController {
     @Query('id') id: string,
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
-  ): Promise<StreamableFile> {
+  ): Promise<void> {
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
     });

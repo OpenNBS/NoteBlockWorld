@@ -63,7 +63,7 @@ export class SongService {
     }
     song.uploader = uploader._id as any;
     song.allowDownload = allowDownload;
-    song.visibility = visibility;
+    song.visibility = visibility === 'public' ? 'public' : 'private';
     song.title = title;
     song.originalAuthor = originalAuthor;
     song.description = description;
@@ -132,7 +132,7 @@ export class SongService {
     const originalAuthor = body.originalAuthor;
     const description = body.description;
     const allowDownload = body.allowDownload;
-    const visibility = body.visibility;
+    const visibility = body.visibility == 'private' ? 'private' : 'public';
     // const category = body.category;
 
     // Calculate song document's data from NBS file
@@ -211,7 +211,7 @@ export class SongService {
       throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
     }
     foundSong.allowDownload = body.allowDownload;
-    foundSong.visibility = body.visibility;
+    foundSong.visibility = body.visibility == 'private' ? 'private' : 'public';
     foundSong.title = body.title;
     foundSong.originalAuthor = body.originalAuthor;
     foundSong.description = body.description;
@@ -256,7 +256,7 @@ export class SongService {
   public async getSongFile(
     id: string,
     user: UserDocument | null,
-  ): Promise<StreamableFile> {
+  ): Promise<void> {
     const foundSong = await this.songModel.findById(id).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -269,16 +269,7 @@ export class SongService {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
     }
-    if (!foundSong.rawFile) {
-      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-    }
-    const buffer = Buffer.from(foundSong.rawFile);
-    const streamableFile = new StreamableFile(buffer, {
-      type: 'audio/nbs',
-      disposition: 'attachment',
-      length: buffer.length,
-    });
-    return streamableFile;
+    // TODO: reimplement
   }
 
   public async getMySongsPage(arg0: {

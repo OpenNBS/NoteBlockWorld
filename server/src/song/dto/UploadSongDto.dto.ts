@@ -86,7 +86,6 @@ export class UploadSongDto {
   }
 
   public static fromSongDocument(song: SongDocument): UploadSongDto {
-    const data = song.toJSON();
     return new UploadSongDto({
       allowDownload: song.allowDownload,
       visibility: song.visibility,

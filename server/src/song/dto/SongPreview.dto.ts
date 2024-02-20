@@ -6,6 +6,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { SongDocument } from '../entity/song.entity';
+
 export class SongPreviewDto {
   @IsString()
   @IsNotEmpty()
@@ -35,10 +36,11 @@ export class SongPreviewDto {
 
   @IsNotEmpty()
   @IsUrl()
-  coverImageUrl: string;
+  thumbnailUrl: string;
 
   @IsNotEmpty()
   createdAt: Date;
+
   @IsNotEmpty()
   updatedAt: Date;
 
@@ -65,7 +67,7 @@ export class SongPreviewDto {
       originalAuthor: song.originalAuthor,
       duration: song.duration,
       noteCount: song.noteCount,
-      coverImageUrl: song.coverImageUrl,
+      thumbnailUrl: song.thumbnailUrl,
       createdAt: song.createdAt,
       updatedAt: song.updatedAt,
       playCount: song.playCount,

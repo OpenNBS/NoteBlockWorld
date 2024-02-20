@@ -8,6 +8,7 @@ export type SongPageView = {
 
   // From song document update
   playCount: number;
+  downloadCount: number;
   likeCount: number;
 
   // From upload form -> updates NBS file

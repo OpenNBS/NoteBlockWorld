@@ -19,6 +19,7 @@ export class SongDto {
   @IsDate()
   updatedAt: Date;
 
+  @IsString()
   uploader: string | UserDocument;
 
   @IsNumber()
@@ -59,7 +60,7 @@ export class SongDto {
 
   @IsOptional()
   @IsString()
-  coverImageUrl?: string;
+  thumbnailUrl?: string;
 
   @IsOptional()
   @IsString()
@@ -86,7 +87,7 @@ export class SongDto {
       duration: song.duration,
       tempo: song.tempo,
       noteCount: song.noteCount,
-      coverImageUrl: song.coverImageUrl,
+      thumbnailUrl: song.thumbnailUrl,
       nbsFileUrl: song.nbsFileUrl,
     });
   };
