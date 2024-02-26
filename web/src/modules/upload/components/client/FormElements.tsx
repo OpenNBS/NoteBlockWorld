@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@web/src/lib/tailwind.utils';
 import React from 'react';
 
 export const Input = React.forwardRef<
