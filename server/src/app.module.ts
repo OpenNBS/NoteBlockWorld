@@ -1,14 +1,8 @@
 import { Logger, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SongModule } from './song/song.module';
-import { CommentModule } from './comment/comment.module';
-import { PlaylistModule } from './playlist/playlist.module';
 import { UserModule } from './user/user.module';
-import { AchievementModule } from './achievement/achievement.module';
-import { NotificationModule } from './notification/notification.module';
 import { AuthModule } from './auth/auth.module';
 import { ParseTokenPipe } from './song/parseToken';
 import { FileController } from './file/file.controller';
@@ -46,15 +40,11 @@ import { FileService } from './file/file.service';
       },
     }),
     SongModule,
-    CommentModule,
-    PlaylistModule,
     UserModule,
-    AchievementModule,
-    NotificationModule,
     AuthModule,
   ],
-  controllers: [AppController, FileController],
-  providers: [AppService, ParseTokenPipe, FileService],
+  controllers: [FileController],
+  providers: [ParseTokenPipe, FileService],
   exports: [ParseTokenPipe],
 })
 export class AppModule {}
