@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
-import StyledComponentsRegistry from '../lib/registry';
 import NextTopLoader from 'nextjs-toploader';
 
 const lato = Lato({
@@ -29,7 +28,7 @@ export default function RootLayout({
           easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
           height={3}
         />
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        {children}
       </body>
     </html>
   );
