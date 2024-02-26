@@ -1,4 +1,3 @@
-import * as NBS from '@encode42/nbs.js';
 import {
   HttpException,
   HttpStatus,
@@ -18,6 +17,7 @@ import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongDocument, Song as SongEntity } from './entity/song.entity';
+import { fromArrayBuffer } from '@encode42/nbs.js';
 
 @Injectable()
 export class SongService {
@@ -112,7 +112,7 @@ export class SongService {
     }
 
     // Is the uploaded file a valid .nbs file?
-    const nbsSong = NBS.fromArrayBuffer(loadedArrayBuffer);
+    const nbsSong = fromArrayBuffer(loadedArrayBuffer);
     // If the above operation fails, it will return an empty song
     if (nbsSong.length === 0) {
       throw new HttpException(
@@ -137,26 +137,26 @@ export class SongService {
 
     // Calculate song document's data from NBS file
     const fileSize = file.size;
-    const midiFileName = nbsSong.importName || '';
+    const midiFileName = nbsSong.meta.importName || '';
     const noteCount = 0; // TODO: calculate
     const tickCount = nbsSong.length;
-    const layerCount = nbsSong.layers.get.length;
+    const layerCount = nbsSong.layers.length;
     const tempo = nbsSong.tempo;
     const timeSignature = nbsSong.timeSignature;
     const duration = tickCount / tempo; // TODO: take tempo changers into account
     const loop = nbsSong.loop.enabled;
     const loopStartTick = nbsSong.loop.startTick;
-    const minutesSpent = nbsSong.minutesSpent;
+    const minutesSpent = nbsSong.stats.minutesSpent;
 
     const usesCustomInstruments = false; // TODO: check if song.instruments.length > firstCustomIndex
     const isInOctaveRange = false; // TODO: check if any(note => note.pitch < 33 || note.pitch > 57)
     const compatible = usesCustomInstruments && isInOctaveRange;
 
     // Update NBS file with form values
-    nbsSong.name = removeNonAscii(body.title);
-    nbsSong.author = removeNonAscii(user.username);
-    nbsSong.originalAuthor = removeNonAscii(body.originalAuthor);
-    nbsSong.description = removeNonAscii(body.description);
+    nbsSong.meta.name = removeNonAscii(body.title);
+    nbsSong.meta.author = removeNonAscii(user.username);
+    nbsSong.meta.originalAuthor = removeNonAscii(body.originalAuthor);
+    nbsSong.meta.description = removeNonAscii(body.description);
 
     // Update song document
     const songDocument = await this.createSongDocument(body, user);

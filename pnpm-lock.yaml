@@ -18,8 +18,8 @@ importers:
         specifier: ^3.515.0
         version: 3.515.0
       '@encode42/nbs.js':
-        specifier: 6.0.0-alpha3
-        version: 6.0.0-alpha3
+        specifier: 5.0.0
+        version: 5.0.0
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -2351,6 +2351,11 @@ packages:
 
   /@emotion/unitless@0.8.1:
     resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
+    dev: false
+
+  /@encode42/nbs.js@5.0.0:
+    resolution: {integrity: sha512-h0p+4Rn25c7NGD8MVEqVJMfiIzrqX1gslRau+D5RzipnbNbsT/nMhfFP2CQ3RukxbmTLgPysrCniGxxLgou9gA==}
+    engines: {node: '>=18', pnpm: '>=8'}
     dev: false
 
   /@encode42/nbs.js@6.0.0-alpha3:
