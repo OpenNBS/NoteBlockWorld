@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useUploadSongProvider } from './UploadSong.context';
-import { ErrorBallon } from '../../../shared/components/client/ErrorBallon';
+import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 export const SongSelector = () => {
   const { setFile, invalidFile } = useUploadSongProvider();
 
@@ -36,7 +36,7 @@ export const SongSelector = () => {
 
   return (
     <>
-      <ErrorBallon message='Invalid File' isVisible={invalidFile} />
+      <ErrorBalloon message='Invalid File' isVisible={invalidFile} />
       <div
         className={`flex flex-col items-center gap-6 h-fit p-8 mb-4 border-dashed border-4 ${
           isDragActive ? 'border-blue-400' : 'border-zinc-700'

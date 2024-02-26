@@ -1,8 +1,8 @@
 import { GlobalError } from 'react-hook-form';
 
-type ErrorBallonProps = GlobalError & { isVisible: boolean };
+type ErrorBalloonProps = GlobalError & { isVisible: boolean };
 
-export const ErrorBallon = ({ message, isVisible }: ErrorBallonProps) => {
+export const ErrorBalloon = ({ message, isVisible }: ErrorBalloonProps) => {
   return (
     <>
       <div

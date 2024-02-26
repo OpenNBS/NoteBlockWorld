@@ -1,5 +1,5 @@
 import { useUploadSongProvider } from './UploadSong.context';
-import { ErrorBallon } from '../../../shared/components/client/ErrorBallon';
+import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import { Input, Option, Select } from './FormElements';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import InstrumentPicker from './InstrumentPicker';
@@ -20,7 +20,9 @@ export const SongUploadForm = ({
         submitSong();
       })}
     >
-      {sendError && <ErrorBallon message={sendError} isVisible={!!sendError} />}
+      {sendError && (
+        <ErrorBalloon message={sendError} isVisible={!!sendError} />
+      )}
       <div className='flex flex-col h-fit gap-6'>
         {/* Title */}
         <div>
@@ -33,7 +35,7 @@ export const SongUploadForm = ({
               maxLength: 64,
             })}
           />
-          <ErrorBallon
+          <ErrorBalloon
             message={errors.title?.message}
             isVisible={!!errors.title}
           />
@@ -47,7 +49,7 @@ export const SongUploadForm = ({
             className='block h-48 w-full rounded-lg bg-transparent border-2 border-zinc-500 p-2'
             {...register('description')}
           ></textarea>
-          <ErrorBallon
+          <ErrorBalloon
             message={errors.description?.message}
             isVisible={!!errors.description}
           />
@@ -117,7 +119,7 @@ export const SongUploadForm = ({
               <Option value='unlisted'>Unlisted</Option>
               <Option value='private'>Private</Option>
             </Select>
-            <ErrorBallon
+            <ErrorBalloon
               message={errors.visibility?.message}
               isVisible={!!errors.visibility}
             />
@@ -129,7 +131,7 @@ export const SongUploadForm = ({
               <Option value='cc_by_4'>Creative Commons CC BY 4.0</Option>
               <Option value='public_domain'>Public domain</Option>
             </Select>
-            <ErrorBallon
+            <ErrorBalloon
               message={errors.license?.message}
               isVisible={!!errors.license}
             />
@@ -157,7 +159,7 @@ export const SongUploadForm = ({
             Allow other users to download the NBS file{' '}
             <span className='text-zinc-400 italic'>(Coming soon!)</span>
           </label>
-          <ErrorBallon
+          <ErrorBalloon
             message={errors.allowDownload?.message}
             isVisible={!!errors.allowDownload}
           />
