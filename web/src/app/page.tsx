@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-const IndexPge = async () => {
+const IndexPage = async () => {
   redirect('/browse');
 };
 
-export default IndexPge;
+export default IndexPage;
