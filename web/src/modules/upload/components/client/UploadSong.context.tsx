@@ -11,9 +11,9 @@ import {
   useForm,
 } from 'react-hook-form';
 
-import { getTokenLocal } from '../../../../lib/axios/token.utils';
+import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 import { UploadSongForm } from '../../types';
-import { uploadSongFormSchema } from './uploadSongFrom.zod';
+import { uploadSongFormSchema } from './uploadSongForm.zod';
 import { useRouter } from 'next/navigation';
 
 type UploadSongContextType = {
