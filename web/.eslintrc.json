@@ -11,7 +11,7 @@
     "browser": true,
     "es2021": true
   },
-  "plugins": ["@typescript-eslint", "prettier", "import"], // Add "import" plugin
+  "plugins": ["@typescript-eslint", "prettier", "import", "unused-imports"], // Add "import" plugin
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -33,6 +33,7 @@
         "endOfLine": "auto"
       }
     ],
+    "unused-imports/no-unused-imports": "warn", // turn on warnings for unused imports
     "sort-imports": [
       "warn",
       {

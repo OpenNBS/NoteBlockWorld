@@ -5,7 +5,12 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'import'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'prettier',
+    'import',
+    'unused-imports',
+  ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -29,6 +34,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'unused-imports/no-unused-imports': 'warn', // turn on warnings for unused imports
     'sort-imports': [
       'warn',
       {
@@ -40,7 +46,7 @@ module.exports = {
       },
     ],
     'import/no-unresolved': 'error', // turn on errors for missing imports
-    'import/newline-after-import': 'error', // enforce a newline after import statements
+    'import/newline-after-import': 'warn', // enforce a newline after import statements
     'import/order': [
       'warn',
       {
