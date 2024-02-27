@@ -11,24 +11,11 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
-  @Get('login/auth0')
-  @UseGuards(AuthGuard('auth0'))
-  public auth0Login() {
-    // Not need for implementation, its handled by passport
-    this.logger.log('Auth0 login');
-  }
-
-  @Get('auth0/callback')
-  @UseGuards(AuthGuard('auth0'))
-  public auth0Redirect(@Req() req: Request, @Res() res: Response) {
-    return this.authService.auth0Login(req, res);
-  }
-
   @Get('login/github')
   @UseGuards(AuthGuard('github'))
   public githubLogin() {
     // Not need for implementation, its handled by passport
-    this.logger.log('Auth0 login');
+    this.logger.log('GitHub login');
   }
 
   @Get('github/callback')
@@ -41,7 +28,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   public googleLogin() {
     // Not need for implementation, its handled by passport
-    this.logger.log('Auth0 login');
+    this.logger.log('Google login');
   }
 
   @Get('google/callback')

@@ -26,8 +26,6 @@ configure the env variables in bash
 ```bash
 export JWT_SECRET="jwtsecret"
 export JWT_EXPIRES_IN="1d"
-export ZERO_CLIENT_ID=""
-export ZERO_CLIENT_SECRET=""
 export DB_HOST="localhost:27017"
 export DB_PASSWORD="noteblockwordpassword"
 export DB_USER="noteblockworduser"

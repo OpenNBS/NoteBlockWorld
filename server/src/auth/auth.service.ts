@@ -95,22 +95,6 @@ export class AuthService {
     return this.GenTokenRedirect(user_registered, res);
   }
 
-  public async auth0Login(req: Request, res: Response) {
-    const { user } = req as any;
-    const { profile } = user;
-    // verify if user exists
-    let user_registered = await this.userService.findByEmail(user.email);
-
-    if (!user_registered) {
-      // create user
-      user_registered = new User() as UserDocument;
-      //TODO: add user data
-
-      await this.userService.create(user_registered);
-    }
-
-    return this.GenTokenRedirect(user_registered, res);
-  }
   private async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const JWT_SECRET = this.configService.get('JWT_SECRET');
     const JWT_EXPIRES_IN = this.configService.get('JWT_EXPIRES_IN');
