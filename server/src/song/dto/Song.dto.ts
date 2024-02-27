@@ -5,7 +5,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { HydratedDocument } from 'mongoose';
 
 import { UserDocument } from '@server/user/entity/user.entity';
 

@@ -1,5 +1,3 @@
-import { Instrument } from '@encode42/nbs.js';
-
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';

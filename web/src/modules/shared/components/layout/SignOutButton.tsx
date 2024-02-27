@@ -4,8 +4,6 @@ import { faCloudUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
-
 export function SignInButton() {
   return (
     <Link href='/login'>

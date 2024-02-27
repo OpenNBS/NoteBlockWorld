@@ -1,10 +1,4 @@
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, ValidateNested } from 'class-validator';
 
 import { SongPreviewDto } from './SongPreview.dto';
 

@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   Res,
-  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -28,7 +27,6 @@ import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
-import { SongPageDto } from './dto/SongPageDto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';

@@ -1,7 +1,7 @@
 import axiosInstance from '@web/src/lib/axios';
 
 import { MySongProvider } from './client/MySongs.context';
-import { MySongsPageComponent, MySongsTable } from './client/MySongsTable';
+import { MySongsPageComponent } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
 import { SongsFolder, SongsPage } from '../types';
 

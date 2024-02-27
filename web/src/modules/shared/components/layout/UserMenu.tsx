@@ -1,8 +1,6 @@
 import {
-  faCog,
   faMusic,
   faSignOutAlt,
-  faUpload,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 

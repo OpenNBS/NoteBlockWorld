@@ -3,7 +3,6 @@ import {
   faHeart,
   faPlus,
   faShare,
-  faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
