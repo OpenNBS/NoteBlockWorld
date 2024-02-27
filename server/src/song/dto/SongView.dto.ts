@@ -1,6 +1,9 @@
-import { UserDocument } from '@server/user/entity/user.entity';
 import { HydratedDocument } from 'mongoose';
+
+import { UserDocument } from '@server/user/entity/user.entity';
+
 import { SongDocument } from '../entity/song.entity';
+
 export class SongViewDto {
   id: string;
   createdAt: Date;

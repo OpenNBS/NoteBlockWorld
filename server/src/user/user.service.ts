@@ -1,11 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from './entity/user.entity';
-import { CreateUser } from './dto/CreateUser.dto';
 import { validate } from 'class-validator';
+import { Model } from 'mongoose';
+
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
+
+import { CreateUser } from './dto/CreateUser.dto';
 import { GetUser } from './dto/GetUser.dto';
+import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {

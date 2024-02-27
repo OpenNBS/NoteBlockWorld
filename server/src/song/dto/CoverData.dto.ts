@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Max, Min, IsInt, IsHexColor } from 'class-validator';
+import { IsHexColor, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
+
 export class CoverData {
   @IsNotEmpty()
   @Max(5)

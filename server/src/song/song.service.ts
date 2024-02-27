@@ -1,3 +1,4 @@
+import { fromArrayBuffer } from '@encode42/nbs.js';
 import {
   HttpException,
   HttpStatus,
@@ -7,17 +8,18 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
-import { Model } from 'mongoose';
+
 import { SongDto } from './dto/Song.dto';
 import { SongPageDto } from './dto/SongPageDto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongDocument, Song as SongEntity } from './entity/song.entity';
-import { fromArrayBuffer } from '@encode42/nbs.js';
 
 @Injectable()
 export class SongService {

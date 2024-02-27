@@ -22,15 +22,18 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetRequestToken } from '@server/GetRequestUser';
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
-import { UserDocument } from '@server/user/entity/user.entity';
 import type { Response } from 'express';
+
+import { PageQuery } from '@server/common/dto/PageQuery.dto';
+import { GetRequestToken } from '@server/GetRequestUser';
+import { UserDocument } from '@server/user/entity/user.entity';
+
+import { SongPageDto } from './dto/SongPageDto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongService } from './song.service';
-import { SongPageDto } from './dto/SongPageDto';
+
 @Controller('song')
 @ApiTags('song')
 export class SongController {

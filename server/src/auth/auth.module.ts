@@ -1,13 +1,16 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+
 import { UserModule } from '@server/user/user.module';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Auth0Strategy } from './strategies/Auth0.strategy';
-import { JwtStrategy } from './strategies/JWT.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { JwtStrategy } from './strategies/JWT.strategy';
+
 @Module({
   imports: [
     UserModule,

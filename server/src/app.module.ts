@@ -1,12 +1,13 @@
 import { Logger, Module } from '@nestjs/common';
-import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SongModule } from './song/song.module';
-import { UserModule } from './user/user.module';
+import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+
 import { AuthModule } from './auth/auth.module';
-import { ParseTokenPipe } from './song/parseToken';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
+import { ParseTokenPipe } from './song/parseToken';
+import { SongModule } from './song/song.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

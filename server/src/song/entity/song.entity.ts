@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema, ObjectId } from 'mongoose';
+
 import { CoverData } from '../dto/CoverData.dto';
 
 @Schema({
@@ -78,7 +79,7 @@ export class Song {
   @Prop({ type: MongooseSchema.Types.Buffer, required: false })
   _content: Buffer; // Used for playback
 
-  @Prop({ type: Array<String>, required: false })
+  @Prop({ type: Array<string>, required: false })
   _sounds: string[]; // Used for playback
 
   @Prop({ type: Number, required: false })
@@ -108,13 +109,13 @@ export class Song {
   @Prop({ type: Number, required: false })
   tempo: number;
 
-  @Prop({ type: Array<Number>, required: false })
+  @Prop({ type: Array<number>, required: false })
   tempoRange: number[];
 
-  @Prop({ type: Array<Number>, required: false })
+  @Prop({ type: Array<number>, required: false })
   timeSignature: number;
 
-  @Prop({ type: Array<Number>, required: false })
+  @Prop({ type: Array<number>, required: false })
   duration: number;
 
   @Prop({ type: Boolean, required: false })

@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsEmail,
+  IsMongoId,
   IsString,
   MaxLength,
-  IsEmail,
   MinLength,
-  IsMongoId,
 } from 'class-validator';
 
 export class GetUser {

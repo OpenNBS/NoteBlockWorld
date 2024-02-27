@@ -6,8 +6,9 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
-import { AppModule } from './app.module';
 import express = require('express');
+
+import { AppModule } from './app.module';
 import { ParseTokenPipe } from './song/parseToken';
 
 const logger: Logger = new Logger('main.ts');

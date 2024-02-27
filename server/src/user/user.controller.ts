@@ -1,10 +1,13 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { GetRequestToken } from '@server/GetRequestUser';
+
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
+import { GetRequestToken } from '@server/GetRequestUser';
+
 import { GetUser } from './dto/GetUser.dto';
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
+
 @Controller('user')
 export class UserController {
   constructor(

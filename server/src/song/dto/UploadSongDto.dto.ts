@@ -8,8 +8,9 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { SongDocument } from '../entity/song.entity';
+
 import { CoverData } from './CoverData.dto';
+import { SongDocument } from '../entity/song.entity';
 
 export class UploadSongDto {
   @ApiProperty({
