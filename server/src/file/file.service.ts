@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './entities/file.entity';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 @Injectable()
 export class FileService {

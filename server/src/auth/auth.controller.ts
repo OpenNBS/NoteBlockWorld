@@ -1,7 +1,7 @@
 import { Controller, Get, Logger, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 

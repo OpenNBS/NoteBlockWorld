@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 import { CreateUser } from '@server/user/dto/CreateUser.dto';
 import { User, UserDocument } from '@server/user/entity/user.entity';
