@@ -1,5 +1,6 @@
 import { Footer } from './Footer';
 import { Header } from './Header';
+
 type TNavbarLayoutProps = {
   children: React.ReactNode;
 };

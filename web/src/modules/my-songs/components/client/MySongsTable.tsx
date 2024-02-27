@@ -1,8 +1,9 @@
 'use client';
 import { useEffect } from 'react';
+
+import { SongRow } from './SongRow';
 import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
-import { SongRow } from './SongRow';
 
 const Loading = () => <div>Loading...</div>; // TODO: replace with loading skeleton
 

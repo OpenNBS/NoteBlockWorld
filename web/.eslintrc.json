@@ -44,6 +44,7 @@
       }
     ],
     "import/no-unresolved": "error", // turn on errors for missing imports
+    "import/newline-after-import": "error", // enforce a newline after import statements
     "import/order": [
       "warn",
       {

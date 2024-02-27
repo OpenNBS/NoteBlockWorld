@@ -1,7 +1,5 @@
 'use client';
 
-import axiosInstance from '@web/src/lib/axios';
-import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 import {
   createContext,
   useCallback,
@@ -9,7 +7,12 @@ import {
   useEffect,
   useState,
 } from 'react';
+
+import axiosInstance from '@web/src/lib/axios';
+import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+
 import { SongsFolder, SongsPage } from '../../types';
+
 type MySongsContextType = {
   page: SongsPage | null;
   nextpage: () => void;

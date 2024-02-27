@@ -1,7 +1,8 @@
 import { Song } from '@encode42/nbs.js';
+import { useEffect, useRef } from 'react';
+
 import type { Note } from './thumbnail.util';
 import { drawFrame } from './thumbnail.util';
-import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
   const notes = song.layers.get

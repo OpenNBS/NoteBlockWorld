@@ -1,9 +1,10 @@
+import { Instrument } from '@encode42/nbs.js';
+
+import { Input, Option, Select } from './FormElements';
+import InstrumentPicker from './InstrumentPicker';
+import { SongThumbnailInput } from './SongThumbnailInput';
 import { useUploadSongProvider } from './UploadSong.context';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
-import { Input, Option, Select } from './FormElements';
-import { SongThumbnailInput } from './SongThumbnailInput';
-import InstrumentPicker from './InstrumentPicker';
-import { Instrument } from '@encode42/nbs.js';
 
 export const SongUploadForm = ({
   defaultAuthorName,

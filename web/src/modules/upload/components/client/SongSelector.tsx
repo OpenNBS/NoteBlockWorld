@@ -2,8 +2,10 @@ import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+
 import { useUploadSongProvider } from './UploadSong.context';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
+
 export const SongSelector = () => {
   const { setFile, invalidFile } = useUploadSongProvider();
 

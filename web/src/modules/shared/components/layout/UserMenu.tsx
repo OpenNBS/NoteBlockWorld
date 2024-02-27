@@ -5,16 +5,18 @@ import {
   faUpload,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
+
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
-import { UserMenuButton } from '../client/UserMenuButton';
-import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
+
 import {
   Popover,
+  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
-  PopoverArrow,
 } from './popover';
 import { RandomAvatar } from './RandomAvatar';
+import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
+import { UserMenuButton } from '../client/UserMenuButton';
 
 export function UserMenu({ userData }: { userData: LoggedUserData }) {
   return (

@@ -1,11 +1,13 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+
 import {
   checkLogin,
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
+
 import { NavLinks } from './NavLinks';
-import Link from 'next/link';
 
 export async function Header() {
   let isLogged;

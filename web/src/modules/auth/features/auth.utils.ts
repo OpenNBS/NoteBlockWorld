@@ -1,5 +1,6 @@
-import axiosInstance from '../../../lib/axios';
 import { cookies } from 'next/headers';
+
+import axiosInstance from '../../../lib/axios';
 import { LoggedUserData } from '../types/User';
 
 export function getTokenServer(): { value: string } | null {

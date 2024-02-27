@@ -1,6 +1,7 @@
-import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { bgColors, getThumbnailNotes } from './thumbnail.util';
 import { useMemo } from 'react';
+
+import { bgColors, getThumbnailNotes } from './thumbnail.util';
+import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 import { useUploadSongProvider } from './UploadSong.context';
 
 const ColorButton = ({

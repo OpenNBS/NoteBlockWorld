@@ -140,17 +140,17 @@ function getKeyText(key: number): string {
 function getLuma(color: string): number {
   // source: https://stackoverflow.com/a/12043228/9045426
 
-  let c = color.substring(1); // strip #
-  let rgb = parseInt(c, 16); // convert rrggbb to decimal
-  let r = (rgb >> 16) & 0xff; // extract red
-  let g = (rgb >> 8) & 0xff; // extract green
-  let b = (rgb >> 0) & 0xff; // extract blue
+  const c = color.substring(1); // strip #
+  const rgb = parseInt(c, 16); // convert rrggbb to decimal
+  const r = (rgb >> 16) & 0xff; // extract red
+  const g = (rgb >> 8) & 0xff; // extract green
+  const b = (rgb >> 0) & 0xff; // extract blue
 
-  let luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
   return luma;
 }
 
-function isDarkColor(color: string, threshold: number = 40): boolean {
+function isDarkColor(color: string, threshold = 40): boolean {
   return getLuma(color) < threshold;
 }
 
@@ -163,9 +163,9 @@ export function drawFrame(
   startTick: number,
   startLayer: number,
   zoomLevel: number,
-  backgroundColor: string = '#fcfcfc',
-  imgWidth: number = 1280,
-  imgHeight: number = 720
+  backgroundColor = '#fcfcfc',
+  imgWidth = 1280,
+  imgHeight = 720
 ) {
   // Store callback id
   if (lastId) {
@@ -192,9 +192,9 @@ export async function drawNotes(
   startTick: number,
   startLayer: number,
   zoomLevel: number,
-  backgroundColor: string = '#fcfcfc',
-  imgWidth: number = 1280,
-  imgHeight: number = 720
+  backgroundColor = '#fcfcfc',
+  imgWidth = 1280,
+  imgHeight = 720
 ) {
   // Get canvas context
   const ctx = canvas.getContext('2d');

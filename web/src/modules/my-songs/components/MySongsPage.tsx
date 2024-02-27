@@ -1,8 +1,9 @@
 import axiosInstance from '@web/src/lib/axios';
-import { SongsFolder, SongsPage } from '../types';
+
 import { MySongProvider } from './client/MySongs.context';
 import { MySongsPageComponent, MySongsTable } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
+import { SongsFolder, SongsPage } from '../types';
 
 async function fetchSongsPage(
   page: number,

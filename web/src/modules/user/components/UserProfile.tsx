@@ -1,5 +1,7 @@
 import Image from 'next/image';
+
 import { SocialLinksTypes, UserProfileData } from '../../auth/types/User';
+
 type UserProfileProps = {
   userData: UserProfileData;
 };

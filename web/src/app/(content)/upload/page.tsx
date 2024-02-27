@@ -1,9 +1,10 @@
+import { redirect } from 'next/navigation';
+
 import {
   checkLogin,
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 import { UploadSongPage } from '@web/src/modules/upload/components/client/UploadSong';
-import { redirect } from 'next/navigation';
 
 async function UploadPage() {
   const isLogged = await checkLogin();
