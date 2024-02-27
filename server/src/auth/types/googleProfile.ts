@@ -19,7 +19,7 @@ type ProfileJson = {
 };
 
 // TODO: this is a uniform profile type standardized by passport for all providers
-export type Profile = {
+export type GoogleProfile = {
   id: string;
   displayName: string;
   name: {

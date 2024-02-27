@@ -39,6 +39,7 @@ export class UserService {
     };
     return this.userModel.find({});
   }
+
   public async getUserByEmailOrId(query: GetUser) {
     const { email, id, username } = query;
     if (email) {
@@ -74,5 +75,30 @@ export class UserService {
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     return usedData;
+  }
+
+  public async usernameExists(username: string) {
+    const user = await this.userModel
+      .findOne({ username })
+      .select('username')
+      .exec();
+    return !!user;
+  }
+
+  public async generateUsername(inputUsername: string) {
+    // Normalize username (remove accents, lowercase, replace spaces with underscores)
+    const baseUsername = inputUsername
+      .toLowerCase()
+      .replace(' ', '_')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9_]/g, '');
+    // Find if there's already a user with the same username
+    let nameTaken = await this.usernameExists(baseUsername);
+    while (nameTaken) {
+      const newUsername = `${baseUsername}.${Math.floor(Math.random() * 100)}`;
+      nameTaken = await this.usernameExists(newUsername);
+    }
+    return baseUsername;
   }
 }

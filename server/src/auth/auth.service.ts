@@ -5,10 +5,12 @@ import axios from 'axios';
 import type { Request, Response } from 'express';
 
 import { CreateUser } from '@server/user/dto/CreateUser.dto';
-import { User, UserDocument } from '@server/user/entity/user.entity';
+import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
+import { GoogleProfile } from './types/googleProfile';
+import { Profile } from './types/profile';
 import { TokenPayload, Tokens } from './types/token';
 
 @Injectable()
@@ -49,28 +51,33 @@ export class AuthService {
   }
 
   public async googleLogin(req: Request, res: Response) {
-    const { user } = req as any;
-    const { profile } = user;
+    const user = req.user as GoogleProfile;
+    const email = user.emails[0].value;
+    const profile = {
+      // Generate username from display name
+      username: email.split('@')[0],
+      email: email,
+    };
     // verify if user exists
-    const user_registered = await this.VerifyAndGetUser(user);
+    const user_registered = await this.verifyAndGetUser(profile);
     return this.GenTokenRedirect(user_registered, res);
   }
 
-  private async VerifyAndGetUser({
-    username,
-    email,
-  }: {
-    username: string;
-    email: string;
-  }) {
-    let user_registered = await this.userService.findByEmail(email);
+  private async createNewUser(user: Profile) {
+    const { username, email } = user;
+    const baseUsername = username;
+    const newUsername = await this.userService.generateUsername(baseUsername);
+    const newUser = new CreateUser({
+      username: newUsername,
+      email: email,
+    });
+    return await this.userService.create(newUser);
+  }
+
+  private async verifyAndGetUser(user: Profile) {
+    const user_registered = await this.userService.findByEmail(user.email);
     if (!user_registered) {
-      // create user
-      const newUser = new CreateUser({
-        username: username,
-        email: email,
-      });
-      user_registered = await this.userService.create(newUser);
+      return await this.createNewUser(user);
     }
     return user_registered;
   }
@@ -88,7 +95,7 @@ export class AuthService {
       (email) => email.primary,
     )[0].email;
 
-    const user_registered = await this.VerifyAndGetUser({
+    const user_registered = await this.verifyAndGetUser({
       username: profile.username,
       email: email,
     });
@@ -118,6 +125,7 @@ export class AuthService {
       refresh_token: refreshToken,
     };
   }
+
   private async GenTokenRedirect(
     user_registered: UserDocument,
     res: Response<any, Record<string, any>>,
