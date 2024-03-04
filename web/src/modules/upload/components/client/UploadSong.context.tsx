@@ -128,7 +128,7 @@ export const UploadSongProvider = ({
       formMethods.setValue('coverData.backgroundColor', '#ffffff');
       formMethods.setValue('customInstruments', ['noteblock']);
     }
-  }, [song]);
+  }, [song, formMethods]);
 
   return (
     <UploadSongContext.Provider
