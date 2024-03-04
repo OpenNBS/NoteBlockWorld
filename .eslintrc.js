@@ -26,6 +26,7 @@ module.exports = {
       'warn',
       {
         endOfLine: 'auto',
+        trailingComma: 'all',
       },
     ],
     'unused-imports/no-unused-imports': 'warn',

@@ -18,7 +18,7 @@ export const getThumbnailNotes = (song: Song): Note[] => {
           instrument: note.instrument,
         };
         return data;
-      })
+      }),
     )
     .flat();
   return notes;
@@ -105,7 +105,7 @@ function noteInBounds(
   startTick: number,
   startLayer: number,
   endTick: number,
-  endLayer: number
+  endLayer: number,
 ): boolean {
   return (
     note.tick >= startTick &&
@@ -164,7 +164,7 @@ export function drawFrame(
   zoomLevel: number,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
-  imgHeight = 720
+  imgHeight = 720,
 ) {
   // Store callback id
   if (lastId) {
@@ -179,8 +179,8 @@ export function drawFrame(
       zoomLevel,
       backgroundColor,
       imgWidth,
-      imgHeight
-    )
+      imgHeight,
+    ),
   );
 }
 
@@ -193,7 +193,7 @@ export async function drawNotes(
   zoomLevel: number,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
-  imgHeight = 720
+  imgHeight = 720,
 ) {
   // Get canvas context
   const ctx = canvas.getContext('2d');
@@ -254,8 +254,8 @@ export async function drawNotes(
         startTick,
         startLayer,
         startTick + width / (zoomFactor * 8),
-        startLayer + height / (zoomFactor * 8)
-      )
+        startLayer + height / (zoomFactor * 8),
+      ),
     )
     .forEach((note) => {
       // Calculate position
@@ -272,7 +272,7 @@ export async function drawNotes(
         x,
         y,
         8 * zoomFactor,
-        8 * zoomFactor
+        8 * zoomFactor,
       );
 
       // Draw the key text

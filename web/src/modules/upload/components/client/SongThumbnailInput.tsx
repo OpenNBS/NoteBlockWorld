@@ -28,7 +28,7 @@ export const SongThumbnailInput = () => {
       'coverData.startTick',
       'coverData.startLayer',
       'coverData.backgroundColor',
-    ]
+    ],
   );
 
   const [notes, maxTick, maxLayer] = useMemo(() => {

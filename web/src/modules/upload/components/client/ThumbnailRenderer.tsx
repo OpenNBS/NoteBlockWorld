@@ -16,7 +16,7 @@ export const getThumbnailNotes = (song: Song): Note[] => {
           instrument: note.instrument,
         };
         return data;
-      })
+      }),
     )
     .flat();
   return notes;

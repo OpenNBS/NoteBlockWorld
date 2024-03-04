@@ -30,7 +30,7 @@ type UploadSongContextType = {
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
-  null as unknown as UploadSongContextType
+  null as unknown as UploadSongContextType,
 );
 
 export const UploadSongProvider = ({
@@ -153,7 +153,7 @@ export const useUploadSongProvider = () => {
   const context = useContext(UploadSongContext);
   if (context === undefined || context === null) {
     throw new Error(
-      'useUploadSongProvider must be used within a UploadSongProvider'
+      'useUploadSongProvider must be used within a UploadSongProvider',
     );
   }
   return context;

@@ -15,7 +15,7 @@ export const SongSelector = () => {
       const file = e.target.files[0];
       setFile(file);
     },
-    [setFile]
+    [setFile],
   );
 
   const handleFileDrop = useCallback(
@@ -24,7 +24,7 @@ export const SongSelector = () => {
       const file = acceptedFiles[0];
       setFile(file);
     },
-    [setFile]
+    [setFile],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

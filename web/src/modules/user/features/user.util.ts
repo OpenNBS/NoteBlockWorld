@@ -2,7 +2,7 @@ import axiosInstance from '../../../lib/axios';
 import { UserProfileData } from '../../auth/types/User';
 
 export const getUserProfileData = async (
-  id: string
+  id: string,
 ): Promise<UserProfileData | never> => {
   try {
     const res = await axiosInstance.get(`/user/?id=${id}`);

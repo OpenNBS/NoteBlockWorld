@@ -22,7 +22,7 @@ const InstrumentTableHeader = ({
     <div
       className={cn(
         'bg-zinc-800 border-zinc-600 border-2 px-2 py-1 text-zinc-400 font-semibold first:rounded-tl-lg last:rounded-tr-lg',
-        className
+        className,
       )}
     >
       {children}
@@ -41,7 +41,7 @@ const InstrumentTableCell = ({
     <div
       className={cn(
         'bg-zinc-900 border-zinc-700 border-2 px-2 py-1',
-        className
+        className,
       )}
     >
       {children}
@@ -54,7 +54,7 @@ const InstrumentTable = () => {
   if (!song) return null;
 
   const instruments = song.instruments.loaded.filter(
-    (instrument) => !instrument.builtIn
+    (instrument) => !instrument.builtIn,
   );
 
   return (
