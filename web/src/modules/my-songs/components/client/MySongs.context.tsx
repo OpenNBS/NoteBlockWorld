@@ -60,7 +60,7 @@ export const MySongProvider = ({
     const token = getTokenLocal();
     try {
       const response = await axiosInstance.get(
-        `/song/my?page=${currentPage}&limit=${pageSize}&sort=createdAt&order=false`,
+        `/my-songs?page=${currentPage}&limit=${pageSize}&sort=createdAt&order=false`,
         {
           headers: {
             authorization: `Bearer ${token}`,

@@ -11,7 +11,7 @@ async function fetchSongsPage(
   token: string
 ): Promise<SongsPage> {
   const response = await axiosInstance.get(
-    `/song/my?page=${page}&limit=${pageSize}&sort=createdAt&order=false`,
+    `/my-songs?page=${page}&limit=${pageSize}&sort=createdAt&order=false`,
     {
       headers: {
         authorization: `Bearer ${token}`,

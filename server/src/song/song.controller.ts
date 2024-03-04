@@ -1,10 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  Patch,
   Post,
   Query,
   Res,
@@ -32,13 +30,25 @@ import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongService } from './song.service';
 
+// Handles public-facing song routes.
+
 @Controller('song')
 @ApiTags('song')
 export class SongController {
   constructor(public readonly songService: SongService) {}
 
+  @Get('/')
+  @ApiOperation({
+    summary: 'Get a filtered/sorted list of songs with pagination',
+  })
+  public async getSongList(
+    @Query() query: PageQuery,
+  ): Promise<SongPreviewDto[]> {
+    return await this.songService.getSongByPage(query);
+  }
+
   @Get('/:id')
-  @ApiOperation({ summary: 'Get song info' })
+  @ApiOperation({ summary: 'Get song info by ID' })
   public async getSong(
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
@@ -46,7 +56,7 @@ export class SongController {
     return await this.songService.getSong(id, user);
   }
 
-  @Get('/file')
+  @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
     @Query('id') id: string,
@@ -59,49 +69,25 @@ export class SongController {
     return await this.songService.getSongFile(id, user);
   }
 
-  @Get('/page')
-  @ApiOperation({ summary: 'Get song info paginated' })
-  public async getSongByPage(
-    @Query() query: PageQuery,
-  ): Promise<SongPreviewDto[]> {
-    return await this.songService.getSongByPage(query);
-  }
-
-  @Patch('/')
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt-refresh'))
-  @ApiOperation({ summary: 'Update a song' })
-  public async patchSong(
-    @Query('id') id: string,
-    @Body() body: UploadSongDto,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongDto> {
-    return await this.songService.patchSong(id, body, user);
-  }
-
-  @Delete('/')
-  @UseGuards(AuthGuard('jwt-refresh'))
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete a song' })
-  public async deleteSong(@Query('id') id: string): Promise<UploadSongDto> {
-    return await this.songService.deleteSong(id);
-  }
-
-  // @Get('/my')
-  // @ApiOperation({
-  //   summary: 'Get a list of songs from the authenticated user with pagination',
-  // })
-  // @ApiBearerAuth()
-  // @UseGuards(AuthGuard('jwt-refresh'))
-  // public async getMySongsPage(
-  //   @Query() query: PageQuery,
-  //   @GetRequestToken() user: UserDocument | null,
-  // ): Promise<SongPageDto> {
-  //   return await this.songService.getMySongsPage({
-  //     query,
-  //     user,
-  //   });
-  // }
+  //@Patch('/:id')
+  //@ApiBearerAuth()
+  //@UseGuards(AuthGuard('jwt-refresh'))
+  //@ApiOperation({ summary: 'Update a song' })
+  //public async patchSong(
+  //  @Param('id') id: string,
+  //  @Body() body: UploadSongDto,
+  //  @GetRequestToken() user: UserDocument | null,
+  //): Promise<UploadSongDto> {
+  //  return await this.songService.patchSong(id, body, user);
+  //}
+  //
+  //@Delete('/:id')
+  //@UseGuards(AuthGuard('jwt-refresh'))
+  //@ApiBearerAuth()
+  //@ApiOperation({ summary: 'Delete a song' })
+  //public async deleteSong(@Param('id') id: string): Promise<UploadSongDto> {
+  //  return await this.songService.deleteSong(id);
+  //}
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
@@ -114,12 +100,12 @@ export class SongController {
   @UseInterceptors(
     FileInterceptor('file', {
       limits: {
-        fileSize: 1024 * 1024 * 25, // 25MB
+        fileSize: 1024 * 1024 * 25, // TODO: import from config
       },
     }),
   )
   @ApiOperation({
-    summary: 'Upload a .nbs file and sends the song data, creating a new song',
+    summary: 'Upload a .nbs file and send the song data, creating a new song',
   })
   public async createSong(
     @UploadedFile() file: Express.Multer.File,
