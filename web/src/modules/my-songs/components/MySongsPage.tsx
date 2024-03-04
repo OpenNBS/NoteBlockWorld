@@ -8,7 +8,7 @@ import { SongsFolder, SongsPage } from '../types';
 async function fetchSongsPage(
   page: number,
   pageSize: number,
-  token: string
+  token: string,
 ): Promise<SongsPage> {
   const response = await axiosInstance.get(
     `/my-songs?page=${page}&limit=${pageSize}&sort=createdAt&order=false`,
@@ -16,7 +16,7 @@ async function fetchSongsPage(
       headers: {
         authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return response.data as SongsPage;
 }
@@ -26,11 +26,13 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
   const pageSize = 20;
   // get token from cookies
   const token = getTokenServer();
-  // if token is not null, redirect to home page
+  // if token is null, redirect to home page
+
   if (!token) return {};
   if (!token.value) return {};
 
   try {
+    console.log('fetching songs');
     const firstPage = await fetchSongsPage(currentPage, pageSize, token.value);
 
     // if there is a next page
@@ -39,7 +41,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
       const secondPage = await fetchSongsPage(
         currentPage,
         pageSize,
-        token.value
+        token.value,
       );
       const data = {
         [0]: firstPage,

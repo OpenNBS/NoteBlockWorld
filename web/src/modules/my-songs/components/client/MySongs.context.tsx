@@ -25,7 +25,7 @@ type MySongsContextType = {
 };
 
 const MySongsContext = createContext<MySongsContextType>(
-  {} as MySongsContextType
+  {} as MySongsContextType,
 );
 
 type MySongProviderProps = {
@@ -35,6 +35,7 @@ type MySongProviderProps = {
   currentPageInit?: number;
   pageSizeInit?: number;
 };
+
 export const MySongProvider = ({
   InitialsongsFolder = {},
   children,
@@ -55,6 +56,7 @@ export const MySongProvider = ({
   const putPage = async ({ key, page }: { key: number; page: SongsPage }) => {
     setLoadedSongs({ ...loadedSongs, [key]: page });
   };
+
   const fetchSongsPage = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     const token = getTokenLocal();
@@ -65,7 +67,7 @@ export const MySongProvider = ({
           headers: {
             authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const data = response.data as SongsPage;
       putPage({
@@ -85,6 +87,7 @@ export const MySongProvider = ({
       setIsLoading(false);
     }
   }, [currentPage, pageSize]);
+
   const loadPage = useCallback(async () => {
     if (currentPage in loadedSongs) {
       setPage(loadedSongs[currentPage]);
@@ -93,6 +96,7 @@ export const MySongProvider = ({
     }
     await fetchSongsPage();
   }, [currentPage, fetchSongsPage, loadedSongs]);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
@@ -106,7 +110,7 @@ export const MySongProvider = ({
         setCurrentPage(page);
       }
     },
-    [totalPages]
+    [totalPages],
   );
 
   const nextpage = useCallback(() => {
@@ -114,6 +118,7 @@ export const MySongProvider = ({
       gotoPage(currentPage + 1);
     }
   }, [currentPage, totalPages, gotoPage]);
+
   const prevpage = useCallback(() => {
     if (currentPage > 1) {
       gotoPage(currentPage - 1);
