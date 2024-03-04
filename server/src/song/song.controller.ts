@@ -22,6 +22,7 @@ import {
 import type { Response } from 'express';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
+import { FileService } from '@server/file/file.service';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
@@ -35,7 +36,14 @@ import { SongService } from './song.service';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
-  constructor(public readonly songService: SongService) {}
+  static multerConfig: object;
+
+  constructor(
+    public readonly songService: SongService,
+    public readonly fileService: FileService,
+  ) {
+    SongController.multerConfig = this.fileService.getMulterConfig();
+  }
 
   @Get('/')
   @ApiOperation({
@@ -97,18 +105,12 @@ export class SongController {
     description: 'Upload Song',
     type: UploadSongDto,
   })
-  @UseInterceptors(
-    FileInterceptor('file', {
-      limits: {
-        fileSize: 1024 * 1024 * 25, // TODO: import from config
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
   @ApiOperation({
     summary: 'Upload a .nbs file and send the song data, creating a new song',
   })
   public async createSong(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.MulterS3.File,
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {

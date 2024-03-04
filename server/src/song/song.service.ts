@@ -78,7 +78,7 @@ export class SongService {
     body,
   }: {
     body: UploadSongDto;
-    file: Express.Multer.File;
+    file: Express.MulterS3.File;
     user: UserDocument | null;
   }): Promise<UploadSongDto> {
     // Is user valid?
