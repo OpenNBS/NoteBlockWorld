@@ -3,8 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
-import { FileController } from './file/file.controller';
-import { FileService } from './file/file.service';
+import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './song/parseToken';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
@@ -43,9 +42,10 @@ import { UserModule } from './user/user.module';
     SongModule,
     UserModule,
     AuthModule,
+    FileModule,
   ],
-  controllers: [FileController],
-  providers: [ParseTokenPipe, FileService],
+  controllers: [],
+  providers: [ParseTokenPipe],
   exports: [ParseTokenPipe],
 })
 export class AppModule {}
