@@ -8,13 +8,12 @@ export interface Note {
 }
 
 export const getThumbnailNotes = (song: Song): Note[] => {
-  const notes = song.layers.get
-    .map((layer, layerId) =>
-      Array.from(layer.notes).map((tick) => {
-        const [tickNumber, note] = tick;
+  const notes = song.layers
+    .map((layer) =>
+      Object.entries(layer.notes).map(([tick, note]) => {
         const data = {
-          tick: tickNumber,
-          layer: layerId,
+          tick: Number(tick),
+          layer: layer.id,
           key: note.key,
           instrument: note.instrument,
         };

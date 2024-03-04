@@ -90,9 +90,9 @@ const InstrumentTable = () => {
               {song.layers
                 .map(
                   (layer) =>
-                    layer.notes.filter(
-                      (note) => note.instrument === instrument.id
-                    ).length
+                    Object.values(layer.notes).filter(
+                      (note) => note.instrument === instrument.id,
+                    ).length,
                 )
                 .reduce((a, b) => a + b, 0)
                 .toLocaleString()}
