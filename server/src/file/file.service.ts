@@ -1,9 +1,12 @@
-import path from 'path';
+import * as path from 'path';
 
-import { S3Client } from '@aws-sdk/client-s3';
+import {
+  ObjectCannedACL,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import multerS3 from 'multer-s3';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -43,29 +46,55 @@ export class FileService {
     return s3Config;
   }
 
-  public getMulterConfig() {
-    const bucketName = this.configService.get<string>('S3_BUCKET');
-    if (!bucketName) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
+  public async uploadSong(file: Express.Multer.File) {
+    console.log(file);
+    const bucket =
+      this.configService.get<string>('S3_BUCKET') || 'noteblockworld-songs';
+    const fileName =
+      path.parse(file.originalname).name.replace(/\s/g, '') + '_' + uuidv4();
+    const extension = path.parse(file.originalname).ext;
+    const newFileName = `${fileName}${extension}`;
 
-    const multerConfig = {
-      storage: multerS3({
-        s3: this.s3Client,
-        bucket: bucketName,
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        acl: 'public-read',
-        key: (req, file, cb) => {
-          const fileName =
-            path.parse(file.originalname).name.replace(/\s/g, '') +
-            '-' +
-            uuidv4();
+    return await this.s3_upload(file, bucket, newFileName, file.mimetype);
+  }
 
-          const extension = path.parse(file.originalname).ext;
-          cb(null, `${fileName}${extension}`);
-        },
-      }),
+  public async uploadThumbnail(file: Express.Multer.File) {
+    throw new Error('Method not implemented.');
+  }
+
+  public async uploadProfilePicture(file: Express.Multer.File) {
+    throw new Error('Method not implemented.');
+  }
+
+  async s3_upload(
+    file: Express.Multer.File,
+    bucket: string,
+    name: string,
+    mimetype: string,
+  ) {
+    const params = {
+      Bucket: bucket,
+      Key: String(name),
+      Body: file.buffer,
+      ACL: ObjectCannedACL.private,
+      ContentType: mimetype,
+      ContentDisposition: 'inline',
+      CreateBucketConfiguration: {
+        LocationConstraint: 'ap-south-1',
+      },
     };
-    return multerConfig;
+
+    const command = new PutObjectCommand(params);
+
+    try {
+      const s3Response = await this.s3Client.send(command);
+      console.log(s3Response);
+      return s3Response;
+    } catch (error) {
+      console.error('Error uploading file: ', error);
+      throw error;
+    } finally {
+      // finally
+    }
   }
 }

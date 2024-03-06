@@ -41,9 +41,7 @@ export class SongController {
   constructor(
     public readonly songService: SongService,
     public readonly fileService: FileService,
-  ) {
-    SongController.multerConfig = this.fileService.getMulterConfig();
-  }
+  ) {}
 
   @Get('/')
   @ApiOperation({
@@ -110,7 +108,7 @@ export class SongController {
     summary: 'Upload a .nbs file and send the song data, creating a new song',
   })
   public async createSong(
-    @UploadedFile() file: Express.MulterS3.File,
+    @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
