@@ -19,6 +19,7 @@ import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { Song as SongEntity } from './entity/song.entity';
+import { removeNonAscii } from './song.util';
 
 @Injectable()
 export class SongService {
