@@ -67,6 +67,14 @@ export class UploadSongDto {
   })
   description: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'Category of the song',
+    example: 'Gaming',
+  })
+  category: string;
+
   @ValidateNested()
   @IsNotEmpty()
   @ApiProperty({
