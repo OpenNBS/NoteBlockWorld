@@ -59,7 +59,7 @@ export class Song {
   @Prop({ type: String, required: true })
   visibility: 'public' | 'private';
 
-  @Prop({ type: Number, required: true, default: true })
+  @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;
 
   @Prop({ type: String, required: true })
