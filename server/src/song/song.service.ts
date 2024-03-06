@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
+import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
@@ -28,6 +29,8 @@ export class SongService {
     private songModel: Model<SongEntity>,
     @Inject(UserService)
     private userService: UserService,
+    @Inject(FileService)
+    private fileService: FileService,
   ) {}
 
   private async createSongDocument(
@@ -123,6 +126,21 @@ export class SongService {
           },
         },
         HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Upload file
+    try {
+      const s3File = await this.fileService.uploadSong(file);
+      console.log(s3File);
+    } catch (e) {
+      throw new HttpException(
+        {
+          error: {
+            file: 'An error occurred while uploading the file',
+          },
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
