@@ -7,19 +7,18 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
-import { SongDto } from './dto/Song.dto';
 import { SongPageDto } from './dto/SongPageDto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { SongDocument, Song as SongEntity } from './entity/song.entity';
+import { Song as SongEntity } from './entity/song.entity';
 
 @Injectable()
 export class SongService {
@@ -33,31 +32,7 @@ export class SongService {
     private fileService: FileService,
   ) {}
 
-  private async createSongDocument(
-    body: UploadSongDto,
-    user: UserDocument,
-  ): Promise<SongDocument> {
-    const foundSong = await this.songModel
-      .findOne({
-        title: body.title,
-        originalAuthor: body.originalAuthor,
-        uploader: user._id,
-      })
-      .exec();
-
-    if (foundSong) {
-      throw new HttpException(
-        {
-          message: 'Song already exists',
-          song: SongDto.fromSongDocument(foundSong),
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
-
-    const { allowDownload, visibility, title, originalAuthor, description } =
-      body;
-    const song = new SongEntity();
+  private async validateUploader(user: UserDocument): Promise<Types.ObjectId> {
     const uploader = await this.userService.findByID(user._id.toString());
     if (!uploader) {
       throw new HttpException(
@@ -65,14 +40,7 @@ export class SongService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    song.uploader = uploader._id as any;
-    song.allowDownload = allowDownload;
-    song.visibility = visibility === 'public' ? 'public' : 'private';
-    song.title = title;
-    song.originalAuthor = originalAuthor;
-    song.description = description;
-    const createdSong = await this.songModel.create(song);
-    return createdSong;
+    return uploader._id;
   }
 
   public async processUploadedSong({
@@ -145,13 +113,18 @@ export class SongService {
     }
 
     // PROCESS UPLOADED SONG
+    // TODO: delete file from S3 if remainder of upload method fails
 
     // Extract form values
-    const title = body.title;
-    const originalAuthor = body.originalAuthor;
-    const description = body.description;
-    const allowDownload = body.allowDownload;
-    const visibility = body.visibility == 'private' ? 'private' : 'public';
+    const {
+      title,
+      originalAuthor,
+      description,
+      allowDownload,
+      visibility,
+      category,
+    } = body;
+
     // const category = body.category;
 
     // Calculate song document's data from NBS file
@@ -178,30 +151,37 @@ export class SongService {
     nbsSong.meta.description = removeNonAscii(body.description);
 
     // Update song document
-    const songDocument = await this.createSongDocument(body, user);
-    // TODO: the following fields are already implemented in createSongDocument. Move them here?
-    songDocument.title = title;
-    songDocument.originalAuthor = originalAuthor;
-    songDocument.description = description;
-    songDocument.allowDownload = allowDownload;
-    songDocument.visibility = visibility;
-    //songDocument.fileSize = fileSize;
-    //songDocument.compatible = compatible;
-    //songDocument.midiFileName = midiFileName;
-    songDocument.noteCount = noteCount;
-    //songDocument.tickCount = tickCount;
-    //songDocument.layerCount = layerCount;
-    songDocument.tempo = tempo;
-    //songDocument.timeSignature = timeSignature;
-    songDocument.duration = duration;
-    //songDocument.loop = loop;
-    //songDocument.loopStartTick = loopStartTick;
-    //songDocument.minutesSpent = minutesSpent;
+
+    const song = new SongEntity();
+    song.uploader = await this.validateUploader(user);
+    song.id = 'id';
+    song.title = title;
+    song.originalAuthor = originalAuthor;
+    song.description = description;
+    song.category = body.category;
+    song.allowDownload = true; //TODO: allowDownload;
+    song.visibility = visibility === 'private' ? 'private' : 'public';
+    song.thumbnailData = body.coverData;
+    song.thumbnailUrl = 'url';
+    song.nbsFileUrl = 'url'; // s3File.Location;
+    //song.fileSize = fileSize;
+    //song.compatible = compatible;
+    //song.midiFileName = midiFileName;
+    song.noteCount = noteCount;
+    //song.tickCount = tickCount;
+    //song.layerCount = layerCount;
+    song.tempo = tempo;
+    //song.timeSignature = timeSignature;
+    song.duration = duration;
+    //song.loop = loop;
+    //song.loopStartTick = loopStartTick;
+    //song.minutesSpent = minutesSpent;
 
     // Save song document
+    const songDocument = await this.songModel.create(song);
     const createdSong = await songDocument.save();
 
-    return UploadSongDto.fromSongDocument(songDocument);
+    return UploadSongDto.fromSongDocument(createdSong);
   }
 
   public async deleteSong(id: string): Promise<UploadSongDto> {

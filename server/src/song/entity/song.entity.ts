@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema, ObjectId } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 import { CoverData } from '../dto/CoverData.dto';
 
@@ -28,8 +28,8 @@ export class Song {
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   updatedAt: Date;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'users' })
-  uploader: ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'users' })
+  uploader: Types.ObjectId;
 
   @Prop({ type: String, required: true })
   thumbnailUrl: string;
@@ -51,7 +51,7 @@ export class Song {
   // SONG FILE ATTRIBUTES (Populated from upload form - updatable)
 
   @Prop({ type: CoverData, required: true })
-  thumbnail: CoverData;
+  thumbnailData: CoverData;
 
   @Prop({ type: String, required: true })
   category: string;
