@@ -65,10 +65,10 @@ export class Song {
   @Prop({ type: String, required: true })
   title: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   originalAuthor: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   description: string;
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
