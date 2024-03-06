@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 import { CoverData } from '../dto/CoverData.dto';
@@ -70,6 +71,14 @@ export class Song {
 
   @Prop({ type: String, required: false })
   description: string;
+
+  @Prop({ type: String, required: false })
+  @Min(0)
+  @Max(2100)
+  yearReleased: number;
+
+  @Prop({ type: MongooseSchema.Types.Date, required: false })
+  originalCreationDate: Date;
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
 
