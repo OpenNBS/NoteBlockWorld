@@ -21,7 +21,7 @@ import { CoverData } from '../dto/CoverData.dto';
 })
 export class Song {
   @Prop({ type: String, required: true, unique: true })
-  id: string;
+  publicId: string;
 
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   createdAt: Date;

@@ -19,7 +19,7 @@ import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { Song as SongEntity } from './entity/song.entity';
-import { removeNonAscii } from './song.util';
+import { generateSongId, removeNonAscii } from './song.util';
 
 @Injectable()
 export class SongService {
@@ -155,7 +155,7 @@ export class SongService {
 
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
-    song.id = 'id';
+    song.publicId = generateSongId();
     song.title = title;
     song.originalAuthor = originalAuthor;
     song.description = description;
