@@ -62,8 +62,13 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
 
 async function MySongsPage() {
   const InitialsongsFolder: SongsFolder = await fetchSongsFolder(); // TODO: this breaks the provider pagination state
-  const totalPagesInit = InitialsongsFolder[0].total;
-  const currentPageInit = InitialsongsFolder[0].page;
+  console.log('InitialsongsFolder', InitialsongsFolder);
+  let totalPagesInit = 0;
+  let currentPageInit = 0;
+  if (InitialsongsFolder[0]) {
+    totalPagesInit = InitialsongsFolder[0].total;
+    currentPageInit = InitialsongsFolder[0].page;
+  }
   return (
     <MySongProvider
       totalPagesInit={Math.ceil(totalPagesInit / 20)}
