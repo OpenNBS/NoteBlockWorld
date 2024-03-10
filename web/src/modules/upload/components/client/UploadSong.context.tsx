@@ -57,7 +57,7 @@ export const UploadSongProvider = ({
     if (!song) {
       throw new Error('Song file not found');
     }
-    const arrayBuffer = song?.toArrayBuffer();
+    const arrayBuffer = song.toArrayBuffer();
     if (arrayBuffer.byteLength === 0) {
       throw new Error('Song file is invalid');
     }
