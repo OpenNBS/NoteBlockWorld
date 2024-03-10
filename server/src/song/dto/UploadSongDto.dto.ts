@@ -87,6 +87,7 @@ export class UploadSongDto {
   coverData: CoverData;
 
   @IsArray()
+  @MaxLength(64, { each: true })
   @ApiProperty({
     description:
       'List of custom instrument paths, one for each custom instrument in the song, relative to the assets/minecraft/sounds folder',
