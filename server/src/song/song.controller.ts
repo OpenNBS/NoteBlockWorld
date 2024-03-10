@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -65,14 +66,15 @@ export class SongController {
   @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
     });
-    return await this.songService.getSongFile(id, user);
+    const url = await this.songService.getSongDownloadUrl(id, user);
+    res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
   }
 
   //@Patch('/:id')

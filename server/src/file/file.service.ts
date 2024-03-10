@@ -1,19 +1,23 @@
 import * as path from 'path';
 
 import {
+  GetObjectCommand,
   ObjectCannedACL,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class FileService {
-  s3Client = this.getS3Client();
+  s3Client: S3Client;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {
+    this.s3Client = this.getS3Client();
+  }
 
   private getS3Client() {
     // Load environment variables
@@ -46,6 +50,7 @@ export class FileService {
     return s3Config;
   }
 
+  // Uploads a song to the S3 bucket and returns the key
   public async uploadSong(file: Express.Multer.File) {
     console.log(file);
     const bucket =
@@ -55,7 +60,28 @@ export class FileService {
     const extension = path.parse(file.originalname).ext;
     const newFileName = `${fileName}${extension}`;
 
-    return await this.s3_upload(file, bucket, newFileName, file.mimetype);
+    await this.s3_upload(file, bucket, newFileName, file.mimetype);
+    return newFileName;
+  }
+
+  public async getSongDownloadUrl(key: string, filename: string) {
+    const bucket = this.configService.get<string>('S3_BUCKET');
+    if (!bucket) {
+      throw new Error('Missing S3_BUCKET environment variable');
+    }
+
+    console.log('bucket', bucket);
+    console.log('key', key);
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentDisposition: `attachment; filename=${filename}`,
+    });
+
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: 5 * 60, // 5 minutes
+    });
+    return signedUrl;
   }
 
   public async uploadThumbnail(file: Express.Multer.File) {

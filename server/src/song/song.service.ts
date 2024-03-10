@@ -99,9 +99,10 @@ export class SongService {
     }
 
     // Upload file
+    let fileKey: string;
     try {
-      const s3File = await this.fileService.uploadSong(file);
-      console.log(s3File);
+      fileKey = await this.fileService.uploadSong(file);
+      console.log(fileKey);
     } catch (e) {
       throw new HttpException(
         {
@@ -168,7 +169,7 @@ export class SongService {
     song.thumbnailData = coverData;
     song._sounds = customInstruments; // TODO: validate custom instruments
     song.thumbnailUrl = 'url';
-    song.nbsFileUrl = 'url'; // s3File.Location;
+    song.nbsFileUrl = fileKey; // s3File.Location;
 
     // Song stats
     song.fileSize = fileSize;
@@ -259,23 +260,48 @@ export class SongService {
     return SongViewDto.fromSongDocument(foundSong);
   }
 
-  public async getSongFile(
+  // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
+  public async getSongDownloadUrl(
     id: string,
     user: UserDocument | null,
-  ): Promise<void> {
-    const foundSong = await this.songModel.findById(id).exec();
+  ): Promise<string> {
+    console.log(id);
+    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
     if (!foundSong) {
-      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+      console.log('Song not found');
+      throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
     }
-    if (foundSong.visibility === 'private') {
-      if (!user) {
-        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-      }
-      if (foundSong.uploader.toString() !== user._id.toString()) {
-        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    if (foundSong.visibility !== 'public') {
+      if (!user || foundSong.uploader.toString() !== user._id.toString()) {
+        console.log("Song is private and user isn't the uploader");
+        throw new HttpException(
+          'This song is private',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
     }
-    // TODO: reimplement
+    if (!foundSong.allowDownload) {
+      console.log('Song has downloads disabled');
+      throw new HttpException(
+        'The uploader has disabled downloads of this song',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    try {
+      const url = await this.fileService.getSongDownloadUrl(
+        foundSong.nbsFileUrl,
+        'song.nbs', // TODO: foundSong.filename
+      );
+      console.log(url);
+      return url;
+    } catch (e) {
+      console.error('Error getting song file', e);
+      throw new HttpException(
+        'An error occurred while retrieving the song file',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   public async getMySongsPage(arg0: {
