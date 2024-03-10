@@ -124,6 +124,8 @@ export class SongService {
       allowDownload,
       visibility,
       category,
+      coverData,
+      customInstruments,
     } = body;
 
     // const category = body.category;
@@ -159,24 +161,28 @@ export class SongService {
     song.title = title;
     song.originalAuthor = originalAuthor;
     song.description = description;
-    song.category = body.category;
-    song.allowDownload = true; //TODO: allowDownload;
+    song.category = category;
+    song.allowDownload = true || allowDownload; //TODO: implement allowDownload;
     song.visibility = visibility === 'private' ? 'private' : 'public';
-    song.thumbnailData = body.coverData;
+
+    song.thumbnailData = coverData;
+    song._sounds = customInstruments; // TODO: validate custom instruments
     song.thumbnailUrl = 'url';
     song.nbsFileUrl = 'url'; // s3File.Location;
-    //song.fileSize = fileSize;
-    //song.compatible = compatible;
-    //song.midiFileName = midiFileName;
+
+    // Song stats
+    song.fileSize = fileSize;
+    song.compatible = compatible;
+    song.midiFileName = midiFileName;
     song.noteCount = noteCount;
-    //song.tickCount = tickCount;
-    //song.layerCount = layerCount;
+    song.tickCount = tickCount;
+    song.layerCount = layerCount;
     song.tempo = tempo;
-    //song.timeSignature = timeSignature;
+    song.timeSignature = timeSignature;
     song.duration = duration;
-    //song.loop = loop;
-    //song.loopStartTick = loopStartTick;
-    //song.minutesSpent = minutesSpent;
+    song.loop = loop;
+    song.loopStartTick = loopStartTick;
+    song.minutesSpent = minutesSpent;
 
     // Save song document
     const songDocument = await this.songModel.create(song);
