@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -75,8 +76,10 @@ export class UploadSongDto {
   })
   category: string;
 
-  @ValidateNested()
   @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => CoverData)
+  @Transform(({ value }) => JSON.parse(value))
   @ApiProperty({
     description: 'Cover data of the song',
     example: CoverData.getApiExample(),
@@ -88,6 +91,7 @@ export class UploadSongDto {
     description:
       'List of custom instrument paths, one for each custom instrument in the song, relative to the assets/minecraft/sounds folder',
   })
+  @Transform(({ value }) => JSON.parse(value))
   customInstruments: string[];
 
   constructor(partial: Partial<UploadSongDto>) {

@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   DocumentBuilder,
@@ -20,6 +20,8 @@ async function bootstrap() {
   const parseTokenPipe = app.get<ParseTokenPipe>(ParseTokenPipe);
 
   app.useGlobalGuards(parseTokenPipe);
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
