@@ -66,9 +66,16 @@ export const UploadSongProvider = ({
     const formData = new FormData();
     formData.append('file', blob, 'song.nbs');
     const formValues = formMethods.getValues();
-    Object.entries(formValues).forEach(([key, value]) => {
-      formData.append(key, value.toString());
-    });
+    Object.entries(formValues)
+      .filter(([key, _]) => key !== 'coverData' && key !== 'customInstruments')
+      .forEach(([key, value]) => {
+        formData.append(key, value.toString());
+      });
+    formData.append('coverData', JSON.stringify(formValues.coverData));
+    formData.append(
+      'customInstruments',
+      JSON.stringify(formValues.customInstruments),
+    );
 
     // Get authorization token from local storage
     const token = getTokenLocal();
@@ -126,7 +133,11 @@ export const UploadSongProvider = ({
       formMethods.setValue('coverData.startTick', 0);
       formMethods.setValue('coverData.startLayer', 0);
       formMethods.setValue('coverData.backgroundColor', '#ffffff');
-      formMethods.setValue('customInstruments', ['noteblock']);
+      formMethods.setValue('customInstruments', [
+        'custom1',
+        'custom2',
+        'custom3',
+      ]);
     }
   }, [song, formMethods]);
 
