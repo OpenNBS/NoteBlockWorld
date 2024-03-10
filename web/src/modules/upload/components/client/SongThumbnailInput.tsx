@@ -50,7 +50,11 @@ export const SongThumbnailInput = () => {
             type='range'
             id='zoom-level'
             className='w-full'
-            {...register('coverData.zoomLevel', { value: 3, max: 5 })}
+            {...register('coverData.zoomLevel', {
+              valueAsNumber: true,
+              value: 3,
+              max: 5,
+            })}
             min={1}
             max={5}
           />
@@ -65,7 +69,11 @@ export const SongThumbnailInput = () => {
             type='range'
             id='start-tick'
             className='w-full'
-            {...register('coverData.startTick', { value: 0, max: maxTick })}
+            {...register('coverData.startTick', {
+              valueAsNumber: true,
+              value: 0,
+              max: maxTick,
+            })}
             max={maxTick}
           />
         </div>
@@ -81,6 +89,7 @@ export const SongThumbnailInput = () => {
             min='0'
             className='w-full'
             {...register('coverData.startLayer', {
+              valueAsNumber: true,
               value: 0,
               max: maxLayer,
             })}
