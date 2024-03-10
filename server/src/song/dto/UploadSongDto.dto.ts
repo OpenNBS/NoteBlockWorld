@@ -18,11 +18,13 @@ export class UploadSongDto {
     description: 'The file to upload',
     type: 'file',
   })
-  @IsNotEmpty()
+  //@IsNotEmpty()
+  //@Type(() => Blob)
   file: Express.Multer.File;
 
   @IsNotEmpty()
   @IsBoolean()
+  @Type(() => Boolean)
   @ApiProperty({
     default: true,
     description: 'Whether the song can be downloaded by other users',
@@ -50,7 +52,6 @@ export class UploadSongDto {
   })
   title: string;
 
-  @IsNotEmpty()
   @IsString()
   @MaxLength(64)
   @ApiProperty({
@@ -59,7 +60,6 @@ export class UploadSongDto {
   })
   originalAuthor: string;
 
-  @IsNotEmpty()
   @IsString()
   @MaxLength(2048)
   @ApiProperty({
