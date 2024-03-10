@@ -8,7 +8,7 @@ const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
+  const formattedTime = `${minutes.toString().padStart(1, '0')}:${seconds
     .toString()
     .padStart(2, '0')}`;
   return formattedTime;
@@ -58,7 +58,13 @@ const SongDetails = ({ song }: SongDetailsProps) => {
           <SongDetailsCell>Uploaded at</SongDetailsCell>
           <SongDetailsCell>
             {song.createdAt
-              ? song.createdAt.toLocaleDateString()
+              ? new Date(song.createdAt).toLocaleString('en-UK', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
               : new Date().toLocaleString('en-UK', {
                   year: 'numeric',
                   month: 'short',
@@ -71,7 +77,10 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         <SongDetailsRow>
           <SongDetailsCell>Note block compatible</SongDetailsCell>
           <SongDetailsCell>
-            <div className='mr-2 h-4 w-4 rounded-full bg-green-500'></div>Yes
+            <div className='flex items-center'>
+              <div className='mr-2 h-2.5 w-2.5 rounded-full bg-green-500'></div>
+              <div className=''>Yes</div>
+            </div>
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
@@ -100,7 +109,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         <SongDetailsRow>
           <SongDetailsCell>Tempo</SongDetailsCell>
           <SongDetailsCell>
-            {song.tempo} ticks per second
+            {song.tempo} t/s
             <span className='font-normal text-zinc-400 ml-2'>
               ({song.tempo * 15} BPM)
             </span>
@@ -128,7 +137,9 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>File size</SongDetailsCell>
-          <SongDetailsCell>{song.fileSize / 1024} kB</SongDetailsCell>
+          <SongDetailsCell>
+            {(song.fileSize / 1024).toFixed(2)} kB
+          </SongDetailsCell>
         </SongDetailsRow>
       </tbody>
     </table>
