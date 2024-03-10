@@ -15,9 +15,12 @@ export const SongUploadForm = ({
   return (
     <form
       className='flex flex-col gap-6'
-      onSubmit={formMethods.handleSubmit(() => {
-        submitSong();
-      })}
+      onSubmit={formMethods.handleSubmit(
+        () => {
+          submitSong();
+        },
+        // () => console.log(sendError, errors, formMethods), // Use for debugging form
+      )}
     >
       {sendError && (
         <ErrorBalloon message={sendError} isVisible={!!sendError} />
