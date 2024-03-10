@@ -53,6 +53,7 @@ export const UploadSongProvider = ({
 
   const submitSongData = async (): Promise<void> => {
     // Get song file from state
+    setSendError(null);
     if (!song) {
       throw new Error('Song file not found');
     }
