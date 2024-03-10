@@ -81,25 +81,27 @@ export const UploadSongProvider = ({
     const token = getTokenLocal();
 
     // Send request
-    const response = await axiosInstance.post(`/song`, formData, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    // Handle response
-    if (response.status === 201) {
-      const data = response.data;
-      const id = data._id as string;
-      router.push(`/my-songs?selectedSong=${id}`);
-    } else {
-      const error_body = (await response.data) as {
-        message: string;
-      };
-      setSendError(error_body.message);
-      return;
-    }
+    await axiosInstance
+      .post(`/song`, formData, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        const id = data._id as string;
+        //router.push(`/my-songs?selectedSong=${id}`);
+      })
+      .catch((error) => {
+        console.error('Error submitting song', error);
+        if (error.response) {
+          setSendError(error.response.data.error.file);
+        } else {
+          setSendError('An unknown error occurred while submitting the song!');
+        }
+        return;
+      });
   };
 
   const submitSong = async () => {
