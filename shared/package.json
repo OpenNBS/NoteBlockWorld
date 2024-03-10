@@ -1,0 +1,10 @@
+{
+  "name": "noteblockworld-shared",
+  "version": "0.1.0",
+  "description": "Shared packages for noteblockworld",
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {},
+  "dependencies": {}
+}
