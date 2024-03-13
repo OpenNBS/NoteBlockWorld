@@ -1,6 +1,6 @@
+import { bgColors, getThumbnailNotes } from '@nbw/features/thumbnail';
 import { useMemo } from 'react';
 
-import { bgColors, getThumbnailNotes } from './thumbnail.util';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 import { useUploadSongProvider } from './UploadSong.context';
 

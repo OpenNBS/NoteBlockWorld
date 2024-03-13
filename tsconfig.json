@@ -12,7 +12,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@server/*": ["./server/src/*"],
-      "@web/*": ["./web/*"]
+      "@web/*": ["./web/*"],
+      "@shared/*": ["./shared/*"]
     }
   }
 }

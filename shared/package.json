@@ -5,6 +5,7 @@
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@encode42/nbs.js": "5.0.0"
+  }
 }
