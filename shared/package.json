@@ -6,6 +6,10 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "@encode42/nbs.js": "5.0.0"
+    "@encode42/nbs.js": "5.0.0",
+    "canvas": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1"
   }
 }

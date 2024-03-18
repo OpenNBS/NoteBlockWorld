@@ -1,11 +1,16 @@
 import { Song } from '@encode42/nbs.js';
 
+import { Canvas, Image, createCanvas, loadImage } from './canvasFactory';
+
 export interface Note {
   tick: number;
   layer: number;
   key: number;
   instrument: number;
 }
+
+type Canvas = typeof Canvas;
+type Image = typeof Image;
 
 export const getThumbnailNotes = (song: Song): Note[] => {
   const notes = song.layers
@@ -58,33 +63,20 @@ export const bgColors = [
   '#232427',
 ];
 
-let noteBlockImage: HTMLImageElement | null = null;
-const tintedImages: Record<string, HTMLCanvasElement> = {};
-
-// Function to load an image from the server
-function loadImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
-}
+let noteBlockImage: Image | null = null;
+const tintedImages: Record<string, Canvas> = {};
 
 // Function to apply tint to an image
-function tintImage(image: HTMLImageElement, color: string): HTMLCanvasElement {
+function tintImage(image: Image, color: string): Canvas {
   if (tintedImages[color]) {
     return tintedImages[color];
   }
 
-  const canvas = document.createElement('canvas');
+  const canvas = createCanvas(image.width, image.height);
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
-
-  canvas.width = image.width;
-  canvas.height = image.height;
 
   ctx.drawImage(image, 0, 0);
 
@@ -157,7 +149,7 @@ function isDarkColor(color: string, threshold = 40): boolean {
 let lastId: number | null = null;
 
 export function drawFrame(
-  canvas: HTMLCanvasElement,
+  canvas: Canvas | HTMLCanvasElement,
   notes: Note[],
   startTick: number,
   startLayer: number,
@@ -166,6 +158,11 @@ export function drawFrame(
   imgWidth = 1280,
   imgHeight = 720,
 ) {
+  // Get canvas
+  if (!canvas) {
+    canvas = createCanvas(imgWidth, imgHeight);
+  }
+
   // Store callback id
   if (lastId) {
     cancelAnimationFrame(lastId);
@@ -186,7 +183,7 @@ export function drawFrame(
 
 // Function to draw Minecraft note blocks on the canvas
 export async function drawNotes(
-  canvas: HTMLCanvasElement,
+  canvas: Canvas | HTMLCanvasElement,
   notes: Note[],
   startTick: number,
   startLayer: number,
@@ -209,7 +206,9 @@ export async function drawNotes(
   ctx.imageSmoothingEnabled = false;
 
   // Set canvas dimensions
-  canvas.width = canvas.offsetWidth;
+  canvas.width =
+    // HTMLCanvasElement has offsetWidth property, but Canvas does not
+    'offsetWidth' in canvas ? (canvas.offsetWidth as number) : imgWidth;
   canvas.height = canvas.width / (imgWidth / imgHeight);
 
   // Calculate effective zoom level
@@ -241,8 +240,11 @@ export async function drawNotes(
   }
 
   // Load note block image if not loaded yet
-  if (!noteBlockImage || noteBlockImage.src !== '/note-block-grayscale.png') {
-    noteBlockImage = await loadImage('/note-block-grayscale.png');
+  if (
+    !noteBlockImage ||
+    noteBlockImage.src !== '/img/note-block-grayscale.png'
+  ) {
+    noteBlockImage = await loadImage('/img/note-block-grayscale.png');
     // TODO: note block image loading on every render is not ideal
   }
 
