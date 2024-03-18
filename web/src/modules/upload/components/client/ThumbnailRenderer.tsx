@@ -4,10 +4,9 @@ import { drawFrame } from '@nbw/features/thumbnail';
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
-  const notes = song.layers.get
+  const notes = song.layers
     .map((layer, layerId) =>
-      Array.from(layer.notes).map((tick) => {
-        const [tickNumber, note] = tick;
+      Array.from(layer.notes).map((note, tickNumber) => {
         const data = {
           tick: tickNumber,
           layer: layerId,
