@@ -1,4 +1,4 @@
-import { bgColors, getThumbnailNotes } from '@nbw/features/thumbnail';
+import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
 import { useMemo } from 'react';
 
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';

@@ -1,6 +1,6 @@
 import { Song } from '@encode42/nbs.js';
-import type { Note } from '@nbw/features/thumbnail';
-import { drawFrame } from '@nbw/features/thumbnail';
+import type { Note } from '@shared/features/thumbnail';
+import { drawFrame } from '@shared/features/thumbnail';
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
