@@ -40,7 +40,14 @@ export const ThumbnailRendererCanvas = ({
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
-    drawFrame(canvas, notes, startTick, startLayer, zoomLevel, backgroundColor);
+    drawFrame({
+      notes,
+      startTick,
+      startLayer,
+      zoomLevel,
+      canvas,
+      backgroundColor,
+    });
   }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;

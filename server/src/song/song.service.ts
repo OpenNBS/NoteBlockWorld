@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
 import { Model, Types } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
@@ -131,6 +132,9 @@ export class SongService {
 
     // const category = body.category;
 
+    // Generate song public ID
+    const publicId = generateSongId();
+
     // Calculate song document's data from NBS file
     const fileSize = file.size;
     const midiFileName = nbsSong.meta.importName || '';
@@ -154,11 +158,44 @@ export class SongService {
     nbsSong.meta.originalAuthor = removeNonAscii(body.originalAuthor);
     nbsSong.meta.description = removeNonAscii(body.description);
 
+    // Generate thumbnail
+    const { startTick, startLayer, zoomLevel, backgroundColor } = coverData;
+
+    const thumbBuffer = drawToImage({
+      notes: getThumbnailNotes(nbsSong),
+      startTick: startTick,
+      startLayer: startLayer,
+      zoomLevel: zoomLevel,
+      backgroundColor: backgroundColor,
+      imgWidth: 1280,
+      imgHeight: 720,
+    });
+
+    // Upload thumbnail
+    let thumbUrl: string;
+    try {
+      thumbUrl = await this.fileService.uploadThumbnail(
+        thumbBuffer,
+        `${publicId}.jpg`,
+      );
+      console.log(fileKey);
+    } catch (e) {
+      throw new HttpException(
+        {
+          error: {
+            file: "An error occurred while creating the song's thumbnail",
+          },
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    console.log(thumbUrl);
+
     // Update song document
 
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
-    song.publicId = generateSongId();
+    song.publicId = publicId;
     song.title = title;
     song.originalAuthor = originalAuthor;
     song.description = description;
@@ -168,7 +205,7 @@ export class SongService {
 
     song.thumbnailData = coverData;
     song._sounds = customInstruments; // TODO: validate custom instruments
-    song.thumbnailUrl = 'url';
+    song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
 
     // Song stats

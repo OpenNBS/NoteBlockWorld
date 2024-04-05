@@ -5,12 +5,33 @@ if (typeof document === 'undefined') {
   const canvasModule = require('canvas');
   const { createCanvas, loadImage } = canvasModule;
 
+  const path = require('path');
+
   const Canvas = canvasModule.Canvas;
   const Image = canvasModule.Image;
+
+  const getPath = (filename: string) => {
+    const dir = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      'assets',
+      filename.split('/').join(path.sep),
+    );
+    console.log('dir', dir);
+    return dir;
+  };
+
+  const saveToImage = (canvas: typeof Canvas) => {
+    return canvas.toBuffer('image/png');
+  };
 
   content = {
     createCanvas,
     loadImage,
+    getPath,
+    saveToImage,
     Canvas,
     Image,
   };
@@ -32,16 +53,27 @@ if (typeof document === 'undefined') {
     });
   };
 
+  const getPath = (filename: string) => {
+    return filename;
+  };
+
+  const saveToImage = (canvas: HTMLCanvasElement) => {
+    console.log('Not implemented');
+  };
+
   const Canvas = HTMLCanvasElement;
   const Image = HTMLImageElement;
 
   content = {
     createCanvas,
     loadImage,
+    getPath,
+    saveToImage,
     Canvas,
     Image,
   };
 }
 
-const { createCanvas, loadImage, Canvas, Image } = content;
-export { createCanvas, loadImage, Canvas, Image };
+const { createCanvas, loadImage, getPath, saveToImage, Canvas, Image } =
+  content;
+export { createCanvas, loadImage, getPath, saveToImage, Canvas, Image };

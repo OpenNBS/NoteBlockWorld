@@ -1,12 +1,30 @@
 import { Song } from '@encode42/nbs.js';
 
-import { Canvas, Image, createCanvas, loadImage } from './canvasFactory';
+import {
+  Canvas,
+  Image,
+  createCanvas,
+  getPath,
+  loadImage,
+  saveToImage,
+} from './canvasFactory';
 
 export interface Note {
   tick: number;
   layer: number;
   key: number;
   instrument: number;
+}
+
+interface DrawParams {
+  notes: Note[];
+  startTick: number;
+  startLayer: number;
+  zoomLevel: number;
+  canvas?: Canvas | HTMLCanvasElement;
+  backgroundColor?: string;
+  imgWidth?: number;
+  imgHeight?: number;
 }
 
 type Canvas = typeof Canvas;
@@ -63,7 +81,7 @@ export const bgColors = [
   '#232427',
 ];
 
-let noteBlockImage: Image | null = null;
+const noteBlockImage: Image | null = null;
 const tintedImages: Record<string, Canvas> = {};
 
 // Function to apply tint to an image
@@ -148,16 +166,16 @@ function isDarkColor(color: string, threshold = 40): boolean {
 // Create variable to store last callback id
 let lastId: number | null = null;
 
-export function drawFrame(
-  canvas: Canvas | HTMLCanvasElement,
-  notes: Note[],
-  startTick: number,
-  startLayer: number,
-  zoomLevel: number,
+export function drawFrame({
+  notes,
+  startTick,
+  startLayer,
+  zoomLevel,
+  canvas = undefined,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
   imgHeight = 720,
-) {
+}: DrawParams) {
   // Get canvas
   if (!canvas) {
     canvas = createCanvas(imgWidth, imgHeight);
@@ -168,30 +186,30 @@ export function drawFrame(
     cancelAnimationFrame(lastId);
   }
   lastId = requestAnimationFrame(() =>
-    drawNotes(
-      canvas,
+    drawNotes({
       notes,
       startTick,
       startLayer,
       zoomLevel,
+      canvas,
       backgroundColor,
       imgWidth,
       imgHeight,
-    ),
+    }),
   );
 }
 
 // Function to draw Minecraft note blocks on the canvas
-export async function drawNotes(
-  canvas: Canvas | HTMLCanvasElement,
-  notes: Note[],
-  startTick: number,
-  startLayer: number,
-  zoomLevel: number,
+export async function drawNotes({
+  notes,
+  startTick,
+  startLayer,
+  zoomLevel,
+  canvas = undefined,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
   imgHeight = 720,
-) {
+}: DrawParams) {
   // Get canvas context
   const ctx = canvas.getContext('2d');
   if (!ctx) {
@@ -240,13 +258,9 @@ export async function drawNotes(
   }
 
   // Load note block image if not loaded yet
-  if (
-    !noteBlockImage ||
-    noteBlockImage.src !== '/img/note-block-grayscale.png'
-  ) {
-    noteBlockImage = await loadImage('/img/note-block-grayscale.png');
-    // TODO: note block image loading on every render is not ideal
-  }
+  const noteBlockImage = await loadImage(
+    getPath('/img/note-block-grayscale.png'),
+  );
 
   // Iterate through note blocks and draw them
   notes
@@ -287,9 +301,17 @@ export async function drawNotes(
     });
 
   console.log(`Finished drawNotes with ID ${id}`);
+}
 
-  // Save the canvas as an image
-  //const image = new Image();
-  //image.src = canvas.toDataURL();
-  //document.body.appendChild(image); // Append the image to the body
+export function drawToImage(params: DrawParams): Buffer {
+  let canvas;
+  const { imgWidth, imgHeight } = params;
+
+  if (!canvas) {
+    canvas = createCanvas(imgWidth, imgHeight);
+  }
+
+  drawNotes({ canvas, ...params });
+  const buffer = saveToImage(canvas);
+  return buffer;
 }

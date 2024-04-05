@@ -60,7 +60,13 @@ export class FileService {
     const extension = path.parse(file.originalname).ext;
     const newFileName = `${fileName}${extension}`;
 
-    await this.s3_upload(file, bucket, newFileName, file.mimetype);
+    await this.s3_upload(
+      file,
+      bucket,
+      newFileName,
+      file.mimetype,
+      ObjectCannedACL.private,
+    );
     return newFileName;
   }
 
@@ -84,8 +90,31 @@ export class FileService {
     return signedUrl;
   }
 
-  public async uploadThumbnail(file: Express.Multer.File) {
-    throw new Error('Method not implemented.');
+  public async uploadThumbnail(buffer: Buffer, filename: string) {
+    const bucket =
+      this.configService.get<string>('S3_BUCKET_THUMBS') ||
+      'noteblockworld-thumbs';
+    await this.s3_upload(
+      buffer,
+      bucket,
+      filename,
+      'image/jpeg',
+      ObjectCannedACL.public_read,
+    );
+    return this.getThumbnailUrl(filename);
+  }
+
+  public getThumbnailUrl(key: string) {
+    const bucket =
+      this.configService.get<string>('S3_BUCKET_THUMBS') ||
+      'noteblockworld-thumbs';
+    const region = this.configService.get<string>('S3_REGION') || '';
+    const url = this.getPublicFileUrl(key, bucket, region);
+    return url;
+  }
+
+  private getPublicFileUrl(key: string, bucket: string, region: string) {
+    return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
   }
 
   public async uploadProfilePicture(file: Express.Multer.File) {
@@ -93,16 +122,23 @@ export class FileService {
   }
 
   async s3_upload(
-    file: Express.Multer.File,
+    file: Express.Multer.File | Buffer,
     bucket: string,
     name: string,
     mimetype: string,
+    accessControl: ObjectCannedACL = ObjectCannedACL.public_read,
   ) {
+    let buff;
+    if (Buffer.isBuffer(file)) {
+      buff = file;
+    } else {
+      buff = file.buffer;
+    }
     const params = {
       Bucket: bucket,
       Key: String(name),
-      Body: file.buffer,
-      ACL: ObjectCannedACL.private,
+      Body: buff,
+      ACL: accessControl,
       ContentType: mimetype,
       ContentDisposition: 'inline',
       CreateBucketConfiguration: {
