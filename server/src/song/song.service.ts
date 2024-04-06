@@ -161,7 +161,7 @@ export class SongService {
     // Generate thumbnail
     const { startTick, startLayer, zoomLevel, backgroundColor } = coverData;
 
-    const thumbBuffer = drawToImage({
+    const thumbBuffer = await drawToImage({
       notes: getThumbnailNotes(nbsSong),
       startTick: startTick,
       startLayer: startLayer,

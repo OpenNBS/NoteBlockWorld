@@ -273,7 +273,7 @@ export async function drawNotes({
         startLayer + height / (zoomFactor * 8),
       ),
     )
-    .forEach((note) => {
+    .forEach(async (note) => {
       // Calculate position
       const x = (note.tick - startTick) * 8 * zoomFactor;
       const y = (note.layer - startLayer) * 8 * zoomFactor;
@@ -303,7 +303,7 @@ export async function drawNotes({
   console.log(`Finished drawNotes with ID ${id}`);
 }
 
-export function drawToImage(params: DrawParams): Buffer {
+export async function drawToImage(params: DrawParams): Promise<Buffer> {
   let canvas;
   const { imgWidth, imgHeight } = params;
 
@@ -311,7 +311,7 @@ export function drawToImage(params: DrawParams): Buffer {
     canvas = createCanvas(imgWidth, imgHeight);
   }
 
-  drawNotes({ canvas, ...params });
+  await drawNotes({ canvas, ...params });
   const buffer = saveToImage(canvas);
   return buffer;
 }
