@@ -215,7 +215,7 @@ export async function drawNotesOffscreen({
   imgHeight,
 }: DrawParams) {
   // Create new offscreen canvas
-  const canvas = new OffscreenCanvas(imgWidth, imgHeight);
+  const canvas = createCanvas(imgWidth, imgHeight);
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Could not get offscreen canvas context');

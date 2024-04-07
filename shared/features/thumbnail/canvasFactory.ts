@@ -37,10 +37,8 @@ if (typeof document === 'undefined') {
   };
 } else {
   // Assume browser environment
-  const createCanvas = (width?: number, height?: number) => {
-    const canvas = document.createElement('canvas');
-    if (width) canvas.width = width;
-    if (height) canvas.height = height;
+  const createCanvas = (width: number, height: number) => {
+    const canvas = new OffscreenCanvas(width, height);
     return canvas;
   };
 
