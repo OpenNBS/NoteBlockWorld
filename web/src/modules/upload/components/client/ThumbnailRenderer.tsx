@@ -28,6 +28,11 @@ export const ThumbnailRendererCanvas = ({
     // Set canvas size to match the container size
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.width / (1280 / 768);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current as HTMLCanvasElement | null;
+    if (!canvas) return;
 
     // Clear previous draw requests
     if (drawRequest.current) {
