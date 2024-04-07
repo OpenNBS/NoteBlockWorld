@@ -1,6 +1,6 @@
 import type { Note } from '@shared/features/thumbnail';
 import { drawNotesOffscreen, swap } from '@shared/features/thumbnail';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type ThumbnailRendererCanvasProps = {
   notes: Note[];
@@ -18,8 +18,8 @@ export const ThumbnailRendererCanvas = ({
   backgroundColor,
 }: ThumbnailRendererCanvasProps) => {
   const canvasRef = useRef(null);
-
   const drawRequest = useRef<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
@@ -31,6 +31,8 @@ export const ThumbnailRendererCanvas = ({
   }, []);
 
   useEffect(() => {
+    setLoading(true);
+
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
 
@@ -51,8 +53,18 @@ export const ThumbnailRendererCanvas = ({
         imgHeight: 768,
       });
       swap(output, canvas);
+      setLoading(false);
     });
   }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
-  return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;
+  return (
+    <div className='relative w-full'>
+      <canvas ref={canvasRef} className='w-full h-full rounded-lg' />
+      {loading && (
+        <div className='absolute top-0 flex items-center justify-center bg-black w-full h-full rounded-lg opacity-80'>
+          Loading...
+        </div>
+      )}
+    </div>
+  );
 };
