@@ -179,10 +179,7 @@ export async function requestFrame(drawFunction: () => Canvas, canvas: Canvas) {
   );
 }
 
-export async function drawAndSwap(
-  drawFunction: () => Promise<Canvas>,
-  canvas: Canvas,
-) {
+export async function swap(src: Canvas, dst: Canvas) {
   /**
    * Run a `drawFunction` that returns a canvas and draw it to the passed `canvas`.
    *
@@ -193,18 +190,13 @@ export async function drawAndSwap(
    */
 
   // Get canvas context
-  const ctx = canvas.getContext('2d');
+  const ctx = dst.getContext('2d');
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
 
-  const output = await drawFunction();
-
-  console.log(output);
-
   // Swap the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(output, 0, 0);
+  ctx.drawImage(src, 0, 0);
 }
 
 export async function drawNotesOffscreen({
@@ -317,7 +309,7 @@ export async function drawToImage(params: DrawParams): Promise<Buffer> {
     canvas = createCanvas(imgWidth, imgHeight);
   }
 
-  await drawAndSwap(() => drawNotesOffscreen(params), canvas);
-  const buffer = saveToImage(canvas);
+  const output = await drawNotesOffscreen(params);
+  const buffer = saveToImage(output);
   return buffer;
 }
