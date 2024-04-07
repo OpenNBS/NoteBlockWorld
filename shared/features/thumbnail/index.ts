@@ -32,6 +32,7 @@ type Canvas = typeof Canvas;
 type Image = typeof Image;
 
 export const getThumbnailNotes = (song: Song): Note[] => {
+  // TODO: return a record indexed by tick to avoid filtering the whole song
   const notes = song.layers
     .map((layer) =>
       Object.entries(layer.notes).map(([tick, note]) => {
@@ -95,9 +96,6 @@ function tintImage(image: Image, color: string): Canvas {
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
-
-  //canvas.style.imageRendering = 'optimizeContrast';
-  ctx.imageSmoothingEnabled = false;
 
   ctx.drawImage(image, 0, 0);
 
@@ -166,19 +164,6 @@ function isDarkColor(color: string, threshold = 40): boolean {
   return getLuma(color) < threshold;
 }
 
-// Create variable to store last callback id
-const drawId: number[] = [];
-
-export async function requestFrame(drawFunction: () => Canvas, canvas: Canvas) {
-  if (drawId.length) {
-    console.log('Cancelling frame', drawId[0]);
-    cancelAnimationFrame(drawId[0]);
-  }
-  drawId.push(
-    requestAnimationFrame(async () => drawAndSwap(await drawFunction, canvas)),
-  );
-}
-
 export async function swap(src: Canvas, dst: Canvas) {
   /**
    * Run a `drawFunction` that returns a canvas and draw it to the passed `canvas`.
@@ -216,10 +201,6 @@ export async function drawNotesOffscreen({
   if (!ctx) {
     throw new Error('Could not get offscreen canvas context');
   }
-
-  // Random execution ID
-  const id = Math.random().toString(36).substring(7);
-  console.log(`Executing drawNotes with ID ${id}`);
 
   // Disable anti-aliasing
   ctx.imageSmoothingEnabled = false;
@@ -297,7 +278,6 @@ export async function drawNotesOffscreen({
       ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
     });
 
-  console.log(`Finished drawNotes with ID ${id}`);
   return canvas;
 }
 
