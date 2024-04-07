@@ -22,6 +22,8 @@ interface DrawParams {
   startLayer: number;
   zoomLevel: number;
   backgroundColor: string;
+  canvasWidth?: number;
+  canvasHeight?: number;
   imgWidth: number;
   imgHeight: number;
 }
@@ -211,8 +213,10 @@ export async function drawNotesOffscreen({
   startLayer,
   zoomLevel,
   backgroundColor,
-  imgWidth,
-  imgHeight,
+  canvasWidth,
+  canvasHeight,
+  imgWidth = 1280,
+  imgHeight = 768,
 }: DrawParams) {
   // Create new offscreen canvas
   const canvas = createCanvas(imgWidth, imgHeight);
@@ -232,10 +236,12 @@ export async function drawNotesOffscreen({
   const zoomFactor = 2 ** (zoomLevel - 1);
 
   // Set scale to draw image at correct thumbnail size
-  const scale = canvas.width / imgWidth;
-  ctx.scale(scale, scale);
-  const width = canvas.width / scale;
-  const height = canvas.height / scale;
+  if (canvasWidth !== undefined) {
+    const scale = canvasWidth / imgWidth;
+    ctx.scale(scale, scale);
+  }
+  const width = canvas.width;
+  const height = canvas.height;
 
   ctx.clearRect(0, 0, width, height);
 

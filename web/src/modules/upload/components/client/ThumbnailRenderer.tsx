@@ -53,8 +53,10 @@ export const ThumbnailRendererCanvas = ({
           startLayer,
           zoomLevel,
           backgroundColor,
-          imgWidth: canvas.width,
-          imgHeight: canvas.height,
+          canvasWidth: canvas.width,
+          canvasHeight: canvas.height,
+          imgWidth: 1280,
+          imgHeight: 768,
         }),
       canvas,
     );
