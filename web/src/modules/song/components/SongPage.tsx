@@ -16,7 +16,7 @@ export async function SongPage({ id }: { id: string }) {
   return (
     <div className='grid grid-cols-8 gap-12'>
       <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
-        <img src={`/demo.png`} className='rounded-xl' />
+        <img src={song.thumbnailUrl} className='rounded-xl' />
 
         <h1 className='text-xl font-bold'>{song.title}</h1>
 

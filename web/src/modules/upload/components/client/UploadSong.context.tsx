@@ -65,7 +65,7 @@ export const UploadSongProvider = ({
 
     // Build form data
     const formData = new FormData();
-    formData.append('file', blob, 'song.nbs');
+    formData.append('file', blob, filename || 'song.nbs');
     const formValues = formMethods.getValues();
     Object.entries(formValues)
       .filter(([key, _]) => key !== 'coverData' && key !== 'customInstruments')
@@ -106,6 +106,7 @@ export const UploadSongProvider = ({
   };
 
   const submitSong = async () => {
+    console.log('submitting song');
     try {
       await submitSongData();
     } catch (e) {

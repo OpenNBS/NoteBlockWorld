@@ -2,7 +2,7 @@ export type SongPageView = {
   // Auto-generated
   id: string;
   uploader: string;
-  coverImageUrl: string;
+  thumbnailUrl: string;
   downloadUrl: string;
   createdAt: Date;
 
