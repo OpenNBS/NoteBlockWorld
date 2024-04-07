@@ -1,6 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 import type { Note } from '@shared/features/thumbnail';
-import { drawNotesOffscreen, requestFrame } from '@shared/features/thumbnail';
+import { drawNotesOffscreen, swap } from '@shared/features/thumbnail';
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
@@ -37,6 +37,8 @@ export const ThumbnailRendererCanvas = ({
 }: ThumbnailRendererCanvasProps) => {
   const canvasRef = useRef(null);
 
+  const drawRequest = useRef<number | null>(null);
+
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
@@ -45,21 +47,24 @@ export const ThumbnailRendererCanvas = ({
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.width / (1280 / 768);
 
-    requestFrame(
-      async () =>
-        await drawNotesOffscreen({
-          notes,
-          startTick,
-          startLayer,
-          zoomLevel,
-          backgroundColor,
-          canvasWidth: canvas.width,
-          canvasHeight: canvas.height,
-          imgWidth: 1280,
-          imgHeight: 768,
-        }),
-      canvas,
-    );
+    // Clear previous draw requests
+    if (drawRequest.current) {
+      cancelAnimationFrame(drawRequest.current);
+    }
+    drawRequest.current = requestAnimationFrame(async () => {
+      const output = await drawNotesOffscreen({
+        notes,
+        startTick,
+        startLayer,
+        zoomLevel,
+        backgroundColor,
+        canvasWidth: canvas.width,
+        canvasHeight: canvas.height,
+        imgWidth: 1280,
+        imgHeight: 768,
+      });
+      swap(output, canvas);
+    });
   }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;
