@@ -8,6 +8,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import axios from '@web/src/lib/axios';
+
 const UploaderBadge = () => {
   return (
     <div className='flex flex-row items-center gap-3'>
@@ -75,10 +77,10 @@ const ShareButton = () => {
   );
 };
 
-const DownloadButton = ({ onClick }: { onClick: () => void }) => {
+const DownloadButton = ({ songId }: { songId: string }) => {
   return (
     <button
-      onClick={onClick}
+      onClick={() => axios.get(`/song/${songId}/download`)}
       className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:bg-green-500'
     >
       <div className='flex flex-row items-center gap-2'>
