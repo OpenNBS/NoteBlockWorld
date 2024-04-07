@@ -1,6 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 import type { Note } from '@shared/features/thumbnail';
-import { drawFrame } from '@shared/features/thumbnail';
+import { drawNotesOffscreen, requestFrame } from '@shared/features/thumbnail';
 import { useEffect, useRef } from 'react';
 
 export const getThumbnailNotes = (song: Song): Note[] => {
@@ -40,14 +40,19 @@ export const ThumbnailRendererCanvas = ({
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
-    drawFrame({
-      notes,
-      startTick,
-      startLayer,
-      zoomLevel,
+    requestFrame(
+      async () =>
+        await drawNotesOffscreen({
+          notes,
+          startTick,
+          startLayer,
+          zoomLevel,
+          backgroundColor,
+          imgWidth: canvas.width,
+          imgHeight: canvas.height,
+        }),
       canvas,
-      backgroundColor,
-    });
+    );
   }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return <canvas ref={canvasRef} className={'w-full rounded-lg'} />;

@@ -21,10 +21,9 @@ interface DrawParams {
   startTick: number;
   startLayer: number;
   zoomLevel: number;
-  canvas?: Canvas | HTMLCanvasElement;
-  backgroundColor?: string;
-  imgWidth?: number;
-  imgHeight?: number;
+  backgroundColor: string;
+  imgWidth: number;
+  imgHeight: number;
 }
 
 type Canvas = typeof Canvas;
@@ -81,7 +80,6 @@ export const bgColors = [
   '#232427',
 ];
 
-const noteBlockImage: Image | null = null;
 const tintedImages: Record<string, Canvas> = {};
 
 // Function to apply tint to an image
@@ -95,6 +93,9 @@ function tintImage(image: Image, color: string): Canvas {
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
+
+  //canvas.style.imageRendering = 'optimizeContrast';
+  ctx.imageSmoothingEnabled = false;
 
   ctx.drawImage(image, 0, 0);
 
@@ -164,56 +165,60 @@ function isDarkColor(color: string, threshold = 40): boolean {
 }
 
 // Create variable to store last callback id
-let lastId: number | null = null;
+const drawId: number[] = [];
 
-export function drawFrame({
-  notes,
-  startTick,
-  startLayer,
-  zoomLevel,
-  canvas = undefined,
-  backgroundColor = '#fcfcfc',
-  imgWidth = 1280,
-  imgHeight = 768,
-}: DrawParams) {
-  // Get canvas
-  if (!canvas) {
-    canvas = createCanvas(imgWidth, imgHeight);
+export async function requestFrame(drawFunction: () => Canvas, canvas: Canvas) {
+  if (drawId.length) {
+    console.log('Cancelling frame', drawId[0]);
+    cancelAnimationFrame(drawId[0]);
   }
-
-  // Store callback id
-  if (lastId) {
-    cancelAnimationFrame(lastId);
-  }
-  lastId = requestAnimationFrame(() =>
-    drawNotes({
-      notes,
-      startTick,
-      startLayer,
-      zoomLevel,
-      canvas,
-      backgroundColor,
-      imgWidth,
-      imgHeight,
-    }),
+  drawId.push(
+    requestAnimationFrame(async () => drawAndSwap(await drawFunction, canvas)),
   );
 }
 
-// Function to draw Minecraft note blocks on the canvas
-export async function drawNotes({
-  notes,
-  startTick,
-  startLayer,
-  zoomLevel,
-  canvas = undefined,
-  backgroundColor = '#fcfcfc',
-  imgWidth = 1280,
-  imgHeight = 768,
-}: DrawParams) {
+export async function drawAndSwap(
+  drawFunction: () => Promise<Canvas>,
+  canvas: Canvas,
+) {
+  /**
+   * Run a `drawFunction` that returns a canvas and draw it to the passed `canvas`.
+   *
+   * @param drawFunction - Function that draws to a canvas and returns it
+   * @param canvas - Canvas to draw the output of `drawFunction` to
+   *
+   * @returns Nothing
+   */
+
   // Get canvas context
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Could not get canvas context');
+  }
+
+  const output = await drawFunction();
+
+  console.log(output);
+
+  // Swap the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(output, 0, 0);
+}
+
+export async function drawNotesOffscreen({
+  notes,
+  startTick,
+  startLayer,
+  zoomLevel,
+  backgroundColor,
+  imgWidth,
+  imgHeight,
+}: DrawParams) {
+  // Create new offscreen canvas
+  const canvas = new OffscreenCanvas(imgWidth, imgHeight);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('Could not get offscreen canvas context');
   }
 
   // Random execution ID
@@ -301,6 +306,7 @@ export async function drawNotes({
     });
 
   console.log(`Finished drawNotes with ID ${id}`);
+  return canvas;
 }
 
 export async function drawToImage(params: DrawParams): Promise<Buffer> {
@@ -311,7 +317,7 @@ export async function drawToImage(params: DrawParams): Promise<Buffer> {
     canvas = createCanvas(imgWidth, imgHeight);
   }
 
-  await drawNotes({ canvas, ...params });
+  await drawAndSwap(() => drawNotesOffscreen(params), canvas);
   const buffer = saveToImage(canvas);
   return buffer;
 }
