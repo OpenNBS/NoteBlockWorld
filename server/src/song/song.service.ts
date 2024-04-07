@@ -168,7 +168,7 @@ export class SongService {
       zoomLevel: zoomLevel,
       backgroundColor: backgroundColor,
       imgWidth: 1280,
-      imgHeight: 720,
+      imgHeight: 768,
     });
 
     // Upload thumbnail

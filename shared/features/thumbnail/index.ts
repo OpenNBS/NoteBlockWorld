@@ -174,7 +174,7 @@ export function drawFrame({
   canvas = undefined,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
-  imgHeight = 720,
+  imgHeight = 768,
 }: DrawParams) {
   // Get canvas
   if (!canvas) {
@@ -208,7 +208,7 @@ export async function drawNotes({
   canvas = undefined,
   backgroundColor = '#fcfcfc',
   imgWidth = 1280,
-  imgHeight = 720,
+  imgHeight = 768,
 }: DrawParams) {
   // Get canvas context
   const ctx = canvas.getContext('2d');
