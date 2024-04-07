@@ -228,12 +228,6 @@ export async function drawNotesOffscreen({
   // Disable anti-aliasing
   ctx.imageSmoothingEnabled = false;
 
-  // Set canvas dimensions
-  canvas.width =
-    // HTMLCanvasElement has offsetWidth property, but Canvas does not
-    'offsetWidth' in canvas ? (canvas.offsetWidth as number) : imgWidth;
-  canvas.height = canvas.width / (imgWidth / imgHeight);
-
   // Calculate effective zoom level
   const zoomFactor = 2 ** (zoomLevel - 1);
 

@@ -40,6 +40,11 @@ export const ThumbnailRendererCanvas = ({
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null;
     if (!canvas) return;
+
+    // Set canvas size to match the container size
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.width / (1280 / 768);
+
     requestFrame(
       async () =>
         await drawNotesOffscreen({
