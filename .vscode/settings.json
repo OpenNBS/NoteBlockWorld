@@ -3,6 +3,6 @@
   "eslint.validate": ["typescript"],
   "eslint.run": "onType",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   }
 }
