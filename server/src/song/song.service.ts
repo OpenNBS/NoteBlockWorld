@@ -269,9 +269,16 @@ export class SongService {
     const options = {
       page: page || 1,
       limit: limit || 10,
+      sort: query.sort || 'createdAt',
+      order: query.order || false,
     };
     const data = await this.songModel
-      .find()
+      .find({
+        visibility: 'public',
+      })
+      .sort({
+        [options.sort]: options.order ? 1 : -1,
+      })
       .skip(options.limit * (options.page - 1))
       .limit(options.limit)
       .exec();

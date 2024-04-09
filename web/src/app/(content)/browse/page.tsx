@@ -1,41 +1,44 @@
-import { TimespanButtonGroup } from '@web/src/modules/browse/components/client/TimespanButton';
-import SongCard from '@web/src/modules/browse/components/SongCard';
-import SongCardGroup from '@web/src/modules/browse/components/SongCardGroup';
+import axiosInstance from '@web/src/lib/axios';
+import { HomePageProvider } from '@web/src/modules/browse/components/client/HomePage.context';
+import HomePageComponent from '@web/src/modules/browse/components/HomePageComponent';
+import { SongPreview } from '@web/src/modules/browse/types';
 
-export default function Home() {
+async function fetchRecentSongs(): Promise<SongPreview[]> {
+  try {
+    const response = await axiosInstance.get('/song', {
+      params: { sort: 'recent', limit: 8 },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error loading recent songs:', error);
+    return [];
+  }
+}
+
+async function fetchFeaturedSongs(): Promise<SongPreview[]> {
+  try {
+    const response = await axiosInstance.get('/song', {
+      params: { sort: 'featured', limit: 8 },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error loading featured songs:', error);
+    return [];
+  }
+}
+
+async function Home() {
+  const recentSongs = await fetchRecentSongs();
+  const featuredSongs = await fetchFeaturedSongs();
+
   return (
-    <>
-      {/* FEATURED SONGS */}
-      <div className='flex flex-col md:flex-row justify-between gap-4 text-nowrap'>
-        <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
-        <div className='flex-0'>
-          <TimespanButtonGroup />
-        </div>
-      </div>
-      <div className='h-6' />
-      <SongCardGroup>
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-      </SongCardGroup>
-      <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
-
-      {/* RECENT SONGS */}
-      <div className='flex flex-row justify-between items-center gap-4'>
-        <h2 className='text-xl uppercase'>Recent songs</h2>
-      </div>
-      <div className='h-6' />
-      <SongCardGroup>
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-        <SongCard />
-      </SongCardGroup>
-    </>
+    <HomePageProvider
+      initialRecentSongs={recentSongs}
+      initialFeaturedSongs={featuredSongs}
+    >
+      <HomePageComponent />
+    </HomePageProvider>
   );
 }
+
+export default Home;
