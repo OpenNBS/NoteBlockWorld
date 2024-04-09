@@ -51,6 +51,7 @@ export class SongController {
   public async getSongList(
     @Query() query: PageQuery,
   ): Promise<SongPreviewDto[]> {
+    // TODO: rename DTOs to SongPreviewRequestDto and SongPreviewResponseDto
     return await this.songService.getSongByPage(query);
   }
 
