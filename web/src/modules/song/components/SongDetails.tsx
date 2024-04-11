@@ -1,17 +1,9 @@
+import { formatDuration } from '@web/src/modules/shared/util/format';
+
 import { SongPageView } from '../types/song.type';
 
 type SongDetailsProps = {
   song: SongPageView;
-};
-
-const formatTime = (totalSeconds: number) => {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  const formattedTime = `${minutes.toString().padStart(1, '0')}:${seconds
-    .toString()
-    .padStart(2, '0')}`;
-  return formattedTime;
 };
 
 const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {
@@ -122,7 +114,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         <SongDetailsRow>
           <SongDetailsCell>Running time</SongDetailsCell>
           <SongDetailsCell>
-            {formatTime(song.tickCount / song.tempo)}
+            {formatDuration(song.tickCount / song.tempo)}
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>

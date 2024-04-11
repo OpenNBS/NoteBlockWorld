@@ -3,13 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { SongPreview } from '../types';
+import { formatDuration } from '@web/src/modules/shared/util/format';
 
-const formatDuration = (duration: number) => {
-  const minutes = Math.floor(duration / 60);
-  const seconds = duration % 60;
-  return `${minutes}:${Math.ceil(seconds).toString().padStart(2, '0')}`;
-};
+import { SongPreview } from '../types';
 
 const SongCard = ({ song }: { song: SongPreview }) => {
   return (
