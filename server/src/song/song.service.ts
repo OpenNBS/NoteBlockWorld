@@ -277,7 +277,7 @@ export class SongService {
         visibility: 'public',
       })
       .sort({
-        [options.sort]: options.order ? 1 : -1,
+        createdAt: options.order ? 'asc' : 'desc',
       })
       .skip(options.limit * (options.page - 1))
       .limit(options.limit)
