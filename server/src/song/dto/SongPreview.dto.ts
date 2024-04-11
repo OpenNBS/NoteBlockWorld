@@ -12,7 +12,7 @@ export class SongPreviewDto {
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  id: string;
+  publicId: string;
 
   @IsString()
   @MaxLength(64)
@@ -62,7 +62,7 @@ export class SongPreviewDto {
 
   public static fromSongDocument(song: SongDocument): SongPreviewDto {
     return new SongPreviewDto({
-      id: song._id.toString(),
+      publicId: song.publicId,
       uploader: song.uploader.toString(),
       title: song.title,
       originalAuthor: song.originalAuthor,

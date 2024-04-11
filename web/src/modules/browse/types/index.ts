@@ -7,7 +7,7 @@ export type FeaturedTimespan =
   | 'all';
 
 export type SongPreview = {
-  id: string;
+  publicId: string;
   title: string;
   uploader: string;
   duration: number;

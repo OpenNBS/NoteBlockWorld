@@ -20,7 +20,7 @@ const HomePageComponent = () => {
       <div className='h-6' />
       <SongCardGroup>
         {featuredSongs.map((song) => (
-          <SongCard key={song.id} song={song} />
+          <SongCard key={song.publicId} song={song} />
         ))}
       </SongCardGroup>
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
@@ -32,7 +32,7 @@ const HomePageComponent = () => {
       <div className='h-6' />
       <SongCardGroup>
         {recentSongs.map((song) => (
-          <SongCard key={song.id} song={song} />
+          <SongCard key={song.publicId} song={song} />
         ))}
       </SongCardGroup>
     </>
