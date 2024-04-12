@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { formatDuration } from '@web/src/modules/shared/util/format';
+import {
+  formatDuration,
+  formatTimeAgo,
+} from '@web/src/modules/shared/util/format';
 
 import { SongPreview } from '../types';
 
@@ -37,7 +40,7 @@ const SongCard = ({ song }: { song: SongPreview }) => {
         <div className='flex flex-row justify-between items-center px-4'>
           {/* Song author */}
           <p className='text-sm text-zinc-400'>
-            {song.uploader.username} • {song.createdAt.toLocaleString('en-US')}
+            {song.uploader.username} • {formatTimeAgo(new Date(song.createdAt))}
           </p>
           {/* Play icon & count */}
           <div className='text-md flex items-center gap-1'>
