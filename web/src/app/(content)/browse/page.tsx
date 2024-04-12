@@ -6,7 +6,7 @@ import { SongPreview } from '@web/src/modules/browse/types';
 async function fetchRecentSongs(): Promise<SongPreview[]> {
   try {
     const response = await axiosInstance.get('/song', {
-      params: { sort: 'recent', limit: 8 },
+      params: { sort: 'createdAt', limit: 8 },
     });
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ async function fetchRecentSongs(): Promise<SongPreview[]> {
 async function fetchFeaturedSongs(): Promise<SongPreview[]> {
   try {
     const response = await axiosInstance.get('/song', {
-      params: { sort: 'featured', limit: 8 },
+      params: { sort: 'createdAt', limit: 8 }, // TODO: featured
     });
     return response.data;
   } catch (error) {

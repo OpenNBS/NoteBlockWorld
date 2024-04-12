@@ -265,9 +265,9 @@ export class SongService {
   }
 
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
-    const { page, limit } = query;
+    const { skip, limit } = query;
     const options = {
-      page: page || 1,
+      skip: skip || 0,
       limit: limit || 10,
       sort: query.sort || 'createdAt',
       order: query.order || false,
@@ -279,7 +279,7 @@ export class SongService {
       .sort({
         createdAt: options.order ? 'asc' : 'desc',
       })
-      .skip(options.limit * (options.page - 1))
+      .skip(options.skip)
       .limit(options.limit)
       .populate('uploader', 'username profileImage -_id')
       .exec();

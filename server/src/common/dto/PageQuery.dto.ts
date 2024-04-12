@@ -18,6 +18,13 @@ export class PageQuery {
   })
   @Min(1)
   @ApiProperty({
+    example: 10,
+    description: 'skip', // TODO: fix descriptions
+  })
+  skip: number;
+
+  @Min(1)
+  @ApiProperty({
     example: 1,
     description: 'page',
   })

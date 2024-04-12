@@ -56,7 +56,7 @@ export const HomePageProvider = ({
     // setRecentLoading(true);
     try {
       const response = await axiosInstance.get('/song', {
-        params: { sort: 'recent', skip: recentSongs.length, limit: 8 },
+        params: { sort: 'createdAt', skip: recentSongs.length, limit: 8 },
       });
       setRecentSongs(response.data);
     } catch (error) {
@@ -71,13 +71,15 @@ export const HomePageProvider = ({
     try {
       const response = await axiosInstance.get('/song', {
         params: {
-          sort: 'recent', // TODO: featured
+          sort: 'createdAt', // TODO: featured
           // TODO: featuredTimespan,
           skip: featuredSongs.length,
           limit: 12,
         },
       });
-      setFeaturedSongs({ ...featuredSongs, ...response.data });
+      setFeaturedSongs([...featuredSongs, ...response.data]);
+      console.log('featuredSongs', featuredSongs);
+      console.log('response.data', response.data);
     } catch (error) {
       setFeaturedError('Error loading featured songs');
     } finally {

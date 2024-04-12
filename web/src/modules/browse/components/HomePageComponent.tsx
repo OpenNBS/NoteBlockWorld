@@ -1,12 +1,14 @@
 'use client';
 
 import { useHomePageProvider } from './client/HomePage.context';
+import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
 
 const HomePageComponent = () => {
-  const { recentSongs, featuredSongs } = useHomePageProvider();
+  const { recentSongs, featuredSongs, fetchRecentSongs, fetchFeaturedSongs } =
+    useHomePageProvider();
 
   return (
     <>
@@ -22,6 +24,7 @@ const HomePageComponent = () => {
         {featuredSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
+        <LoadMoreButton onClick={fetchFeaturedSongs} />
       </SongCardGroup>
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
@@ -34,6 +37,7 @@ const HomePageComponent = () => {
         {recentSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
+        <LoadMoreButton onClick={fetchRecentSongs} />
       </SongCardGroup>
     </>
   );
