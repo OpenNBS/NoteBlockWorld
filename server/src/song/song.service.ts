@@ -281,6 +281,7 @@ export class SongService {
       })
       .skip(options.limit * (options.page - 1))
       .limit(options.limit)
+      .populate('uploader', 'username profileImage -_id')
       .exec();
     return data.map((song) => SongPreviewDto.fromSongDocument(song));
   }

@@ -37,7 +37,7 @@ const SongCard = ({ song }: { song: SongPreview }) => {
         <div className='flex flex-row justify-between items-center px-4'>
           {/* Song author */}
           <p className='text-sm text-zinc-400'>
-            {song.uploader} • {song.createdAt.toLocaleString('en-US')}
+            {song.uploader.username} • {song.createdAt.toLocaleString('en-US')}
           </p>
           {/* Play icon & count */}
           <div className='text-md flex items-center gap-1'>

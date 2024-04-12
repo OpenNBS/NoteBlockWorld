@@ -29,7 +29,7 @@ export class Song {
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   updatedAt: Date;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'users' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'User' })
   uploader: Types.ObjectId;
 
   @Prop({ type: String, required: true })

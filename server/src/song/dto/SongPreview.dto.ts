@@ -8,16 +8,19 @@ import {
 
 import { SongDocument } from '../entity/song.entity';
 
+type SongPreviewUploader = {
+  username: string;
+  profileImage: string;
+};
+
 export class SongPreviewDto {
   @IsString()
   @IsNotEmpty()
   @IsUUID()
   publicId: string;
 
-  @IsString()
-  @MaxLength(64)
-  @IsUUID()
-  uploader?: string;
+  @IsNotEmpty()
+  uploader: SongPreviewUploader;
 
   @IsNotEmpty()
   @IsString()
@@ -63,7 +66,7 @@ export class SongPreviewDto {
   public static fromSongDocument(song: SongDocument): SongPreviewDto {
     return new SongPreviewDto({
       publicId: song.publicId,
-      uploader: song.uploader.toString(),
+      uploader: song.uploader as unknown as SongPreviewUploader,
       title: song.title,
       originalAuthor: song.originalAuthor,
       duration: song.duration,

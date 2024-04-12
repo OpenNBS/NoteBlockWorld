@@ -9,7 +9,10 @@ export type FeaturedTimespan =
 export type SongPreview = {
   publicId: string;
   title: string;
-  uploader: string;
+  uploader: {
+    username: string;
+    profileImage: string;
+  };
   duration: number;
   thumbnailUrl: string;
   createdAt: Date;
