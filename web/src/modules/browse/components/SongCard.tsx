@@ -13,9 +13,9 @@ import { SongPreview } from '../types';
 const SongCard = ({ song }: { song: SongPreview }) => {
   return (
     <Link href={`/song/${song.publicId}`}>
-      <div className='flex flex-col gap-2 pb-2 bg-zinc-800  hover:bg-zinc-700 rounded-lg hover:scale-105 cursor-pointer w-fit h-fit transition-all duration-200'>
+      <div className='flex flex-col gap-2 pb-2 bg-zinc-800  hover:bg-zinc-700 rounded-lg hover:scale-105 cursor-pointer w-full h-full transition-all duration-200'>
         {/* Song image */}
-        <div className='w-full object-cover rounded-lg relative'>
+        <div className='w-full aspect-[5/3] object-cover rounded-lg relative'>
           <Image
             src={song.thumbnailUrl || '/demo.png'}
             width={640}
