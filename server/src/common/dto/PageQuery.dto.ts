@@ -16,12 +16,12 @@ export class PageQuery {
     allowInfinity: false,
     maxDecimalPlaces: 0,
   })
-  @Min(1)
+  @Min(0)
   @ApiProperty({
     example: 10,
     description: 'skip', // TODO: fix descriptions
   })
-  skip: number;
+  skip: number = 0;
 
   @Min(1)
   @ApiProperty({
