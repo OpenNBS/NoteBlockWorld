@@ -58,7 +58,7 @@ export const HomePageProvider = ({
       const response = await axiosInstance.get('/song', {
         params: { sort: 'createdAt', skip: recentSongs.length, limit: 12 },
       });
-      setRecentSongs(response.data);
+      setRecentSongs([...recentSongs, ...response.data]);
     } catch (error) {
       setRecentError('Error loading recent songs');
     } finally {
