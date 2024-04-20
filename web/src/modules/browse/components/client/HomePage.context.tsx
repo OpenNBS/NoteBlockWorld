@@ -56,7 +56,7 @@ export const HomePageProvider = ({
     // setRecentLoading(true);
     try {
       const response = await axiosInstance.get('/song', {
-        params: { sort: 'createdAt', skip: recentSongs.length, limit: 8 },
+        params: { sort: 'createdAt', skip: recentSongs.length, limit: 12 },
       });
       setRecentSongs(response.data);
     } catch (error) {
@@ -74,7 +74,7 @@ export const HomePageProvider = ({
           sort: 'createdAt', // TODO: featured
           // TODO: featuredTimespan,
           skip: featuredSongs.length,
-          limit: 12,
+          limit: 8,
         },
       });
       setFeaturedSongs([...featuredSongs, ...response.data]);

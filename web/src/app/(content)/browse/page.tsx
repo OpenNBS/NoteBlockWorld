@@ -18,7 +18,7 @@ async function fetchRecentSongs(): Promise<SongPreview[]> {
 async function fetchFeaturedSongs(): Promise<SongPreview[]> {
   try {
     const response = await axiosInstance.get('/song', {
-      params: { sort: 'createdAt', limit: 8 }, // TODO: featured
+      params: { sort: 'createdAt', limit: 4 }, // TODO: featured
     });
     return response.data;
   } catch (error) {
