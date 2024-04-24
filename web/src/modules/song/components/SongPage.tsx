@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import axios from '@web/src/lib/axios';
 
 import SongDetails from './SongDetails';
@@ -16,7 +18,17 @@ export async function SongPage({ id }: { id: string }) {
   return (
     <div className='grid grid-cols-8 gap-12'>
       <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
-        <img src={song.thumbnailUrl} className='rounded-xl' />
+        {/* Song thumbnail */}
+        {/* TODO: implement loading https://github.com/vercel/next.js/discussions/50617 */}
+        <picture className='bg-zinc-800 aspect-[5/3] rounded-xl'>
+          <Image
+            width={1280}
+            height={720}
+            alt='Song thumbnail'
+            src={song.thumbnailUrl}
+            className='w-full h-full rounded-xl'
+          />
+        </picture>
 
         <h1 className='text-xl font-bold'>{song.title}</h1>
 
