@@ -302,6 +302,9 @@ export class SongService {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
     }
+    // increment view count
+    foundSong.playCount++;
+    await foundSong.save();
     return SongViewDto.fromSongDocument(foundSong);
   }
 
@@ -339,6 +342,9 @@ export class SongService {
         'song.nbs', // TODO: foundSong.filename
       );
       console.log(url);
+      // increment download count
+      foundSong.downloadCount++;
+      await foundSong.save();
       return url;
     } catch (e) {
       console.error('Error getting song file', e);
