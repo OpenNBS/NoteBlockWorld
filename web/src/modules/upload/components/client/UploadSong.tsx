@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { SongSelector } from './SongSelector';
 import { SongUploadForm } from './SongUploadForm';
+import UploadCompleteModal from './UploadCompleteModal';
 import {
   UploadSongProvider,
   useUploadSongProvider,
 } from './UploadSong.context';
 
 const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
-  const { song, filename } = useUploadSongProvider();
+  const { song, filename, isUploadComplete } = useUploadSongProvider();
   return (
     <>
       <div className='flex flex-row justify-between items-center gap-12'>
@@ -41,6 +42,7 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
       ) : (
         <SongUploadForm defaultAuthorName={defaultAuthorName} />
       )}
+      <UploadCompleteModal isOpen={isUploadComplete}></UploadCompleteModal>
     </>
   );
 };
