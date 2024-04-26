@@ -290,7 +290,10 @@ export class SongService {
     id: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
-    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
+    const foundSong = await this.songModel
+      .findOne({ publicId: id })
+      .populate('uploader', 'username profileImage -_id')
+      .exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }

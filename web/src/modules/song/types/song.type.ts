@@ -1,7 +1,12 @@
+export type SongPageViewUploader = {
+  username: string;
+  profileImage: string;
+};
+
 export type SongPageView = {
   // Auto-generated
   id: string;
-  uploader: string;
+  uploader: SongPageViewUploader;
   thumbnailUrl: string;
   downloadUrl: string;
   createdAt: Date;

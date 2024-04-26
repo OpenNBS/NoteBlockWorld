@@ -32,7 +32,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Author</SongDetailsCell>
-          <SongDetailsCell>{song.uploader}</SongDetailsCell>
+          <SongDetailsCell>{song.uploader.username}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Original author</SongDetailsCell>

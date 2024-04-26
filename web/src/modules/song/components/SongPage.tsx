@@ -34,7 +34,7 @@ export async function SongPage({ id }: { id: string }) {
 
         {/* Uploader and actions */}
         <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
-          <UploaderBadge />
+          <UploaderBadge user={song.uploader} />
           <FollowButton />
           <div className='flex-grow'></div>
           <div className='flex flex-row gap-4'>

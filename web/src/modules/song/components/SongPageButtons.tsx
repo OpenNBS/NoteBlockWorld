@@ -10,12 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import axios from '@web/src/lib/axios';
 
-const UploaderBadge = () => {
+import { SongPageViewUploader } from '../types/song.type';
+
+const UploaderBadge = ({ user }: { user: SongPageViewUploader }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
-      <img src={`/bentroen.png`} className='h-10 w-10 rounded-full' />
+      <img src={user.profileImage} className='h-10 w-10 rounded-full' />
       <div className='flex flex-col leading-tight h-full'>
-        <p className='font-bold'>Bentroen</p>
+        <p className='font-bold'>{user.username}</p>
         <p className='text-sm text-zinc-400'>410 followers</p>
       </div>
     </div>

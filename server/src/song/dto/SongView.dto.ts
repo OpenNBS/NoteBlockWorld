@@ -1,10 +1,15 @@
 import { SongDocument } from '../entity/song.entity';
 
+type SongViewUploader = {
+  username: string;
+  profileImage: string;
+};
+
 export class SongViewDto {
   id: string;
   createdAt: Date;
   editedAt: Date;
-  uploader: string;
+  uploader: SongViewUploader;
   playCount: number;
   downloadCount: number;
   likeCount: number;
@@ -28,10 +33,13 @@ export class SongViewDto {
 
   public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
-    return new SongViewDto({ ...data });
+    return new SongViewDto({
+      ...data,
+      uploader: song.uploader as unknown as SongViewUploader,
+    });
   }
 
-  constructor(song: Partial<SongDocument>) {
+  constructor(song: Partial<SongViewDto>) {
     Object.assign(this, song);
   }
 }
