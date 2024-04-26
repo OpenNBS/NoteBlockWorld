@@ -9,8 +9,15 @@ export const SongUploadForm = ({
 }: {
   defaultAuthorName: string;
 }) => {
-  const { formMethods, sendError, errors, register, submitSong, song } =
-    useUploadSongProvider();
+  const {
+    formMethods,
+    sendError,
+    errors,
+    register,
+    submitSong,
+    song,
+    isSubmitting,
+  } = useUploadSongProvider();
 
   return (
     <form
@@ -169,13 +176,24 @@ export const SongUploadForm = ({
 
         <div className='h-4'></div>
 
-        {/* Upload button */}
-        <button
-          type='submit'
-          className='w-32 ml-auto p-3 font-semibold bg-blue-500 hover:bg-blue-400 uppercase rounded-lg'
-        >
-          Upload
-        </button>
+        <div className='flex flex-row items-center justify-end gap-8'>
+          {/* Uploading label */}
+          {isSubmitting && (
+            <div className='flex flex-row items-center justify-center gap-2'>
+              <span className='loader'></span>
+              <p className='text-center'>Uploading song...</p>
+            </div>
+          )}
+
+          {/* Upload button */}
+          <button
+            type='submit'
+            className='w-32 p-3 font-semibold bg-blue-500 enabled:hover:bg-blue-400 uppercase rounded-lg disabled:opacity-50'
+            disabled={isSubmitting}
+          >
+            Upload
+          </button>
+        </div>
       </div>
     </form>
   );

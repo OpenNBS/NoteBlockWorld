@@ -27,6 +27,7 @@ type UploadSongContextType = {
   register: UseFormRegister<UploadSongForm>;
   errors: FieldErrors<UploadSongForm>;
   sendError: string | null;
+  isSubmitting: boolean;
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -42,6 +43,7 @@ export const UploadSongProvider = ({
   const [song, setSong] = useState<Song | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const [invalidFile, setInvalidFile] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
@@ -108,9 +110,12 @@ export const UploadSongProvider = ({
   const submitSong = async () => {
     console.log('submitting song');
     try {
+      setIsSubmitting(true);
       await submitSongData();
     } catch (e) {
       console.log(e); // TODO: handle error
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -157,6 +162,7 @@ export const UploadSongProvider = ({
         invalidFile,
         filename,
         setFile: setFileHandler,
+        isSubmitting,
       }}
     >
       {children}
