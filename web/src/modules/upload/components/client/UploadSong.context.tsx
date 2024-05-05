@@ -47,6 +47,7 @@ export const UploadSongProvider = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
+  const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
   });
@@ -95,8 +96,9 @@ export const UploadSongProvider = ({
       })
       .then((response) => {
         const data = response.data;
-        const id = data._id as string;
-        //router.push(`/my-songs?selectedSong=${id}`);
+        const id = data.publicId as string;
+        setUploadedSongId(id);
+        setIsUploadComplete(true);
       })
       .catch((error) => {
         console.error('Error submitting song', error);
