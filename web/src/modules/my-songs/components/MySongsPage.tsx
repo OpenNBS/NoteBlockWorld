@@ -10,15 +10,26 @@ async function fetchSongsPage(
   pageSize: number,
   token: string,
 ): Promise<SongsPage> {
-  const response = await axiosInstance.get(
-    `/my-songs?page=${page}&limit=${pageSize}&sort=createdAt&order=false`,
-    {
+  const response = await axiosInstance
+    .get('/my-songs', {
       headers: {
         authorization: `Bearer ${token}`,
       },
-    },
-  );
-  return response.data as SongsPage;
+      params: {
+        page: page,
+        limit: pageSize,
+        sort: 'createdAt',
+        order: false,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.error('Error fetching songs', error);
+      return error;
+    });
+  return response;
 }
 
 async function fetchSongsFolder(): Promise<SongsFolder> {
