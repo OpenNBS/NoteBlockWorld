@@ -16,7 +16,7 @@ async function fetchSongsPage(
         authorization: `Bearer ${token}`,
       },
       params: {
-        page: page,
+        page: page + 1,
         limit: pageSize,
         sort: 'createdAt',
         order: false,
