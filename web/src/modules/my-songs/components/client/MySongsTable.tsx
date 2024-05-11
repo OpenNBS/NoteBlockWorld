@@ -1,5 +1,10 @@
 'use client';
-import { useEffect } from 'react';
+
+import {
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { SongRow } from './SongRow';
 import { SongsPage } from '../../types';
@@ -23,16 +28,18 @@ const MySongsTablePaginator = () => {
       <button
         onClick={prevpage}
         className='disabled:opacity-50 disabled:cursor-not-allowed'
-        disabled={currentPage === 0}
+        disabled={currentPage === 1}
+        aria-label='Previous page'
       >
-        Previous
+        <FontAwesomeIcon icon={faChevronLeft} />
       </button>
       <button
         onClick={nextpage}
         className='disabled:opacity-50 disabled:cursor-not-allowed'
         disabled={currentPage === totalPages}
+        aria-label='Next page'
       >
-        Next
+        <FontAwesomeIcon icon={faChevronRight} />
       </button>
       <div className='w-10'></div>
       <div className='flex items-center justify-center gap-4 h-12'>
@@ -53,10 +60,6 @@ const MySongsTablePaginator = () => {
 
 export const MySongsTable = () => {
   const { page } = useMySongsProvider();
-
-  useEffect(() => {
-    console.log('page', page);
-  }, [page]);
 
   return (
     <div className='min-w-full h-full text-md text-center text-nowrap text-ellipsis border-separate border-spacing-0'>
