@@ -47,25 +47,10 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     console.log('fetching songs');
     const firstPage = await fetchSongsPage(currentPage, pageSize, token.value);
 
-    // if there is a next page
-    if (firstPage.total > pageSize) {
-      currentPage++;
-      const secondPage = await fetchSongsPage(
-        currentPage,
-        pageSize,
-        token.value,
-      );
-      const data = {
-        [0]: firstPage,
-        [1]: secondPage,
-      } as SongsFolder;
-      return data;
-    } else {
-      const data = {
-        [currentPage]: firstPage,
-      };
-      return data;
-    }
+    const data = {
+      [currentPage]: firstPage,
+    };
+    return data;
   } catch (error: unknown) {
     console.error('Error fetching songs', error);
     return {};
