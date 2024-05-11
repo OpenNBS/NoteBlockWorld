@@ -1,7 +1,6 @@
-import '@web/src/app/globals.css';
 import '@web/src/app/enableRecaptchaBadge.css';
 
-export default async function LoginLayout({
+export default async function UploadLayout({
   children,
 }: {
   children: React.ReactNode;

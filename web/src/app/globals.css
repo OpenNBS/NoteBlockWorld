@@ -125,3 +125,11 @@ body {
       transform: rotate(360deg);
   }
 }
+
+/************** Google reCAPTCHA badge **************/
+
+.grecaptcha-badge { 
+  visibility: hidden;
+  position: fixed;
+  bottom: 100px !important;
+}
