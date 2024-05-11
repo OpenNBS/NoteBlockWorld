@@ -63,7 +63,7 @@ export default function UploadCompleteModal({
                   as='h3'
                   className='text-2xl font-semibold leading-6 text-white mb-5'
                 >
-                  Upload complete!
+                  Upload complete! 🎉
                 </Dialog.Title>
 
                 <p className='text-md text-white mb-2'>
