@@ -18,8 +18,10 @@ type MySongsContextType = {
   nextpage: () => void;
   prevpage: () => void;
   gotoPage: (page: number) => void;
+  totalSongs: number;
   totalPages: number;
   currentPage: number;
+  pageSize: number;
   isLoading: boolean;
   error: string | null;
 };
@@ -45,6 +47,7 @@ export const MySongProvider = ({
 }: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
+  const [totalSongs, setTotalSongs] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(totalPagesInit);
   const [currentPage, setCurrentPage] = useState<number>(currentPageInit);
   // eslint-disable-next-line no-unused-vars
@@ -74,6 +77,7 @@ export const MySongProvider = ({
         key: currentPage,
         page: data,
       });
+      setTotalSongs(data.total);
       setTotalPages(Math.ceil(data.total / pageSize));
       setPage(data);
     } catch (error: unknown) {
@@ -132,8 +136,10 @@ export const MySongProvider = ({
         nextpage,
         prevpage,
         gotoPage,
+        totalSongs,
         totalPages,
         currentPage,
+        pageSize,
         isLoading,
         error,
       }}

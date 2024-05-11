@@ -39,6 +39,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
   const token = getTokenServer();
   // if token is null, redirect to home page
 
+  // if token is null, redirect to home page
   if (!token) return {};
   if (!token.value) return {};
 

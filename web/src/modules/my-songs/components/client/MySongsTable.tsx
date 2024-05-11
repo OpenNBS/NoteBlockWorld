@@ -20,11 +20,15 @@ const SongRows = ({ page }: { page: SongsPage }) => {
 };
 
 const MySongsTablePaginator = () => {
-  const { nextpage, prevpage, gotoPage, totalPages, currentPage } =
+  const { nextpage, prevpage, totalSongs, totalPages, currentPage, pageSize } =
     useMySongsProvider();
 
+  const start = currentPage * pageSize - pageSize + 1;
+  const end = Math.min(currentPage * pageSize, totalSongs);
+  const total = totalSongs;
+
   return (
-    <div className='flex items-center justify-center gap-4 h-12'>
+    <div className='flex items-center justify-center gap-6 h-12'>
       <button
         onClick={prevpage}
         className='disabled:opacity-50 disabled:cursor-not-allowed'
@@ -33,6 +37,9 @@ const MySongsTablePaginator = () => {
       >
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
+      <span className='min-w-24'>
+        {start} – {end} of {total}
+      </span>
       <button
         onClick={nextpage}
         className='disabled:opacity-50 disabled:cursor-not-allowed'
@@ -41,19 +48,6 @@ const MySongsTablePaginator = () => {
       >
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
-      <div className='w-10'></div>
-      <div className='flex items-center justify-center gap-4 h-12'>
-        <label htmlFor='page' className='text-zinc-400'>
-          Page
-        </label>
-        <input
-          type='number'
-          value={currentPage}
-          onChange={(e) => gotoPage(Number(e.target.value))}
-          className={`block w-8 rounded-lg bg-transparent border-2 border-zinc-500 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 `}
-        />
-        <span className='text-zinc-400'>{`of ${totalPages}`}</span>
-      </div>
     </div>
   );
 };
