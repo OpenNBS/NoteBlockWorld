@@ -111,11 +111,11 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
 
       {/* Actions */}
       <div>
-        <div className='flex flex-col items-center justify-center gap-3 text-xl'>
+        <div className='flex flex-row items-center justify-center text-xl'>
           {/* TODO: add popups/tooltips */}
           <DownloadButton songId={song.publicId} />
           <EditButton songId={song.publicId} />
-          <DeleteButton songId={song.publicId} />
+          <DeleteButton onClick={() => {}} />
         </div>
       </div>
     </article>
