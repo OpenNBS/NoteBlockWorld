@@ -5,9 +5,9 @@ import { SongRow } from './SongRow';
 import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
 
-const Loading = () => <div>Loading...</div>; // TODO: replace with loading skeleton
+const Loading = () => <p>Loading...</p>; // TODO: replace with loading skeleton
 
-const NoSongs = () => <div>You haven&apos;t uploaded any song yet!</div>;
+const NoSongs = () => <p>{"You haven't uploaded any song yet!"}</p>;
 
 const SongRows = ({ page }: { page: SongsPage }) => {
   const { content } = page;
