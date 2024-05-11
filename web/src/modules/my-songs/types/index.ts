@@ -7,7 +7,7 @@ export type MySongsSongDTO = {
   originalAuthor: string;
   duration: number;
   noteCount: number;
-  coverImageUrl: string;
+  thumbnailUrl: string;
   createdAt: Date;
   updatedAt: Date;
   playCount: number;

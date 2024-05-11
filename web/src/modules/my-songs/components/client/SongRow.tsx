@@ -6,6 +6,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
+
 import { MySongsSongDTO } from '../../types';
 import {
   DeleteButton,
@@ -38,10 +40,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       {/* Thumbnail */}
       <div className='col-span-1'>
         <div className='aspect-video my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative'>
-          <img
-            src='/demo.png'
-            className='w-full h-full object-cover rounded-lg'
-          />
+          <SongThumbnail src={song.thumbnailUrl} />
           <div className='absolute bottom-0 right-0 m-1.5 px-1 py-0.5 bg-zinc-900/80 rounded-md'>
             <span className='text-white font-semibold text-md'>
               {song.duration}
