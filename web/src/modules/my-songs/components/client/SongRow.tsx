@@ -5,6 +5,7 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 
 import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/src/modules/shared/util/format';
@@ -36,7 +37,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
   return (
     <article
       className='grid grid-cols-8 border border-zinc-700 border-t-0 last:border-b-0 hover:bg-zinc-950/50 transition-colors duration-150 [&>div]:p-2 [&>div]:my-auto'
-      key={song.id}
+      key={song.publicId}
     >
       {/* Thumbnail */}
       <div className='col-span-1'>
@@ -47,21 +48,27 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
               {formatDuration(song.duration)}
             </span>
           </div>
-          <div className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'>
+          <Link
+            href={`/song/${song.publicId}`}
+            className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'
+          >
             <FontAwesomeIcon
               icon={faCirclePlay}
               className='text-white w-12 h-12'
             />
-          </div>
+          </Link>
         </div>
       </div>
 
       {/* Song */}
       <div className='col-span-3 text-wrap'>
         <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
-          <span className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'>
+          <Link
+            href={`/song/${song.publicId}`}
+            className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'
+          >
             {song.title}
-          </span>
+          </Link>
           <p
             className={`line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400 ${
               !song.description && 'italic'
@@ -106,9 +113,9 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       <div>
         <div className='flex flex-col items-center justify-center gap-3 text-xl'>
           {/* TODO: add popups/tooltips */}
-          <DownloadButton songId={song.id} />
-          <EditButton songId={song.id} />
-          <DeleteButton songId={song.id} />
+          <DownloadButton songId={song.publicId} />
+          <EditButton songId={song.publicId} />
+          <DeleteButton songId={song.publicId} />
         </div>
       </div>
     </article>

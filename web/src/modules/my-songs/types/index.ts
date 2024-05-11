@@ -1,5 +1,5 @@
 export type MySongsSongDTO = {
-  id: string;
+  publicId: string;
   description: string;
   visibility: 'public' | 'private';
   uploader?: string;
