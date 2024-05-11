@@ -10,6 +10,7 @@ import Link from 'next/link';
 import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
+import { useMySongsProvider } from './MySongs.context';
 import { MySongsSongDTO } from '../../types';
 import {
   DeleteButton,
@@ -22,6 +23,13 @@ const TableCell = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
+  const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
+
+  const onDeleteClicked = () => {
+    setSongToDelete(song);
+    setIsDeleteDialogOpen(true);
+  };
+
   const getDescription = (description: string | null) => {
     const maxDisplayLength = 50;
     if (description) {
@@ -115,7 +123,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
           {/* TODO: add popups/tooltips */}
           <DownloadButton songId={song.publicId} />
           <EditButton songId={song.publicId} />
-          <DeleteButton onClick={() => {}} />
+          <DeleteButton onClick={onDeleteClicked} />
         </div>
       </div>
     </article>

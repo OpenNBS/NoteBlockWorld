@@ -11,7 +11,7 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
-import { SongsFolder, SongsPage } from '../../types';
+import { MySongsSongDTO, SongsFolder, SongsPage } from '../../types';
 
 type MySongsContextType = {
   page: SongsPage | null;
@@ -24,6 +24,11 @@ type MySongsContextType = {
   pageSize: number;
   isLoading: boolean;
   error: string | null;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: (isOpen: boolean) => void;
+  songToDelete: MySongsSongDTO | null;
+  setSongToDelete: (song: MySongsSongDTO) => void;
+  deleteSong: () => void;
 };
 
 const MySongsContext = createContext<MySongsContextType>(
@@ -55,6 +60,8 @@ export const MySongProvider = ({
   const [page, setPage] = useState<SongsPage | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [songToDelete, setSongToDelete] = useState<MySongsSongDTO | null>(null);
 
   const putPage = async ({ key, page }: { key: number; page: SongsPage }) => {
     setLoadedSongs({ ...loadedSongs, [key]: page });
@@ -129,6 +136,30 @@ export const MySongProvider = ({
     }
   }, [currentPage, gotoPage]);
 
+  const deleteSong = useCallback(async () => {
+    if (!songToDelete) {
+      return;
+    }
+    const token = getTokenLocal();
+    try {
+      await axiosInstance.delete(`/song/${songToDelete.publicId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      setIsDeleteDialogOpen(false);
+      setSongToDelete(null);
+      await fetchSongsPage();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+      if (error instanceof Response) {
+        setError(error.statusText);
+      }
+    }
+  }, [songToDelete, fetchSongsPage]);
+
   return (
     <MySongsContext.Provider
       value={{
@@ -142,6 +173,11 @@ export const MySongProvider = ({
         pageSize,
         isLoading,
         error,
+        isDeleteDialogOpen,
+        setIsDeleteDialogOpen,
+        songToDelete,
+        setSongToDelete,
+        deleteSong,
       }}
     >
       {children}

@@ -6,6 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
 import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
@@ -16,7 +17,7 @@ const NoSongs = () => <p>{"You haven't uploaded any song yet!"}</p>;
 
 const SongRows = ({ page }: { page: SongsPage }) => {
   const { content } = page;
-  return content.map((song) => <SongRow key={song.id} song={song} />);
+  return content.map((song) => <SongRow key={song.publicId} song={song} />);
 };
 
 const MySongsTablePaginator = () => {
@@ -78,17 +79,34 @@ export const MySongsTable = () => {
 };
 
 export const MySongsPageComponent = () => {
-  const { error, page, isLoading } = useMySongsProvider();
+  const {
+    error,
+    page,
+    isLoading,
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+    songToDelete,
+    deleteSong,
+  } = useMySongsProvider();
 
   return (
-    <section className='flex flex-col h-full gap-12 justify-between w-full transition-all'>
-      <h1 className='text-3xl font-semibold flex-1 pt-8'>My songs</h1>
-      {error && (
-        <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
-      )}
-      <div className='flex flex-col gap-12 w-full'>
-        {isLoading ? <Loading /> : page ? <MySongsTable /> : <NoSongs />}
-      </div>
-    </section>
+    <>
+      <DeleteConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        setIsOpen={setIsDeleteDialogOpen}
+        songId={songToDelete?.publicId || ''}
+        songTitle={songToDelete?.title || ''}
+        onConfirm={deleteSong}
+      />
+      <section className='flex flex-col h-full gap-12 justify-between w-full transition-all'>
+        <h1 className='text-3xl font-semibold flex-1 pt-8'>My songs</h1>
+        {error && (
+          <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
+        )}
+        <div className='flex flex-col gap-12 w-full'>
+          {isLoading ? <Loading /> : page ? <MySongsTable /> : <NoSongs />}
+        </div>
+      </section>
+    </>
   );
 };
