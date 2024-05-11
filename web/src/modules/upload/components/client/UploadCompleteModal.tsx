@@ -82,7 +82,11 @@ export default function UploadCompleteModal({
                   <button
                     type='button'
                     className='rounded-md h-full px-2 text-nowrap bg-zinc-700 text-white hover:bg-zinc-600'
-                    onClick={() => {}}
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `https://noteblock.world/song/${songId}`,
+                      )
+                    }
                   >
                     Copy
                   </button>
