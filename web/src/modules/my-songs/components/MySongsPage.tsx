@@ -33,11 +33,11 @@ async function fetchSongsPage(
 }
 
 async function fetchSongsFolder(): Promise<SongsFolder> {
-  let currentPage = 0;
-  const pageSize = 20;
+  const currentPage = 0;
+  const pageSize = 10;
+
   // get token from cookies
   const token = getTokenServer();
-  // if token is null, redirect to home page
 
   // if token is null, redirect to home page
   if (!token) return {};
@@ -75,6 +75,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
 async function MySongsPage() {
   const InitialsongsFolder: SongsFolder = await fetchSongsFolder(); // TODO: this breaks the provider pagination state
   console.log('InitialsongsFolder', InitialsongsFolder);
+  const pageSizeInit = 10;
   let totalPagesInit = 0;
   let currentPageInit = 0;
   if (InitialsongsFolder[0]) {
@@ -83,9 +84,9 @@ async function MySongsPage() {
   }
   return (
     <MySongProvider
-      totalPagesInit={Math.ceil(totalPagesInit / 20)}
+      totalPagesInit={Math.ceil(totalPagesInit / pageSizeInit)}
       currentPageInit={currentPageInit}
-      pageSizeInit={20}
+      pageSizeInit={pageSizeInit}
       InitialsongsFolder={InitialsongsFolder}
     >
       <MySongsPageComponent />

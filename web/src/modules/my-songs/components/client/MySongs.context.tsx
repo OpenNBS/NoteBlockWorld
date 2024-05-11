@@ -43,7 +43,7 @@ export const MySongProvider = ({
   children,
   totalPagesInit = 0,
   currentPageInit = 0,
-  pageSizeInit = 20,
+  pageSizeInit = 10,
 }: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
