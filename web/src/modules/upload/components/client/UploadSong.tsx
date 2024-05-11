@@ -12,7 +12,9 @@ import {
 } from './UploadSong.context';
 
 const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
-  const { song, filename, isUploadComplete, songId } = useUploadSongProvider();
+  const { song, filename, isUploadComplete, uploadedSongId } =
+    useUploadSongProvider();
+
   return (
     <>
       <div className='flex flex-row justify-between items-center gap-12'>
@@ -44,7 +46,7 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
       )}
       <UploadCompleteModal
         isOpen={isUploadComplete}
-        songId={songId}
+        songId={uploadedSongId}
       ></UploadCompleteModal>
     </>
   );

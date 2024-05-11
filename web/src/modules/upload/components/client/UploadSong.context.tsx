@@ -29,6 +29,7 @@ type UploadSongContextType = {
   sendError: string | null;
   isSubmitting: boolean;
   isUploadComplete: boolean;
+  uploadedSongId: string | null;
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -169,6 +170,7 @@ export const UploadSongProvider = ({
         setFile: setFileHandler,
         isSubmitting,
         isUploadComplete,
+        uploadedSongId,
       }}
     >
       {children}
