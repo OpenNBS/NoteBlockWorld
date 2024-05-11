@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
+import { formatDuration } from '@web/src/modules/shared/util/format';
 
 import { MySongsSongDTO } from '../../types';
 import {
@@ -43,7 +44,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
           <SongThumbnail src={song.thumbnailUrl} />
           <div className='absolute bottom-0 right-0 m-1.5 px-1 py-0.5 bg-zinc-900/80 rounded-md'>
             <span className='text-white font-semibold text-md'>
-              {song.duration}
+              {formatDuration(song.duration)}
             </span>
           </div>
           <div className='flex items-center justify-center absolute bottom-0 right-0 top-0 left-0 rounded-lg bg-black opacity-0 hover:opacity-40 cursor-pointer transition-all duration-200'>
