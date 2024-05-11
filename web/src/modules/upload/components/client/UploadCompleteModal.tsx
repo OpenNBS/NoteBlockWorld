@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import JSConfetti from 'js-confetti';
 import Link from 'next/link';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export default function UploadCompleteModal({
   isOpen,
@@ -10,6 +10,8 @@ export default function UploadCompleteModal({
   isOpen: boolean;
   songId: string;
 }) {
+  const [isCopied, setIsCopied] = useState(false);
+
   useEffect(() => {
     // Confetti
     const canvas = document.getElementById('confetti') as HTMLCanvasElement;
@@ -29,6 +31,14 @@ export default function UploadCompleteModal({
       ],
     });
   }, []);
+
+  const handleCopy = () => () => {
+    navigator.clipboard.writeText(`https://noteblock.world/song/${songId}`);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
 
   return (
     <Transition appear show={isOpen || true} as={Fragment}>
@@ -81,14 +91,11 @@ export default function UploadCompleteModal({
                   {/* Copy button */}
                   <button
                     type='button'
-                    className='rounded-md h-full px-2 text-nowrap bg-zinc-700 text-white hover:bg-zinc-600'
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        `https://noteblock.world/song/${songId}`,
-                      )
-                    }
+                    disabled={isCopied}
+                    className='rounded-md h-full px-2 w-[4.25rem] text-nowrap bg-zinc-700 text-white enabled:hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-default disabled:text-xs'
+                    onClick={handleCopy()}
                   >
-                    Copy
+                    {isCopied ? 'Copied!' : 'Copy'}
                   </button>
                 </div>
 
