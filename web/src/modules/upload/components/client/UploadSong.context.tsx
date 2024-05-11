@@ -3,6 +3,7 @@
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useReCaptcha } from 'next-recaptcha-v3';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -49,6 +50,7 @@ export const UploadSongProvider = ({
   const [sendError, setSendError] = useState<string | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
+
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
   });
@@ -57,7 +59,15 @@ export const UploadSongProvider = ({
     formState: { errors },
   } = formMethods;
 
+  const { executeReCaptcha } = useReCaptcha();
+
   const submitSongData = async (): Promise<void> => {
+    // Generate ReCaptcha token
+    const reCaptchaToken = await executeReCaptcha('upload_song');
+    if (!reCaptchaToken) {
+      throw new Error('ReCaptcha token not found');
+    }
+
     // Get song file from state
     setSendError(null);
     if (!song) {
@@ -83,6 +93,7 @@ export const UploadSongProvider = ({
       'customInstruments',
       JSON.stringify(formValues.customInstruments),
     );
+    formData.append('token', reCaptchaToken);
 
     // Get authorization token from local storage
     const token = getTokenLocal();
@@ -113,7 +124,6 @@ export const UploadSongProvider = ({
   };
 
   const submitSong = async () => {
-    console.log('submitting song');
     try {
       setIsSubmitting(true);
       await submitSongData();

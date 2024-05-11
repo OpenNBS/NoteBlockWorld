@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
+import { ReCaptchaProvider } from 'next-recaptcha-v3';
 import NextTopLoader from 'nextjs-toploader';
 
 const lato = Lato({
@@ -19,17 +20,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className='min-h-screen'>
-      <body className={lato.className + ' min-h-screen bg-zinc-900 text-white'}>
-        <NextTopLoader
-          showSpinner={false}
-          crawlSpeed={700}
-          speed={700}
-          easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
-          height={3}
-        />
-        {children}
-      </body>
-    </html>
+    <ReCaptchaProvider useEnterprise>
+      <html lang='en' className='min-h-screen'>
+        <body
+          className={lato.className + ' min-h-screen bg-zinc-900 text-white'}
+        >
+          <NextTopLoader
+            showSpinner={false}
+            crawlSpeed={700}
+            speed={700}
+            easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
+            height={3}
+          />
+          {children}
+        </body>
+      </html>
+    </ReCaptchaProvider>
   );
 }
