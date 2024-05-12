@@ -30,7 +30,7 @@ type UploadSongContextType = {
   sendError: string | null;
   isSubmitting: boolean;
   isUploadComplete: boolean;
-  uploadedSongId: string;
+  uploadedSongId: string | null;
 };
 
 const UploadSongContext = createContext<UploadSongContextType>(
@@ -49,7 +49,7 @@ export const UploadSongProvider = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
-  const [uploadedSongId, setUploadedSongId] = useState<string>('');
+  const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
 
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),

@@ -44,10 +44,13 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
       ) : (
         <SongUploadForm defaultAuthorName={defaultAuthorName} />
       )}
-      <UploadCompleteModal
-        isOpen={isUploadComplete}
-        songId={uploadedSongId}
-      ></UploadCompleteModal>
+
+      {uploadedSongId && (
+        <UploadCompleteModal
+          isOpen={isUploadComplete}
+          songId={uploadedSongId}
+        />
+      )}
     </>
   );
 };
