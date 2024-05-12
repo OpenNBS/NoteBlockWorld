@@ -33,7 +33,9 @@ export default function UploadCompleteModal({
   }, []);
 
   const handleCopy = () => () => {
-    navigator.clipboard.writeText(`https://noteblock.world/song/${songId}`);
+    navigator.clipboard.writeText(
+      `${process.env.NEXT_PUBLIC_URL}/song/${songId}`,
+    );
     setIsCopied(true);
     setTimeout(() => {
       setIsCopied(false);
@@ -84,7 +86,7 @@ export default function UploadCompleteModal({
                   {/* Link box */}
                   <input
                     className='box-border h-full w-full text-sm p-2 outline outline-1 outline-zinc-600 bg-zinc-900 text-zinc-400 resize-none'
-                    value={`https://noteblock.world/song/${songId}`}
+                    value={`${process.env.NEXT_PUBLIC_URL}/song/${songId}`}
                     disabled
                   />
 
