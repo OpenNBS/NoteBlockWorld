@@ -19,8 +19,8 @@ const FooterIcon = ({ icon, href }: { href: string; icon: IconDefinition }) => (
 
 export function Footer() {
   return (
-    <footer className='flex items-center justify-center w-full h-14 px-6 sm:px-10 py-2 z-10 border-t border-zinc-700 text-sm text-zinc-400'>
-      <div className='flex-1 flex flex-row justify-around items-center max-w-screen-xl'>
+    <footer className='flex items-center justify-center w-full h-fit min-h-12 px-6 sm:px-10 py-4 z-10 border-t border-zinc-700 text-sm text-zinc-400'>
+      <div className='flex-1 flex flex-col sm:flex-row gap-2 justify-around items-center max-w-screen-xl'>
         {/* Social links */}
         <div className='flex-grow flex flex-row gap-2'>
           <FooterIcon icon={faTwitter} href='https://twitter.com/OpenNBS' />
