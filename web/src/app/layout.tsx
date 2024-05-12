@@ -3,6 +3,7 @@ import { Lato } from 'next/font/google';
 import './globals.css';
 import { ReCaptchaProvider } from 'next-recaptcha-v3';
 import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from 'react-hot-toast';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -31,6 +32,10 @@ export default function RootLayout({
             speed={700}
             easing='cubic-bezier(0.16, 1, 0.3, 1)' // easeOutExpo
             height={3}
+          />
+          <Toaster
+            position='bottom-right'
+            toastOptions={{ className: '!bg-zinc-700 !text-white' }}
           />
           {children}
         </body>

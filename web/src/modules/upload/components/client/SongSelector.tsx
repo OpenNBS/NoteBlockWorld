@@ -2,6 +2,7 @@ import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import toast from 'react-hot-toast';
 
 import { useUploadSongProvider } from './UploadSong.context';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
@@ -29,6 +30,11 @@ export const SongSelector = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleFileDrop,
+    onDropRejected: () => {
+      toast.error("Oops! This doesn't look like a valid NBS file.", {
+        position: 'bottom-center',
+      });
+    },
     accept: {
       'application/octet-stream': ['.nbs'],
     },
