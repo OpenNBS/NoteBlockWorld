@@ -28,17 +28,17 @@ export async function Header() {
       <nav className='w-full flex flex-row justify-between items-center max-w-screen-xl'>
         {/* Logo */}
 
-        <h1 className='flex-1 text-lg text-nowrap'>
+        <h1 className='hidden sm:block flex-1 text-lg text-nowrap'>
           <Link href='/'>Note Block World</Link>
         </h1>
-        <div className='flex-grow flex justify-center'>
+        <div className='flex-grow flex justify-start sm:justify-center min-w-fit'>
           <Link href='/'>
             <Image
               src='/nbw-white.png'
               alt='NoteBlockWorld logo'
-              className='h-10 mx-auto my-2 hover:animate-[bounce2_1s_infinite] duration-100'
+              className='h-10 mx-auto my-2 aspect-square hover:animate-[bounce2_1s_infinite] duration-100 drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)]'
               width={40}
-              height={50}
+              height={40}
             />
           </Link>
         </div>
