@@ -6,5 +6,15 @@ export default async function LoginLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <div
+        className="fixed z-[-1] w-full h-full bg-center bg-repeat grayscale before:content-[''] before:absolute before:w-full before:h-full before:bg-gradient-to-b before:from-black/20 before:to-black/80"
+        style={{
+          backgroundImage: "url('/background-tile.png')",
+        }}
+      ></div>
+      {children}
+    </>
+  );
 }

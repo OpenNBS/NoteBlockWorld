@@ -28,7 +28,7 @@ const signIn = (provider: AuthProvider) => {
 
 export const LoginPage = () => {
   return (
-    <main className='w-screen h-screen p-6 text-center text-balance bg-zinc-900 flex items-center justify-center'>
+    <main className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'>
       <div className='flex flex-col gap-4 bg-zinc-800 w-[480px] rounded-xl p-10'>
         <div>
           <h2 className='text-4xl mb-2'>Sign in</h2>
