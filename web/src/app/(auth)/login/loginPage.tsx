@@ -32,7 +32,7 @@ export const LoginPage = () => {
     <main className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'>
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-800 w-fit rounded-xl p-10'>
         {/* Left half */}
-        <div className='flex flex-row sm:flex-col items-center justify-center gap-2 mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem]'>
+        <div className='flex flex-row sm:flex-col items-center justify-center gap-2 mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem] animate-[nbw-glow_3s_ease-in-out_infinite]'>
           <Image
             src='/nbw-color.png'
             alt='Note Block World logo'
