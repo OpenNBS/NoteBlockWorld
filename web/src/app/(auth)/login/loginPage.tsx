@@ -32,17 +32,21 @@ export const LoginPage = () => {
     <main className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'>
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-800 w-fit rounded-xl p-10'>
         {/* Left half */}
-        <div className='flex flex-row sm:flex-col items-center justify-center gap-2'>
+        <div className='flex flex-row sm:flex-col items-center justify-center gap-2 mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem]'>
           <Image
             src='/nbw-color.png'
             alt='Note Block World logo'
-            className='w-[64px] sm:w-[128px]'
+            className='w-[100px] sm:w-[128px]'
             width={150}
             height={150}
           />
-          <h1 className='text-2xl whitespace-break-spaces w-min font-light text-left sm:text-center leading-none'>
-            Note Block World
-          </h1>
+          <Image
+            src='/nbw-logo.png'
+            width={150}
+            height={100}
+            alt=''
+            className='relative right-8 sm:right-0 sm:bottom-10 resize-none min-w-[150px] max-w-[150px]'
+          />
         </div>
 
         {/* Vertical divider (mobile) */}
@@ -51,7 +55,7 @@ export const LoginPage = () => {
         <div className='h-[1px] min-w-full block sm:hidden bg-zinc-600'></div>
 
         {/* Right half */}
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col justify-center gap-4'>
           <div className='flex flex-col'>
             <h2 className='text-4xl mb-2'>Sign in</h2>
             <p>to discover, share and listen to note block music</p>
