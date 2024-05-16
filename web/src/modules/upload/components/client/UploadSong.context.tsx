@@ -51,7 +51,8 @@ export const UploadSongProvider = ({
   const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
 
   const formMethods = useForm<UploadSongForm>({
-    resolver: zodResolver(uploadSongFormSchema),
+    resolver: zodResolver(SongFormSchema),
+    mode: 'onBlur',
   });
   const {
     register,
