@@ -11,7 +11,21 @@ import { SongRow } from './SongRow';
 import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
 
-const Loading = () => <p>Loading...</p>; // TODO: replace with loading skeleton
+const Loading = ({ pageSize }: { pageSize: number }) => {
+  return (
+    <div className='grid grid-cols-8 gap-2 *:h-10'>
+      {Array.from({ length: pageSize }).map((_, i) => (
+        <>
+          <div className='col-span-4'>Song</div>
+          <div>Visibility</div>
+          <div>Created at</div>
+          <div>Play count</div>
+          <div>Actions</div>
+        </>
+      ))}
+    </div>
+  );
+};
 
 const NoSongs = () => <p>{"You haven't uploaded any song yet!"}</p>;
 
@@ -54,7 +68,7 @@ const MySongsTablePaginator = () => {
 };
 
 export const MySongsTable = () => {
-  const { page } = useMySongsProvider();
+  const { page, pageSize, isLoading } = useMySongsProvider();
 
   return (
     <div className='min-w-full h-full text-md text-center text-nowrap text-ellipsis border-separate border-spacing-0'>
@@ -68,7 +82,11 @@ export const MySongsTable = () => {
       </div>
 
       {/* Content */}
-      {page && <SongRows page={page} />}
+      {isLoading ? (
+        <Loading pageSize={pageSize} />
+      ) : (
+        page && <SongRows page={page} />
+      )}
 
       {/* Footer (pagination) */}
       <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
@@ -82,7 +100,6 @@ export const MySongsPageComponent = () => {
   const {
     error,
     page,
-    isLoading,
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
     songToDelete,
@@ -104,7 +121,7 @@ export const MySongsPageComponent = () => {
           <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
         )}
         <div className='flex flex-col gap-12 w-full'>
-          {isLoading ? <Loading /> : page ? <MySongsTable /> : <NoSongs />}
+          {page ? <MySongsTable /> : <NoSongs />}
         </div>
       </section>
     </>
