@@ -85,6 +85,22 @@ export const LoginPage = () => {
               <span className='flex-1'>Login with GitHub</span>
             </Link>
           </div>
+
+          <p className='text-xs whitespace-normal w-3/4 text-zinc-400'>
+            By signing in, you agree to our{' '}
+            <Link className='text-blue-400 hover:underline' href='/terms'>
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link className='text-blue-400 hover:underline' href='/privacy'>
+              Privacy Policy
+            </Link>
+            . Oh, and be sure to check our{' '}
+            <Link className='text-blue-400 hover:underline' href='/guidelines'>
+              Community Guidelines
+            </Link>
+            , too!
+          </p>
         </div>
       </div>
     </main>
