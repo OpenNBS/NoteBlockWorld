@@ -43,7 +43,7 @@ export default function UploadCompleteModal({
   };
 
   return (
-    <Transition appear show={isOpen || true} as={Fragment}>
+    <Transition appear show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={() => {}}>
         <Transition.Child
           as={Fragment}
