@@ -150,7 +150,7 @@ function getKeyText(key: number): string {
 function getLuma(color: string): number {
   // source: https://stackoverflow.com/a/12043228/9045426
 
-  const c = color.substring(1); // strip #
+  const c = color?.substring(1) || ''; // strip #
   const rgb = parseInt(c, 16); // convert rrggbb to decimal
   const r = (rgb >> 16) & 0xff; // extract red
   const g = (rgb >> 8) & 0xff; // extract green
