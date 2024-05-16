@@ -1,13 +1,13 @@
 import { z as zod } from 'zod';
 
-const coverDataSchema = zod.object({
+export const coverDataSchema = zod.object({
   zoomLevel: zod.number().int().min(1).max(5),
   startTick: zod.number().int().min(0),
   startLayer: zod.number().int().min(0),
   backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
 });
 
-export const uploadSongFormSchema = zod.object({
+const SongFormSchema = zod.object({
   allowDownload: zod.boolean(),
   visibility: zod.union([zod.literal('public'), zod.literal('private')]),
   title: zod
@@ -47,3 +47,13 @@ export const uploadSongFormSchema = zod.object({
     zod.literal('Classical'),
   ]),
 });
+
+export const uploadSongFormSchema = SongFormSchema;
+
+export const editSongFormSchema = SongFormSchema.extend({
+  id: zod.string(),
+});
+
+export type CoverData = zod.infer<typeof coverDataSchema>;
+
+export type UploadSongForm = zod.infer<typeof uploadSongFormSchema>;

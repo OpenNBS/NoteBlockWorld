@@ -14,7 +14,7 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
-import { uploadSongFormSchema } from './uploadSongForm.zod';
+import { SongFormSchema } from './uploadSongForm.zod';
 import { UploadSongForm } from '../../types';
 
 type UploadSongContextType = {
