@@ -1,3 +1,5 @@
+import { Controller } from 'react-hook-form';
+
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
@@ -19,6 +21,8 @@ export const SongUploadForm = ({
     isSubmitting,
   } = useUploadSongProvider();
 
+  const { control } = formMethods;
+
   return (
     <form
       className='flex flex-col gap-6'
@@ -36,6 +40,7 @@ export const SongUploadForm = ({
         {/* Title */}
         <div>
           <label htmlFor='name'>Title*</label>
+          {/*
           <Input
             type='text'
             className=''
@@ -43,6 +48,13 @@ export const SongUploadForm = ({
               required: true,
               maxLength: 64,
             })}
+          />
+         */}
+          <Controller
+            render={({ field }) => <Input {...field} />}
+            name='title'
+            control={control}
+            defaultValue=''
           />
           <ErrorBalloon
             message={errors.title?.message}
