@@ -1,8 +1,8 @@
 import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
 import { useMemo } from 'react';
 
+import { useSongProvider } from './context/Song.context';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { useUploadSongProvider } from './UploadSong.context';
 
 const ColorButton = ({
   color,
@@ -20,8 +20,8 @@ const ColorButton = ({
   />
 );
 
-export const SongThumbnailInput = () => {
-  const { song, register, formMethods } = useUploadSongProvider();
+export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
+  const { song, register, formMethods } = useSongProvider(type);
   const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
     [
       'coverData.zoomLevel',
@@ -99,13 +99,7 @@ export const SongThumbnailInput = () => {
         <div>{startLayer}</div>
       </div>
 
-      <ThumbnailRendererCanvas
-        notes={notes}
-        zoomLevel={zoomLevel}
-        startTick={startTick}
-        startLayer={startLayer}
-        backgroundColor={backgroundColor}
-      />
+      <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
 
       {/* Background Color */}
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
