@@ -22,14 +22,7 @@ export const SongProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 type ContextType = 'upload' | 'edit';
-
-type useSongProviderType = <T extends ContextType>(
-  type: T,
-) => T extends 'upload' ? useUploadSongProviderType : useEditSongProviderType;
-
-export const useSongProvider: useSongProviderType = <T extends ContextType>(
-  type: T,
-) => {
+export const useSongProvider = <T extends ContextType>(type: T) => {
   const uploadContext = useContext(UploadSongContext);
   const editContext = useContext(EditSongContext);
   if (type === 'upload') {
