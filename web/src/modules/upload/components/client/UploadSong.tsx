@@ -6,14 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongSelector } from './SongSelector';
 import { SongUploadForm } from './SongUploadForm';
 import UploadCompleteModal from './UploadCompleteModal';
-import {
-  UploadSongProvider,
-  useUploadSongProvider,
-} from './UploadSong.context';
+import { SongProvider, useSongProvider } from './context/Song.context';
 
 const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
   const { song, filename, isUploadComplete, uploadedSongId } =
-    useUploadSongProvider();
+    useSongProvider('upload');
 
   return (
     <>
@@ -61,8 +58,8 @@ export const UploadSongPage = ({
   defaultAuthorName: string;
 }) => {
   return (
-    <UploadSongProvider>
+    <SongProvider>
       <UploadSong defaultAuthorName={defaultAuthorName} />
-    </UploadSongProvider>
+    </SongProvider>
   );
 };
