@@ -1,7 +1,7 @@
 import { cn } from '@web/src/lib/tailwind.utils';
 
+import { useSongProvider } from './context/Song.context';
 import { Option, Select } from './FormElements';
-import { useUploadSongProvider } from './UploadSong.context';
 
 const sounds = [
   { name: 'sound1' },
@@ -49,8 +49,8 @@ const InstrumentTableCell = ({
   );
 };
 
-const InstrumentTable = () => {
-  const { song } = useUploadSongProvider();
+const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
+  const { song } = useSongProvider(type);
   if (!song) return null;
 
   const instruments = song.instruments.loaded.filter(
@@ -114,8 +114,8 @@ const InstrumentTable = () => {
   );
 };
 
-const InstrumentPicker = () => {
-  const { song } = useUploadSongProvider();
+const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
+  const { song } = useSongProvider(type);
   if (!song) return null;
 
   // TODO: this is re-running when the thumbnail sliders are changed. Why?
@@ -127,7 +127,10 @@ const InstrumentPicker = () => {
   return customInstrumentCount === 0 ? (
     <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
   ) : (
-    <InstrumentTable />
+    <InstrumentTable
+      type={type}
+      key={customInstrumentCount} // Re-render when the number of custom instruments changes
+    />
   );
 };
 
