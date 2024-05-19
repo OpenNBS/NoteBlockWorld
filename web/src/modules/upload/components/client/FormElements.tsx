@@ -1,8 +1,8 @@
-import React from 'react';
+import { forwardRef } from 'react';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 
-export const Input = React.forwardRef<
+export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
@@ -16,7 +16,7 @@ export const Input = React.forwardRef<
 });
 Input.displayName = 'Input';
 
-export const Select = React.forwardRef<
+export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement>
 >((props, ref) => {
@@ -33,7 +33,7 @@ export const Select = React.forwardRef<
 });
 Select.displayName = 'Select';
 
-export const Option = React.forwardRef<
+export const Option = forwardRef<
   HTMLOptionElement,
   React.OptionHTMLAttributes<HTMLOptionElement>
 >((props, ref) => {
