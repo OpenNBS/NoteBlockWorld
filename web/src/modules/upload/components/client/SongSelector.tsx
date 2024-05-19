@@ -4,11 +4,11 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
 
-import { useUploadSongProvider } from './UploadSong.context';
+import { useSongProvider } from './context/Song.context';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 
 export const SongSelector = () => {
-  const { setFile, invalidFile } = useUploadSongProvider();
+  const { setFile, invalidFile } = useSongProvider('upload');
 
   const handleFileSelect = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
