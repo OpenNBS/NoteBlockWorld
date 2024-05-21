@@ -103,6 +103,14 @@ export const LoginPage = () => {
           </p>
         </div>
       </div>
+      <div className='absolute bottom-4 mx-auto text-zinc-600 text-xs'>
+        <p>
+          © 2024{' '}
+          <Link href='https://opennbs.org/' className='hover:underline'>
+            OpenNBS
+          </Link>
+        </p>
+      </div>
     </main>
   );
 };
