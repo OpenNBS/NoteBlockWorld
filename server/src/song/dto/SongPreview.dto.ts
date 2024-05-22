@@ -6,7 +6,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-import { SongDocument } from '../entity/song.entity';
+import { SongWithUser } from '../entity/song.entity';
 
 type SongPreviewUploader = {
   username: string;
@@ -63,10 +63,10 @@ export class SongPreviewDto {
     Object.assign(this, partial);
   }
 
-  public static fromSongDocument(song: SongDocument): SongPreviewDto {
+  public static fromSongDocument(song: SongWithUser): SongPreviewDto {
     return new SongPreviewDto({
       publicId: song.publicId,
-      uploader: song.uploader as unknown as SongPreviewUploader,
+      uploader: song.uploader,
       title: song.title,
       originalAuthor: song.originalAuthor,
       duration: song.duration,

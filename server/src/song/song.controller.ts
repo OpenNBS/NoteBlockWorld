@@ -30,6 +30,7 @@ import { UserDocument } from '@server/user/entity/user.entity';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from './dto/UploadSongResponseDto.dto';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.
@@ -104,7 +105,7 @@ export class SongController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload Song',
-    type: UploadSongDto,
+    type: UploadSongResponseDto,
   })
   @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
   @ApiOperation({
@@ -114,7 +115,7 @@ export class SongController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongDto> {
+  ): Promise<UploadSongResponseDto> {
     return await this.songService.processUploadedSong({ body, file, user });
   }
 }

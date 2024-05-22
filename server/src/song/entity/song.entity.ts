@@ -3,6 +3,7 @@ import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 import { CoverData } from '../dto/CoverData.dto';
+import { SongViewUploader } from '../dto/SongView.dto';
 
 @Schema({
   timestamps: true,
@@ -10,7 +11,7 @@ import { CoverData } from '../dto/CoverData.dto';
   toJSON: {
     virtuals: true,
     transform: (doc, ret) => {
-      ret.id = ret._id;
+      //ret.id = ret._id;
       delete ret._id;
       // TODO: hydrate uploader
       //if (ret.uploader) {
@@ -145,3 +146,7 @@ export class Song {
 
 export const SongSchema = SchemaFactory.createForClass(Song);
 export type SongDocument = Song & HydratedDocument<Song>;
+
+export type SongWithUser = Omit<Song, 'uploader'> & {
+  uploader: SongViewUploader;
+};

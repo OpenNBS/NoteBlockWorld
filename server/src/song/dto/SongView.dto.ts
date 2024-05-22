@@ -1,12 +1,12 @@
 import { SongDocument } from '../entity/song.entity';
 
-type SongViewUploader = {
+export type SongViewUploader = {
   username: string;
   profileImage: string;
 };
 
 export class SongViewDto {
-  id: string;
+  publicId: string;
   createdAt: Date;
   editedAt: Date;
   uploader: SongViewUploader;

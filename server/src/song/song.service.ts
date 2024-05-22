@@ -19,7 +19,8 @@ import { SongPageDto } from './dto/SongPageDto';
 import { SongPreviewDto } from './dto/SongPreview.dto';
 import { SongViewDto } from './dto/SongView.dto';
 import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { Song as SongEntity } from './entity/song.entity';
+import { UploadSongResponseDto } from './dto/UploadSongResponseDto.dto';
+import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { generateSongId, removeNonAscii } from './song.util';
 
 @Injectable()
@@ -53,7 +54,7 @@ export class SongService {
     body: UploadSongDto;
     file: Express.Multer.File;
     user: UserDocument | null;
-  }): Promise<UploadSongDto> {
+  }): Promise<UploadSongResponseDto> {
     // Is user valid?
     if (!user) {
       throw new HttpException(
@@ -225,24 +226,31 @@ export class SongService {
     // Save song document
     const songDocument = await this.songModel.create(song);
     const createdSong = await songDocument.save();
-
-    return UploadSongDto.fromSongDocument(createdSong);
+    const populatedSong = (await createdSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    )) as unknown as SongWithUser;
+    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async deleteSong(id: string): Promise<UploadSongDto> {
-    const foundSong = await this.songModel.findById(id).exec();
+  public async deleteSong(id: string): Promise<UploadSongResponseDto> {
+    const foundSong = (await this.songModel
+      .findById(id)
+      .populate('uploader')
+      .exec()) as unknown as SongWithUser;
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
-    await this.songModel.deleteOne({ _id: id }).exec();
-    return UploadSongDto.fromSongDocument(foundSong);
+    // TODO: handle file deletion, Maybe move to a trash collection?
+    await this.songModel.deleteOne({ _id: id }).populate('uploader').exec();
+    return UploadSongResponseDto.fromSongWithUserDocument(foundSong);
   }
 
   public async patchSong(
     id: string,
     body: UploadSongDto,
     user: UserDocument | null,
-  ): Promise<UploadSongDto> {
+  ): Promise<UploadSongResponseDto> {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
@@ -260,8 +268,10 @@ export class SongService {
     foundSong.originalAuthor = body.originalAuthor;
     foundSong.description = body.description;
 
-    const createdSong = await foundSong.save();
-    return UploadSongDto.fromSongDocument(createdSong);
+    const createdSong = (await foundSong.save()).populate(
+      'uploader',
+    ) as unknown as SongWithUser;
+    return UploadSongResponseDto.fromSongWithUserDocument(createdSong);
   }
 
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
@@ -272,7 +282,7 @@ export class SongService {
       sort: query.sort || 'createdAt',
       order: query.order || false,
     };
-    const data = await this.songModel
+    const data = (await this.songModel
       .find({
         visibility: 'public',
       })
@@ -282,7 +292,7 @@ export class SongService {
       .skip(options.skip)
       .limit(options.limit)
       .populate('uploader', 'username profileImage -_id')
-      .exec();
+      .exec()) as unknown as SongWithUser[];
     return data.map((song) => SongPreviewDto.fromSongDocument(song));
   }
 
@@ -370,7 +380,7 @@ export class SongService {
     const limit = parseInt(query.limit.toString()) || 10;
     const order = query.order ? query.order : false;
     const sort = query.sort ? query.sort : 'createdAt';
-    const songData = await this.songModel
+    const songData = (await this.songModel
       .find({
         uploader: user._id,
       })
@@ -379,7 +389,7 @@ export class SongService {
       })
       .skip(limit * (page - 1))
       .limit(limit)
-      .exec();
+      .exec()) as unknown as SongWithUser[];
     const total = await this.songModel
       .countDocuments({
         uploader: user._id,
