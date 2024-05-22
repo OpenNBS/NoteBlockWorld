@@ -1,16 +1,19 @@
+import { useEditSongProviderType } from './context/EditSong.context';
 import { useSongProvider } from './context/Song.context';
+import { useUploadSongProviderType } from './context/UploadSong.context';
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 
 export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
-  const useSongProviderData = useSongProvider(type) as
-    | useUploadSongProviderType
-    | useEditSongProviderType;
+  const useSongProviderData = useSongProvider(
+    type,
+  ) as useUploadSongProviderType & useEditSongProviderType;
   const { sendError, errors, submitSong, song, isSubmitting } =
     useSongProviderData;
   const formMethods = useSongProviderData.formMethods;
+  const { register } = useSongProviderData;
   return (
     <>
       <form
@@ -26,8 +29,7 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
           {/* Title */}
           <div>
             <label htmlFor='name'>Title*</label>
-            <Input {...formMethods.register('title')} />
-
+            <Input {...register('title')} invalid={!!errors.title} />
             <ErrorBalloon
               message={errors.title?.message}
               isVisible={!!errors.title}
@@ -40,8 +42,10 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
 
             <textarea
               id='description'
-              className='block h-48 w-full rounded-lg bg-transparent border-2 border-zinc-500 p-2'
-              {...formMethods.register('description')}
+              className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
+                errors.description ? 'border-red-500' : 'border-zinc-500'
+              } p-2`}
+              {...register('description')}
             ></textarea>
 
             <ErrorBalloon
@@ -59,12 +63,13 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
                 id='artist'
                 disabled={true}
                 className='block'
-                {...formMethods.register('artist')}
+                invalid={!!errors.artist}
+                {...register('artist')}
               />
             </div>
             <div className='flex-1'>
               <label htmlFor='album'>Original author</label>
-              <Input {...formMethods.register('originalAuthor')} />
+              <Input {...register('originalAuthor')} />
               <p className='text-sm text-zinc-500'>
                 {"(Leave blank if it's an original song)"}
               </p>
@@ -76,7 +81,7 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             <div className='flex-1'>
               <label htmlFor='category'>Category</label>
 
-              <Select {...formMethods.register('category')}>
+              <Select {...register('category')} invalid={!!errors.category}>
                 <Option value='Gaming'>Gaming</Option>
                 <Option value='MoviesNTV'>Movies & TV</Option>
                 <Option value='Anime'>Anime</Option>
@@ -109,7 +114,11 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             <div className='flex-1'>
               <label htmlFor='visibility'>Visibility</label>
 
-              <Select id='visibility' {...formMethods.register('visibility')}>
+              <Select
+                invalid={!!errors.visibility}
+                id='visibility'
+                {...register('visibility')}
+              >
                 <Option value='public'>Public</Option>
                 <Option value='unlisted'>Unlisted</Option>
                 <Option value='private'>Private</Option>
@@ -122,7 +131,7 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             </div>
             <div className='flex-1'>
               <label htmlFor='license'>License</label>
-              <Select {...formMethods.register('license')}>
+              <Select invalid={!!errors.license} {...register('license')}>
                 <Option value='no_license'>No license</Option>
                 <Option value='cc_by_4'>Creative Commons CC BY 4.0</Option>
                 <Option value='public_domain'>Public domain</Option>
@@ -146,7 +155,8 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             <input
               type='checkbox'
               className='accent-blue scale-150 mr-3'
-              {...formMethods.register('allowDownload')}
+              disabled
+              {...register('allowDownload')}
             />
             <label htmlFor='allowDownload'>
               Allow other users to download the NBS file{' '}
