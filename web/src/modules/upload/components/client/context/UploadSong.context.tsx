@@ -1,7 +1,7 @@
 'use client';
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
@@ -83,30 +83,27 @@ export const UploadSongProvider = ({
 
     // Get authorization token from local storage
     const token = getTokenLocal();
-
-    // Send request
-    await axiosInstance
-      .post(`/song`, formData, {
+    try {
+      // Send request
+      const response = await axiosInstance.post(`/song`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
-      })
-      .then((response) => {
-        const data = response.data;
-        const id = data.publicId as string;
-        setUploadedSongId(id);
-        setIsUploadComplete(true);
-      })
-      .catch((error) => {
-        console.error('Error submitting song', error);
-        if (error.response) {
-          setSendError(error.response.data.error.file);
-        } else {
-          setSendError('An unknown error occurred while submitting the song!');
-        }
-        return;
       });
+
+      const data = response.data;
+      const id = data.publicId as string;
+      setUploadedSongId(id);
+      setIsUploadComplete(true);
+    } catch (error: any) {
+      console.error('Error submitting song', error);
+      if (error.response) {
+        setSendError(error.response.data.error.file);
+      } else {
+        setSendError('An unknown error occurred while submitting the song!');
+      }
+    }
   };
 
   const submitSong = async () => {
@@ -116,6 +113,7 @@ export const UploadSongProvider = ({
       setIsUploadComplete(true);
     } catch (e) {
       console.log(e); // TODO: handle error
+      //formMethods.setError('file', { message: 'An error occurred' });
     } finally {
       setIsSubmitting(false);
     }
@@ -149,6 +147,10 @@ export const UploadSongProvider = ({
         'custom2',
         'custom3',
       ]);
+
+      formMethods.setValue('allowDownload', true);
+
+      // disable allowDownload
     }
   }, [song, formMethods]);
 
@@ -172,4 +174,8 @@ export const UploadSongProvider = ({
       {children}
     </UploadSongContext.Provider>
   );
+};
+
+export const useUploadSongProvider = (): useUploadSongProviderType => {
+  return useContext(UploadSongContext);
 };
