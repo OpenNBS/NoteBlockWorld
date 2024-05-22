@@ -9,7 +9,10 @@ import {
   useForm,
 } from 'react-hook-form';
 
-import { EditSongForm, editSongFormSchema } from '../uploadSongForm.zod';
+import {
+  EditSongForm,
+  editSongFormSchema,
+} from '../../../../upload/components/client/uploadSongForm.zod';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;

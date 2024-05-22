@@ -3,7 +3,10 @@
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { SongProvider, useSongProvider } from './context/Song.context';
+import {
+  SongProvider,
+  useSongProvider,
+} from '../../../song/components/client/context/Song.context';
 import { SongSelector } from './SongSelector';
 import { SongUploadForm } from './SongUploadForm';
 import UploadCompleteModal from './UploadCompleteModal';

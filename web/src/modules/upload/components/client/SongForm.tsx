@@ -1,10 +1,10 @@
-import { useEditSongProviderType } from './context/EditSong.context';
-import { useSongProvider } from './context/Song.context';
+import { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 import { useUploadSongProviderType } from './context/UploadSong.context';
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
+import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
 export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
   const useSongProviderData = useSongProvider(

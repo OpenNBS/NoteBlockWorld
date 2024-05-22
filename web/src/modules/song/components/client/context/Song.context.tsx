@@ -6,12 +6,12 @@ import {
   EditSongContext,
   EditSongProvider,
   useEditSongProviderType,
-} from './EditSong.context';
+} from '../../../../song-edit/components/client/context/EditSong.context';
 import {
   UploadSongContext,
   UploadSongProvider,
   useUploadSongProviderType,
-} from './UploadSong.context';
+} from '../../../../upload/components/client/context/UploadSong.context';
 
 export const SongProvider = ({ children }: { children: React.ReactNode }) => {
   return (

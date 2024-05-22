@@ -1,8 +1,8 @@
 import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
 import { useMemo } from 'react';
 
-import { useSongProvider } from './context/Song.context';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
+import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
 const ColorButton = ({
   color,

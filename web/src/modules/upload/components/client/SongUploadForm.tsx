@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-import { useSongProvider } from './context/Song.context';
 import { useUploadSongProviderType } from './context/UploadSong.context';
 import { SongForm } from './SongForm';
+import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
 export const SongUploadForm = ({
   defaultAuthorName,
