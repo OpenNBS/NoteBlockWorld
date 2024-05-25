@@ -208,9 +208,6 @@ importers:
       '@types/multer':
         specifier: ^1.4.11
         version: 1.4.11
-      Express:
-        specifier: ^3.0.1
-        version: 3.0.1
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
@@ -220,6 +217,9 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
     devDependencies:
       '@types/node':
         specifier: ^20.3.1
@@ -3852,11 +3852,6 @@ packages:
   /@xtuc/long@4.2.2:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: true
-
-  /Express@3.0.1:
-    resolution: {integrity: sha512-T8VnUAU1Kjm6wRidtZVjpCYGuSY9IXEYatng3QQ2Q7QQfDoo+tNeJFucDaZ79V4babYWarc4VkKsipC9x2EFlQ==}
-    deprecated: Package unsupported. Please use the express package (all lowercase) instead.
-    dev: false
 
   /abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
