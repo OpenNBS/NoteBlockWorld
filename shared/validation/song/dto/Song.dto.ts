@@ -1,3 +1,4 @@
+import { UserDocument } from '@server/user/entity/user.entity';
 import {
   IsBoolean,
   IsDate,
@@ -6,9 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 
-import { UserDocument } from '@server/user/entity/user.entity';
-
-import { SongDocument } from '../entity/song.entity';
+import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export class SongDto {
   @IsString()

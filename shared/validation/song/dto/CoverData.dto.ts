@@ -46,3 +46,5 @@ export class CoverData {
     };
   }
 }
+
+type CoverDataType = InstanceType<typeof CoverData>;

@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 
 import { CoverData } from './CoverData.dto';
-import { SongDocument } from '../entity/song.entity';
+import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export class UploadSongDto {
   @ApiProperty({

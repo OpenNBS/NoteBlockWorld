@@ -1,4 +1,4 @@
-import { SongDocument } from '../entity/song.entity';
+import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export type SongViewUploader = {
   username: string;

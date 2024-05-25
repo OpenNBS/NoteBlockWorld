@@ -6,7 +6,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-import { SongWithUser } from '../entity/song.entity';
+import { SongWithUser } from '../../../../server/src/song/entity/song.entity';
 
 type SongPreviewUploader = {
   username: string;

@@ -8,8 +8,8 @@ import {
 } from 'class-validator';
 
 import { CoverData } from './CoverData.dto';
-import { SongViewUploader } from './SongView.dto';
-import { SongWithUser } from '../entity/song.entity';
+import * as SongViewDto from './SongView.dto';
+import { SongWithUser } from '../../../../server/src/song/entity/song.entity';
 
 export class UploadSongResponseDto {
   @IsString()
@@ -35,7 +35,7 @@ export class UploadSongResponseDto {
     description: 'Original author of the song',
     example: 'Myself',
   })
-  uploader: SongViewUploader;
+  uploader: SongViewDto.SongViewUploader;
 
   @IsNotEmpty()
   @ValidateNested()
