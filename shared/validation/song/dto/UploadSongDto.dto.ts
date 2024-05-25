@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 
 import { CoverData } from './CoverData.dto';
+import type { CategoryType, LicenseType, VisibilityType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export class UploadSongDto {
@@ -41,7 +42,7 @@ export class UploadSongDto {
     description: 'The visibility of the song',
     example: 'public',
   })
-  visibility: string;
+  visibility: VisibilityType;
 
   @IsNotEmpty()
   @IsString()
@@ -74,7 +75,7 @@ export class UploadSongDto {
     description: 'Category of the song',
     example: 'Gaming',
   })
-  category: string;
+  category: CategoryType;
 
   @IsNotEmpty()
   @ValidateNested()
@@ -85,6 +86,17 @@ export class UploadSongDto {
     example: CoverData.getApiExample(),
   })
   coverData: CoverData;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsIn(['public', 'private', 'unlisted'])
+  @ApiProperty({
+    enum: ['public', 'private', 'unlisted'],
+    default: 'public',
+    description: 'The visibility of the song',
+    example: 'public',
+  })
+  license: LicenseType;
 
   @IsArray()
   @MaxLength(64, { each: true })
