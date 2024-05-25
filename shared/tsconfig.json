@@ -19,6 +19,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "strictPropertyInitialization": false,
     "plugins": [
       {
         "name": "next"
