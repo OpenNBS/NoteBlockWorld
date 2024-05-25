@@ -1,7 +1,3 @@
-import { SongPreviewDto } from '@nbw/validation/song/dto/SongPreview.dto';
-import { SongViewDto } from '@nbw/validation/song/dto/SongView.dto';
-import { UploadSongDto } from '@nbw/validation/song/dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from '@nbw/validation/song/dto/UploadSongResponseDto.dto';
 import {
   Body,
   Controller,
@@ -25,6 +21,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
+import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import type { Response } from 'express';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';

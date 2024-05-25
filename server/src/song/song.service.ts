@@ -1,10 +1,4 @@
 import { fromArrayBuffer } from '@encode42/nbs.js';
-import { drawToImage, getThumbnailNotes } from '@nbw/features/thumbnail';
-import { SongPageDto } from '@nbw/validation/song/dto/SongPageDto';
-import { SongPreviewDto } from '@nbw/validation/song/dto/SongPreview.dto';
-import { SongViewDto } from '@nbw/validation/song/dto/SongView.dto';
-import { UploadSongDto } from '@nbw/validation/song/dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from '@nbw/validation/song/dto/UploadSongResponseDto.dto';
 import {
   HttpException,
   HttpStatus,
@@ -13,6 +7,15 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import {
+  drawToImage,
+  getThumbnailNotes,
+} from '@shared/features/thumbnail/thumbnail';
+import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
+import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import { Model, Types } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
@@ -326,7 +329,6 @@ export class SongService {
     id: string,
     user: UserDocument | null,
   ): Promise<string> {
-    console.log(id);
     const foundSong = await this.songModel.findOne({ publicId: id }).exec();
     if (!foundSong) {
       console.log('Song not found');
@@ -408,6 +410,13 @@ export class SongService {
     id: string,
     user: UserDocument | null,
   ): Promise<UploadSongDto> {
-    throw new Error('Method not implemented.');
+    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
+    if (!foundSong) {
+      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
+    }
+    if (foundSong.uploader.toString() !== user?._id.toString()) {
+      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
+    }
+    return UploadSongDto.fromSongDocument(foundSong);
   }
 }

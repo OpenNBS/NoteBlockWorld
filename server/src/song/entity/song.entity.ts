@@ -1,6 +1,11 @@
-import { CoverData } from '@nbw/validation/song/dto/CoverData.dto';
 import { SongViewUploader } from '@nbw/validation/song/dto/SongView.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { CoverData } from '@shared/validation/song/dto/CoverData.dto';
+import {
+  CategoryType,
+  LicenseType,
+  VisibilityType,
+} from '@shared/validation/song/dto/types';
 import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
@@ -55,10 +60,19 @@ export class Song {
   thumbnailData: CoverData;
 
   @Prop({ type: String, required: true })
-  category: string;
+  category: CategoryType;
 
   @Prop({ type: String, required: true })
-  visibility: 'public' | 'private';
+  visibility: VisibilityType;
+
+  @Prop({ type: String, required: true })
+  license: LicenseType;
+
+  @Prop({ type: Array<string>, required: true })
+  customInstruments: string[];
+
+  @Prop({ type: Object, required: true })
+  coverData: CoverData;
 
   @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;
