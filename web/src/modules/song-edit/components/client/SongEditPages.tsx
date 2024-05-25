@@ -1,12 +1,17 @@
+import { SongViewDtoType } from '@nbw/validation/song/dto/types';
+
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenServer } from '@web/src/modules/auth/features/auth.utils';
+import { SongProvider } from '@web/src/modules/song/components/client/context/Song.context';
 
-async function fetchSong({ id }: { id: string }) {
+import { SongEditForm } from './SongEditForm';
+
+async function fetchSong({ id }: { id: string }): Promise<SongViewDtoType> {
   // get token from cookies
   const token = getTokenServer();
   // if token is not null, redirect to home page
-  if (!token) return {};
-  if (!token.value) return {};
+  if (!token) throw new Error('Failed to fetch song data');
+  if (!token.value) throw new Error('Failed to fetch song data');
 
   try {
     const response = await axiosInstance.get(`/song?id=${id}`, {
@@ -17,15 +22,28 @@ async function fetchSong({ id }: { id: string }) {
       },
     });
     const data = await response.data;
-    return data;
+    return data as SongViewDtoType;
   } catch (error: unknown) {
-    console.error('Error fetching song', error);
-    return {};
+    throw new Error('Failed to fetch song data');
   }
 }
 
 export async function EditSongPage({ id }: { id: string }) {
-  const song = await fetchSong({ id });
-  console.log(song);
-  return <h1>Edit Song {id}</h1>;
+  try {
+    const songData = await fetchSong({ id });
+    return (
+      <div className='flex flex-row justify-between items-center gap-12'>
+        <div className='flex-1'>
+          <h1 className='text-3xl font-semibold text-nowrap'>
+            Editing {songData.title}
+          </h1>
+          <SongProvider>
+            {songData && <SongEditForm songData={songData} />}
+          </SongProvider>
+        </div>
+      </div>
+    );
+  } catch (error: unknown) {
+    return <div>Failed to fetch song data</div>;
+  }
 }
