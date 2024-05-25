@@ -1,12 +1,27 @@
-export const ThumbnailConst = {
+function deepFreeze<T extends { [key: string]: any }>(object: T): Readonly<T> {
+  const propNames = Object.getOwnPropertyNames(object);
+
+  for (const name of propNames) {
+    const value = object[name];
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    object[name] =
+      value && typeof value === 'object' ? deepFreeze(value) : value;
+  }
+
+  return Object.freeze(object);
+}
+
+export const ThumbnailConst = deepFreeze({
   MIN_ZOOM_LEVEL: 1,
   MAX_ZOOM_LEVEL: 5,
   DEFAULT_ZOOM_LEVEL: 3,
   DEFAULT_START_TICK: 0,
   DEFAULT_START_LAYER: 0,
-};
+});
 
-export const ThumbnailBgColors = {
+export const ThumbnailBgColors = deepFreeze({
   red: { name: 'Red', light: '#FFCDD2', dark: '#E57373' },
   pink: { name: 'Pink', light: '#F8BBD0', dark: '#F06292' },
   purple: { name: 'Purple', light: '#E1BEE7', dark: '#BA68C8' },
@@ -25,9 +40,9 @@ export const ThumbnailBgColors = {
   deepOrange: { name: 'Deep Orange', light: '#FFCCBC', dark: '#FF8A65' },
   brown: { name: 'Brown', light: '#D7CCC8', dark: '#A1887F' },
   gray: { name: 'Gray', light: '#CFD8DC', dark: '#90A4AE' },
-};
+});
 
-export const UploadConst = {
+export const UploadConst = deepFreeze({
   MAX_SONG_UPLOAD_SIZE: 1024 * 1024, // 1 MB
   MIMETYPE_NBS: 'application/octet-stream',
   MAX_SONG_TITLE_LENGTH: 100,
@@ -85,4 +100,4 @@ export const UploadConst = {
     public: 'Public',
     private: 'Private',
   },
-};
+});
