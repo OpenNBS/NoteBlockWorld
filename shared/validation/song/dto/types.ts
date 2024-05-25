@@ -7,6 +7,7 @@ import { SongPreviewDto } from './SongPreview.dto';
 import { SongViewDto } from './SongView.dto';
 import { UploadSongDto } from './UploadSongDto.dto';
 import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
+import { UploadConst } from '../constants';
 
 export type UploadSongDtoType = InstanceType<typeof UploadSongDto>;
 export type UploadSongResponseDtoType = InstanceType<
@@ -21,3 +22,7 @@ export type CustomInstrumentDataType = InstanceType<
   typeof CustomInstrumentData
 >;
 export type CoverDataType = InstanceType<typeof CoverData>;
+
+export type VisibilityType = keyof typeof UploadConst.visibility;
+export type CategoryType = keyof typeof UploadConst.categories;
+export type LicenseType = keyof typeof UploadConst.licenses;
