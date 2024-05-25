@@ -1,6 +1,10 @@
 'use client';
 import { Song } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  SongViewDtoType,
+  UploadSongDtoType,
+} from '@nbw/validation/song/dto/types';
 import { createContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -22,6 +26,7 @@ export type useEditSongProviderType = {
   song: Song | null;
   sendError: string | null;
   isSubmitting: boolean;
+  loadSong: (song: SongViewDtoType) => void;
 };
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
@@ -61,6 +66,26 @@ export const EditSongProvider = ({
     }
   }, [song, formMethods]);
 
+  const loadSong = (id: string, username: string, song: UploadSongDtoType) => {
+    formMethods.reset({
+      allowDownload: song.allowDownload,
+      visibility: song.visibility,
+      title: song.title,
+      originalAuthor: song.originalAuthor,
+      artist: username,
+      description: song.description,
+      coverData: {
+        zoomLevel: song.coverData.zoomLevel,
+        startTick: song.coverData.startTick,
+        startLayer: song.coverData.startLayer,
+        backgroundColor: song.coverData.backgroundColor,
+      },
+      customInstruments: song.customInstruments,
+      license: song.license,
+      category: song.category,
+    });
+  };
+
   return (
     <EditSongContext.Provider
       value={{
@@ -71,6 +96,7 @@ export const EditSongProvider = ({
         song,
         sendError,
         isSubmitting,
+        loadSong,
       }}
     >
       {children}
