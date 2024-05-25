@@ -1,3 +1,4 @@
+import { UploadConst } from '@shared/validation/song/constants';
 import { z as zod } from 'zod';
 
 export const coverDataSchema = zod.object({
@@ -7,11 +8,13 @@ export const coverDataSchema = zod.object({
   backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
 });
 
+const visibility = Object.keys(UploadConst.visibility) as const;
+const categories = Object.keys(UploadConst.categories) as const;
+const licenses = Object.keys(UploadConst.licenses) as const;
+
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
-  visibility: zod
-    .union([zod.literal('public'), zod.literal('private')])
-    .default('public'),
+  visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
     .max(64, {
@@ -33,33 +36,13 @@ export const SongFormSchema = zod.object({
   coverData: coverDataSchema,
   customInstruments: zod.array(zod.string()),
   license: zod
-    .union([
-      zod.literal('no_license'),
-      zod.literal('cc_by_4'),
-      zod.literal('public_domain'),
-    ])
-    .refine(
-      (value) => ['no_license', 'cc_by_4', 'public_domain'].includes(value),
-      {
-        message:
-          "Invalid license. Must be one of 'No license', 'CC BY 4.0', 'Public domain'",
-      },
-    )
+    .enum(licenses)
+    .refine((value) => Object.keys(UploadConst.licenses).includes(value), {
+      message:
+        "Invalid license. Must be one of 'No license', 'CC BY 4.0', 'Public domain'",
+    })
     .default('no_license'),
-  category: zod
-    .union([
-      zod.literal('Gaming'),
-      zod.literal('MoviesNTV'),
-      zod.literal('Anime'),
-      zod.literal('Vocaloid'),
-      zod.literal('Rock'),
-      zod.literal('Pop'),
-      zod.literal('Electronic'),
-      zod.literal('Ambient'),
-      zod.literal('Jazz'),
-      zod.literal('Classical'),
-    ])
-    .optional(),
+  category: zod.enum(categories).optional(),
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});
