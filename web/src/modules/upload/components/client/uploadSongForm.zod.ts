@@ -16,7 +16,7 @@ export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  visibility: zod.enum(visibility.map((v) => v.value)).default('public'),
+  visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
     .max(64, {
