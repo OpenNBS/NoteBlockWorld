@@ -118,6 +118,10 @@ export class UploadSongDto {
       title: song.title,
       originalAuthor: song.originalAuthor,
       description: song.description,
+      category: song.category,
+      coverData: song.coverData,
+      license: song.license,
+      customInstruments: song.customInstruments ?? [],
     });
   }
 }
