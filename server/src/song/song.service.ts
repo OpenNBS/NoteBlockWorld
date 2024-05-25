@@ -1,4 +1,10 @@
 import { fromArrayBuffer } from '@encode42/nbs.js';
+import { drawToImage, getThumbnailNotes } from '@nbw/features/thumbnail';
+import { SongPageDto } from '@nbw/validation/song/dto/SongPageDto';
+import { SongPreviewDto } from '@nbw/validation/song/dto/SongPreview.dto';
+import { SongViewDto } from '@nbw/validation/song/dto/SongView.dto';
+import { UploadSongDto } from '@nbw/validation/song/dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from '@nbw/validation/song/dto/UploadSongResponseDto.dto';
 import {
   HttpException,
   HttpStatus,
@@ -7,7 +13,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
 import { Model, Types } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
@@ -15,11 +20,6 @@ import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
-import { SongPageDto } from './dto/SongPageDto';
-import { SongPreviewDto } from './dto/SongPreview.dto';
-import { SongViewDto } from './dto/SongView.dto';
-import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from './dto/UploadSongResponseDto.dto';
 import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { generateSongId, removeNonAscii } from './song.util';
 

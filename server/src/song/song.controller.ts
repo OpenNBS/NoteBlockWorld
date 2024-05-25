@@ -1,3 +1,7 @@
+import { SongPreviewDto } from '@nbw/validation/song/dto/SongPreview.dto';
+import { SongViewDto } from '@nbw/validation/song/dto/SongView.dto';
+import { UploadSongDto } from '@nbw/validation/song/dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from '@nbw/validation/song/dto/UploadSongResponseDto.dto';
 import {
   Body,
   Controller,
@@ -27,10 +31,6 @@ import { FileService } from '@server/file/file.service';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
-import { SongPreviewDto } from './dto/SongPreview.dto';
-import { SongViewDto } from './dto/SongView.dto';
-import { UploadSongDto } from './dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from './dto/UploadSongResponseDto.dto';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.

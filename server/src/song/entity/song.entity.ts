@@ -1,9 +1,8 @@
+import { CoverData } from '@nbw/validation/song/dto/CoverData.dto';
+import { SongViewUploader } from '@nbw/validation/song/dto/SongView.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
-
-import { CoverData } from '../dto/CoverData.dto';
-import { SongViewUploader } from '../dto/SongView.dto';
 
 @Schema({
   timestamps: true,
