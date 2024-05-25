@@ -8,6 +8,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   Res,
@@ -65,6 +66,25 @@ export class SongController {
     return await this.songService.getSong(id, user);
   }
 
+  @Get('/:id/edit')
+  @ApiOperation({ summary: 'Get song info for editing by ID' })
+  public async getEditSong(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<UploadSongDto> {
+    return await this.songService.getSongEdit(id, user);
+  }
+
+  @Patch('/:id/edit')
+  @ApiOperation({ summary: 'Edit song info by ID' })
+  public async patchSong(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+    @Body() body: UploadSongDto,
+  ): Promise<UploadSongResponseDto> {
+    return await this.songService.patchSong(id, body, user);
+  }
+
   @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
@@ -98,7 +118,6 @@ export class SongController {
   //public async deleteSong(@Param('id') id: string): Promise<UploadSongDto> {
   //  return await this.songService.deleteSong(id);
   //}
-
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()

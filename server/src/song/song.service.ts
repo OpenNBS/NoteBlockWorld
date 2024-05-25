@@ -403,4 +403,11 @@ export class SongService {
       total: total,
     };
   }
+
+  public async getSongEdit(
+    id: string,
+    user: UserDocument | null,
+  ): Promise<UploadSongDto> {
+    throw new Error('Method not implemented.');
+  }
 }
