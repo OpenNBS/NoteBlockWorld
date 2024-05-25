@@ -1,10 +1,12 @@
-import { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
+import { UploadConst } from '@shared/validation/song/constants';
+
 import { useUploadSongProviderType } from './context/UploadSong.context';
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
+import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
 export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
   const useSongProviderData = useSongProvider(
@@ -82,16 +84,13 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               <label htmlFor='category'>Category</label>
 
               <Select {...register('category')} invalid={!!errors.category}>
-                <Option value='Gaming'>Gaming</Option>
-                <Option value='MoviesNTV'>Movies & TV</Option>
-                <Option value='Anime'>Anime</Option>
-                <Option value='Vocaloid'>Vocaloid</Option>
-                <Option value='Rock'>Rock</Option>
-                <Option value='Pop'>Pop</Option>
-                <Option value='Electronic'>Electronic</Option>
-                <Option value='Ambient'>Ambient</Option>
-                <Option value='Jazz'>Jazz</Option>
-                <Option value='Classical'>Classical</Option>
+                {Object.entries(UploadConst.categories).map(
+                  ([key, value]: [string, string]) => (
+                    <Option key={key} value={key}>
+                      {value}
+                    </Option>
+                  ),
+                )}
               </Select>
 
               <ErrorBalloon
@@ -119,9 +118,13 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
                 id='visibility'
                 {...register('visibility')}
               >
-                <Option value='public'>Public</Option>
-                <Option value='unlisted'>Unlisted</Option>
-                <Option value='private'>Private</Option>
+                {Object.entries(UploadConst.visibility).map(
+                  ([key, value]: [string, string]) => (
+                    <Option key={key} value={key}>
+                      {value}
+                    </Option>
+                  ),
+                )}
               </Select>
 
               <ErrorBalloon
@@ -132,9 +135,13 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             <div className='flex-1'>
               <label htmlFor='license'>License</label>
               <Select invalid={!!errors.license} {...register('license')}>
-                <Option value='no_license'>No license</Option>
-                <Option value='cc_by_4'>Creative Commons CC BY 4.0</Option>
-                <Option value='public_domain'>Public domain</Option>
+                {Object.entries(UploadConst.licenses).map(
+                  ([key, value]: [string, string]) => (
+                    <Option key={key} value={key}>
+                      {value}
+                    </Option>
+                  ),
+                )}
               </Select>
               <ErrorBalloon
                 message={errors.license?.message}
