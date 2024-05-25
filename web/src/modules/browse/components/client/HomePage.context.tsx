@@ -78,8 +78,8 @@ export const HomePageProvider = ({
         },
       });
       setFeaturedSongs([...featuredSongs, ...response.data]);
-      console.log('featuredSongs', featuredSongs);
-      console.log('response.data', response.data);
+      //console.log('featuredSongs', featuredSongs);
+      //console.log('response.data', response.data);
     } catch (error) {
       setFeaturedError('Error loading featured songs');
     } finally {
