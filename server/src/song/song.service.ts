@@ -7,10 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  drawToImage,
-  getThumbnailNotes,
-} from '@shared/features/thumbnail/thumbnail';
+import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
