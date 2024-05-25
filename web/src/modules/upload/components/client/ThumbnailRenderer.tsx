@@ -20,10 +20,10 @@ export const ThumbnailRendererCanvas = ({
 
   const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
     [
-      'coverData.zoomLevel',
-      'coverData.startTick',
-      'coverData.startLayer',
-      'coverData.backgroundColor',
+      'thumbnailData.zoomLevel',
+      'thumbnailData.startTick',
+      'thumbnailData.startLayer',
+      'thumbnailData.backgroundColor',
     ],
   );
 
@@ -44,7 +44,7 @@ export const ThumbnailRendererCanvas = ({
       const zoomSpeed = 0.1;
       const newZoom = zoomLevel + delta * zoomSpeed;
       formMethods.setValue(
-        'coverData.zoomLevel',
+        'thumbnailData.zoomLevel',
         Math.min(Math.max(newZoom, minZoom), maxZoom),
       );
     });
@@ -73,12 +73,12 @@ export const ThumbnailRendererCanvas = ({
         const newLayer = startLayer + dx;
 
         formMethods.setValue(
-          'coverData.startTick',
+          'thumbnailData.startTick',
           Math.min(Math.max(newTick, minTick), maxTick),
         );
 
         formMethods.setValue(
-          'coverData.startLayer',
+          'thumbnailData.startLayer',
           Math.min(Math.max(newLayer, minLayer), maxLayer),
         );
       });

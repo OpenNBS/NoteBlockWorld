@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsHexColor, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
 
-export class CoverData {
+export class ThumbnailData {
   @IsNotEmpty()
   @Max(5)
   @Min(1)
@@ -37,7 +37,7 @@ export class CoverData {
   })
   backgroundColor: string;
 
-  static getApiExample(): CoverData {
+  static getApiExample(): ThumbnailData {
     return {
       zoomLevel: 3,
       startTick: 0,

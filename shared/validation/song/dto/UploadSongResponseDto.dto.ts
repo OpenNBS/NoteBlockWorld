@@ -7,8 +7,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CoverData } from './CoverData.dto';
 import * as SongViewDto from './SongView.dto';
+import { ThumbnailData } from './ThumbnailData.dto';
 import { SongWithUser } from '../../../../server/src/song/entity/song.entity';
 
 export class UploadSongResponseDto {
@@ -39,11 +39,11 @@ export class UploadSongResponseDto {
 
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => CoverData)
+  @Type(() => ThumbnailData)
   @Transform(({ value }) => JSON.parse(value))
   @ApiProperty({
-    description: 'Cover data of the song',
-    example: CoverData.getApiExample(),
+    description: 'Thumbnail data of the song',
+    example: ThumbnailData.getApiExample(),
   })
   thumbnailUrl: string;
 

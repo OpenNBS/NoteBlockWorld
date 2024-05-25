@@ -24,10 +24,10 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song, register, formMethods } = useSongProvider(type);
   const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
     [
-      'coverData.zoomLevel',
-      'coverData.startTick',
-      'coverData.startLayer',
-      'coverData.backgroundColor',
+      'thumbnailData.zoomLevel',
+      'thumbnailData.startTick',
+      'thumbnailData.startLayer',
+      'thumbnailData.backgroundColor',
     ],
   );
 
@@ -50,7 +50,7 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
             type='range'
             id='zoom-level'
             className='w-full'
-            {...register('coverData.zoomLevel', {
+            {...register('thumbnailData.zoomLevel', {
               valueAsNumber: true,
               value: 3,
               max: 5,
@@ -69,7 +69,7 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
             type='range'
             id='start-tick'
             className='w-full'
-            {...register('coverData.startTick', {
+            {...register('thumbnailData.startTick', {
               valueAsNumber: true,
               value: 0,
               max: maxTick,
@@ -88,7 +88,7 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
             id='start-layer'
             min='0'
             className='w-full'
-            {...register('coverData.startLayer', {
+            {...register('thumbnailData.startLayer', {
               valueAsNumber: true,
               value: 0,
               max: maxLayer,
@@ -111,7 +111,7 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
               color={color}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
-                formMethods.setValue('coverData.backgroundColor', color);
+                formMethods.setValue('thumbnailData.backgroundColor', color);
               }}
             />
           ))}

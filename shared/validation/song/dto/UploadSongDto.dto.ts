@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CoverData } from './CoverData.dto';
+import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
@@ -79,13 +79,13 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => CoverData)
+  @Type(() => ThumbnailData)
   @Transform(({ value }) => JSON.parse(value))
   @ApiProperty({
-    description: 'Cover data of the song',
-    example: CoverData.getApiExample(),
+    description: 'Thumbnail data of the song',
+    example: ThumbnailData.getApiExample(),
   })
-  coverData: CoverData;
+  thumbnailData: ThumbnailData;
 
   @IsNotEmpty()
   @IsString()
@@ -119,7 +119,7 @@ export class UploadSongDto {
       originalAuthor: song.originalAuthor,
       description: song.description,
       category: song.category,
-      coverData: song.coverData,
+      thumbnailData: song.thumbnailData,
       license: song.license,
       customInstruments: song.customInstruments ?? [],
     });

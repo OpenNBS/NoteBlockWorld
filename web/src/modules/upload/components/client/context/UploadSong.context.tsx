@@ -71,11 +71,13 @@ export const UploadSongProvider = ({
     const formValues = formMethods.getValues();
     Object.entries(formValues)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, _]) => key !== 'coverData' && key !== 'customInstruments')
+      .filter(
+        ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
+      )
       .forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
-    formData.append('coverData', JSON.stringify(formValues.coverData));
+    formData.append('thumbnailData', JSON.stringify(formValues.thumbnailData));
     formData.append(
       'customInstruments',
       JSON.stringify(formValues.customInstruments),
@@ -138,10 +140,10 @@ export const UploadSongProvider = ({
   };
   useEffect(() => {
     if (song) {
-      formMethods.setValue('coverData.zoomLevel', 1);
-      formMethods.setValue('coverData.startTick', 0);
-      formMethods.setValue('coverData.startLayer', 0);
-      formMethods.setValue('coverData.backgroundColor', '#ffffff');
+      formMethods.setValue('thumbnailData.zoomLevel', 1);
+      formMethods.setValue('thumbnailData.startTick', 0);
+      formMethods.setValue('thumbnailData.startLayer', 0);
+      formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
       formMethods.setValue('customInstruments', [
         'custom1',
         'custom2',

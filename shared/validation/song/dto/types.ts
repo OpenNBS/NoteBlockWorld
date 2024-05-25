@@ -1,10 +1,10 @@
-import { CoverData } from './CoverData.dto';
 import { CustomInstrumentData } from './CustomInstrumentData.dto';
 import { DeleteSongDto } from './DeleteSong.dto';
 import { SongDto } from './Song.dto';
 import { SongPageDto } from './SongPageDto';
 import { SongPreviewDto } from './SongPreview.dto';
 import { SongViewDto } from './SongView.dto';
+import { ThumbnailData as ThumbnailData } from './ThumbnailData.dto';
 import { UploadSongDto } from './UploadSongDto.dto';
 import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
 import { UploadConst } from '../constants';
@@ -21,7 +21,7 @@ export type DeleteSongDtoType = InstanceType<typeof DeleteSongDto>;
 export type CustomInstrumentDataType = InstanceType<
   typeof CustomInstrumentData
 >;
-export type CoverDataType = InstanceType<typeof CoverData>;
+export type ThumbnailDataType = InstanceType<typeof ThumbnailData>;
 
 export type VisibilityType = keyof typeof UploadConst.visibility;
 export type CategoryType = keyof typeof UploadConst.categories;

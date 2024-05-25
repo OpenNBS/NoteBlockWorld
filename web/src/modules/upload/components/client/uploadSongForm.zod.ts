@@ -1,7 +1,7 @@
 import { UploadConst } from '@shared/validation/song/constants';
 import { z as zod } from 'zod';
 
-export const coverDataSchema = zod.object({
+export const thumbnailDataSchema = zod.object({
   zoomLevel: zod.number().int().min(1).max(5),
   startTick: zod.number().int().min(0),
   startLayer: zod.number().int().min(0),
@@ -35,7 +35,7 @@ export const SongFormSchema = zod.object({
   description: zod.string().max(1024, {
     message: 'Description must be less than 1024 characters',
   }),
-  coverData: coverDataSchema,
+  thumbnailData: thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
   license: zod
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -57,7 +57,7 @@ export const editSongFormSchema = SongFormSchema.extend({
   id: zod.string(),
 });
 
-export type CoverData = zod.infer<typeof coverDataSchema>;
+export type ThumbnailDataForm = zod.infer<typeof thumbnailDataSchema>;
 
 export type UploadSongForm = zod.infer<typeof uploadSongFormSchema>;
 

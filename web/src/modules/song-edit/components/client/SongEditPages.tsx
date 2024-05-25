@@ -14,7 +14,7 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
   if (!token.value) throw new Error('Failed to fetch song data');
 
   try {
-    const response = await axiosInstance.get(`/song?id=${id}`, {
+    const response = await axiosInstance.get(`/song/${id}/edit`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

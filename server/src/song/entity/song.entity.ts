@@ -1,6 +1,6 @@
 import { SongViewUploader } from '@nbw/validation/song/dto/SongView.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { CoverData } from '@shared/validation/song/dto/CoverData.dto';
+import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import {
   CategoryType,
   LicenseType,
@@ -56,8 +56,8 @@ export class Song {
 
   // SONG FILE ATTRIBUTES (Populated from upload form - updatable)
 
-  @Prop({ type: CoverData, required: true })
-  thumbnailData: CoverData;
+  @Prop({ type: ThumbnailData, required: true })
+  thumbnailData: ThumbnailData;
 
   @Prop({ type: String, required: true })
   category: CategoryType;
@@ -70,9 +70,6 @@ export class Song {
 
   @Prop({ type: Array<string>, required: true })
   customInstruments: string[];
-
-  @Prop({ type: Object, required: true })
-  coverData: CoverData;
 
   @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;

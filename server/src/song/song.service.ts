@@ -127,7 +127,7 @@ export class SongService {
       allowDownload,
       visibility,
       category,
-      coverData,
+      thumbnailData: thumbnailData,
       customInstruments,
     } = body;
 
@@ -160,7 +160,7 @@ export class SongService {
     nbsSong.meta.description = removeNonAscii(body.description);
 
     // Generate thumbnail
-    const { startTick, startLayer, zoomLevel, backgroundColor } = coverData;
+    const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
     const thumbBuffer = await drawToImage({
       notes: getThumbnailNotes(nbsSong),
@@ -204,7 +204,7 @@ export class SongService {
     song.allowDownload = true || allowDownload; //TODO: implement allowDownload;
     song.visibility = visibility === 'private' ? 'private' : 'public';
 
-    song.thumbnailData = coverData;
+    song.thumbnailData = thumbnailData;
     song._sounds = customInstruments; // TODO: validate custom instruments
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
@@ -412,8 +412,9 @@ export class SongService {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
     if (foundSong.uploader.toString() !== user?._id.toString()) {
-      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
+      throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
+    this.logger.log(foundSong);
     return UploadSongDto.fromSongDocument(foundSong);
   }
 }

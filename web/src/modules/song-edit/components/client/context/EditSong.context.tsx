@@ -51,10 +51,10 @@ export const EditSongProvider = ({
 
   useEffect(() => {
     if (song) {
-      formMethods.setValue('coverData.zoomLevel', 1);
-      formMethods.setValue('coverData.startTick', 0);
-      formMethods.setValue('coverData.startLayer', 0);
-      formMethods.setValue('coverData.backgroundColor', '#ffffff');
+      formMethods.setValue('thumbnailData.zoomLevel', 1);
+      formMethods.setValue('thumbnailData.startTick', 0);
+      formMethods.setValue('thumbnailData.startLayer', 0);
+      formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
       formMethods.setValue('customInstruments', [
         'custom1',
         'custom2',
@@ -71,11 +71,11 @@ export const EditSongProvider = ({
       originalAuthor: song.originalAuthor,
       artist: username,
       description: song.description,
-      coverData: {
-        zoomLevel: song.coverData.zoomLevel,
-        startTick: song.coverData.startTick,
-        startLayer: song.coverData.startLayer,
-        backgroundColor: song.coverData.backgroundColor,
+      thumbnailData: {
+        zoomLevel: song.thumbnailData.zoomLevel,
+        startTick: song.thumbnailData.startTick,
+        startLayer: song.thumbnailData.startLayer,
+        backgroundColor: song.thumbnailData.backgroundColor,
       },
       customInstruments: song.customInstruments,
       license: song.license,
