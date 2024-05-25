@@ -8,7 +8,7 @@ export const coverDataSchema = zod.object({
 });
 
 export const SongFormSchema = zod.object({
-  allowDownload: zod.boolean().default(false),
+  allowDownload: zod.boolean().default(true),
   visibility: zod
     .union([zod.literal('public'), zod.literal('private')])
     .default('public'),
