@@ -8,13 +8,15 @@ export const coverDataSchema = zod.object({
   backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
 });
 
-const visibility = Object.keys(UploadConst.visibility) as const;
-const categories = Object.keys(UploadConst.categories) as const;
-const licenses = Object.keys(UploadConst.licenses) as const;
+const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
+const categories = Object.keys(UploadConst.categories) as Readonly<string[]>;
+const licenses = Object.keys(UploadConst.licenses) as Readonly<string[]>;
 
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
-  visibility: zod.enum(visibility).default('public'),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  visibility: zod.enum(visibility.map((v) => v.value)).default('public'),
   title: zod
     .string()
     .max(64, {
@@ -36,12 +38,16 @@ export const SongFormSchema = zod.object({
   coverData: coverDataSchema,
   customInstruments: zod.array(zod.string()),
   license: zod
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     .enum(licenses)
     .refine((value) => Object.keys(UploadConst.licenses).includes(value), {
       message:
         "Invalid license. Must be one of 'No license', 'CC BY 4.0', 'Public domain'",
     })
     .default('no_license'),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   category: zod.enum(categories).optional(),
 });
 
