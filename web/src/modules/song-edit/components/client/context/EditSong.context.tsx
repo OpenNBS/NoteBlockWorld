@@ -1,10 +1,7 @@
 'use client';
 import { Song } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  SongViewDtoType,
-  UploadSongDtoType,
-} from '@nbw/validation/song/dto/types';
+import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
 import { createContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -26,7 +23,7 @@ export type useEditSongProviderType = {
   song: Song | null;
   sendError: string | null;
   isSubmitting: boolean;
-  loadSong: (song: SongViewDtoType) => void;
+  loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
 };
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
