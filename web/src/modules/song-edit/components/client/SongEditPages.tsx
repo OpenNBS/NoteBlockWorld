@@ -1,7 +1,10 @@
 import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
 
 import axiosInstance from '@web/src/lib/axios';
-import { getTokenServer } from '@web/src/modules/auth/features/auth.utils';
+import {
+  getTokenServer,
+  getUserData,
+} from '@web/src/modules/auth/features/auth.utils';
 import { SongProvider } from '@web/src/modules/song/components/client/context/Song.context';
 
 import { SongEditForm } from './SongEditForm';
@@ -31,8 +34,9 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
 export async function EditSongPage({ id }: { id: string }) {
   try {
     const songData = await fetchSong({ id });
-    const songId = 'a';
-    const username = 'b';
+    const songId = id;
+    const userData = await getUserData();
+    const username = userData?.username;
     return (
       <div className='flex flex-row justify-between items-center gap-12'>
         <div className='flex-1'>
