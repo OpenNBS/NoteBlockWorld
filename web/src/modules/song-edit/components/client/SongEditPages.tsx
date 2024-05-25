@@ -1,4 +1,4 @@
-import { SongViewDtoType } from '@nbw/validation/song/dto/types';
+import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenServer } from '@web/src/modules/auth/features/auth.utils';
@@ -6,7 +6,7 @@ import { SongProvider } from '@web/src/modules/song/components/client/context/So
 
 import { SongEditForm } from './SongEditForm';
 
-async function fetchSong({ id }: { id: string }): Promise<SongViewDtoType> {
+async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
   // get token from cookies
   const token = getTokenServer();
   // if token is not null, redirect to home page
@@ -22,7 +22,7 @@ async function fetchSong({ id }: { id: string }): Promise<SongViewDtoType> {
       },
     });
     const data = await response.data;
-    return data as SongViewDtoType;
+    return data as UploadSongDtoType;
   } catch (error: unknown) {
     throw new Error('Failed to fetch song data');
   }
@@ -31,6 +31,8 @@ async function fetchSong({ id }: { id: string }): Promise<SongViewDtoType> {
 export async function EditSongPage({ id }: { id: string }) {
   try {
     const songData = await fetchSong({ id });
+    const songId = 'a';
+    const username = 'b';
     return (
       <div className='flex flex-row justify-between items-center gap-12'>
         <div className='flex-1'>
@@ -38,7 +40,13 @@ export async function EditSongPage({ id }: { id: string }) {
             Editing {songData.title}
           </h1>
           <SongProvider>
-            {songData && <SongEditForm songData={songData} />}
+            {songData && (
+              <SongEditForm
+                songId={songId}
+                username={username}
+                songData={songData}
+              />
+            )}
           </SongProvider>
         </div>
       </div>
