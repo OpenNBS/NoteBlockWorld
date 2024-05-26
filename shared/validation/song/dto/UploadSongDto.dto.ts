@@ -10,9 +10,15 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { UploadConst } from '@shared/validation/song/constants';
+
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
+
+const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
+const categories = Object.keys(UploadConst.categories) as Readonly<string[]>;
+const licenses = Object.keys(UploadConst.licenses) as Readonly<string[]>;
 
 export class UploadSongDto {
   @ApiProperty({
@@ -35,12 +41,12 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsIn(['public', 'private', 'unlisted'])
+  @IsIn(visibility)
   @ApiProperty({
-    enum: ['public', 'private', 'unlisted'],
-    default: 'public',
+    enum: visibility,
+    default: visibility[0],
     description: 'The visibility of the song',
-    example: 'public',
+    example: visibility[0],
   })
   visibility: VisibilityType;
 
@@ -71,9 +77,11 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsIn(categories)
   @ApiProperty({
+    enum: categories,
     description: 'Category of the song',
-    example: 'Gaming',
+    example: categories[0],
   })
   category: CategoryType;
 
@@ -89,12 +97,12 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsIn(['public', 'private', 'unlisted'])
+  @IsIn(licenses)
   @ApiProperty({
-    enum: ['public', 'private', 'unlisted'],
-    default: 'public',
+    enum: licenses,
+    default: licenses[0],
     description: 'The visibility of the song',
-    example: 'public',
+    example: licenses[0],
   })
   license: LicenseType;
 
