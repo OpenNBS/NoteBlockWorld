@@ -119,7 +119,7 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
   if (!song) return null;
 
   // TODO: this is re-running when the thumbnail sliders are changed. Why?
-  console.log(song);
+  //console.log(song);
 
   const customInstrumentCount =
     song.instruments.loaded.length - song.instruments.firstCustomIndex;
