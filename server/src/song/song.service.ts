@@ -21,7 +21,11 @@ import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
-import { Song as SongEntity, SongWithUser } from './entity/song.entity';
+import {
+  SongDocument,
+  Song as SongEntity,
+  SongWithUser,
+} from './entity/song.entity';
 import { generateSongId, removeNonAscii } from './song.util';
 
 @Injectable()
@@ -324,27 +328,46 @@ export class SongService {
     body: UploadSongDto,
     user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    }
-    const foundSong = await this.songModel.findById(id).exec();
+    const foundSong = (await this.songModel
+      .findById(id)
+      .exec()) as unknown as SongDocument;
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
-    // is song from user?
-    if (foundSong.uploader.toString() !== user._id.toString()) {
-      throw new HttpException('Song not found', HttpStatus.I_AM_A_TEAPOT);
+    if (foundSong.uploader.toString() !== user?._id.toString()) {
+      throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
-    foundSong.allowDownload = body.allowDownload;
-    foundSong.visibility = body.visibility == 'private' ? 'private' : 'public';
+    // Update song document
     foundSong.title = body.title;
     foundSong.originalAuthor = body.originalAuthor;
     foundSong.description = body.description;
-
-    const createdSong = (await foundSong.save()).populate(
+    foundSong.category = body.category;
+    foundSong.allowDownload = body.allowDownload;
+    foundSong.visibility = body.visibility;
+    foundSong.license = body.license;
+    foundSong.customInstruments = body.customInstruments;
+    foundSong.thumbnailData = body.thumbnailData;
+    foundSong._sounds = body.customInstruments;
+    // Update NBS file with form values
+    //TODO: Update song metadata
+    const songFile = await this.fileService.getSongFile(foundSong.nbsFileUrl);
+    const nbsSong = fromArrayBuffer(songFile);
+    this.updateSongFileMetadata(nbsSong, body, user);
+    //TODO: Generate thumbnail
+    const thumbUrl = await this.generateThumbnail(
+      body.thumbnailData,
+      nbsSong,
+      foundSong.publicId,
+      foundSong.nbsFileUrl,
+    );
+    //TODO: Upload thumbnail and song file
+    // Save song document
+    const updatedSong = await foundSong.save();
+    const populatedSong = (await updatedSong.populate(
       'uploader',
-    ) as unknown as SongWithUser;
-    return UploadSongResponseDto.fromSongWithUserDocument(createdSong);
+      'username profileImage -_id',
+    )) as unknown as SongWithUser;
+    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
