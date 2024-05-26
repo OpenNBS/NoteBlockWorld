@@ -20,11 +20,12 @@ export const SongEditForm = ({
   username,
 }: SongEditFormProps) => {
   const type = 'edit';
-  const { formMethods, loadSong } = useSongProvider(
+  const { loadSong, setSongId } = useSongProvider(
     type,
   ) as useEditSongProviderType;
   useEffect(() => {
     loadSong(songId, username, songData);
-  }, [loadSong, songData, songId, username]);
+    setSongId(songId);
+  }, [loadSong, setSongId, songData, songId, username]);
   return <SongForm type={type} />;
 };
