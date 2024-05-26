@@ -159,4 +159,8 @@ export class FileService {
       // finally
     }
   }
+
+  public async getSongFile(nbsFileUrl: string): Promise<ArrayBuffer> {
+    throw new Error('Method not implemented.');
+  }
 }
