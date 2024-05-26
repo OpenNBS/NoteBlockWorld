@@ -1,14 +1,17 @@
 'use client';
-import { Song } from '@encode42/nbs.js';
+
+import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
+
+import axios from '@web/src/lib/axios';
 
 import {
   EditSongForm,
@@ -49,39 +52,37 @@ export const EditSongProvider = ({
 
   const submitSong = async () => undefined;
 
-  useEffect(() => {
-    if (song) {
-      formMethods.setValue('thumbnailData.zoomLevel', 1);
-      formMethods.setValue('thumbnailData.startTick', 0);
-      formMethods.setValue('thumbnailData.startLayer', 0);
-      formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
-      formMethods.setValue('customInstruments', [
-        'custom1',
-        'custom2',
-        'custom3',
-      ]);
-    }
-  }, [song, formMethods]);
-
-  const loadSong = (id: string, username: string, song: UploadSongDtoType) => {
-    formMethods.reset({
-      allowDownload: song.allowDownload,
-      visibility: song.visibility,
-      title: song.title,
-      originalAuthor: song.originalAuthor,
-      artist: username,
-      description: song.description,
-      thumbnailData: {
-        zoomLevel: song.thumbnailData.zoomLevel,
-        startTick: song.thumbnailData.startTick,
-        startLayer: song.thumbnailData.startLayer,
-        backgroundColor: song.thumbnailData.backgroundColor,
-      },
-      customInstruments: song.customInstruments,
-      license: song.license,
-      category: song.category,
-    });
-  };
+  const loadSong = useCallback(
+    async (id: string, username: string, songData: UploadSongDtoType) => {
+      formMethods.reset({
+        allowDownload: songData.allowDownload,
+        visibility: songData.visibility,
+        title: songData.title,
+        originalAuthor: songData.originalAuthor,
+        artist: username,
+        description: songData.description,
+        thumbnailData: {
+          zoomLevel: songData.thumbnailData.zoomLevel,
+          startTick: songData.thumbnailData.startTick,
+          startLayer: songData.thumbnailData.startLayer,
+          backgroundColor: songData.thumbnailData.backgroundColor,
+        },
+        customInstruments: songData.customInstruments,
+        license: songData.license,
+        category: songData.category,
+      });
+      // fetch song
+      const songFile = (
+        await axios.get(`/song/${id}/download?src=edit`, {
+          responseType: 'arraybuffer',
+        })
+      ).data as ArrayBuffer;
+      // convert to song
+      const song = fromArrayBuffer(songFile);
+      setSong(song);
+    },
+    [formMethods, setSong],
+  );
 
   return (
     <EditSongContext.Provider
