@@ -99,18 +99,6 @@ export class SongController {
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
   }
 
-  //@Patch('/:id')
-  //@ApiBearerAuth()
-  //@UseGuards(AuthGuard('jwt-refresh'))
-  //@ApiOperation({ summary: 'Update a song' })
-  //public async patchSong(
-  //  @Param('id') id: string,
-  //  @Body() body: UploadSongDto,
-  //  @GetRequestToken() user: UserDocument | null,
-  //): Promise<UploadSongDto> {
-  //  return await this.songService.patchSong(id, body, user);
-  //}
-  //
   //@Delete('/:id')
   //@UseGuards(AuthGuard('jwt-refresh'))
   //@ApiBearerAuth()
