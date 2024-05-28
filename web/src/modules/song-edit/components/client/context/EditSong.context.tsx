@@ -2,7 +2,10 @@
 
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
+import {
+  UploadSongDtoType,
+  UploadSongNoFileDtoType,
+} from '@nbw/validation/song/dto/types';
 import { createContext, useCallback, useState } from 'react';
 import {
   FieldErrors,
@@ -11,14 +14,13 @@ import {
   useForm,
 } from 'react-hook-form';
 
-import axios from '@web/src/lib/axios';
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
 import {
   EditSongForm,
   editSongFormSchema,
-} from '../../../../upload/components/client/uploadSongForm.zod';
+} from '../../../../song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
@@ -29,6 +31,7 @@ export type useEditSongProviderType = {
   sendError: string | null;
   isSubmitting: boolean;
   loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
+  setSongId: (id: string) => void;
 };
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
@@ -56,35 +59,35 @@ export const EditSongProvider = ({
   const submitSong = async (): Promise<void> => {
     setSendError(null);
     // Build form data
-    const formData = new FormData();
-    const formValues = formMethods.getValues();
-    Object.entries(formValues)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
-      )
-      .forEach(([key, value]) => {
-        formData.append(key, value.toString());
-      });
-    formData.append('thumbnailData', JSON.stringify(formValues.thumbnailData));
-    formData.append(
-      'customInstruments',
-      JSON.stringify(formValues.customInstruments),
-    );
-    const songId = formValues.id as string;
+    const formValues: UploadSongNoFileDtoType = {
+      allowDownload: false,
+      visibility: 'public',
+      title: '',
+      originalAuthor: '',
+      description: '',
+      thumbnailData: {
+        zoomLevel: 0,
+        startTick: 0,
+        startLayer: 0,
+        backgroundColor: '#000000',
+      },
+      customInstruments: [],
+      license: 'unknown',
+      category: 'pop',
+    };
+
+    const songId = formMethods.getValues().id;
     // Get authorization token from local storage
     const token = getTokenLocal();
     try {
       // Send request
       const response = await axiosInstance.patch(
-        `/song/${songId}/edit
-      }`,
-        formData,
+        `/song/${songId}/edit`,
+        JSON.stringify(formValues),
         {
           headers: {
             authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
           },
         },
       );
@@ -122,7 +125,7 @@ export const EditSongProvider = ({
       });
       // fetch song
       const songFile = (
-        await axios.get(`/song/${id}/download?src=edit`, {
+        await axiosInstance.get(`/song/${id}/download?src=edit`, {
           responseType: 'arraybuffer',
         })
       ).data as ArrayBuffer;
@@ -131,6 +134,11 @@ export const EditSongProvider = ({
       setSong(song);
     },
     [formMethods, setSong],
+  );
+
+  const setSongId = useCallback(
+    (id: string) => formMethods.setValue('id', id),
+    [formMethods],
   );
 
   return (
@@ -144,6 +152,7 @@ export const EditSongProvider = ({
         sendError,
         isSubmitting,
         loadSong,
+        setSongId,
       }}
     >
       {children}
