@@ -8,13 +8,15 @@ export const Input = forwardRef<
     invalid?: boolean;
   }
 >((props, ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { invalid, ...rest } = props;
   return (
     <input
       ref={ref}
-      {...props}
+      {...rest}
       className={`block h-12 w-full rounded-lg bg-transparent border-2 ${
         props.invalid ? 'border-red-500' : 'border-zinc-500'
-      } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 invalid:bg-red-500 p-2`}
+      } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
     />
   );
 });
@@ -26,10 +28,12 @@ export const Select = forwardRef<
     invalid?: boolean;
   }
 >((props, ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { invalid, ...rest } = props;
   return (
     <select
       ref={ref}
-      {...props}
+      {...rest}
       className={cn(
         `block h-12 w-full rounded-lg bg-transparent border-2 ${
           props.invalid ? 'border-red-500' : 'border-zinc-500'
