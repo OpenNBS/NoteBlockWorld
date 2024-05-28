@@ -63,9 +63,12 @@ export const MySongProvider = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [songToDelete, setSongToDelete] = useState<MySongsSongDTO | null>(null);
 
-  const putPage = async ({ key, page }: { key: number; page: SongsPage }) => {
-    setLoadedSongs({ ...loadedSongs, [key]: page });
-  };
+  const putPage = useCallback(
+    async ({ key, page }: { key: number; page: SongsPage }) => {
+      setLoadedSongs({ ...loadedSongs, [key]: page });
+    },
+    [loadedSongs],
+  );
 
   const fetchSongsPage = useCallback(async (): Promise<void> => {
     setIsLoading(true);
@@ -97,7 +100,7 @@ export const MySongProvider = ({
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, putPage]);
 
   const loadPage = useCallback(async () => {
     if (currentPage in loadedSongs) {
@@ -113,7 +116,7 @@ export const MySongProvider = ({
       setIsLoading(true);
       loadPage();
     })();
-  }, [currentPage]);
+  }, [currentPage, loadPage]);
 
   const gotoPage = useCallback(
     (page: number) => {
