@@ -10,6 +10,7 @@ import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
 import { UploadConst } from '../constants';
 
 export type UploadSongDtoType = InstanceType<typeof UploadSongDto>;
+export type UploadSongNoFileDtoType = Omit<UploadSongDtoType, 'file'>;
 export type UploadSongResponseDtoType = InstanceType<
   typeof UploadSongResponseDto
 >;
