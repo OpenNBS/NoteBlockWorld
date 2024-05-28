@@ -17,13 +17,13 @@ const Loading = ({ pageSize }: { pageSize: number }) => {
       {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Array.from({ length: pageSize }).map((_, i) => (
-          <>
+          <div key={i}>
             <div className='col-span-4'>Song</div>
             <div>Visibility</div>
             <div>Created at</div>
             <div>Play count</div>
             <div>Actions</div>
-          </>
+          </div>
         ))
       }
     </div>
