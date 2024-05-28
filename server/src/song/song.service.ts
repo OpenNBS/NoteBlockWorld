@@ -436,6 +436,7 @@ export class SongService {
   public async getSongDownloadUrl(
     publicId: string,
     user: UserDocument | null,
+    src?: string,
   ): Promise<string> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -464,7 +465,7 @@ export class SongService {
         'song.nbs', // TODO: foundSong.filename
       );
       // increment download count
-      foundSong.downloadCount++;
+      if (src !== 'edit') foundSong.downloadCount++;
       await foundSong.save();
       return url;
     } catch (e) {

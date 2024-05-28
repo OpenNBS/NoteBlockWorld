@@ -102,13 +102,14 @@ export class SongController {
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
     @Param('id') id: string,
+    @Query('src') src: string,
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
     });
-    const url = await this.songService.getSongDownloadUrl(id, user);
+    const url = await this.songService.getSongDownloadUrl(id, user, src);
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
   }
 
