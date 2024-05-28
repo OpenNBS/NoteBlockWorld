@@ -1,3 +1,5 @@
+// TODO: check if types are still necessary in the frontend (use types from shared/ module)
+
 export type FeaturedTimespan =
   | 'hour'
   | 'day'

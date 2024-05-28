@@ -132,18 +132,18 @@ export class SongService {
     songStats: {
       fileSize: number;
       midiFileName: string;
-      noteCount: number; // TODO: calculate
+      noteCount: number;
       tickCount: number;
       layerCount: number;
       tempo: number;
       timeSignature: number;
-      duration: number; // TODO: take tempo changers into account
+      duration: number;
       loop: boolean;
       loopStartTick: number;
       minutesSpent: number;
-      usesCustomInstruments: boolean; // TODO: check if song.instruments.length > firstCustomIndex
-      isInOctaveRange: boolean; // TODO: check if any(note => note.pitch < 33 || note.pitch > 57)
-      compatible: any;
+      usesCustomInstruments: boolean;
+      isInOctaveRange: boolean;
+      compatible: boolean;
     },
   ) {
     const song = new SongEntity();
@@ -180,22 +180,24 @@ export class SongService {
     return song;
   }
 
+  // TODO: move all upload auxiliary methods to new UploadSongService
+
   private getSongStats(file: Express.Multer.File, nbsSong: Song) {
     return {
       fileSize: file.size,
       midiFileName: nbsSong.meta.importName || '',
-      noteCount: 0, // TODO: calculate,
+      noteCount: 0, // TODO(Bentroen): calculate,
       tickCount: nbsSong.length,
       layerCount: nbsSong.layers.length,
       tempo: nbsSong.tempo,
       timeSignature: nbsSong.timeSignature,
-      duration: nbsSong.length / nbsSong.tempo, // TODO: take tempo changers into account
+      duration: nbsSong.length / nbsSong.tempo, // TODO(Bentroen): take tempo changers into account
       loop: nbsSong.loop.enabled,
       loopStartTick: nbsSong.loop.startTick,
       minutesSpent: nbsSong.stats.minutesSpent,
-      usesCustomInstruments: false, // TODO: check if song.instruments.length > firstCustomIndex
-      isInOctaveRange: false, // TODO: check if any(note => note.pitch < 33 || note.pitch > 57)
-      compatible: false, //usesCustomInstruments && isInOctaveRange,
+      usesCustomInstruments: false, // TODO(Bentroen): check if song.instruments.length > firstCustomIndex
+      isInOctaveRange: false, // TODO(Bentroen): check if any(note => note.pitch < 33 || note.pitch > 57)
+      compatible: false, //TODO(Bentroen): usesCustomInstruments && isInOctaveRange,
     };
   }
 
