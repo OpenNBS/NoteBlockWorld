@@ -11,8 +11,7 @@ import {
 import { SongSelector } from '../../../song/components/client/SongSelector';
 
 const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
-  const { song, filename, isUploadComplete, uploadedSongId } =
-    useSongProvider('upload');
+  const { song, filename } = useSongProvider('upload');
 
   return (
     <>
