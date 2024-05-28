@@ -118,7 +118,28 @@ export class FileService {
   }
 
   public async uploadProfilePicture(file: Express.Multer.File) {
-    throw new Error('Method not implemented.');
+    // TODO: verify if this is working correctly
+    const bucket =
+      this.configService.get<string>('S3_BUCKET_PROFILE') ||
+      'noteblockworld-profiles';
+    const fileName = uuidv4();
+    await this.s3_upload(
+      file,
+      bucket,
+      fileName,
+      file.mimetype,
+      ObjectCannedACL.public_read,
+    );
+    return this.getProfilePictureUrl(fileName);
+  }
+  public async getProfilePictureUrl(fileName: string) {
+    // TODO: verify if this is working correctly
+    const bucket =
+      this.configService.get<string>('S3_BUCKET_PROFILE') ||
+      'noteblockworld-profiles';
+    const region = this.configService.get<string>('S3_REGION') || '';
+    const url = this.getPublicFileUrl(fileName, bucket, region);
+    return url;
   }
 
   public async deleteSong(nbsFileUrl: string) {
@@ -184,6 +205,29 @@ export class FileService {
   }
 
   public async getSongFile(nbsFileUrl: string): Promise<ArrayBuffer> {
-    throw new Error('Method not implemented.');
+    // TODO: verify if this is working correctly
+    const bucket = this.configService.get<string>('S3_BUCKET');
+    if (!bucket) {
+      throw new Error('Missing S3_BUCKET environment variable');
+    }
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: nbsFileUrl,
+    });
+
+    try {
+      const response = await this.s3Client.send(command);
+      const byteArray = await response.Body?.transformToByteArray();
+      if (!byteArray) {
+        throw new Error('Error getting file');
+      }
+      return byteArray.buffer;
+    } catch (error) {
+      console.error('Error getting file: ', error);
+      throw error;
+    } finally {
+      // finally
+    }
   }
 }
