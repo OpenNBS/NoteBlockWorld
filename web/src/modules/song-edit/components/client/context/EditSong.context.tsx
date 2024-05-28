@@ -13,6 +13,7 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import UploadCompleteModal from '@web/src/modules/upload/components/client/UploadCompleteModal';
 
 import {
   EditSongForm,
@@ -47,6 +48,7 @@ export const EditSongProvider = ({
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
+  const [updatedSongId, setUpdatedSongId] = useState<string | null>(null);
 
   const {
     register,
@@ -91,6 +93,8 @@ export const EditSongProvider = ({
       );
 
       const data = response.data;
+      const id = data.publicId as string;
+      setUpdatedSongId(id);
       setIsUploadComplete(true);
     } catch (error: any) {
       console.error('Error submitting song', error);
@@ -153,6 +157,13 @@ export const EditSongProvider = ({
         setSongId,
       }}
     >
+      {updatedSongId && (
+        <UploadCompleteModal
+          isEdit
+          isOpen={isUploadComplete}
+          songId={updatedSongId}
+        />
+      )}
       {children}
     </EditSongContext.Provider>
   );

@@ -6,9 +6,11 @@ import { Fragment, useEffect, useState } from 'react';
 export default function UploadCompleteModal({
   isOpen,
   songId,
+  isEdit,
 }: {
   isOpen: boolean;
   songId: string;
+  isEdit?: boolean;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -75,7 +77,7 @@ export default function UploadCompleteModal({
                   as='h3'
                   className='text-2xl font-semibold leading-6 text-white mb-5'
                 >
-                  Upload complete! 🎉
+                  {isEdit ? 'Edit' : 'Upload'} complete! 🎉
                 </Dialog.Title>
 
                 <p className='text-md text-white mb-2'>

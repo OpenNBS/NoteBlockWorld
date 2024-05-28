@@ -16,6 +16,7 @@ import {
   UploadSongForm,
   uploadSongFormSchema,
 } from '../../../../song/components/client/SongForm.zod';
+import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {
   song: Song | null;
@@ -176,6 +177,12 @@ export const UploadSongProvider = ({
         uploadedSongId,
       }}
     >
+      {uploadedSongId && (
+        <UploadCompleteModal
+          isOpen={isUploadComplete}
+          songId={uploadedSongId}
+        />
+      )}
       {children}
     </UploadSongContext.Provider>
   );

@@ -4,7 +4,6 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { SongUploadForm } from './SongUploadForm';
-import UploadCompleteModal from './UploadCompleteModal';
 import {
   SongProvider,
   useSongProvider,
@@ -43,13 +42,6 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
         <SongSelector />
       ) : (
         <SongUploadForm defaultAuthorName={defaultAuthorName} />
-      )}
-
-      {uploadedSongId && (
-        <UploadCompleteModal
-          isOpen={isUploadComplete}
-          songId={uploadedSongId}
-        />
       )}
     </>
   );
