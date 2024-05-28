@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
-import { CreateUser } from '@server/user/dto/CreateUser.dto';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
