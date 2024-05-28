@@ -47,13 +47,21 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     console.log('fetching songs');
     const firstPage = await fetchSongsPage(currentPage, pageSize, token.value);
 
-    const data = {
+    const data: SongsFolder = {
       [currentPage]: firstPage,
     };
+
     return data;
   } catch (error: unknown) {
     console.error('Error fetching songs', error);
-    return {};
+    return {
+      0: {
+        content: [],
+        total: 0,
+        page: 0,
+        pageSize: 0,
+      },
+    };
   }
 }
 

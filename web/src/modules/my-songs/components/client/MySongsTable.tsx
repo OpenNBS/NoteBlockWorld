@@ -14,15 +14,18 @@ import { useMySongsProvider } from '../client/MySongs.context';
 const Loading = ({ pageSize }: { pageSize: number }) => {
   return (
     <div className='grid grid-cols-8 gap-2 *:h-10'>
-      {Array.from({ length: pageSize }).map((_, i) => (
-        <>
-          <div className='col-span-4'>Song</div>
-          <div>Visibility</div>
-          <div>Created at</div>
-          <div>Play count</div>
-          <div>Actions</div>
-        </>
-      ))}
+      {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Array.from({ length: pageSize }).map((_, i) => (
+          <>
+            <div className='col-span-4'>Song</div>
+            <div>Visibility</div>
+            <div>Created at</div>
+            <div>Play count</div>
+            <div>Actions</div>
+          </>
+        ))
+      }
     </div>
   );
 };
@@ -105,7 +108,6 @@ export const MySongsPageComponent = () => {
     songToDelete,
     deleteSong,
   } = useMySongsProvider();
-
   return (
     <>
       <DeleteConfirmDialog
@@ -121,7 +123,7 @@ export const MySongsPageComponent = () => {
           <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
         )}
         <div className='flex flex-col gap-12 w-full'>
-          {page?.pageSize === 0 ? <MySongsTable /> : <NoSongs />}
+          {page?.content.length ? <MySongsTable /> : <NoSongs />}
         </div>
       </section>
     </>
