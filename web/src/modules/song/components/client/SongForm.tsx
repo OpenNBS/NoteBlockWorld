@@ -184,7 +184,7 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               <div className='flex flex-row items-center justify-center gap-2'>
                 <span className='loader'></span>
                 <p className='text-center'>
-                  {type === 'upload' ? 'Uploading song...' : 'Updating song...'}
+                  {type === 'upload' ? 'Uploading song...' : 'Saving song...'}
                 </p>
               </div>
             )}
@@ -195,7 +195,7 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               className='w-32 p-3 font-semibold bg-blue-500 enabled:hover:bg-blue-400 uppercase rounded-lg disabled:opacity-50'
               disabled={isSubmitting}
             >
-              {type === 'upload' ? 'Upload' : 'Update'}
+              {type === 'upload' ? 'Upload' : 'Save'}
             </button>
           </div>
         </div>
