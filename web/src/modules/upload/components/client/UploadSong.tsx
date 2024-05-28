@@ -3,13 +3,13 @@
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { SongUploadForm } from './SongUploadForm';
+import UploadCompleteModal from './UploadCompleteModal';
 import {
   SongProvider,
   useSongProvider,
 } from '../../../song/components/client/context/Song.context';
-import { SongSelector } from './SongSelector';
-import { SongUploadForm } from './SongUploadForm';
-import UploadCompleteModal from './UploadCompleteModal';
+import { SongSelector } from '../../../song/components/client/SongSelector';
 
 const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
   const { song, filename, isUploadComplete, uploadedSongId } =

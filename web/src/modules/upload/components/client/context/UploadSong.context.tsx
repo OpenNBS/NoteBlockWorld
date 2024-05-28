@@ -12,7 +12,10 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
-import { UploadSongForm, uploadSongFormSchema } from '../uploadSongForm.zod';
+import {
+  UploadSongForm,
+  uploadSongFormSchema,
+} from '../../../../song/components/client/SongForm.zod';
 
 export type useUploadSongProviderType = {
   song: Song | null;
@@ -70,8 +73,8 @@ export const UploadSongProvider = ({
     formData.append('file', blob, filename || 'song.nbs');
     const formValues = formMethods.getValues();
     Object.entries(formValues)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
       )
       .forEach(([key, value]) => {
