@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -76,12 +77,19 @@ export class SongController {
   }
 
   @Patch('/:id/edit')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
+  @ApiBody({
+    description: 'Upload Song',
+    type: UploadSongResponseDto,
+  })
   @ApiOperation({ summary: 'Edit song info by ID' })
   public async patchSong(
     @Param('id') id: string,
-    @GetRequestToken() user: UserDocument | null,
     @Body() body: UploadSongDto,
+    @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
+    console.log('patchSong', id, body, user);
     return await this.songService.patchSong(id, body, user);
   }
 
@@ -99,13 +107,17 @@ export class SongController {
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
   }
 
-  //@Delete('/:id')
-  //@UseGuards(AuthGuard('jwt-refresh'))
-  //@ApiBearerAuth()
-  //@ApiOperation({ summary: 'Delete a song' })
-  //public async deleteSong(@Param('id') id: string): Promise<UploadSongDto> {
-  //  return await this.songService.deleteSong(id);
-  //}
+  @Delete('/:id')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a song' })
+  public async deleteSong(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<void> {
+    await this.songService.deleteSong(id, user);
+  }
+
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
