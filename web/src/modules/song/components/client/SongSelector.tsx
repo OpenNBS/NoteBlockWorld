@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
 
+import { useSongProvider } from './context/Song.context';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
-import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
 export const SongSelector = () => {
   const { setFile, invalidFile } = useSongProvider('upload');

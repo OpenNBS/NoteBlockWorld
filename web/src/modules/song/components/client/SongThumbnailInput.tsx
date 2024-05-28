@@ -1,8 +1,11 @@
 import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
 import { useMemo } from 'react';
 
+import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
+
+import { useSongProvider } from './context/Song.context';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { useSongProvider } from '../../../song/components/client/context/Song.context';
+import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
 const ColorButton = ({
   color,
@@ -21,15 +24,15 @@ const ColorButton = ({
 );
 
 export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
-  const { song, register, formMethods } = useSongProvider(type);
-  const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
-    [
-      'thumbnailData.zoomLevel',
-      'thumbnailData.startTick',
-      'thumbnailData.startLayer',
-      'thumbnailData.backgroundColor',
-    ],
-  );
+  const { song, register, formMethods } = useSongProvider(
+    type,
+  ) as useUploadSongProviderType & useEditSongProviderType;
+
+  const [zoomLevel, startTick, startLayer] = formMethods.watch([
+    'thumbnailData.zoomLevel',
+    'thumbnailData.startTick',
+    'thumbnailData.startLayer',
+  ]);
 
   const [notes, maxTick, maxLayer] = useMemo(() => {
     if (!song) return [[], 0, 0];

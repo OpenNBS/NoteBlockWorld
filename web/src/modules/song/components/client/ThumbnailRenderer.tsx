@@ -3,7 +3,7 @@ import { drawNotesOffscreen, swap } from '@shared/features/thumbnail';
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { UploadSongForm } from './uploadSongForm.zod';
+import { UploadSongForm } from './SongForm.zod';
 
 type ThumbnailRendererCanvasProps = {
   notes: Note[];

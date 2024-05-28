@@ -1,6 +1,7 @@
 import { UploadConst } from '@shared/validation/song/constants';
 
-import { useUploadSongProviderType } from './context/UploadSong.context';
+import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
+
 import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
