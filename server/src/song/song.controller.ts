@@ -93,6 +93,7 @@ export class SongController {
     @Req() req: RawBodyRequest<Request>,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
+    //TODO: Fix this weird type casting and raw body access
     const body = req.body as unknown as UploadSongDto;
     return await this.songService.patchSong(id, body, user);
   }
