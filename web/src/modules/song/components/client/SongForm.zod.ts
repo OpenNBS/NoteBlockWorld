@@ -43,6 +43,7 @@ export const SongFormSchema = zod.object({
     .enum(licenses)
     .refine((value) => Object.keys(UploadConst.licenses).includes(value), {
       message:
+        // TODO: outdated message
         "Invalid license. Must be one of 'No license', 'CC BY 4.0', 'Public domain'",
     })
     .default('no_license'),

@@ -83,6 +83,7 @@ export const MySongProvider = ({
         },
       );
       const data = response.data as SongsPage;
+      // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       putPage({
         key: currentPage,
         page: data,
