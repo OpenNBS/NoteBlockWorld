@@ -370,16 +370,15 @@ export class SongService {
       foundSong.publicId,
       foundSong.nbsFileUrl,
     );
-    //TODO: Upload thumbnail and song file
-
+    //TODO: update song document
+    foundSong.thumbnailUrl = thumbUrl;
     // Save song document
-    //const updatedSong = await foundSong.save();
-    //const populatedSong = (await updatedSong.populate(
-    //  'uploader',
-    //  'username profileImage -_id',
-    //)) as unknown as SongWithUser;
-    return foundSong as unknown as UploadSongResponseDto;
-    //UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
+    const updatedSong = await foundSong.save();
+    const populatedSong = (await updatedSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    )) as unknown as SongWithUser;
+    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
