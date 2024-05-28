@@ -110,7 +110,7 @@ export class SongController {
       'Content-Disposition': 'attachment; filename="song.nbs"',
     });
     const url = await this.songService.getSongDownloadUrl(id, user, src);
-    res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
+    res.redirect(HttpStatus.FOUND, url);
   }
 
   @Delete('/:id')
