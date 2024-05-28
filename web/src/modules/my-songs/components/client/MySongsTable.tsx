@@ -121,7 +121,7 @@ export const MySongsPageComponent = () => {
           <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
         )}
         <div className='flex flex-col gap-12 w-full'>
-          {page ? <MySongsTable /> : <NoSongs />}
+          {page?.pageSize === 0 ? <MySongsTable /> : <NoSongs />}
         </div>
       </section>
     </>
