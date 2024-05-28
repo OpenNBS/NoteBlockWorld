@@ -55,8 +55,8 @@ export const MySongProvider = ({
   const [totalSongs, setTotalSongs] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(totalPagesInit);
   const [currentPage, setCurrentPage] = useState<number>(currentPageInit);
-  // eslint-disable-next-line no-unused-vars
-  const [pageSize, _] = useState<number>(pageSizeInit);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [pageSize, _setPageSize] = useState<number>(pageSizeInit);
   const [page, setPage] = useState<SongsPage | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
