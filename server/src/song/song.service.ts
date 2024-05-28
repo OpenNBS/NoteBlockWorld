@@ -254,7 +254,6 @@ export class SongService {
     let fileKey: string;
     try {
       fileKey = await this.fileService.uploadSong(file);
-      this.logger.log(fileKey);
     } catch (e) {
       throw new HttpException(
         {
@@ -310,17 +309,28 @@ export class SongService {
     }
   }
 
-  public async deleteSong(id: string): Promise<UploadSongResponseDto> {
-    const foundSong = (await this.songModel
-      .findById(id)
-      .populate('uploader')
-      .exec()) as unknown as SongWithUser;
+  public async deleteSong(
+    id: string,
+    user: UserDocument | null,
+  ): Promise<UploadSongResponseDto> {
+    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
-    // TODO: handle file deletion, Maybe move to a trash collection?
-    await this.songModel.deleteOne({ _id: id }).populate('uploader').exec();
-    return UploadSongResponseDto.fromSongWithUserDocument(foundSong);
+    if (foundSong.uploader.toString() !== user?._id.toString()) {
+      throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
+    }
+
+    await this.songModel
+      .deleteOne({ publicId: id })
+      .populate('uploader')
+      .exec();
+
+    await this.fileService.deleteSong(foundSong.nbsFileUrl);
+
+    return UploadSongResponseDto.fromSongWithUserDocument(
+      (await foundSong.populate('uploader')) as unknown as SongWithUser,
+    );
   }
 
   public async patchSong(
@@ -361,13 +371,15 @@ export class SongService {
       foundSong.nbsFileUrl,
     );
     //TODO: Upload thumbnail and song file
+
     // Save song document
-    const updatedSong = await foundSong.save();
-    const populatedSong = (await updatedSong.populate(
-      'uploader',
-      'username profileImage -_id',
-    )) as unknown as SongWithUser;
-    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
+    //const updatedSong = await foundSong.save();
+    //const populatedSong = (await updatedSong.populate(
+    //  'uploader',
+    //  'username profileImage -_id',
+    //)) as unknown as SongWithUser;
+    return foundSong as unknown as UploadSongResponseDto;
+    //UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
@@ -424,12 +436,10 @@ export class SongService {
   ): Promise<string> {
     const foundSong = await this.songModel.findOne({ publicId: id }).exec();
     if (!foundSong) {
-      this.logger.log('Song not found');
       throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
     }
     if (foundSong.visibility !== 'public') {
       if (!user || foundSong.uploader.toString() !== user._id.toString()) {
-        this.logger.log("Song is private and user isn't the uploader");
         throw new HttpException(
           'This song is private',
           HttpStatus.UNAUTHORIZED,
@@ -437,7 +447,6 @@ export class SongService {
       }
     }
     if (!foundSong.allowDownload) {
-      this.logger.log('Song has downloads disabled');
       throw new HttpException(
         'The uploader has disabled downloads of this song',
         HttpStatus.UNAUTHORIZED,
@@ -449,10 +458,8 @@ export class SongService {
         foundSong.nbsFileUrl,
         'song.nbs', // TODO: foundSong.filename
       );
-      this.logger.log(url);
       // increment download count
       foundSong.downloadCount++;
-      this.logger.log(foundSong);
       await foundSong.save();
       return url;
     } catch (e) {
@@ -511,7 +518,6 @@ export class SongService {
     if (foundSong.uploader.toString() !== user?._id.toString()) {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
-    this.logger.log(foundSong);
     return UploadSongDto.fromSongDocument(foundSong);
   }
 }
