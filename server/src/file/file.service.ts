@@ -121,6 +121,29 @@ export class FileService {
     throw new Error('Method not implemented.');
   }
 
+  public async deleteSong(nbsFileUrl: string) {
+    const bucket = this.configService.get<string>('S3_BUCKET');
+    if (!bucket) {
+      throw new Error('Missing S3_BUCKET environment variable');
+    }
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: nbsFileUrl,
+    });
+
+    try {
+      await this.s3Client.send(command);
+    } catch (error) {
+      console.error('Error deleting file: ', error);
+      throw error;
+    } finally {
+      // finally
+    }
+
+    return;
+  }
+
   async s3_upload(
     file: Express.Multer.File | Buffer,
     bucket: string,
