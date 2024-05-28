@@ -2,10 +2,7 @@
 
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  UploadSongDtoType,
-  UploadSongNoFileDtoType,
-} from '@nbw/validation/song/dto/types';
+import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
 import { createContext, useCallback, useState } from 'react';
 import {
   FieldErrors,
@@ -58,32 +55,33 @@ export const EditSongProvider = ({
 
   const submitSong = async (): Promise<void> => {
     setSendError(null);
+    const songId = formMethods.getValues().id;
     // Build form data
-    const formValues: UploadSongNoFileDtoType = {
-      allowDownload: false,
-      visibility: 'public',
-      title: '',
-      originalAuthor: '',
-      description: '',
+    const formValues = {
+      allowDownload: formMethods.getValues().allowDownload,
+      visibility: formMethods.getValues().visibility,
+      title: formMethods.getValues().title,
+      originalAuthor: formMethods.getValues().originalAuthor,
+      description: formMethods.getValues().description,
       thumbnailData: {
-        zoomLevel: 0,
-        startTick: 0,
-        startLayer: 0,
-        backgroundColor: '#000000',
+        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
+        startTick: formMethods.getValues().thumbnailData.startTick,
+        startLayer: formMethods.getValues().thumbnailData.startLayer,
+        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
       },
-      customInstruments: [],
-      license: 'unknown',
-      category: 'pop',
+      customInstruments: formMethods.getValues().customInstruments,
+      license: formMethods.getValues().license,
+      category: formMethods.getValues().category,
     };
 
-    const songId = formMethods.getValues().id;
+    // Send request
     // Get authorization token from local storage
     const token = getTokenLocal();
     try {
       // Send request
       const response = await axiosInstance.patch(
         `/song/${songId}/edit`,
-        JSON.stringify(formValues),
+        formValues,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -97,7 +95,7 @@ export const EditSongProvider = ({
     } catch (error: any) {
       console.error('Error submitting song', error);
       if (error.response) {
-        setSendError(error.response.data.error.file);
+        setSendError(error.response.data.message);
       } else {
         setSendError('An unknown error occurred while submitting the song!');
       }
