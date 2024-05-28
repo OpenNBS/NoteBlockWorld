@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  RawBodyRequest,
+  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -81,17 +83,17 @@ export class SongController {
   @Patch('/:id/edit')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Edit song info by ID' })
   @ApiBody({
     description: 'Upload Song',
     type: UploadSongResponseDto,
   })
-  @ApiOperation({ summary: 'Edit song info by ID' })
   public async patchSong(
     @Param('id') id: string,
-    @Body() body: UploadSongDto,
+    @Req() req: RawBodyRequest<Request>,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
-    console.log('patchSong', id, body, user);
+    const body = req.body as unknown as UploadSongDto;
     return await this.songService.patchSong(id, body, user);
   }
 

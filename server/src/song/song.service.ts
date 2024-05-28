@@ -310,10 +310,12 @@ export class SongService {
   }
 
   public async deleteSong(
-    id: string,
+    publicId: string,
     user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
-    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
+    const foundSong = await this.songModel
+      .findOne({ publicId: publicId })
+      .exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
@@ -322,7 +324,7 @@ export class SongService {
     }
 
     await this.songModel
-      .deleteOne({ publicId: id })
+      .deleteOne({ publicId: publicId })
       .populate('uploader')
       .exec();
 
@@ -334,12 +336,14 @@ export class SongService {
   }
 
   public async patchSong(
-    id: string,
+    publicId: string,
     body: UploadSongDto,
     user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
     const foundSong = (await this.songModel
-      .findById(id)
+      .findOne({
+        publicId: publicId,
+      })
       .exec()) as unknown as SongDocument;
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -404,11 +408,11 @@ export class SongService {
   }
 
   public async getSong(
-    id: string,
+    publicId: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
     const foundSong = await this.songModel
-      .findOne({ publicId: id })
+      .findOne({ publicId: publicId })
       .populate('uploader', 'username profileImage -_id')
       .exec();
     if (!foundSong) {
@@ -430,10 +434,12 @@ export class SongService {
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
   public async getSongDownloadUrl(
-    id: string,
+    publicId: string,
     user: UserDocument | null,
   ): Promise<string> {
-    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
+    const foundSong = await this.songModel
+      .findOne({ publicId: publicId })
+      .exec();
     if (!foundSong) {
       throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
     }
@@ -507,10 +513,12 @@ export class SongService {
   }
 
   public async getSongEdit(
-    id: string,
+    publicId: string,
     user: UserDocument | null,
   ): Promise<UploadSongDto> {
-    const foundSong = await this.songModel.findOne({ publicId: id }).exec();
+    const foundSong = await this.songModel
+      .findOne({ publicId: publicId })
+      .exec();
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
