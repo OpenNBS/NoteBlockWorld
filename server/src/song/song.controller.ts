@@ -69,6 +69,8 @@ export class SongController {
 
   @Get('/:id/edit')
   @ApiOperation({ summary: 'Get song info for editing by ID' })
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
   public async getEditSong(
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
