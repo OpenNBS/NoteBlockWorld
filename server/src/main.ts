@@ -72,6 +72,3 @@ bootstrap()
   .catch((error) => {
     logger.error(`Error: ${error}`);
   });
-function cookieParser(): any {
-  throw new Error('Function not implemented.');
-}
