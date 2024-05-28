@@ -56,6 +56,7 @@ export const EditSongProvider = ({
   } = formMethods;
 
   const submitSong = async (): Promise<void> => {
+    setIsSubmitting(true);
     setSendError(null);
     const songId = formMethods.getValues().id;
     // Build form data
@@ -103,6 +104,8 @@ export const EditSongProvider = ({
       } else {
         setSendError('An unknown error occurred while submitting the song!');
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
