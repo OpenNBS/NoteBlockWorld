@@ -1,10 +1,10 @@
 'use client';
-
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
@@ -30,8 +30,25 @@ const Loading = ({ pageSize }: { pageSize: number }) => {
   );
 };
 
-const NoSongs = () => <p>{"You haven't uploaded any song yet!"}</p>;
-
+const NoSongs = () => (
+  <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
+    <div className='flex items-center justify-center'>
+      <Image
+        src='/emptyChest.gif'
+        alt='Note Block World logo'
+        className='w-[100px] sm:w-[128px]'
+        width={150}
+        height={150}
+        style={{ filter: 'contrast(1) brightness(1.5) grayscale(.8)' }}
+      />
+    </div>
+    <div className='flex items-center justify-center'>
+      <p>
+        {`You haven't uploaded any songs yet. Click the "Upload" button to get started!`}
+      </p>
+    </div>
+  </div>
+);
 const SongRows = ({ page }: { page: SongsPage }) => {
   const { content } = page;
   return content.map((song) => <SongRow key={song.publicId} song={song} />);
@@ -91,6 +108,8 @@ export const MySongsTable = () => {
         page && <SongRows page={page} />
       )}
 
+      {page?.content.length === 0 && <NoSongs />}
+
       {/* Footer (pagination) */}
       <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
         <MySongsTablePaginator />
@@ -123,7 +142,7 @@ export const MySongsPageComponent = () => {
           <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
         )}
         <div className='flex flex-col gap-12 w-full'>
-          {page?.content.length ? <MySongsTable /> : <NoSongs />}
+          <MySongsTable />
         </div>
       </section>
     </>
