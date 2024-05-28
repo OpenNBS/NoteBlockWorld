@@ -3,6 +3,7 @@
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
+import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useState } from 'react';
 import {
   FieldErrors,
@@ -10,10 +11,10 @@ import {
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
+import toaster from 'react-hot-toast';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
-import UploadCompleteModal from '@web/src/modules/upload/components/client/UploadCompleteModal';
 
 import {
   EditSongForm,
@@ -47,13 +48,13 @@ export const EditSongProvider = ({
   const [song, setSong] = useState<Song | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploadComplete, setIsUploadComplete] = useState(false);
-  const [updatedSongId, setUpdatedSongId] = useState<string | null>(null);
 
   const {
     register,
     formState: { errors },
   } = formMethods;
+
+  const router = useRouter();
 
   const submitSong = async (): Promise<void> => {
     setIsSubmitting(true);
@@ -93,15 +94,14 @@ export const EditSongProvider = ({
         },
       );
 
-      const data = response.data;
-      const id = data.publicId as string;
-      setUpdatedSongId(id);
-      setIsUploadComplete(true);
+      toaster.success('Song saved successfully!');
+      router.push('/my-songs');
     } catch (error: any) {
       console.error('Error submitting song', error);
       if (error.response) {
         setSendError(error.response.data.message);
       } else {
+        console.log(error);
         setSendError('An unknown error occurred while submitting the song!');
       }
     } finally {
@@ -160,13 +160,6 @@ export const EditSongProvider = ({
         setSongId,
       }}
     >
-      {updatedSongId && (
-        <UploadCompleteModal
-          isEdit
-          isOpen={isUploadComplete}
-          songId={updatedSongId}
-        />
-      )}
       {children}
     </EditSongContext.Provider>
   );
