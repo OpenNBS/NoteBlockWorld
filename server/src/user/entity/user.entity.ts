@@ -12,6 +12,9 @@ import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
   },
 })
 export class User {
+  @Prop({ type: String, required: true, unique: true })
+  publicId: string;
+
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
   creationDate: Date;
 
