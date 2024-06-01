@@ -20,12 +20,12 @@ export const SongEditForm = ({
   username,
 }: SongEditFormProps) => {
   const type = 'edit';
-  const { loadSong, setSongId } = useSongProvider(
+  const { loadSong, setSongId, song } = useSongProvider(
     type,
   ) as useEditSongProviderType;
   useEffect(() => {
     loadSong(songId, username, songData);
     setSongId(songId);
   }, [loadSong, setSongId, songData, songId, username]);
-  return <SongForm type={type} />;
+  return <SongForm type={type} isLocked={!song ? true : false} />;
 };

@@ -11,7 +11,9 @@ export const SongUploadForm = ({
   defaultAuthorName: string;
 }) => {
   const type = 'upload';
-  const { formMethods } = useSongProvider(type) as useUploadSongProviderType;
+  const { formMethods, song } = useSongProvider(
+    type,
+  ) as useUploadSongProviderType;
 
   const defaultAuthorNameMemo = useMemo(() => {
     return defaultAuthorName;
@@ -21,5 +23,5 @@ export const SongUploadForm = ({
     formMethods.setValue('artist', defaultAuthorNameMemo);
   }, [defaultAuthorName, defaultAuthorNameMemo, formMethods]);
 
-  return <SongForm type={type} />;
+  return <SongForm type={type} isLocked={!song ? true : false} />;
 };
