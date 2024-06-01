@@ -89,7 +89,7 @@ export const Checkbox = forwardRef<
         type='checkbox'
         ref={ref}
         {...rest}
-        className={`block h-12 w-full rounded-lg bg-transparent border-2 ${
+        className={`accent-blue scale-150 mr-3 ${
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } p-2`}
       />
