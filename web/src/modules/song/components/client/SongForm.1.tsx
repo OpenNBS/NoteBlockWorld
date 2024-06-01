@@ -1,18 +1,12 @@
 import { UploadConst } from '@shared/validation/song/constants';
-
 import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
-
-import { Checkbox, Input, Option, Select, TextArea } from './FormElements';
+import { Input, Option, Select } from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
-
-type SongFormProps = {
-  type: 'upload' | 'edit';
-  isLocked?: boolean;
-};
+import { SongFormProps } from './SongForm';
 
 export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
   const useSongProviderData = useSongProvider(
@@ -33,13 +27,13 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
         {sendError && (
           <ErrorBalloon message={sendError} isVisible={!!sendError} />
         )}
-        <div className='flex flex-col h-fit gap-12'>
+        <div className='flex flex-col h-fit gap-6'>
           {/* Title */}
           <div>
             <label htmlFor='name'>Title*</label>
             <Input
               disabled={isLocked}
-              errorMessage={errors.title?.message}
+              invalid={!!errors.title}
               {...register('title', {
                 disabled: isLocked,
               })}
@@ -54,11 +48,19 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           <div>
             <label htmlFor='description'>Description</label>
 
-            <TextArea
-              errorMessage={errors.description?.message}
+            <textarea
+              id='description'
+              className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
+                errors.description ? 'border-red-500' : 'border-zinc-500'
+              } p-2`}
               {...register('description', {
                 disabled: isLocked,
               })}
+            ></textarea>
+
+            <ErrorBalloon
+              message={errors.description?.message}
+              isVisible={!!errors.description}
             />
           </div>
 
@@ -71,7 +73,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                 id='artist'
                 disabled={true}
                 className='block'
-                errorMessage={errors.artist?.message}
+                invalid={!!errors.artist}
                 {...register('artist', {
                   disabled: true, // TODO: This will be enabled in the future when the feature is implemented
                 })}
@@ -90,7 +92,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
             </div>
           </div>
 
-          {/* Category */}
+          {/* Genre */}
           <div className='flex flex-row gap-8 justify-between'>
             <div className='flex-1'>
               <label htmlFor='category'>Category</label>
@@ -99,7 +101,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                 {...register('category', {
                   disabled: isLocked,
                 })}
-                errorMessage={errors.category?.message}
+                invalid={!!errors.category}
               >
                 {Object.entries(UploadConst.categories).map(
                   ([key, value]: [string, string]) => (
@@ -109,6 +111,11 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                   ),
                 )}
               </Select>
+
+              <ErrorBalloon
+                message={errors.category?.message}
+                isVisible={!!errors.category}
+              />
             </div>
           </div>
 
@@ -126,7 +133,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <label htmlFor='visibility'>Visibility</label>
 
               <Select
-                errorMessage={errors.visibility?.message}
+                invalid={!!errors.visibility}
                 id='visibility'
                 {...register('visibility', {
                   disabled: isLocked,
@@ -140,11 +147,16 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                   ),
                 )}
               </Select>
+
+              <ErrorBalloon
+                message={errors.visibility?.message}
+                isVisible={!!errors.visibility}
+              />
             </div>
             <div className='flex-1'>
               <label htmlFor='license'>License</label>
               <Select
-                errorMessage={errors.license?.message}
+                invalid={!!errors.license}
                 {...register('license', {
                   disabled: isLocked,
                 })}
@@ -157,6 +169,10 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                   ),
                 )}
               </Select>
+              <ErrorBalloon
+                message={errors.license?.message}
+                isVisible={!!errors.license}
+              />
             </div>
           </div>
 
@@ -169,7 +185,9 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
 
           {/* Allow download */}
           <div className='flex-1'>
-            <Checkbox
+            <input
+              type='checkbox'
+              className='accent-blue scale-150 mr-3'
               disabled
               {...register('allowDownload', {
                 disabled: true, // TODO: This will be enabled in the future when the feature is implemented
@@ -179,6 +197,10 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               Allow other users to download the NBS file{' '}
               <span className='text-zinc-400 italic'>(Coming soon!)</span>
             </label>
+            <ErrorBalloon
+              message={errors.allowDownload?.message}
+              isVisible={!!errors.allowDownload}
+            />
           </div>
 
           <div className='h-4'></div>

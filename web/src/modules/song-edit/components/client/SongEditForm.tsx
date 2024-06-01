@@ -4,7 +4,7 @@ import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
 import { useEffect } from 'react';
 
 import { useSongProvider } from '@web/src/modules/song/components/client/context/Song.context';
-import { SongForm } from '@web/src/modules/song/components/client/SongForm';
+import { SongForm } from '@web/src/modules/song/components/client/SongForm.1';
 
 import { useEditSongProviderType } from './context/EditSong.context';
 
