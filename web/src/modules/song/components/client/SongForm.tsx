@@ -9,7 +9,12 @@ import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
-export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
+type SongFormProps = {
+  type: 'upload' | 'edit';
+  isLocked?: boolean;
+};
+
+export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
   const useSongProviderData = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
@@ -32,7 +37,13 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
           {/* Title */}
           <div>
             <label htmlFor='name'>Title*</label>
-            <Input {...register('title')} invalid={!!errors.title} />
+            <Input
+              disabled={isLocked}
+              invalid={!!errors.title}
+              {...register('title', {
+                disabled: isLocked,
+              })}
+            />
             <ErrorBalloon
               message={errors.title?.message}
               isVisible={!!errors.title}
@@ -48,7 +59,9 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
                 errors.description ? 'border-red-500' : 'border-zinc-500'
               } p-2`}
-              {...register('description')}
+              {...register('description', {
+                disabled: isLocked,
+              })}
             ></textarea>
 
             <ErrorBalloon
@@ -67,12 +80,18 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
                 disabled={true}
                 className='block'
                 invalid={!!errors.artist}
-                {...register('artist')}
+                {...register('artist', {
+                  disabled: isLocked,
+                })}
               />
             </div>
             <div className='flex-1'>
               <label htmlFor='album'>Original author</label>
-              <Input {...register('originalAuthor')} />
+              <Input
+                {...register('originalAuthor', {
+                  disabled: isLocked,
+                })}
+              />
               <p className='text-sm text-zinc-500'>
                 {"(Leave blank if it's an original song)"}
               </p>
@@ -84,7 +103,12 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             <div className='flex-1'>
               <label htmlFor='category'>Category</label>
 
-              <Select {...register('category')} invalid={!!errors.category}>
+              <Select
+                {...register('category', {
+                  disabled: isLocked,
+                })}
+                invalid={!!errors.category}
+              >
                 {Object.entries(UploadConst.categories).map(
                   ([key, value]: [string, string]) => (
                     <Option key={key} value={key}>
@@ -117,7 +141,9 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               <Select
                 invalid={!!errors.visibility}
                 id='visibility'
-                {...register('visibility')}
+                {...register('visibility', {
+                  disabled: isLocked,
+                })}
               >
                 {Object.entries(UploadConst.visibility).map(
                   ([key, value]: [string, string]) => (
@@ -135,7 +161,12 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
             </div>
             <div className='flex-1'>
               <label htmlFor='license'>License</label>
-              <Select invalid={!!errors.license} {...register('license')}>
+              <Select
+                invalid={!!errors.license}
+                {...register('license', {
+                  disabled: isLocked,
+                })}
+              >
                 {Object.entries(UploadConst.licenses).map(
                   ([key, value]: [string, string]) => (
                     <Option key={key} value={key}>
@@ -164,7 +195,9 @@ export const SongForm = ({ type }: { type: 'upload' | 'edit' }) => {
               type='checkbox'
               className='accent-blue scale-150 mr-3'
               disabled
-              {...register('allowDownload')}
+              {...register('allowDownload', {
+                disabled: true, // TODO: This will be enabled in the future when the feature is implemented
+              })}
             />
             <label htmlFor='allowDownload'>
               Allow other users to download the NBS file{' '}
