@@ -7,11 +7,11 @@ import {
   faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
-import { SongPageViewUploader } from '../types/song.type';
 import { downloadSongFile } from '../util/downloadSong';
 
-const UploaderBadge = ({ user }: { user: SongPageViewUploader }) => {
+const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
       <img src={user.profileImage} className='h-10 w-10 rounded-full' />
@@ -86,10 +86,13 @@ const DownloadSongButton = ({
     title: string;
   };
 }) => {
-  const handleClick = async () => {
-    downloadSongFile(song);
-  };
-  return <DownloadButton handleClick={handleClick} />;
+  return (
+    <DownloadButton
+      handleClick={() => {
+        downloadSongFile(song);
+      }}
+    />
+  );
 };
 
 const DownloadButton = ({

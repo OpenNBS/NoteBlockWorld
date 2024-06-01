@@ -1,9 +1,9 @@
+import { SongViewDtoType } from '@shared/validation/song/dto/types';
+
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
-import { SongPageView } from '../types/song.type';
-
 type SongDetailsProps = {
-  song: SongPageView;
+  song: SongViewDtoType;
 };
 
 const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {
@@ -96,7 +96,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Tick count</SongDetailsCell>
-          <SongDetailsCell>{song.tickCount}</SongDetailsCell>
+          <SongDetailsCell>{(song as any).tickCount}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Tempo</SongDetailsCell>
@@ -109,28 +109,30 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Time signature</SongDetailsCell>
-          <SongDetailsCell>{song.timeSignature}</SongDetailsCell>
+          <SongDetailsCell>{(song as any).timeSignature}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Running time</SongDetailsCell>
           <SongDetailsCell>
-            {formatDuration(song.tickCount / song.tempo)}
+            {formatDuration((song as any).tickCount / song.tempo)}
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Loop</SongDetailsCell>
           <SongDetailsCell>
-            {song.loop ? `Yes (to tick ${song.loopStartTick})` : 'No'}
+            {(song as any).loop
+              ? `Yes (to tick ${(song as any).loopStartTick})`
+              : 'No'}
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Time spent</SongDetailsCell>
-          <SongDetailsCell>{song.minutesSpent}</SongDetailsCell>
+          <SongDetailsCell>{(song as any).minutesSpent}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>File size</SongDetailsCell>
           <SongDetailsCell>
-            {(song.fileSize / 1024).toFixed(2)} kB
+            {((song as any).fileSize / 1024).toFixed(2)} kB
           </SongDetailsCell>
         </SongDetailsRow>
       </tbody>

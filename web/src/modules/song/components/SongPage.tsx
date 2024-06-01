@@ -1,3 +1,4 @@
+import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
@@ -10,10 +11,9 @@ import {
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
-import { SongPageView } from '../types/song.type';
 
 export async function SongPage({ id }: { id: string }) {
-  const { data: song } = await axios.get<SongPageView>(`/song/${id}`);
+  const { data: song } = await axios.get<SongViewDtoType>(`/song/${id}`);
 
   return (
     <div className='grid grid-cols-8 gap-12'>
