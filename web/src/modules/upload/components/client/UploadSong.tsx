@@ -15,10 +15,10 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
 
   return (
     <>
-      <div className='flex flex-row justify-between items-center gap-12'>
-        <div className='flex-1'>
-          <h1 className='text-3xl font-semibold text-nowrap'>Upload song</h1>
-        </div>
+      <div className='flex flex-row justify-between items-center gap-12 mb-10'>
+        <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
+          Upload song
+        </h1>
         {song && (
           <div className='flex-shrink min-w-0 flex flex-row gap-4 items-center text-zinc-500'>
             <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
@@ -36,7 +36,6 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
           </div>
         )}
       </div>
-      <div className='h-10' />
       {!song ? (
         <SongSelector />
       ) : (

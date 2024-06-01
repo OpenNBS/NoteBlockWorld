@@ -38,22 +38,23 @@ export async function EditSongPage({ id }: { id: string }) {
     const userData = await getUserData();
     const username = userData?.username;
     return (
-      <div className='flex flex-row justify-between items-center gap-12'>
-        <div className='flex-1'>
-          <h1 className='text-3xl font-semibold text-nowrap'>
+      <>
+        <div className='flex flex-row justify-between items-center gap-12 mb-10'>
+          <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
             Editing {songData.title}
           </h1>
-          <SongProvider>
-            {songData && (
-              <SongEditForm
-                songId={songId}
-                username={username}
-                songData={songData}
-              />
-            )}
-          </SongProvider>
+          {/* TODO: Show song file name */}
         </div>
-      </div>
+        <SongProvider>
+          {songData && (
+            <SongEditForm
+              songId={songId}
+              username={username}
+              songData={songData}
+            />
+          )}
+        </SongProvider>
+      </>
     );
   } catch (error: unknown) {
     return <div>Failed to fetch song data</div>;
