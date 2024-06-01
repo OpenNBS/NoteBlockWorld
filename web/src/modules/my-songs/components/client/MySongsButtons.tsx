@@ -8,14 +8,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
+import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
+
 const DownloadButton = ({ songId }: { songId: string }) => {
   return (
-    <Link
-      href={`/song/${songId}/download`}
+    <button
+      onClick={() => downloadSongFile(songId)}
       className='flex items-center justify-center w-8 h-8 hover:text-green-500 hover:scale-[1.25] transition-all duration-150'
     >
       <FontAwesomeIcon icon={faDownload} />
-    </Link>
+    </button>
   );
 };
 

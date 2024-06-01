@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import axios from '@web/src/lib/axios';
+import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
 
 import { SongPageViewUploader } from '../types/song.type';
 
@@ -82,7 +82,7 @@ const ShareButton = () => {
 const DownloadButton = ({ songId }: { songId: string }) => {
   return (
     <button
-      onClick={() => axios.get(`/song/${songId}/download`)}
+      onClick={() => downloadSongFile(songId)}
       className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:bg-green-500'
     >
       <div className='flex flex-row items-center gap-2'>
