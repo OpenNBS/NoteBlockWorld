@@ -1,47 +1,5 @@
-export type SongPageViewUploader = {
-  username: string;
-  profileImage: string;
-};
+import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
-export type SongPageView = {
-  // Auto-generated
-  id: string;
-  uploader: SongPageViewUploader;
-  thumbnailUrl: string;
-  downloadUrl: string;
-  createdAt: Date;
+export type SongPageViewUploader = SongViewDtoType['uploader'];
 
-  // From song document update
-  playCount: number;
-  downloadCount: number;
-  likeCount: number;
-
-  // From upload form -> updates NBS file
-  title: string;
-  originalAuthor: string;
-  description: string;
-
-  // From upload form -> updates song document
-  updatedAt: Date;
-  category: string;
-  visibility: 'public' | 'private';
-  allowDownload: boolean;
-
-  // From upload form -> Read/calculate from NBS file
-  // (Immutable!)
-  fileSize: number;
-  compatible: boolean;
-  midiFileName: string;
-  noteCount: number;
-  vanillaInstrumentCount: number;
-  customInstrumentCount: number;
-  tickCount: number;
-  layerCount: number;
-  tempo: number;
-  tempoRange: number[];
-  timeSignature: number;
-  duration: number;
-  loop: boolean;
-  loopStartTick: number;
-  minutesSpent: number;
-};
+export type SongPageView = SongViewDtoType;

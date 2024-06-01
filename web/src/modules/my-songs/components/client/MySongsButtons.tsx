@@ -10,10 +10,31 @@ import Link from 'next/link';
 
 import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
 
-const DownloadButton = ({ songId }: { songId: string }) => {
+export const DownloadSongButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+    title: string;
+  };
+}) => {
+  return (
+    <DownloadButton
+      handleClick={async () => {
+        downloadSongFile(song);
+      }}
+    />
+  );
+};
+
+const DownloadButton = ({
+  handleClick,
+}: {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   return (
     <button
-      onClick={() => downloadSongFile(songId)}
+      onClick={handleClick}
       className='flex items-center justify-center w-8 h-8 hover:text-green-500 hover:scale-[1.25] transition-all duration-150'
     >
       <FontAwesomeIcon icon={faDownload} />

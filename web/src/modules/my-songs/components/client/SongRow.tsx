@@ -14,7 +14,7 @@ import { useMySongsProvider } from './MySongs.context';
 import { MySongsSongDTO } from '../../types';
 import {
   DeleteButton,
-  DownloadButton,
+  DownloadSongButton,
   EditButton,
 } from '../client/MySongsButtons';
 
@@ -121,7 +121,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       <div>
         <div className='flex flex-row items-center justify-center text-xl'>
           {/* TODO: add popups/tooltips */}
-          <DownloadButton songId={song.publicId} />
+          <DownloadSongButton song={song} />
           <EditButton songId={song.publicId} />
           <DeleteButton onClick={onDeleteClicked} />
         </div>

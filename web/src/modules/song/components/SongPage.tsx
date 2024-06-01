@@ -4,7 +4,7 @@ import axios from '@web/src/lib/axios';
 
 import SongDetails from './SongDetails';
 import {
-  DownloadButton,
+  DownloadSongButton,
   FollowButton,
   LikeButton,
   ShareButton,
@@ -40,7 +40,7 @@ export async function SongPage({ id }: { id: string }) {
           <div className='flex flex-row gap-4'>
             <LikeButton />
             <ShareButton />
-            <DownloadButton songId={id} />
+            <DownloadSongButton song={song} />
           </div>
         </div>
 
