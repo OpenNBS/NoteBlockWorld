@@ -81,7 +81,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                 className='block'
                 invalid={!!errors.artist}
                 {...register('artist', {
-                  disabled: isLocked,
+                  disabled: true, // TODO: This will be enabled in the future when the feature is implemented
                 })}
               />
             </div>
