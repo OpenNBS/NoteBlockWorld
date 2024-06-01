@@ -18,10 +18,6 @@ import {
   EditButton,
 } from '../client/MySongsButtons';
 
-const TableCell = ({ children }: { children: React.ReactNode }) => {
-  return <div className='p-2'>{children}</div>;
-};
-
 export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
 
