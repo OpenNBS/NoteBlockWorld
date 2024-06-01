@@ -43,6 +43,7 @@ async function bootstrap() {
   // enable cors
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization'],
+    exposedHeaders: ['Content-Disposition'],
     origin: 'http://localhost:3000',
     credentials: true,
   });

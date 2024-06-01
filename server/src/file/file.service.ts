@@ -184,7 +184,7 @@ export class FileService {
       Body: buff,
       ACL: accessControl,
       ContentType: mimetype,
-      ContentDisposition: 'inline',
+      ContentDisposition: 'attachment; filename=' + name,
       CreateBucketConfiguration: {
         LocationConstraint: 'ap-south-1',
       },
