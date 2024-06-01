@@ -1,11 +1,7 @@
 import { SongViewUploader } from '@nbw/validation/song/dto/SongView.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
-import {
-  CategoryType,
-  LicenseType,
-  VisibilityType,
-} from '@shared/validation/song/dto/types';
+import * as types from '@shared/validation/song/dto/types';
 import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
@@ -60,13 +56,13 @@ export class Song {
   thumbnailData: ThumbnailData;
 
   @Prop({ type: String, required: true })
-  category: CategoryType;
+  category: types.CategoryType;
 
   @Prop({ type: String, required: true })
-  visibility: VisibilityType;
+  visibility: types.VisibilityType;
 
   @Prop({ type: String, required: true })
-  license: LicenseType;
+  license: types.LicenseType;
 
   @Prop({ type: Array<string>, required: true })
   customInstruments: string[];
