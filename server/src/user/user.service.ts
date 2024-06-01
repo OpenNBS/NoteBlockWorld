@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
+import { UserProfileDto } from '@shared/validation/user/dto/UserProfile.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 
 import { User, UserDocument } from './entity/user.entity';
+import { generateUserId } from './user.util';
 
 @Injectable()
 export class UserService {
@@ -18,6 +20,7 @@ export class UserService {
     const user = new this.userModel(user_registered);
     user.username = user_registered.username;
     user.email = user_registered.email;
+    user.publicId = generateUserId();
     return await user.save();
   }
 
@@ -69,13 +72,23 @@ export class UserService {
     return hydratedUser;
   }
 
-  public async getSelfUserData(user: UserDocument | null) {
+  public async getSelfUserData(
+    user: UserDocument | null,
+  ): Promise<UserProfileDto> {
     if (!user)
       throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
     const usedData = await this.findByID(user._id.toString());
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-    return usedData;
+    return UserProfileDto.fromUserProfileDto(usedData);
+  }
+
+  public async getUserProfileById(publicId: string): Promise<UserProfileDto> {
+    const user = await this.userModel.findOne({ publicId }).exec();
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return UserProfileDto.fromUserProfileDto(user);
   }
 
   public async usernameExists(username: string) {

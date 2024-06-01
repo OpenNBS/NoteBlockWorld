@@ -1,6 +1,7 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
+import { UserProfileDto } from '@shared/validation/user/dto/UserProfile.dto';
 
 import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { GetRequestToken } from '@server/GetRequestUser';
@@ -32,8 +33,19 @@ export class UserController {
   @Get('me')
   @ApiTags('user')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get the token owner data' })
-  async getMe(@GetRequestToken() user: UserDocument | null) {
+  @ApiOperation({ summary: 'Get the token owner profile data' })
+  async getMe(
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<UserProfileDto> {
     return await this.userService.getSelfUserData(user);
+  }
+
+  @Get('/:publicId')
+  @ApiTags('user')
+  @ApiOperation({ summary: 'Get user profile by public ID' })
+  async getProfileById(
+    @Param('publicId') publicId: string,
+  ): Promise<UserProfileDto> {
+    return await this.userService.getUserProfileById(publicId);
   }
 }
