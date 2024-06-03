@@ -20,7 +20,7 @@ export const Input = forwardRef<
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
       />
-      <ErrorBalloon message={errorMessage} isVisible={!!errorMessage} />
+      <ErrorBalloon message={errorMessage} />
     </>
   );
 });
@@ -43,7 +43,7 @@ export const TextArea = forwardRef<
         ref={ref}
         {...rest}
       />
-      <ErrorBalloon message={errorMessage} isVisible={!!errorMessage} />
+      <ErrorBalloon message={errorMessage} />
     </>
   );
 });
@@ -70,7 +70,7 @@ export const Select = forwardRef<
         )}
       />
 
-      <ErrorBalloon message={errorMessage} isVisible={!!errorMessage} />
+      <ErrorBalloon message={errorMessage} />
     </>
   );
 });
@@ -93,7 +93,7 @@ export const Checkbox = forwardRef<
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } p-2`}
       />
-      <ErrorBalloon message={errorMessage} isVisible={!!errorMessage} />
+      <ErrorBalloon message={errorMessage} />
     </>
   );
 });

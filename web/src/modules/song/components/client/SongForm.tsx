@@ -30,9 +30,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           submitSong();
         })}
       >
-        {sendError && (
-          <ErrorBalloon message={sendError} isVisible={!!sendError} />
-        )}
+        {sendError && <ErrorBalloon message={sendError} />}
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
@@ -44,10 +42,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                 disabled: isLocked,
               })}
             />
-            <ErrorBalloon
-              message={errors.title?.message}
-              isVisible={!!errors.title}
-            />
+            <ErrorBalloon message={errors.title?.message} />
           </div>
 
           {/* Description */}

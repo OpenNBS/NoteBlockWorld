@@ -5,7 +5,6 @@ import { useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
 
 import { useSongProvider } from './context/Song.context';
-import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 
 export const SongSelector = () => {
   const { setFile, invalidFile } = useSongProvider('upload');
@@ -44,7 +43,6 @@ export const SongSelector = () => {
 
   return (
     <>
-      <ErrorBalloon message='Invalid File' isVisible={invalidFile} />
       <div
         className={`flex flex-col items-center gap-6 h-fit p-8 mb-4 border-dashed border-4 ${
           isDragActive ? 'border-blue-400' : 'border-zinc-700'
