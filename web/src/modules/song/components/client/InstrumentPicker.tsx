@@ -98,8 +98,10 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                 .toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
-              <Select className='h-9 py-0 px-1 rounded-none'>
-                <Option value='none'>No sound</Option>
+              <Select className='h-9 py-0 px-1 rounded-none' id={''}>
+                <Option key={-1} value='none'>
+                  No sound
+                </Option>
                 {sounds.map((sound, i) => (
                   <Option key={i} value={sound.name}>
                     {sound.name}
