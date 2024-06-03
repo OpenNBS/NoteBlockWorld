@@ -2,11 +2,12 @@ import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 import { useSongProvider } from './context/Song.context';
 
 export const SongSelector = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { setFile, invalidFile } = useSongProvider('upload');
 
   const handleFileSelect = useCallback(
