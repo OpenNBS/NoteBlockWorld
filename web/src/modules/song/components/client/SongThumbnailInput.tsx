@@ -64,7 +64,6 @@ export const SongThumbnailInput = ({
             className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.zoomLevel', {
               valueAsNumber: true,
-              value: 3,
               max: 5,
               disabled: isLocked,
             })}
@@ -85,11 +84,11 @@ export const SongThumbnailInput = ({
             className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.startTick', {
               valueAsNumber: true,
-              value: 0,
               max: maxTick,
               disabled: isLocked,
             })}
             disabled={isLocked}
+            min={0}
             max={maxTick}
           />
         </div>
@@ -102,14 +101,13 @@ export const SongThumbnailInput = ({
           <input
             type='range'
             id='start-layer'
-            min='0'
             className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.startLayer', {
               valueAsNumber: true,
-              value: 0,
               max: maxLayer,
             })}
             disabled={isLocked}
+            min={0}
             max={maxLayer}
           />
         </div>

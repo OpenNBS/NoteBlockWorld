@@ -142,9 +142,10 @@ export const UploadSongProvider = ({
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
   };
+
   useEffect(() => {
     if (song) {
-      formMethods.setValue('thumbnailData.zoomLevel', 1);
+      formMethods.setValue('thumbnailData.zoomLevel', 3);
       formMethods.setValue('thumbnailData.startTick', 0);
       formMethods.setValue('thumbnailData.startLayer', 0);
       formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
