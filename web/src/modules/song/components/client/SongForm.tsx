@@ -59,15 +59,14 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           {/* Author */}
           <div className='flex flex-row gap-8 justify-between'>
             <div className='flex-1'>
-              <label htmlFor='artist'>Author</label>
+              <label htmlFor='author'>Author</label>
               <Input
                 type='text'
-                id='artist'
+                id='author'
                 disabled={true}
-                className='block'
-                errorMessage={errors.artist?.message}
-                {...register('artist', {
-                  disabled: true, // TODO: This will be enabled in the future when the feature is implemented
+                errorMessage={errors.author?.message}
+                {...register('author', {
+                  disabled: true,
                 })}
               />
             </div>

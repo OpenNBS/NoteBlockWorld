@@ -116,7 +116,7 @@ export const EditSongProvider = ({
         visibility: songData.visibility,
         title: songData.title,
         originalAuthor: songData.originalAuthor,
-        artist: username,
+        author: username,
         description: songData.description,
         thumbnailData: {
           zoomLevel: songData.thumbnailData.zoomLevel,

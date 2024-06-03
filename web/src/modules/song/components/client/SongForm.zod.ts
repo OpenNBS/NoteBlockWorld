@@ -31,7 +31,7 @@ export const SongFormSchema = zod.object({
       message: 'Original author must be less than 64 characters',
     })
     .min(0),
-  artist: zod.string().min(0),
+  author: zod.string(),
   description: zod.string().max(1024, {
     message: 'Description must be less than 1024 characters',
   }),

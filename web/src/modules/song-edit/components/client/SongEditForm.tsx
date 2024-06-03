@@ -20,12 +20,16 @@ export const SongEditForm = ({
   username,
 }: SongEditFormProps) => {
   const type = 'edit';
+
   const { loadSong, setSongId, song } = useSongProvider(
     type,
   ) as useEditSongProviderType;
+
   useEffect(() => {
     loadSong(songId, username, songData);
     setSongId(songId);
   }, [loadSong, setSongId, songData, songId, username]);
+  // TODO: The username is injected into the form differently in SongUploadForm (defaultAuthorName) and SongEditForm (username). This should be consistent
+
   return <SongForm type={type} isLocked={!song ? true : false} />;
 };
