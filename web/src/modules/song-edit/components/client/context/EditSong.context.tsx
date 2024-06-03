@@ -73,7 +73,7 @@ export const EditSongProvider = ({
         startLayer: formMethods.getValues().thumbnailData.startLayer,
         backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
       },
-      artist: formMethods.getValues().artist,
+      artist: formMethods.getValues().author,
       customInstruments: formMethods.getValues().customInstruments,
       license: formMethods.getValues().license,
       category: formMethods.getValues().category,
@@ -117,7 +117,7 @@ export const EditSongProvider = ({
         shouldDirty: true,
         shouldTouch: true,
       });
-      formMethods.setValue('artist', username, {
+      formMethods.setValue('author', username, {
         shouldDirty: true,
         shouldValidate: false,
         shouldTouch: true,
