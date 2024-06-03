@@ -7,12 +7,12 @@ export const Area = ({
   label,
   children,
 }: {
-  label: string;
+  label?: string;
   children: React.ReactNode;
 }) => {
   return (
     <>
-      <label>{label}</label>
+      {label && <label>{label}</label>}
       <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
         {children}
       </div>
@@ -24,7 +24,7 @@ export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     id: string;
-    label: string;
+    label?: string;
     errorMessage?: string;
   }
 >((props, ref) => {
@@ -32,7 +32,7 @@ export const Input = forwardRef<
   const { id, label, errorMessage, ...rest } = props;
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <input
         id={id}
         ref={ref}
@@ -51,14 +51,14 @@ export const TextArea = forwardRef<
   HTMLTextAreaElement,
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
     id: string;
-    label: string;
+    label?: string;
     errorMessage?: string;
   }
 >((props, ref) => {
   const { id, label, errorMessage, ...rest } = props;
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <textarea
         id={id}
         className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
@@ -77,7 +77,7 @@ export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
-    label: string;
+    label?: string;
     errorMessage?: string;
   }
 >((props, ref) => {
@@ -85,7 +85,7 @@ export const Select = forwardRef<
   const { id, label, errorMessage, ...rest } = props;
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <select
         ref={ref}
         {...rest}
