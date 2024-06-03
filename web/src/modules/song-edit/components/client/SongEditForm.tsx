@@ -21,9 +21,8 @@ export const SongEditForm = ({
 }: SongEditFormProps) => {
   const type = 'edit';
 
-  const { loadSong, setSongId, song, isSubmitting } = useSongProvider(
-    type,
-  ) as useEditSongProviderType;
+  const { loadSong, setSongId, song, formMethods, isSubmitting } =
+    useSongProvider(type) as useEditSongProviderType;
 
   useEffect(() => {
     loadSong(songId, username, songData);
@@ -31,5 +30,17 @@ export const SongEditForm = ({
   }, [loadSong, setSongId, songData, songId, username]);
   // TODO: The username is injected into the form differently in SongUploadForm (defaultAuthorName) and SongEditForm (username). This should be consistent
 
-  return <SongForm type={type} isLocked={!song || isSubmitting} />;
+  return (
+    <>
+      <button
+        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+        onClick={() => {
+          console.log(formMethods.getValues());
+        }}
+      >
+        test
+      </button>
+      <SongForm type={type} isLocked={!song || isSubmitting} />
+    </>
+  );
 };
