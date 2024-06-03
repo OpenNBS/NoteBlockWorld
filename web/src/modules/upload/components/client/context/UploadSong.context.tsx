@@ -44,6 +44,9 @@ export const UploadSongProvider = ({
   const [filename, setFilename] = useState<string | null>(null);
   const [invalidFile, setInvalidFile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  {
+    /* TODO: React Hook Form has an isSubmitting attribute. Can we leverage it? https://react-hook-form.com/docs/useformstate */
+  }
   const [sendError, setSendError] = useState<string | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
