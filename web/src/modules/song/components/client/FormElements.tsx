@@ -39,7 +39,7 @@ export const TextArea = forwardRef<
         id='description'
         className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
           errorMessage ? 'border-red-500' : 'border-zinc-500'
-        } p-2`}
+        } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
         ref={ref}
         {...rest}
       />

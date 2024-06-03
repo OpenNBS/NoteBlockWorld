@@ -18,8 +18,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
   const useSongProviderData = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
-  const { sendError, errors, submitSong, song, isSubmitting } =
-    useSongProviderData;
+  const { sendError, errors, submitSong, isSubmitting } = useSongProviderData;
   const formMethods = useSongProviderData.formMethods;
   const { register } = useSongProviderData;
   return (
@@ -111,7 +110,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           <div className='flex-1'>
             <p>Thumbnail</p>
             <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
-              <SongThumbnailInput type={type} />
+              <SongThumbnailInput type={type} isLocked={isLocked} />
             </div>
           </div>
 

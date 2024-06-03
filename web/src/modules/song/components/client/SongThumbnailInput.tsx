@@ -10,20 +10,29 @@ import type { useEditSongProviderType } from '../../../song-edit/components/clie
 const ColorButton = ({
   color,
   onClick,
+  disabled,
 }: {
   color: string;
   // eslint-disable-next-line no-unused-vars
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled: boolean;
 }) => (
   <button
     type='button'
-    className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30'
+    className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30 disabled:opacity-30'
     style={{ backgroundColor: color }}
+    disabled={disabled}
     onClick={onClick}
   />
 );
 
-export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
+export const SongThumbnailInput = ({
+  type,
+  isLocked,
+}: {
+  type: 'upload' | 'edit';
+  isLocked: boolean;
+}) => {
   const { song, register, formMethods } = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
@@ -52,12 +61,14 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
           <input
             type='range'
             id='zoom-level'
-            className='w-full'
+            className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.zoomLevel', {
               valueAsNumber: true,
               value: 3,
               max: 5,
+              disabled: isLocked,
             })}
+            disabled={isLocked}
             min={1}
             max={5}
           />
@@ -71,12 +82,14 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
           <input
             type='range'
             id='start-tick'
-            className='w-full'
+            className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.startTick', {
               valueAsNumber: true,
               value: 0,
               max: maxTick,
+              disabled: isLocked,
             })}
+            disabled={isLocked}
             max={maxTick}
           />
         </div>
@@ -90,12 +103,13 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
             type='range'
             id='start-layer'
             min='0'
-            className='w-full'
+            className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.startLayer', {
               valueAsNumber: true,
               value: 0,
               max: maxLayer,
             })}
+            disabled={isLocked}
             max={maxLayer}
           />
         </div>
@@ -112,6 +126,7 @@ export const SongThumbnailInput = ({ type }: { type: 'upload' | 'edit' }) => {
             <ColorButton
               key={index}
               color={color}
+              disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 formMethods.setValue('thumbnailData.backgroundColor', color);
