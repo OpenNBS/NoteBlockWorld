@@ -6,8 +6,6 @@ import axios from '@web/src/lib/axios';
 import SongDetails from './SongDetails';
 import {
   DownloadSongButton,
-  FollowButton,
-  LikeButton,
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
@@ -35,10 +33,10 @@ export async function SongPage({ id }: { id: string }) {
         {/* Uploader and actions */}
         <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
           <UploaderBadge user={song.uploader} />
-          <FollowButton />
+          {/* <FollowButton /> */}
           <div className='flex-grow'></div>
           <div className='flex flex-row gap-4'>
-            <LikeButton />
+            {/* <LikeButton /> */}
             <ShareButton />
             <DownloadSongButton song={song} />
           </div>

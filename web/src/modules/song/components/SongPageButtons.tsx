@@ -8,13 +8,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
-import Image from 'next/image';
 
 import { downloadSongFile } from '../util/downloadSong';
 
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
+      {/*
       <Image
         unoptimized
         src={user.profileImage}
@@ -23,9 +23,13 @@ const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
         width={40}
         height={40}
       />
+      */}
       <div className='flex flex-col leading-tight h-full'>
-        <p className='font-bold'>{user.username}</p>
-        <p className='text-sm text-zinc-400'>410 followers</p>
+        <p className='text-zinc-400'>
+          uploaded by{' '}
+          <span className='font-bold text-white'>{user.username}</span>
+        </p>
+        {/* <p className='text-sm text-zinc-400'>410 followers</p> */}
       </div>
     </div>
   );
