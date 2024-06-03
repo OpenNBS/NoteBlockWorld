@@ -123,7 +123,10 @@ export const ThumbnailRendererCanvas = ({
 
   return (
     <div className='relative w-full'>
-      <canvas ref={canvasRef} className='w-full h-full rounded-lg' />
+      <canvas
+        ref={canvasRef}
+        className='w-full h-full aspect-[5/3] rounded-lg'
+      />
       {loading && (
         <div className='absolute top-0 flex items-center justify-center bg-black w-full h-full rounded-lg opacity-80'>
           Loading...
