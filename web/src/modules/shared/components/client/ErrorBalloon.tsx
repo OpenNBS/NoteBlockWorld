@@ -6,7 +6,7 @@ export const ErrorBalloon = ({ message, isVisible }: ErrorBalloonProps) => {
   return (
     <>
       <div
-        className={`bg-red-600 p-2 absolute rounded-md mt-2 ${
+        className={`text-red-600 text-sm absolute mt-1 ${
           message ? 'block' : 'hidden'
         }`}
       >
