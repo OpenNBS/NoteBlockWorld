@@ -72,9 +72,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
                 type='text'
                 disabled={true}
                 errorMessage={errors.author?.message}
-                {...register('author', {
-                  disabled: true,
-                })}
+                {...register('author')}
               />
             </div>
             <div className='flex-1'>
@@ -169,12 +167,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
 
           {/* Allow download */}
           <div className='flex-1'>
-            <Checkbox
-              disabled
-              {...register('allowDownload', {
-                disabled: true, // TODO: This will be enabled in the future when the feature is implemented
-              })}
-            />
+            <Checkbox disabled {...register('allowDownload', {})} />
             <label htmlFor='allowDownload'>
               Allow other users to download the NBS file{' '}
               <span className='text-zinc-400 italic'>(Coming soon!)</span>
