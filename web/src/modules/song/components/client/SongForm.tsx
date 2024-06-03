@@ -18,9 +18,9 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
   const useSongProviderData = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
-  const { sendError, errors, submitSong, isSubmitting } = useSongProviderData;
-  const formMethods = useSongProviderData.formMethods;
-  const { register } = useSongProviderData;
+  const { sendError, errors, submitSong, isSubmitting, formMethods, register } =
+    useSongProviderData;
+
   return (
     <>
       <form
