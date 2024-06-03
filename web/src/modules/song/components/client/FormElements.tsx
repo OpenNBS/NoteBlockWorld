@@ -3,17 +3,38 @@ import { forwardRef } from 'react';
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 
+export const Area = ({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <>
+      <label>{label}</label>
+      <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+        {children}
+      </div>
+    </>
+  );
+};
+
 export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
+    id: string;
+    label: string;
     errorMessage?: string;
   }
 >((props, ref) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { errorMessage, ...rest } = props;
+  const { id, label, errorMessage, ...rest } = props;
   return (
     <>
+      <label htmlFor={id}>{label}</label>
       <input
+        id={id}
         ref={ref}
         {...rest}
         className={`block h-12 w-full rounded-lg bg-transparent border-2 ${
@@ -29,14 +50,17 @@ Input.displayName = 'Input';
 export const TextArea = forwardRef<
   HTMLTextAreaElement,
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
+    id: string;
+    label: string;
     errorMessage?: string;
   }
 >((props, ref) => {
-  const { errorMessage, ...rest } = props;
+  const { id, label, errorMessage, ...rest } = props;
   return (
     <>
+      <label htmlFor={id}>{label}</label>
       <textarea
-        id='description'
+        id={id}
         className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
@@ -52,13 +76,16 @@ TextArea.displayName = 'TextArea';
 export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & {
+    id: string;
+    label: string;
     errorMessage?: string;
   }
 >((props, ref) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { errorMessage, ...rest } = props;
+  const { id, label, errorMessage, ...rest } = props;
   return (
     <>
+      <label htmlFor={id}>{label}</label>
       <select
         ref={ref}
         {...rest}

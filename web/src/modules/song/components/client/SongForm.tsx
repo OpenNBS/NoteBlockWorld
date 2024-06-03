@@ -2,7 +2,14 @@ import { UploadConst } from '@shared/validation/song/constants';
 
 import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
 
-import { Checkbox, Input, Option, Select, TextArea } from './FormElements';
+import {
+  Area,
+  Checkbox,
+  Input,
+  Option,
+  Select,
+  TextArea,
+} from './FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
@@ -33,22 +40,22 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
-            <label htmlFor='name'>Title*</label>
             <Input
+              id='title'
+              label='Title*'
               disabled={isLocked}
               errorMessage={errors.title?.message}
               {...register('title', {
                 disabled: isLocked,
               })}
             />
-            <ErrorBalloon message={errors.title?.message} />
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor='description'>Description</label>
-
             <TextArea
+              id='description'
+              label='Description'
               errorMessage={errors.description?.message}
               {...register('description', {
                 disabled: isLocked,
@@ -59,10 +66,10 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           {/* Author */}
           <div className='flex flex-row gap-8 justify-between'>
             <div className='flex-1'>
-              <label htmlFor='author'>Author</label>
               <Input
-                type='text'
                 id='author'
+                label='Author'
+                type='text'
                 disabled={true}
                 errorMessage={errors.author?.message}
                 {...register('author', {
@@ -71,8 +78,9 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               />
             </div>
             <div className='flex-1'>
-              <label htmlFor='album'>Original author</label>
               <Input
+                id='originalAuthor'
+                label='Original author'
                 {...register('originalAuthor', {
                   disabled: isLocked,
                 })}
@@ -80,15 +88,16 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <p className='text-sm text-zinc-500'>
                 {"(Leave blank if it's an original song)"}
               </p>
+              {/* TODO: make this into a composable component: <Input.Description>, <Input.Label> etc. */}
             </div>
           </div>
 
           {/* Category */}
           <div className='flex flex-row gap-8 justify-between'>
             <div className='flex-1'>
-              <label htmlFor='category'>Category</label>
-
               <Select
+                id='category'
+                label='Category'
                 {...register('category', {
                   disabled: isLocked,
                 })}
@@ -107,20 +116,18 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
 
           {/* Thumbnail */}
           <div className='flex-1'>
-            <p>Thumbnail</p>
-            <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+            <Area label='Thumbnail'>
               <SongThumbnailInput type={type} isLocked={isLocked} />
-            </div>
+            </Area>
           </div>
 
           {/* Visibility */}
           <div className='flex flex-row gap-8 justify-between'>
             <div className='flex-1'>
-              <label htmlFor='visibility'>Visibility</label>
-
               <Select
-                errorMessage={errors.visibility?.message}
                 id='visibility'
+                label='Visibility'
+                errorMessage={errors.visibility?.message}
                 {...register('visibility', {
                   disabled: isLocked,
                 })}
@@ -135,8 +142,9 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               </Select>
             </div>
             <div className='flex-1'>
-              <label htmlFor='license'>License</label>
               <Select
+                id='license'
+                label='License'
                 errorMessage={errors.license?.message}
                 {...register('license', {
                   disabled: isLocked,
@@ -154,10 +162,9 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           </div>
 
           <div className='flex-1'>
-            <label htmlFor='custom-instruments'>Custom instruments</label>
-            <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+            <Area label='Custom instruments'>
               <InstrumentPicker type={type} />
-            </div>
+            </Area>
           </div>
 
           {/* Allow download */}
