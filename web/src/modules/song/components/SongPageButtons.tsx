@@ -16,6 +16,7 @@ const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
       <Image
+        unoptimized
         src={user.profileImage}
         alt={`Profile picture of ${user.username}`}
         className='h-10 w-10 rounded-full'
