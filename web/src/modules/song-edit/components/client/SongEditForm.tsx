@@ -21,7 +21,7 @@ export const SongEditForm = ({
 }: SongEditFormProps) => {
   const type = 'edit';
 
-  const { loadSong, setSongId, song } = useSongProvider(
+  const { loadSong, setSongId, song, isSubmitting } = useSongProvider(
     type,
   ) as useEditSongProviderType;
 
@@ -31,5 +31,5 @@ export const SongEditForm = ({
   }, [loadSong, setSongId, songData, songId, username]);
   // TODO: The username is injected into the form differently in SongUploadForm (defaultAuthorName) and SongEditForm (username). This should be consistent
 
-  return <SongForm type={type} isLocked={!song ? true : false} />;
+  return <SongForm type={type} isLocked={!song || isSubmitting} />;
 };
