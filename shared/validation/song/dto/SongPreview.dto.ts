@@ -29,6 +29,10 @@ export class SongPreviewDto {
 
   @IsNotEmpty()
   @IsString()
+  description: string;
+
+  @IsNotEmpty()
+  @IsString()
   @MaxLength(64)
   originalAuthor: string;
 
@@ -55,10 +59,6 @@ export class SongPreviewDto {
   @IsString()
   visibility: string;
 
-  @IsNotEmpty()
-  @IsString()
-  description: string;
-
   constructor(partial: Partial<SongPreviewDto>) {
     Object.assign(this, partial);
   }
@@ -68,6 +68,7 @@ export class SongPreviewDto {
       publicId: song.publicId,
       uploader: song.uploader,
       title: song.title,
+      description: song.description,
       originalAuthor: song.originalAuthor,
       duration: song.duration,
       noteCount: song.noteCount,
