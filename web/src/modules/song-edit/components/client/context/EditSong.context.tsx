@@ -73,6 +73,7 @@ export const EditSongProvider = ({
         startLayer: formMethods.getValues().thumbnailData.startLayer,
         backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
       },
+      artist: formMethods.getValues().artist,
       customInstruments: formMethods.getValues().customInstruments,
       license: formMethods.getValues().license,
       category: formMethods.getValues().category,
@@ -111,29 +112,48 @@ export const EditSongProvider = ({
 
   const loadSong = useCallback(
     async (id: string, username: string, songData: UploadSongDtoType) => {
-      formMethods.reset({
-        allowDownload: songData.allowDownload,
-        visibility: songData.visibility,
-        title: songData.title,
-        originalAuthor: songData.originalAuthor,
-        author: username,
-        description: songData.description,
-        thumbnailData: {
-          zoomLevel: songData.thumbnailData.zoomLevel,
-          startTick: songData.thumbnailData.startTick,
-          startLayer: songData.thumbnailData.startLayer,
-          backgroundColor: songData.thumbnailData.backgroundColor,
-        },
-        customInstruments: songData.customInstruments,
-        license: songData.license,
-        category: songData.category,
+      formMethods.setValue('allowDownload', true, {
+        shouldValidate: false,
+        shouldDirty: true,
+        shouldTouch: true,
       });
+      formMethods.setValue('artist', username, {
+        shouldDirty: true,
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+
+      formMethods.setValue('visibility', songData.visibility);
+      formMethods.setValue('title', songData.title);
+      formMethods.setValue('originalAuthor', songData.originalAuthor);
+      formMethods.setValue('description', songData.description);
+      formMethods.setValue(
+        'thumbnailData.zoomLevel',
+        songData.thumbnailData.zoomLevel,
+      );
+      formMethods.setValue(
+        'thumbnailData.startTick',
+        songData.thumbnailData.startTick,
+      );
+      formMethods.setValue(
+        'thumbnailData.startLayer',
+        songData.thumbnailData.startLayer,
+      );
+      formMethods.setValue(
+        'thumbnailData.backgroundColor',
+        songData.thumbnailData.backgroundColor,
+      );
+      formMethods.setValue('customInstruments', songData.customInstruments);
+      formMethods.setValue('license', songData.license);
+      formMethods.setValue('category', songData.category);
+
       // fetch song
       const songFile = (
         await axiosInstance.get(`/song/${id}/download?src=edit`, {
           responseType: 'arraybuffer',
         })
       ).data as ArrayBuffer;
+
       // convert to song
       const song = fromArrayBuffer(songFile);
       setSong(song);
