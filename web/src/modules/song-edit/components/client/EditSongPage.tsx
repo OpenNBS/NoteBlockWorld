@@ -43,6 +43,8 @@ export async function EditSongPage({ id }: { id: string }) {
           <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
             Editing {songData.title}
           </h1>
+          {/* TODO: spinner not showing */}
+          {songData === null && <div className='loader'></div>}
           {/* TODO: Show song file name */}
         </div>
         <SongProvider>
