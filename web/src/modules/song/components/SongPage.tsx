@@ -9,6 +9,7 @@ import {
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
+import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
   const { data: song } = await axios.get<SongViewDtoType>(`/song/${id}`);
@@ -44,7 +45,9 @@ export async function SongPage({ id }: { id: string }) {
 
         {/* Views, upload date, description */}
         <div className='flex flex-col p-3 gap-2 bg-zinc-800 rounded-xl'>
-          <div className='text-sm text-zinc-300'>221 views • 2 days ago</div>
+          <div className='text-sm text-zinc-300'>
+            {song.playCount} views • {formatTimeAgo(new Date(song.createdAt))}
+          </div>
           <p className='leading-tight'>{song.description}</p>
         </div>
       </div>
