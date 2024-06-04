@@ -5,5 +5,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "cSpell.words": ["DTOs", "uuidv", "virtuals"]
+  "cSpell.words": ["DTOs", "Embla", "uuidv", "virtuals"]
 }
