@@ -1,5 +1,10 @@
 'use client';
 
+import { PageQueryDTOType } from '@shared/validation/common/dto/types';
+import {
+  SongPreviewDtoType,
+  TimespanType,
+} from '@shared/validation/song/dto/types';
 import {
   createContext,
   useCallback,
@@ -10,19 +15,19 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 
-import { FeaturedTimespan, SongPreview } from '../../types';
-
 type HomePageContextType = {
-  recentSongs: SongPreview[];
+  recentSongs: SongPreviewDtoType[];
   fetchRecentSongs: () => void;
   recentLoading: boolean;
   recentError: string;
-  featuredSongs: SongPreview[];
+  featuredSongs: SongPreviewDtoType[];
   fetchFeaturedSongs: () => void;
   featuredLoading: boolean;
   featuredError: string;
-  featuredTimespan: FeaturedTimespan;
-  setFeaturedTimespan: (timespan: FeaturedTimespan) => void;
+  featuredTimespan: TimespanType;
+  setFeaturedTimespan: (timespan: TimespanType) => void;
+  timespan: TimespanType;
+  setTimespan: (timespan: TimespanType) => void;
 };
 
 const HomePageContext = createContext<HomePageContextType>(
@@ -35,28 +40,36 @@ export const HomePageProvider = ({
   initialFeaturedSongs,
 }: {
   children: React.ReactNode;
-  initialRecentSongs: SongPreview[];
-  initialFeaturedSongs: SongPreview[];
+  initialRecentSongs: SongPreviewDtoType[];
+  initialFeaturedSongs: SongPreviewDtoType[];
 }) => {
   // Recent songs
   const [recentSongs, setRecentSongs] =
-    useState<SongPreview[]>(initialRecentSongs);
+    useState<SongPreviewDtoType[]>(initialRecentSongs);
   const [recentLoading, setRecentLoading] = useState(false);
   const [recentError, setRecentError] = useState<string>('');
 
   // Featured songs
   const [featuredSongs, setFeaturedSongs] =
-    useState<SongPreview[]>(initialFeaturedSongs);
+    useState<SongPreviewDtoType[]>(initialFeaturedSongs);
   const [featuredTimespan, setFeaturedTimespan] =
-    useState<FeaturedTimespan>('week');
+    useState<TimespanType>('week');
   const [featuredLoading, setFeaturedLoading] = useState(false);
   const [featuredError, setFeaturedError] = useState<string>('');
+  const [timespan, setTimespan] = useState<TimespanType>('week');
 
   const fetchRecentSongs = useCallback(async () => {
     // setRecentLoading(true);
+    const params: PageQueryDTOType = {
+      page: 1, // TODO: fiz constants
+      limit: 10,
+      sort: 'createdAt',
+      order: false,
+      timespan: featuredTimespan,
+    };
     try {
       const response = await axiosInstance.get('/song', {
-        params: { sort: 'createdAt', skip: recentSongs.length, limit: 12 },
+        params,
       });
       setRecentSongs([...recentSongs, ...response.data]);
     } catch (error) {
@@ -64,18 +77,20 @@ export const HomePageProvider = ({
     } finally {
       setRecentLoading(false);
     }
-  }, [recentSongs]);
+  }, [featuredTimespan, recentSongs]);
 
   const fetchFeaturedSongs = useCallback(async () => {
     //setFeaturedLoading(true);
+    const params: PageQueryDTOType = {
+      page: 1, // TODO: fiz constants
+      limit: 10,
+      sort: 'playCount',
+      order: false,
+      timespan: featuredTimespan,
+    };
     try {
       const response = await axiosInstance.get('/song', {
-        params: {
-          sort: 'createdAt', // TODO: featured
-          // TODO: featuredTimespan,
-          skip: featuredSongs.length,
-          limit: 8,
-        },
+        params,
       });
       setFeaturedSongs([...featuredSongs, ...response.data]);
       //console.log('featuredSongs', featuredSongs);
@@ -85,7 +100,7 @@ export const HomePageProvider = ({
     } finally {
       setFeaturedLoading(false);
     }
-  }, [featuredSongs]);
+  }, [featuredSongs, featuredTimespan]);
 
   const loadPage = useCallback(async () => {
     await fetchFeaturedSongs();
@@ -109,6 +124,8 @@ export const HomePageProvider = ({
         featuredError,
         featuredTimespan,
         setFeaturedTimespan,
+        timespan,
+        setTimespan,
       }}
     >
       {children}

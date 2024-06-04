@@ -6,7 +6,7 @@ import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
 
-const HomePageComponent = () => {
+export const HomePageComponent = () => {
   const { recentSongs, featuredSongs, fetchRecentSongs, fetchFeaturedSongs } =
     useHomePageProvider();
 
@@ -20,7 +20,7 @@ const HomePageComponent = () => {
         </div>
       </div>
       <div className='h-6' />
-      <SongCardGroup>
+      <SongCardGroup data-test='featured-songs'>
         {featuredSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
@@ -33,7 +33,7 @@ const HomePageComponent = () => {
         <h2 className='text-xl uppercase'>Recent songs</h2>
       </div>
       <div className='h-6' />
-      <SongCardGroup>
+      <SongCardGroup data-test='recent-songs'>
         {recentSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
@@ -42,5 +42,3 @@ const HomePageComponent = () => {
     </>
   );
 };
-
-export default HomePageComponent;

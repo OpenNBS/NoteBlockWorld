@@ -1,5 +1,6 @@
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import Link from 'next/link';
 
 import {
@@ -8,9 +9,8 @@ import {
 } from '@web/src/modules/shared/util/format';
 
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
-import { SongPreview } from '../types';
 
-const SongCard = ({ song }: { song: SongPreview }) => {
+const SongCard = ({ song }: { song: SongPreviewDtoType }) => {
   return (
     <Link href={`/song/${song.publicId}`}>
       <div className='flex flex-col gap-2 pb-2 bg-zinc-800  hover:bg-zinc-700 rounded-lg hover:scale-105 cursor-pointer w-full h-full transition-all duration-200'>

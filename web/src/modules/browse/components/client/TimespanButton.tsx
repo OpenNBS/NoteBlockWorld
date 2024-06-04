@@ -1,5 +1,7 @@
 'use client';
 
+import { useHomePageProvider } from './HomePage.context';
+
 interface TimespanButtonProps {
   children: React.ReactNode;
   isActive: boolean;
@@ -9,45 +11,51 @@ interface TimespanButtonProps {
 }
 
 export const TimespanButtonGroup = () => {
+  const { setTimespan, timespan } = useHomePageProvider();
   return (
     <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
       <TimespanButton
         id='hour'
-        isActive={true}
+        data-test='timespan-hour'
+        isActive={timespan === 'hour'}
         isDisabled={false}
-        onClick={() => {}}
+        onClick={() => setTimespan('hour')}
       >
         past hour
       </TimespanButton>
       <TimespanButton
         id='day'
-        isActive={false}
+        data-test='timespan-day'
+        isActive={timespan === 'day'}
         isDisabled={false}
-        onClick={() => {}}
+        onClick={() => setTimespan('day')}
       >
         past day
       </TimespanButton>
       <TimespanButton
         id='week'
-        isActive={false}
+        data-test='timespan-week'
+        isActive={timespan === 'week'}
         isDisabled={false}
-        onClick={() => {}}
+        onClick={() => setTimespan('week')}
       >
         past week
       </TimespanButton>
       <TimespanButton
         id='month'
-        isActive={false}
+        data-test='timespan-month'
+        isActive={timespan === 'month'}
         isDisabled={false}
-        onClick={() => {}}
+        onClick={() => setTimespan('month')}
       >
         past month
       </TimespanButton>
       <TimespanButton
         id='year'
-        isActive={false}
+        data-test='timespan-year'
+        isActive={timespan === 'year'}
         isDisabled={false}
-        onClick={() => {}}
+        onClick={() => setTimespan('year')}
       >
         past year
       </TimespanButton>
