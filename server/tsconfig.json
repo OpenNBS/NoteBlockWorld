@@ -12,6 +12,7 @@
     // "strictBindCallApply": true,
     // "forceConsistentCasingInFileNames": true,
     // "noFallthroughCasesInSwitch": true
+    "strictPropertyInitialization": false,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
