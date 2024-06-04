@@ -1,4 +1,4 @@
-import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
+import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 
 import axiosInstance from '@web/src/lib/axios';
 import {

@@ -2,7 +2,7 @@
 
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UploadSongDtoType } from '@nbw/validation/song/dto/types';
+import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useState } from 'react';
 import {
