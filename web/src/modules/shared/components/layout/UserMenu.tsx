@@ -5,6 +5,7 @@ import {
   faMusic,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 
@@ -14,7 +15,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from './popover';
-import { RandomAvatar } from './RandomAvatar';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
 import { UserMenuButton } from '../client/UserMenuButton';
 
@@ -39,10 +39,12 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-2'>
             <div className='h-8 w-8'>
-              <RandomAvatar
-                mode={'pattern'}
-                name={userData.username}
-                size={32}
+              <Image
+                width={32}
+                height={32}
+                src={userData.profileImage}
+                alt=''
+                className='rounded-full'
               />
             </div>
             <div className='flex-shrink min-w-0 flex flex-col leading-tight'>

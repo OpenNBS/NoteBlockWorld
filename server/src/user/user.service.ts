@@ -18,6 +18,7 @@ export class UserService {
     const user = new this.userModel(user_registered);
     user.username = user_registered.username;
     user.email = user_registered.email;
+    user.profileImage = user_registered.profileImage;
     return await user.save();
   }
 

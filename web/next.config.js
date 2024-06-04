@@ -13,6 +13,16 @@ const nextConfig = {
         hostname: process.env.THUMBNAIL_URL,
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+      },
     ],
   },
 };

@@ -57,6 +57,7 @@ export class AuthService {
       // Generate username from display name
       username: email.split('@')[0],
       email: email,
+      profileImage: user.photos[0].value,
     };
     // verify if user exists
     const user_registered = await this.verifyAndGetUser(profile);
@@ -64,12 +65,13 @@ export class AuthService {
   }
 
   private async createNewUser(user: Profile) {
-    const { username, email } = user;
+    const { username, email, profileImage } = user;
     const baseUsername = username;
     const newUsername = await this.userService.generateUsername(baseUsername);
     const newUser = new CreateUser({
       username: newUsername,
       email: email,
+      profileImage: profileImage,
     });
     return await this.userService.create(newUser);
   }
@@ -78,6 +80,11 @@ export class AuthService {
     const user_registered = await this.userService.findByEmail(user.email);
     if (!user_registered) {
       return await this.createNewUser(user);
+    }
+    // Update profile picture if it has changed
+    if (user_registered.profileImage !== user.profileImage) {
+      user_registered.profileImage = user.profileImage;
+      await user_registered.save();
     }
     return user_registered;
   }
@@ -98,6 +105,7 @@ export class AuthService {
     const user_registered = await this.verifyAndGetUser({
       username: profile.username,
       email: email,
+      profileImage: profile.photos[0].value,
     });
     return this.GenTokenRedirect(user_registered, res);
   }

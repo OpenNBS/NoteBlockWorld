@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateUser {
   @IsNotEmpty()
@@ -20,6 +26,14 @@ export class CreateUser {
     example: 'tomast1137',
   })
   username: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  @ApiProperty({
+    description: 'Profile image of the user',
+    example: 'https://example.com/image.jpg',
+  })
+  profileImage: string;
 
   constructor(partial: Partial<CreateUser>) {
     Object.assign(this, partial);
