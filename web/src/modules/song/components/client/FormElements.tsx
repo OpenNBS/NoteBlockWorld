@@ -5,8 +5,8 @@ import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 
 export const Label = forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & {
+  HTMLLabelElement,
+  React.InputHTMLAttributes<HTMLLabelElement> & {
     id?: string;
     label: string;
   }
@@ -111,7 +111,7 @@ export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
-    label: string;
+    label?: string;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -120,7 +120,7 @@ export const Select = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      <Label id={id} label={label} />
+      {label && <Label id={id} label={label} />}
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
