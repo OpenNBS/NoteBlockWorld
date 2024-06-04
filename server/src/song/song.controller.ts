@@ -24,13 +24,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import type { Response } from 'express';
 
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
@@ -54,7 +54,7 @@ export class SongController {
     summary: 'Get a filtered/sorted list of songs with pagination',
   })
   public async getSongList(
-    @Query() query: PageQuery,
+    @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
     // TODO: rename DTOs to SongPreviewRequestDto and SongPreviewResponseDto
     return await this.songService.getSongByPage(query);

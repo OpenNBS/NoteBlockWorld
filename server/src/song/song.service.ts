@@ -8,15 +8,16 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
+import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
+import { TimespanType } from '@shared/validation/song/dto/types';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import { Model, Types } from 'mongoose';
 
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
@@ -387,26 +388,31 @@ export class SongService {
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async getSongByPage(query: PageQuery): Promise<SongPreviewDto[]> {
-    const { skip, limit } = query;
-    const options = {
-      skip: skip || 0,
-      limit: limit || 10,
-      sort: query.sort || 'createdAt',
-      order: query.order || false,
+  public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
+    const { page, limit, sort, order, timespan } = query;
+    const now = new Date();
+    const timespanMap: Record<TimespanType, Date> = {
+      hour: new Date(now.getTime() - 1000 * 60 * 60),
+      day: new Date(now.getTime() - 1000 * 60 * 60 * 24),
+      week: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7),
+      month: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 30),
+      year: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 365),
+      all: new Date(0),
     };
+
     const data = (await this.songModel
       .find({
         visibility: 'public',
+        createdAt: { $gte: timespanMap[timespan] },
       })
       .sort({
-        createdAt: options.order ? 'asc' : 'desc',
+        [sort]: order ? 1 : -1,
       })
-      .skip(options.skip)
-      .limit(options.limit)
+      .skip(page * limit - limit)
+      .limit(limit)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
-    return data.map((song) => SongPreviewDto.fromSongDocument(song));
+    return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
   public async getSong(
@@ -480,7 +486,7 @@ export class SongService {
   }
 
   public async getMySongsPage(arg0: {
-    query: PageQuery;
+    query: PageQueryDTO;
     user: UserDocument | null;
   }): Promise<SongPageDto> {
     const { query, user } = arg0;
@@ -508,7 +514,9 @@ export class SongService {
       .exec();
 
     return {
-      content: songData.map((song) => SongPreviewDto.fromSongDocument(song)),
+      content: songData.map((song) =>
+        SongPreviewDto.fromSongDocumentWithUser(song),
+      ),
       page: page,
       limit: limit,
       total: total,

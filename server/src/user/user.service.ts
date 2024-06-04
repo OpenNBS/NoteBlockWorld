@@ -1,11 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
-
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
 
 import { User, UserDocument } from './entity/user.entity';
 
@@ -32,7 +31,7 @@ export class UserService {
     return user;
   }
 
-  public getUserPaginated(query: PageQuery) {
+  public getUserPaginated(query: PageQueryDTO) {
     const { page, limit } = query;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const options = {
