@@ -46,6 +46,10 @@ body {
 
 /************** Scrollbar **************/
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   scrollbar-width: thin;
   scrollbar-color: --tw-bg-zinc-900 --tw-bg-zinc-500;
