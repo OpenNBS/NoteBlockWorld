@@ -13,7 +13,7 @@ import SongThumbnail from '../../shared/components/layout/SongThumbnail';
 const SongCard = ({ song }: { song: SongPreviewDtoType }) => {
   return (
     <Link href={`/song/${song.publicId}`}>
-      <div className='flex flex-col gap-2 pb-2 bg-zinc-800  hover:bg-zinc-700 rounded-lg hover:scale-105 cursor-pointer w-full h-full transition-all duration-200'>
+      <div className='flex flex-col gap-2 pb-2 bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'>
         {/* Song image */}
         <div className='relative'>
           <SongThumbnail src={song.thumbnailUrl} />

@@ -6,6 +6,13 @@ import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '../../shared/components/client/Carousel';
 
 export const HomePageComponent = () => {
   const {
@@ -28,12 +35,20 @@ export const HomePageComponent = () => {
         </div>
       </div>
       <div className='h-6' />
-      <SongCardGroup data-test='featured-songs'>
-        {featuredSongs.map((song) => (
-          <SongCard key={song.publicId} song={song} />
-        ))}
-        <LoadMoreButton onClick={() => increasePageFeatured()} />
-      </SongCardGroup>
+      <Carousel>
+        <CarouselContent>
+          {featuredSongs.map((song) => (
+            <CarouselItem
+              className='basis-1 md:basis-1/2 basis-1/3'
+              key={song.publicId}
+            >
+              <SongCard song={song} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
       {/* RECENT SONGS */}
