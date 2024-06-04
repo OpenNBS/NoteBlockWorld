@@ -19,7 +19,6 @@ type FeaturedSongsContextType = {
   featuredSongs: SongPreviewDtoType[];
   featuredLoading: boolean;
   featuredError: string;
-  increasePageFeatured: () => void;
   timespan: TimespanType;
   setTimespan: (timespan: TimespanType) => void;
 };
@@ -73,16 +72,12 @@ export function FeaturedSongsProvider({
     fetchFeaturedSongs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timespan]);
-  function increasePageFeatured() {
-    setCurrentPage((prev) => prev + 1);
-  }
   return (
     <FeaturedSongsContext.Provider
       value={{
         featuredSongs,
         featuredLoading,
         featuredError,
-        increasePageFeatured,
         timespan,
         setTimespan,
       }}

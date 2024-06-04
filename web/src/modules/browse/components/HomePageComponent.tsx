@@ -9,18 +9,15 @@ import SongCardGroup from './SongCardGroup';
 import {
   Carousel,
   CarouselContent,
+  CarouselDots,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
 
 export const HomePageComponent = () => {
-  const {
-    featuredSongs,
-    featuredLoading,
-    featuredError,
-    increasePageFeatured,
-  } = useFeaturedSongsProvider();
+  const { featuredSongs, featuredLoading, featuredError } =
+    useFeaturedSongsProvider();
 
   const { recentSongs, recentLoading, recentError, increasePageRecent } =
     useRecentSongsProvider();
@@ -35,11 +32,16 @@ export const HomePageComponent = () => {
         </div>
       </div>
       <div className='h-6' />
-      <Carousel>
+      <Carousel
+        opts={{
+          align: 'start',
+          loop: true,
+        }}
+      >
         <CarouselContent>
           {featuredSongs.map((song) => (
             <CarouselItem
-              className='basis-1 md:basis-1/2 basis-1/3'
+              className='basis-full md:basis-1/2 lg:basis-1/3'
               key={song.publicId}
             >
               <SongCard song={song} />
@@ -48,6 +50,7 @@ export const HomePageComponent = () => {
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
+        <CarouselDots />
       </Carousel>
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 

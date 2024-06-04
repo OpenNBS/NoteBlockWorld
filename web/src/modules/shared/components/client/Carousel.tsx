@@ -8,7 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
-import * as React from 'react';
+import {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  KeyboardEventHandler,
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { cn } from '../../../../lib/tailwind.utils';
 
@@ -33,10 +43,10 @@ type CarouselContextProps = {
   canScrollNext: boolean;
 } & CarouselProps;
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null);
+const CarouselContext = createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
-  const context = React.useContext(CarouselContext);
+  const context = useContext(CarouselContext);
 
   if (!context) {
     throw new Error('useCarousel must be used within a <Carousel />');
@@ -45,9 +55,9 @@ function useCarousel() {
   return context;
 }
 
-export const Carousel = React.forwardRef<
+export const Carousel = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CarouselProps
+  HTMLAttributes<HTMLDivElement> & CarouselProps
 >(
   (
     {
@@ -68,10 +78,9 @@ export const Carousel = React.forwardRef<
       },
       plugins,
     );
-    const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-    const [canScrollNext, setCanScrollNext] = React.useState(false);
-
-    const onSelect = React.useCallback((api: CarouselApi) => {
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
+    const onSelect = useCallback((api: CarouselApi) => {
       if (!api) {
         return;
       }
@@ -80,16 +89,16 @@ export const Carousel = React.forwardRef<
       setCanScrollNext(api.canScrollNext());
     }, []);
 
-    const scrollPrev = React.useCallback(() => {
+    const scrollPrev = useCallback(() => {
       api?.scrollPrev();
     }, [api]);
 
-    const scrollNext = React.useCallback(() => {
+    const scrollNext = useCallback(() => {
       api?.scrollNext();
     }, [api]);
 
-    const handleKeyDown = React.useCallback(
-      (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown: KeyboardEventHandler = useCallback(
+      (event) => {
         if (event.key === 'ArrowLeft') {
           event.preventDefault();
           scrollPrev();
@@ -101,7 +110,7 @@ export const Carousel = React.forwardRef<
       [scrollPrev, scrollNext],
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!api || !setApi) {
         return;
       }
@@ -109,7 +118,7 @@ export const Carousel = React.forwardRef<
       setApi(api);
     }, [api, setApi]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!api) {
         return;
       }
@@ -122,12 +131,12 @@ export const Carousel = React.forwardRef<
         api?.off('select', onSelect);
       };
     }, [api, onSelect]);
-
+    api?.scrollSnapList();
     return (
       <CarouselContext.Provider
         value={{
           carouselRef,
-          api: api,
+          api,
           opts,
           orientation:
             orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
@@ -153,9 +162,9 @@ export const Carousel = React.forwardRef<
 );
 Carousel.displayName = 'Carousel';
 
-export const CarouselContent = React.forwardRef<
+export const CarouselContent = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { carouselRef, orientation } = useCarousel();
 
@@ -175,9 +184,9 @@ export const CarouselContent = React.forwardRef<
 });
 CarouselContent.displayName = 'CarouselContent';
 
-export const CarouselItem = React.forwardRef<
+export const CarouselItem = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { orientation } = useCarousel();
 
@@ -197,19 +206,35 @@ export const CarouselItem = React.forwardRef<
 });
 CarouselItem.displayName = 'CarouselItem';
 
-export const CarouselPrevious = React.forwardRef<
+const CarouselButton = forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
+  ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
-
   return (
     <button
       ref={ref}
       className={cn(
-        'absolute h-8 w-8 rounded-full',
+        'absolute h-12 w-12 rounded-full bg-zinc-800 hover:bg-zinc-700 hover:scale-110 transition-all duration-200 ease-in-out cursor-pointer',
+        className,
+      )}
+      {...props}
+    />
+  );
+});
+CarouselButton.displayName = 'CarouselButton';
+
+export const CarouselPrevious = forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+
+  return (
+    <CarouselButton
+      ref={ref}
+      className={cn(
         orientation === 'horizontal'
-          ? '-left-12 top-1/2 -translate-y-1/2'
+          ? '-left-6 top-1/2 -translate-y-1/2'
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
@@ -219,25 +244,24 @@ export const CarouselPrevious = React.forwardRef<
     >
       <FontAwesomeIcon icon={faChevronLeft} className='h-4 w-4' />
       <span className='sr-only'>Previous slide</span>
-    </button>
+    </CarouselButton>
   );
 });
 CarouselPrevious.displayName = 'CarouselPrevious';
 
-export const CarouselNext = React.forwardRef<
+export const CarouselNext = forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
+  ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (
-    <button
+    <CarouselButton
       ref={ref}
       className={cn(
-        'absolute h-8 w-8 rounded-full',
         orientation === 'horizontal'
-          ? '-right-12 top-1/2 -translate-y-1/2'
-          : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+          ? '-right-6 top-1/2 -translate-y-1/2'
+          : 'bottom-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
       disabled={!canScrollNext}
@@ -246,7 +270,69 @@ export const CarouselNext = React.forwardRef<
     >
       <FontAwesomeIcon icon={faChevronRight} className='h-4 w-4' />
       <span className='sr-only'>Next slide</span>
-    </button>
+    </CarouselButton>
   );
 });
 CarouselNext.displayName = 'CarouselNext';
+
+type UseDotButtonType = {
+  selectedIndex: number;
+  scrollSnaps: number[];
+  onDotButtonClick: (index: number) => void;
+};
+
+export const useDotButton = (): UseDotButtonType => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const { api } = useCarousel();
+
+  const onDotButtonClick = useCallback(
+    (index: number) => {
+      if (!api) return;
+      api.scrollTo(index);
+    },
+    [api],
+  );
+
+  const onInit = useCallback(() => {
+    if (!api) return;
+    setScrollSnaps(api.scrollSnapList());
+  }, [api]);
+
+  const onSelect = useCallback(() => {
+    if (!api) return;
+    setSelectedIndex(api.selectedScrollSnap());
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    onInit();
+    onSelect();
+    api.on('reInit', onInit).on('reInit', onSelect).on('select', onSelect);
+  }, [api, onInit, onSelect]);
+
+  return {
+    selectedIndex,
+    scrollSnaps,
+    onDotButtonClick,
+  };
+};
+
+export const CarouselDots = () => {
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton();
+
+  return (
+    <div className='flex justify-center gap-2 mt-6'>
+      {scrollSnaps.map((_, index) => (
+        <button
+          key={index}
+          onClick={() => onDotButtonClick(index)}
+          className={cn(
+            'h-2.5 w-2.5 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 ease-in-out',
+            index === selectedIndex && 'bg-zinc-700',
+          )}
+        />
+      ))}
+    </div>
+  );
+};
