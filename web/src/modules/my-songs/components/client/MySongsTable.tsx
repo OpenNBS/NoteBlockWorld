@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongPageDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
+import Skeleton from 'react-loading-skeleton';
 
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
@@ -59,9 +60,15 @@ const MySongsTablePaginator = () => {
       >
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
-      <span className='min-w-24'>
-        {start} – {end} of {total}
-      </span>
+      <div className='w-24'>
+        {total === 0 ? (
+          <Skeleton />
+        ) : (
+          <>
+            {start} – {end} of {total}
+          </>
+        )}
+      </div>
       <button
         onClick={nextpage}
         className='disabled:opacity-50 disabled:cursor-not-allowed'
