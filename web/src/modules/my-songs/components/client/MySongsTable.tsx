@@ -4,11 +4,11 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SongPageDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
 
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
-import { SongsPage } from '../../types';
 import { useMySongsProvider } from '../client/MySongs.context';
 
 const Loading = ({ pageSize }: { pageSize: number }) => {
@@ -49,7 +49,7 @@ const NoSongs = () => (
     </div>
   </div>
 );
-const SongRows = ({ page }: { page: SongsPage }) => {
+const SongRows = ({ page }: { page: SongPageDtoType }) => {
   const { content } = page;
   return content.map((song) => <SongRow key={song.publicId} song={song} />);
 };
@@ -121,7 +121,6 @@ export const MySongsTable = () => {
 export const MySongsPageComponent = () => {
   const {
     error,
-    page,
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
     songToDelete,

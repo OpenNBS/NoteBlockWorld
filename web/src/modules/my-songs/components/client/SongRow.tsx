@@ -5,20 +5,20 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import Link from 'next/link';
 
 import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
 import { useMySongsProvider } from './MySongs.context';
-import { MySongsSongDTO } from '../../types';
 import {
   DeleteButton,
   DownloadSongButton,
   EditButton,
 } from '../client/MySongsButtons';
 
-export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
+export const SongRow = ({ song }: { song: SongPreviewDtoType }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
 
   const onDeleteClicked = () => {

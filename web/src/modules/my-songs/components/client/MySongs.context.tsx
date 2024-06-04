@@ -1,6 +1,11 @@
 'use client';
 
 import {
+  SongPageDtoType,
+  SongPreviewDtoType,
+  SongsFolder,
+} from '@shared/validation/song/dto/types';
+import {
   createContext,
   useCallback,
   useContext,
@@ -11,10 +16,8 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
-import { MySongsSongDTO, SongsFolder, SongsPage } from '../../types';
-
 type MySongsContextType = {
-  page: SongsPage | null;
+  page: SongPageDtoType | null;
   nextpage: () => void;
   prevpage: () => void;
   gotoPage: (page: number) => void;
@@ -26,8 +29,8 @@ type MySongsContextType = {
   error: string | null;
   isDeleteDialogOpen: boolean;
   setIsDeleteDialogOpen: (isOpen: boolean) => void;
-  songToDelete: MySongsSongDTO | null;
-  setSongToDelete: (song: MySongsSongDTO) => void;
+  songToDelete: SongPreviewDtoType | null;
+  setSongToDelete: (song: SongPreviewDtoType) => void;
   deleteSong: () => void;
 };
 
@@ -57,14 +60,16 @@ export const MySongProvider = ({
   const [currentPage, setCurrentPage] = useState<number>(currentPageInit);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [pageSize, _setPageSize] = useState<number>(pageSizeInit);
-  const [page, setPage] = useState<SongsPage | null>(null);
+  const [page, setPage] = useState<SongPageDtoType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [songToDelete, setSongToDelete] = useState<MySongsSongDTO | null>(null);
+  const [songToDelete, setSongToDelete] = useState<SongPreviewDtoType | null>(
+    null,
+  );
 
   const putPage = useCallback(
-    async ({ key, page }: { key: number; page: SongsPage }) => {
+    async ({ key, page }: { key: number; page: SongPageDtoType }) => {
       setLoadedSongs({ ...loadedSongs, [key]: page });
     },
     [loadedSongs],
@@ -82,7 +87,7 @@ export const MySongProvider = ({
           },
         },
       );
-      const data = response.data as SongsPage;
+      const data = response.data as SongPageDtoType;
       // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       putPage({
         key: currentPage,

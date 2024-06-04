@@ -1,15 +1,19 @@
+import {
+  SongPageDtoType,
+  SongsFolder,
+} from '@shared/validation/song/dto/types';
+
 import axiosInstance from '@web/src/lib/axios';
 
 import { MySongProvider } from './client/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
-import { SongsFolder, SongsPage } from '../types';
 
 async function fetchSongsPage(
   page: number,
   pageSize: number,
   token: string,
-): Promise<SongsPage> {
+): Promise<SongPageDtoType> {
   const response = await axiosInstance
     .get('/my-songs', {
       headers: {
@@ -59,7 +63,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
         content: [],
         total: 0,
         page: 0,
-        pageSize: 0,
+        limit: 0,
       },
     };
   }
