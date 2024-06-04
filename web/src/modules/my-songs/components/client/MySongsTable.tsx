@@ -11,25 +11,6 @@ import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
 import { useMySongsProvider } from '../client/MySongs.context';
 
-const Loading = ({ pageSize }: { pageSize: number }) => {
-  return (
-    <div className='grid grid-cols-8 gap-2 *:h-10'>
-      {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        Array.from({ length: pageSize }).map((_, i) => (
-          <div key={i}>
-            <div className='col-span-4'>Song</div>
-            <div>Visibility</div>
-            <div>Created at</div>
-            <div>Play count</div>
-            <div>Actions</div>
-          </div>
-        ))
-      }
-    </div>
-  );
-};
-
 const NoSongs = () => (
   <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
     <div className='flex items-center justify-center'>
@@ -49,9 +30,17 @@ const NoSongs = () => (
     </div>
   </div>
 );
-const SongRows = ({ page }: { page: SongPageDtoType }) => {
-  const { content } = page;
-  return content.map((song) => <SongRow key={song.publicId} song={song} />);
+const SongRows = ({
+  page,
+  pageSize,
+}: {
+  page: SongPageDtoType | null;
+  pageSize: number;
+}) => {
+  const content = !page ? Array(pageSize).fill({}) : page.content;
+  return content.map((song, i) => (
+    <SongRow key={song.publicId || i} song={null} />
+  ));
 };
 
 const MySongsTablePaginator = () => {
@@ -102,11 +91,7 @@ export const MySongsTable = () => {
       </div>
 
       {/* Content */}
-      {isLoading ? (
-        <Loading pageSize={pageSize} />
-      ) : (
-        page && <SongRows page={page} />
-      )}
+      <SongRows page={page} pageSize={pageSize} />
 
       {page?.content.length === 0 && <NoSongs />}
 
