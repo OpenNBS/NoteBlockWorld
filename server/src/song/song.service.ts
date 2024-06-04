@@ -400,11 +400,15 @@ export class SongService {
       all: new Date(0),
     };
 
+    const queryObject: any = {
+      visibility: 'public',
+    };
+    if (timespan) {
+      queryObject.createdAt = { $gte: timespanMap[timespan] };
+    }
+
     const data = (await this.songModel
-      .find({
-        visibility: 'public',
-        createdAt: { $gte: timespanMap[timespan] },
-      })
+      .find(queryObject)
       .sort({
         [sort]: order ? -1 : 1,
       })
@@ -412,6 +416,7 @@ export class SongService {
       .limit(limit)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
+
     return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
