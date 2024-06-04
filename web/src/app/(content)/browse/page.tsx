@@ -8,14 +8,13 @@ import { HomePageComponent } from '@web/src/modules/browse/components/HomePageCo
 const recentSongsParams: PageQueryDTOType = {
   page: 1, // TODO: fiz constants
   limit: 10,
-  sort: 'createdAt',
+  sort: 'recent',
   order: false,
-  timespan: 'week',
 };
 const featuredSongsParams: PageQueryDTOType = {
   page: 1, // TODO: fiz constants
   limit: 10,
-  sort: 'playCount',
+  sort: 'featured',
   order: false,
   timespan: 'week',
 };
