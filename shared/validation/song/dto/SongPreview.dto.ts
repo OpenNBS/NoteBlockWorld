@@ -63,7 +63,7 @@ export class SongPreviewDto {
     Object.assign(this, partial);
   }
 
-  public static fromSongDocument(song: SongWithUser): SongPreviewDto {
+  public static fromSongDocumentWithUser(song: SongWithUser): SongPreviewDto {
     return new SongPreviewDto({
       publicId: song.publicId,
       uploader: song.uploader,

@@ -101,3 +101,12 @@ export const UploadConst = deepFreeze({
     private: 'Private',
   },
 });
+
+export const timespans = [
+  'hour',
+  'day',
+  'week',
+  'month',
+  'year',
+  'all',
+] as const;

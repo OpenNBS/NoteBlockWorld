@@ -6,7 +6,7 @@ import { SongViewDto } from './SongView.dto';
 import { ThumbnailData as ThumbnailData } from './ThumbnailData.dto';
 import { UploadSongDto } from './UploadSongDto.dto';
 import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
-import { UploadConst } from '../constants';
+import { UploadConst, timespans } from '../constants';
 
 export type UploadSongDtoType = InstanceType<typeof UploadSongDto>;
 export type UploadSongNoFileDtoType = Omit<UploadSongDtoType, 'file'>;
@@ -27,10 +27,4 @@ export type CategoryType = keyof typeof UploadConst.categories;
 export type LicenseType = keyof typeof UploadConst.licenses;
 export type SongsFolder = Record<number, SongPageDtoType>;
 
-export type FeaturedTimespan =
-  | 'hour'
-  | 'day'
-  | 'week'
-  | 'month'
-  | 'year'
-  | 'all';
+export type TimespanType = (typeof timespans)[number];
