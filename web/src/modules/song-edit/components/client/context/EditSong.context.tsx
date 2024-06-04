@@ -12,6 +12,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import toaster from 'react-hot-toast';
+import { undefined } from 'zod';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -48,6 +49,9 @@ export const EditSongProvider = ({
   const [song, setSong] = useState<Song | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [originalData, setOriginalData] = useState<UploadSongDtoType | null>(
+    null,
+  );
 
   const {
     register,
@@ -56,11 +60,11 @@ export const EditSongProvider = ({
 
   const router = useRouter();
 
-  const submitSong = async (): Promise<void> => {
-    setIsSubmitting(true);
-    setSendError(null);
-    const songId = formMethods.getValues().id;
-    // Build form data
+  function dataWasNotChanged() {
+    if (!originalData) {
+      return false;
+    }
+
     const formValues = {
       allowDownload: formMethods.getValues().allowDownload,
       visibility: formMethods.getValues().visibility,
@@ -79,21 +83,72 @@ export const EditSongProvider = ({
       category: formMethods.getValues().category,
     };
 
+    const coprarisons = [
+      formValues.allowDownload === originalData.allowDownload,
+      formValues.visibility === originalData.visibility,
+      formValues.title === originalData.title,
+      formValues.originalAuthor === originalData.originalAuthor,
+      formValues.description === originalData.description,
+      formValues.thumbnailData.zoomLevel ===
+        originalData.thumbnailData.zoomLevel,
+      formValues.thumbnailData.startTick ===
+        originalData.thumbnailData.startTick,
+      formValues.thumbnailData.startLayer ===
+        originalData.thumbnailData.startLayer,
+      formValues.thumbnailData.backgroundColor ===
+        originalData.thumbnailData.backgroundColor,
+      formValues.customInstruments === originalData.customInstruments,
+      formValues.license === originalData.license,
+      formValues.category === originalData.category,
+    ];
+
+    console.log(coprarisons);
+
+    return coprarisons.every((value) => value);
+  }
+
+  const submitSong = async (): Promise<void> => {
+    // Build form data
+    const formValues: UploadSongDtoType = {
+      allowDownload: formMethods.getValues().allowDownload,
+      visibility: formMethods.getValues()
+        .visibility as UploadSongDtoType['visibility'],
+      title: formMethods.getValues().title,
+      originalAuthor: formMethods.getValues().originalAuthor,
+      description: formMethods.getValues().description,
+      thumbnailData: {
+        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
+        startTick: formMethods.getValues().thumbnailData.startTick,
+        startLayer: formMethods.getValues().thumbnailData.startLayer,
+        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
+      },
+      customInstruments: formMethods.getValues().customInstruments,
+      license: formMethods.getValues().license as UploadSongDtoType['license'],
+      category: formMethods.getValues()
+        .category as UploadSongDtoType['category'],
+      file: undefined,
+    };
+
+    if (dataWasNotChanged()) {
+      toaster.success('No changes were made to the song!');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSendError(null);
+    const songId = formMethods.getValues().id;
+
     // Send request
     // Get authorization token from local storage
     const token = getTokenLocal();
     try {
       // Send request
-      const response = await axiosInstance.patch(
-        `/song/${songId}/edit`,
-        formValues,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+      await axiosInstance.patch(`/song/${songId}/edit`, formValues, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-      );
+      });
 
       toaster.success('Song saved successfully!');
       router.push('/my-songs');
@@ -112,6 +167,7 @@ export const EditSongProvider = ({
 
   const loadSong = useCallback(
     async (id: string, username: string, songData: UploadSongDtoType) => {
+      setOriginalData(songData);
       formMethods.setValue('allowDownload', true, {
         shouldValidate: false,
         shouldDirty: true,
