@@ -37,7 +37,7 @@ const SongRows = ({
   page: SongPageDtoType | null;
   pageSize: number;
 }) => {
-  const content = !page ? Array(pageSize).fill({}) : page.content;
+  const content = !page ? Array(pageSize).fill(null) : page.content;
   return content.map((song, i) => <SongRow key={i} song={song} />);
 };
 
