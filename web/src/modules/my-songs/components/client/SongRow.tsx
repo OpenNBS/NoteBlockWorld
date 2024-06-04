@@ -74,8 +74,8 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
             {song.title}
           </Link>
           <p
-            className={`line-clamp-3 text-ellipsis text-sm leading-tight text-zinc-400 ${
-              !song.description && 'italic'
+            className={`line-clamp-3 text-ellipsis text-sm leading-tight ${
+              !song.description ? 'text-zinc-500 italic' : 'text-zinc-400'
             }`}
           >
             {getDescription(song.description)}
