@@ -36,8 +36,11 @@ export default function RootLayout({
             height={3}
           />
           <Toaster
-            position='bottom-right'
-            toastOptions={{ className: '!bg-zinc-700 !text-white' }}
+            position='bottom-center'
+            toastOptions={{
+              className: '!bg-zinc-700 !text-white',
+              duration: 4000,
+            }}
           />
           <SkeletonTheme
             borderRadius='10px'
