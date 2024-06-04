@@ -53,7 +53,7 @@ export const SongRow = ({
     >
       {/* Thumbnail */}
       <div className='col-span-1'>
-        <div className='aspect-[5/3] my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative'>
+        <div className='aspect-[5/3] my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative block leading-none'>
           {!song ? (
             <Skeleton className='w-full h-full' />
           ) : (
