@@ -29,7 +29,10 @@ const signIn = (provider: AuthProvider) => {
 
 export const LoginPage = () => {
   return (
-    <main className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'>
+    <main
+      data-test='login-page'
+      className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'
+    >
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-900/30 backdrop-blur-md w-fit max-w-2xl rounded-2xl p-10'>
         {/* Left half */}
         <div className='flex flex-row sm:flex-col items-center justify-center gap-2 mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem] animate-[nbw-glow_3s_ease-in-out_infinite]'>
@@ -64,6 +67,7 @@ export const LoginPage = () => {
           <div className='flex flex-col w-full gap-4'>
             {/* Login with Google */}
             <Link
+              data-test='login-google'
               href={signIn('google')}
               className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
             >
@@ -75,6 +79,7 @@ export const LoginPage = () => {
             </Link>
             {/* Login with Github */}
             <Link
+              data-test='login-github'
               href={signIn('github')}
               className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
             >
@@ -88,15 +93,27 @@ export const LoginPage = () => {
 
           <p className='text-xs whitespace-normal w-3/4 text-zinc-400'>
             By signing in, you agree to our{' '}
-            <Link className='text-blue-400 hover:underline' href='/terms'>
+            <Link
+              className='text-blue-400 hover:underline'
+              data-test='login-terms'
+              href='/terms'
+            >
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link className='text-blue-400 hover:underline' href='/privacy'>
+            <Link
+              className='text-blue-400 hover:underline'
+              data-test='login-privacy'
+              href='/privacy'
+            >
               Privacy Policy
             </Link>
             . Oh, and be sure to check our{' '}
-            <Link className='text-blue-400 hover:underline' href='/guidelines'>
+            <Link
+              className='text-blue-400 hover:underline'
+              data-test='login-guidelines'
+              href='/guidelines'
+            >
               Community Guidelines
             </Link>
             , too!
@@ -106,7 +123,11 @@ export const LoginPage = () => {
       <div className='absolute bottom-4 mx-auto text-zinc-600 text-xs'>
         <p>
           © 2024{' '}
-          <Link href='https://opennbs.org/' className='hover:underline'>
+          <Link
+            data-test='login-opennbs'
+            href='https://opennbs.org/'
+            className='hover:underline'
+          >
             OpenNBS
           </Link>
         </p>
