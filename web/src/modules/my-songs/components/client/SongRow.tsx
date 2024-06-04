@@ -68,7 +68,7 @@ export const SongRow = ({ song }: { song: MySongsSongDTO }) => {
       <div className='col-span-3 text-wrap'>
         <div className='flex flex-col justify-center gap-1 text-left max-w-96'>
           <Link
-            href={`/song/${song.publicId}`}
+            href={`/song/${song.publicId}/edit`}
             className='line-clamp-2 text-ellipsis text-md font-medium leading-tight hover:underline cursor-pointer'
           >
             {song.title}
