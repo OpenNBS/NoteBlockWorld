@@ -115,6 +115,16 @@ export class SongController {
     res.redirect(HttpStatus.FOUND, url);
   }
 
+  @Get('/:id/open')
+  @ApiOperation({ summary: 'Get song .nbs file' })
+  public async getSongDownloadUrl(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<string> {
+    const url = await this.songService.getSongDownloadUrl(id, user, 'open');
+    return url;
+  }
+
   @Delete('/:id')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()

@@ -10,9 +10,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
-import Link from 'next/link';
 
-import { downloadSongFile } from '../util/downloadSong';
+import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
@@ -87,18 +86,37 @@ const ShareButton = () => {
   );
 };
 
-const OpenInNBSButton = () => {
+const OpenSongInNBSButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+  };
+}) => {
   return (
-    <Link
-      href='nbs://'
-      passHref
+    <OpenInNBSButton
+      handleClick={() => {
+        openSongInNBS(song);
+      }}
+    />
+  );
+};
+
+const OpenInNBSButton = ({
+  handleClick,
+}: {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
+  return (
+    <button
+      onClick={handleClick}
       className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:bg-blue-500'
     >
       <div className='flex flex-row items-center gap-2'>
         <FontAwesomeIcon icon={faPlay} />
         <div>Open in NBS</div>
       </div>
-    </Link>
+    </button>
   );
 };
 
@@ -142,6 +160,6 @@ export {
   FollowButton,
   LikeButton,
   ShareButton,
-  OpenInNBSButton,
+  OpenSongInNBSButton,
   DownloadSongButton,
 };
