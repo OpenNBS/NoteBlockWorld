@@ -24,10 +24,8 @@ export default function RootLayout({
 }) {
   return (
     <ReCaptchaProvider useEnterprise>
-      <html lang='en' className='min-h-screen'>
-        <body
-          className={lato.className + ' min-h-screen bg-zinc-900 text-white'}
-        >
+      <html lang='en'>
+        <body className={lato.className + ' bg-zinc-900 text-white'}>
           <NextTopLoader
             showSpinner={false}
             crawlSpeed={700}
