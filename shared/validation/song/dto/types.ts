@@ -27,3 +27,4 @@ export type ThumbnailDataType = InstanceType<typeof ThumbnailData>;
 export type VisibilityType = keyof typeof UploadConst.visibility;
 export type CategoryType = keyof typeof UploadConst.categories;
 export type LicenseType = keyof typeof UploadConst.licenses;
+export type SongsFolder = Record<number, SongPageDtoType>;
