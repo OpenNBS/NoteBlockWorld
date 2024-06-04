@@ -2,7 +2,7 @@ import { PageQueryDTOType } from '@shared/validation/common/dto/types';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 
 import axiosInstance from '@web/src/lib/axios';
-import { HomePageProvider } from '@web/src/modules/browse/components/client/HomePage.context';
+import { HomePageProvider } from '@web/src/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/src/modules/browse/components/HomePageComponent';
 
 const recentSongsParams: PageQueryDTOType = {
@@ -44,14 +44,11 @@ async function fetchFeaturedSongs(): Promise<SongPreviewDtoType[]> {
 }
 
 async function Home() {
-  const recentSongs = await fetchRecentSongs();
-  const featuredSongs = await fetchFeaturedSongs();
+  //const recentSongs = await fetchRecentSongs();
+  //const featuredSongs = await fetchFeaturedSongs();
 
   return (
-    <HomePageProvider
-      initialRecentSongs={recentSongs}
-      initialFeaturedSongs={featuredSongs}
-    >
+    <HomePageProvider initialRecentSongs={[]} initialFeaturedSongs={[]}>
       <HomePageComponent />
     </HomePageProvider>
   );

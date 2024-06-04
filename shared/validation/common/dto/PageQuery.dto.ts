@@ -62,7 +62,7 @@ export class PageQueryDTO {
     description: 'Filters the results by the specified timespan.',
     required: false,
   })
-  timespan: TimespanType = 'hour';
+  timespan?: TimespanType;
 
   constructor(partial: Partial<PageQueryDTO>) {
     Object.assign(this, partial);
