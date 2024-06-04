@@ -4,19 +4,34 @@ import Skeleton from 'react-loading-skeleton';
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 
+export const Label = forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    id?: string;
+    label: string;
+  }
+>((props) => {
+  const { id, label } = props;
+  return (
+    <label htmlFor={id} className='text-sm text-zinc-300'>
+      {label}
+    </label>
+  );
+});
+Label.displayName = 'Label';
+
 export const Area = ({
   label,
   isLoading,
   children,
 }: {
-  label?: string;
+  label: string;
   isLoading?: boolean;
   children: React.ReactNode;
 }) => {
   return (
     <>
-      {label && <label>{label}</label>}
-
+      <Label label={label} />
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
@@ -32,7 +47,7 @@ export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     id: string;
-    label?: string;
+    label: string;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -41,7 +56,7 @@ export const Input = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
+      <Label id={id} label={label} />
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
@@ -65,7 +80,7 @@ export const TextArea = forwardRef<
   HTMLTextAreaElement,
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
     id: string;
-    label?: string;
+    label: string;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -73,7 +88,7 @@ export const TextArea = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
+      <Label id={id} label={label} />
       {isLoading ? (
         <Skeleton height='12rem' containerClassName='block leading-none' />
       ) : (
@@ -96,7 +111,7 @@ export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
-    label?: string;
+    label: string;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -105,7 +120,7 @@ export const Select = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
+      <Label id={id} label={label} />
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
