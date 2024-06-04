@@ -20,7 +20,7 @@ export class PageQueryDTO {
     example: 1,
     description: 'page',
   })
-  page: number = 1;
+  page?: number = 1;
 
   @IsNotEmpty()
   @IsNumber({
@@ -34,7 +34,7 @@ export class PageQueryDTO {
     example: 20,
     description: 'limit',
   })
-  limit: number = 10;
+  limit?: number = 10;
 
   @IsString()
   @IsOptional()
@@ -43,7 +43,7 @@ export class PageQueryDTO {
     description: 'Sorts the results by the specified field.',
     required: false,
   })
-  sort: string = 'createdAt';
+  sort?: string = 'createdAt';
 
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
@@ -53,7 +53,7 @@ export class PageQueryDTO {
       'Sorts the results in ascending order if true; in descending order if false.',
     required: false,
   })
-  order: boolean = false;
+  order?: boolean = false;
 
   @IsEnum(timespans)
   @IsOptional()
