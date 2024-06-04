@@ -3,12 +3,14 @@
 import {
   faDownload,
   faHeart,
+  faPlay,
   faPlus,
   faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { downloadSongFile } from '../util/downloadSong';
 
@@ -85,6 +87,21 @@ const ShareButton = () => {
   );
 };
 
+const OpenInNBSButton = () => {
+  return (
+    <Link
+      href='nbs://'
+      passHref
+      className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:bg-blue-500'
+    >
+      <div className='flex flex-row items-center gap-2'>
+        <FontAwesomeIcon icon={faPlay} />
+        <div>Open in NBS</div>
+      </div>
+    </Link>
+  );
+};
+
 const DownloadSongButton = ({
   song,
 }: {
@@ -125,5 +142,6 @@ export {
   FollowButton,
   LikeButton,
   ShareButton,
+  OpenInNBSButton,
   DownloadSongButton,
 };
