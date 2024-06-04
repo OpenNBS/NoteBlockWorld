@@ -18,10 +18,15 @@ import type { useEditSongProviderType } from '../../../song-edit/components/clie
 
 type SongFormProps = {
   type: 'upload' | 'edit';
+  isLoading?: boolean;
   isLocked?: boolean;
 };
 
-export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
+export const SongForm = ({
+  type,
+  isLoading = false,
+  isLocked = false,
+}: SongFormProps) => {
   const useSongProviderData = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
@@ -31,7 +36,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
   return (
     <>
       <form
-        className='flex flex-col gap-6'
+        className={`flex flex-col gap-6`}
         onSubmit={formMethods.handleSubmit(() => {
           submitSong();
         })}
@@ -43,6 +48,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
             <Input
               id='title'
               label='Title*'
+              isLoading={isLoading}
               disabled={isLocked}
               errorMessage={errors.title?.message}
               {...register('title', {
@@ -56,6 +62,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
             <TextArea
               id='description'
               label='Description'
+              isLoading={isLoading}
               errorMessage={errors.description?.message}
               {...register('description', {
                 disabled: isLocked,
@@ -69,7 +76,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <Input
                 id='author'
                 label='Author'
-                type='text'
+                isLoading={isLoading}
                 disabled={true}
                 errorMessage={errors.author?.message}
                 {...register('author')}
@@ -79,6 +86,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <Input
                 id='originalAuthor'
                 label='Original author'
+                isLoading={isLoading}
                 {...register('originalAuthor', {
                   disabled: isLocked,
                 })}
@@ -96,6 +104,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <Select
                 id='category'
                 label='Category'
+                isLoading={isLoading}
                 {...register('category', {
                   disabled: isLocked,
                 })}
@@ -114,7 +123,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
 
           {/* Thumbnail */}
           <div className='flex-1'>
-            <Area label='Thumbnail'>
+            <Area label='Thumbnail' isLoading={isLoading}>
               <SongThumbnailInput type={type} isLocked={isLocked} />
             </Area>
           </div>
@@ -125,6 +134,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <Select
                 id='visibility'
                 label='Visibility'
+                isLoading={isLoading}
                 errorMessage={errors.visibility?.message}
                 {...register('visibility', {
                   disabled: isLocked,
@@ -143,6 +153,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
               <Select
                 id='license'
                 label='License'
+                isLoading={isLoading}
                 errorMessage={errors.license?.message}
                 {...register('license', {
                   disabled: isLocked,
@@ -160,7 +171,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
           </div>
 
           <div className='flex-1'>
-            <Area label='Custom instruments'>
+            <Area label='Custom instruments' isLoading={isLoading}>
               <InstrumentPicker type={type} />
             </Area>
           </div>
@@ -191,7 +202,7 @@ export const SongForm = ({ type, isLocked = false }: SongFormProps) => {
             <button
               type='submit'
               className='w-32 p-3 font-semibold bg-blue-500 enabled:hover:bg-blue-400 uppercase rounded-lg disabled:opacity-50'
-              disabled={isSubmitting}
+              disabled={isLoading || isSubmitting}
             >
               {type === 'upload' ? 'Upload' : 'Save'}
             </button>

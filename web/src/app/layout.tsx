@@ -4,6 +4,8 @@ import './globals.css';
 import { ReCaptchaProvider } from 'next-recaptcha-v3';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { SkeletonTheme } from 'react-loading-skeleton';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -37,7 +39,13 @@ export default function RootLayout({
             position='bottom-right'
             toastOptions={{ className: '!bg-zinc-700 !text-white' }}
           />
-          {children}
+          <SkeletonTheme
+            borderRadius='10px'
+            baseColor='rgb(39 39 42)'
+            highlightColor='rgb(63 63 70)'
+          >
+            {children}
+          </SkeletonTheme>
         </body>
       </html>
     </ReCaptchaProvider>

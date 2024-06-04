@@ -33,7 +33,7 @@ export const SongEditForm = ({
 
   return (
     <>
-      <SongForm type={type} isLocked={!song || isSubmitting} />
+      <SongForm type={type} isLoading={!song} isLocked={isSubmitting} />
     </>
   );
 };

@@ -1,21 +1,29 @@
 import { forwardRef } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 
 export const Area = ({
   label,
+  isLoading,
   children,
 }: {
   label?: string;
+  isLoading?: boolean;
   children: React.ReactNode;
 }) => {
   return (
     <>
-      {label && <label>{label}</label>}
-      <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
-        {children}
-      </div>
+      {label && (isLoading ? <Skeleton width={100} /> : <label>{label}</label>)}
+
+      {isLoading ? (
+        <Skeleton height='20rem' />
+      ) : (
+        <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+          {children}
+        </div>
+      )}
     </>
   );
 };
@@ -25,22 +33,33 @@ export const Input = forwardRef<
   React.InputHTMLAttributes<HTMLInputElement> & {
     id: string;
     label?: string;
+    isLoading?: boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, label, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
-      <input
-        id={id}
-        ref={ref}
-        {...rest}
-        className={`block h-12 w-full rounded-lg bg-transparent border-2 ${
-          errorMessage ? 'border-red-500' : 'border-zinc-500'
-        } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
-      />
+      {label &&
+        (isLoading ? (
+          <Skeleton width={100} />
+        ) : (
+          <label htmlFor={id}>{label}</label>
+        ))}
+      {isLoading ? (
+        <Skeleton height={'3rem'} />
+      ) : (
+        <input
+          type='text'
+          id={id}
+          ref={ref}
+          {...rest}
+          className={`block h-12 w-full rounded-lg bg-transparent border-2 ${
+            errorMessage ? 'border-red-500' : 'border-zinc-500'
+          } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
+        />
+      )}
       <ErrorBalloon message={errorMessage} />
     </>
   );
@@ -52,21 +71,31 @@ export const TextArea = forwardRef<
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
     id: string;
     label?: string;
+    isLoading?: boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
-  const { id, label, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
-      <textarea
-        id={id}
-        className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
-          errorMessage ? 'border-red-500' : 'border-zinc-500'
-        } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
-        ref={ref}
-        {...rest}
-      />
+      {label &&
+        (isLoading ? (
+          <Skeleton width={100} />
+        ) : (
+          <label htmlFor={id}>{label}</label>
+        ))}
+      {isLoading ? (
+        <Skeleton height={'15rem'} />
+      ) : (
+        <textarea
+          id={id}
+          className={`block h-48 w-full rounded-lg bg-transparent border-2 ${
+            errorMessage ? 'border-red-500' : 'border-zinc-500'
+          } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
+          ref={ref}
+          {...rest}
+        />
+      )}
       <ErrorBalloon message={errorMessage} />
     </>
   );
@@ -78,24 +107,34 @@ export const Select = forwardRef<
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
     label?: string;
+    isLoading?: boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, label, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label && <label htmlFor={id}>{label}</label>}
-      <select
-        ref={ref}
-        {...rest}
-        className={cn(
-          `block h-12 w-full rounded-lg bg-transparent border-2 ${
-            errorMessage ? 'border-red-500' : 'border-zinc-500'
-          }  disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
-          props.className,
-        )}
-      />
+      {label &&
+        (isLoading ? (
+          <Skeleton width={100} />
+        ) : (
+          <label htmlFor={id}>{label}</label>
+        ))}
+      {isLoading ? (
+        <Skeleton height={'3rem'} />
+      ) : (
+        <select
+          ref={ref}
+          {...rest}
+          className={cn(
+            `block h-12 w-full rounded-lg bg-transparent border-2 ${
+              errorMessage ? 'border-red-500' : 'border-zinc-500'
+            }  disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
+            props.className,
+          )}
+        />
+      )}
 
       <ErrorBalloon message={errorMessage} />
     </>
