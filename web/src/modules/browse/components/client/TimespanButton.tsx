@@ -18,7 +18,7 @@ export const TimespanButtonGroup = () => {
         id='hour'
         data-test='timespan-hour'
         isActive={timespan === 'hour'}
-        isDisabled={false}
+        isDisabled={timespan === 'hour'}
         onClick={() => setTimespan('hour')}
       >
         past hour
@@ -27,7 +27,7 @@ export const TimespanButtonGroup = () => {
         id='day'
         data-test='timespan-day'
         isActive={timespan === 'day'}
-        isDisabled={false}
+        isDisabled={timespan === 'day'}
         onClick={() => setTimespan('day')}
       >
         past day
@@ -36,7 +36,7 @@ export const TimespanButtonGroup = () => {
         id='week'
         data-test='timespan-week'
         isActive={timespan === 'week'}
-        isDisabled={false}
+        isDisabled={timespan === 'week'}
         onClick={() => setTimespan('week')}
       >
         past week
@@ -45,7 +45,7 @@ export const TimespanButtonGroup = () => {
         id='month'
         data-test='timespan-month'
         isActive={timespan === 'month'}
-        isDisabled={false}
+        isDisabled={timespan === 'month'}
         onClick={() => setTimespan('month')}
       >
         past month
@@ -54,7 +54,7 @@ export const TimespanButtonGroup = () => {
         id='year'
         data-test='timespan-year'
         isActive={timespan === 'year'}
-        isDisabled={false}
+        isDisabled={timespan === 'year'}
         onClick={() => setTimespan('year')}
       >
         past year
