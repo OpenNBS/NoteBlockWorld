@@ -185,8 +185,6 @@ export const SongForm = ({
             </label>
           </div>
 
-          <div className='h-4'></div>
-
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Uploading label */}
             {isSubmitting && (
