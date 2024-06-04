@@ -19,7 +19,13 @@ import {
   EditButton,
 } from '../client/MySongsButtons';
 
-export const SongRow = ({ song }: { song: SongPreviewDtoType | null }) => {
+export const SongRow = ({
+  song,
+  key,
+}: {
+  song: SongPreviewDtoType | null;
+  key: number;
+}) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
 
   const onDeleteClicked = () => {
@@ -43,7 +49,7 @@ export const SongRow = ({ song }: { song: SongPreviewDtoType | null }) => {
   return (
     <article
       className='grid grid-cols-8 border border-zinc-700 border-t-0 last:border-b-0 hover:bg-zinc-950/50 transition-colors duration-150 [&>div]:p-2 [&>div]:my-auto'
-      key={1}
+      key={key}
     >
       {/* Thumbnail */}
       <div className='col-span-1'>

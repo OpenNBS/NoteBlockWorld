@@ -38,9 +38,7 @@ const SongRows = ({
   pageSize: number;
 }) => {
   const content = !page ? Array(pageSize).fill({}) : page.content;
-  return content.map((song, i) => (
-    <SongRow key={song.publicId || i} song={null} />
-  ));
+  return content.map((song, i) => <SongRow key={i} song={song} />);
 };
 
 const MySongsTablePaginator = () => {
