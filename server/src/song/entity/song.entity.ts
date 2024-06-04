@@ -1,7 +1,7 @@
 import { SongViewUploader } from '@nbw/validation/song/dto/SongView.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
-import {
+import type {
   CategoryType,
   LicenseType,
   VisibilityType,
