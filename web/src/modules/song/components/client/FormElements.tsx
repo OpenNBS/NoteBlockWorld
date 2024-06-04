@@ -15,7 +15,7 @@ export const Area = ({
 }) => {
   return (
     <>
-      {label && (isLoading ? <Skeleton width={100} /> : <label>{label}</label>)}
+      {label && <label>{label}</label>}
 
       {isLoading ? (
         <Skeleton height='20rem' />
@@ -41,12 +41,7 @@ export const Input = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label &&
-        (isLoading ? (
-          <Skeleton width={100} />
-        ) : (
-          <label htmlFor={id}>{label}</label>
-        ))}
+      {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
         <Skeleton height={'3rem'} />
       ) : (
@@ -78,12 +73,7 @@ export const TextArea = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label &&
-        (isLoading ? (
-          <Skeleton width={100} />
-        ) : (
-          <label htmlFor={id}>{label}</label>
-        ))}
+      {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
         <Skeleton height={'15rem'} />
       ) : (
@@ -115,12 +105,7 @@ export const Select = forwardRef<
   const { id, label, isLoading, errorMessage, ...rest } = props;
   return (
     <>
-      {label &&
-        (isLoading ? (
-          <Skeleton width={100} />
-        ) : (
-          <label htmlFor={id}>{label}</label>
-        ))}
+      {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
         <Skeleton height={'3rem'} />
       ) : (
