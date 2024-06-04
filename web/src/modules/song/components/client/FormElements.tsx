@@ -20,7 +20,7 @@ export const Area = ({
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
-        <div className='flex justify-center w-full rounded-lg border-2 border-zinc-500 p-8 mb-4'>
+        <div className='flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4'>
           {children}
         </div>
       )}
@@ -43,7 +43,7 @@ export const Input = forwardRef<
     <>
       {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
-        <Skeleton height={'3rem'} />
+        <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
         <input
           type='text'
@@ -75,7 +75,7 @@ export const TextArea = forwardRef<
     <>
       {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
-        <Skeleton height={'15rem'} />
+        <Skeleton height='12rem' containerClassName='block leading-none' />
       ) : (
         <textarea
           id={id}
@@ -107,7 +107,7 @@ export const Select = forwardRef<
     <>
       {label && <label htmlFor={id}>{label}</label>}
       {isLoading ? (
-        <Skeleton height={'3rem'} />
+        <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
         <select
           ref={ref}
