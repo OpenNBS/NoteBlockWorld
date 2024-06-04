@@ -1,4 +1,5 @@
 'use client';
+
 import { PageQueryDTOType } from '@shared/validation/common/dto/types';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import {
@@ -39,13 +40,16 @@ export function RecentSongsProvider({
       const params: PageQueryDTOType = {
         page: currentPage,
         limit: 10, // TODO: fiz constants
-        sort: 'createdAt',
+        sort: 'recent',
         order: false,
       };
       try {
-        const response = await axiosInstance.get('/song', {
-          params,
-        });
+        const response = await axiosInstance.get<SongPreviewDtoType[]>(
+          '/song',
+          {
+            params,
+          },
+        );
         setRecentSongs([...recentSongs, ...response.data]);
       } catch (error) {
         setRecentError('Error loading recent songs');

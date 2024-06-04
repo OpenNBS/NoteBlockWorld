@@ -1,7 +1,10 @@
 'use client';
 
 import { PageQueryDTOType } from '@shared/validation/common/dto/types';
-import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import {
+  SongPreviewDtoType,
+  TimespanType,
+} from '@shared/validation/song/dto/types';
 import {
   createContext,
   useCallback,
@@ -12,13 +15,13 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 
-import { useHomePageProvider } from './HomePage.context';
-
 type FeaturedSongsContextType = {
   featuredSongs: SongPreviewDtoType[];
   featuredLoading: boolean;
   featuredError: string;
   increasePageFeatured: () => void;
+  timespan: TimespanType;
+  setTimespan: (timespan: TimespanType) => void;
 };
 const FeaturedSongsContext = createContext<FeaturedSongsContextType>(
   {} as FeaturedSongsContextType,
@@ -36,34 +39,40 @@ export function FeaturedSongsProvider({
   const [featuredLoading, setFeaturedLoading] = useState(false);
   const [featuredError, setFeaturedError] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { timespan } = useHomePageProvider();
+  const [timespan, setTimespan] = useState<TimespanType>('week');
+
   const fetchFeaturedSongs = useCallback(
     async function () {
       //setFeaturedLoading(true);
       const params: PageQueryDTOType = {
-        page: currentPage,
-        limit: 10, // TODO: fiz constants
-        sort: 'playCount',
-        order: false,
+        sort: 'featured',
         timespan: timespan,
       };
       try {
-        const response = await axiosInstance.get('/song', {
-          params,
-        });
-        setFeaturedSongs([...featuredSongs, ...response.data]);
+        const response = await axiosInstance.get<SongPreviewDtoType[]>(
+          '/song',
+          {
+            params,
+          },
+        );
+        setFeaturedSongs(response.data);
       } catch (error) {
         setFeaturedError('Error loading featured songs');
       } finally {
         setFeaturedLoading(false);
       }
     },
-    [currentPage, featuredSongs, timespan],
+    [timespan],
   );
   useEffect(() => {
     fetchFeaturedSongs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
+
+  useEffect(() => {
+    fetchFeaturedSongs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timespan]);
   function increasePageFeatured() {
     setCurrentPage((prev) => prev + 1);
   }
@@ -74,6 +83,8 @@ export function FeaturedSongsProvider({
         featuredLoading,
         featuredError,
         increasePageFeatured,
+        timespan,
+        setTimespan,
       }}
     >
       {children}

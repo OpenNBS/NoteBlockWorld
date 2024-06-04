@@ -1,21 +1,15 @@
 'use client';
 
-import {
-  SongPreviewDtoType,
-  TimespanType,
-} from '@shared/validation/song/dto/types';
-import { createContext, useContext, useState } from 'react';
+import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import { createContext, useContext } from 'react';
 
 import { FeaturedSongsProvider } from './FeaturedSongs.context';
 import { RecentSongsProvider } from './RecentSongs.context';
 
-type HomePageContextType = {
-  timespan: TimespanType;
-  setTimespan: (timespan: TimespanType) => void;
-};
+type HomePageContextType = null;
 
 const HomePageContext = createContext<HomePageContextType>(
-  {} as HomePageContextType,
+  null as HomePageContextType,
 );
 
 export function HomePageProvider({
@@ -27,15 +21,8 @@ export function HomePageProvider({
   initialRecentSongs: SongPreviewDtoType[];
   initialFeaturedSongs: SongPreviewDtoType[];
 }) {
-  const [timespan, setTimespan] = useState<TimespanType>('week');
-
   return (
-    <HomePageContext.Provider
-      value={{
-        timespan,
-        setTimespan,
-      }}
-    >
+    <HomePageContext.Provider value={null}>
       <RecentSongsProvider initialRecentSongs={initialRecentSongs}>
         <FeaturedSongsProvider initialFeaturedSongs={initialFeaturedSongs}>
           {children}

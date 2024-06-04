@@ -1,6 +1,6 @@
 'use client';
 
-import { useHomePageProvider } from './context/HomePage.context';
+import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
 
 interface TimespanButtonProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface TimespanButtonProps {
 }
 
 export const TimespanButtonGroup = () => {
-  const { setTimespan, timespan } = useHomePageProvider();
+  const { setTimespan, timespan } = useFeaturedSongsProvider();
   return (
     <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
       <TimespanButton
