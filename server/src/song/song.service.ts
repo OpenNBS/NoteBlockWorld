@@ -406,7 +406,7 @@ export class SongService {
         createdAt: { $gte: timespanMap[timespan] },
       })
       .sort({
-        [sort]: order ? 1 : -1,
+        [sort]: order ? -1 : 1,
       })
       .skip(page * limit - limit)
       .limit(limit)
