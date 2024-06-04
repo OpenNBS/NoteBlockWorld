@@ -10,10 +10,10 @@ export const Label = forwardRef<
     id?: string;
     label: string;
   }
->((props) => {
+>((props, ref) => {
   const { id, label } = props;
   return (
-    <label htmlFor={id} className='text-sm text-zinc-300'>
+    <label htmlFor={id} ref={ref} className='text-sm text-zinc-300'>
       {label}
     </label>
   );
