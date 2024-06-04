@@ -1,14 +1,22 @@
 'use client';
 
-import { useHomePageProvider } from './client/HomePage.context';
+import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
+import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
-  const { recentSongs, featuredSongs, fetchRecentSongs, fetchFeaturedSongs } =
-    useHomePageProvider();
+  const {
+    featuredSongs,
+    featuredLoading,
+    featuredError,
+    increasePageFeatured,
+  } = useFeaturedSongsProvider();
+
+  const { recentSongs, recentLoading, recentError, increasePageRecent } =
+    useRecentSongsProvider();
 
   return (
     <>
@@ -24,7 +32,7 @@ export const HomePageComponent = () => {
         {featuredSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
-        <LoadMoreButton onClick={fetchFeaturedSongs} />
+        <LoadMoreButton onClick={() => increasePageFeatured()} />
       </SongCardGroup>
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
@@ -37,7 +45,7 @@ export const HomePageComponent = () => {
         {recentSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
-        <LoadMoreButton onClick={fetchRecentSongs} />
+        <LoadMoreButton onClick={() => increasePageRecent()} />
       </SongCardGroup>
     </>
   );

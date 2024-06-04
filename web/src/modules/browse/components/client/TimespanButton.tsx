@@ -1,6 +1,6 @@
 'use client';
 
-import { useHomePageProvider } from './HomePage.context';
+import { useHomePageProvider } from './context/HomePage.context';
 
 interface TimespanButtonProps {
   children: React.ReactNode;
