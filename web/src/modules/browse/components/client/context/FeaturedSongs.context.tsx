@@ -62,10 +62,11 @@ export function FeaturedSongsProvider({
   );
   useEffect(() => {
     fetchFeaturedSongs();
-  }, [fetchFeaturedSongs, currentPage]);
-  const increasePageFeatured = useCallback(function () {
-    //setCurrentPage((prev) => prev + 1);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+  function increasePageFeatured() {
+    setCurrentPage((prev) => prev + 1);
+  }
   return (
     <FeaturedSongsContext.Provider
       value={{

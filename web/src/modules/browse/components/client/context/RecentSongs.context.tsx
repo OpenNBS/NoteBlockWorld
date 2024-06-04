@@ -57,10 +57,11 @@ export function RecentSongsProvider({
   );
   useEffect(() => {
     fetchRecentSongs();
-  }, [fetchRecentSongs, currentPage]);
-  const increasePageRecent = useCallback(function () {
-    //setCurrentPage((prev) => prev + 1);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+  function increasePageRecent() {
+    setCurrentPage((prev) => prev + 1);
+  }
   return (
     <RecentSongsContext.Provider
       value={{

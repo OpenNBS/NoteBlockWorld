@@ -44,14 +44,11 @@ async function fetchFeaturedSongs(): Promise<SongPreviewDtoType[]> {
 }
 
 async function Home() {
-  const recentSongs = await fetchRecentSongs();
-  const featuredSongs = await fetchFeaturedSongs();
+  //const recentSongs = await fetchRecentSongs();
+  //const featuredSongs = await fetchFeaturedSongs();
 
   return (
-    <HomePageProvider
-      initialRecentSongs={recentSongs}
-      initialFeaturedSongs={featuredSongs}
-    >
+    <HomePageProvider initialRecentSongs={[]} initialFeaturedSongs={[]}>
       <HomePageComponent />
     </HomePageProvider>
   );
