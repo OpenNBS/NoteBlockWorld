@@ -1,4 +1,5 @@
 import { UploadConst } from '@shared/validation/song/constants';
+import { useRouter } from 'next/navigation';
 
 import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
 
@@ -30,8 +31,11 @@ export const SongForm = ({
   const useSongProviderData = useSongProvider(
     type,
   ) as useUploadSongProviderType & useEditSongProviderType;
+
   const { sendError, errors, submitSong, isSubmitting, formMethods, register } =
     useSongProviderData;
+
+  const router = useRouter();
 
   return (
     <>
@@ -194,6 +198,18 @@ export const SongForm = ({
                   {type === 'upload' ? 'Uploading song...' : 'Saving song...'}
                 </p>
               </div>
+            )}
+
+            {/* Cancel button (only on edit form) */}
+            {type === 'edit' && (
+              <button
+                type='button'
+                className='w-32 p-3 bg-zinc-700 enabled:hover:bg-zinc-600 uppercase rounded-lg disabled:opacity-50'
+                onClick={() => router.back()}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
             )}
 
             {/* Upload button */}
