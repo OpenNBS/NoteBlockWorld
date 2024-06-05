@@ -354,6 +354,20 @@ export class SongService {
     if (foundSong.uploader.toString() !== user?._id.toString()) {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
+    if (
+      foundSong.title === body.title &&
+      foundSong.originalAuthor === body.originalAuthor &&
+      foundSong.description === body.description &&
+      foundSong.category === body.category &&
+      foundSong.allowDownload === body.allowDownload &&
+      foundSong.visibility === body.visibility &&
+      foundSong.license === body.license &&
+      foundSong.customInstruments === body.customInstruments &&
+      foundSong.thumbnailData === body.thumbnailData &&
+      foundSong._sounds === body.customInstruments
+    ) {
+      throw new HttpException('No changes detected', HttpStatus.BAD_REQUEST);
+    }
     // Update song document
     foundSong.title = body.title;
     foundSong.originalAuthor = body.originalAuthor;
@@ -363,7 +377,6 @@ export class SongService {
     foundSong.visibility = body.visibility;
     foundSong.license = body.license;
     foundSong.customInstruments = body.customInstruments;
-    foundSong.thumbnailData = body.thumbnailData;
     foundSong._sounds = body.customInstruments;
     // Update NBS file with form values
     //TODO: Update song metadata
@@ -386,6 +399,7 @@ export class SongService {
         foundSong.publicId,
         foundSong.nbsFileUrl,
       );
+      foundSong.thumbnailData = body.thumbnailData;
     }
 
     //TODO: update song document
