@@ -31,11 +31,11 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         alignOffset={-10}
         arrowPadding={10}
       >
-        <div className='shadow-xl pb-2'>
+        <div className='shadow-xl pb-1'>
           <PopoverArrow className='fill-zinc-600' />
           <div className='min-w-48 max-w-64'>
             {/* User */}
-            <div className='flex flex-row gap-2 items-center p-4 pb-2'>
+            <div className='flex flex-row gap-2 items-center p-4 pb-3'>
               <div className='h-8 w-8'>
                 <Image
                   width={32}

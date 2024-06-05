@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
 const UserMenuSplitLine = () => (
-  <hr className='w-full h-0.5 bg-zinc-600 border-0 my-2' />
+  <hr className='w-full h-0.5 bg-zinc-600 border-0 my-1' />
 );
 
 const UserMenuLink = ({
