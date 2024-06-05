@@ -1,4 +1,5 @@
 import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
+import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 
 import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
@@ -64,12 +65,12 @@ export const SongThumbnailInput = ({
             className='w-full disabled:cursor-not-allowed'
             {...register('thumbnailData.zoomLevel', {
               valueAsNumber: true,
-              max: 5,
+              max: ThumbnailConst.MAX_ZOOM_LEVEL,
               disabled: isLocked,
             })}
             disabled={isLocked}
-            min={1}
-            max={5}
+            min={ThumbnailConst.DEFAULT_ZOOM_LEVEL}
+            max={ThumbnailConst.MAX_ZOOM_LEVEL}
           />
         </div>
         <div>{zoomLevel}</div>
@@ -88,7 +89,7 @@ export const SongThumbnailInput = ({
               disabled: isLocked,
             })}
             disabled={isLocked}
-            min={0}
+            min={ThumbnailConst.DEFAULT_START_TICK}
             max={maxTick}
           />
         </div>
@@ -107,7 +108,7 @@ export const SongThumbnailInput = ({
               max: maxLayer,
             })}
             disabled={isLocked}
-            min={0}
+            min={ThumbnailConst.DEFAULT_START_LAYER}
             max={maxLayer}
           />
         </div>
