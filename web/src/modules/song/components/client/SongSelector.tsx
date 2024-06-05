@@ -36,7 +36,7 @@ export const SongSelector = () => {
       });
     },
     accept: {
-      'application/octet-stream': ['.nbs'],
+      'application/nbs': ['.nbs'],
     },
     multiple: false,
     noClick: true,
