@@ -10,7 +10,7 @@ import {
   Option,
   Select,
   TextArea,
-} from './FormElements';
+} from '../../../shared/components/client/FormElements';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';

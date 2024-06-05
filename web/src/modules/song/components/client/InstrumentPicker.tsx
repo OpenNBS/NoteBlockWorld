@@ -1,7 +1,7 @@
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
-import { Option, Select } from './FormElements';
+import { Option, Select } from '../../../shared/components/client/FormElements';
 
 const sounds = [
   { name: 'sound1' },
