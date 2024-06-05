@@ -121,6 +121,7 @@ export const SongThumbnailInput = ({
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
           {bgColors.map((color, index) => (
+          {Object.values(bgColors).map((color, index) => (
             <ColorButton
               key={index}
               color={color}
