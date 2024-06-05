@@ -25,8 +25,6 @@ export class UploadSongDto {
     description: 'The file to upload',
     type: 'file',
   })
-  //@IsNotEmpty()
-  //@Type(() => Blob)
   file: Express.Multer.File;
 
   @IsNotEmpty()
