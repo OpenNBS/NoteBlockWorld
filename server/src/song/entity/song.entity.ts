@@ -15,12 +15,7 @@ import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
   toJSON: {
     virtuals: true,
     transform: (doc, ret) => {
-      //ret.id = ret._id;
       delete ret._id;
-      // TODO: hydrate uploader
-      //if (ret.uploader) {
-      //  ret.uploader = ret.uploader.toJSON();
-      //}
     },
   },
 })
