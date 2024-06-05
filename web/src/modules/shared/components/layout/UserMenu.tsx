@@ -25,16 +25,13 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-fit p-0 pb-2 border-2 border-zinc-600 bg-zinc-800 text-white shadow-xl rounded-lg'
+        className='w-fit p-[2px] pb-2 h-fit box-border shadow-[inset_0px_0px_0px_2px_rgb(82_82_91)] border-zinc-600 bg-zinc-800 text-white rounded-lg'
         sideOffset={10}
         align='end'
         alignOffset={-10}
+        arrowPadding={10}
       >
-        <PopoverArrow
-          className='fill-zinc-600'
-          width={'1rem'}
-          height={'0.5rem'}
-        />
+        <PopoverArrow className='fill-zinc-600' />
         <div className='min-w-48 max-w-64'>
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-2'>
