@@ -4,6 +4,8 @@ import { faCloudUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
+
 export function SignInButton() {
   return (
     <Link href='/login'>
@@ -19,13 +21,20 @@ export function SignInButton() {
 
 export function UploadButton() {
   return (
-    <Link href='/upload'>
-      <div className='h-8 w-8 p-1'>
-        <FontAwesomeIcon
-          icon={faCloudUpload}
-          className='h-full text-white hover:text-zinc-400 transition-colors duration-150'
-        />
-      </div>
-    </Link>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Link href='/upload'>
+          <div className='h-8 w-8 p-1'>
+            <FontAwesomeIcon
+              icon={faCloudUpload}
+              className='h-full text-white hover:text-zinc-400 transition-colors duration-150'
+            />
+          </div>
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent>
+        <span className='text-xs'>Upload a song</span>
+      </TooltipContent>
+    </Tooltip>
   );
 }
