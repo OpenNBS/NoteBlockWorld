@@ -36,6 +36,7 @@ export const HomePageComponent = () => {
         opts={{
           align: 'start',
           loop: false,
+          duration: 15,
         }}
       >
         <CarouselContent>
