@@ -120,14 +120,17 @@ export const SongThumbnailInput = ({
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
-          {bgColors.map(({ dark }, index) => (
+          {bgColors.map((data: any, index) => (
             <ColorButton
               key={index}
-              color={dark}
+              color={data.dark}
               disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
-                formMethods.setValue('thumbnailData.backgroundColor', dark);
+                formMethods.setValue(
+                  'thumbnailData.backgroundColor',
+                  data.dark,
+                );
               }}
             />
           ))}
