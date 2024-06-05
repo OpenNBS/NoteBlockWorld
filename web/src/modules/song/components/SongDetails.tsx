@@ -16,7 +16,7 @@ const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {
 
 const SongDetailsCell = ({ children }: { children: React.ReactNode }) => {
   return (
-    <td className='first:w-[40%] last:w-[60%] last:max-w-0 text-ellipsis overflow-hidden whitespace-nowrap p-2 py-3 first:text-zinc-400 first:text-right last:font-bold'>
+    <td className='first:w-[40%] last:w-[60%] last:max-w-0 text-ellipsis overflow-hidden whitespace-nowrap p-2 py-[10px] first:text-zinc-400 first:text-right last:font-bold'>
       {children}
     </td>
   );
@@ -28,7 +28,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
       <tbody>
         <SongDetailsRow>
           <SongDetailsCell>Title</SongDetailsCell>
-          <SongDetailsCell>{song.title + song.title}</SongDetailsCell>
+          <SongDetailsCell>{song.title}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Author</SongDetailsCell>
@@ -36,7 +36,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Original author</SongDetailsCell>
-          <SongDetailsCell>{song.originalAuthor}</SongDetailsCell>
+          <SongDetailsCell>{song.originalAuthor || '--'}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>MIDI file name</SongDetailsCell>
@@ -47,42 +47,22 @@ const SongDetails = ({ song }: SongDetailsProps) => {
           <SongDetailsCell>{song.category}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
-          <SongDetailsCell>Uploaded at</SongDetailsCell>
-          <SongDetailsCell>
-            {song.createdAt
-              ? new Date(song.createdAt).toLocaleString('en-UK', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })
-              : new Date().toLocaleString('en-UK', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-          </SongDetailsCell>
-        </SongDetailsRow>
-        <SongDetailsRow>
           <SongDetailsCell>Note block compatible</SongDetailsCell>
           <SongDetailsCell>
             <div className='flex items-center'>
               <div className='mr-2 h-2.5 w-2.5 rounded-full bg-green-500'></div>
-              <div className=''>Yes</div>
+              <div>Yes</div>
             </div>
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
-          <SongDetailsCell>Note count</SongDetailsCell>
+          <SongDetailsCell>Notes</SongDetailsCell>
           <SongDetailsCell>
             {song.noteCount.toLocaleString('en-US')}
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
-          <SongDetailsCell>Instrument count</SongDetailsCell>
+          <SongDetailsCell>Instruments</SongDetailsCell>
           <SongDetailsCell>
             {song.vanillaInstrumentCount + song.customInstrumentCount}
             <span className='font-normal text-zinc-400 ml-2'>
@@ -91,11 +71,11 @@ const SongDetails = ({ song }: SongDetailsProps) => {
           </SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
-          <SongDetailsCell>Layer count</SongDetailsCell>
+          <SongDetailsCell>Layers</SongDetailsCell>
           <SongDetailsCell>{song.layerCount}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
-          <SongDetailsCell>Tick count</SongDetailsCell>
+          <SongDetailsCell>Ticks</SongDetailsCell>
           <SongDetailsCell>{(song as any).tickCount}</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
@@ -109,7 +89,7 @@ const SongDetails = ({ song }: SongDetailsProps) => {
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Time signature</SongDetailsCell>
-          <SongDetailsCell>{(song as any).timeSignature}</SongDetailsCell>
+          <SongDetailsCell>{(song as any).timeSignature}/4</SongDetailsCell>
         </SongDetailsRow>
         <SongDetailsRow>
           <SongDetailsCell>Running time</SongDetailsCell>
