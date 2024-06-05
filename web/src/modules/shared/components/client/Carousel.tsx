@@ -90,11 +90,19 @@ export const Carousel = forwardRef<
     }, []);
 
     const scrollPrev = useCallback(() => {
-      api?.scrollPrev();
+      if (api?.canScrollPrev()) {
+        api?.scrollPrev();
+      } else {
+        api?.scrollTo(api.containerNode().children.length - 1);
+      }
     }, [api]);
 
     const scrollNext = useCallback(() => {
-      api?.scrollNext();
+      if (api?.canScrollNext()) {
+        api?.scrollNext();
+      } else {
+        api?.scrollTo(0);
+      }
     }, [api]);
 
     const handleKeyDown: KeyboardEventHandler = useCallback(
@@ -238,7 +246,6 @@ export const CarouselPrevious = forwardRef<
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
-      disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
@@ -264,7 +271,6 @@ export const CarouselNext = forwardRef<
           : 'bottom-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
-      disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
