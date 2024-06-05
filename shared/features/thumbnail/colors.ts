@@ -162,4 +162,4 @@ export const bgColors = [
     light: colors.stone[400],
     dark: colors.stone[900],
   },
-];
+] as const;
