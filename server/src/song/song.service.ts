@@ -370,15 +370,26 @@ export class SongService {
     const songFile = await this.fileService.getSongFile(foundSong.nbsFileUrl);
     const nbsSong = fromArrayBuffer(songFile);
     this.updateSongFileMetadata(nbsSong, body, user);
-    //TODO: Generate thumbnail
-    const thumbUrl = await this.generateThumbnail(
-      body.thumbnailData,
-      nbsSong,
-      foundSong.publicId,
-      foundSong.nbsFileUrl,
-    );
+    // if new thumbnail data the same as existing one?
+    if (
+      !(
+        body.thumbnailData.backgroundColor ===
+          foundSong.thumbnailData.backgroundColor &&
+        body.thumbnailData.startLayer === foundSong.thumbnailData.startLayer &&
+        body.thumbnailData.startTick === foundSong.thumbnailData.startTick &&
+        body.thumbnailData.zoomLevel === foundSong.thumbnailData.zoomLevel
+      )
+    ) {
+      foundSong.thumbnailUrl = await this.generateThumbnail(
+        body.thumbnailData,
+        nbsSong,
+        foundSong.publicId,
+        foundSong.nbsFileUrl,
+      );
+    }
+
     //TODO: update song document
-    foundSong.thumbnailUrl = thumbUrl;
+
     // Save song document
     const updatedSong = await foundSong.save();
     const populatedSong = (await updatedSong.populate(
