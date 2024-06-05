@@ -235,7 +235,7 @@ export const CarouselPrevious = forwardRef<
   HTMLButtonElement,
   ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  const { orientation, scrollPrev } = useCarousel();
 
   return (
     <CarouselButton
@@ -260,7 +260,7 @@ export const CarouselNext = forwardRef<
   HTMLButtonElement,
   ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
+  const { orientation, scrollNext } = useCarousel();
 
   return (
     <CarouselButton
