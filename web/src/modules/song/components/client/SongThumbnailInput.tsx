@@ -3,7 +3,7 @@ import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
+import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';

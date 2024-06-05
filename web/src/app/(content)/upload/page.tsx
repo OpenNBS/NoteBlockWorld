@@ -4,7 +4,7 @@ import {
   checkLogin,
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
-import { UploadSongPage } from '@web/src/modules/upload/components/client/UploadSong';
+import { UploadSongPage } from '@web/src/modules/song-upload/components/client/UploadSong';
 
 async function UploadPage() {
   const isLogged = await checkLogin();

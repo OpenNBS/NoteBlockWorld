@@ -1,7 +1,7 @@
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
-import { useUploadSongProviderType } from '@web/src/modules/upload/components/client/context/UploadSong.context';
+import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import {
   Area,

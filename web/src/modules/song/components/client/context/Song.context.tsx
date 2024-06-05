@@ -11,7 +11,7 @@ import {
   UploadSongContext,
   UploadSongProvider,
   useUploadSongProviderType,
-} from '../../../../upload/components/client/context/UploadSong.context';
+} from '../../../../song-upload/components/client/context/UploadSong.context';
 
 export const SongProvider = ({ children }: { children: React.ReactNode }) => {
   return (
