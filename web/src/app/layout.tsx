@@ -7,6 +7,8 @@ import { Toaster } from 'react-hot-toast';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
+import { TooltipProvider } from '../modules/shared/components/tooltip';
+
 const lato = Lato({
   subsets: ['latin'],
   weight: ['100', '300', '400', '700', '900'],
@@ -45,7 +47,9 @@ export default function RootLayout({
             baseColor='rgb(39 39 42)'
             highlightColor='rgb(63 63 70)'
           >
-            {children}
+            <TooltipProvider delayDuration={0} skipDelayDuration={0}>
+              {children}
+            </TooltipProvider>
           </SkeletonTheme>
         </body>
       </html>
