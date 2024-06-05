@@ -16,11 +16,9 @@ import {
 } from '../../shared/components/client/Carousel';
 
 export const HomePageComponent = () => {
-  const { featuredSongs, featuredLoading, featuredError } =
-    useFeaturedSongsProvider();
+  const { featuredSongs } = useFeaturedSongsProvider();
 
-  const { recentSongs, recentLoading, recentError, increasePageRecent } =
-    useRecentSongsProvider();
+  const { recentSongs, increasePageRecent } = useRecentSongsProvider();
 
   return (
     <>
