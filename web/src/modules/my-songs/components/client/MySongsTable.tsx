@@ -101,7 +101,7 @@ const MySongsTablePaginator = () => {
 };
 
 export const MySongsTable = () => {
-  const { page, pageSize, isLoading } = useMySongsProvider();
+  const { page, pageSize } = useMySongsProvider();
 
   return (
     <div className='min-w-full h-full text-md text-center text-nowrap text-ellipsis border-separate border-spacing-0'>
