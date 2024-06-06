@@ -4,13 +4,14 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MY_SONGS } from '@shared/validation/song/constants';
 import { SongPageDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 
+import { useMySongsProvider } from './context/MySongs.context';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
-import { useMySongsProvider } from '../client/MySongs.context';
 
 const NoSongs = () => (
   <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
@@ -38,8 +39,19 @@ const SongRows = ({
   page: SongPageDtoType | null;
   pageSize: number;
 }) => {
+  const maxPage = MY_SONGS.PAGE_SIZE;
   const content = !page ? Array(pageSize).fill(null) : page.content;
-  return content.map((song, i) => <SongRow key={i} song={song} />);
+  return (
+    <>
+      {content.map((song, i) => (
+        <SongRow key={i} song={song} />
+      ))}
+      {maxPage - content.length > 0 &&
+        Array(maxPage - content.length)
+          .fill(null)
+          .map((_, i) => <SongRow key={i} song={null} />)}
+    </>
+  );
 };
 
 const MySongsTablePaginator = () => {
