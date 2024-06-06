@@ -1,3 +1,4 @@
+import { MY_SONGS } from '@shared/validation/song/constants';
 import {
   SongPageDtoType,
   SongsFolder,
@@ -5,7 +6,7 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 
-import { MySongProvider } from './client/MySongs.context';
+import { MySongProvider } from './client/context/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
 
@@ -38,7 +39,7 @@ async function fetchSongsPage(
 
 async function fetchSongsFolder(): Promise<SongsFolder> {
   const currentPage = 0;
-  const pageSize = 10;
+  const pageSize = MY_SONGS.PAGE_SIZE;
 
   // get token from cookies
   const token = getTokenServer();

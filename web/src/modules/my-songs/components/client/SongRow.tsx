@@ -12,7 +12,7 @@ import Skeleton from 'react-loading-skeleton';
 import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
-import { useMySongsProvider } from './MySongs.context';
+import { useMySongsProvider } from './context/MySongs.context';
 import {
   DeleteButton,
   DownloadSongButton,
