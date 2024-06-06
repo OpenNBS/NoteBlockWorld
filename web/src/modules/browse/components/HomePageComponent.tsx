@@ -38,6 +38,15 @@ export const HomePageComponent = () => {
         }}
       >
         <CarouselContent>
+          {/*
+            // TODO: Show skeleton loader when loading
+        */}
+          {'DELETE THIS' && (
+            <CarouselItem className='basis-full md:basis-1/2 lg:basis-1/3'>
+              <SongCard song={undefined} />
+            </CarouselItem>
+          )}
+
           {featuredSongs.map((song) => (
             <CarouselItem
               className='basis-full md:basis-1/2 lg:basis-1/3'
@@ -59,6 +68,10 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
+        {/*
+        // TODO: Show skeleton loader when loading
+        */}
+        {'DELETE THIS' && <SongCard song={undefined} />}
         {recentSongs.map((song) => (
           <SongCard key={song.publicId} song={song} />
         ))}
