@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 import { useSongProvider } from '@web/src/modules/song/components/client/context/Song.context';
 import { SongForm } from '@web/src/modules/song/components/client/SongForm';
+import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
 
 import { useEditSongProviderType } from './context/EditSong.context';
 
@@ -33,6 +34,22 @@ export const SongEditForm = ({
 
   return (
     <>
+      <p className='text-m text-gray-500 text-right my-5'>
+        Song file:{' '}
+        <button
+          className='text-blue-500 underline pointer'
+          onClick={() =>
+            downloadSongFile({
+              publicId: songId,
+              title: `${songData.originalAuthor || username} - ${
+                songData.title
+              }`,
+            })
+          }
+        >
+          {songData.originalAuthor || username} - {songData.title}.nbs
+        </button>
+      </p>
       <SongForm type={type} isLoading={!song} isLocked={isSubmitting} />
     </>
   );
