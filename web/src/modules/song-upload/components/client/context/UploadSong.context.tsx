@@ -174,10 +174,8 @@ export const UploadSongProvider = ({
     };
 
     window.addEventListener('beforeunload', handler);
-    console.log('added listener');
     return () => {
       window.removeEventListener('beforeunload', handler);
-      console.log('removed listener');
     };
   }, [song]);
 

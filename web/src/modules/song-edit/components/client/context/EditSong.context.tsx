@@ -234,12 +234,9 @@ export const EditSongProvider = ({
           'Are you sure you want to leave? You have unsaved changes.';
       }
     };
-
     window.addEventListener('beforeunload', handler);
-    console.log('added listener');
     return () => {
       window.removeEventListener('beforeunload', handler);
-      console.log('removed listener');
     };
   }, [dataWasNotChanged]);
 
