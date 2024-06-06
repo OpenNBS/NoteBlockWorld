@@ -164,6 +164,23 @@ export const UploadSongProvider = ({
     }
   }, [song, formMethods]);
 
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (song) {
+        e.preventDefault();
+        e.returnValue =
+          'Are you sure you want to leave? You have unsaved changes.';
+      }
+    };
+
+    window.addEventListener('beforeunload', handler);
+    console.log('added listener');
+    return () => {
+      window.removeEventListener('beforeunload', handler);
+      console.log('removed listener');
+    };
+  }, [song]);
+
   return (
     <UploadSongContext.Provider
       value={{

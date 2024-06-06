@@ -4,7 +4,7 @@ import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 import { useRouter } from 'next/navigation';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
@@ -60,52 +60,56 @@ export const EditSongProvider = ({
 
   const router = useRouter();
 
-  function dataWasNotChanged() {
-    if (!originalData) {
-      return false;
-    }
+  const dataWasNotChanged = useCallback(
+    function () {
+      if (!originalData) {
+        return false;
+      }
 
-    const formValues = {
-      allowDownload: formMethods.getValues().allowDownload,
-      visibility: formMethods.getValues().visibility,
-      title: formMethods.getValues().title,
-      originalAuthor: formMethods.getValues().originalAuthor,
-      description: formMethods.getValues().description,
-      thumbnailData: {
-        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-        startTick: formMethods.getValues().thumbnailData.startTick,
-        startLayer: formMethods.getValues().thumbnailData.startLayer,
-        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
-      },
-      artist: formMethods.getValues().author,
-      customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license,
-      category: formMethods.getValues().category,
-    };
+      const formValues = {
+        allowDownload: formMethods.getValues().allowDownload,
+        visibility: formMethods.getValues().visibility,
+        title: formMethods.getValues().title,
+        originalAuthor: formMethods.getValues().originalAuthor,
+        description: formMethods.getValues().description,
+        thumbnailData: {
+          zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
+          startTick: formMethods.getValues().thumbnailData.startTick,
+          startLayer: formMethods.getValues().thumbnailData.startLayer,
+          backgroundColor:
+            formMethods.getValues().thumbnailData.backgroundColor,
+        },
+        artist: formMethods.getValues().author,
+        customInstruments: formMethods.getValues().customInstruments,
+        license: formMethods.getValues().license,
+        category: formMethods.getValues().category,
+      };
 
-    const coprarisons = [
-      formValues.allowDownload === originalData.allowDownload,
-      formValues.visibility === originalData.visibility,
-      formValues.title === originalData.title,
-      formValues.originalAuthor === originalData.originalAuthor,
-      formValues.description === originalData.description,
-      formValues.thumbnailData.zoomLevel ===
-        originalData.thumbnailData.zoomLevel,
-      formValues.thumbnailData.startTick ===
-        originalData.thumbnailData.startTick,
-      formValues.thumbnailData.startLayer ===
-        originalData.thumbnailData.startLayer,
-      formValues.thumbnailData.backgroundColor ===
-        originalData.thumbnailData.backgroundColor,
-      formValues.customInstruments === originalData.customInstruments,
-      formValues.license === originalData.license,
-      formValues.category === originalData.category,
-    ];
+      const coprarisons = [
+        formValues.allowDownload === originalData.allowDownload,
+        formValues.visibility === originalData.visibility,
+        formValues.title === originalData.title,
+        formValues.originalAuthor === originalData.originalAuthor,
+        formValues.description === originalData.description,
+        formValues.thumbnailData.zoomLevel ===
+          originalData.thumbnailData.zoomLevel,
+        formValues.thumbnailData.startTick ===
+          originalData.thumbnailData.startTick,
+        formValues.thumbnailData.startLayer ===
+          originalData.thumbnailData.startLayer,
+        formValues.thumbnailData.backgroundColor ===
+          originalData.thumbnailData.backgroundColor,
+        formValues.customInstruments === originalData.customInstruments,
+        formValues.license === originalData.license,
+        formValues.category === originalData.category,
+      ];
 
-    console.log(coprarisons);
+      console.log(coprarisons);
 
-    return coprarisons.every((value) => value);
-  }
+      return coprarisons.every((value) => value);
+    },
+    [formMethods, originalData],
+  );
 
   const submitSong = async (): Promise<void> => {
     // Build form data
@@ -221,6 +225,23 @@ export const EditSongProvider = ({
     (id: string) => formMethods.setValue('id', id),
     [formMethods],
   );
+
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (!dataWasNotChanged()) {
+        e.preventDefault();
+        e.returnValue =
+          'Are you sure you want to leave? You have unsaved changes.';
+      }
+    };
+
+    window.addEventListener('beforeunload', handler);
+    console.log('added listener');
+    return () => {
+      window.removeEventListener('beforeunload', handler);
+      console.log('removed listener');
+    };
+  }, [dataWasNotChanged]);
 
   return (
     <EditSongContext.Provider
