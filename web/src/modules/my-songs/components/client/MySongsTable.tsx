@@ -22,12 +22,19 @@ const NoSongs = () => (
         className='w-[100px] sm:w-[128px]'
         width={150}
         height={150}
-        style={{ filter: 'contrast(1) brightness(1.5) grayscale(.8)' }}
+        style={{
+          filter: 'contrast(1) brightness(1.5) grayscale(.8)',
+        }}
       />
     </div>
     <div className='flex items-center justify-center'>
       <p>
-        {`You haven't uploaded any songs yet. Click the "Upload" button to get started!`}
+        {/* // eslint-disable-next-line react/no-unescaped-entities */}
+        {" You haven't uploaded any songs yet. Click the"}
+        <a href='/upload' className='text-blue-500 underline px-1'>
+          {'Upload'}
+        </a>
+        {'button to get started!'}
       </p>
     </div>
   </div>
@@ -99,23 +106,26 @@ export const MySongsTable = () => {
   return (
     <div className='min-w-full h-full text-md text-center text-nowrap text-ellipsis border-separate border-spacing-0'>
       {/* Header */}
-      <div className='grid grid-cols-8 sticky top-14 z-10 bg-zinc-800 border-2 border-zinc-700 rounded-t-lg py-2'>
-        <div className='col-span-4'>Song</div>
-        <div>Visibility</div>
-        <div>Created at</div>
-        <div>Play count</div>
-        <div>Actions</div>
-      </div>
-
-      {/* Content */}
-      <SongRows page={page} pageSize={pageSize} />
-
-      {page?.content.length === 0 && <NoSongs />}
-
+      {page?.content.length !== 0 && (
+        <div className='grid grid-cols-8 sticky top-14 z-10 bg-zinc-800 border-2 border-zinc-700 rounded-t-lg py-2'>
+          <div className='col-span-4'>Song</div>
+          <div>Visibility</div>
+          <div>Created at</div>
+          <div>Play count</div>
+          <div>Actions</div>
+        </div>
+      )}
+      {page?.content.length === 0 ? (
+        <NoSongs />
+      ) : (
+        <SongRows page={page} pageSize={pageSize} />
+      )}
       {/* Footer (pagination) */}
-      <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
-        <MySongsTablePaginator />
-      </div>
+      {page?.content.length !== 0 && (
+        <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
+          <MySongsTablePaginator />
+        </div>
+      )}
     </div>
   );
 };
