@@ -16,7 +16,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
       {/* Header */}
       <Header />
       {/* Main content */}
-      <main className='w-full max-w-screen-xl flex-grow pt-24 px-6 sm:px-10 pb-10 overflow-hidden'>
+      <main className='w-full max-w-screen-xl flex-grow pt-24 px-6 sm:px-10 pb-10'>
         {children}
       </main>
       {/* Footer */}
