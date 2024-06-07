@@ -72,7 +72,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
 
 async function MySongsPage() {
   const InitialsongsFolder: SongsFolder = await fetchSongsFolder(); // TODO: this breaks the provider pagination state
-  const pageSizeInit = 10;
+  const pageSizeInit = MY_SONGS.PAGE_SIZE;
   let totalPagesInit = 0;
   let currentPageInit = 0;
   if (InitialsongsFolder[0]) {

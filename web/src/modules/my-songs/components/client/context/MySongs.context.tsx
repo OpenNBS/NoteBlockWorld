@@ -1,5 +1,6 @@
 'use client';
 
+import { MY_SONGS } from '@shared/validation/song/constants';
 import {
   SongPageDtoType,
   SongPreviewDtoType,
@@ -51,7 +52,7 @@ export const MySongProvider = ({
   children,
   totalPagesInit = 0,
   currentPageInit = 0,
-  pageSizeInit = 10,
+  pageSizeInit = MY_SONGS.PAGE_SIZE,
 }: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
