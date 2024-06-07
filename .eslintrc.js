@@ -23,11 +23,19 @@ module.exports = {
     '@typescript-eslint/no-inferrable-types': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn', // Taken from the JSON file
-    '@typescript-eslint/lines-between-class-members': ['warn', 'always'],
+    '@typescript-eslint/lines-between-class-members': [
+      'warn',
+      {
+        enforce: [
+          { blankLine: 'always', prev: '*', next: '*' },
+          { blankLine: 'always', prev: '*', next: 'method' },
+        ],
+      },
+      { exceptAfterSingleLine: true },
+    ],
     'padding-line-between-statements': 'off',
     '@typescript-eslint/padding-line-between-statements': [
       'warn',
-      { blankLine: 'never', prev: '*', next: '*' },
       { blankLine: 'any', prev: 'import', next: '*' }, // handled by sort-imports
       { blankLine: 'any', prev: '*', next: 'singleline-const' },
       { blankLine: 'any', prev: '*', next: 'singleline-let' },
@@ -39,6 +47,7 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'multiline-const' },
       { blankLine: 'always', prev: '*', next: 'multiline-let' },
       { blankLine: 'always', prev: '*', next: 'multiline-var' },
+      { blankLine: 'always', prev: 'block-like', next: '*' },
       { blankLine: 'always', prev: 'multiline-block-like', next: '*' },
       { blankLine: 'always', prev: 'multiline-expression', next: '*' },
       { blankLine: 'always', prev: 'multiline-const', next: '*' },
