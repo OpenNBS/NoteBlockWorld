@@ -56,20 +56,22 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType }) => {
 
 const SongCard = ({ song }: { song?: SongPreviewDtoType }) => {
   return (
-    <Link href={song ? `/song/${song.publicId}` : '#'}>
-      <div className='flex flex-col gap-2 pb-2 bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'>
-        {song ? (
-          <SongDataDisplay song={song} />
-        ) : (
-          <Skeleton
-            style={{
-              height: '100%',
-              width: '100%',
-            }}
-          />
-        )}
-      </div>
-    </Link>
+    <>
+      {song ? (
+        <Link href={song ? `/song/${song.publicId}` : '#'}>
+          <div className='flex flex-col gap-2 pb-2 bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'>
+            <SongDataDisplay song={song} />
+          </div>
+        </Link>
+      ) : (
+        <Skeleton
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
+        />
+      )}
+    </>
   );
 };
 
