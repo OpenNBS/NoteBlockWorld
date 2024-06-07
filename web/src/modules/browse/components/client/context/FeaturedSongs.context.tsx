@@ -37,7 +37,6 @@ export function FeaturedSongsProvider({
     useState<SongPreviewDtoType[]>(initialFeaturedSongs);
   const [featuredLoading, setFeaturedLoading] = useState(false);
   const [featuredError, setFeaturedError] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [timespan, setTimespan] = useState<TimespanType>('week');
 
   const fetchFeaturedSongs = useCallback(
@@ -46,6 +45,7 @@ export function FeaturedSongsProvider({
       const params: PageQueryDTOType = {
         sort: 'featured',
         timespan: timespan,
+        limit: 3, // unused
       };
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
@@ -63,10 +63,6 @@ export function FeaturedSongsProvider({
     },
     [timespan],
   );
-  useEffect(() => {
-    fetchFeaturedSongs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
 
   useEffect(() => {
     fetchFeaturedSongs();
