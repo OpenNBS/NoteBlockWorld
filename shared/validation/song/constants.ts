@@ -115,3 +115,7 @@ export const MY_SONGS = deepFreeze({
   PAGE_SIZE: 3,
   SORT: 'createdAt',
 });
+
+export const BROWSER_SONGS = deepFreeze({
+  max_recent_songs: 100,
+});
