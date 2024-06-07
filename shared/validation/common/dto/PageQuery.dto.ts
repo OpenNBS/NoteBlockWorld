@@ -34,7 +34,7 @@ export class PageQueryDTO {
     example: 20,
     description: 'limit',
   })
-  limit?: number = 10;
+  limit?: number;
 
   @IsString()
   @IsOptional()

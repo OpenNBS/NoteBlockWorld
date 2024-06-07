@@ -112,6 +112,6 @@ export const timespans = [
 ] as const;
 
 export const MY_SONGS = deepFreeze({
-  PAGE_SIZE: 10,
+  PAGE_SIZE: 3,
   SORT: 'createdAt',
 });
