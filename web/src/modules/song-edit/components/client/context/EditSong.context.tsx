@@ -99,12 +99,20 @@ export const EditSongProvider = ({
           originalData.thumbnailData.startLayer,
         formValues.thumbnailData.backgroundColor ===
           originalData.thumbnailData.backgroundColor,
-        formValues.customInstruments === originalData.customInstruments,
+        formValues.customInstruments.length ===
+          originalData.customInstruments.length &&
+          formValues.customInstruments.every((val) =>
+            originalData.customInstruments.includes(val),
+          ),
         formValues.license === originalData.license,
         formValues.category === originalData.category,
       ];
+      console.log(
+        coprarisons.every((value) => value),
+        coprarisons,
+      );
 
-      console.log(coprarisons);
+      console.log(formValues.customInstruments, originalData.customInstruments);
 
       return coprarisons.every((value) => value);
     },
