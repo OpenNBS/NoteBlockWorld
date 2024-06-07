@@ -73,7 +73,7 @@ const MySongsTablePaginator = () => {
     <div className='flex items-center justify-center gap-6 h-12'>
       <button
         onClick={prevpage}
-        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        className='disabled:opacity-20 disabled:cursor-not-allowed'
         disabled={currentPage === 1}
         aria-label='Previous page'
       >
@@ -90,7 +90,7 @@ const MySongsTablePaginator = () => {
       </div>
       <button
         onClick={nextpage}
-        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        className='disabled:opacity-20 disabled:cursor-not-allowed'
         disabled={currentPage === totalPages}
         aria-label='Next page'
       >
