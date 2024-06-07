@@ -17,7 +17,6 @@ import axiosInstance from '@web/src/lib/axios';
 
 type FeaturedSongsContextType = {
   featuredSongs: (SongPreviewDtoType | null)[];
-  featuredLoading: boolean;
   featuredError: string;
   timespan: TimespanType;
   setTimespan: (timespan: TimespanType) => void;
@@ -35,31 +34,25 @@ export function FeaturedSongsProvider({
   // Featured songs
   const [featuredSongs, setFeaturedSongs] =
     useState<SongPreviewDtoType[]>(initialFeaturedSongs);
-  const [featuredLoading, setFeaturedLoading] = useState(false);
   const [featuredError, setFeaturedError] = useState<string>('');
   const [timespan, setTimespan] = useState<TimespanType>('week');
 
   const fetchFeaturedSongs = useCallback(
     async function () {
-      //setFeaturedLoading(true);
       setFeaturedSongs(Array(5).fill(null));
       const params: PageQueryDTOType = {
         sort: 'featured',
         timespan: timespan,
-        limit: 3, // unused
+        limit: 3,
       };
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           '/song',
-          {
-            params,
-          },
+          { params },
         );
         setFeaturedSongs(response.data);
       } catch (error) {
         setFeaturedError('Error loading featured songs');
-      } finally {
-        setFeaturedLoading(false);
       }
     },
     [timespan],
@@ -73,7 +66,6 @@ export function FeaturedSongsProvider({
     <FeaturedSongsContext.Provider
       value={{
         featuredSongs,
-        featuredLoading,
         featuredError,
         timespan,
         setTimespan,

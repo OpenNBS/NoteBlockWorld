@@ -18,11 +18,15 @@ const featuredSongsParams: PageQueryDTOType = {
 };
 
 async function Home() {
+  // TODO: implement server fetching again
   //const recentSongs = await fetchRecentSongs();
   //const featuredSongs = await fetchFeaturedSongs();
 
   return (
-    <HomePageProvider initialRecentSongs={[]} initialFeaturedSongs={[]}>
+    <HomePageProvider
+      initialRecentSongs={Array(8).fill(null)}
+      initialFeaturedSongs={Array(5).fill(null)}
+    >
       <HomePageComponent />
     </HomePageProvider>
   );

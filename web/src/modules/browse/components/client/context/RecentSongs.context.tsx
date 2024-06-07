@@ -13,7 +13,6 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 
 type RecentSongsContextType = {
-  recentLoading: boolean;
   recentSongs: (SongPreviewDtoType | null)[];
   recentError: string;
   increasePageRecent: () => void;
@@ -31,13 +30,11 @@ export function RecentSongsProvider({
   // Recent songs
   const [recentSongs, setRecentSongs] =
     useState<SongPreviewDtoType[]>(initialRecentSongs);
-  const [recentLoading, setRecentLoading] = useState(false);
   const [recentError, setRecentError] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const fetchRecentSongs = useCallback(
     async function () {
-      // setRecentLoading(true);
       setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
       const params: PageQueryDTOType = {
         page: currentPage,
@@ -48,9 +45,7 @@ export function RecentSongsProvider({
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           '/song',
-          {
-            params,
-          },
+          { params },
         );
         setRecentSongs([
           ...recentSongs.filter((song) => song !== null),
@@ -59,8 +54,6 @@ export function RecentSongsProvider({
       } catch (error) {
         setRecentSongs(recentSongs.filter((song) => song !== null));
         setRecentError('Error loading recent songs');
-      } finally {
-        setRecentLoading(false);
       }
     },
     [currentPage, recentSongs],
@@ -76,7 +69,6 @@ export function RecentSongsProvider({
     <RecentSongsContext.Provider
       value={{
         recentSongs,
-        recentLoading,
         recentError,
         increasePageRecent,
       }}
