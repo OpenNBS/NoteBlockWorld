@@ -1,7 +1,11 @@
-import { faFile } from '@fortawesome/free-solid-svg-icons';
+'use client';
+
+import { faDownload, faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { cn } from '@web/src/lib/tailwind.utils';
+
+import { downloadSongFile } from '../../util/downloadSong';
 
 export const FileDisplay = ({
   fileName,
@@ -17,7 +21,7 @@ export const FileDisplay = ({
   >
     <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
       <FontAwesomeIcon icon={faFile} size='lg' />
-      <p className='text-md flex-shrink min-w-0 truncate'>{fileName}</p>
+      <p className='text-md flex-shrink min-w-0 truncate'>{`${fileName}.nbs`}</p>
     </div>
     {children}
   </div>
@@ -35,3 +39,21 @@ export const ChangeFileButton = ({
     Change file
   </button>
 );
+
+export const DownloadFileButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+    title: string;
+  };
+}) => {
+  return (
+    <button
+      className='text-nowrap px-2 py-1 bg-green-600 hover:bg-green-500 rounded-lg text-white'
+      onClick={async () => downloadSongFile(song)}
+    >
+      <FontAwesomeIcon icon={faDownload} />
+    </button>
+  );
+};

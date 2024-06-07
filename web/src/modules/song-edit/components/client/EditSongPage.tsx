@@ -6,6 +6,10 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 import { SongProvider } from '@web/src/modules/song/components/client/context/Song.context';
+import {
+  DownloadFileButton,
+  FileDisplay,
+} from '@web/src/modules/song/components/client/FileDisplay';
 
 import { SongEditForm } from './SongEditForm';
 
@@ -43,8 +47,12 @@ export async function EditSongPage({ id }: { id: string }) {
           <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
             Editing {songData.title}
           </h1>
-          {/* TODO: spinner not showing */}
-          {songData === null && <div className='loader'></div>}
+          <FileDisplay fileName={songData.title}>
+            <DownloadFileButton
+              song={{ publicId: songId, title: songData.title }}
+            />
+          </FileDisplay>
+
           {/* TODO: Show song file name */}
         </div>
         <SongProvider>
