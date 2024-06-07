@@ -1,21 +1,17 @@
 import { GlobalError } from 'react-hook-form';
 
-type ErrorBalloonProps = GlobalError & { isVisible: boolean };
+type ErrorBalloonProps = GlobalError;
 
-export const ErrorBalloon = ({ message, isVisible }: ErrorBalloonProps) => {
+export const ErrorBalloon = ({ message }: ErrorBalloonProps) => {
   return (
     <>
       <div
-        className={`bg-red-600 p-2 absolute rounded-md mt-2 ${
-          isVisible ? 'block' : 'hidden'
+        className={`text-red-600 text-sm absolute mt-1 ${
+          message ? 'block' : 'hidden'
         }`}
       >
         {message}
       </div>
-      <div
-        // spacing
-        className='block h-8'
-      />
     </>
   );
 };

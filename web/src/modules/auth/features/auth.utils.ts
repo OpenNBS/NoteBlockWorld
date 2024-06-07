@@ -6,6 +6,7 @@ import { LoggedUserData } from '../types/User';
 export function getTokenServer(): { value: string } | null {
   const cookieStore = cookies();
   const token = cookieStore.get('token');
+
   return token as { value: string } | null;
 }
 
@@ -23,6 +24,7 @@ export const checkLogin = async () => {
         authorization: `Bearer ${token.value}`,
       },
     });
+
     // if the token is valid, redirect to home page
     if (res.status === 200) return true;
     else return false;
@@ -45,6 +47,7 @@ export const getUserData = async (): Promise<LoggedUserData | never> => {
         authorization: `Bearer ${token.value}`,
       },
     });
+
     // if the token is valid, redirect to home page
     if (res.status === 200) return res.data as LoggedUserData;
     else throw new Error('Invalid token');

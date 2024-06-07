@@ -8,14 +8,37 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
-const DownloadButton = ({ songId }: { songId: string }) => {
+import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
+
+export const DownloadSongButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+    title: string;
+  };
+}) => {
   return (
-    <Link
-      href={`/song/${songId}/download`}
+    <DownloadButton
+      handleClick={async () => {
+        downloadSongFile(song);
+      }}
+    />
+  );
+};
+
+const DownloadButton = ({
+  handleClick,
+}: {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
+  return (
+    <button
+      onClick={handleClick}
       className='flex items-center justify-center w-8 h-8 hover:text-green-500 hover:scale-[1.25] transition-all duration-150'
     >
       <FontAwesomeIcon icon={faDownload} />
-    </Link>
+    </button>
   );
 };
 

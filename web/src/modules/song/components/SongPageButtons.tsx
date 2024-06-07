@@ -3,22 +3,29 @@
 import {
   faDownload,
   faHeart,
+  faPlay,
   faPlus,
   faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import Image from 'next/image';
 
-import axios from '@web/src/lib/axios';
+import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 
-import { SongPageViewUploader } from '../types/song.type';
-
-const UploaderBadge = ({ user }: { user: SongPageViewUploader }) => {
+const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
-      <img src={user.profileImage} className='h-10 w-10 rounded-full' />
+      <Image
+        width={32}
+        height={32}
+        src={user.profileImage}
+        alt=''
+        className='rounded-full'
+      />
       <div className='flex flex-col leading-tight h-full'>
-        <p className='font-bold'>{user.username}</p>
-        <p className='text-sm text-zinc-400'>410 followers</p>
+        <p className='font-bold text-white'>{user.username}</p>
+        {/* <p className='text-sm text-zinc-400'>410 followers</p> */}
       </div>
     </div>
   );
@@ -79,10 +86,65 @@ const ShareButton = () => {
   );
 };
 
-const DownloadButton = ({ songId }: { songId: string }) => {
+const OpenSongInNBSButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+  };
+}) => {
+  return (
+    <OpenInNBSButton
+      handleClick={() => {
+        openSongInNBS(song);
+      }}
+    />
+  );
+};
+
+const OpenInNBSButton = ({
+  handleClick,
+}: {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   return (
     <button
-      onClick={() => axios.get(`/song/${songId}/download`)}
+      onClick={handleClick}
+      className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:bg-blue-500'
+    >
+      <div className='flex flex-row items-center gap-2'>
+        <FontAwesomeIcon icon={faPlay} />
+        <div>Open in NBS</div>
+      </div>
+    </button>
+  );
+};
+
+const DownloadSongButton = ({
+  song,
+}: {
+  song: {
+    publicId: string;
+    title: string;
+  };
+}) => {
+  return (
+    <DownloadButton
+      handleClick={() => {
+        downloadSongFile(song);
+      }}
+    />
+  );
+};
+
+const DownloadButton = ({
+  handleClick,
+}: {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
+  return (
+    <button
+      onClick={handleClick}
       className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:bg-green-500'
     >
       <div className='flex flex-row items-center gap-2'>
@@ -93,4 +155,11 @@ const DownloadButton = ({ songId }: { songId: string }) => {
   );
 };
 
-export { UploaderBadge, FollowButton, LikeButton, ShareButton, DownloadButton };
+export {
+  UploaderBadge,
+  FollowButton,
+  LikeButton,
+  ShareButton,
+  OpenSongInNBSButton,
+  DownloadSongButton,
+};

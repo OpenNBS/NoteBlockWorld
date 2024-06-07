@@ -2,51 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/************** Modal **************/
-
-.ReactModal__Overlay {
-  transition: all 300ms ease-in-out;
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.ReactModal__Overlay--after-open {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.ReactModal__Overlay--before-close {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
 /************** Scrollbar **************/
 
+html {
+  min-height: 100vh;
+  overflow-y: scroll;
+}
+
 body {
+  min-height: 100vh;
   scrollbar-width: thin;
   scrollbar-color: --tw-bg-zinc-900 --tw-bg-zinc-500;
 }
@@ -74,7 +38,6 @@ body {
 ::-webkit-scrollbar-thumb:active {
   @apply bg-zinc-700;
 }
-
 
 /************** Animations **************/
 
@@ -137,4 +100,12 @@ body {
   visibility: hidden;
   position: fixed;
   bottom: 100px !important;
+}
+
+/************** Prevent trailing lines on Chrome **************/
+/* https://stackoverflow.com/a/25799659/9045426 */
+
+* {
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }

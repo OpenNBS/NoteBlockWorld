@@ -1,8 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SongViewUploader } from '@shared/validation/song/dto/SongView.dto';
+import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
+import type {
+  CategoryType,
+  LicenseType,
+  VisibilityType,
+} from '@shared/validation/song/dto/types';
 import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
-
-import { CoverData } from '../dto/CoverData.dto';
 
 @Schema({
   timestamps: true,
@@ -10,12 +15,7 @@ import { CoverData } from '../dto/CoverData.dto';
   toJSON: {
     virtuals: true,
     transform: (doc, ret) => {
-      ret.id = ret._id;
       delete ret._id;
-      // TODO: hydrate uploader
-      //if (ret.uploader) {
-      //  ret.uploader = ret.uploader.toJSON();
-      //}
     },
   },
 })
@@ -51,14 +51,20 @@ export class Song {
 
   // SONG FILE ATTRIBUTES (Populated from upload form - updatable)
 
-  @Prop({ type: CoverData, required: true })
-  thumbnailData: CoverData;
+  @Prop({ type: ThumbnailData, required: true })
+  thumbnailData: ThumbnailData;
 
   @Prop({ type: String, required: true })
-  category: string;
+  category: CategoryType;
 
   @Prop({ type: String, required: true })
-  visibility: 'public' | 'private';
+  visibility: VisibilityType;
+
+  @Prop({ type: String, required: true })
+  license: LicenseType;
+
+  @Prop({ type: Array<string>, required: true })
+  customInstruments: string[];
 
   @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;
@@ -145,3 +151,7 @@ export class Song {
 
 export const SongSchema = SchemaFactory.createForClass(Song);
 export type SongDocument = Song & HydratedDocument<Song>;
+
+export type SongWithUser = Omit<Song, 'uploader'> & {
+  uploader: SongViewUploader;
+};

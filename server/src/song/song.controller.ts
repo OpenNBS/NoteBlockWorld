@@ -1,11 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
+  RawBodyRequest,
+  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -20,16 +24,17 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
+import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import type { Response } from 'express';
 
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
-import { SongPreviewDto } from './dto/SongPreview.dto';
-import { SongViewDto } from './dto/SongView.dto';
-import { UploadSongDto } from './dto/UploadSongDto.dto';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.
@@ -49,9 +54,8 @@ export class SongController {
     summary: 'Get a filtered/sorted list of songs with pagination',
   })
   public async getSongList(
-    @Query() query: PageQuery,
+    @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
-    // TODO: rename DTOs to SongPreviewRequestDto and SongPreviewResponseDto
     return await this.songService.getSongByPage(query);
   }
 
@@ -64,39 +68,75 @@ export class SongController {
     return await this.songService.getSong(id, user);
   }
 
+  @Get('/:id/edit')
+  @ApiOperation({ summary: 'Get song info for editing by ID' })
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
+  public async getEditSong(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<UploadSongDto> {
+    return await this.songService.getSongEdit(id, user);
+  }
+
+  @Patch('/:id/edit')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Edit song info by ID' })
+  @ApiBody({
+    description: 'Upload Song',
+    type: UploadSongResponseDto,
+  })
+  public async patchSong(
+    @Param('id') id: string,
+    @Req() req: RawBodyRequest<Request>,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<UploadSongResponseDto> {
+    //TODO: Fix this weird type casting and raw body access
+    const body = req.body as unknown as UploadSongDto;
+
+    return await this.songService.patchSong(id, body, user);
+  }
+
   @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
     @Param('id') id: string,
+    @Query('src') src: string,
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
+      // Expose the Content-Disposition header to the client
+      'Access-Control-Expose-Headers': 'Content-Disposition',
     });
-    const url = await this.songService.getSongDownloadUrl(id, user);
-    res.redirect(HttpStatus.TEMPORARY_REDIRECT, url);
+
+    const url = await this.songService.getSongDownloadUrl(id, user, src);
+    res.redirect(HttpStatus.FOUND, url);
   }
 
-  //@Patch('/:id')
-  //@ApiBearerAuth()
-  //@UseGuards(AuthGuard('jwt-refresh'))
-  //@ApiOperation({ summary: 'Update a song' })
-  //public async patchSong(
-  //  @Param('id') id: string,
-  //  @Body() body: UploadSongDto,
-  //  @GetRequestToken() user: UserDocument | null,
-  //): Promise<UploadSongDto> {
-  //  return await this.songService.patchSong(id, body, user);
-  //}
-  //
-  //@Delete('/:id')
-  //@UseGuards(AuthGuard('jwt-refresh'))
-  //@ApiBearerAuth()
-  //@ApiOperation({ summary: 'Delete a song' })
-  //public async deleteSong(@Param('id') id: string): Promise<UploadSongDto> {
-  //  return await this.songService.deleteSong(id);
-  //}
+  @Get('/:id/open')
+  @ApiOperation({ summary: 'Get song .nbs file' })
+  public async getSongDownloadUrl(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<string> {
+    const url = await this.songService.getSongDownloadUrl(id, user, 'open');
+
+    return url;
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a song' })
+  public async deleteSong(
+    @Param('id') id: string,
+    @GetRequestToken() user: UserDocument | null,
+  ): Promise<void> {
+    await this.songService.deleteSong(id, user);
+  }
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
@@ -104,7 +144,7 @@ export class SongController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload Song',
-    type: UploadSongDto,
+    type: UploadSongResponseDto,
   })
   @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
   @ApiOperation({
@@ -114,7 +154,7 @@ export class SongController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongDto> {
+  ): Promise<UploadSongResponseDto> {
     return await this.songService.processUploadedSong({ body, file, user });
   }
 }

@@ -43,16 +43,19 @@ async function bootstrap() {
   // enable cors
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization'],
+    exposedHeaders: ['Content-Disposition'],
     origin: 'http://localhost:3000',
     credentials: true,
   });
 
   const document = SwaggerModule.createDocument(app, config);
+
   const swaggerOptions: SwaggerCustomOptions = {
     swaggerOptions: {
       persistAuthorization: true,
     },
   };
+
   SwaggerModule.setup('api/doc', app, document, swaggerOptions);
 
   const port = process.env.PORT || 4000;
@@ -72,6 +75,3 @@ bootstrap()
   .catch((error) => {
     logger.error(`Error: ${error}`);
   });
-function cookieParser(): any {
-  throw new Error('Function not implemented.');
-}

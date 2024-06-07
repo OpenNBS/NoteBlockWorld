@@ -1,37 +1,66 @@
 'use client';
-
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MY_SONGS } from '@shared/validation/song/constants';
+import { SongPageDtoType } from '@shared/validation/song/dto/types';
+import Image from 'next/image';
+import Skeleton from 'react-loading-skeleton';
 
+import { useMySongsProvider } from './context/MySongs.context';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
-import { SongsPage } from '../../types';
-import { useMySongsProvider } from '../client/MySongs.context';
 
-const Loading = ({ pageSize }: { pageSize: number }) => {
-  return (
-    <div className='grid grid-cols-8 gap-2 *:h-10'>
-      {Array.from({ length: pageSize }).map((_, i) => (
-        <>
-          <div className='col-span-4'>Song</div>
-          <div>Visibility</div>
-          <div>Created at</div>
-          <div>Play count</div>
-          <div>Actions</div>
-        </>
-      ))}
+const NoSongs = () => (
+  <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
+    <div className='flex items-center justify-center'>
+      <Image
+        src='/emptyChest.gif'
+        alt='Note Block World logo'
+        className='w-[100px] sm:w-[128px]'
+        width={150}
+        height={150}
+        style={{
+          filter: 'contrast(1) brightness(1.5) grayscale(.8)',
+        }}
+      />
     </div>
+    <div className='flex items-center justify-center'>
+      <p>
+        {/* // eslint-disable-next-line react/no-unescaped-entities */}
+        {" You haven't uploaded any songs yet. Click the"}
+        <a href='/upload' className='text-blue-500 underline px-1'>
+          {'Upload'}
+        </a>
+        {'button to get started!'}
+      </p>
+    </div>
+  </div>
+);
+
+const SongRows = ({
+  page,
+  pageSize,
+}: {
+  page: SongPageDtoType | null;
+  pageSize: number;
+}) => {
+  const maxPage = MY_SONGS.PAGE_SIZE;
+  const content = !page ? Array(pageSize).fill(null) : page.content;
+
+  return (
+    <>
+      {content.map((song, i) => (
+        <SongRow key={i} song={song} />
+      ))}
+      {maxPage - content.length > 0 &&
+        Array(maxPage - content.length)
+          .fill(null)
+          .map((_, i) => <SongRow key={i} />)}
+    </>
   );
-};
-
-const NoSongs = () => <p>{"You haven't uploaded any song yet!"}</p>;
-
-const SongRows = ({ page }: { page: SongsPage }) => {
-  const { content } = page;
-  return content.map((song) => <SongRow key={song.publicId} song={song} />);
 };
 
 const MySongsTablePaginator = () => {
@@ -46,18 +75,24 @@ const MySongsTablePaginator = () => {
     <div className='flex items-center justify-center gap-6 h-12'>
       <button
         onClick={prevpage}
-        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        className='disabled:opacity-20 disabled:cursor-not-allowed'
         disabled={currentPage === 1}
         aria-label='Previous page'
       >
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
-      <span className='min-w-24'>
-        {start} – {end} of {total}
-      </span>
+      <div className='w-24'>
+        {total === 0 ? (
+          <Skeleton />
+        ) : (
+          <>
+            {start} – {end} of {total}
+          </>
+        )}
+      </div>
       <button
         onClick={nextpage}
-        className='disabled:opacity-50 disabled:cursor-not-allowed'
+        className='disabled:opacity-20 disabled:cursor-not-allowed'
         disabled={currentPage === totalPages}
         aria-label='Next page'
       >
@@ -68,30 +103,31 @@ const MySongsTablePaginator = () => {
 };
 
 export const MySongsTable = () => {
-  const { page, pageSize, isLoading } = useMySongsProvider();
+  const { page, pageSize } = useMySongsProvider();
 
   return (
     <div className='min-w-full h-full text-md text-center text-nowrap text-ellipsis border-separate border-spacing-0'>
       {/* Header */}
-      <div className='grid grid-cols-8 sticky top-14 z-10 bg-zinc-800 border-2 border-zinc-700 rounded-t-lg py-2'>
-        <div className='col-span-4'>Song</div>
-        <div>Visibility</div>
-        <div>Created at</div>
-        <div>Play count</div>
-        <div>Actions</div>
-      </div>
-
-      {/* Content */}
-      {isLoading ? (
-        <Loading pageSize={pageSize} />
-      ) : (
-        page && <SongRows page={page} />
+      {page?.content.length !== 0 && (
+        <div className='grid grid-cols-8 sticky top-14 z-10 bg-zinc-800 border-2 border-zinc-700 rounded-t-lg py-2'>
+          <div className='col-span-4'>Song</div>
+          <div>Visibility</div>
+          <div>Uploaded at</div>
+          <div>Play count</div>
+          <div>Actions</div>
+        </div>
       )}
-
+      {page?.content.length === 0 ? (
+        <NoSongs />
+      ) : (
+        <SongRows page={page} pageSize={pageSize} />
+      )}
       {/* Footer (pagination) */}
-      <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
-        <MySongsTablePaginator />
-      </div>
+      {page?.content.length !== 0 && (
+        <div className='sticky bottom-0 border-2 bg-zinc-800 border-zinc-700 rounded-b-lg'>
+          <MySongsTablePaginator />
+        </div>
+      )}
     </div>
   );
 };
@@ -99,7 +135,6 @@ export const MySongsTable = () => {
 export const MySongsPageComponent = () => {
   const {
     error,
-    page,
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
     songToDelete,
@@ -121,7 +156,7 @@ export const MySongsPageComponent = () => {
           <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
         )}
         <div className='flex flex-col gap-12 w-full'>
-          {page ? <MySongsTable /> : <NoSongs />}
+          <MySongsTable />
         </div>
       </section>
     </>

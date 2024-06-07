@@ -4,6 +4,10 @@ import './globals.css';
 import { ReCaptchaProvider } from 'next-recaptcha-v3';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { SkeletonTheme } from 'react-loading-skeleton';
+
+import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -22,10 +26,8 @@ export default function RootLayout({
 }) {
   return (
     <ReCaptchaProvider useEnterprise>
-      <html lang='en' className='min-h-screen'>
-        <body
-          className={lato.className + ' min-h-screen bg-zinc-900 text-white'}
-        >
+      <html lang='en'>
+        <body className={lato.className + ' bg-zinc-900 text-white'}>
           <NextTopLoader
             showSpinner={false}
             crawlSpeed={700}
@@ -34,10 +36,21 @@ export default function RootLayout({
             height={3}
           />
           <Toaster
-            position='bottom-right'
-            toastOptions={{ className: '!bg-zinc-700 !text-white' }}
+            position='bottom-center'
+            toastOptions={{
+              className: '!bg-zinc-700 !text-white',
+              duration: 4000,
+            }}
           />
-          {children}
+          <SkeletonTheme
+            borderRadius='10px'
+            baseColor='rgb(39 39 42)'
+            highlightColor='rgb(63 63 70)'
+          >
+            <TooltipProvider delayDuration={0} skipDelayDuration={0}>
+              {children}
+            </TooltipProvider>
+          </SkeletonTheme>
         </body>
       </html>
     </ReCaptchaProvider>

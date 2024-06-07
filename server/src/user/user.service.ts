@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
+import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
-import { PageQuery } from '@server/common/dto/PageQuery.dto';
-
-import { CreateUser } from './dto/CreateUser.dto';
-import { GetUser } from './dto/GetUser.dto';
 import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
@@ -18,42 +17,53 @@ export class UserService {
     const user = new this.userModel(user_registered);
     user.username = user_registered.username;
     user.email = user_registered.email;
+    user.profileImage = user_registered.profileImage;
+
     return await user.save();
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email }).exec();
+
     return user;
   }
 
   public async findByID(objectID: string): Promise<UserDocument | null> {
     const user = await this.userModel.findById(objectID).exec();
+
     return user;
   }
 
-  public getUserPaginated(query: PageQuery) {
+  public getUserPaginated(query: PageQueryDTO) {
     const { page, limit } = query;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const options = {
       page: page || 1,
       limit: limit || 10,
     };
+
     return this.userModel.find({});
   }
 
   public async getUserByEmailOrId(query: GetUser) {
     const { email, id, username } = query;
+
     if (email) {
       return await this.findByEmail(email);
     }
+
     if (id) {
       return await this.findByID(id);
     }
+
     if (username) {
       throw new HttpException(
         'Username is not supported yet',
         HttpStatus.BAD_REQUEST,
       );
     }
+
     throw new HttpException(
       'You must provide an email or an id',
       HttpStatus.BAD_REQUEST,
@@ -65,6 +75,7 @@ export class UserService {
       .findById(user._id)
       .populate('songs')
       .exec();
+
     return hydratedUser;
   }
 
@@ -74,6 +85,7 @@ export class UserService {
     const usedData = await this.findByID(user._id.toString());
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+
     return usedData;
   }
 
@@ -82,6 +94,7 @@ export class UserService {
       .findOne({ username })
       .select('username')
       .exec();
+
     return !!user;
   }
 
@@ -93,12 +106,15 @@ export class UserService {
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9_]/g, '');
+
     // Find if there's already a user with the same username
     let nameTaken = await this.usernameExists(baseUsername);
+
     while (nameTaken) {
       const newUsername = `${baseUsername}.${Math.floor(Math.random() * 100)}`;
       nameTaken = await this.usernameExists(newUsername);
     }
+
     return baseUsername;
   }
 }

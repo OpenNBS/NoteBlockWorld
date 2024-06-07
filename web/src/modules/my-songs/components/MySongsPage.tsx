@@ -1,15 +1,20 @@
+import { MY_SONGS } from '@shared/validation/song/constants';
+import {
+  SongPageDtoType,
+  SongsFolder,
+} from '@shared/validation/song/dto/types';
+
 import axiosInstance from '@web/src/lib/axios';
 
-import { MySongProvider } from './client/MySongs.context';
+import { MySongProvider } from './client/context/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';
 import { getTokenServer } from '../../auth/features/auth.utils';
-import { SongsFolder, SongsPage } from '../types';
 
 async function fetchSongsPage(
   page: number,
   pageSize: number,
   token: string,
-): Promise<SongsPage> {
+): Promise<SongPageDtoType> {
   const response = await axiosInstance
     .get('/my-songs', {
       headers: {
@@ -27,14 +32,16 @@ async function fetchSongsPage(
     })
     .catch((error) => {
       console.error('Error fetching songs', error);
+
       return error;
     });
+
   return response;
 }
 
 async function fetchSongsFolder(): Promise<SongsFolder> {
   const currentPage = 0;
-  const pageSize = 10;
+  const pageSize = MY_SONGS.PAGE_SIZE;
 
   // get token from cookies
   const token = getTokenServer();
@@ -47,26 +54,36 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     console.log('fetching songs');
     const firstPage = await fetchSongsPage(currentPage, pageSize, token.value);
 
-    const data = {
+    const data: SongsFolder = {
       [currentPage]: firstPage,
     };
+
     return data;
   } catch (error: unknown) {
     console.error('Error fetching songs', error);
-    return {};
+
+    return {
+      0: {
+        content: [],
+        total: 0,
+        page: 0,
+        limit: 0,
+      },
+    };
   }
 }
 
 async function MySongsPage() {
   const InitialsongsFolder: SongsFolder = await fetchSongsFolder(); // TODO: this breaks the provider pagination state
-  console.log('InitialsongsFolder', InitialsongsFolder);
-  const pageSizeInit = 10;
+  const pageSizeInit = MY_SONGS.PAGE_SIZE;
   let totalPagesInit = 0;
   let currentPageInit = 0;
+
   if (InitialsongsFolder[0]) {
     totalPagesInit = InitialsongsFolder[0].total;
     currentPageInit = InitialsongsFolder[0].page;
   }
+
   return (
     <MySongProvider
       totalPagesInit={Math.ceil(totalPagesInit / pageSizeInit)}

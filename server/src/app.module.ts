@@ -28,10 +28,12 @@ import { UserModule } from './user/user.module';
           Logger.error(
             'Missing DB config, define DB_HOST, DB_PASSWORD, DB_USER',
           );
+
           throw new Error('Missing DB config');
         }
         const uri = `mongodb+srv://${user}:${password}@${url}`;
         Logger.debug(`Connecting to ${uri}`);
+
         return {
           uri: uri,
           retryAttempts: 10,

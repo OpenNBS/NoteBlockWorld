@@ -9,6 +9,8 @@ import {
   saveToImage,
 } from './canvasFactory';
 
+export { bgColors } from './colors';
+
 export interface Note {
   tick: number;
   layer: number;
@@ -66,21 +68,6 @@ const instrumentColors = [
   '#19be19',
   '#be1957',
   '#575757',
-];
-
-export const bgColors = [
-  '#ffffff',
-  '#77172e',
-  '#692b17',
-  '#7c4a03',
-  '#264d3b',
-  '#0c625d',
-  '#256377',
-  '#284255',
-  '#472e5b',
-  '#6c394f',
-  '#4b443a',
-  '#232427',
 ];
 
 const tintedImages: Record<string, Canvas> = {};
@@ -150,7 +137,7 @@ function getKeyText(key: number): string {
 function getLuma(color: string): number {
   // source: https://stackoverflow.com/a/12043228/9045426
 
-  const c = color.substring(1); // strip #
+  const c = color?.substring(1) || ''; // strip #
   const rgb = parseInt(c, 16); // convert rrggbb to decimal
   const r = (rgb >> 16) & 0xff; // extract red
   const g = (rgb >> 8) & 0xff; // extract green
