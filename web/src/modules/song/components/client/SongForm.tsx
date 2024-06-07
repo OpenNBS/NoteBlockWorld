@@ -3,6 +3,9 @@ import { useRouter } from 'next/navigation';
 
 import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
+import InstrumentPicker from './InstrumentPicker';
+import { SongThumbnailInput } from './SongThumbnailInput';
+import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import {
   Area,
   Checkbox,
@@ -11,9 +14,6 @@ import {
   Select,
   TextArea,
 } from '../../../shared/components/client/FormElements';
-import InstrumentPicker from './InstrumentPicker';
-import { SongThumbnailInput } from './SongThumbnailInput';
-import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
@@ -55,9 +55,7 @@ export const SongForm = ({
               isLoading={isLoading}
               disabled={isLocked}
               errorMessage={errors.title?.message}
-              {...register('title', {
-                disabled: isLocked,
-              })}
+              {...register('title')}
             />
           </div>
 
@@ -68,9 +66,7 @@ export const SongForm = ({
               label='Description'
               isLoading={isLoading}
               errorMessage={errors.description?.message}
-              {...register('description', {
-                disabled: isLocked,
-              })}
+              {...register('description')}
             />
           </div>
 
@@ -91,9 +87,7 @@ export const SongForm = ({
                 id='originalAuthor'
                 label='Original author'
                 isLoading={isLoading}
-                {...register('originalAuthor', {
-                  disabled: isLocked,
-                })}
+                {...register('originalAuthor')}
               />
               <p className='text-sm text-zinc-500'>
                 {"(Leave blank if it's an original song)"}
@@ -109,9 +103,7 @@ export const SongForm = ({
                 id='category'
                 label='Category'
                 isLoading={isLoading}
-                {...register('category', {
-                  disabled: isLocked,
-                })}
+                {...register('category')}
                 errorMessage={errors.category?.message}
               >
                 {Object.entries(UploadConst.categories).map(
@@ -140,9 +132,7 @@ export const SongForm = ({
                 label='Visibility'
                 isLoading={isLoading}
                 errorMessage={errors.visibility?.message}
-                {...register('visibility', {
-                  disabled: isLocked,
-                })}
+                {...register('visibility')}
               >
                 {Object.entries(UploadConst.visibility).map(
                   ([key, value]: [string, string]) => (
@@ -159,9 +149,7 @@ export const SongForm = ({
                 label='License'
                 isLoading={isLoading}
                 errorMessage={errors.license?.message}
-                {...register('license', {
-                  disabled: isLocked,
-                })}
+                {...register('license')}
               >
                 {Object.entries(UploadConst.licenses).map(
                   ([key, value]: [string, string]) => (
@@ -182,7 +170,7 @@ export const SongForm = ({
 
           {/* Allow download */}
           <div className='flex-1'>
-            <Checkbox disabled {...register('allowDownload', {})} />
+            <Checkbox disabled {...register('allowDownload')} />
             <label htmlFor='allowDownload'>
               Allow other users to download the NBS file{' '}
               <span className='text-zinc-400 italic'>(Coming soon!)</span>
