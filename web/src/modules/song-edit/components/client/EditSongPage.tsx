@@ -45,8 +45,9 @@ export async function EditSongPage({ id }: { id: string }) {
       <div className='p-8 h-full w-full flex justify-center'>
         <div className='w-[75vw] max-w-[768px]'>
           <div className='flex flex-row justify-between items-center gap-12 mb-10'>
-            <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
-              Editing {songData.title}
+            <h1 className='flex-1 text-3xl font-bold text-nowrap truncate'>
+              <span className='font-light'>Editing </span>
+              {songData.title}
             </h1>
             <FileDisplay fileName={songData.title}>
               <DownloadFileButton
