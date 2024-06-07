@@ -25,8 +25,9 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
       <PopoverContent
-        className='w-fit p-[2px] h-fit box-border shadow-[inset_0px_0px_0px_2px_rgb(82_82_91)] border-zinc-600 bg-zinc-800 text-white rounded-lg'
-        sideOffset={10}
+        // We use an inset shadow as a border below because using a border makes the popover arrow shift during animation due to the extra element size. The actual menu shadow is a drop-shadow CSS filter.
+        className='w-fit p-[2px] pb-1.5 h-fit shadow-[inset_0px_0px_0px_2px_rgb(82_82_91)] drop-shadow-lg border-zinc-600 bg-zinc-800 text-white rounded-lg'
+        sideOffset={5}
         align='end'
         alignOffset={-10}
         arrowPadding={10}
