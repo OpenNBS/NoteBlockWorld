@@ -17,6 +17,8 @@ type RecentSongsContextType = {
   recentSongs: (SongPreviewDtoType | null)[];
   recentError: string;
   increasePageRecent: () => void;
+  isLoading: boolean;
+  hasMore: boolean;
 };
 const RecentSongsContext = createContext<RecentSongsContextType>(
   {} as RecentSongsContextType,
@@ -32,13 +34,16 @@ export function RecentSongsProvider({
   const [recentSongs, setRecentSongs] =
     useState<SongPreviewDtoType[]>(initialRecentSongs);
   const [recentError, setRecentError] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const fetchRecentSongs = useCallback(
     async function () {
-      setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
+      setLoading(true);
+      //setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
       const params: PageQueryDTOType = {
-        page: currentPage,
+        page: page,
         limit: 10, // TODO: fiz constants
         sort: 'recent',
         order: false,
@@ -52,28 +57,35 @@ export function RecentSongsProvider({
           ...recentSongs.filter((song) => song !== null),
           ...response.data,
         ]);
+        setLoading(false);
       } catch (error) {
         setRecentSongs(recentSongs.filter((song) => song !== null));
         setRecentError('Error loading recent songs');
+      } finally {
+        setLoading(false);
+        setHasMore(recentSongs.length < BROWSER_SONGS.max_recent_songs);
       }
     },
-    [currentPage, recentSongs],
+    [page, recentSongs],
   );
   useEffect(() => {
     fetchRecentSongs();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [page]);
   function increasePageRecent() {
     if (BROWSER_SONGS.max_recent_songs <= recentSongs.length) {
       return;
     }
-    setCurrentPage((prev) => prev + 1);
+    setPage((prev) => prev + 1);
   }
   return (
     <RecentSongsContext.Provider
       value={{
         recentSongs,
         recentError,
+        isLoading: loading,
+        hasMore,
         increasePageRecent,
       }}
     >

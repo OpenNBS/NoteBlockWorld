@@ -1,10 +1,7 @@
 'use client';
 
-import { BROWSER_SONGS } from '@shared/validation/song/constants';
-
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
-import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
@@ -16,11 +13,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
+import InfiniteScroll from '../../shared/components/client/InfiniteScroll';
 
 export const HomePageComponent = () => {
   const { featuredSongs } = useFeaturedSongsProvider();
 
-  const { recentSongs, increasePageRecent } = useRecentSongsProvider();
+  const { recentSongs, increasePageRecent, isLoading, hasMore } =
+    useRecentSongsProvider();
 
   return (
     <>
@@ -64,9 +63,19 @@ export const HomePageComponent = () => {
         {recentSongs.map((song, i) => (
           <SongCard key={i} song={song} />
         ))}
-        {BROWSER_SONGS.max_recent_songs <= recentSongs.length && (
-          <LoadMoreButton onClick={() => increasePageRecent()} />
-        )}
+        <InfiniteScroll
+          isLoading={isLoading}
+          hasMore={hasMore}
+          next={function (): void {
+            () => increasePageRecent();
+          }}
+        >
+          {Array(4 - (recentSongs.length % 4) + 8)
+            .fill(null)
+            .map((_, i) => (
+              <SongCard key={i} song={null} />
+            ))}
+        </InfiniteScroll>
       </SongCardGroup>
     </>
   );
