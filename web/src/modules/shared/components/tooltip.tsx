@@ -21,6 +21,7 @@ const TooltipArrow = forwardRef<
     />
   </>
 ));
+
 TooltipArrow.displayName = TooltipPrimitive.Content.displayName;
 
 const TooltipContent = forwardRef<
@@ -42,6 +43,7 @@ const TooltipContent = forwardRef<
     </TooltipPrimitive.Content>
   </>
 ));
+
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 function TooltipProvider({

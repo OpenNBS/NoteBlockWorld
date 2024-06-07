@@ -34,10 +34,12 @@ export function HomePageProvider({
 
 export function useHomePageProvider() {
   const context = useContext(HomePageContext);
+
   if (context === undefined || context === null) {
     throw new Error(
       'useHomePageProvider must be used within a HomepageProvider',
     );
   }
+
   return context;
 }

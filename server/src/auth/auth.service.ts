@@ -27,19 +27,25 @@ export class AuthService {
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
     const authorizationHeader = headers.authorization;
+
     if (!authorizationHeader) {
       return res.status(401).json({ message: 'No authorization header' });
     }
+
     const token = authorizationHeader.split(' ')[1];
+
     if (!token) {
       return res.status(401).json({ message: 'No token provided' });
     }
+
     try {
       const decoded = this.jwtService.verify(token, {
         secret: this.configService.get('JWT_SECRET'),
       });
+
       // verify if user exists
       const user_registered = await this.userService.findByID(decoded.id);
+
       if (!user_registered) {
         return res.status(401).json({ message: 'Unauthorized' });
       } else {
@@ -53,14 +59,17 @@ export class AuthService {
   public async googleLogin(req: Request, res: Response) {
     const user = req.user as GoogleProfile;
     const email = user.emails[0].value;
+
     const profile = {
       // Generate username from display name
       username: email.split('@')[0],
       email: email,
       profileImage: user.photos[0].value,
     };
+
     // verify if user exists
     const user_registered = await this.verifyAndGetUser(profile);
+
     return this.GenTokenRedirect(user_registered, res);
   }
 
@@ -68,36 +77,43 @@ export class AuthService {
     const { username, email, profileImage } = user;
     const baseUsername = username;
     const newUsername = await this.userService.generateUsername(baseUsername);
+
     const newUser = new CreateUser({
       username: newUsername,
       email: email,
       profileImage: profileImage,
     });
+
     return await this.userService.create(newUser);
   }
 
   private async verifyAndGetUser(user: Profile) {
     const user_registered = await this.userService.findByEmail(user.email);
+
     if (!user_registered) {
       return await this.createNewUser(user);
     }
+
     // Update profile picture if it has changed
     if (user_registered.profileImage !== user.profileImage) {
       user_registered.profileImage = user.profileImage;
       await user_registered.save();
     }
+
     return user_registered;
   }
 
   public async githubLogin(req: Request, res: Response) {
     const user = req.user as GithubAccessToken;
     const { profile } = user;
+
     // verify if user exists
     const response = await axios.get('https://api.github.com/user/emails', {
       headers: {
         Authorization: `token ${user.accessToken}`,
       },
     });
+
     const email = (response.data as GithubEmailList).filter(
       (email) => email.primary,
     )[0].email;
@@ -107,6 +123,7 @@ export class AuthService {
       email: email,
       profileImage: profile.photos[0].value,
     });
+
     return this.GenTokenRedirect(user_registered, res);
   }
 
@@ -114,9 +131,11 @@ export class AuthService {
     const JWT_SECRET = this.configService.get('JWT_SECRET');
     const JWT_EXPIRES_IN = this.configService.get('JWT_EXPIRES_IN');
     const JWT_REFRESH_SECRET = this.configService.get('JWT_REFRESH_SECRET');
+
     const JWT_REFRESH_EXPIRES_IN = this.configService.get(
       'JWT_REFRESH_EXPIRES_IN',
     );
+
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: JWT_SECRET,
@@ -143,6 +162,7 @@ export class AuthService {
       email: user_registered.email,
       username: user_registered.username,
     });
+
     const userId = user_registered._id.toString();
     // set the cookie in the response
     const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000';
@@ -156,10 +176,13 @@ export class AuthService {
 
   public async getUserFromToken(token: string): Promise<UserDocument | null> {
     const decoded = this.jwtService.decode(token) as TokenPayload;
+
     if (!decoded) {
       return null;
     }
+
     const user = await this.userService.findByID(decoded.id);
+
     return user;
   }
 }

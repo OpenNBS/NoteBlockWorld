@@ -39,6 +39,7 @@ const NoSongs = () => (
     </div>
   </div>
 );
+
 const SongRows = ({
   page,
   pageSize,
@@ -48,6 +49,7 @@ const SongRows = ({
 }) => {
   const maxPage = MY_SONGS.PAGE_SIZE;
   const content = !page ? Array(pageSize).fill(null) : page.content;
+
   return (
     <>
       {content.map((song, i) => (
@@ -138,6 +140,7 @@ export const MySongsPageComponent = () => {
     songToDelete,
     deleteSong,
   } = useMySongsProvider();
+
   return (
     <>
       <DeleteConfirmDialog

@@ -9,6 +9,7 @@ type AuthProvider = 'google' | 'github';
 
 const getLoginUrl = (provider: AuthProvider) => {
   let AuthURL;
+
   switch (provider) {
     case 'google':
       AuthURL = baseApiURL + '/auth/login/google';
@@ -19,11 +20,14 @@ const getLoginUrl = (provider: AuthProvider) => {
     default:
       throw new Error('Invalid provider');
   }
+
   return AuthURL;
 };
+
 const signIn = (provider: AuthProvider) => {
   'use client';
   const url = getLoginUrl(provider);
+
   return url;
 };
 

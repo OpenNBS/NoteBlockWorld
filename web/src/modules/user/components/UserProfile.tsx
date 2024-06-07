@@ -19,6 +19,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
     following,
     achievements,
   } = userData;
+
   return (
     <section className='w-full h-full'>
       <Image
@@ -38,6 +39,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
         {Object.keys(socialLinks).map((key, index) => {
           const link = socialLinks[key as SocialLinksTypes];
           if (!link) return null;
+
           return (
             <li key={index}>
               <a href={link} className='text-blue-500 hover:underline'>

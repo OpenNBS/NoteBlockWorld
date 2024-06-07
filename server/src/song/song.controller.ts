@@ -94,6 +94,7 @@ export class SongController {
   ): Promise<UploadSongResponseDto> {
     //TODO: Fix this weird type casting and raw body access
     const body = req.body as unknown as UploadSongDto;
+
     return await this.songService.patchSong(id, body, user);
   }
 
@@ -110,6 +111,7 @@ export class SongController {
       // Expose the Content-Disposition header to the client
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
+
     const url = await this.songService.getSongDownloadUrl(id, user, src);
     res.redirect(HttpStatus.FOUND, url);
   }
@@ -121,6 +123,7 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
   ): Promise<string> {
     const url = await this.songService.getSongDownloadUrl(id, user, 'open');
+
     return url;
   }
 

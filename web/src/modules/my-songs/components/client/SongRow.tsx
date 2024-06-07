@@ -30,11 +30,14 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
 
   const getDescription = (description: string | null) => {
     const maxDisplayLength = 50;
+
     if (description) {
       const length = description.length;
+
       if (length > maxDisplayLength) {
         return description.slice(0, maxDisplayLength) + '...';
       }
+
       return description;
     } else {
       return 'No description';

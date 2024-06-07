@@ -17,9 +17,11 @@ type RecentSongsContextType = {
   recentError: string;
   increasePageRecent: () => void;
 };
+
 const RecentSongsContext = createContext<RecentSongsContextType>(
   {} as RecentSongsContextType,
 );
+
 export function RecentSongsProvider({
   children,
   initialRecentSongs,
@@ -30,23 +32,27 @@ export function RecentSongsProvider({
   // Recent songs
   const [recentSongs, setRecentSongs] =
     useState<SongPreviewDtoType[]>(initialRecentSongs);
+
   const [recentError, setRecentError] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const fetchRecentSongs = useCallback(
     async function () {
       setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
+
       const params: PageQueryDTOType = {
         page: currentPage,
         limit: 10, // TODO: fiz constants
         sort: 'recent',
         order: false,
       };
+
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           '/song',
           { params },
         );
+
         setRecentSongs([
           ...recentSongs.filter((song) => song !== null),
           ...response.data,
@@ -58,13 +64,16 @@ export function RecentSongsProvider({
     },
     [currentPage, recentSongs],
   );
+
   useEffect(() => {
     fetchRecentSongs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
+
   function increasePageRecent() {
     setCurrentPage((prev) => prev + 1);
   }
+
   return (
     <RecentSongsContext.Provider
       value={{
@@ -80,10 +89,12 @@ export function RecentSongsProvider({
 
 export function useRecentSongsProvider() {
   const context = useContext(RecentSongsContext);
+
   if (context === undefined || context === null) {
     throw new Error(
       'useRecentSongsProvider must be used within a RecentSongsProvider',
     );
   }
+
   return context;
 }

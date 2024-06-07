@@ -27,6 +27,7 @@ import { JwtStrategy } from './strategies/JWT.strategy';
         if (!JWT_EXPIRES_IN) {
           Logger.warn('JWT_EXPIRES_IN is not set, using default of 60s');
         }
+
         return {
           secret: JWT_SECRET,
           signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' },

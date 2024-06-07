@@ -18,6 +18,7 @@ export default function UploadCompleteModal({
     // Confetti
     const canvas = document.getElementById('confetti') as HTMLCanvasElement;
     const confetti = new JSConfetti({ canvas });
+
     confetti.addConfetti({
       confettiRadius: 6,
       confettiNumber: 150,
@@ -38,7 +39,9 @@ export default function UploadCompleteModal({
     navigator.clipboard.writeText(
       `${process.env.NEXT_PUBLIC_URL}/song/${songId}`,
     );
+
     setIsCopied(true);
+
     setTimeout(() => {
       setIsCopied(false);
     }, 1000);

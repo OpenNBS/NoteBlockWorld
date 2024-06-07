@@ -11,6 +11,7 @@ const recentSongsParams: PageQueryDTOType = {
   sort: 'recent',
   order: false,
 };
+
 const featuredSongsParams: PageQueryDTOType = {
   page: 1, // TODO: fiz constants
   limit: 5,
@@ -24,6 +25,7 @@ async function fetchRecentSongs() {
     const response = await axiosInstance.get<SongPreviewDtoType[]>('/song', {
       params: recentSongsParams,
     });
+
     return response.data;
   } catch (error) {
     return [];
@@ -35,6 +37,7 @@ async function fetchFeaturedSongs() {
     const response = await axiosInstance.get<SongPreviewDtoType[]>('/song', {
       params: featuredSongsParams,
     });
+
     return response.data;
   } catch (error) {
     return [];

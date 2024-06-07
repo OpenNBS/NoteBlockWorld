@@ -32,8 +32,10 @@ async function fetchSongsPage(
     })
     .catch((error) => {
       console.error('Error fetching songs', error);
+
       return error;
     });
+
   return response;
 }
 
@@ -59,6 +61,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     return data;
   } catch (error: unknown) {
     console.error('Error fetching songs', error);
+
     return {
       0: {
         content: [],
@@ -75,10 +78,12 @@ async function MySongsPage() {
   const pageSizeInit = MY_SONGS.PAGE_SIZE;
   let totalPagesInit = 0;
   let currentPageInit = 0;
+
   if (InitialsongsFolder[0]) {
     totalPagesInit = InitialsongsFolder[0].total;
     currentPageInit = InitialsongsFolder[0].page;
   }
+
   return (
     <MySongProvider
       totalPagesInit={Math.ceil(totalPagesInit / pageSizeInit)}

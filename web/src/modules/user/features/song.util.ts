@@ -6,5 +6,6 @@ export const getUserSongs = async (userId: string) => {
       id: userId,
     },
   });
+
   return res.data;
 };

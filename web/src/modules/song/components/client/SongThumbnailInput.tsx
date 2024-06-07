@@ -22,11 +22,13 @@ function ThumbnailSliders({
   maxLayer: number;
 }) {
   const { register } = formMethods;
+
   const [zoomLevel, startTick, startLayer] = formMethods.watch([
     'thumbnailData.zoomLevel',
     'thumbnailData.startTick',
     'thumbnailData.startLayer',
   ]);
+
   return (
     <div className='w-full grid grid-cols-[max-content_auto_7%] gap-y-2 gap-x-3 items-center align-middle'>
       <div>
@@ -124,6 +126,7 @@ export const SongThumbnailInput = ({
     const notes = getThumbnailNotes(song);
     const maxTick = Math.max(...notes.map((note) => note.tick));
     const maxLayer = Math.max(...notes.map((note) => note.layer));
+
     return [notes, maxTick, maxLayer];
   }, [song]);
 
@@ -149,6 +152,7 @@ export const SongThumbnailInput = ({
               disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
+
                 formMethods.setValue(
                   'thumbnailData.backgroundColor',
                   data.dark,

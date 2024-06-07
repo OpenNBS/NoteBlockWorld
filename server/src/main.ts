@@ -49,11 +49,13 @@ async function bootstrap() {
   });
 
   const document = SwaggerModule.createDocument(app, config);
+
   const swaggerOptions: SwaggerCustomOptions = {
     swaggerOptions: {
       persistAuthorization: true,
     },
   };
+
   SwaggerModule.setup('api/doc', app, document, swaggerOptions);
 
   const port = process.env.PORT || 4000;
