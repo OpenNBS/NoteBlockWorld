@@ -42,8 +42,8 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
       {/* Song info */}
       <div className='flex flex-row justify-between px-4 pt-0.5 text-pretty flex-grow'>
         {/* Song title */}
-        <h3 className='text-md font-semibold leading-tight w-full h-10 flex-grow'>
-          {song?.title || <Skeleton count={2} />}
+        <h3 className='text-md font-semibold leading-tight w-full flex-grow line-clamp-2'>
+          {song?.title || <Skeleton count={1} />}
         </h3>
       </div>
       <div className='flex flex-row justify-between items-center gap-4 px-4'>
@@ -77,7 +77,7 @@ const SongCard = ({ song }: { song?: SongPreviewDtoType }) => {
   return !song ? (
     <SongDataDisplay song={song} />
   ) : (
-    <Link href={song ? `/song/${song.publicId}` : '#'}>
+    <Link href={song ? `/song/${song.publicId}` : '#'} className='h-full'>
       <div className='bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'>
         <SongDataDisplay song={song} />
       </div>
