@@ -44,7 +44,7 @@ export function RecentSongsProvider({
       //setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
       const params: PageQueryDTOType = {
         page: page,
-        limit: 10, // TODO: fiz constants
+        limit: 8 * 2, // TODO: fiz constants
         sort: 'recent',
         order: false,
       };
@@ -74,7 +74,12 @@ export function RecentSongsProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   function increasePageRecent() {
-    if (BROWSER_SONGS.max_recent_songs <= recentSongs.length) {
+    if (
+      BROWSER_SONGS.max_recent_songs <= recentSongs.length ||
+      loading ||
+      recentError ||
+      !hasMore
+    ) {
       return;
     }
     setPage((prev) => prev + 1);
