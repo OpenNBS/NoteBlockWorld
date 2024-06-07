@@ -42,8 +42,8 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
       {/* Song info */}
       <div className='flex flex-row justify-between px-4 pt-0.5 text-pretty flex-grow'>
         {/* Song title */}
-        <h3 className='text-md font-semibold leading-tight w-full flex-grow line-clamp-2'>
-          {song?.title || <Skeleton count={1} />}
+        <h3 className='text-md font-semibold leading-tight w-full h-10 flex-grow line-clamp-2'>
+          {song?.title || <Skeleton count={2} />}
         </h3>
       </div>
       <div className='flex flex-row justify-between items-center gap-4 px-4'>
