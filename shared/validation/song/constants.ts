@@ -14,11 +14,11 @@ function deepFreeze<T extends { [key: string]: any }>(object: T): Readonly<T> {
 }
 
 export const ThumbnailConst = deepFreeze({
-  MIN_ZOOM_LEVEL: 1,
-  MAX_ZOOM_LEVEL: 5,
-  DEFAULT_ZOOM_LEVEL: 3,
-  DEFAULT_START_TICK: 0,
-  DEFAULT_START_LAYER: 0,
+  ZOOM_LEVEL_MIN: 1,
+  ZOOM_LEVEL_MAX: 5,
+  ZOOM_LEVEL_DEFAULT: 3,
+  START_TICK_DEFAULT: 0,
+  START_LAYER_DEFAULT: 0,
 });
 
 export const ThumbnailBgColors = deepFreeze({
@@ -43,12 +43,19 @@ export const ThumbnailBgColors = deepFreeze({
 });
 
 export const UploadConst = deepFreeze({
-  MAX_SONG_UPLOAD_SIZE: 1024 * 1024, // 1 MB
+  SONG_UPLOAD_MAX_SIZE: 1024 * 1024, // 1 MB
   MIMETYPE_NBS: 'application/octet-stream',
-  MAX_SONG_TITLE_LENGTH: 100,
-  MAX_SONG_DESCRIPTION_LENGTH: 1000,
-  MAX_SONG_ORIGINAL_AUTHOR_LENGTH: 50,
+  SONG_TITLE_MIN_LENGTH: 3,
+  SONG_TITLE_MAX_LENGTH: 100,
+  SONG_DESCRIPTION_MAX_LENGTH: 1000,
+  SONG_ORIGINAL_AUTHOR_MAX_LENGTH: 50,
+
+  CATEGORY_DEFAULT: 'none',
+  LICENSE_DEFAULT: 'cc_by',
+  VISIBILITY_DEFAULT: 'public',
+
   categories: {
+    none: 'No category',
     rock: 'Rock',
     pop: 'Pop',
     jazz: 'Jazz',
@@ -112,6 +119,6 @@ export const timespans = [
 ] as const;
 
 export const MY_SONGS = deepFreeze({
-  PAGE_SIZE: 3,
+  PAGE_SIZE: 10,
   SORT: 'createdAt',
 });
