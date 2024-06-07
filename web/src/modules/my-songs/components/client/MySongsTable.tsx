@@ -110,7 +110,7 @@ export const MySongsTable = () => {
         <div className='grid grid-cols-8 sticky top-14 z-10 bg-zinc-800 border-2 border-zinc-700 rounded-t-lg py-2'>
           <div className='col-span-4'>Song</div>
           <div>Visibility</div>
-          <div>Created at</div>
+          <div>Uploaded at</div>
           <div>Play count</div>
           <div>Actions</div>
         </div>
