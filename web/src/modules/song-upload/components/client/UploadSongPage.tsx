@@ -12,31 +12,37 @@ import {
 } from '../../../song/components/client/context/Song.context';
 import { SongSelector } from '../../../song/components/client/SongSelector';
 
-const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
+const UploadSongPageComponent = ({
+  defaultAuthorName,
+}: {
+  defaultAuthorName: string;
+}) => {
   const { song, filename } = useSongProvider('upload');
 
   return (
-    <>
-      <div className='flex flex-row justify-between items-center gap-12 mb-10'>
-        <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
-          Upload song
-        </h1>
-        {filename && (
-          <FileDisplay fileName={filename}>
-            <ChangeFileButton
-              handleClick={() => {
-                window.location.reload();
-              }}
-            />
-          </FileDisplay>
+    <div className='p-8 h-full w-full flex justify-center'>
+      <div className='w-[75vw] max-w-[768px]'>
+        <div className='flex flex-row justify-between items-center gap-12 mb-10'>
+          <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
+            Upload song
+          </h1>
+          {filename && (
+            <FileDisplay fileName={filename}>
+              <ChangeFileButton
+                handleClick={() => {
+                  window.location.reload();
+                }}
+              />
+            </FileDisplay>
+          )}
+        </div>
+        {!song ? (
+          <SongSelector />
+        ) : (
+          <SongUploadForm defaultAuthorName={defaultAuthorName} />
         )}
       </div>
-      {!song ? (
-        <SongSelector />
-      ) : (
-        <SongUploadForm defaultAuthorName={defaultAuthorName} />
-      )}
-    </>
+    </div>
   );
 };
 
@@ -47,7 +53,7 @@ export const UploadSongPage = ({
 }) => {
   return (
     <SongProvider>
-      <UploadSong defaultAuthorName={defaultAuthorName} />
+      <UploadSongPageComponent defaultAuthorName={defaultAuthorName} />
     </SongProvider>
   );
 };

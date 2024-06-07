@@ -13,13 +13,7 @@ async function UploadPage() {
   const userData = await getUserData();
   const username = userData?.username;
 
-  return (
-    <div className='p-8 h-full w-full flex justify-center'>
-      <div className='w-[75vw] max-w-[768px]'>
-        <UploadSongPage defaultAuthorName={username} />
-      </div>
-    </div>
-  );
+  return <UploadSongPage defaultAuthorName={username} />;
 }
 
 export default UploadPage;

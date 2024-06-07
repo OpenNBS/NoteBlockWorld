@@ -42,31 +42,32 @@ export async function EditSongPage({ id }: { id: string }) {
     const userData = await getUserData();
     const username = userData?.username;
     return (
-      <>
-        <div className='flex flex-row justify-between items-center gap-12 mb-10'>
-          <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
-            Editing {songData.title}
-          </h1>
-          <FileDisplay fileName={songData.title}>
-            <DownloadFileButton
-              song={{ publicId: songId, title: songData.title }}
-            />
-          </FileDisplay>
-
-          {/* TODO: Show song file name */}
+      <div className='p-8 h-full w-full flex justify-center'>
+        <div className='w-[75vw] max-w-[768px]'>
+          <div className='flex flex-row justify-between items-center gap-12 mb-10'>
+            <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
+              Editing {songData.title}
+            </h1>
+            <FileDisplay fileName={songData.title}>
+              <DownloadFileButton
+                song={{ publicId: songId, title: songData.title }}
+              />
+            </FileDisplay>
+          </div>
+          <SongProvider>
+            {songData && (
+              <SongEditForm
+                songId={songId}
+                username={username}
+                songData={songData}
+              />
+            )}
+          </SongProvider>
         </div>
-        <SongProvider>
-          {songData && (
-            <SongEditForm
-              songId={songId}
-              username={username}
-              songData={songData}
-            />
-          )}
-        </SongProvider>
-      </>
+      </div>
     );
   } catch (error: unknown) {
+    // TODO: present better error message
     return <div>Failed to fetch song data</div>;
   }
 }
