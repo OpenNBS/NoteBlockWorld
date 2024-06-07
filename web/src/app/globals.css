@@ -101,3 +101,11 @@ body {
   position: fixed;
   bottom: 100px !important;
 }
+
+/************** Prevent trailing lines on Chrome **************/
+/* https://stackoverflow.com/a/25799659/9045426 */
+
+* {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
