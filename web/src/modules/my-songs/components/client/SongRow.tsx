@@ -19,7 +19,7 @@ import {
   EditButton,
 } from '../client/MySongsButtons';
 
-export const SongRow = ({ song }: { song: SongPreviewDtoType | null }) => {
+export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
 
   const onDeleteClicked = () => {
@@ -40,11 +40,20 @@ export const SongRow = ({ song }: { song: SongPreviewDtoType | null }) => {
       return 'No description';
     }
   };
+
+  // If the song is undefined/unset, display an empty row ('*>invisible' hides all children)
+  // If the song is null, display skeleton loading
+  // TODO: this might be bad for accessibility?
   return (
-    <article className='grid grid-cols-8 border border-zinc-700 border-t-0 last:border-b-0 hover:bg-zinc-950/50 transition-colors duration-150 [&>div]:p-2 [&>div]:my-auto'>
+    <article
+      className={
+        'grid grid-cols-8 border border-zinc-700 border-t-0 last:border-b-0 hover:bg-zinc-950/50 transition-colors duration-150 [&>div]:p-2 [&>div]:my-auto ' +
+        (song === undefined ? '*:invisible' : '')
+      }
+    >
       {/* Thumbnail */}
       <div className='col-span-1'>
-        <div className='aspect-[5/3] my-1.5 min-w-20 max-h-28 object-cover rounded-lg relative block leading-none'>
+        <div className='aspect-[5/3] w-full object-cover rounded-lg relative block leading-none'>
           {!song ? (
             <Skeleton className='w-full h-full' />
           ) : (

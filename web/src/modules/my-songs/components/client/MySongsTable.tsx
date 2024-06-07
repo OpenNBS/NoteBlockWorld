@@ -56,7 +56,7 @@ const SongRows = ({
       {maxPage - content.length > 0 &&
         Array(maxPage - content.length)
           .fill(null)
-          .map((_, i) => <SongRow key={i} song={null} />)}
+          .map((_, i) => <SongRow key={i} />)}
     </>
   );
 };
