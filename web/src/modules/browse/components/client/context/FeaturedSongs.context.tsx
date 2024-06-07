@@ -43,7 +43,7 @@ export function FeaturedSongsProvider({
       const params: PageQueryDTOType = {
         sort: 'featured',
         timespan: timespan,
-        limit: 3,
+        limit: 3, // TODO: unused, implement again
       };
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
