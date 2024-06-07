@@ -1,6 +1,7 @@
 'use client';
 
 import { PageQueryDTOType } from '@shared/validation/common/dto/types';
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import {
   createContext,
@@ -63,6 +64,9 @@ export function RecentSongsProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
   function increasePageRecent() {
+    if (BROWSER_SONGS.max_recent_songs <= recentSongs.length) {
+      return;
+    }
     setCurrentPage((prev) => prev + 1);
   }
   return (

@@ -1,5 +1,7 @@
 'use client';
 
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
+
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
@@ -62,7 +64,9 @@ export const HomePageComponent = () => {
         {recentSongs.map((song, i) => (
           <SongCard key={i} song={song} />
         ))}
-        <LoadMoreButton onClick={() => increasePageRecent()} />
+        {BROWSER_SONGS.max_recent_songs <= recentSongs.length && (
+          <LoadMoreButton onClick={() => increasePageRecent()} />
+        )}
       </SongCardGroup>
     </>
   );
