@@ -1,7 +1,9 @@
 'use client';
 
-import { faFile } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  ChangeFileButton,
+  FileDisplay,
+} from '@web/src/modules/song/components/client/FileDisplay';
 
 import { SongUploadForm } from './SongUploadForm';
 import {
@@ -19,21 +21,14 @@ const UploadSong = ({ defaultAuthorName }: { defaultAuthorName: string }) => {
         <h1 className='flex-1 text-3xl font-semibold text-nowrap'>
           Upload song
         </h1>
-        {song && (
-          <div className='flex-shrink min-w-0 flex flex-row gap-4 items-center text-zinc-500'>
-            <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
-              <FontAwesomeIcon icon={faFile} size='lg' />
-              <p className='text-md flex-shrink min-w-0 truncate'>{filename}</p>
-            </div>
-            <button
-              className='text-nowrap px-3 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg text-white'
-              onClick={() => {
+        {filename && (
+          <FileDisplay fileName={filename}>
+            <ChangeFileButton
+              handleClick={() => {
                 window.location.reload();
               }}
-            >
-              Change file
-            </button>
-          </div>
+            />
+          </FileDisplay>
         )}
       </div>
       {!song ? (
