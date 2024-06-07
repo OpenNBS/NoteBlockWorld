@@ -11,7 +11,7 @@ const SongThumbnail = ({
 }) => {
   return (
     <Image
-      unoptimized // TODO: onError is not capturing errors without the 'unoptimized' prop
+      //unoptimized // TODO: onError is not capturing errors without the 'unoptimized' prop
       src={src}
       className='w-full h-full rounded-lg aspect-[5/3] object-cover'
       width={640}
