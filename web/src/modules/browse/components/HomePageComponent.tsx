@@ -38,21 +38,12 @@ export const HomePageComponent = () => {
         }}
       >
         <CarouselContent>
-          {/*
-            // TODO: Show skeleton loader when loading
-        */}
-          {'DELETE THIS' && (
-            <CarouselItem className='basis-full md:basis-1/2 lg:basis-1/3'>
-              <SongCard song={undefined} />
-            </CarouselItem>
-          )}
-
-          {featuredSongs.map((song) => (
+          {featuredSongs.map((song, i) => (
             <CarouselItem
               className='basis-full md:basis-1/2 lg:basis-1/3'
-              key={song.publicId}
+              key={i}
             >
-              <SongCard song={song} />
+              <SongCard song={null} />
             </CarouselItem>
           ))}
         </CarouselContent>

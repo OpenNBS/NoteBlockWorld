@@ -42,6 +42,7 @@ export function FeaturedSongsProvider({
   const fetchFeaturedSongs = useCallback(
     async function () {
       //setFeaturedLoading(true);
+      setFeaturedSongs(Array(5).fill(null));
       const params: PageQueryDTOType = {
         sort: 'featured',
         timespan: timespan,
