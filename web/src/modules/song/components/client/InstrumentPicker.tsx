@@ -1,15 +1,9 @@
+import { getLatestVersionSoundList } from '@shared/features/sounds';
+
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
 import { Option, Select } from '../../../shared/components/client/FormElements';
-
-const sounds = [
-  { name: 'sound1' },
-  { name: 'sound2' },
-  { name: 'sound3' },
-  { name: 'sound4' },
-  { name: 'entity/firework_rocket/blast_far.ogg' },
-];
 
 const InstrumentTableHeader = ({
   className,
@@ -57,6 +51,21 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
     (instrument) => !instrument.builtIn,
   );
 
+  const sounds = getLatestVersionSoundList();
+
+  sounds.then((soundList) => {
+    // Download a .json file with the sound list content
+    const stringifiedSoundList = JSON.stringify(soundList, null, 2);
+    console.log(JSON.stringify(soundList, null, 2));
+    const blob = new Blob([stringifiedSoundList], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href;
+    a.download = 'soundList.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
   return (
     <div className='flex flex-col w-full'>
       {/* Header */}
@@ -102,9 +111,9 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                 <Option key={-1} value='none'>
                   No sound
                 </Option>
-                {sounds.map((sound, i) => (
-                  <Option key={i} value={sound.name}>
-                    {sound.name}
+                {Object.entries(sounds).map(([name], i) => (
+                  <Option key={i} value={name}>
+                    {name}
                   </Option>
                 ))}
               </Select>
