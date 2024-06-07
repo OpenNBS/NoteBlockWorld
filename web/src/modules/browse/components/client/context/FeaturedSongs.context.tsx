@@ -16,7 +16,7 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 
 type FeaturedSongsContextType = {
-  featuredSongs: SongPreviewDtoType[];
+  featuredSongs: (SongPreviewDtoType | null)[];
   featuredLoading: boolean;
   featuredError: string;
   timespan: TimespanType;

@@ -13,8 +13,8 @@ import {
 import axiosInstance from '@web/src/lib/axios';
 
 type RecentSongsContextType = {
-  recentSongs: SongPreviewDtoType[];
   recentLoading: boolean;
+  recentSongs: (SongPreviewDtoType | null)[];
   recentError: string;
   increasePageRecent: () => void;
 };
@@ -34,9 +34,11 @@ export function RecentSongsProvider({
   const [recentLoading, setRecentLoading] = useState(false);
   const [recentError, setRecentError] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+
   const fetchRecentSongs = useCallback(
     async function () {
       // setRecentLoading(true);
+      setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
       const params: PageQueryDTOType = {
         page: currentPage,
         limit: 10, // TODO: fiz constants
@@ -50,8 +52,12 @@ export function RecentSongsProvider({
             params,
           },
         );
-        setRecentSongs([...recentSongs, ...response.data]);
+        setRecentSongs([
+          ...recentSongs.filter((song) => song !== null),
+          ...response.data,
+        ]);
       } catch (error) {
+        setRecentSongs(recentSongs.filter((song) => song !== null));
         setRecentError('Error loading recent songs');
       } finally {
         setRecentLoading(false);

@@ -52,9 +52,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
           {!song ? (
             <Skeleton />
           ) : (
-            `${song.uploader.username} • ${formatTimeAgo(
-              new Date(song.createdAt),
-            )}`
+            `${song.uploader.username} • ${formattedTimeAgo}`
           )}
         </p>
         {/* Play icon & count */}
@@ -73,7 +71,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
   );
 };
 
-const SongCard = ({ song }: { song?: SongPreviewDtoType }) => {
+const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
   return !song ? (
     <SongDataDisplay song={song} />
   ) : (

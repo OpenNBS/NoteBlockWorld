@@ -43,7 +43,7 @@ export const HomePageComponent = () => {
               className='basis-full md:basis-1/2 lg:basis-1/3'
               key={i}
             >
-              <SongCard song={null} />
+              <SongCard song={song} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -59,12 +59,8 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
-        {/*
-        // TODO: Show skeleton loader when loading
-        */}
-        {'DELETE THIS' && <SongCard song={undefined} />}
-        {recentSongs.map((song) => (
-          <SongCard key={song.publicId} song={song} />
+        {recentSongs.map((song, i) => (
+          <SongCard key={i} song={song} />
         ))}
         <LoadMoreButton onClick={() => increasePageRecent()} />
       </SongCardGroup>
