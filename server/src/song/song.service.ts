@@ -9,11 +9,11 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
-import { TimespanType } from '@shared/validation/song/dto/types';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import { Model, Types } from 'mongoose';
@@ -437,34 +437,31 @@ export class SongService {
   }
 
   public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
-    const { page, limit, sort, timespan } = query;
+    const { page, limit, sort, order } = query;
 
-    if (sort !== 'featured' && sort !== 'recent') {
-      throw new HttpException('Invalid sort parameter', HttpStatus.BAD_REQUEST);
+    if (!page || !limit || !sort) {
+      throw new HttpException(
+        'Invalid query parameters',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    switch (sort) {
-      case 'featured':
-        if (!timespan) {
-          throw new HttpException(
-            'Invalid query parameters',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
+    const songs = (await this.songModel
+      .find({
+        visibility: 'public',
+      })
+      .sort({
+        [sort]: order ? 1 : -1,
+      })
+      .skip(page * limit - limit)
+      .limit(limit)
+      .populate('uploader', 'username profileImage -_id')
+      .exec()) as unknown as SongWithUser[];
 
-        return this.getFeaturedSongs(timespan as TimespanType);
-      case 'recent':
-        if (!page || !limit) {
-          throw new HttpException(
-            'Invalid query parameters',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-
-        return this.getRecentSongs(page, limit);
-    }
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
-  private async getRecentSongs(
+
+  public async getRecentSongs(
     page: number,
     limit: number,
   ): Promise<SongPreviewDto[]> {
@@ -484,44 +481,19 @@ export class SongService {
 
     return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
-  private async getFeaturedSongs(
-    timespan: TimespanType,
-  ): Promise<SongPreviewDto[]> {
-    let laterThan = new Date(Date.now());
 
-    switch (timespan) {
-      case 'hour':
-        laterThan.setHours(laterThan.getHours() - 1);
-        break;
-      case 'day':
-        laterThan.setDate(laterThan.getDate() - 1);
-        break;
-      case 'week':
-        laterThan.setDate(laterThan.getDate() - 7);
-        break;
-      case 'month':
-        laterThan.setMonth(laterThan.getMonth() - 1);
-        break;
-      case 'year':
-        laterThan.setFullYear(laterThan.getFullYear() - 1);
-        break;
-      default:
-        laterThan = new Date(0);
-    }
-
-    const data = (await this.songModel
-      .find({
+  public async getSongsForTimespan(timespan: number): Promise<SongWithUser[]> {
+    return this.songModel
+      .find<SongWithUser>({
         visibility: 'public',
         createdAt: {
-          $gte: laterThan,
+          $gte: timespan,
         },
       })
       .sort({ playCount: -1 })
-      .limit(10)
+      .limit(BROWSER_SONGS.featuredPageSize)
       .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
-
-    return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+      .exec();
   }
 
   public async getSong(

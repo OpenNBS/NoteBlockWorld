@@ -33,6 +33,7 @@ export type useEditSongProviderType = {
   loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
   setSongId: (id: string) => void;
 };
+
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
 );

@@ -1,14 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsHexColor, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
 
+import { ThumbnailConst } from '../constants';
+
 export class ThumbnailData {
   @IsNotEmpty()
-  @Max(5)
-  @Min(1)
+  @Max(ThumbnailConst.zoomLevel.max)
+  @Min(ThumbnailConst.zoomLevel.min)
   @IsInt()
   @ApiProperty({
     description: 'Zoom level of the cover image',
-    example: 3,
+    example: ThumbnailConst.zoomLevel.default,
   })
   zoomLevel: number;
 
@@ -17,7 +19,7 @@ export class ThumbnailData {
   @IsInt()
   @ApiProperty({
     description: 'X position of the cover image',
-    example: 0,
+    example: ThumbnailConst.startTick.default,
   })
   startTick: number;
 
@@ -25,7 +27,7 @@ export class ThumbnailData {
   @Min(0)
   @ApiProperty({
     description: 'Y position of the cover image',
-    example: 0,
+    example: ThumbnailConst.startLayer.default,
   })
   startLayer: number;
 
@@ -33,7 +35,7 @@ export class ThumbnailData {
   @IsHexColor()
   @ApiProperty({
     description: 'Background color of the cover image',
-    example: '#F0F0F0',
+    example: ThumbnailConst.backgroundColor.default,
   })
   backgroundColor: string;
 

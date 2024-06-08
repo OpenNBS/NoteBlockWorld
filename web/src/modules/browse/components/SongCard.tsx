@@ -2,7 +2,6 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import Link from 'next/link';
-import { useMemo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import {
@@ -13,11 +12,6 @@ import {
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
 
 const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
-  const formattedTimeAgo = useMemo(() => {
-    if (!song) return;
-    formatTimeAgo(new Date(song.createdAt));
-  }, [song]);
-
   return (
     <div className='flex flex-col gap-2 pb-2 h-full'>
       {/* Song image */}
@@ -52,7 +46,9 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
           {!song ? (
             <Skeleton />
           ) : (
-            `${song.uploader.username} • ${formattedTimeAgo}`
+            `${song.uploader.username} • ${formatTimeAgo(
+              new Date(song.createdAt),
+            )}`
           )}
         </p>
         {/* Play icon & count */}
