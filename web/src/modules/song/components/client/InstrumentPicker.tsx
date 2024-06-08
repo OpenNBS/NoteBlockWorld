@@ -1,4 +1,5 @@
 import { getLatestVersionSoundList } from '@shared/features/sounds';
+import { SOUND_LIST } from '@shared/features/sounds/constants';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 
@@ -131,6 +132,8 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
 
   // TODO: this is re-running when the thumbnail sliders are changed. Why?
   //console.log(song);
+
+  console.log(SOUND_LIST);
 
   const customInstrumentCount =
     song.instruments.loaded.length - song.instruments.firstCustomIndex;
