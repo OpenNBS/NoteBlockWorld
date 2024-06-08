@@ -41,12 +41,12 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.zoomLevel', {
             valueAsNumber: true,
-            max: ThumbnailConst.MAX_ZOOM_LEVEL,
+            max: ThumbnailConst.ZOOM_LEVEL_MAX,
             disabled: isLocked,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_ZOOM_LEVEL}
-          max={ThumbnailConst.MAX_ZOOM_LEVEL}
+          min={ThumbnailConst.ZOOM_LEVEL_MIN}
+          max={ThumbnailConst.ZOOM_LEVEL_MAX}
         />
       </div>
       <div>{zoomLevel}</div>
@@ -64,7 +64,7 @@ function ThumbnailSliders({
             disabled: isLocked,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_START_TICK}
+          min={ThumbnailConst.START_TICK_DEFAULT}
           max={maxTick}
         />
       </div>
@@ -82,7 +82,7 @@ function ThumbnailSliders({
             max: maxLayer,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_START_LAYER}
+          min={ThumbnailConst.START_LAYER_DEFAULT}
           max={maxLayer}
         />
       </div>
