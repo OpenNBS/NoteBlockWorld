@@ -63,6 +63,7 @@ export class SongBrowserService {
 
     return featuredSongs;
   }
+
   public async getRecentSongs(query: PageQueryDTO): Promise<SongPreviewDto[]> {
     const { page, limit } = query;
 
