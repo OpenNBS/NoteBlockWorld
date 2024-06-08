@@ -24,9 +24,11 @@ async function getLatestVersion(type: 'release' | 'snapshot' = 'release') {
 async function getVersionSummary(version: string) {
   const manifestData = await fetchVersionManifest();
   const versionData = manifestData.versions.find((v) => v.id === version);
+
   if (!versionData) {
     throw new Error(`Version ${version} not found`);
   }
+
   return versionData;
 }
 
@@ -57,6 +59,7 @@ async function getAssetIndexSounds(version: string) {
   const sounds = Object.entries(objects).filter(([key]) =>
     key.endsWith('.ogg'),
   );
+
   return sounds;
 }
 
@@ -67,6 +70,7 @@ async function getSoundList(version: string) {
   const soundList = Object.fromEntries(
     sounds.map(([key, { hash }]) => [key, hash]),
   );
+
   return soundList;
 }
 
@@ -80,13 +84,3 @@ export async function getLatestVersionSoundList() {
 export type SoundListType = Awaited<
   ReturnType<typeof getLatestVersionSoundList>
 >;
-
-// Write getLatestVersionSoundList to a json file
-// import { writeFileSync } from 'fs';
-// import { resolve } from 'path';
-//
-// getLatestVersionSoundList().then((soundList) => {
-//   const soundListPath = resolve(__dirname, 'soundList.json');
-//   writeFileSync(soundListPath, JSON.stringify(soundList, null, 2));
-// });
-//
