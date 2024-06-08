@@ -16,6 +16,7 @@ export class ParseTokenPipe implements CanActivate {
     @Inject(AuthService)
     private readonly authService: AuthService,
   ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const bearerToken = request.headers.authorization;

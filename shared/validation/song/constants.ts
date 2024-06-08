@@ -20,6 +20,7 @@ export const ThumbnailConst = deepFreeze({
 });
 
 export const MIMETYPE_NBS = 'application/octet-stream';
+
 export const UploadConst = deepFreeze({
   file: {
     maxSize: 1024 * 1024, // 1 MB

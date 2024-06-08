@@ -150,6 +150,7 @@ export class Song {
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
+
 export type SongDocument = Song & HydratedDocument<Song>;
 
 export type SongWithUser = Omit<Song, 'uploader'> & {

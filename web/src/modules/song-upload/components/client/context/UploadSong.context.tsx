@@ -33,6 +33,7 @@ export type useUploadSongProviderType = {
   isUploadComplete: boolean;
   uploadedSongId: string | null;
 };
+
 export const UploadSongContext = createContext<useUploadSongProviderType>(
   null as unknown as useUploadSongProviderType,
 );

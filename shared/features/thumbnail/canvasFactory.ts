@@ -21,6 +21,7 @@ if (typeof document === 'undefined') {
       'assets',
       filename.split('/').join(path.sep),
     );
+
     console.log('dir', dir);
     return dir;
   };
@@ -76,4 +77,5 @@ if (typeof document === 'undefined') {
 
 const { createCanvas, loadImage, getPath, saveToImage, Canvas, Image } =
   content;
+
 export { createCanvas, loadImage, getPath, saveToImage, Canvas, Image };
