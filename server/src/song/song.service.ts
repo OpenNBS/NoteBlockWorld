@@ -460,6 +460,7 @@ export class SongService {
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
+
   public async getRecentSongs(
     page: number,
     limit: number,
@@ -480,6 +481,7 @@ export class SongService {
 
     return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
+
   public async getSongsForTimespan(timespan: number): Promise<SongWithUser[]> {
     return this.songModel
       .find<SongWithUser>({

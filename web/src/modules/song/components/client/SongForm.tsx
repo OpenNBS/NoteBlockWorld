@@ -194,7 +194,7 @@ export const SongForm = ({
                 type='button'
                 className='w-32 p-3 bg-zinc-700 enabled:hover:bg-zinc-600 uppercase rounded-lg disabled:opacity-50'
                 onClick={() => router.back()}
-                disabled={isSubmitting}
+                disabled={isLoading || isSubmitting}
               >
                 Cancel
               </button>

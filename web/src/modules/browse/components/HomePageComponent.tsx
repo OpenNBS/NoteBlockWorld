@@ -25,11 +25,9 @@ export const HomePageComponent = () => {
   return (
     <>
       {/* FEATURED SONGS */}
-      <div className='flex flex-col md:flex-row justify-between gap-4 text-nowrap'>
+      <div className='flex flex-wrap justify-between gap-6 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
-        <div className='flex-0'>
-          <TimespanButtonGroup />
-        </div>
+        <TimespanButtonGroup />
       </div>
       <div className='h-6' />
       <Carousel

@@ -149,6 +149,7 @@ export class FileService {
 
     return this.getProfilePictureUrl(fileName);
   }
+
   public async getProfilePictureUrl(fileName: string) {
     // TODO: verify if this is working correctly
     const bucket =
