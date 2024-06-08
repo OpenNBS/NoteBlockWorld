@@ -8,6 +8,7 @@ import { ParseTokenPipe } from './song/parseToken';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
+import { UserStatsModule } from './user-stats/user-stats.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SongBrowserModule } from './song-browser/song-browser.module';
     AuthModule,
     FileModule,
     SongBrowserModule,
+    UserStatsModule,
   ],
   controllers: [],
   providers: [ParseTokenPipe],

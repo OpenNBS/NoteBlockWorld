@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
@@ -7,6 +7,7 @@ import type { Request, Response } from 'express';
 
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
+import { UserStatsService } from '@server/user-stats/user-stats.service';
 
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
@@ -22,6 +23,9 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+
+    @Inject(UserStatsService)
+    private readonly userStatsService: UserStatsService,
   ) {}
 
   public async verifyToken(req: Request, res: Response) {
@@ -29,13 +33,17 @@ export class AuthService {
     const authorizationHeader = headers.authorization;
 
     if (!authorizationHeader) {
-      return res.status(401).json({ message: 'No authorization header' });
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'No authorization header' });
     }
 
     const token = authorizationHeader.split(' ')[1];
 
     if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'No token provided' });
     }
 
     try {
@@ -47,12 +55,16 @@ export class AuthService {
       const user_registered = await this.userService.findByID(decoded.id);
 
       if (!user_registered) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .json({ message: 'Unauthorized' });
       } else {
         return decoded;
       }
     } catch (error) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'Unauthorized' });
     }
   }
 
@@ -162,6 +174,9 @@ export class AuthService {
       email: user_registered.email,
       username: user_registered.username,
     });
+
+    this.userStatsService.updateUserLastLogin(user_registered);
+    this.userStatsService.updateUserLoginStreak(user_registered);
 
     const userId = user_registered._id.toString();
     // set the cookie in the response
