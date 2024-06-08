@@ -50,15 +50,18 @@ export function RecentSongsProvider({
           },
         );
 
-        console.log(response.data.length);
-        console.log(recentSongs.length);
-
         setRecentSongs([
           ...recentSongs.filter((song) => song !== null),
           ...response.data,
         ]);
 
         setLoading(false);
+
+        if (response.data.length === 0) {
+          setHasMore(false);
+
+          return;
+        }
       } catch (error) {
         setRecentSongs(recentSongs.filter((song) => song !== null));
         setRecentError('Error loading recent songs');

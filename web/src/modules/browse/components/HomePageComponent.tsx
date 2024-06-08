@@ -1,5 +1,7 @@
 'use client';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import { TimespanButtonGroup } from './client/TimespanButton';
@@ -13,7 +15,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
-import InfiniteScroll from '../../shared/components/client/InfiniteScroll';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
@@ -59,24 +60,37 @@ export const HomePageComponent = () => {
         <h2 className='text-xl uppercase'>Recent songs</h2>
       </div>
       <div className='h-6' />
-      <SongCardGroup data-test='recent-songs'>
-        {recentSongs.map((song, i) => (
-          <SongCard key={i} song={song} />
-        ))}
-        <InfiniteScroll
-          isLoading={isLoading}
-          hasMore={hasMore}
-          next={function (): void {
-            () => increasePageRecent();
-          }}
-        >
-          {Array(4 - (recentSongs.length % 4) + 4)
-            .fill(null)
-            .map((_, i) => (
-              <SongCard key={i} song={null} />
-            ))}
-        </InfiniteScroll>
-      </SongCardGroup>
+      <InfiniteScroll
+        dataLength={recentSongs.length} //This is important field to render the next data
+        next={increasePageRecent}
+        hasMore={hasMore}
+        loader={
+          <div className='flex justify-center'>
+            <div className='spinner' />
+          </div>
+        }
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        <SongCardGroup data-test='recent-songs'>
+          {' '}
+          {recentSongs.map((song, i) => (
+            <SongCard key={i} song={song} />
+          ))}
+          {hasMore ? (
+            Array(4 - (recentSongs.length % 4) + 4)
+              .fill(null)
+              .map((_, i) => <SongCard key={i} song={null} />)
+          ) : (
+            <div className='flex justify-center'>
+              <p className='text-zinc-400'>No more songs</p>
+            </div>
+          )}
+        </SongCardGroup>
+      </InfiniteScroll>
     </>
   );
 };
