@@ -5,11 +5,19 @@ export const thumbnailDataSchema = zod.object({
   zoomLevel: zod
     .number()
     .int()
-    .min(ThumbnailConst.ZOOM_LEVEL_MIN)
-    .max(ThumbnailConst.ZOOM_LEVEL_MAX)
-    .default(ThumbnailConst.ZOOM_LEVEL_DEFAULT),
-  startTick: zod.number().int().min(0),
-  startLayer: zod.number().int().min(0),
+    .min(ThumbnailConst.zoomLevel.min)
+    .max(ThumbnailConst.zoomLevel.max)
+    .default(ThumbnailConst.zoomLevel.default),
+  startTick: zod
+    .number()
+    .int()
+    .min(0)
+    .default(ThumbnailConst.startTick.default),
+  startLayer: zod
+    .number()
+    .int()
+    .min(0)
+    .default(ThumbnailConst.startLayer.default),
   backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
 });
 

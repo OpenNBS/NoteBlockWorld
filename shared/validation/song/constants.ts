@@ -14,11 +14,17 @@ function deepFreeze<T extends { [key: string]: any }>(object: T): Readonly<T> {
 }
 
 export const ThumbnailConst = deepFreeze({
-  ZOOM_LEVEL_MIN: 1,
-  ZOOM_LEVEL_MAX: 5,
-  ZOOM_LEVEL_DEFAULT: 3,
-  START_TICK_DEFAULT: 0,
-  START_LAYER_DEFAULT: 0,
+  zoomLevel: {
+    min: 1,
+    max: 5,
+    default: 3,
+  },
+  startTick: {
+    default: 0,
+  },
+  startLayer: {
+    default: 0,
+  },
 });
 
 export const ThumbnailBgColors = deepFreeze({
