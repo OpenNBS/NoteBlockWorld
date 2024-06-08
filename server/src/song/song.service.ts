@@ -9,6 +9,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
@@ -488,7 +489,7 @@ export class SongService {
         },
       })
       .sort({ playCount: -1 })
-      .limit(10)
+      .limit(BROWSER_SONGS.featuredPageSize)
       .populate('uploader', 'username profileImage -_id')
       .exec();
   }
