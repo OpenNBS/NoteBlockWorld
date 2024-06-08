@@ -29,6 +29,15 @@ function ThumbnailSliders({
     'thumbnailData.startLayer',
   ]);
 
+  const zoonLevelValue = (zoomLevel: number) => {
+    //1 = 25
+    //2 = 100
+    //3 = 200
+    //4 = 300
+    //5 = 400
+    return zoomLevel * 100 - 100;
+  };
+
   return (
     <div className='w-full grid grid-cols-[max-content_auto_7%] gap-y-2 gap-x-3 items-center align-middle'>
       <div>
@@ -48,7 +57,7 @@ function ThumbnailSliders({
           max={ThumbnailConst.zoomLevel.max}
         />
       </div>
-      <div>{zoomLevel}</div>
+      <div>{zoonLevelValue(zoomLevel)}%</div>
       <div>
         <label htmlFor='start-tick'>Start Tick</label>
       </div>
