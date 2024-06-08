@@ -1,22 +1,15 @@
 'use client';
 
-import { PageQueryDTOType } from '@shared/validation/common/dto/types';
 import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 import axiosInstance from '@web/src/lib/axios';
 
 type RecentSongsContextType = {
   recentSongs: (SongPreviewDtoType | null)[];
   recentError: string;
-  increasePageRecent: () => void;
+  increasePageRecent: () => Promise<void>;
   isLoading: boolean;
   hasMore: boolean;
 };
@@ -45,18 +38,20 @@ export function RecentSongsProvider({
     async function () {
       setLoading(true);
 
-      //setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
-      const params: PageQueryDTOType = {
-        page: page,
-        limit: 8 * 2, // TODO: fiz constants
-        order: false,
-      };
-
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           '/song-browser/recent',
-          { params },
+          {
+            params: {
+              page: page,
+              limit: 12, // TODO: fiz constants
+              order: false,
+            },
+          },
         );
+
+        console.log(response.data.length);
+        console.log(recentSongs.length);
 
         setRecentSongs([
           ...recentSongs.filter((song) => song !== null),
@@ -75,13 +70,7 @@ export function RecentSongsProvider({
     [page, recentSongs],
   );
 
-  useEffect(() => {
-    fetchRecentSongs();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  function increasePageRecent() {
+  async function increasePageRecent() {
     if (
       BROWSER_SONGS.max_recent_songs <= recentSongs.length ||
       loading ||
@@ -92,6 +81,7 @@ export function RecentSongsProvider({
     }
 
     setPage((prev) => prev + 1);
+    await fetchRecentSongs();
   }
 
   return (

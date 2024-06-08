@@ -1,4 +1,3 @@
-import { PageQueryDTOType } from '@shared/validation/common/dto/types';
 import {
   FeaturedSongsDtoType,
   SongPreviewDtoType,
@@ -8,18 +7,19 @@ import axiosInstance from '@web/src/lib/axios';
 import { HomePageProvider } from '@web/src/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/src/modules/browse/components/HomePageComponent';
 
-const recentSongsParams: PageQueryDTOType = {
-  page: 1, // TODO: fiz constants
-  limit: 12,
-  sort: 'recent',
-  order: false,
-};
-
 async function fetchRecentSongs() {
   try {
-    const response = await axiosInstance.get<SongPreviewDtoType[]>('/song', {
-      params: recentSongsParams,
-    });
+    const response = await axiosInstance.get<SongPreviewDtoType[]>(
+      '/song-browser/recent',
+      {
+        params: {
+          page: 1, // TODO: fiz constants
+          limit: 12,
+          sort: 'recent',
+          order: false,
+        },
+      },
+    );
 
     return response.data;
   } catch (error) {
