@@ -7,6 +7,7 @@ import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './song/parseToken';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
+import { SongBrowserModule } from './song-browser/song-browser.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     AuthModule,
     FileModule,
+    SongBrowserModule,
   ],
   controllers: [],
   providers: [ParseTokenPipe],

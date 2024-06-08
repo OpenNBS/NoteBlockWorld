@@ -1,30 +1,25 @@
-import { PageQueryDTOType } from '@shared/validation/common/dto/types';
-import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import {
+  FeaturedSongsDtoType,
+  SongPreviewDtoType,
+} from '@shared/validation/song/dto/types';
 
 import axiosInstance from '@web/src/lib/axios';
 import { HomePageProvider } from '@web/src/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/src/modules/browse/components/HomePageComponent';
 
-const recentSongsParams: PageQueryDTOType = {
-  page: 1, // TODO: fiz constants
-  limit: 12,
-  sort: 'recent',
-  order: false,
-};
-
-const featuredSongsParams: PageQueryDTOType = {
-  page: 1, // TODO: fiz constants
-  limit: 5,
-  sort: 'featured',
-  order: false,
-  timespan: 'week',
-};
-
 async function fetchRecentSongs() {
   try {
-    const response = await axiosInstance.get<SongPreviewDtoType[]>('/song', {
-      params: recentSongsParams,
-    });
+    const response = await axiosInstance.get<SongPreviewDtoType[]>(
+      '/song-browser/recent',
+      {
+        params: {
+          page: 1, // TODO: fiz constants
+          limit: 12,
+          sort: 'recent',
+          order: false,
+        },
+      },
+    );
 
     return response.data;
   } catch (error) {
@@ -32,15 +27,22 @@ async function fetchRecentSongs() {
   }
 }
 
-async function fetchFeaturedSongs() {
+async function fetchFeaturedSongs(): Promise<FeaturedSongsDtoType> {
   try {
-    const response = await axiosInstance.get<SongPreviewDtoType[]>('/song', {
-      params: featuredSongsParams,
-    });
+    const response = await axiosInstance.get<FeaturedSongsDtoType>(
+      '/song-browser/featured',
+    );
 
     return response.data;
   } catch (error) {
-    return [];
+    return {
+      hour: [],
+      day: [],
+      week: [],
+      month: [],
+      year: [],
+      all: [],
+    };
   }
 }
 

@@ -1,4 +1,5 @@
 import { CustomInstrumentData } from './CustomInstrumentData.dto';
+import { FeaturedSongsDto } from './FeaturedSongsDto.dtc';
 import { SongDto } from './Song.dto';
 import { SongPageDto } from './SongPageDto';
 import { SongPreviewDto } from './SongPreview.dto';
@@ -27,6 +28,8 @@ export type SongDtoType = InstanceType<typeof SongDto>;
 export type CustomInstrumentDataType = InstanceType<
   typeof CustomInstrumentData
 >;
+
+export type FeaturedSongsDtoType = InstanceType<typeof FeaturedSongsDto>;
 
 export type ThumbnailDataType = InstanceType<typeof ThumbnailData>;
 
