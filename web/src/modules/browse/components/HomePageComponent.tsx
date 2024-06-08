@@ -70,11 +70,10 @@ export const HomePageComponent = () => {
             () => increasePageRecent();
           }}
         >
-          {Array(4 - (recentSongs.length % 4) + 8)
-            .fill(null)
-            .map((_, i) => (
-              <SongCard key={i} song={null} />
-            ))}
+          {!hasMore &&
+            Array(4 - (recentSongs.length % 4) + 4)
+              .fill(null)
+              .map((_, i) => <SongCard key={i} song={null} />)}
         </InfiniteScroll>
       </SongCardGroup>
     </>
