@@ -1,6 +1,9 @@
 'use client';
 
-import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import {
+  FeaturedSongsDtoType,
+  SongPreviewDtoType,
+} from '@shared/validation/song/dto/types';
 import { createContext, useContext } from 'react';
 
 import { FeaturedSongsProvider } from './FeaturedSongs.context';
@@ -19,7 +22,7 @@ export function HomePageProvider({
 }: {
   children: React.ReactNode;
   initialRecentSongs: SongPreviewDtoType[];
-  initialFeaturedSongs: SongPreviewDtoType[];
+  initialFeaturedSongs: FeaturedSongsDtoType;
 }) {
   return (
     <HomePageContext.Provider value={null}>

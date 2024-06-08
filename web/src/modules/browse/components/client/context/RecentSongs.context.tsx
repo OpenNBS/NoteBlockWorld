@@ -37,7 +37,7 @@ export function RecentSongsProvider({
     useState<SongPreviewDtoType[]>(initialRecentSongs);
 
   const [recentError, setRecentError] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(2);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -49,13 +49,12 @@ export function RecentSongsProvider({
       const params: PageQueryDTOType = {
         page: page,
         limit: 8 * 2, // TODO: fiz constants
-        sort: 'recent',
         order: false,
       };
 
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
-          '/song',
+          '/song-browser/recent',
           { params },
         );
 

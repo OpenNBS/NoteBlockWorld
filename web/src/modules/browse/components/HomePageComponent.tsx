@@ -16,7 +16,7 @@ import {
 import InfiniteScroll from '../../shared/components/client/InfiniteScroll';
 
 export const HomePageComponent = () => {
-  const { featuredSongs } = useFeaturedSongsProvider();
+  const { featuredSongsPage } = useFeaturedSongsProvider();
 
   const { recentSongs, increasePageRecent, isLoading, hasMore } =
     useRecentSongsProvider();
@@ -39,7 +39,7 @@ export const HomePageComponent = () => {
         }}
       >
         <CarouselContent>
-          {featuredSongs.map((song, i) => (
+          {featuredSongsPage.map((song, i) => (
             <CarouselItem
               className='basis-full md:basis-1/2 lg:basis-1/3'
               key={i}
