@@ -7,6 +7,7 @@ import { UserModule } from '@server/user/user.module';
 
 import { Song, SongSchema } from './entity/song.entity';
 import { MySongsController } from './my-songs/my-songs.controller';
+import { SongUploadService } from './song-upload/song-upload.service';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
@@ -17,7 +18,7 @@ import { SongService } from './song.service';
     UserModule,
     FileModule,
   ],
-  providers: [SongService],
+  providers: [SongService, SongUploadService],
   controllers: [SongController, MySongsController],
   exports: [SongService],
 })
