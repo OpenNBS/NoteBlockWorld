@@ -76,19 +76,13 @@ export const HomePageComponent = () => {
         }
       >
         <SongCardGroup data-test='recent-songs'>
-          {' '}
           {recentSongs.map((song, i) => (
             <SongCard key={i} song={song} />
           ))}
-          {hasMore ? (
+          {isLoading &&
             Array(4 - (recentSongs.length % 4) + 4)
               .fill(null)
-              .map((_, i) => <SongCard key={i} song={null} />)
-          ) : (
-            <div className='flex justify-center'>
-              <p className='text-zinc-400'>No more songs</p>
-            </div>
-          )}
+              .map((_, i) => <SongCard key={i} song={null} />)}
         </SongCardGroup>
       </InfiniteScroll>
     </>
