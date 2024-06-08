@@ -28,7 +28,9 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
         authorization: `Bearer ${token.value}`,
       },
     });
+
     const data = await response.data;
+
     return data as UploadSongDtoType;
   } catch (error: unknown) {
     throw new Error('Failed to fetch song data');
@@ -41,6 +43,7 @@ export async function EditSongPage({ id }: { id: string }) {
     const songId = id;
     const userData = await getUserData();
     const username = userData?.username;
+
     return (
       <div className='p-8 h-full w-full flex justify-center'>
         <div className='w-[75vw] max-w-[768px]'>

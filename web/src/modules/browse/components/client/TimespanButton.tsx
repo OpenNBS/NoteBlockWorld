@@ -12,6 +12,7 @@ interface TimespanButtonProps {
 
 export const TimespanButtonGroup = () => {
   const { setTimespan, timespan } = useFeaturedSongsProvider();
+
   return (
     <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
       <TimespanButton

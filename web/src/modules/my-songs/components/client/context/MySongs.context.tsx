@@ -56,6 +56,7 @@ export const MySongProvider = ({
 }: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
+
   const [totalSongs, setTotalSongs] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(totalPagesInit);
   const [currentPage, setCurrentPage] = useState<number>(currentPageInit);
@@ -65,6 +66,7 @@ export const MySongProvider = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+
   const [songToDelete, setSongToDelete] = useState<SongPreviewDtoType | null>(
     null,
   );
@@ -79,6 +81,7 @@ export const MySongProvider = ({
   const fetchSongsPage = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     const token = getTokenLocal();
+
     try {
       const response = await axiosInstance.get(
         `/my-songs?page=${currentPage}&limit=${pageSize}&sort=createdAt&order=false`,
@@ -88,12 +91,15 @@ export const MySongProvider = ({
           },
         },
       );
+
       const data = response.data as SongPageDtoType;
+
       // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       putPage({
         key: currentPage,
         page: data,
       });
+
       setTotalSongs(data.total);
       setTotalPages(Math.ceil(data.total / pageSize));
       setPage(data);
@@ -101,6 +107,7 @@ export const MySongProvider = ({
       if (error instanceof Error) {
         setError(error.message);
       }
+
       if (error instanceof Response) {
         setError(error.statusText);
       }
@@ -113,8 +120,10 @@ export const MySongProvider = ({
     if (currentPage in loadedSongs) {
       setPage(loadedSongs[currentPage]);
       setIsLoading(false);
+
       return;
     }
+
     await fetchSongsPage();
   }, [currentPage, fetchSongsPage, loadedSongs]);
 
@@ -150,13 +159,16 @@ export const MySongProvider = ({
     if (!songToDelete) {
       return;
     }
+
     const token = getTokenLocal();
+
     try {
       await axiosInstance.delete(`/song/${songToDelete.publicId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
+
       setIsDeleteDialogOpen(false);
       setSongToDelete(null);
       await fetchSongsPage();
@@ -164,6 +176,7 @@ export const MySongProvider = ({
       if (error instanceof Error) {
         setError(error.message);
       }
+
       if (error instanceof Response) {
         setError(error.statusText);
       }
@@ -197,8 +210,10 @@ export const MySongProvider = ({
 
 export const useMySongsProvider = () => {
   const context = useContext(MySongsContext);
+
   if (context === undefined || context === null) {
     throw new Error('useMySongsProvider must be used within a MySongsProvider');
   }
+
   return context;
 };

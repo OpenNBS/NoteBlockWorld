@@ -1,6 +1,7 @@
 'use client';
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ThumbnailConst } from '@shared/validation/song/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -35,6 +36,7 @@ export type useUploadSongProviderType = {
 export const UploadSongContext = createContext<useUploadSongProviderType>(
   null as unknown as useUploadSongProviderType,
 );
+
 export const UploadSongProvider = ({
   children,
 }: {
@@ -44,9 +46,11 @@ export const UploadSongProvider = ({
   const [filename, setFilename] = useState<string | null>(null);
   const [invalidFile, setInvalidFile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   {
     /* TODO: React Hook Form has an isSubmitting attribute. Can we leverage it? https://react-hook-form.com/docs/useformstate */
   }
+
   const [sendError, setSendError] = useState<string | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
@@ -55,6 +59,7 @@ export const UploadSongProvider = ({
     resolver: zodResolver(uploadSongFormSchema),
     mode: 'onBlur',
   });
+
   const {
     register,
     formState: { errors },
@@ -63,19 +68,24 @@ export const UploadSongProvider = ({
   const submitSongData = async (): Promise<void> => {
     // Get song file from state
     setSendError(null);
+
     if (!song) {
       throw new Error('Song file not found');
     }
+
     const arrayBuffer = song.toArrayBuffer();
+
     if (arrayBuffer.byteLength === 0) {
       throw new Error('Song file is invalid');
     }
+
     const blob = new Blob([arrayBuffer]);
 
     // Build form data
     const formData = new FormData();
     formData.append('file', blob, filename || 'song.nbs');
     const formValues = formMethods.getValues();
+
     Object.entries(formValues)
       .filter(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -84,7 +94,9 @@ export const UploadSongProvider = ({
       .forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
+
     formData.append('thumbnailData', JSON.stringify(formValues.thumbnailData));
+
     formData.append(
       'customInstruments',
       JSON.stringify(formValues.customInstruments),
@@ -92,6 +104,7 @@ export const UploadSongProvider = ({
 
     // Get authorization token from local storage
     const token = getTokenLocal();
+
     try {
       // Send request
       const response = await axiosInstance.post(`/song`, formData, {
@@ -103,10 +116,12 @@ export const UploadSongProvider = ({
 
       const data = response.data;
       const id = data.publicId as string;
+      console.log('Song uploaded successfully', id);
       setUploadedSongId(id);
       setIsUploadComplete(true);
     } catch (error: any) {
       console.error('Error submitting song', error);
+
       if (error.response) {
         setSendError(error.response.data.error.file);
       } else {
@@ -131,11 +146,14 @@ export const UploadSongProvider = ({
   const setFileHandler = async (file: File | null) => {
     if (!file) return;
     const song = fromArrayBuffer(await file.arrayBuffer());
+
     if (song.length <= 0) {
       setInvalidFile(true);
       setSong(null);
+
       return;
     }
+
     setSong(song);
     setFilename(file.name);
 
@@ -148,10 +166,26 @@ export const UploadSongProvider = ({
 
   useEffect(() => {
     if (song) {
-      formMethods.setValue('thumbnailData.zoomLevel', 3);
-      formMethods.setValue('thumbnailData.startTick', 0);
-      formMethods.setValue('thumbnailData.startLayer', 0);
-      formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
+      formMethods.setValue(
+        'thumbnailData.zoomLevel',
+        ThumbnailConst.zoomLevel.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.startTick',
+        ThumbnailConst.startTick.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.startLayer',
+        ThumbnailConst.startLayer.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.backgroundColor',
+        ThumbnailConst.backgroundColor.default,
+      );
+
       formMethods.setValue('customInstruments', [
         'custom1',
         'custom2',
@@ -168,12 +202,14 @@ export const UploadSongProvider = ({
     const handler = (e: BeforeUnloadEvent) => {
       if (song) {
         e.preventDefault();
+
         e.returnValue =
           'Are you sure you want to leave? You have unsaved changes.';
       }
     };
 
     window.addEventListener('beforeunload', handler);
+
     return () => {
       window.removeEventListener('beforeunload', handler);
     };

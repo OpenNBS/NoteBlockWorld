@@ -104,6 +104,7 @@ export const ThumbnailRendererCanvas = ({
     if (drawRequest.current) {
       cancelAnimationFrame(drawRequest.current);
     }
+
     drawRequest.current = requestAnimationFrame(async () => {
       const output = await drawNotesOffscreen({
         notes,
@@ -116,6 +117,7 @@ export const ThumbnailRendererCanvas = ({
         imgWidth: 1280,
         imgHeight: 768,
       });
+
       swap(output, canvas);
       setLoading(false);
     });

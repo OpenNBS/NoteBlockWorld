@@ -78,8 +78,10 @@ export const Carousel = forwardRef<
       },
       plugins,
     );
+
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
+
     const onSelect = useCallback((api: CarouselApi) => {
       if (!api) {
         return;
@@ -139,7 +141,9 @@ export const Carousel = forwardRef<
         api?.off('select', onSelect);
       };
     }, [api, onSelect]);
+
     api?.scrollSnapList();
+
     return (
       <CarouselContext.Provider
         value={{
@@ -177,7 +181,7 @@ export const CarouselContent = forwardRef<
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div ref={carouselRef} className=''>
+    <div ref={carouselRef} className='overflow-hidden p-4 m-[-1rem]'>
       <div
         ref={ref}
         className={cn(
@@ -229,6 +233,7 @@ const CarouselButton = forwardRef<
     />
   );
 });
+
 CarouselButton.displayName = 'CarouselButton';
 
 export const CarouselPrevious = forwardRef<

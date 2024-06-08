@@ -5,8 +5,10 @@ import Layout from '../../layout';
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
+
   try {
     const userData = await getUserProfileData(id);
+
     return (
       <main className='w-full h-full m-auto text-center bg-zinc-900 flex items-center justify-center'>
         <Layout>

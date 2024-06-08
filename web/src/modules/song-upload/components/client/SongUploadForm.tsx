@@ -6,6 +6,7 @@ import { useUploadSongProviderType } from './context/UploadSong.context';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
 const type = 'upload';
+
 export const SongUploadForm = ({
   defaultAuthorName,
 }: {

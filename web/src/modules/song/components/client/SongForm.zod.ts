@@ -1,11 +1,27 @@
-import { UploadConst } from '@shared/validation/song/constants';
+import { ThumbnailConst, UploadConst } from '@shared/validation/song/constants';
 import { z as zod } from 'zod';
 
 export const thumbnailDataSchema = zod.object({
-  zoomLevel: zod.number().int().min(1).max(5),
-  startTick: zod.number().int().min(0),
-  startLayer: zod.number().int().min(0),
-  backgroundColor: zod.string().regex(/^#[0-9a-fA-F]{6}$/),
+  zoomLevel: zod
+    .number()
+    .int()
+    .min(ThumbnailConst.zoomLevel.min)
+    .max(ThumbnailConst.zoomLevel.max)
+    .default(ThumbnailConst.zoomLevel.default),
+  startTick: zod
+    .number()
+    .int()
+    .min(0)
+    .default(ThumbnailConst.startTick.default),
+  startLayer: zod
+    .number()
+    .int()
+    .min(0)
+    .default(ThumbnailConst.startLayer.default),
+  backgroundColor: zod
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .default(ThumbnailConst.backgroundColor.default),
 });
 
 const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
@@ -19,21 +35,21 @@ export const SongFormSchema = zod.object({
   visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
-    .max(64, {
-      message: 'Title must be less than 64 characters',
+    .max(UploadConst.title.maxLength, {
+      message: `Title must be shorter than ${UploadConst.title.maxLength} characters`,
     })
     .min(1, {
       message: 'Title is required',
     }),
   originalAuthor: zod
     .string()
-    .max(64, {
-      message: 'Original author must be less than 64 characters',
+    .max(UploadConst.originalAuthor.maxLength, {
+      message: `Original author must be shorter than ${UploadConst.originalAuthor.maxLength} characters`,
     })
     .min(0),
   author: zod.string().optional(),
-  description: zod.string().max(1024, {
-    message: 'Description must be less than 1024 characters',
+  description: zod.string().max(UploadConst.description.maxLength, {
+    message: `Description must be less than ${UploadConst.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
@@ -42,14 +58,12 @@ export const SongFormSchema = zod.object({
     // @ts-ignore
     .enum(licenses)
     .refine((value) => Object.keys(UploadConst.licenses).includes(value), {
-      message:
-        // TODO: outdated message
-        "Invalid license. Must be one of 'No license', 'CC BY 4.0', 'Public domain'",
+      message: 'Invalid license',
     })
-    .default('no_license'),
+    .default(UploadConst.license.default),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  category: zod.enum(categories).optional(),
+  category: zod.enum(categories).default(UploadConst.CATEGORY_DEFAULT),
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});

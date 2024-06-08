@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 let content = {} as any;
 
 if (typeof document === 'undefined') {

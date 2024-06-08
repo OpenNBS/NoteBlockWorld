@@ -33,6 +33,7 @@ export class SongViewDto {
 
   public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
+
     return new SongViewDto({
       ...data,
       uploader: song.uploader as unknown as SongViewUploader,

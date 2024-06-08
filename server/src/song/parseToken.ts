@@ -23,12 +23,16 @@ export class ParseTokenPipe implements CanActivate {
     if (!bearerToken) {
       return true;
     }
+
     const token = bearerToken.split(' ')[1];
     const user = await this.authService.getUserFromToken(token);
+
     if (!user) {
       return true;
     }
+
     request.existingUser = user;
+
     return true;
   }
 }

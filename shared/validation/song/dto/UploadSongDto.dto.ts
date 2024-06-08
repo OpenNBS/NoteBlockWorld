@@ -50,7 +50,7 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(128)
+  @MaxLength(UploadConst.title.maxLength)
   @ApiProperty({
     description: 'Title of the song',
     example: 'My Song',
@@ -58,7 +58,7 @@ export class UploadSongDto {
   title: string;
 
   @IsString()
-  @MaxLength(64)
+  @MaxLength(UploadConst.originalAuthor.maxLength)
   @ApiProperty({
     description: 'Original author of the song',
     example: 'Myself',
@@ -66,7 +66,7 @@ export class UploadSongDto {
   originalAuthor: string;
 
   @IsString()
-  @MaxLength(2048)
+  @MaxLength(UploadConst.description.maxLength)
   @ApiProperty({
     description: 'Description of the song',
     example: 'This is my song',
@@ -105,7 +105,7 @@ export class UploadSongDto {
   license: LicenseType;
 
   @IsArray()
-  @MaxLength(64, { each: true })
+  @MaxLength(UploadConst.customInstruments.maxCount, { each: true })
   @ApiProperty({
     description:
       'List of custom instrument paths, one for each custom instrument in the song, relative to the assets/minecraft/sounds folder',

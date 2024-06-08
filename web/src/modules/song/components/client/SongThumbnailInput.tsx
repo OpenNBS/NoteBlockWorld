@@ -1,4 +1,4 @@
-import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
+import { bgColorsArray, getThumbnailNotes } from '@shared/features/thumbnail';
 import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -22,11 +22,13 @@ function ThumbnailSliders({
   maxLayer: number;
 }) {
   const { register } = formMethods;
+
   const [zoomLevel, startTick, startLayer] = formMethods.watch([
     'thumbnailData.zoomLevel',
     'thumbnailData.startTick',
     'thumbnailData.startLayer',
   ]);
+
   return (
     <div className='w-full grid grid-cols-[max-content_auto_7%] gap-y-2 gap-x-3 items-center align-middle'>
       <div>
@@ -39,12 +41,11 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.zoomLevel', {
             valueAsNumber: true,
-            max: ThumbnailConst.MAX_ZOOM_LEVEL,
             disabled: isLocked,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_ZOOM_LEVEL}
-          max={ThumbnailConst.MAX_ZOOM_LEVEL}
+          min={ThumbnailConst.zoomLevel.min}
+          max={ThumbnailConst.zoomLevel.max}
         />
       </div>
       <div>{zoomLevel}</div>
@@ -62,7 +63,7 @@ function ThumbnailSliders({
             disabled: isLocked,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_START_TICK}
+          min={ThumbnailConst.startTick.default}
           max={maxTick}
         />
       </div>
@@ -80,7 +81,7 @@ function ThumbnailSliders({
             max: maxLayer,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.DEFAULT_START_LAYER}
+          min={ThumbnailConst.startLayer.default}
           max={maxLayer}
         />
       </div>
@@ -124,6 +125,7 @@ export const SongThumbnailInput = ({
     const notes = getThumbnailNotes(song);
     const maxTick = Math.max(...notes.map((note) => note.tick));
     const maxLayer = Math.max(...notes.map((note) => note.layer));
+
     return [notes, maxTick, maxLayer];
   }, [song]);
 
@@ -142,17 +144,15 @@ export const SongThumbnailInput = ({
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
-          {bgColors.map((data: any, index) => (
+          {bgColorsArray.map(({ key, name, light, dark }, index) => (
             <ColorButton
               key={index}
-              color={data.dark}
+              color={dark}
               disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
-                formMethods.setValue(
-                  'thumbnailData.backgroundColor',
-                  data.dark,
-                );
+
+                formMethods.setValue('thumbnailData.backgroundColor', dark);
               }}
             />
           ))}

@@ -43,12 +43,14 @@ export class SongService {
 
   private async validateUploader(user: UserDocument): Promise<Types.ObjectId> {
     const uploader = await this.userService.findByID(user._id.toString());
+
     if (!uploader) {
       throw new HttpException(
         'user not found, contact an administrator',
         HttpStatus.UNAUTHORIZED,
       );
     }
+
     return uploader._id;
   }
 
@@ -71,6 +73,7 @@ export class SongService {
     // Load file into memory
     const loadedArrayBuffer = new ArrayBuffer(file.buffer.byteLength);
     const view = new Uint8Array(loadedArrayBuffer);
+
     for (let i = 0; i < file.buffer.byteLength; ++i) {
       view[i] = file.buffer[i];
     }
@@ -117,10 +120,12 @@ export class SongService {
     // Save song document
     const songDocument = await this.songModel.create(song);
     const createdSong = await songDocument.save();
+
     const populatedSong = (await createdSong.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
+
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
@@ -233,11 +238,13 @@ export class SongService {
 
     // Upload thumbnail
     let thumbUrl: string;
+
     try {
       thumbUrl = await this.fileService.uploadThumbnail(
         thumbBuffer,
         `${publicId}.jpg`,
       );
+
       this.logger.log(fileKey);
     } catch (e) {
       throw new HttpException(
@@ -249,12 +256,15 @@ export class SongService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+
     this.logger.log(thumbUrl);
+
     return thumbUrl;
   }
 
   private async uploadSongFile(file: Express.Multer.File) {
     let fileKey: string;
+
     try {
       fileKey = await this.fileService.uploadSong(file);
     } catch (e) {
@@ -267,11 +277,13 @@ export class SongService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+
     return fileKey;
   }
 
   private getSongObject(loadedArrayBuffer: ArrayBuffer) {
     const nbsSong = fromArrayBuffer(loadedArrayBuffer);
+
     // If the above operation fails, it will return an empty song
     if (nbsSong.length === 0) {
       throw new HttpException(
@@ -283,6 +295,7 @@ export class SongService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
     return nbsSong;
   }
 
@@ -319,9 +332,11 @@ export class SongService {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
+
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
+
     if (foundSong.uploader.toString() !== user?._id.toString()) {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
@@ -348,12 +363,15 @@ export class SongService {
         publicId: publicId,
       })
       .exec()) as unknown as SongDocument;
+
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
+
     if (foundSong.uploader.toString() !== user?._id.toString()) {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
+
     if (
       foundSong.title === body.title &&
       foundSong.originalAuthor === body.originalAuthor &&
@@ -368,6 +386,7 @@ export class SongService {
     ) {
       throw new HttpException('No changes detected', HttpStatus.BAD_REQUEST);
     }
+
     // Update song document
     foundSong.title = body.title;
     foundSong.originalAuthor = body.originalAuthor;
@@ -383,6 +402,7 @@ export class SongService {
     const songFile = await this.fileService.getSongFile(foundSong.nbsFileUrl);
     const nbsSong = fromArrayBuffer(songFile);
     this.updateSongFileMetadata(nbsSong, body, user);
+
     // if new thumbnail data the same as existing one?
     if (
       !(
@@ -399,6 +419,7 @@ export class SongService {
         foundSong.publicId,
         foundSong.nbsFileUrl,
       );
+
       foundSong.thumbnailData = body.thumbnailData;
     }
 
@@ -406,15 +427,18 @@ export class SongService {
 
     // Save song document
     const updatedSong = await foundSong.save();
+
     const populatedSong = (await updatedSong.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
+
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
     const { page, limit, sort, timespan } = query;
+
     if (sort !== 'featured' && sort !== 'recent') {
       throw new HttpException('Invalid sort parameter', HttpStatus.BAD_REQUEST);
     }
@@ -427,6 +451,7 @@ export class SongService {
             HttpStatus.BAD_REQUEST,
           );
         }
+
         return this.getFeaturedSongs(timespan as TimespanType);
       case 'recent':
         if (!page || !limit) {
@@ -435,6 +460,7 @@ export class SongService {
             HttpStatus.BAD_REQUEST,
           );
         }
+
         return this.getRecentSongs(page, limit);
     }
   }
@@ -462,6 +488,7 @@ export class SongService {
     timespan: TimespanType,
   ): Promise<SongPreviewDto[]> {
     let laterThan = new Date(Date.now());
+
     switch (timespan) {
       case 'hour':
         laterThan.setHours(laterThan.getHours() - 1);
@@ -481,6 +508,7 @@ export class SongService {
       default:
         laterThan = new Date(0);
     }
+
     const data = (await this.songModel
       .find({
         visibility: 'public',
@@ -492,6 +520,7 @@ export class SongService {
       .limit(10)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
+
     return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
@@ -503,20 +532,25 @@ export class SongService {
       .findOne({ publicId: publicId })
       .populate('uploader', 'username profileImage -_id')
       .exec();
+
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
+
     if (foundSong.visibility === 'private') {
       if (!user) {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
+
       if (foundSong.uploader.toString() !== user._id.toString()) {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
     }
+
     // increment view count
     foundSong.playCount++;
     await foundSong.save();
+
     return SongViewDto.fromSongDocument(foundSong);
   }
 
@@ -529,9 +563,11 @@ export class SongService {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
+
     if (!foundSong) {
       throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
     }
+
     if (foundSong.visibility !== 'public') {
       if (!user || foundSong.uploader.toString() !== user._id.toString()) {
         throw new HttpException(
@@ -540,6 +576,7 @@ export class SongService {
         );
       }
     }
+
     if (!foundSong.allowDownload) {
       throw new HttpException(
         'The uploader has disabled downloads of this song',
@@ -552,9 +589,11 @@ export class SongService {
         foundSong.nbsFileUrl,
         'song.nbs', // TODO: foundSong.filename
       );
+
       // increment download count
       if (src !== 'edit') foundSong.downloadCount++;
       await foundSong.save();
+
       return url;
     } catch (e) {
       this.logger.error('Error getting song file', e);
@@ -570,13 +609,16 @@ export class SongService {
     user: UserDocument | null;
   }): Promise<SongPageDto> {
     const { query, user } = arg0;
+
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
+
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const order = query.order ? query.order : false;
     const sort = query.sort ? query.sort : 'recent';
+
     const songData = (await this.songModel
       .find({
         uploader: user._id,
@@ -587,6 +629,7 @@ export class SongService {
       .skip(limit * (page - 1))
       .limit(limit)
       .exec()) as unknown as SongWithUser[];
+
     const total = await this.songModel
       .countDocuments({
         uploader: user._id,
@@ -610,12 +653,15 @@ export class SongService {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
+
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
+
     if (foundSong.uploader.toString() !== user?._id.toString()) {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
+
     return UploadSongDto.fromSongDocument(foundSong);
   }
 }

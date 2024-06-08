@@ -42,26 +42,37 @@ body {
 /************** Animations **************/
 
 @keyframes bounce2 {
-    25% {
-        transform-origin: center bottom;
-        transform: translateY(-12%) rotateZ(-4deg);
-        animation-timing-function: cubic-bezier(0.8,0,1,1);
-    }
-    0%, 50%, 100% {
-        transform: none;
-        animation-timing-function: cubic-bezier(0,0,0.2,1);
-    }
-    75% {
-      transform-origin: center bottom;
-      transform: translateY(-12%) rotateZ(4deg);
-      animation-timing-function: cubic-bezier(0.8,0,1,1);
+  25% {
+    transform-origin: center bottom;
+    transform: translateY(-12%) rotateZ(-4deg);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  0%,
+  50%,
+  100% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  75% {
+    transform-origin: center bottom;
+    transform: translateY(-12%) rotateZ(4deg);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
 }
 
 @keyframes nbw-glow {
-  0%   { filter: saturate(150%) brightness(140%) hue-rotate(-10deg) drop-shadow(0px 0px 10px rgba(50, 149, 255, 0.75)); }
-  50%  { filter: saturate(100%) brightness(100%) hue-rotate(0deg) drop-shadow(0px 0px 0px rgba(50, 149, 255, 0.0)); }
-  100% { filter: saturate(150%) brightness(140%) hue-rotate(-10deg) drop-shadow(0px 0px 10px rgba(50, 149, 255, 0.75)) }
+  0% {
+    filter: saturate(150%) brightness(140%) hue-rotate(-10deg)
+      drop-shadow(0px 0px 10px rgba(50, 149, 255, 0.75));
+  }
+  50% {
+    filter: saturate(100%) brightness(100%) hue-rotate(0deg)
+      drop-shadow(0px 0px 0px rgba(50, 149, 255, 0));
+  }
+  100% {
+    filter: saturate(150%) brightness(140%) hue-rotate(-10deg)
+      drop-shadow(0px 0px 10px rgba(50, 149, 255, 0.75));
+  }
 }
 
 /************** Loading bar **************/
@@ -77,7 +88,7 @@ body {
 .loader {
   width: 16px;
   height: 16px;
-  border: 2px solid #FFF;
+  border: 2px solid #fff;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -87,17 +98,20 @@ body {
 
 @keyframes rotation {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 /************** Google reCAPTCHA badge **************/
 
-.grecaptcha-badge { 
+.grecaptcha-badge {
   visibility: hidden;
   position: fixed;
   bottom: 100px !important;
 }
+
+/************** Prevent trailing lines on Chrome **************/
+/* https://stackoverflow.com/a/25799659/9045426 */

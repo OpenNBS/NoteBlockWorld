@@ -12,15 +12,18 @@ import { NavLinks } from './NavLinks';
 export async function Header() {
   let isLogged;
   let userData;
+
   try {
     isLogged = await checkLogin();
     userData = undefined;
+
     if (isLogged) {
       userData = await getUserData();
     }
   } catch (e) {
     redirect('/login?error=login');
   }
+
   return (
     // calc(3.5rem - 3px) = h-14 minus height of the loading bar
     <header className='fixed w-full h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>

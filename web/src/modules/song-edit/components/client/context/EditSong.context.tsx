@@ -36,6 +36,7 @@ export type useEditSongProviderType = {
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
 );
+
 export const EditSongProvider = ({
   children,
 }: {
@@ -49,6 +50,7 @@ export const EditSongProvider = ({
   const [song, setSong] = useState<Song | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [originalData, setOriginalData] = useState<UploadSongDtoType | null>(
     null,
   );
@@ -107,6 +109,7 @@ export const EditSongProvider = ({
         formValues.license === originalData.license,
         formValues.category === originalData.category,
       ];
+
       console.log(
         coprarisons.every((value) => value),
         coprarisons,
@@ -143,6 +146,7 @@ export const EditSongProvider = ({
 
     if (dataWasNotChanged()) {
       toaster.success('No changes were made to the song!');
+
       return;
     }
 
@@ -153,6 +157,7 @@ export const EditSongProvider = ({
     // Send request
     // Get authorization token from local storage
     const token = getTokenLocal();
+
     try {
       // Send request
       await axiosInstance.patch(`/song/${songId}/edit`, formValues, {
@@ -166,6 +171,7 @@ export const EditSongProvider = ({
       router.push('/my-songs');
     } catch (error: any) {
       console.error('Error submitting song', error);
+
       if (error.response) {
         setSendError(error.response.data.message);
       } else {
@@ -180,11 +186,13 @@ export const EditSongProvider = ({
   const loadSong = useCallback(
     async (id: string, username: string, songData: UploadSongDtoType) => {
       setOriginalData(songData);
+
       formMethods.setValue('allowDownload', true, {
         shouldValidate: false,
         shouldDirty: true,
         shouldTouch: true,
       });
+
       formMethods.setValue('author', username, {
         shouldDirty: true,
         shouldValidate: false,
@@ -195,22 +203,27 @@ export const EditSongProvider = ({
       formMethods.setValue('title', songData.title);
       formMethods.setValue('originalAuthor', songData.originalAuthor);
       formMethods.setValue('description', songData.description);
+
       formMethods.setValue(
         'thumbnailData.zoomLevel',
         songData.thumbnailData.zoomLevel,
       );
+
       formMethods.setValue(
         'thumbnailData.startTick',
         songData.thumbnailData.startTick,
       );
+
       formMethods.setValue(
         'thumbnailData.startLayer',
         songData.thumbnailData.startLayer,
       );
+
       formMethods.setValue(
         'thumbnailData.backgroundColor',
         songData.thumbnailData.backgroundColor,
       );
+
       formMethods.setValue('customInstruments', songData.customInstruments);
       formMethods.setValue('license', songData.license);
       formMethods.setValue('category', songData.category);
@@ -238,11 +251,14 @@ export const EditSongProvider = ({
     const handler = (e: BeforeUnloadEvent) => {
       if (!dataWasNotChanged()) {
         e.preventDefault();
+
         e.returnValue =
           'Are you sure you want to leave? You have unsaved changes.';
       }
     };
+
     window.addEventListener('beforeunload', handler);
+
     return () => {
       window.removeEventListener('beforeunload', handler);
     };
