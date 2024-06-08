@@ -175,9 +175,6 @@ export class AuthService {
       username: user_registered.username,
     });
 
-    this.userStatsService.updateUserLastLogin(user_registered);
-    this.userStatsService.updateUserLoginStreak(user_registered);
-
     const userId = user_registered._id.toString();
     // set the cookie in the response
     const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000';
