@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { TimespanType } from '@shared/validation/song/dto/types';
@@ -37,8 +38,19 @@ export class SongBrowserService {
     };
 
     for (const [timespan, time] of Object.entries(times)) {
-      songs[timespan as TimespanType] =
-        await this.songService.getSongsForTimespan(time);
+      const songPage = await this.songService.getSongsForTimespan(time);
+
+      if (songPage.length < BROWSER_SONGS.featuredPageSize) {
+        const missing = BROWSER_SONGS.featuredPageSize - songPage.length;
+
+        const additionalSongs = await this.songService.getSongsForTimespan(
+          times.all,
+        );
+
+        songPage.push(...additionalSongs.slice(0, missing));
+      }
+
+      songs[timespan as TimespanType] = songPage;
     }
 
     const featuredSongs = FeaturedSongsDto.create();
