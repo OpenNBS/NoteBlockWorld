@@ -9,7 +9,7 @@ import {
   saveToImage,
 } from './canvasFactory';
 
-export { bgColors } from './colors';
+export { bgColorsArray } from './colors';
 
 export interface Note {
   tick: number;
@@ -44,10 +44,12 @@ export const getThumbnailNotes = (song: Song): Note[] => {
           key: note.key,
           instrument: note.instrument,
         };
+
         return data;
       }),
     )
     .flat();
+
   return notes;
 };
 
@@ -80,6 +82,7 @@ function tintImage(image: Image, color: string): Canvas {
 
   const canvas = createCanvas(image.width, image.height);
   const ctx = canvas.getContext('2d');
+
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
@@ -94,6 +97,7 @@ function tintImage(image: Image, color: string): Canvas {
   ctx.drawImage(image, 0, 0);
 
   tintedImages[color] = canvas;
+
   return canvas;
 }
 
@@ -116,6 +120,7 @@ function noteInBounds(
 // Function to convert key number to key text
 function getKeyText(key: number): string {
   const octaves = Math.floor(key / 12);
+
   const notes = [
     'C',
     'C#',
@@ -130,7 +135,9 @@ function getKeyText(key: number): string {
     'A#',
     'B',
   ];
+
   const note = notes[key % 12];
+
   return `${note}${octaves}`;
 }
 
@@ -144,6 +151,7 @@ function getLuma(color: string): number {
   const b = (rgb >> 0) & 0xff; // extract blue
 
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
   return luma;
 }
 
@@ -163,6 +171,7 @@ export async function swap(src: Canvas, dst: Canvas) {
 
   // Get canvas context
   const ctx = dst.getContext('2d');
+
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
@@ -185,6 +194,7 @@ export async function drawNotesOffscreen({
   // Create new offscreen canvas
   const canvas = createCanvas(imgWidth, imgHeight);
   const ctx = canvas.getContext('2d');
+
   if (!ctx) {
     throw new Error('Could not get offscreen canvas context');
   }
@@ -200,6 +210,7 @@ export async function drawNotesOffscreen({
     const scale = canvasWidth / imgWidth;
     ctx.scale(scale, scale);
   }
+
   const width = canvas.width;
   const height = canvas.height;
 
@@ -211,6 +222,7 @@ export async function drawNotesOffscreen({
 
   // Check if the background color is dark or light
   const isDark = isDarkColor(backgroundColor, 90);
+
   if (isDark) {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
   } else {
@@ -247,6 +259,7 @@ export async function drawNotesOffscreen({
       if (!noteBlockImage) {
         throw new Error('Note block image not loaded');
       }
+
       // Draw the note block
       ctx.drawImage(
         tintImage(noteBlockImage, overlayColor),
@@ -278,5 +291,6 @@ export async function drawToImage(params: DrawParams): Promise<Buffer> {
 
   const output = await drawNotesOffscreen(params);
   const buffer = saveToImage(output);
+
   return buffer;
 }
