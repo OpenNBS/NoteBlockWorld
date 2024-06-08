@@ -37,13 +37,18 @@ export class UserService {
   public getUserPaginated(query: PageQueryDTO) {
     const { page, limit } = query;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const options = {
-      page: page || 1,
-      limit: limit || 10,
-    };
+    if (!page || !limit) {
+      throw new HttpException(
+        'You must provide a page and a limit',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    return this.userModel.find({});
+    return this.userModel
+      .find()
+      .skip(page * limit)
+      .limit(limit)
+      .exec();
   }
 
   public async getUserByEmailOrId(query: GetUser) {
