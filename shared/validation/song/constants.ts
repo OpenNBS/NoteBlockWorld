@@ -15,7 +15,7 @@ export const ThumbnailConst = deepFreeze({
     default: 0,
   },
   backgroundColor: {
-    default: bgColors.gray.light,
+    default: bgColors.gray.dark,
   },
 });
 

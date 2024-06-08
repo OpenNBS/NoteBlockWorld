@@ -1,4 +1,4 @@
-import { bgColors, getThumbnailNotes } from '@shared/features/thumbnail';
+import { bgColorsArray, getThumbnailNotes } from '@shared/features/thumbnail';
 import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -144,18 +144,15 @@ export const SongThumbnailInput = ({
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
-          {bgColors.map((data: any, index) => (
+          {bgColorsArray.map(({ key, name, light, dark }, index) => (
             <ColorButton
               key={index}
-              color={data.dark}
+              color={dark}
               disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
 
-                formMethods.setValue(
-                  'thumbnailData.backgroundColor',
-                  data.dark,
-                );
+                formMethods.setValue('thumbnailData.backgroundColor', dark);
               }}
             />
           ))}
