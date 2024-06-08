@@ -5,6 +5,9 @@
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
+  "scripts": {
+    "lint": "eslint */**/*.ts --fix"
+  },
   "dependencies": {
     "@encode42/nbs.js": "5.0.0",
     "@nestjs/swagger": "^7.1.1",
