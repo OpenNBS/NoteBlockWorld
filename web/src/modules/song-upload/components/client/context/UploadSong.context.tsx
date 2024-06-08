@@ -1,6 +1,7 @@
 'use client';
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ThumbnailConst } from '@shared/validation/song/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -115,6 +116,7 @@ export const UploadSongProvider = ({
 
       const data = response.data;
       const id = data.publicId as string;
+      console.log('Song uploaded successfully', id);
       setUploadedSongId(id);
       setIsUploadComplete(true);
     } catch (error: any) {
@@ -164,10 +166,25 @@ export const UploadSongProvider = ({
 
   useEffect(() => {
     if (song) {
-      formMethods.setValue('thumbnailData.zoomLevel', 3);
-      formMethods.setValue('thumbnailData.startTick', 0);
-      formMethods.setValue('thumbnailData.startLayer', 0);
-      formMethods.setValue('thumbnailData.backgroundColor', '#ffffff');
+      formMethods.setValue(
+        'thumbnailData.zoomLevel',
+        ThumbnailConst.zoomLevel.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.startTick',
+        ThumbnailConst.startTick.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.startLayer',
+        ThumbnailConst.startLayer.default,
+      );
+
+      formMethods.setValue(
+        'thumbnailData.backgroundColor',
+        ThumbnailConst.backgroundColor.default,
+      );
 
       formMethods.setValue('customInstruments', [
         'custom1',
