@@ -11,8 +11,6 @@ html {
 
 body {
   min-height: 100vh;
-  scrollbar-width: thin;
-  scrollbar-color: --tw-bg-zinc-900 --tw-bg-zinc-500;
 }
 
 ::-webkit-scrollbar {

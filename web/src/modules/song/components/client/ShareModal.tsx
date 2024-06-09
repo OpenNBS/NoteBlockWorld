@@ -1,37 +1,32 @@
-import { Dialog, Transition } from '@headlessui/react';
-import JSConfetti from 'js-confetti';
-import Link from 'next/link';
-import { Fragment, useEffect, useState } from 'react';
+'use client';
 
-export default function UploadCompleteModal({
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useState } from 'react';
+
+const getTwitterIntentUrl = (songId: string) => {
+  const baseUrl = 'https://twitter.com/intent/tweet?`';
+
+  const params = new URLSearchParams({
+    text: `Check out my new song!`,
+    url: `${process.env.NEXT_PUBLIC_URL}/song/${songId}`,
+  });
+
+  const url = `${baseUrl}${params.toString()}`;
+  return url;
+};
+
+export default function ShareModal({
   isOpen,
+  setIsOpen,
   songId,
 }: {
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   songId: string;
 }) {
   const [isCopied, setIsCopied] = useState(false);
-
-  useEffect(() => {
-    // Confetti
-    const canvas = document.getElementById('confetti') as HTMLCanvasElement;
-    const confetti = new JSConfetti({ canvas });
-
-    confetti.addConfetti({
-      confettiRadius: 6,
-      confettiNumber: 150,
-      confettiColors: [
-        '#f44336',
-        '#9c27b0',
-        '#3f51b5',
-        '#03a9f4',
-        '#009688',
-        '#8bc34a',
-        '#ffeb3b',
-        '#ff9800',
-      ],
-    });
-  }, []);
 
   const handleCopy = () => () => {
     navigator.clipboard.writeText(
@@ -47,22 +42,24 @@ export default function UploadCompleteModal({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as='div' className='relative z-10' onClose={() => undefined}>
+      <Dialog
+        as='div'
+        className='relative z-10'
+        onClose={() => setIsOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
-          enter='ease-out duration-500'
+          enter='ease-out-back duration-300'
           enterFrom='opacity-0'
           enterTo='opacity-100'
           leave='ease-in duration-200'
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
         >
-          <div className='fixed inset-0 bg-black opacity-50' />
+          <div className='fixed inset-0 bg-black/50' />
         </Transition.Child>
 
-        <canvas id='confetti' className='fixed inset-0' />
-
-        <div className='fixed inset-0 overflow-y-auto backdrop-blur'>
+        <div className='fixed inset-0 w-screen overflow-y-auto'>
           <div className='flex min-h-full items-center justify-center p-4 text-center'>
             <Transition.Child
               as={Fragment}
@@ -78,12 +75,18 @@ export default function UploadCompleteModal({
                   as='h3'
                   className='text-2xl font-semibold leading-6 text-white mb-5'
                 >
-                  Upload complete! 🎉
+                  Share song
                 </Dialog.Title>
 
-                <p className='text-md text-white mb-2'>
-                  You can now view or share your song with the link below:
-                </p>
+                {/* X button */}
+                <button
+                  type='button'
+                  aria-label='Close'
+                  className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FontAwesomeIcon icon={faClose} />
+                </button>
 
                 <div className='flex justify-end items-center gap-3 h-8'>
                   {/* Link box */}
@@ -102,32 +105,6 @@ export default function UploadCompleteModal({
                   >
                     {isCopied ? 'Copied!' : 'Copy'}
                   </button>
-                </div>
-
-                <div className='flex items-center justify-between gap-4 mt-6'>
-                  <button
-                    type='button'
-                    className='rounded-md px-4 py-2 text-nowrap text-blue-500 hover:text-blue-300 hover:bg-blue-300/20'
-                    onClick={() => {
-                      window.location.reload();
-                    }}
-                  >
-                    Upload again
-                  </button>
-
-                  <Link
-                    href={`/my-songs`}
-                    className='rounded-md px-4 py-2 text-nowrap bg-blue-500/30 text-blue-300 hover:bg-blue-500/60 hover:text-white'
-                  >
-                    Go to my songs
-                  </Link>
-
-                  <Link
-                    href={`/song/${songId}`}
-                    className='rounded-md px-4 py-2 text-nowrap bg-blue-500 text-white hover:bg-blue-400'
-                  >
-                    View song
-                  </Link>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

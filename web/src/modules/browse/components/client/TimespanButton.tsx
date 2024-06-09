@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@web/src/modules/shared/components/tooltip';
+
 import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
 
 interface TimespanButtonProps {
@@ -11,7 +17,7 @@ interface TimespanButtonProps {
 }
 
 export const TimespanButtonGroup = () => {
-  const { setTimespan, timespan } = useFeaturedSongsProvider();
+  const { setTimespan, timespan, timespanEmpty } = useFeaturedSongsProvider();
 
   return (
     <div className='flex flex-row gap-2 md:gap-3 overflow-x-auto'>
@@ -19,7 +25,7 @@ export const TimespanButtonGroup = () => {
         id='hour'
         data-test='timespan-hour'
         isActive={timespan === 'hour'}
-        isDisabled={timespan === 'hour'}
+        isDisabled={timespan === 'hour' || timespanEmpty['hour']}
         onClick={() => setTimespan('hour')}
       >
         past hour
@@ -28,7 +34,7 @@ export const TimespanButtonGroup = () => {
         id='day'
         data-test='timespan-day'
         isActive={timespan === 'day'}
-        isDisabled={timespan === 'day'}
+        isDisabled={timespan === 'day' || timespanEmpty['day']}
         onClick={() => setTimespan('day')}
       >
         past day
@@ -37,7 +43,7 @@ export const TimespanButtonGroup = () => {
         id='week'
         data-test='timespan-week'
         isActive={timespan === 'week'}
-        isDisabled={timespan === 'week'}
+        isDisabled={timespan === 'week' || timespanEmpty['week']}
         onClick={() => setTimespan('week')}
       >
         past week
@@ -46,7 +52,7 @@ export const TimespanButtonGroup = () => {
         id='month'
         data-test='timespan-month'
         isActive={timespan === 'month'}
-        isDisabled={timespan === 'month'}
+        isDisabled={timespan === 'month' || timespanEmpty['month']}
         onClick={() => setTimespan('month')}
       >
         past month
@@ -55,7 +61,7 @@ export const TimespanButtonGroup = () => {
         id='year'
         data-test='timespan-year'
         isActive={timespan === 'year'}
-        isDisabled={timespan === 'year'}
+        isDisabled={timespan === 'year' || timespanEmpty['year']}
         onClick={() => setTimespan('year')}
       >
         past year
@@ -72,20 +78,27 @@ export const TimespanButton = ({
   id,
 }: TimespanButtonProps) => {
   return (
-    <div>
-      <button
-        id={id}
-        onClick={onClick}
-        className={
-          (isActive
-            ? 'bg-white text-black cursor-default font-bold'
-            : 'enabled:bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-500') +
-          ' whitespace-nowrap text-sm py-1 px-2 w-24 rounded-full transition-all duration-200'
-        }
-        disabled={isDisabled}
-      >
-        {children}
-      </button>
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          id={id}
+          onClick={onClick}
+          className={
+            (isActive
+              ? 'bg-white text-black cursor-default font-bold'
+              : 'bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-50') +
+            ' whitespace-nowrap text-sm py-1 px-2 w-24 rounded-full transition-all duration-200'
+          }
+          disabled={isDisabled}
+        >
+          {children}
+        </button>
+      </TooltipTrigger>
+      {isDisabled && !isActive && (
+        <TooltipContent>
+          No songs uploaded in the {children?.toString()}
+        </TooltipContent>
+      )}
+    </Tooltip>
   );
 };

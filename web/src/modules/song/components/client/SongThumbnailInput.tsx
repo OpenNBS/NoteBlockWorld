@@ -3,6 +3,11 @@ import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@web/src/modules/shared/components/tooltip';
 import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import { useSongProvider } from './context/Song.context';
@@ -92,21 +97,28 @@ function ThumbnailSliders({
 
 const ColorButton = ({
   color,
+  tooltip,
   onClick,
   disabled,
 }: {
   color: string;
+  tooltip: string;
   // eslint-disable-next-line no-unused-vars
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled: boolean;
 }) => (
-  <button
-    type='button'
-    className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30 disabled:opacity-30'
-    style={{ backgroundColor: color }}
-    disabled={disabled}
-    onClick={onClick}
-  />
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <button
+        type='button'
+        className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30 disabled:opacity-30'
+        style={{ backgroundColor: color }}
+        disabled={disabled}
+        onClick={onClick}
+      />
+    </TooltipTrigger>
+    <TooltipContent className='text-center'>{tooltip}</TooltipContent>
+  </Tooltip>
 );
 
 export const SongThumbnailInput = ({
@@ -148,6 +160,7 @@ export const SongThumbnailInput = ({
             <ColorButton
               key={index}
               color={dark}
+              tooltip={name}
               disabled={isLocked}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();

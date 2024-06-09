@@ -11,6 +11,7 @@ type FeaturedSongsContextType = {
   featuredSongsPage: SongPreviewDtoType[];
   timespan: TimespanType;
   setTimespan: (timespan: TimespanType) => void;
+  timespanEmpty: Record<string, boolean>;
 };
 
 const FeaturedSongsContext = createContext<FeaturedSongsContextType>(
@@ -33,6 +34,14 @@ export function FeaturedSongsProvider({
 
   const [timespan, setTimespan] = useState<TimespanType>('week');
 
+  const timespanEmpty = Object.keys(featuredSongs).reduce(
+    (result, timespan) => {
+      result[timespan] = featuredSongs[timespan as TimespanType].length === 0;
+      return result;
+    },
+    {} as Record<string, boolean>,
+  );
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     setFeaturedSongsPage(featuredSongs[timespan]);
@@ -44,6 +53,7 @@ export function FeaturedSongsProvider({
         featuredSongsPage,
         timespan,
         setTimespan,
+        timespanEmpty,
       }}
     >
       {children}
