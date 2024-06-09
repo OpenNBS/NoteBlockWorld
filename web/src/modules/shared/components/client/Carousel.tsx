@@ -333,7 +333,7 @@ export const CarouselDots = () => {
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton();
 
   return (
-    <div className='flex justify-center gap-2 mt-6'>
+    <div className='flex justify-center gap-2 mt-6 h-2'>
       {scrollSnaps.map((_, index) => (
         <button
           key={index}
