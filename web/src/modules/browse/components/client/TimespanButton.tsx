@@ -79,7 +79,7 @@ export const TimespanButton = ({
 }: TimespanButtonProps) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <button
           id={id}
           onClick={onClick}
