@@ -27,7 +27,9 @@ export default function RootLayout({
   return (
     <ReCaptchaProvider useEnterprise>
       <html lang='en'>
-        <body className={lato.className + ' bg-zinc-900 text-white'}>
+        <body
+          className={lato.className + ' bg-zinc-900 text-white overflow-hidden'}
+        >
           <NextTopLoader
             showSpinner={false}
             crawlSpeed={700}
