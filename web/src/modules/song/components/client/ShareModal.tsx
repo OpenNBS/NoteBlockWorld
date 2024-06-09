@@ -1,5 +1,7 @@
 'use client';
 
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -76,6 +78,16 @@ export default function ShareModal({
                 >
                   Share song
                 </Dialog.Title>
+
+                {/* X button */}
+                <button
+                  type='button'
+                  aria-label='Close'
+                  className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FontAwesomeIcon icon={faClose} />
+                </button>
 
                 <div className='flex justify-end items-center gap-3 h-8'>
                   {/* Link box */}
