@@ -86,7 +86,7 @@ export const TimespanButton = ({
           className={
             (isActive
               ? 'bg-white text-black cursor-default font-bold'
-              : 'enabled:bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-500') +
+              : 'bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-50') +
             ' whitespace-nowrap text-sm py-1 px-2 w-24 rounded-full transition-all duration-200'
           }
           disabled={isDisabled}
