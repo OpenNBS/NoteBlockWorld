@@ -35,7 +35,7 @@ export const LoginPage = () => {
   return (
     <main
       data-test='login-page'
-      className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'
+      className='w-full h-screen p-6 text-center text-balance flex items-center justify-center'
     >
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-900/30 backdrop-blur-md w-fit max-w-2xl rounded-2xl p-10'>
         {/* Left half */}
