@@ -1,10 +1,9 @@
-import { getLatestVersionSoundList } from '@shared/features/sounds';
-import { SOUND_LIST } from '@shared/features/sounds/constants';
+import { useState } from 'react';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
-import { Option, Select } from '../../../shared/components/client/FormElements';
+import { SongSearchCombo } from './SongSearchCombo';
 
 const InstrumentTableHeader = ({
   className,
@@ -46,26 +45,12 @@ const InstrumentTableCell = ({
 
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
+  const [value, setValue] = useState('');
   if (!song) return null;
 
   const instruments = song.instruments.loaded.filter(
     (instrument) => !instrument.builtIn,
   );
-
-  const sounds = getLatestVersionSoundList();
-
-  sounds.then((soundList) => {
-    // Download a .json file with the sound list content
-    const stringifiedSoundList = JSON.stringify(soundList, null, 2);
-    console.log(JSON.stringify(soundList, null, 2));
-    const blob = new Blob([stringifiedSoundList], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href;
-    a.download = 'soundList.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  });
 
   return (
     <div className='flex flex-col w-full'>
@@ -108,16 +93,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                 .toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
-              <Select className='h-9 py-0 px-1 rounded-none' id={''}>
-                <Option key={-1} value='none'>
-                  No sound
-                </Option>
-                {Object.entries(sounds).map(([name], i) => (
-                  <Option key={i} value={name}>
-                    {name}
-                  </Option>
-                ))}
-              </Select>
+              <SongSearchCombo setValue={setValue} value={value} />
             </div>
           </div>
         ))}
@@ -129,11 +105,6 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
   if (!song) return null;
-
-  // TODO: this is re-running when the thumbnail sliders are changed. Why?
-  //console.log(song);
-
-  console.log(SOUND_LIST);
 
   const customInstrumentCount =
     song.instruments.loaded.length - song.instruments.firstCustomIndex;
