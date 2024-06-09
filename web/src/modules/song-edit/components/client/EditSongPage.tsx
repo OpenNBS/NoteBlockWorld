@@ -52,7 +52,7 @@ export async function EditSongPage({ id }: { id: string }) {
               <span className='font-light'>Editing </span>
               {songData.title}
             </h1>
-            <FileDisplay fileName={songData.title}>
+            <FileDisplay fileName={`${songData.title}.nbs`}>
               <DownloadFileButton
                 song={{ publicId: songId, title: songData.title }}
               />
