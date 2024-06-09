@@ -51,7 +51,7 @@ export async function Header() {
               quality={100}
               src='/nbw-color.png'
               alt='NoteBlockWorld logo'
-              className='h-10 mx-auto my-2 aspect-square hover:animate-[bounce2_1s_infinite] duration-100 drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)]'
+              className='h-10 mx-auto my-2 aspect-square drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)] hover:animate-[nbw-glow_3s_ease-in-out_infinite]'
               style={{
                 filter: 'drop-shadow(0px 0px 4px rgba(50, 149, 255, 1))',
               }}
