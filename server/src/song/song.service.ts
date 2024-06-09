@@ -496,6 +496,22 @@ export class SongService {
       .exec();
   }
 
+  public async getSongsBeforeTimespan(
+    timespan: number,
+  ): Promise<SongWithUser[]> {
+    return this.songModel
+      .find<SongWithUser>({
+        visibility: 'public',
+        createdAt: {
+          $lt: timespan,
+        },
+      })
+      .sort({ createdAt: -1 })
+      .limit(BROWSER_SONGS.featuredPageSize)
+      .populate('uploader', 'username profileImage -_id')
+      .exec();
+  }
+
   public async getSong(
     publicId: string,
     user: UserDocument | null,

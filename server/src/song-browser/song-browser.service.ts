@@ -40,11 +40,17 @@ export class SongBrowserService {
     for (const [timespan, time] of Object.entries(times)) {
       const songPage = await this.songService.getSongsForTimespan(time);
 
-      if (songPage.length < BROWSER_SONGS.featuredPageSize) {
+      // If the length is 0, send an empty array (no songs available in that timespan)
+      // If the length is less than the page size, pad it with songs "borrowed"
+      // from the nearest timestamp, regardless of view count
+      if (
+        songPage.length > 0 &&
+        songPage.length < BROWSER_SONGS.featuredPageSize
+      ) {
         const missing = BROWSER_SONGS.featuredPageSize - songPage.length;
 
-        const additionalSongs = await this.songService.getSongsForTimespan(
-          times.all,
+        const additionalSongs = await this.songService.getSongsBeforeTimespan(
+          time,
         );
 
         songPage.push(...additionalSongs.slice(0, missing));
