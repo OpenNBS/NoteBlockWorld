@@ -3,7 +3,6 @@
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
-import Link from 'next/link';
 import { Fragment, useState } from 'react';
 
 const getTwitterIntentUrl = (songId: string) => {
@@ -106,32 +105,6 @@ export default function ShareModal({
                   >
                     {isCopied ? 'Copied!' : 'Copy'}
                   </button>
-                </div>
-
-                <div className='flex items-center justify-between gap-4 mt-6'>
-                  <button
-                    type='button'
-                    className='rounded-md px-4 py-2 text-nowrap text-blue-500 hover:text-blue-300 hover:bg-blue-300/20'
-                    onClick={() => {
-                      window.location.reload();
-                    }}
-                  >
-                    Upload again
-                  </button>
-
-                  <Link
-                    href={`/my-songs`}
-                    className='rounded-md px-4 py-2 text-nowrap bg-blue-500/30 text-blue-300 hover:bg-blue-500/60 hover:text-white'
-                  >
-                    Go to my songs
-                  </Link>
-
-                  <Link
-                    href={`/song/${songId}`}
-                    className='rounded-md px-4 py-2 text-nowrap bg-blue-500 text-white hover:bg-blue-400'
-                  >
-                    View song
-                  </Link>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
