@@ -117,11 +117,7 @@ const ColorButton = ({
         onClick={onClick}
       />
     </TooltipTrigger>
-    <TooltipContent className='text-center'>
-      {tooltip}
-      <br />
-      <span className='text-zinc-400 italic'>{color}</span>
-    </TooltipContent>
+    <TooltipContent className='text-center'>{tooltip}</TooltipContent>
   </Tooltip>
 );
 
