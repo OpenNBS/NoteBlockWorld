@@ -39,7 +39,7 @@ export async function SongPage({ id }: { id: string }) {
           <div className='flex-grow'></div>
           <div className='flex flex-row gap-4'>
             {/* <LikeButton /> */}
-            <ShareButton />
+            <ShareButton songId={song.publicId} />
             <OpenSongInNBSButton song={song} />
             <DownloadSongButton song={song} />
           </div>

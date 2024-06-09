@@ -10,7 +10,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
+import { useState } from 'react';
 
+import ShareModal from './client/ShareModal';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
@@ -75,14 +77,29 @@ const LikeButton = () => {
   );
 };
 
-const ShareButton = () => {
+const ShareButton = ({ songId }: { songId: string }) => {
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
   return (
-    <button className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-gray-600 hover:bg-gray-500'>
-      <div className='flex flex-row items-center gap-2'>
-        <FontAwesomeIcon icon={faShare} />
-        <div>Share</div>
-      </div>
-    </button>
+    <>
+      <button
+        onClick={() => setIsShareModalOpen(true)}
+        className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-gray-600 hover:bg-gray-500'
+      >
+        <div className='flex flex-row items-center gap-2'>
+          <FontAwesomeIcon icon={faShare} />
+          <div>Share</div>
+        </div>
+      </button>
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        setIsOpen={(isOpen: boolean) => {
+          setIsShareModalOpen(isOpen);
+        }}
+        songId={songId}
+      />
+    </>
   );
 };
 
