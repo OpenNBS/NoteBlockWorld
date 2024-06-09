@@ -79,7 +79,7 @@ export const LoginPage = () => {
                 icon={faGoogle}
                 className='align-middle mr-2 h-5'
               />
-              <span className='flex-1 text-nowrap'>Login with Google</span>
+              <span className='flex-1 text-nowrap'>Log in with Google</span>
             </Link>
             {/* Login with Github */}
             <Link
@@ -91,7 +91,7 @@ export const LoginPage = () => {
                 icon={faGithub}
                 className='align-middle mr-2 h-5'
               />
-              <span className='flex-1'>Login with GitHub</span>
+              <span className='flex-1'>Log in with GitHub</span>
             </Link>
           </div>
 
