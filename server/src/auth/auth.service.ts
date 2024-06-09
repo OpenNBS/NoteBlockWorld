@@ -171,7 +171,7 @@ export class AuthService {
     const cookie_refresh = `refresh_token=${token.refresh_token};  Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
     const cookie_user = `user=${userId}; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
     res.setHeader('Set-Cookie', [cookie, cookie_refresh, cookie_user]);
-    res.redirect(frontEndURL + '/browse');
+    res.redirect(frontEndURL + '/');
   }
 
   public async getUserFromToken(token: string): Promise<UserDocument | null> {
