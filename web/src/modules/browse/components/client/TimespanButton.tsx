@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@web/src/modules/shared/components/tooltip';
+
 import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
 
 interface TimespanButtonProps {
@@ -72,20 +78,27 @@ export const TimespanButton = ({
   id,
 }: TimespanButtonProps) => {
   return (
-    <div>
-      <button
-        id={id}
-        onClick={onClick}
-        className={
-          (isActive
-            ? 'bg-white text-black cursor-default font-bold'
-            : 'enabled:bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-500') +
-          ' whitespace-nowrap text-sm py-1 px-2 w-24 rounded-full transition-all duration-200'
-        }
-        disabled={isDisabled}
-      >
-        {children}
-      </button>
-    </div>
+    <Tooltip>
+      <TooltipTrigger>
+        <button
+          id={id}
+          onClick={onClick}
+          className={
+            (isActive
+              ? 'bg-white text-black cursor-default font-bold'
+              : 'enabled:bg-zinc-600 enabled:text-white enabled:cursor-pointer hover:enabled:bg-zinc-500 disabled:bg-zinc-700 disabled:text-zinc-500') +
+            ' whitespace-nowrap text-sm py-1 px-2 w-24 rounded-full transition-all duration-200'
+          }
+          disabled={isDisabled}
+        >
+          {children}
+        </button>
+      </TooltipTrigger>
+      {isDisabled && !isActive && (
+        <TooltipContent>
+          No songs uploaded in the {children?.toString()}
+        </TooltipContent>
+      )}
+    </Tooltip>
   );
 };
