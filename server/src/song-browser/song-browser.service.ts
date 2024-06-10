@@ -60,12 +60,30 @@ export class SongBrowserService {
     }
 
     const featuredSongs = FeaturedSongsDto.create();
-    featuredSongs.hour = songs.hour;
-    featuredSongs.day = songs.day;
-    featuredSongs.week = songs.week;
-    featuredSongs.month = songs.month;
-    featuredSongs.year = songs.year;
-    featuredSongs.all = songs.all;
+
+    featuredSongs.hour = songs.hour.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    featuredSongs.day = songs.day.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    featuredSongs.week = songs.week.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    featuredSongs.month = songs.month.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    featuredSongs.year = songs.year.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    featuredSongs.all = songs.all.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
 
     return featuredSongs;
   }
