@@ -26,10 +26,12 @@ export const Area = ({
   label,
   isLoading,
   children,
+  className,
 }: {
   label: string;
   isLoading?: boolean;
   children: React.ReactNode;
+  className?: string;
 }) => {
   return (
     <>
@@ -37,7 +39,12 @@ export const Area = ({
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
-        <div className='flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4'>
+        <div
+          className={cn(
+            'flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4',
+            className,
+          )}
+        >
           {children}
         </div>
       )}
