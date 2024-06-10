@@ -1,6 +1,5 @@
 'use client';
 
-import { SOUND_LIST_KEYS } from '@shared/features/sounds/constants';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import sounds from '@shared/data/soundListKeys.json';
@@ -21,8 +20,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../../../shared/components/client/Popover';
-
-const sounds = SOUND_LIST_KEYS;
 
 export function SongSearchCombo({
   value,
