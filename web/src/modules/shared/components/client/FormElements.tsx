@@ -25,10 +25,12 @@ Label.displayName = 'Label';
 export const Area = ({
   label,
   isLoading,
+  className,
   children,
 }: {
   label: string;
   isLoading?: boolean;
+  className?: string;
   children: React.ReactNode;
 }) => {
   return (
@@ -37,7 +39,12 @@ export const Area = ({
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
-        <div className='flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4'>
+        <div
+          className={cn(
+            'flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4',
+            className,
+          )}
+        >
           {children}
         </div>
       )}

@@ -1,7 +1,10 @@
 'use client';
 
 import { SOUND_LIST_KEYS } from '@shared/features/sounds/constants';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import sounds from '@shared/data/soundListKeys.json';
+import { Check } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '../../../../lib/tailwind.utils';
@@ -33,25 +36,35 @@ export function SongSearchCombo({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button aria-expanded={open} className='w-[200px] justify-between'>
+        <button
+          aria-expanded={open}
+          className='block h-full w-full border-2 text-sm text-left align-top pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
+        >
           {value
-            ? sounds.find((currentSound) => currentSound === currentSound)
+            ? sounds
+                .find((currentSound) => currentSound === currentSound)
+                ?.replace('minecraft/sounds/', '')
+                .replace('.ogg', '')
             : 'Select a sound'}
-          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            size='sm'
+            className='text-white mx-1 h-4 w-4 float-right shrink-0'
+          />
         </button>
       </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0'>
+      <PopoverContent className='w-fit p-0 bg-zinc-900 border-2 border-zinc-500'>
         <Command>
-          <CommandInput placeholder='Search framework...' />
+          <CommandInput placeholder='Search sounds...' />
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {sounds.map((currentSound) => (
+              {(sounds as string[]).map((currentSound) => (
                 <CommandItem
                   key={currentSound}
                   value={currentSound}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
+                  onSelect={(currentValue: string) => {
+                    setValue(currentValue);
                     setOpen(false);
                   }}
                 >
@@ -61,7 +74,9 @@ export function SongSearchCombo({
                       value === currentSound ? 'opacity-100' : 'opacity-0',
                     )}
                   />
-                  {currentSound}
+                  {currentSound
+                    .replace('minecraft/sounds/', '')
+                    .replace('.ogg', '')}
                 </CommandItem>
               ))}
             </CommandGroup>
