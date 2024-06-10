@@ -15,6 +15,11 @@ import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
+const formatZoomLevel = (zoomLevel: number) => {
+  const percentage = 100 * Math.pow(2, zoomLevel - 3);
+  return `${percentage}%`;
+};
+
 function ThumbnailSliders({
   formMethods,
   isLocked,
@@ -53,7 +58,7 @@ function ThumbnailSliders({
           max={ThumbnailConst.zoomLevel.max}
         />
       </div>
-      <div>{zoomLevel}</div>
+      <div>{formatZoomLevel(zoomLevel)}</div>
       <div>
         <label htmlFor='start-tick'>Start Tick</label>
       </div>
