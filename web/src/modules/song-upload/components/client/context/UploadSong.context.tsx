@@ -159,7 +159,7 @@ export const UploadSongProvider = ({
     setFilename(file.name);
 
     const { name, description, originalAuthor } = song.meta;
-    const title = name || filename?.replace('.nbs', '') || '';
+    const title = name || file.name.replace('.nbs', '');
     formMethods.setValue('title', title);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { cn } from '@web/src/lib/tailwind.utils';
+import { Area } from '@web/src/modules/shared/components/client/FormElements';
 
 import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';
@@ -110,7 +111,9 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
     song.instruments.loaded.length - song.instruments.firstCustomIndex;
 
   return customInstrumentCount === 0 ? (
-    <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
+    <Area label=''>
+      <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
+    </Area>
   ) : (
     <InstrumentTable
       type={type}

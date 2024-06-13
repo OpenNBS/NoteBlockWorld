@@ -163,7 +163,11 @@ export const SongForm = ({
           </div>
 
           <div className='flex-1'>
-            <Area label='Custom instruments' isLoading={isLoading}>
+            <Area
+              label='Custom instruments'
+              className='p-0 border-0'
+              isLoading={isLoading}
+            >
               <InstrumentPicker type={type} />
             </Area>
           </div>

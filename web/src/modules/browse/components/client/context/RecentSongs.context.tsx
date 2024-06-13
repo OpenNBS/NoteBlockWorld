@@ -38,13 +38,15 @@ export function RecentSongsProvider({
     async function () {
       setLoading(true);
 
+      setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
+
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           '/song-browser/recent',
           {
             params: {
               page: page,
-              limit: 12, // TODO: fiz constants
+              limit: 8, // TODO: fiz constants
               order: false,
             },
           },
@@ -57,7 +59,7 @@ export function RecentSongsProvider({
 
         setLoading(false);
 
-        if (response.data.length === 0) {
+        if (response.data.length < 8) {
           setHasMore(false);
 
           return;
@@ -67,7 +69,7 @@ export function RecentSongsProvider({
         setRecentError('Error loading recent songs');
       } finally {
         setLoading(false);
-        setHasMore(recentSongs.length < BROWSER_SONGS.max_recent_songs);
+        // setHasMore(recentSongs.length < BROWSER_SONGS.max_recent_songs);
       }
     },
     [page, recentSongs],
