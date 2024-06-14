@@ -6,6 +6,9 @@ const nextConfig = {
     config.externals.push({ canvas: 'commonjs canvas' });
     return config;
   },
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     remotePatterns: [
       {

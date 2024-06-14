@@ -1,3 +1,7 @@
+# Data files
+web/public/data/
+shared/data/
+
 # Logs
 logs
 *.log

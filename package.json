@@ -4,13 +4,20 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "pnpm run --parallel dev",
+        "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && pnpm run dev && docker-compose down",
+        "docker:build": "docker-compose -f docker-compose.yml build",
+        "docker:deploy": "docker-compose -f docker-compose.yml up -d",
+        "docker:down": "docker-compose -f docker-compose.yml down",
+        "deploy:server": "pnpm run --filter ./server build && pnpm run --filter ./server start",
+        "deploy:web": "pnpm run --filter ./web build && pnpm run --filter ./web start",
+        "dev": "pnpm build:data && pnpm run --parallel dev",
         "dev:web": "pnpm run --filter ./web dev",
         "dev:server": "pnpm run --filter ./server dev",
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "pnpm run --parallel lint",
         "cy:open": "pnpm run --filter ./tests cy:open",
-        "prettier": "prettier --write ."
+        "prettier": "prettier --write .",
+        "build:data": "ts-node ./build.ts"
     },
     "keywords": [],
     "author": "",
@@ -23,9 +30,11 @@
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-unused-imports": "^2.0.0",
-        "prettier": "^2.8.8"
+        "prettier": "^2.8.8",
+        "@types/node": "^20.3.1"
     },
     "dependencies": {
-        "@nbw": "workspace:noteblockworld-shared@*"
+        "@nbw": "workspace:noteblockworld-shared@*",
+        "ts-node": "^10.9.1"
     }
 }
