@@ -12,6 +12,7 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import { SongFileType } from '@web/src/modules/song/types';
 
 import {
   UploadSongForm,
@@ -20,7 +21,7 @@ import {
 import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {
-  song: Song | null;
+  song: SongFileType | null;
   filename: string | null;
   setFile: (file: File | null) => void;
   invalidFile: boolean;

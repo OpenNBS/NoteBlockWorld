@@ -52,6 +52,7 @@ export class SongService {
       );
     }
   }
+
   public async uploadSong({
     file,
     user,
@@ -82,6 +83,7 @@ export class SongService {
 
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
+
   public async deleteSong(
     publicId: string,
     user: UserDocument | null,
@@ -221,6 +223,7 @@ export class SongService {
         return this.getRecentSongs(page, limit);
     }
   }
+
   private async getRecentSongs(
     page: number,
     limit: number,
@@ -241,6 +244,7 @@ export class SongService {
 
     return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
+
   private async getFeaturedSongs(
     timespan: TimespanType,
   ): Promise<SongPreviewDto[]> {

@@ -7,7 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { drawToImage, getThumbnailNotes } from '@shared/features/thumbnail';
+import { drawToImage } from '@shared/features/thumbnail';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { Model, Types } from 'mongoose';
@@ -115,8 +115,6 @@ export class SongUploadService {
     // Is file valid?
     this.checkIsFileValid(file);
 
-    console.log(user, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
     // Load file into memory
     const loadedArrayBuffer = new ArrayBuffer(file.buffer.byteLength);
     const view = new Uint8Array(loadedArrayBuffer);
@@ -133,8 +131,6 @@ export class SongUploadService {
 
     // PROCESS UPLOADED SONG
     // TODO: delete file from S3 if remainder of upload method fails
-
-    // const category = body.category;
 
     // Generate song public ID
     const publicId = generateSongId();
@@ -153,7 +149,7 @@ export class SongUploadService {
       fileKey,
     );
 
-    // create song document
+    // Create song document
     const song = await this.generateSongDocument(
       user,
       publicId,
@@ -167,9 +163,24 @@ export class SongUploadService {
   }
 
   public getSongStats(file: Express.Multer.File, nbsSong: Song) {
+    //const noteCount = 0;
+    //
+    //const tempoChangerInstruments: Instrument[] = [];
+    //
+    //for (const instrument of nbsSong.instruments.loaded) {
+    //  if (instrument.meta.name === 'Tempo Changer') {
+    //    tempoChangerInstruments.push(instrument);
+    //  }
+    //}
+    //
+    //for (const tick in Array(nbsSong.length).keys()) {
+    //  for (const layer of nbsSong.layers) {
+    //   const note = layer.notes[tick];
+    //}
+
     return {
       fileSize: file.size,
-      midiFileName: nbsSong.meta.importName || '',
+      midiFileName: nbsSong.importName || '',
       noteCount: 0, // TODO(Bentroen): calculate,
       tickCount: nbsSong.length,
       layerCount: nbsSong.layers.length,
@@ -178,7 +189,7 @@ export class SongUploadService {
       duration: nbsSong.length / nbsSong.tempo, // TODO(Bentroen): take tempo changers into account
       loop: nbsSong.loop.enabled,
       loopStartTick: nbsSong.loop.startTick,
-      minutesSpent: nbsSong.stats.minutesSpent,
+      minutesSpent: nbsSong.minutesSpent,
       usesCustomInstruments: false, // TODO(Bentroen): check if song.instruments.length > firstCustomIndex
       isInOctaveRange: false, // TODO(Bentroen): check if any(note => note.pitch < 33 || note.pitch > 57)
       compatible: false, //TODO(Bentroen): usesCustomInstruments && isInOctaveRange,
@@ -190,10 +201,10 @@ export class SongUploadService {
     body: UploadSongDto,
     user: UserDocument,
   ) {
-    nbsSong.meta.name = removeNonAscii(body.title);
-    nbsSong.meta.author = removeNonAscii(user.username);
-    nbsSong.meta.originalAuthor = removeNonAscii(body.originalAuthor);
-    nbsSong.meta.description = removeNonAscii(body.description);
+    nbsSong.name = removeNonAscii(body.title);
+    nbsSong.author = removeNonAscii(user.username);
+    nbsSong.originalAuthor = removeNonAscii(body.originalAuthor);
+    nbsSong.description = removeNonAscii(body.description);
   }
 
   public async generateThumbnail(
@@ -205,7 +216,7 @@ export class SongUploadService {
     const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
     const thumbBuffer = await drawToImage({
-      notes: getThumbnailNotes(nbsSong),
+      notes: [], //getThumbnailNotes(nbsSong),
       startTick: startTick,
       startLayer: startLayer,
       zoomLevel: zoomLevel,

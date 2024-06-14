@@ -1,7 +1,7 @@
 'use client';
 
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseSongFromBuffer } from '@shared/features/song/parse';
 import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import { undefined } from 'zod';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import { SongFileType } from '@web/src/modules/song/types';
 
 import {
   EditSongForm,
@@ -27,12 +28,13 @@ export type useEditSongProviderType = {
   submitSong: () => void;
   register: UseFormRegister<EditSongForm>;
   errors: FieldErrors<EditSongForm>;
-  song: Song | null;
+  song: SongFileType | null;
   sendError: string | null;
   isSubmitting: boolean;
   loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
   setSongId: (id: string) => void;
 };
+
 export const EditSongContext = createContext<useEditSongProviderType>(
   null as unknown as useEditSongProviderType,
 );
@@ -47,7 +49,7 @@ export const EditSongProvider = ({
     mode: 'onBlur',
   });
 
-  const [song, setSong] = useState<Song | null>(null);
+  const [song, setSong] = useState<SongFileType | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -236,7 +238,7 @@ export const EditSongProvider = ({
       ).data as ArrayBuffer;
 
       // convert to song
-      const song = fromArrayBuffer(songFile);
+      const song = parseSongFromBuffer(songFile);
       setSong(song);
     },
     [formMethods, setSong],
