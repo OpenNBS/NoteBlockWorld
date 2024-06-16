@@ -1,6 +1,6 @@
 import { deepFreeze } from '@shared/validation/common/deepFreeze';
 
-import soundListData from '../../data/soundList.json';
+import { soundListData } from './soundListData';
 
 export const SOUND_LIST = deepFreeze(soundListData as Record<string, string>);
 
