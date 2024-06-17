@@ -193,7 +193,7 @@ export class AuthService {
       domain: string,
       maxAge: string,
     ): string {
-      return `${name}=${value}; Path=/; Domain=${domain}; Max-Age=${maxAge}; SameSite=Lax;`;
+      return `${name}=${value}; Path=/; Domain=${domain}; Max-Age=${maxAge}; SameSite=None; Secure; HttpOnly`;
     }
 
     const userId = user_registered._id.toString();
