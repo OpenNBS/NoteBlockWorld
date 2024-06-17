@@ -17,6 +17,7 @@ import { TokenPayload, Tokens } from './types/token';
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private readonly FRONTEND_URL: string;
+  private readonly APP_DOMAIN: string;
   private readonly COOKIE_EXPIRES_IN: string;
   private readonly JWT_SECRET: string;
   private readonly JWT_EXPIRES_IN: string;
@@ -30,6 +31,7 @@ export class AuthService {
   ) {
     const config = {
       FRONTEND_URL: configService.get('FRONTEND_URL'),
+      APP_DOMAIN: configService.get('APP_DOMAIN'),
       COOKIE_EXPIRES_IN:
         configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
       JWT_SECRET: this.configService.get('JWT_SECRET'),
@@ -49,6 +51,7 @@ export class AuthService {
     }
 
     this.FRONTEND_URL = config.FRONTEND_URL;
+    this.APP_DOMAIN = config.APP_DOMAIN;
     this.COOKIE_EXPIRES_IN = config.COOKIE_EXPIRES_IN;
     this.JWT_SECRET = config.JWT_SECRET;
     this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
@@ -187,21 +190,27 @@ export class AuthService {
       username: user_registered.username,
     });
 
-    function createCookieString(name: string, value: string): string {
-      return `${name}=${value}`;
-    }
-
     const userId = user_registered._id.toString();
     const frontEndURL = this.FRONTEND_URL;
+    const domain = this.APP_DOMAIN;
+    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
 
-    const cookies = [
-      createCookieString('token', token.access_token),
-      createCookieString('refresh_token', token.refresh_token),
-      createCookieString('user', userId),
-    ];
+    res.cookie('token', token.access_token, {
+      domain: domain,
+      maxAge: maxAge,
+    });
 
-    const url = `${frontEndURL}/auth/login-success?${cookies.join('&')}`;
-    res.redirect(url);
+    res.cookie('refresh_token', token.refresh_token, {
+      domain: domain,
+      maxAge: maxAge,
+    });
+
+    res.cookie('user', userId, {
+      domain: domain,
+      maxAge: maxAge,
+    });
+
+    res.redirect(frontEndURL + '/');
   }
 
   public async getUserFromToken(token: string): Promise<UserDocument | null> {
