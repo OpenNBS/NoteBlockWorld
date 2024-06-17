@@ -187,28 +187,19 @@ export class AuthService {
       username: user_registered.username,
     });
 
-    function createCookieString(
-      name: string,
-      value: string,
-      domain: string,
-      maxAge: string,
-    ): string {
-      return `${name}=${value}; Path=/; Domain=${domain}; Max-Age=${maxAge}; SameSite=None;`;
+    function createCookieString(name: string, value: string): string {
+      return `${name}=${value}`;
     }
 
     const userId = user_registered._id.toString();
     const frontEndURL = this.FRONTEND_URL;
-    const domain = new URL(frontEndURL).hostname; // Extract the domain from the URL
-    const maxAge = this.COOKIE_EXPIRES_IN;
-
     const cookies = [
-      createCookieString('token', token.access_token, domain, maxAge),
-      createCookieString('refresh_token', token.refresh_token, domain, maxAge),
-      createCookieString('user', userId, domain, maxAge),
+      createCookieString('token', token.access_token),
+      createCookieString('refresh_token', token.refresh_token),
+      createCookieString('user', userId),
     ];
-
-    res.setHeader('Set-Cookie', cookies);
-    res.redirect(frontEndURL + '/');
+    const url = `${frontEndURL}/auth/login-success?${cookies.join('&')}`;
+    res.redirect(url);
   }
 
   public async getUserFromToken(token: string): Promise<UserDocument | null> {
