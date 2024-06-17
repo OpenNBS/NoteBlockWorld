@@ -1,7 +1,7 @@
 'use client';
 
 const LoginSuccessPage = () => {
-  function singIn() {
+  function signIn() {
     // get query params
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
@@ -14,9 +14,11 @@ const LoginSuccessPage = () => {
     // redirect to home
     window.location.href = '/';
   }
+
   if (typeof window !== 'undefined') {
-    singIn();
+    signIn();
   }
+
   return (
     <>
       <h1 className='text-center text-4xl'>Redirecting...</h1>

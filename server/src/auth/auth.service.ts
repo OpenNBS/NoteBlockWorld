@@ -193,11 +193,13 @@ export class AuthService {
 
     const userId = user_registered._id.toString();
     const frontEndURL = this.FRONTEND_URL;
+
     const cookies = [
       createCookieString('token', token.access_token),
       createCookieString('refresh_token', token.refresh_token),
       createCookieString('user', userId),
     ];
+
     const url = `${frontEndURL}/auth/login-success?${cookies.join('&')}`;
     res.redirect(url);
   }

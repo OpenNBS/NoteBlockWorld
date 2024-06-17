@@ -9,6 +9,7 @@ export class TwoWayMap<T extends RecordKey, U extends RecordKey> {
   constructor(map: Map<T, U>) {
     this.map = map;
     this.reverseMap = new Map<U, T>();
+
     for (const [key, value] of map.entries()) {
       this.reverseMap.set(value, key);
     }

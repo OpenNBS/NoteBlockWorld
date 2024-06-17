@@ -20,10 +20,10 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
 
     if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET || !SERVER_URL) {
       GithubStrategy.logger.error(
-        'Missing Github config, define GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, SERVER_URL',
+        'Missing GitHub config, define GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, SERVER_URL',
       );
 
-      throw new Error('Missing Github config');
+      throw new Error('Missing GitHub config');
     }
 
     super({
@@ -36,7 +36,7 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    GithubStrategy.logger.debug(`Github Login Data ${JSON.stringify(profile)}`);
+    GithubStrategy.logger.debug(`GitHub Login Data ${JSON.stringify(profile)}`);
 
     return { accessToken, refreshToken, profile };
   }

@@ -60,7 +60,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 4000;
 
-  logger.log('Open NoteBlockWorld API Backend🎶🌎🌍🌏 ');
+  logger.log('Note Block World API Backend 🎶🌎🌍🌏 ');
 
   await app.listen(port);
 
