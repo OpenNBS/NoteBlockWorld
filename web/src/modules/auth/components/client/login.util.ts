@@ -8,7 +8,7 @@ export function deleteAuthCookies() {
 
   cookiesToBeDeleted.forEach((cookie) => {
     if (!document) return;
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
   });
 }
 

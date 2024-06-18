@@ -25,21 +25,36 @@ export async function Header() {
   }
 
   return (
-    // calc(3.5rem - 3px) = h-14 minus height of the loading bar
-    <header className='fixed w-full h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
+    <header className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
       {/* Navbar */}
       <nav className='w-full flex flex-row justify-between items-center max-w-screen-xl px-6 sm:px-10'>
         {/* Logo */}
 
-        <h1 className='hidden sm:block flex-1 text-lg text-nowrap'>
-          <Link href='/'>Note Block World</Link>
-        </h1>
-        <div className='flex-grow flex justify-start sm:justify-center min-w-fit'>
+        <div className='hidden sm:block flex-1 text-lg text-nowrap'>
+          <picture className='w-full h-auto'>
+            <Link href='/'>
+              <Image
+                unoptimized
+                src='/nbw-logo-flat.png'
+                alt='Note Block World logo'
+                className=''
+                width={300}
+                height={64}
+              />
+            </Link>
+          </picture>
+        </div>
+        <div className='flex-1 flex justify-start sm:justify-center min-w-fit'>
           <Link href='/'>
             <Image
-              src='/nbw-white.png'
+              unoptimized
+              quality={100}
+              src='/nbw-color.png'
               alt='NoteBlockWorld logo'
-              className='h-10 mx-auto my-2 aspect-square hover:animate-[bounce2_1s_infinite] duration-100 drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)]'
+              className='h-10 mx-auto my-2 aspect-square drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)] hover:animate-[nbw-glow_3s_ease-in-out_infinite]'
+              style={{
+                filter: 'drop-shadow(0px 0px 4px rgba(50, 149, 255, 1))',
+              }}
               width={40}
               height={40}
             />

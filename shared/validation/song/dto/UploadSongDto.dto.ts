@@ -25,7 +25,7 @@ export class UploadSongDto {
     description: 'The file to upload',
     type: 'file',
   })
-  file: Express.Multer.File;
+  file: any; //TODO: Express.Multer.File;
 
   @IsNotEmpty()
   @IsBoolean()

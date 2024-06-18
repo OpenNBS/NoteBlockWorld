@@ -35,7 +35,7 @@ export const LoginPage = () => {
   return (
     <main
       data-test='login-page'
-      className='w-screen h-screen p-6 text-center text-balance flex items-center justify-center'
+      className='w-full h-screen p-6 text-center text-balance flex items-center justify-center'
     >
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-900/30 backdrop-blur-md w-fit max-w-2xl rounded-2xl p-10'>
         {/* Left half */}
@@ -79,7 +79,7 @@ export const LoginPage = () => {
                 icon={faGoogle}
                 className='align-middle mr-2 h-5'
               />
-              <span className='flex-1 text-nowrap'>Login with Google</span>
+              <span className='flex-1 text-nowrap'>Log in with Google</span>
             </Link>
             {/* Login with Github */}
             <Link
@@ -91,7 +91,7 @@ export const LoginPage = () => {
                 icon={faGithub}
                 className='align-middle mr-2 h-5'
               />
-              <span className='flex-1'>Login with GitHub</span>
+              <span className='flex-1'>Log in with GitHub</span>
             </Link>
           </div>
 

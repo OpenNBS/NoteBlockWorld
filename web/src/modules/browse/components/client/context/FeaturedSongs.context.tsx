@@ -1,25 +1,17 @@
 'use client';
 
-import { PageQueryDTOType } from '@shared/validation/common/dto/types';
 import {
+  FeaturedSongsDtoType,
   SongPreviewDtoType,
   TimespanType,
 } from '@shared/validation/song/dto/types';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-
-import axiosInstance from '@web/src/lib/axios';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 type FeaturedSongsContextType = {
-  featuredSongs: (SongPreviewDtoType | null)[];
-  featuredError: string;
+  featuredSongsPage: SongPreviewDtoType[];
   timespan: TimespanType;
   setTimespan: (timespan: TimespanType) => void;
+  timespanEmpty: Record<string, boolean>;
 };
 
 const FeaturedSongsContext = createContext<FeaturedSongsContextType>(
@@ -31,51 +23,37 @@ export function FeaturedSongsProvider({
   initialFeaturedSongs,
 }: {
   children: React.ReactNode;
-  initialFeaturedSongs: SongPreviewDtoType[];
+  initialFeaturedSongs: FeaturedSongsDtoType;
 }) {
   // Featured songs
-  const [featuredSongs, setFeaturedSongs] =
-    useState<SongPreviewDtoType[]>(initialFeaturedSongs);
+  const [featuredSongs] = useState<FeaturedSongsDtoType>(initialFeaturedSongs);
 
-  const [featuredError, setFeaturedError] = useState<string>('');
+  const [featuredSongsPage, setFeaturedSongsPage] = useState<
+    SongPreviewDtoType[]
+  >(initialFeaturedSongs.week);
+
   const [timespan, setTimespan] = useState<TimespanType>('week');
 
-  const fetchFeaturedSongs = useCallback(
-    async function () {
-      setFeaturedSongs(Array(5).fill(null));
-
-      const params: PageQueryDTOType = {
-        sort: 'featured',
-        timespan: timespan,
-        limit: 3, // TODO: unused, implement again
-      };
-
-      try {
-        const response = await axiosInstance.get<SongPreviewDtoType[]>(
-          '/song',
-          { params },
-        );
-
-        setFeaturedSongs(response.data);
-      } catch (error) {
-        setFeaturedError('Error loading featured songs');
-      }
+  const timespanEmpty = Object.keys(featuredSongs).reduce(
+    (result, timespan) => {
+      result[timespan] = featuredSongs[timespan as TimespanType].length === 0;
+      return result;
     },
-    [timespan],
+    {} as Record<string, boolean>,
   );
 
   useEffect(() => {
-    fetchFeaturedSongs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timespan]);
+    setFeaturedSongsPage(featuredSongs[timespan]);
+  }, [featuredSongs, timespan]);
 
   return (
     <FeaturedSongsContext.Provider
       value={{
-        featuredSongs,
-        featuredError,
+        featuredSongsPage,
         timespan,
         setTimespan,
+        timespanEmpty,
       }}
     >
       {children}

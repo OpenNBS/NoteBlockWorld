@@ -1,7 +1,10 @@
+import { useState } from 'react';
+
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
-import { Option, Select } from '../../../shared/components/client/FormElements';
+import { SongSearchCombo } from './SongSearchCombo';
+import { Area } from '../../../shared/components/client/FormElements';
 
 const sounds = [
   { name: 'sound1' },
@@ -51,6 +54,7 @@ const InstrumentTableCell = ({
 
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
+  const [value, setValue] = useState('');
   if (!song) return null;
 
   const instruments = song.instruments.loaded.filter(
@@ -98,16 +102,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                 .toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
-              <Select className='h-9 py-0 px-1 rounded-none' id={''}>
-                <Option key={-1} value='none'>
-                  No sound
-                </Option>
-                {sounds.map((sound, i) => (
-                  <Option key={i} value={sound.name}>
-                    {sound.name}
-                  </Option>
-                ))}
-              </Select>
+              <SongSearchCombo setValue={setValue} value={value} />
             </div>
           </div>
         ))}
@@ -120,14 +115,13 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
   if (!song) return null;
 
-  // TODO: this is re-running when the thumbnail sliders are changed. Why?
-  //console.log(song);
-
   const customInstrumentCount =
     song.instruments.loaded.length - song.instruments.firstCustomIndex;
 
   return customInstrumentCount === 0 ? (
-    <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
+    <Area label=''>
+      <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
+    </Area>
   ) : (
     <InstrumentTable
       type={type}

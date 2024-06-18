@@ -16,13 +16,48 @@ import { TokenPayload, Tokens } from './types/token';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-
+  private readonly FRONTEND_URL: string;
+  private readonly APP_DOMAIN: string;
+  private readonly COOKIE_EXPIRES_IN: string;
+  private readonly JWT_SECRET: string;
+  private readonly JWT_EXPIRES_IN: string;
+  private readonly JWT_REFRESH_SECRET: string;
+  private readonly JWT_REFRESH_EXPIRES_IN: string;
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    const config = {
+      FRONTEND_URL: configService.get('FRONTEND_URL'),
+      APP_DOMAIN: configService.get('APP_DOMAIN'),
+      COOKIE_EXPIRES_IN:
+        configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
+      JWT_SECRET: this.configService.get('JWT_SECRET'),
+      JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
+      JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
+      JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
+    };
+
+    if (Object.values(config).some((value) => value === undefined)) {
+      for (const [key, value] of Object.entries(config)) {
+        if (value === undefined) {
+          this.logger.error(`Missing ${key} environment variable`);
+        }
+      }
+
+      throw new Error('Missing environment variables');
+    }
+
+    this.FRONTEND_URL = config.FRONTEND_URL;
+    this.APP_DOMAIN = config.APP_DOMAIN;
+    this.COOKIE_EXPIRES_IN = config.COOKIE_EXPIRES_IN;
+    this.JWT_SECRET = config.JWT_SECRET;
+    this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
+    this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
+    this.JWT_REFRESH_EXPIRES_IN = config.JWT_REFRESH_EXPIRES_IN;
+  }
 
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
@@ -40,7 +75,7 @@ export class AuthService {
 
     try {
       const decoded = this.jwtService.verify(token, {
-        secret: this.configService.get('JWT_SECRET'),
+        secret: this.JWT_SECRET,
       });
 
       // verify if user exists
@@ -128,22 +163,14 @@ export class AuthService {
   }
 
   private async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
-    const JWT_SECRET = this.configService.get('JWT_SECRET');
-    const JWT_EXPIRES_IN = this.configService.get('JWT_EXPIRES_IN');
-    const JWT_REFRESH_SECRET = this.configService.get('JWT_REFRESH_SECRET');
-
-    const JWT_REFRESH_EXPIRES_IN = this.configService.get(
-      'JWT_REFRESH_EXPIRES_IN',
-    );
-
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: JWT_SECRET,
-        expiresIn: JWT_EXPIRES_IN,
+        secret: this.JWT_SECRET,
+        expiresIn: this.JWT_EXPIRES_IN,
       }),
       this.jwtService.signAsync(payload, {
-        secret: JWT_REFRESH_SECRET,
-        expiresIn: JWT_REFRESH_EXPIRES_IN,
+        secret: this.JWT_REFRESH_SECRET,
+        expiresIn: this.JWT_REFRESH_EXPIRES_IN,
       }),
     ]);
 
@@ -164,14 +191,26 @@ export class AuthService {
     });
 
     const userId = user_registered._id.toString();
-    // set the cookie in the response
-    const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontEndURL = this.FRONTEND_URL;
+    const domain = this.APP_DOMAIN;
+    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
 
-    const cookie = `token=${token.access_token}; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
-    const cookie_refresh = `refresh_token=${token.refresh_token};  Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
-    const cookie_user = `user=${userId}; Path=/; Max-Age=${process.env.COOKIE_EXPIRES_IN}; SameSite=Lax;`;
-    res.setHeader('Set-Cookie', [cookie, cookie_refresh, cookie_user]);
-    res.redirect(frontEndURL + '/browse');
+    res.cookie('token', token.access_token, {
+      domain: domain,
+      maxAge: maxAge,
+    });
+
+    res.cookie('refresh_token', token.refresh_token, {
+      domain: domain,
+      maxAge: maxAge,
+    });
+
+    res.cookie('user', userId, {
+      domain: domain,
+      maxAge: maxAge,
+    });
+
+    res.redirect(frontEndURL + '/');
   }
 
   public async getUserFromToken(token: string): Promise<UserDocument | null> {

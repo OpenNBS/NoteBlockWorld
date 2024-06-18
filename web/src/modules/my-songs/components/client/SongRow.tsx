@@ -28,22 +28,6 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
     setIsDeleteDialogOpen(true);
   };
 
-  const getDescription = (description: string | null) => {
-    const maxDisplayLength = 50;
-
-    if (description) {
-      const length = description.length;
-
-      if (length > maxDisplayLength) {
-        return description.slice(0, maxDisplayLength) + '...';
-      }
-
-      return description;
-    } else {
-      return 'No description';
-    }
-  };
-
   // If the song is undefined/unset, display an empty row ('*>invisible' hides all children)
   // If the song is null, display skeleton loading
   // TODO: this might be bad for accessibility?
@@ -98,11 +82,11 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
             <Skeleton />
           ) : (
             <p
-              className={`line-clamp-3 text-ellipsis text-sm leading-tight ${
+              className={`text-ellipsis text-sm leading-tight line-clamp-2 ${
                 !song.description ? 'text-zinc-500 italic' : 'text-zinc-400'
               }`}
             >
-              {getDescription(song.description)}
+              {song.description || 'No description'}
             </p>
           )}
         </div>

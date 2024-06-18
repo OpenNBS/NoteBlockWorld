@@ -5,7 +5,7 @@ let content = {} as any;
 if (typeof document === 'undefined') {
   // Assume Node.js environment
   const canvasModule = require('canvas');
-  const { createCanvas, loadImage } = canvasModule;
+  const { createCanvas, loadImage, registerFont } = canvasModule;
 
   const path = require('path');
 
@@ -21,6 +21,7 @@ if (typeof document === 'undefined') {
       'assets',
       filename.split('/').join(path.sep),
     );
+
     console.log('dir', dir);
     return dir;
   };
@@ -29,10 +30,18 @@ if (typeof document === 'undefined') {
     return canvas.toBuffer('image/png');
   };
 
+  const useFont = () => {
+    registerFont(getPath('/fonts/Lato-Regular.ttf'), { family: 'Lato' });
+  };
+
+  useFont();
+
   content = {
     createCanvas,
     loadImage,
+    registerFont,
     getPath,
+    useFont,
     saveToImage,
     Canvas,
     Image,
@@ -61,6 +70,17 @@ if (typeof document === 'undefined') {
     console.log('Not implemented');
   };
 
+  // Register font
+  const useFont = () => {
+    const f = new FontFace('Lato', 'url(/fonts/Lato-Regular.ttf)');
+
+    f.load().then((font) => {
+      document.fonts.add(font);
+    });
+  };
+
+  useFont();
+
   const Canvas = HTMLCanvasElement;
   const Image = HTMLImageElement;
 
@@ -74,6 +94,22 @@ if (typeof document === 'undefined') {
   };
 }
 
-const { createCanvas, loadImage, getPath, saveToImage, Canvas, Image } =
-  content;
-export { createCanvas, loadImage, getPath, saveToImage, Canvas, Image };
+const {
+  createCanvas,
+  loadImage,
+  getPath,
+  useFont,
+  saveToImage,
+  Canvas,
+  Image,
+} = content;
+
+export {
+  createCanvas,
+  loadImage,
+  getPath,
+  useFont,
+  saveToImage,
+  Canvas,
+  Image,
+};

@@ -272,7 +272,7 @@ export async function drawNotesOffscreen({
       // Draw the key text
       const keyText = getKeyText(note.key);
       ctx.fillStyle = '#ffffff';
-      ctx.font = `${3 * zoomFactor}px Tahoma`;
+      ctx.font = `${3 * zoomFactor}px Lato`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);

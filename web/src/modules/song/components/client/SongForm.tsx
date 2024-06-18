@@ -163,7 +163,11 @@ export const SongForm = ({
           </div>
 
           <div className='flex-1'>
-            <Area label='Custom instruments' isLoading={isLoading}>
+            <Area
+              label='Custom instruments'
+              className='p-0 border-0'
+              isLoading={isLoading}
+            >
               <InstrumentPicker type={type} />
             </Area>
           </div>
@@ -194,7 +198,7 @@ export const SongForm = ({
                 type='button'
                 className='w-32 p-3 bg-zinc-700 enabled:hover:bg-zinc-600 uppercase rounded-lg disabled:opacity-50'
                 onClick={() => router.back()}
-                disabled={isSubmitting}
+                disabled={isLoading || isSubmitting}
               >
                 Cancel
               </button>

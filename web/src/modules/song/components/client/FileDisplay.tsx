@@ -21,7 +21,7 @@ export const FileDisplay = ({
   >
     <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
       <FontAwesomeIcon icon={faFile} size='lg' />
-      <p className='text-md flex-shrink min-w-0 truncate'>{`${fileName}.nbs`}</p>
+      <p className='text-md flex-shrink min-w-0 truncate'>{fileName}</p>
     </div>
     {children}
   </div>

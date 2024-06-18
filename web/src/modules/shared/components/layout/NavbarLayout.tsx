@@ -7,12 +7,7 @@ type TNavbarLayoutProps = {
 
 async function Layout({ children }: TNavbarLayoutProps) {
   return (
-    <div
-      className='w-full h-full flex flex-col justify-between items-center bg-zinc-900'
-      style={{
-        minHeight: '100vh',
-      }}
-    >
+    <div className='w-full h-full min-h-screen flex flex-col justify-between items-center bg-zinc-900'>
       {/* Header */}
       <Header />
       {/* Main content */}

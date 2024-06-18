@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
@@ -196,20 +197,14 @@ export class SongService {
   }
 
   public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
-    const { page, limit, sort, timespan } = query;
+    const { page, limit, sort, order } = query;
 
-    if (sort !== 'featured' && sort !== 'recent') {
-      throw new HttpException('Invalid sort parameter', HttpStatus.BAD_REQUEST);
+    if (!page || !limit || !sort) {
+      throw new HttpException(
+        'Invalid query parameters',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-
-    switch (sort) {
-      case 'featured':
-        if (!timespan) {
-          throw new HttpException(
-            'Invalid query parameters',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
 
         return this.getFeaturedSongs(timespan as TimespanType);
       case 'recent':
@@ -274,15 +269,29 @@ export class SongService {
       .find({
         visibility: 'public',
         createdAt: {
-          $gte: laterThan,
+          $gte: timespan,
         },
       })
       .sort({ playCount: -1 })
-      .limit(10)
+      .limit(BROWSER_SONGS.featuredPageSize)
       .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
+      .exec();
+  }
 
-    return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  public async getSongsBeforeTimespan(
+    timespan: number,
+  ): Promise<SongWithUser[]> {
+    return this.songModel
+      .find<SongWithUser>({
+        visibility: 'public',
+        createdAt: {
+          $lt: timespan,
+        },
+      })
+      .sort({ createdAt: -1 })
+      .limit(BROWSER_SONGS.featuredPageSize)
+      .populate('uploader', 'username profileImage -_id')
+      .exec();
   }
 
   public async getSong(

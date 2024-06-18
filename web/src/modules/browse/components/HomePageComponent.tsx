@@ -1,5 +1,8 @@
 'use client';
 
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
@@ -16,18 +19,17 @@ import {
 } from '../../shared/components/client/Carousel';
 
 export const HomePageComponent = () => {
-  const { featuredSongs } = useFeaturedSongsProvider();
+  const { featuredSongsPage } = useFeaturedSongsProvider();
 
-  const { recentSongs, increasePageRecent } = useRecentSongsProvider();
+  const { recentSongs, increasePageRecent, isLoading, hasMore } =
+    useRecentSongsProvider();
 
   return (
     <>
       {/* FEATURED SONGS */}
-      <div className='flex flex-col md:flex-row justify-between gap-4 text-nowrap'>
+      <div className='flex flex-wrap justify-between gap-6 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
-        <div className='flex-0'>
-          <TimespanButtonGroup />
-        </div>
+        <TimespanButtonGroup />
       </div>
       <div className='h-6' />
       <Carousel
@@ -38,7 +40,7 @@ export const HomePageComponent = () => {
         }}
       >
         <CarouselContent>
-          {featuredSongs.map((song, i) => (
+          {featuredSongsPage.map((song, i) => (
             <CarouselItem
               className='basis-full md:basis-1/2 lg:basis-1/3'
               key={i}
@@ -62,8 +64,43 @@ export const HomePageComponent = () => {
         {recentSongs.map((song, i) => (
           <SongCard key={i} song={song} />
         ))}
-        <LoadMoreButton onClick={() => increasePageRecent()} />
       </SongCardGroup>
+      <div className='flex flex-col w-full justify-between items-center mt-4'>
+        {hasMore ? (
+          <LoadMoreButton onClick={() => increasePageRecent()} />
+        ) : (
+          <FontAwesomeIcon
+            icon={faEllipsis}
+            className='text-2xl text-zinc-500'
+          />
+        )}
+      </div>
     </>
+    //  <InfiniteScroll
+    //    dataLength={recentSongs.length} //This is important field to render the next data
+    //    next={increasePageRecent}
+    //    hasMore={hasMore}
+    //    loader={
+    //      <div className='flex justify-center'>
+    //        <div className='spinner' />
+    //      </div>
+    //    }
+    //    endMessage={
+    //      <p style={{ textAlign: 'center' }}>
+    //        <b>Yay! You have seen it all</b>
+    //      </p>
+    //    }
+    //  >
+    //    <SongCardGroup data-test='recent-songs'>
+    //      {recentSongs.map((song, i) => (
+    //        <SongCard key={i} song={song} />
+    //      ))}
+    //      {isLoading &&
+    //        Array(4 - (recentSongs.length % 4) + 4)
+    //          .fill(null)
+    //          .map((_, i) => <SongCard key={i} song={null} />)}
+    //    </SongCardGroup>
+    //  </InfiniteScroll>
+    //</>
   );
 };
