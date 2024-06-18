@@ -7,13 +7,7 @@ const Login = async () => {
   const isLogged = await checkLogin();
   if (isLogged) redirect('/');
 
-  // get query params
-  return (
-    <>
-      <LoginPage />
-      {/* <TokenRemover /> */}
-    </>
-  );
+  return <LoginPage />;
 };
 
 export default Login;
