@@ -7,9 +7,11 @@ export type SongFileType = {
   notes: NoteArray;
 };
 
-export type NoteArray = (Note | null)[][];
+export type NoteArray = Note[];
 
 export interface Note {
+  tick: number;
+  layer: number;
   key: number;
   instrument: number;
 }

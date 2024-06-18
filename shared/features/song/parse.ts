@@ -20,13 +20,6 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
 }
 
 const getNoteArray = (song: Song): NoteArray => {
-  // const rows = song.layers.get.length;
-  // const cols = song.length;
-
-  // const notes = Array.from({ length: rows }, () =>
-  //   Array(cols).fill(null),
-  // ) as (Note | null)[][];
-
   const notes: NoteArray = [];
 
   for (const [layerId, layer] of song.layers.get.entries()) {

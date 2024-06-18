@@ -6,7 +6,7 @@ import {
   loadImage,
   saveToImage,
 } from './canvasFactory';
-import { NoteArray } from '../song/types';
+import { Note, NoteArray } from '../song/types';
 
 export { bgColorsArray } from './colors';
 
@@ -71,6 +71,22 @@ function tintImage(image: Image, color: string): Canvas {
   tintedImages[color] = canvas;
 
   return canvas;
+}
+
+// Function to check if a note is within the bounds of the canvas
+function noteInBounds(
+  note: Note,
+  startTick: number,
+  startLayer: number,
+  endTick: number,
+  endLayer: number,
+): boolean {
+  return (
+    note.tick >= startTick &&
+    note.layer >= startLayer &&
+    note.tick < endTick &&
+    note.layer < endLayer
+  );
 }
 
 // Function to convert key number to key text
@@ -199,13 +215,14 @@ export async function drawNotesOffscreen({
   const endTick = startTick + width / (zoomFactor * 8);
   const endLayer = startLayer + height / (zoomFactor * 8);
 
-  for (const [layerId, layer] of notes.slice(startLayer, endLayer).entries()) {
-    for (const [tick, note] of layer.slice(startTick, endTick).entries()) {
-      if (note === null) continue;
-
+  notes
+    .filter((note) =>
+      noteInBounds(note, startTick, startLayer, endTick, endLayer),
+    )
+    .forEach(async (note) => {
       // Calculate position
-      const x = (tick - startTick) * 8 * zoomFactor;
-      const y = (layerId - startLayer) * 8 * zoomFactor;
+      const x = (note.tick - startTick) * 8 * zoomFactor;
+      const y = (note.layer - startLayer) * 8 * zoomFactor;
       const overlayColor = instrumentColors[note.instrument % 16];
 
       if (!noteBlockImage) {
@@ -228,8 +245,7 @@ export async function drawNotesOffscreen({
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
-    }
-  }
+    });
 
   return canvas;
 }
