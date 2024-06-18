@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseSongFromBuffer } from '@shared/features/song/parse';
+import { SongFileType } from '@shared/features/song/types';
 import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
@@ -16,7 +17,6 @@ import { undefined } from 'zod';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
-import { SongFileType } from '@web/src/modules/song/types';
 
 import {
   EditSongForm,

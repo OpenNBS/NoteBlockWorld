@@ -1,4 +1,4 @@
-import { bgColorsArray, getThumbnailNotes } from '@shared/features/thumbnail';
+import { bgColorsArray } from '@shared/features/thumbnail';
 import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -133,15 +133,15 @@ export const SongThumbnailInput = ({
   type: 'upload' | 'edit';
   isLocked: boolean;
 }) => {
-  const { song, formMethods } = useSongProvider(
-    type,
-  ) as useUploadSongProviderType & useEditSongProviderType;
+  const { song, formMethods } = useSongProvider(type) as
+    | useUploadSongProviderType
+    | useEditSongProviderType;
 
   const [notes, maxTick, maxLayer] = useMemo(() => {
     if (!song) return [[], 0, 0];
-    const notes = getThumbnailNotes(song);
-    const maxTick = Math.max(...notes.map((note) => note.tick));
-    const maxLayer = Math.max(...notes.map((note) => note.layer));
+    const notes = song.notes;
+    const maxTick = song.notes[0].length;
+    const maxLayer = song.notes.length;
 
     return [notes, maxTick, maxLayer];
   }, [song]);

@@ -1,5 +1,3 @@
-import { Song } from '@encode42/nbs.js';
-
 import {
   Canvas,
   Image,
@@ -8,18 +6,12 @@ import {
   loadImage,
   saveToImage,
 } from './canvasFactory';
+import { NoteArray } from '../song/types';
 
 export { bgColorsArray } from './colors';
 
-export interface Note {
-  tick: number;
-  layer: number;
-  key: number;
-  instrument: number;
-}
-
 interface DrawParams {
-  notes: Note[];
+  notes: NoteArray;
   startTick: number;
   startLayer: number;
   zoomLevel: number;
@@ -32,26 +24,6 @@ interface DrawParams {
 
 type Canvas = typeof Canvas;
 type Image = typeof Image;
-
-export const getThumbnailNotes = (song: Song): Note[] => {
-  // TODO: return a record indexed by tick to avoid filtering the whole song
-  const notes = song.layers
-    .map((layer) =>
-      Object.entries(layer.notes).map(([tick, note]) => {
-        const data = {
-          tick: Number(tick),
-          layer: layer.id,
-          key: note.key,
-          instrument: note.instrument,
-        };
-
-        return data;
-      }),
-    )
-    .flat();
-
-  return notes;
-};
 
 const instrumentColors = [
   '#1964ac',
@@ -99,22 +71,6 @@ function tintImage(image: Image, color: string): Canvas {
   tintedImages[color] = canvas;
 
   return canvas;
-}
-
-// Function to check if a note is within the bounds of the canvas
-function noteInBounds(
-  note: Note,
-  startTick: number,
-  startLayer: number,
-  endTick: number,
-  endLayer: number,
-): boolean {
-  return (
-    note.tick >= startTick &&
-    note.layer >= startLayer &&
-    note.tick < endTick &&
-    note.layer < endLayer
-  );
 }
 
 // Function to convert key number to key text
@@ -240,20 +196,16 @@ export async function drawNotesOffscreen({
   );
 
   // Iterate through note blocks and draw them
-  notes
-    .filter((note) =>
-      noteInBounds(
-        note,
-        startTick,
-        startLayer,
-        startTick + width / (zoomFactor * 8),
-        startLayer + height / (zoomFactor * 8),
-      ),
-    )
-    .forEach(async (note) => {
+  const endTick = startTick + width / (zoomFactor * 8);
+  const endLayer = startLayer + height / (zoomFactor * 8);
+
+  for (const [layerId, layer] of notes.slice(startLayer, endLayer).entries()) {
+    for (const [tick, note] of layer.slice(startTick, endTick).entries()) {
+      if (note === null) continue;
+
       // Calculate position
-      const x = (note.tick - startTick) * 8 * zoomFactor;
-      const y = (note.layer - startLayer) * 8 * zoomFactor;
+      const x = (tick - startTick) * 8 * zoomFactor;
+      const y = (layerId - startLayer) * 8 * zoomFactor;
       const overlayColor = instrumentColors[note.instrument % 16];
 
       if (!noteBlockImage) {
@@ -276,7 +228,8 @@ export async function drawNotesOffscreen({
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
-    });
+    }
+  }
 
   return canvas;
 }

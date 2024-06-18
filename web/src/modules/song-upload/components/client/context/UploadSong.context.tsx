@@ -1,6 +1,8 @@
 'use client';
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseSongFromBuffer } from '@shared/features/song/parse';
+import { SongFileType } from '@shared/features/song/types';
 import { ThumbnailConst } from '@shared/validation/song/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
@@ -12,7 +14,6 @@ import {
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
-import { SongFileType } from '@web/src/modules/song/types';
 
 import {
   UploadSongForm,
@@ -44,7 +45,7 @@ export const UploadSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [song, setSong] = useState<Song | null>(null);
+  const [song, setSong] = useState<SongFileType | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const [invalidFile, setInvalidFile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,7 +76,7 @@ export const UploadSongProvider = ({
       throw new Error('Song file not found');
     }
 
-    const arrayBuffer = song.toArrayBuffer();
+    const arrayBuffer = song.arrayBuffer;
 
     if (arrayBuffer.byteLength === 0) {
       throw new Error('Song file is invalid');
@@ -147,9 +148,12 @@ export const UploadSongProvider = ({
 
   const setFileHandler = async (file: File | null) => {
     if (!file) return;
-    const song = fromArrayBuffer(await file.arrayBuffer());
 
-    if (song.length <= 0) {
+    let song: SongFileType;
+
+    try {
+      song = parseSongFromBuffer(await file.arrayBuffer());
+    } catch (e) {
       setInvalidFile(true);
       setSong(null);
 
@@ -159,9 +163,9 @@ export const UploadSongProvider = ({
     setSong(song);
     setFilename(file.name);
 
-    const { name, description, originalAuthor } = song.meta;
-    const title = name || file.name.replace('.nbs', '');
-    formMethods.setValue('title', title);
+    const { title, description, originalAuthor } = song;
+    const formTitle = title || file.name.replace('.nbs', '');
+    formMethods.setValue('title', formTitle);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
   };
