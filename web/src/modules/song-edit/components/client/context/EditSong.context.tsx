@@ -88,7 +88,7 @@ export const EditSongProvider = ({
         category: formMethods.getValues().category,
       };
 
-      const coprarisons = [
+      const comparisons = [
         formValues.allowDownload === originalData.allowDownload,
         formValues.visibility === originalData.visibility,
         formValues.title === originalData.title,
@@ -112,13 +112,13 @@ export const EditSongProvider = ({
       ];
 
       console.log(
-        coprarisons.every((value) => value),
-        coprarisons,
+        comparisons.every((value) => value),
+        comparisons,
       );
 
       console.log(formValues.customInstruments, originalData.customInstruments);
 
-      return coprarisons.every((value) => value);
+      return comparisons.every((value) => value);
     },
     [formMethods, originalData],
   );

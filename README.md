@@ -27,8 +27,8 @@ configure the env variables in bash
 export JWT_SECRET="jwtsecret"
 export JWT_EXPIRES_IN="1d"
 export DB_HOST="localhost:27017"
-export DB_PASSWORD="noteblockwordpassword"
-export DB_USER="noteblockworduser"
+export DB_PASSWORD="noteblockworldpassword"
+export DB_USER="noteblockworlduser"
 export SERVER_URL="http://localhost:3000"
 ```
 
@@ -43,9 +43,9 @@ In windows you can use `set` instead of `export`
 ```bash
 set JWT_SECRET="jwtsecret"
 set JWT_EXPIRES_IN="1d"
-set DB_HOST="mongodb://localhost:27017/noteblockword"
-set DB_PASSWORD="noteblockwordpassword"
-set DB_USER="noteblockworduser"
+set DB_HOST="mongodb://localhost:27017/noteblockworld"
+set DB_PASSWORD="noteblockworldpassword"
+set DB_USER="noteblockworlduser"
 set SERVER_URL="http://localhost:3000"
 ```
 

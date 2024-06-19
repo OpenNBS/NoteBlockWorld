@@ -27,15 +27,17 @@ export const Area = ({
   isLoading,
   className,
   children,
+  className,
 }: {
-  label: string;
+  label?: string;
   isLoading?: boolean;
   className?: string;
   children: React.ReactNode;
+  className?: string;
 }) => {
   return (
     <>
-      <Label label={label} />
+      {label && <Label label={label} />}
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (

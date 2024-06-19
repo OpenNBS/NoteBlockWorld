@@ -134,35 +134,11 @@ export const bgColors = deepFreeze({
     light: colors.rose[400],
     dark: colors.rose[900],
   },
-  slate: {
-    key: 'slate',
-    name: 'slate',
-    light: colors.slate[400],
-    dark: colors.slate[900],
-  },
   gray: {
     key: 'gray',
     name: 'Gray',
-    light: colors.gray[400],
-    dark: colors.gray[900],
-  },
-  zinc: {
-    key: 'zinc',
-    name: 'Zinc',
-    light: colors.zinc[400],
-    dark: colors.zinc[900],
-  },
-  neutral: {
-    key: 'neutral',
-    name: 'Neutral',
-    light: colors.neutral[400],
-    dark: colors.neutral[900],
-  },
-  stone: {
-    key: 'stone',
-    name: 'Stone',
-    light: colors.stone[400],
-    dark: colors.stone[900],
+    light: colors.zinc[200],
+    dark: colors.zinc[800],
   },
 });
 

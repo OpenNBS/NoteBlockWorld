@@ -44,7 +44,7 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization'],
     exposedHeaders: ['Content-Disposition'],
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   });
 
@@ -60,7 +60,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 4000;
 
-  logger.log('Open NoteBlockWorld API Backend🎶🌎🌍🌏 ');
+  logger.log('Note Block World API Backend 🎶🌎🌍🌏 ');
 
   await app.listen(port);
 
