@@ -46,6 +46,7 @@ if (typeof document === 'undefined') {
     getPath,
     useFont,
     saveToImage,
+    noteBlockImage,
     Canvas,
     Image,
   };
