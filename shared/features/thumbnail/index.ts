@@ -2,8 +2,7 @@ import {
   Canvas,
   Image,
   createCanvas,
-  getPath,
-  loadImage,
+  noteBlockImage,
   saveToImage,
 } from './canvasFactory';
 import { NoteQuadTree, Rectangle } from '../song/notes';
@@ -190,10 +189,7 @@ export async function drawNotesOffscreen({
     ctx.fillRect(i, 0, 1, height);
   }
 
-  // Load note block image if not loaded yet
-  const noteBlockImage = await loadImage(
-    getPath('/img/note-block-grayscale.png'),
-  );
+  const loadedNoteBlockImage = await noteBlockImage;
 
   // Iterate through note blocks and draw them
   const endTick = startTick + width / (zoomFactor * 8);
@@ -214,13 +210,13 @@ export async function drawNotesOffscreen({
     const y = (note.layer - startLayer) * 8 * zoomFactor;
     const overlayColor = instrumentColors[note.instrument % 16];
 
-    if (!noteBlockImage) {
+    if (!loadedNoteBlockImage) {
       throw new Error('Note block image not loaded');
     }
 
     // Draw the note block
     ctx.drawImage(
-      tintImage(noteBlockImage, overlayColor),
+      tintImage(loadedNoteBlockImage, overlayColor),
       x,
       y,
       8 * zoomFactor,
