@@ -112,10 +112,7 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
       <p className='text-center italic text-zinc-400'>Sounds pretty vanilla!</p>
     </Area>
   ) : (
-    <InstrumentTable
-      type={type}
-      key={customInstrumentCount} // Re-render when the number of custom instruments changes
-    />
+    <InstrumentTable type={type} />
   );
 };
 
