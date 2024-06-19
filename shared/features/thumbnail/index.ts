@@ -192,8 +192,8 @@ export async function drawNotesOffscreen({
   const loadedNoteBlockImage = await noteBlockImage;
 
   // Iterate through note blocks and draw them
-  const endTick = startTick + width / (zoomFactor * 8);
-  const endLayer = startLayer + height / (zoomFactor * 8);
+  const endTick = startTick + width / (zoomFactor * 8) - 1;
+  const endLayer = startLayer + height / (zoomFactor * 8) - 1;
 
   const visibleNotes = notes.getNotesInRect({
     x1: startTick,
