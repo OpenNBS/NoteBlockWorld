@@ -140,8 +140,8 @@ export const SongThumbnailInput = ({
   const [notes, maxTick, maxLayer] = useMemo(() => {
     if (!song) return [[], 0, 0];
     const notes = song.notes;
-    const maxTick = Math.max(...notes.map((note) => note.tick));
-    const maxLayer = Math.max(...notes.map((note) => note.layer));
+    const maxTick = song.length;
+    const maxLayer = song.height;
 
     return [notes, maxTick, maxLayer];
   }, [song]);

@@ -10,6 +10,9 @@ export { Rectangle } from '@timohausmann/quadtree-ts';
 export class NoteQuadTree {
   private quadtree: Quadtree<TreeNode>;
 
+  public width = 0;
+  public height = 0;
+
   constructor(song: Song) {
     const width = song.length;
     const height = song.layers.total;
@@ -27,6 +30,9 @@ export class NoteQuadTree {
         });
 
         this.quadtree.insert(treeItem);
+
+        if (tick > this.width) this.width = tick;
+        if (layerId > this.height) this.height = layerId;
       }
     }
   }

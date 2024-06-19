@@ -14,13 +14,17 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
 
   console.log('parsing done');
 
+  const quadTree = new NoteQuadTree(song);
+
   return {
     title: song.name,
     author: song.author,
     originalAuthor: song.originalAuthor,
     description: song.description,
+    length: quadTree.width,
+    height: quadTree.height,
     arrayBuffer: buffer,
-    notes: new NoteQuadTree(song),
+    notes: quadTree,
     instruments: getInstruments(song),
   };
 }

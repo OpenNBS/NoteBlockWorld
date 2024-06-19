@@ -5,6 +5,8 @@ export type SongFileType = {
   description: string;
   author: string;
   originalAuthor: string;
+  length: number;
+  height: number;
   arrayBuffer: ArrayBuffer;
   notes: NoteQuadTree;
   instruments: InstrumentArray;
