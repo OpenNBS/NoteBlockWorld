@@ -4,15 +4,11 @@ import { NoteQuadTree } from './notes';
 import { InstrumentArray, SongFileType } from './types';
 
 export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
-  console.log('parsing song');
-
   const song = fromArrayBuffer(buffer);
 
   if (song.length === 0) {
     throw new Error('Invalid song');
   }
-
-  console.log('parsing done');
 
   const quadTree = new NoteQuadTree(song);
 
@@ -30,7 +26,6 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
 }
 
 const getInstruments = (song: Song): InstrumentArray => {
-  console.log(song.instruments);
   const blockCounts = getInstrumentBlockCounts(song);
 
   const firstCustomIndex = song.instruments.firstCustomIndex;

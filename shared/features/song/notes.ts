@@ -55,8 +55,6 @@ export class NoteQuadTree {
       height: Math.abs(y2 - y1),
     });
 
-    console.log(rect);
-
     return this.quadtree
       .retrieve(rect)
       .flatMap((node) => {
