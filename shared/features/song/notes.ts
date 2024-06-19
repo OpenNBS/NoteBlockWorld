@@ -37,9 +37,37 @@ export class NoteQuadTree {
     }
   }
 
-  public getNotesInRect(rect: Rectangle): Note[] {
-    return this.quadtree.retrieve(rect).flatMap((node) => {
-      return node.data ? [node.data] : [];
+  public getNotesInRect({
+    x1,
+    y1,
+    x2,
+    y2,
+  }: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  }): Note[] {
+    const rect = new Rectangle({
+      x: Math.min(x1, x2),
+      y: Math.min(y1, y2),
+      width: Math.abs(x2 - x1),
+      height: Math.abs(y2 - y1),
     });
+
+    console.log(rect);
+
+    return this.quadtree
+      .retrieve(rect)
+      .flatMap((node) => {
+        return node.data ? [node.data] : [];
+      })
+      .filter(
+        (note) =>
+          note.tick >= x1 &&
+          note.tick <= x2 &&
+          note.layer >= y1 &&
+          note.layer <= y2,
+      );
   }
 }

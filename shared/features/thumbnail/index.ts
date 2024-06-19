@@ -5,7 +5,7 @@ import {
   noteBlockImage,
   saveToImage,
 } from './canvasFactory';
-import { NoteQuadTree, Rectangle } from '../song/notes';
+import { NoteQuadTree } from '../song/notes';
 
 export { bgColorsArray } from './colors';
 
@@ -195,14 +195,12 @@ export async function drawNotesOffscreen({
   const endTick = startTick + width / (zoomFactor * 8);
   const endLayer = startLayer + height / (zoomFactor * 8);
 
-  const visibleNotes = notes.getNotesInRect(
-    new Rectangle({
-      x: startTick,
-      y: startLayer,
-      width: endTick,
-      height: endLayer,
-    }),
-  );
+  const visibleNotes = notes.getNotesInRect({
+    x1: startTick,
+    y1: startLayer,
+    x2: endTick,
+    y2: endLayer,
+  });
 
   visibleNotes.forEach(async (note) => {
     // Calculate position
