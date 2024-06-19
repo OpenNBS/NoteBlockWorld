@@ -11,6 +11,9 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    // TODO: Extend from these configurations once upgrading to typescript-eslint v6+
+    //'plugin:@typescript-eslint/recommended-type-checked',
+    //'plugin:@typescript-eslint/stylistic-type-checked',
     'plugin:prettier/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
