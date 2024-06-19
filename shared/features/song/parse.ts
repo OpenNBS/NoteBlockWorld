@@ -52,9 +52,9 @@ const getInstruments = (song: Song): InstrumentArray => {
 
   const firstCustomIndex = song.instruments.firstCustomIndex;
 
-  const customInstruments = Object.keys(song.instruments)
+  const customInstruments = Object.keys(song.instruments.get)
     .map((idString) => parseInt(idString))
-    .filter((id) => id <= firstCustomIndex)
+    .filter((id) => id >= firstCustomIndex)
     .map((id) => song.instruments.get[id]);
 
   return customInstruments.map((instrument, id) => {
@@ -68,7 +68,7 @@ const getInstruments = (song: Song): InstrumentArray => {
 
 const getInstrumentBlockCounts = (song: Song) => {
   const blockCounts = Object.fromEntries(
-    Object.keys(song.instruments).map((instrumentId) => [instrumentId, 0]),
+    Object.keys(song.instruments.get).map((instrumentId) => [instrumentId, 0]),
   );
 
   for (const layer of song.layers) {

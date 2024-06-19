@@ -83,7 +83,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
             className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
           >
             <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.id}
+              {instrument.id + 1}
             </InstrumentTableCell>
             <InstrumentTableCell className='col-span-3 truncate'>
               {instrument.name || 'Unnamed instrument'}
