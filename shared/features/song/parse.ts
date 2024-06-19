@@ -1,6 +1,7 @@
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 
-import { InstrumentArray, NoteArray, SongFileType } from './types';
+import { NoteQuadTree } from './notes';
+import { InstrumentArray, SongFileType } from './types';
 
 export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
   console.log('parsing song');
@@ -19,32 +20,10 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
     originalAuthor: song.originalAuthor,
     description: song.description,
     arrayBuffer: buffer,
-    notes: getNoteArray(song),
+    notes: new NoteQuadTree(song),
     instruments: getInstruments(song),
   };
 }
-
-const getNoteArray = (song: Song): NoteArray => {
-  console.log('getNoteArray');
-  const notes: NoteArray = [];
-
-  for (const [layerId, layer] of song.layers.get.entries()) {
-    for (const [tick, note] of layer.notes) {
-      const noteData = {
-        tick: tick,
-        layer: layerId,
-        key: note.key,
-        instrument: note.instrument,
-      };
-
-      notes.push(noteData);
-    }
-  }
-
-  console.log('getNoteArray done');
-
-  return notes;
-};
 
 const getInstruments = (song: Song): InstrumentArray => {
   console.log(song.instruments);

@@ -1,14 +1,14 @@
+import { NoteQuadTree } from './notes';
+
 export type SongFileType = {
   title: string;
   description: string;
   author: string;
   originalAuthor: string;
   arrayBuffer: ArrayBuffer;
-  notes: NoteArray;
+  notes: NoteQuadTree;
   instruments: InstrumentArray;
 };
-
-export type NoteArray = Note[];
 
 export type InstrumentArray = Instrument[];
 
