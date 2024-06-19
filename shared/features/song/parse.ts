@@ -1,4 +1,4 @@
-import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
+import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 
 import { NoteArray, SongFileType } from './types';
 
@@ -14,7 +14,7 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
     author: song.author,
     originalAuthor: song.originalAuthor,
     description: song.description,
-    arrayBuffer: toArrayBuffer(song),
+    arrayBuffer: buffer,
     notes: getNoteArray(song),
   };
 }
