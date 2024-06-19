@@ -57,9 +57,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const [value, setValue] = useState('');
   if (!song) return null;
 
-  const instruments = song.instruments.loaded.filter(
-    (instrument) => !instrument.builtIn,
-  );
+  const instruments = song.instruments;
 
   return (
     <div className='flex flex-col w-full'>
@@ -85,21 +83,13 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
             className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
           >
             <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.id - song.instruments.firstCustomIndex + 1}
+              {instrument.id}
             </InstrumentTableCell>
             <InstrumentTableCell className='col-span-3 truncate'>
-              {instrument.meta.name.trim() || 'Unnamed instrument'}
+              {instrument.name || 'Unnamed instrument'}
             </InstrumentTableCell>
             <InstrumentTableCell className='col-span-1 text-right'>
-              {song.layers
-                .map(
-                  (layer) =>
-                    Object.values(layer.notes).filter(
-                      (note) => note.instrument === instrument.id,
-                    ).length,
-                )
-                .reduce((a, b) => a + b, 0)
-                .toLocaleString()}
+              {instrument.count.toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
               <SongSearchCombo setValue={setValue} value={value} />
@@ -115,8 +105,7 @@ const InstrumentPicker = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
   if (!song) return null;
 
-  const customInstrumentCount =
-    song.instruments.loaded.length - song.instruments.firstCustomIndex;
+  const customInstrumentCount = song.instruments.length;
 
   return customInstrumentCount === 0 ? (
     <Area label=''>
