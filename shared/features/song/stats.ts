@@ -150,8 +150,8 @@ export class SongStats {
 
     let duration = 0;
 
-    // Add last tick to close last tempo segment
-    const lastTick = this.song.length - 1;
+    // Add end of last tick to close last tempo segment
+    const lastTick = this.song.length + 1;
 
     if (!(lastTick in tempoChangeTicks)) {
       tempoChangeTicks.push(lastTick);
