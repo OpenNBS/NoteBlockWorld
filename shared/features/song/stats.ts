@@ -4,7 +4,7 @@ import { SongStatsType } from './types';
 
 export class SongStats {
   private song: Song;
-  private stats: SongStatsType;
+  private stats: Partial<SongStatsType> = {};
 
   constructor(song: Song) {
     this.song = song;
