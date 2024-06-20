@@ -1,6 +1,5 @@
 import { Song } from '@encode42/nbs.js';
 
-import { getInstrumentBlockCounts } from './parse';
 import { SongStatsType } from './types';
 
 export class SongStats {
@@ -12,8 +11,13 @@ export class SongStats {
 
     this.stats.midiFileName = this.getMidiFileName();
 
-    const { noteCount, tickCount, layerCount, notesOutsideOctaveRange } =
-      this.getCounts();
+    const {
+      noteCount,
+      tickCount,
+      layerCount,
+      notesOutsideOctaveRange,
+      instrumentNoteCounts,
+    } = this.getCounts();
 
     this.stats.noteCount = noteCount;
     this.stats.tickCount = tickCount;
@@ -27,7 +31,7 @@ export class SongStats {
     this.stats.minutesSpent = this.getMinutesSpent();
     this.stats.usesCustomInstruments = this.getUsesCustomInstruments();
     this.stats.notesOutsideOctaveRange = notesOutsideOctaveRange;
-    this.stats.instrumentNoteCounts = this.getInstrumentNoteCounts();
+    this.stats.instrumentNoteCounts = instrumentNoteCounts;
   }
 
   public toObject() {
@@ -43,11 +47,13 @@ export class SongStats {
     tickCount: number;
     layerCount: number;
     notesOutsideOctaveRange: number;
+    instrumentNoteCounts: number[];
   } {
     let noteCount = 0;
     let tickCount = 0;
     let layerCount = 0;
     let notesOutsideOctaveRange = 0;
+    const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
 
     for (const [layerId, layer] of this.song.layers.get.entries()) {
       for (const [tick, note] of layer.notes) {
@@ -64,6 +70,7 @@ export class SongStats {
           notesOutsideOctaveRange++;
         }
 
+        instrumentNoteCounts[note.instrument]++;
         noteCount++;
       }
     }
@@ -73,6 +80,7 @@ export class SongStats {
       tickCount,
       layerCount,
       notesOutsideOctaveRange,
+      instrumentNoteCounts,
     };
   }
 
@@ -188,10 +196,6 @@ export class SongStats {
     }
 
     return false;
-  }
-
-  private getInstrumentNoteCounts(): number[] {
-    return Object.values(getInstrumentBlockCounts(this.song));
   }
 }
 
