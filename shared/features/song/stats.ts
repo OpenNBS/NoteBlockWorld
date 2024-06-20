@@ -102,18 +102,20 @@ export class SongStats {
     const tempoSegments: Record<number, number> = {};
     const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
-    for (const layer of Array.from(this.song.layers.get).reverse()) {
-      for (const [tick, note] of layer.notes) {
-        // Not a tempo changer
-        if (!tempoChangerInstruments.includes(note.instrument)) continue;
+    if (tempoChangerInstruments.length > 0) {
+      for (const layer of Array.from(this.song.layers.get).reverse()) {
+        for (const [tick, note] of layer.notes) {
+          // Not a tempo changer
+          if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
-        // The tempo change isn't effective if there's another tempo changer in the same tick,
-        // so we iterate layers bottom to top and skip the block if a tempo changer has already
-        // been found in this tick
-        if (tick in tempoSegments) continue;
+          // The tempo change isn't effective if there's another tempo changer in the same tick,
+          // so we iterate layers bottom to top and skip the block if a tempo changer has already
+          // been found in this tick
+          if (tick in tempoSegments) continue;
 
-        const tempo = note.pitch / 15; // note pitch = BPM = (t/s) * 15
-        tempoSegments[tick] = tempo;
+          const tempo = note.pitch / 15; // note pitch = BPM = (t/s) * 15
+          tempoSegments[tick] = tempo;
+        }
       }
     }
 
