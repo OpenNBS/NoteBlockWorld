@@ -94,7 +94,8 @@ export class SongStats {
 
   private getTempoRange(): number[] | null {
     const tempoValues = Object.values(this.getTempoSegments());
-    if (tempoValues.length === 0) return null;
+    // If song has only the tempo set at the beginning, we have no tempo changes (indicated as null)
+    if (tempoValues.length === 1) return null;
 
     const minTempo = Math.min(...tempoValues);
     const maxTempo = Math.max(...tempoValues);
