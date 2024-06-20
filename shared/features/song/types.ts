@@ -14,15 +14,15 @@ export type SongFileType = {
 
 export type InstrumentArray = Instrument[];
 
-export interface Note {
+export type Note = {
   tick: number;
   layer: number;
   key: number;
   instrument: number;
-}
+};
 
-export interface Instrument {
+export type Instrument = {
   id: number;
   name: string;
   count: number;
-}
+};
