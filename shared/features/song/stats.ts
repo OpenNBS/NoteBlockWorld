@@ -35,10 +35,16 @@ export class SongStats {
     s.loopStartTick = this.getLoopStartTick();
     s.minutesSpent = this.getMinutesSpent();
     s.usesCustomInstruments = this.getUsesCustomInstruments();
+    s.instrumentNoteCounts = instrumentNoteCounts;
+
+    const { vanillaInstrumentCount, customInstrumentCount } =
+      this.getVanillaAndCustomInstrumentCounts(instrumentNoteCounts);
+
+    s.vanillaInstrumentCount = vanillaInstrumentCount;
+    s.customInstrumentCount = customInstrumentCount;
     s.firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
     s.notesOutsideOctaveRange = notesOutsideOctaveRange;
     s.compatible = s.notesOutsideOctaveRange === 0 && !s.usesCustomInstruments;
-    s.instrumentNoteCounts = instrumentNoteCounts;
   }
 
   public toObject() {
@@ -210,6 +216,22 @@ export class SongStats {
     }
 
     return false;
+  }
+
+  private getVanillaAndCustomInstrumentCounts(
+    noteCountsPerInstrument: number[],
+  ) {
+    const firstCustomIndex = this.song.instruments.firstCustomIndex;
+
+    const vanillaInstrumentCount = noteCountsPerInstrument
+      .slice(0, firstCustomIndex)
+      .filter((count) => count > 0).length;
+
+    const customInstrumentCount = noteCountsPerInstrument
+      .slice(firstCustomIndex, -1)
+      .filter((count) => count > 0).length;
+
+    return { vanillaInstrumentCount, customInstrumentCount };
   }
 
   private getFirstCustomInstrumentIndex(): number {
