@@ -39,6 +39,11 @@ export class SongStats {
       this.getFirstCustomInstrumentIndex();
 
     this.stats.notesOutsideOctaveRange = notesOutsideOctaveRange;
+
+    this.stats.compatible =
+      this.stats.notesOutsideOctaveRange === 0 &&
+      !this.stats.usesCustomInstruments;
+
     this.stats.instrumentNoteCounts = instrumentNoteCounts;
   }
 
