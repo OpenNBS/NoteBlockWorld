@@ -42,6 +42,7 @@ export type SongStatsType = {
   vanillaInstrumentCount: number;
   customInstrumentCount: number;
   usesCustomInstruments: boolean;
+  firstCustomInstrumentIndex: number;
   notesOutsideOctaveRange: number;
   compatible: boolean;
   instrumentNoteCounts: number[];

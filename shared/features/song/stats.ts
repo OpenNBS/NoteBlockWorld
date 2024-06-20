@@ -2,6 +2,10 @@ import { Song } from '@encode42/nbs.js';
 
 import { SongStatsType } from './types';
 
+export function getSongStats(song: Song) {
+  return new SongStats(song).toObject();
+}
+
 export class SongStats {
   private song: Song;
   private stats: Partial<SongStatsType> = {};
@@ -30,12 +34,16 @@ export class SongStats {
     this.stats.loopStartTick = this.getLoopStartTick();
     this.stats.minutesSpent = this.getMinutesSpent();
     this.stats.usesCustomInstruments = this.getUsesCustomInstruments();
+
+    this.stats.firstCustomInstrumentIndex =
+      this.getFirstCustomInstrumentIndex();
+
     this.stats.notesOutsideOctaveRange = notesOutsideOctaveRange;
     this.stats.instrumentNoteCounts = instrumentNoteCounts;
   }
 
   public toObject() {
-    return this.stats;
+    return this.stats as SongStatsType;
   }
 
   private getMidiFileName(): string {
@@ -203,6 +211,10 @@ export class SongStats {
     }
 
     return false;
+  }
+
+  private getFirstCustomInstrumentIndex(): number {
+    return this.song.instruments.firstCustomIndex;
   }
 }
 
