@@ -75,6 +75,10 @@ export class SongStats {
       }
     }
 
+    // Get end of last tick/layer instead of start
+    tickCount++;
+    layerCount++;
+
     return {
       noteCount,
       tickCount,
