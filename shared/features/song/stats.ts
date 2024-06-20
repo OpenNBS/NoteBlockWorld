@@ -12,8 +12,9 @@ export class SongStats {
 
   constructor(song: Song) {
     this.song = song;
+    const s = this.stats;
 
-    this.stats.midiFileName = this.getMidiFileName();
+    s.midiFileName = this.getMidiFileName();
 
     const {
       noteCount,
@@ -23,28 +24,21 @@ export class SongStats {
       instrumentNoteCounts,
     } = this.getCounts();
 
-    this.stats.noteCount = noteCount;
-    this.stats.tickCount = tickCount;
-    this.stats.layerCount = layerCount;
-    this.stats.tempo = this.getTempo();
-    this.stats.tempoRange = this.getTempoRange();
-    this.stats.timeSignature = this.getTimeSignature();
-    this.stats.duration = this.getDuration();
-    this.stats.loop = this.getLoop();
-    this.stats.loopStartTick = this.getLoopStartTick();
-    this.stats.minutesSpent = this.getMinutesSpent();
-    this.stats.usesCustomInstruments = this.getUsesCustomInstruments();
-
-    this.stats.firstCustomInstrumentIndex =
-      this.getFirstCustomInstrumentIndex();
-
-    this.stats.notesOutsideOctaveRange = notesOutsideOctaveRange;
-
-    this.stats.compatible =
-      this.stats.notesOutsideOctaveRange === 0 &&
-      !this.stats.usesCustomInstruments;
-
-    this.stats.instrumentNoteCounts = instrumentNoteCounts;
+    s.noteCount = noteCount;
+    s.tickCount = tickCount;
+    s.layerCount = layerCount;
+    s.tempo = this.getTempo();
+    s.tempoRange = this.getTempoRange();
+    s.timeSignature = this.getTimeSignature();
+    s.duration = this.getDuration();
+    s.loop = this.getLoop();
+    s.loopStartTick = this.getLoopStartTick();
+    s.minutesSpent = this.getMinutesSpent();
+    s.usesCustomInstruments = this.getUsesCustomInstruments();
+    s.firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
+    s.notesOutsideOctaveRange = notesOutsideOctaveRange;
+    s.compatible = s.notesOutsideOctaveRange === 0 && !s.usesCustomInstruments;
+    s.instrumentNoteCounts = instrumentNoteCounts;
   }
 
   public toObject() {
