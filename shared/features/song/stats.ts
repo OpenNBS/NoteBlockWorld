@@ -1,5 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 
+import { getInstrumentBlockCounts } from './parse';
 import { SongStatsType } from './types';
 
 export class SongStats {
@@ -9,11 +10,14 @@ export class SongStats {
   constructor(song: Song) {
     this.song = song;
 
-    this.stats.fileSize = this.getFileSize();
     this.stats.midiFileName = this.getMidiFileName();
-    this.stats.noteCount = this.getNoteCount();
-    this.stats.tickCount = this.getTickCount();
-    this.stats.layerCount = this.getLayerCount();
+
+    const { noteCount, tickCount, layerCount, notesOutsideOctaveRange } =
+      this.getCounts();
+
+    this.stats.noteCount = noteCount;
+    this.stats.tickCount = tickCount;
+    this.stats.layerCount = layerCount;
     this.stats.tempo = this.getTempo();
     this.stats.tempoRange = this.getTempoRange();
     this.stats.timeSignature = this.getTimeSignature();
@@ -22,77 +26,172 @@ export class SongStats {
     this.stats.loopStartTick = this.getLoopStartTick();
     this.stats.minutesSpent = this.getMinutesSpent();
     this.stats.usesCustomInstruments = this.getUsesCustomInstruments();
-    this.stats.isInOctaveRange = this.getIsInOctaveRange();
-    this.stats.compatible = this.getCompatible();
-    this.stats.instrumentCounts = this.getInstrumentCounts();
+    this.stats.notesOutsideOctaveRange = notesOutsideOctaveRange;
+    this.stats.instrumentNoteCounts = this.getInstrumentNoteCounts();
   }
 
   public toObject() {
     return this.stats;
   }
 
-  private getFileSize(): number {
-    throw new Error('Method not implemented.');
-  }
-
   private getMidiFileName(): string {
-    throw new Error('Method not implemented.');
+    return this.song.importName;
   }
 
-  private getNoteCount(): number {
-    throw new Error('Method not implemented.');
-  }
+  private getCounts(): {
+    noteCount: number;
+    tickCount: number;
+    layerCount: number;
+    notesOutsideOctaveRange: number;
+  } {
+    let noteCount = 0;
+    let tickCount = 0;
+    let layerCount = 0;
+    let notesOutsideOctaveRange = 0;
 
-  private getTickCount(): number {
-    throw new Error('Method not implemented.');
-  }
+    for (const [layerId, layer] of this.song.layers.get.entries()) {
+      for (const [tick, note] of layer.notes) {
+        if (tick > tickCount) {
+          tickCount = tick;
+        }
 
-  private getLayerCount(): number {
-    throw new Error('Method not implemented.');
+        // The song may store empty layers at the bottom. We actually want the last layer with a note in it
+        if (layerId > layerCount) {
+          layerCount = layerId;
+        }
+
+        if (note.key < 33 || note.key > 57) {
+          notesOutsideOctaveRange++;
+        }
+
+        noteCount++;
+      }
+    }
+
+    return {
+      noteCount,
+      tickCount,
+      layerCount,
+      notesOutsideOctaveRange,
+    };
   }
 
   private getTempo(): number {
-    throw new Error('Method not implemented.');
+    return this.song.tempo;
   }
 
-  private getTempoRange(): number[] {
-    throw new Error('Method not implemented.');
+  private getTempoRange(): number[] | null {
+    const tempoValues = Object.values(this.getTempoSegments());
+    if (tempoValues.length === 0) return null;
+
+    const minTempo = Math.min(...tempoValues);
+    const maxTempo = Math.max(...tempoValues);
+
+    return [minTempo, maxTempo];
+  }
+
+  private getTempoSegments(): Record<number, number> {
+    const tempoSegments: Record<number, number> = {};
+    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
+
+    for (const layer of Array.from(this.song.layers.get).reverse()) {
+      for (const [tick, note] of layer.notes) {
+        // Not a tempo changer
+        if (!tempoChangerInstruments.includes(note.instrument)) continue;
+
+        // The tempo change isn't effective if there's another tempo changer in the same tick,
+        // so we iterate layers bottom to top and skip the block if a tempo changer has already
+        // been found in this tick
+        if (tick in tempoSegments) continue;
+
+        const tempo = note.pitch / 15; // note pitch = BPM = (t/s) * 15
+        tempoSegments[tick] = tempo;
+      }
+    }
+
+    // If there isn't a tempo changer at tick 0, we add one there to set the starting tempo
+    tempoSegments[0] = 0 in tempoSegments ? tempoSegments[0] : this.song.tempo;
+
+    return tempoSegments;
+  }
+
+  private getTempoChangerInstrumentIds(): number[] {
+    return Object.entries(this.song.instruments.get).flatMap(
+      ([id, instrument]) =>
+        instrument.name === 'Tempo Changer' ? [parseInt(id)] : [],
+    );
   }
 
   private getTimeSignature(): number {
-    throw new Error('Method not implemented.');
+    return this.song.timeSignature;
   }
 
   private getDuration(): number {
-    throw new Error('Method not implemented.');
+    const tempoSegments = this.getTempoSegments();
+
+    const tempoChangeTicks = Object.keys(tempoSegments)
+      .map((tick) => parseInt(tick))
+      .toSorted();
+
+    let duration = 0;
+
+    // Add last tick to close last tempo segment
+    const lastTick = this.song.length - 1;
+
+    if (!(lastTick in tempoChangeTicks)) {
+      tempoChangeTicks.push(lastTick);
+    }
+
+    // Iterate pairs of tempo change ticks and calculate their length
+    for (let i = 0; i < tempoChangeTicks.length - 1; i++) {
+      const currTick = tempoChangeTicks[i];
+      const nextTick = tempoChangeTicks[i + 1];
+
+      const currTempo = tempoSegments[currTick];
+
+      const segmentDurationTicks = nextTick - currTick;
+      const timePerTick = 1 / currTempo;
+
+      duration += segmentDurationTicks * timePerTick;
+    }
+
+    return duration;
   }
 
   private getLoop(): boolean {
-    throw new Error('Method not implemented.');
+    return this.song.loop.enabled;
   }
 
   private getLoopStartTick(): number {
-    throw new Error('Method not implemented.');
+    return this.song.loop.startTick;
   }
 
   private getMinutesSpent(): number {
-    throw new Error('Method not implemented.');
+    return this.song.minutesSpent;
   }
 
   private getUsesCustomInstruments(): boolean {
-    throw new Error('Method not implemented.');
+    // Having custom instruments isn't enough, the song must have at least a note with one of them
+    const lastInstrumentId = this.song.instruments.total - 1; // e.g. 15
+    const firstCustomIndex = this.song.instruments.firstCustomIndex; // e.g. 16
+
+    if (lastInstrumentId < firstCustomIndex) {
+      return false;
+    }
+
+    for (const layer of this.song.layers.get) {
+      for (const [_, note] of layer.notes) {
+        if (note.instrument >= firstCustomIndex) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
-  private getIsInOctaveRange(): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  private getCompatible(): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  private getInstrumentCounts(): number[] {
-    throw new Error('Method not implemented.');
+  private getInstrumentNoteCounts(): number[] {
+    return Object.values(getInstrumentBlockCounts(this.song));
   }
 }
 

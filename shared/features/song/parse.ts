@@ -44,7 +44,7 @@ const getInstruments = (song: Song): InstrumentArray => {
   });
 };
 
-const getInstrumentBlockCounts = (song: Song) => {
+export const getInstrumentBlockCounts = (song: Song) => {
   const blockCounts = Object.fromEntries(
     Object.keys(song.instruments.get).map((instrumentId) => [instrumentId, 0]),
   );

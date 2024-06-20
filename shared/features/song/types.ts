@@ -28,20 +28,21 @@ export type Instrument = {
 };
 
 export type SongStatsType = {
-  fileSize: number;
   midiFileName: string;
   noteCount: number;
   tickCount: number;
   layerCount: number;
   tempo: number;
-  tempoRange: number[];
+  tempoRange: number[] | null;
   timeSignature: number;
   duration: number;
   loop: boolean;
   loopStartTick: number;
   minutesSpent: number;
+  vanillaInstrumentCount: number;
+  customInstrumentCount: number;
   usesCustomInstruments: boolean;
-  isInOctaveRange: boolean;
+  notesOutsideOctaveRange: number;
   compatible: boolean;
-  instrumentCounts: number[];
+  instrumentNoteCounts: number[];
 };
