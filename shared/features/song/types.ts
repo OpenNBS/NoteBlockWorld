@@ -26,3 +26,22 @@ export type Instrument = {
   name: string;
   count: number;
 };
+
+export type SongStatsType = {
+  fileSize: number;
+  midiFileName: string;
+  noteCount: number;
+  tickCount: number;
+  layerCount: number;
+  tempo: number;
+  tempoRange: number[];
+  timeSignature: number;
+  duration: number;
+  loop: boolean;
+  loopStartTick: number;
+  minutesSpent: number;
+  usesCustomInstruments: boolean;
+  isInOctaveRange: boolean;
+  compatible: boolean;
+  instrumentCounts: number[];
+};
