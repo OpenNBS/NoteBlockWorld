@@ -131,7 +131,7 @@ export class SongStats {
           // been found in this tick
           if (tick in tempoSegments) continue;
 
-          const tempo = note.pitch / 15; // note pitch = BPM = (t/s) * 15
+          const tempo = Math.abs(note.pitch) / 15; // note pitch = BPM = (t/s) * 15
           tempoSegments[tick] = tempo;
         }
       }
