@@ -39,7 +39,7 @@ export class SongStats {
   }
 
   private getMidiFileName(): string {
-    return this.song.importName;
+    return this.song.importName || '';
   }
 
   private getCounts(): {
