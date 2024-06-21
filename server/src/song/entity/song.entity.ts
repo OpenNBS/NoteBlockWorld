@@ -93,7 +93,7 @@ export class Song {
   fileSize: number;
 
   @Prop({ type: SongStats, required: true })
-  songStats: SongStats;
+  stats: SongStats;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);

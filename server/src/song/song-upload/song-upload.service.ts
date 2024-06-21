@@ -72,7 +72,7 @@ export class SongUploadService {
     song.thumbnailData = body.thumbnailData;
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
-    song.songStats = songStats;
+    song.stats = songStats;
     song.fileSize = file.size;
 
     return song;
