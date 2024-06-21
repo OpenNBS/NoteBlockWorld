@@ -3,10 +3,10 @@ import { Song } from '@encode42/nbs.js';
 import { SongStatsType } from './types';
 
 export function getSongStats(song: Song) {
-  return new SongStats(song).toObject();
+  return new SongStatsGenerator(song).toObject();
 }
 
-export class SongStats {
+class SongStatsGenerator {
   private song: Song;
   private stats = {} as SongStatsType;
 
