@@ -8,7 +8,7 @@ export function getSongStats(song: Song) {
 
 export class SongStats {
   private song: Song;
-  private stats: Partial<SongStatsType> = {};
+  private stats = {} as SongStatsType;
 
   constructor(song: Song) {
     this.song = song;
@@ -48,7 +48,7 @@ export class SongStats {
   }
 
   public toObject() {
-    return this.stats as SongStatsType;
+    return this.stats;
   }
 
   private getMidiFileName(): string {
