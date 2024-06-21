@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { NoteQuadTree } from '@shared/features/song/notes';
 import { SongStats } from '@shared/features/song/SongStats';
 import { SongStatsGenerator } from '@shared/features/song/stats';
 import { drawToImage } from '@shared/features/thumbnail';
@@ -156,8 +157,10 @@ export class SongUploadService {
   ) {
     const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
+    const quadTree = new NoteQuadTree(nbsSong);
+
     const thumbBuffer = await drawToImage({
-      notes: [], //getThumbnailNotes(nbsSong),
+      notes: quadTree,
       startTick: startTick,
       startLayer: startLayer,
       zoomLevel: zoomLevel,
