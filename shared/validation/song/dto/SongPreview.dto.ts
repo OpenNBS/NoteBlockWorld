@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  IsUrl,
-  MaxLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsUrl, MaxLength } from 'class-validator';
 
 import { SongWithUser } from '../../../../server/src/song/entity/song.entity';
 
@@ -16,7 +10,6 @@ type SongPreviewUploader = {
 export class SongPreviewDto {
   @IsString()
   @IsNotEmpty()
-  @IsUUID()
   publicId: string;
 
   @IsNotEmpty()
