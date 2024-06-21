@@ -36,7 +36,7 @@ export class SongUploadService {
     private userService: UserService,
   ) {}
 
-  public async validateUploader(user: UserDocument): Promise<Types.ObjectId> {
+  private async validateUploader(user: UserDocument): Promise<Types.ObjectId> {
     const uploader = await this.userService.findByID(user._id.toString());
 
     if (!uploader) {
@@ -49,7 +49,7 @@ export class SongUploadService {
     return uploader._id;
   }
 
-  public async generateSongDocument(
+  private async generateSongDocument(
     user: UserDocument,
     publicId: string,
     body: UploadSongDto,
@@ -195,7 +195,7 @@ export class SongUploadService {
     return thumbUrl;
   }
 
-  public async uploadSongFile(file: Express.Multer.File) {
+  private async uploadSongFile(file: Express.Multer.File) {
     let fileKey: string;
 
     try {
@@ -232,7 +232,7 @@ export class SongUploadService {
     return nbsSong;
   }
 
-  public checkIsFileValid(file: Express.Multer.File) {
+  private checkIsFileValid(file: Express.Multer.File) {
     if (!file) {
       throw new HttpException(
         {
