@@ -1,6 +1,5 @@
 import { CustomInstrumentData } from './CustomInstrumentData.dto';
 import { FeaturedSongsDto } from './FeaturedSongsDto.dtc';
-import { SongDto } from './Song.dto';
 import { SongPageDto } from './SongPageDto';
 import { SongPreviewDto } from './SongPreview.dto';
 import { SongViewDto } from './SongView.dto';
@@ -22,8 +21,6 @@ export type SongViewDtoType = InstanceType<typeof SongViewDto>;
 export type SongPreviewDtoType = InstanceType<typeof SongPreviewDto>;
 
 export type SongPageDtoType = InstanceType<typeof SongPageDto>;
-
-export type SongDtoType = InstanceType<typeof SongDto>;
 
 export type CustomInstrumentDataType = InstanceType<
   typeof CustomInstrumentData
