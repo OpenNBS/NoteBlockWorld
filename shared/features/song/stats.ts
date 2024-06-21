@@ -11,13 +11,12 @@ export class SongStatsGenerator {
   }
 
   private song: Song;
-  private stats = {} as SongStatsType;
+  private stats: SongStatsType;
 
   private constructor(song: Song) {
     this.song = song;
-    const s = this.stats;
 
-    s.midiFileName = this.getMidiFileName();
+    const midiFileName = this.getMidiFileName();
 
     const {
       noteCount,
@@ -27,27 +26,41 @@ export class SongStatsGenerator {
       instrumentNoteCounts,
     } = this.getCounts();
 
-    s.noteCount = noteCount;
-    s.tickCount = tickCount;
-    s.layerCount = layerCount;
-    s.tempo = this.getTempo();
-    s.tempoRange = this.getTempoRange();
-    s.timeSignature = this.getTimeSignature();
-    s.duration = this.getDuration();
-    s.loop = this.getLoop();
-    s.loopStartTick = this.getLoopStartTick();
-    s.minutesSpent = this.getMinutesSpent();
-    s.usesCustomInstruments = this.getUsesCustomInstruments();
-    s.instrumentNoteCounts = instrumentNoteCounts;
+    const tempo = this.getTempo();
+    const tempoRange = this.getTempoRange();
+    const timeSignature = this.getTimeSignature();
+    const duration = this.getDuration();
+    const loop = this.getLoop();
+    const loopStartTick = this.getLoopStartTick();
+    const minutesSpent = this.getMinutesSpent();
+    const usesCustomInstruments = this.getUsesCustomInstruments();
 
     const { vanillaInstrumentCount, customInstrumentCount } =
       this.getVanillaAndCustomInstrumentCounts(instrumentNoteCounts);
 
-    s.vanillaInstrumentCount = vanillaInstrumentCount;
-    s.customInstrumentCount = customInstrumentCount;
-    s.firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
-    s.notesOutsideOctaveRange = notesOutsideOctaveRange;
-    s.compatible = s.notesOutsideOctaveRange === 0 && !s.usesCustomInstruments;
+    const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
+    const compatible = notesOutsideOctaveRange === 0 && !usesCustomInstruments;
+
+    this.stats = {
+      midiFileName,
+      noteCount,
+      tickCount,
+      layerCount,
+      instrumentNoteCounts,
+      tempo,
+      tempoRange,
+      timeSignature,
+      duration,
+      loop,
+      loopStartTick,
+      minutesSpent,
+      usesCustomInstruments,
+      vanillaInstrumentCount,
+      customInstrumentCount,
+      firstCustomInstrumentIndex,
+      notesOutsideOctaveRange,
+      compatible,
+    };
   }
 
   private toObject() {
