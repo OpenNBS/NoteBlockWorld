@@ -1,6 +1,7 @@
+import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
-import { cn } from '@web/src/lib/tailwind.utils';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
 type SongDetailsProps = {
@@ -20,6 +21,14 @@ const SongDetailsCell = ({ children }: { children: React.ReactNode }) => {
     <td className='first:w-[40%] last:w-[60%] last:max-w-0 text-ellipsis overflow-hidden whitespace-nowrap p-2 py-[10px] first:text-zinc-400 first:text-right last:font-bold'>
       {children}
     </td>
+  );
+};
+
+const CheckOrCross = ({ check }: { check: boolean }) => {
+  return check ? (
+    <FontAwesomeIcon icon={faCheck} className='text-green-500' />
+  ) : (
+    <FontAwesomeIcon icon={faClose} className='text-red-500' />
   );
 };
 
@@ -49,13 +58,9 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
 
   const compatibleInfo = (
     <div className='flex items-center'>
-      <div
-        className={cn(
-          'mr-2 h-2.5 w-2.5 rounded-full',
-          stats.compatible ? 'bg-green-500' : 'bg-red-500',
-        )}
-      ></div>
-      <div>{stats.compatible ? 'Yes' : 'No'}</div>
+      <div>
+        <CheckOrCross check={stats.compatible} />
+      </div>
     </div>
   );
 
