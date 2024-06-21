@@ -1,4 +1,5 @@
 import { NoteQuadTree } from './notes';
+import { SongStats } from './SongStats';
 
 export type SongFileType = {
   title: string;
@@ -27,23 +28,4 @@ export type Instrument = {
   count: number;
 };
 
-export type SongStatsType = {
-  midiFileName: string;
-  noteCount: number;
-  tickCount: number;
-  layerCount: number;
-  tempo: number;
-  tempoRange: number[] | null;
-  timeSignature: number;
-  duration: number;
-  loop: boolean;
-  loopStartTick: number;
-  minutesSpent: number;
-  vanillaInstrumentCount: number;
-  customInstrumentCount: number;
-  usesCustomInstruments: boolean;
-  firstCustomInstrumentIndex: number;
-  notesOutsideOctaveRange: number;
-  compatible: boolean;
-  instrumentNoteCounts: number[];
-};
+export type SongStatsType = InstanceType<typeof SongStats>;

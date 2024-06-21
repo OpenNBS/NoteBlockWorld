@@ -2,15 +2,18 @@ import { Song } from '@encode42/nbs.js';
 
 import { SongStatsType } from './types';
 
-export function getSongStats(song: Song) {
-  return new SongStatsGenerator(song).toObject();
-}
+// Usage:
+// SongStatsGenerator.getSongStats(song)
 
-class SongStatsGenerator {
+export class SongStatsGenerator {
+  public static getSongStats(song: Song) {
+    return new SongStatsGenerator(song).toObject();
+  }
+
   private song: Song;
   private stats = {} as SongStatsType;
 
-  constructor(song: Song) {
+  private constructor(song: Song) {
     this.song = song;
     const s = this.stats;
 
@@ -47,7 +50,7 @@ class SongStatsGenerator {
     s.compatible = s.notesOutsideOctaveRange === 0 && !s.usesCustomInstruments;
   }
 
-  public toObject() {
+  private toObject() {
     return this.stats;
   }
 
@@ -238,6 +241,3 @@ class SongStatsGenerator {
     return this.song.instruments.firstCustomIndex;
   }
 }
-
-// Usage:
-// const stats = new SongStats(song).toObject()

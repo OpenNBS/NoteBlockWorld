@@ -7,6 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { SongStats } from '@shared/features/song/SongStats';
+import { SongStatsGenerator } from '@shared/features/song/stats';
 import { drawToImage } from '@shared/features/thumbnail';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
@@ -52,22 +54,8 @@ export class SongUploadService {
     body: UploadSongDto,
     thumbUrl: string,
     fileKey: string,
-    songStats: {
-      fileSize: number;
-      midiFileName: string;
-      noteCount: number;
-      tickCount: number;
-      layerCount: number;
-      tempo: number;
-      timeSignature: number;
-      duration: number;
-      loop: boolean;
-      loopStartTick: number;
-      minutesSpent: number;
-      usesCustomInstruments: boolean;
-      isInOctaveRange: boolean;
-      compatible: boolean;
-    },
+    songStats: SongStats,
+    file: Express.Multer.File,
   ) {
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
@@ -80,25 +68,11 @@ export class SongUploadService {
     song.visibility = body.visibility;
     song.license = body.license;
     song.customInstruments = body.customInstruments;
-
     song.thumbnailData = body.thumbnailData;
-    song._sounds = body.customInstruments; // TODO: validate custom instruments
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
-
-    // Song stats
-    song.fileSize = songStats.fileSize;
-    song.compatible = songStats.compatible;
-    song.midiFileName = songStats.midiFileName;
-    song.noteCount = songStats.noteCount;
-    song.tickCount = songStats.tickCount;
-    song.layerCount = songStats.layerCount;
-    song.tempo = songStats.tempo;
-    song.timeSignature = songStats.timeSignature;
-    song.duration = songStats.duration;
-    song.loop = songStats.loop;
-    song.loopStartTick = songStats.loopStartTick;
-    song.minutesSpent = songStats.minutesSpent;
+    song.songStats = songStats;
+    song.fileSize = file.size;
 
     return song;
   }
@@ -136,7 +110,7 @@ export class SongUploadService {
     const publicId = generateSongId();
 
     // Calculate song document's data from NBS file
-    const songStats = this.getSongStats(file, nbsSong);
+    const songStats = SongStatsGenerator.getSongStats(nbsSong);
 
     // Update NBS file with form values
     this.updateSongFileMetadata(nbsSong, body, user);
@@ -157,43 +131,10 @@ export class SongUploadService {
       thumbUrl,
       fileKey,
       songStats,
+      file,
     );
 
     return song;
-  }
-
-  public getSongStats(file: Express.Multer.File, nbsSong: Song) {
-    //const noteCount = 0;
-    //
-    //const tempoChangerInstruments: Instrument[] = [];
-    //
-    //for (const instrument of nbsSong.instruments.loaded) {
-    //  if (instrument.meta.name === 'Tempo Changer') {
-    //    tempoChangerInstruments.push(instrument);
-    //  }
-    //}
-    //
-    //for (const tick in Array(nbsSong.length).keys()) {
-    //  for (const layer of nbsSong.layers) {
-    //   const note = layer.notes[tick];
-    //}
-
-    return {
-      fileSize: file.size,
-      midiFileName: nbsSong.importName || '',
-      noteCount: 0, // TODO(Bentroen): calculate,
-      tickCount: nbsSong.length,
-      layerCount: nbsSong.layers.length,
-      tempo: nbsSong.tempo,
-      timeSignature: nbsSong.timeSignature,
-      duration: nbsSong.length / nbsSong.tempo, // TODO(Bentroen): take tempo changers into account
-      loop: nbsSong.loop.enabled,
-      loopStartTick: nbsSong.loop.startTick,
-      minutesSpent: nbsSong.minutesSpent,
-      usesCustomInstruments: false, // TODO(Bentroen): check if song.instruments.length > firstCustomIndex
-      isInOctaveRange: false, // TODO(Bentroen): check if any(note => note.pitch < 33 || note.pitch > 57)
-      compatible: false, //TODO(Bentroen): usesCustomInstruments && isInOctaveRange,
-    };
   }
 
   public updateSongFileMetadata(
