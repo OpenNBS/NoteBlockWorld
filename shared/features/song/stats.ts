@@ -36,7 +36,7 @@ export class SongStatsGenerator {
     const usesCustomInstruments = this.getUsesCustomInstruments();
 
     const { vanillaInstrumentCount, customInstrumentCount } =
-      this.getVanillaAndCustomInstrumentCounts(instrumentNoteCounts);
+      this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
     const compatible = notesOutsideOctaveRange === 0 && !usesCustomInstruments;
@@ -236,10 +236,13 @@ export class SongStatsGenerator {
     return false;
   }
 
-  private getVanillaAndCustomInstrumentCounts(
+  private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
   ) {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
+
+    // We want the count of instruments that have at least one note in the song
+    // (which tells us how many songs are effectively used in the song)
 
     const vanillaInstrumentCount = noteCountsPerInstrument
       .slice(0, firstCustomIndex)
