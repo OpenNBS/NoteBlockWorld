@@ -26,10 +26,12 @@ export class SongStatsGenerator {
       instrumentNoteCounts,
     } = this.getCounts();
 
+    const tempoSegments = this.getTempoSegments();
+
     const tempo = this.getTempo();
-    const tempoRange = this.getTempoRange();
+    const tempoRange = this.getTempoRange(tempoSegments);
     const timeSignature = this.getTimeSignature();
-    const duration = this.getDuration();
+    const duration = this.getDuration(tempoSegments);
     const loop = this.getLoop();
     const loopStartTick = this.getLoopStartTick();
     const minutesSpent = this.getMinutesSpent();
@@ -121,8 +123,10 @@ export class SongStatsGenerator {
     return this.song.tempo;
   }
 
-  private getTempoRange(): number[] | null {
-    const tempoValues = Object.values(this.getTempoSegments());
+  private getTempoRange(
+    tempoSegments: Record<number, number>,
+  ): number[] | null {
+    const tempoValues = Object.values(tempoSegments);
     // If song has only the tempo set at the beginning, we have no tempo changes (indicated as null)
     if (tempoValues.length === 1) return null;
 
@@ -170,9 +174,7 @@ export class SongStatsGenerator {
     return this.song.timeSignature;
   }
 
-  private getDuration(): number {
-    const tempoSegments = this.getTempoSegments();
-
+  private getDuration(tempoSegments: Record<number, number>): number {
     const tempoChangeTicks = Object.keys(tempoSegments).map((tick) =>
       parseInt(tick),
     );
