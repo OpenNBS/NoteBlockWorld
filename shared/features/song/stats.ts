@@ -249,7 +249,7 @@ export class SongStatsGenerator {
       .filter((count) => count > 0).length;
 
     const customInstrumentCount = noteCountsPerInstrument
-      .slice(firstCustomIndex, -1)
+      .slice(firstCustomIndex)
       .filter((count) => count > 0).length;
 
     return { vanillaInstrumentCount, customInstrumentCount };
