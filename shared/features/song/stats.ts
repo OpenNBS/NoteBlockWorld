@@ -173,9 +173,11 @@ export class SongStatsGenerator {
   private getDuration(): number {
     const tempoSegments = this.getTempoSegments();
 
-    const tempoChangeTicks = Object.keys(tempoSegments)
-      .map((tick) => parseInt(tick))
-      .toSorted();
+    const tempoChangeTicks = Object.keys(tempoSegments).map((tick) =>
+      parseInt(tick),
+    );
+
+    tempoChangeTicks.sort();
 
     let duration = 0;
 
