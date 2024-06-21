@@ -177,7 +177,7 @@ export class SongStatsGenerator {
       parseInt(tick),
     );
 
-    tempoChangeTicks.sort();
+    tempoChangeTicks.sort((a, b) => a - b);
 
     let duration = 0;
 
