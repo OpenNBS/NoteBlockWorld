@@ -1,5 +1,6 @@
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
+import { cn } from '@web/src/lib/tailwind.utils';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 
 type SongDetailsProps = {
@@ -48,8 +49,13 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
 
   const compatibleInfo = (
     <div className='flex items-center'>
-      <div className='mr-2 h-2.5 w-2.5 rounded-full bg-green-500'></div>
-      <div>Yes</div>
+      <div
+        className={cn(
+          'mr-2 h-2.5 w-2.5 rounded-full',
+          stats.compatible ? 'bg-green-500' : 'bg-red-500',
+        )}
+      ></div>
+      <div>{stats.compatible ? 'Yes' : 'No'}</div>
     </div>
   );
 
