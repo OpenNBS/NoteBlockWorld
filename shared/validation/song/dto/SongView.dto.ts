@@ -1,3 +1,5 @@
+import { SongStats } from '@shared/features/song/SongStats';
+
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export type SongViewUploader = {
@@ -20,19 +22,14 @@ export class SongViewDto {
   title: string;
   originalAuthor: string;
   description: string;
-  duration: number;
-  tempo: number;
-  noteCount: number;
-  thumbnailUrl: string;
-  nbsFileUrl: string;
-  category: string;
-  vanillaInstrumentCount: number;
-  customInstrumentCount: number;
-  layerCount: number;
-  midiFileName: string;
+
+  // SONG STATS
+  songStats: SongStats;
 
   public static fromSongDocument(song: SongDocument): SongViewDto {
     const data = song.toJSON();
+
+    // TODO: this is not type-safe
 
     return new SongViewDto({
       ...data,
