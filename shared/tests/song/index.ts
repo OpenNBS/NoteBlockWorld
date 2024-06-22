@@ -159,6 +159,9 @@ function testTempoChangerWithStart() {
   assert(duration.toFixed(2) === stats.duration.toFixed(2));
   assert(stats.tempo === 10.0);
   assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
+
+  // Tempo changers shouldn't count as detuned notes
+  assert(stats.detunedNoteCount === 0);
 }
 
 function testTempoChangerNoStart() {

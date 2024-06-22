@@ -97,6 +97,8 @@ export class SongStatsGenerator {
     let incompatibleNoteCount = 0;
     const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
 
+    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
+
     for (const [layerId, layer] of this.song.layers.get.entries()) {
       for (const [tick, note] of layer.notes) {
         if (tick > tickCount) {
@@ -142,7 +144,10 @@ export class SongStatsGenerator {
         const isOutOfRange =
           effectivePitch < minRange || effectivePitch > maxRange;
 
-        const hasDetune = note.pitch % 100 !== 0;
+        // Don't consider tempo changers as detuned notes
+        const hasDetune =
+          note.pitch % 100 !== 0 &&
+          !tempoChangerInstruments.includes(note.instrument);
 
         const usesCustomInstrument =
           note.instrument >= this.song.instruments.firstCustomIndex;
