@@ -47,12 +47,25 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
   // Pre-compute complex values
   const formattedFileSize = `${(song.fileSize / 1024).toFixed(2)} kB`;
   const formattedDuration = formatDuration(stats.duration);
-  const bpm = `${stats.tempo * 15} BPM`;
+
+  let tpsLabel, bpmLabel;
+
+  if (stats.tempoRange !== null) {
+    const [minTps, maxTps] = stats.tempoRange;
+    const minBpm = minTps * 15;
+    const maxBpm = maxTps * 15;
+    tpsLabel = `${minTps.toFixed(2)} – ${maxTps.toFixed(2)} t/s`;
+    bpmLabel = `(${minBpm.toFixed(0)} – ${maxBpm.toFixed(0)} BPM)`;
+  } else {
+    const tps = stats.tempo;
+    const bpm = tps * 15;
+    tpsLabel = `${tps.toFixed(2)}`;
+    bpmLabel = `(${bpm} BPM)`;
+  }
 
   const tempoInfo = (
     <>
-      {`${song.stats.tempo} t/s`}{' '}
-      <span className='font-normal text-zinc-400'>{`(${bpm})`}</span>
+      {tpsLabel} <span className='font-normal text-zinc-400'>{bpmLabel}</span>
     </>
   );
 
