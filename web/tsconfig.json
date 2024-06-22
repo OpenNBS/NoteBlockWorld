@@ -9,6 +9,7 @@
     // "forceConsistentCasingInFileNames": true,
     // "skipLibCheck": true,
     "target": "es5",
+    "downlevelIteration": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "strict": true,
