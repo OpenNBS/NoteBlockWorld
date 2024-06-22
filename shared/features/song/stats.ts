@@ -136,8 +136,8 @@ export class SongStatsGenerator {
         // a custom sounds.json in a resource pack).
 
         const instrumentKey = this.song.instruments.get[note.instrument].key; // F#4 = 45
-        const minRange = instrumentKey - 12; // F#3 = 33
-        const maxRange = instrumentKey + 12; // F#5 = 57
+        const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
+        const maxRange = 45 - (instrumentKey - 45) + 12; // F#5 = 57
 
         const isOutOfRange =
           effectivePitch < minRange || effectivePitch > maxRange;
