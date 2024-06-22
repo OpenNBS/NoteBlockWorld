@@ -86,7 +86,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
           <>(vanilla)</>
         ) : (
           <>
-            {stats.vanillaInstrumentCount} vanilla,{' '}
+            ({stats.vanillaInstrumentCount} vanilla,{' '}
             {stats.customInstrumentCount} custom)
           </>
         )}
