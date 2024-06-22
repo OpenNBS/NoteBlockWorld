@@ -155,6 +155,6 @@ export class SongController {
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
-    return await this.songService.processUploadedSong({ body, file, user });
+    return await this.songService.uploadSong({ body, file, user });
   }
 }

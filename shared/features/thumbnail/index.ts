@@ -1,25 +1,16 @@
-import { Song } from '@encode42/nbs.js';
-
 import {
   Canvas,
   Image,
   createCanvas,
-  getPath,
-  loadImage,
+  noteBlockImage,
   saveToImage,
 } from './canvasFactory';
+import { NoteQuadTree } from '../song/notes';
 
 export { bgColorsArray } from './colors';
 
-export interface Note {
-  tick: number;
-  layer: number;
-  key: number;
-  instrument: number;
-}
-
 interface DrawParams {
-  notes: Note[];
+  notes: NoteQuadTree;
   startTick: number;
   startLayer: number;
   zoomLevel: number;
@@ -32,26 +23,6 @@ interface DrawParams {
 
 type Canvas = typeof Canvas;
 type Image = typeof Image;
-
-export const getThumbnailNotes = (song: Song): Note[] => {
-  // TODO: return a record indexed by tick to avoid filtering the whole song
-  const notes = song.layers
-    .map((layer) =>
-      Object.entries(layer.notes).map(([tick, note]) => {
-        const data = {
-          tick: Number(tick),
-          layer: layer.id,
-          key: note.key,
-          instrument: note.instrument,
-        };
-
-        return data;
-      }),
-    )
-    .flat();
-
-  return notes;
-};
 
 const instrumentColors = [
   '#1964ac',
@@ -99,22 +70,6 @@ function tintImage(image: Image, color: string): Canvas {
   tintedImages[color] = canvas;
 
   return canvas;
-}
-
-// Function to check if a note is within the bounds of the canvas
-function noteInBounds(
-  note: Note,
-  startTick: number,
-  startLayer: number,
-  endTick: number,
-  endLayer: number,
-): boolean {
-  return (
-    note.tick >= startTick &&
-    note.layer >= startLayer &&
-    note.tick < endTick &&
-    note.layer < endLayer
-  );
 }
 
 // Function to convert key number to key text
@@ -234,49 +189,46 @@ export async function drawNotesOffscreen({
     ctx.fillRect(i, 0, 1, height);
   }
 
-  // Load note block image if not loaded yet
-  const noteBlockImage = await loadImage(
-    getPath('/img/note-block-grayscale.png'),
-  );
+  const loadedNoteBlockImage = await noteBlockImage;
 
   // Iterate through note blocks and draw them
-  notes
-    .filter((note) =>
-      noteInBounds(
-        note,
-        startTick,
-        startLayer,
-        startTick + width / (zoomFactor * 8),
-        startLayer + height / (zoomFactor * 8),
-      ),
-    )
-    .forEach(async (note) => {
-      // Calculate position
-      const x = (note.tick - startTick) * 8 * zoomFactor;
-      const y = (note.layer - startLayer) * 8 * zoomFactor;
-      const overlayColor = instrumentColors[note.instrument % 16];
+  const endTick = startTick + width / (zoomFactor * 8) - 1;
+  const endLayer = startLayer + height / (zoomFactor * 8) - 1;
 
-      if (!noteBlockImage) {
-        throw new Error('Note block image not loaded');
-      }
+  const visibleNotes = notes.getNotesInRect({
+    x1: startTick,
+    y1: startLayer,
+    x2: endTick,
+    y2: endLayer,
+  });
 
-      // Draw the note block
-      ctx.drawImage(
-        tintImage(noteBlockImage, overlayColor),
-        x,
-        y,
-        8 * zoomFactor,
-        8 * zoomFactor,
-      );
+  visibleNotes.forEach(async (note) => {
+    // Calculate position
+    const x = (note.tick - startTick) * 8 * zoomFactor;
+    const y = (note.layer - startLayer) * 8 * zoomFactor;
+    const overlayColor = instrumentColors[note.instrument % 16];
 
-      // Draw the key text
-      const keyText = getKeyText(note.key);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `${3 * zoomFactor}px Lato`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
-    });
+    if (!loadedNoteBlockImage) {
+      throw new Error('Note block image not loaded');
+    }
+
+    // Draw the note block
+    ctx.drawImage(
+      tintImage(loadedNoteBlockImage, overlayColor),
+      x,
+      y,
+      8 * zoomFactor,
+      8 * zoomFactor,
+    );
+
+    // Draw the key text
+    const keyText = getKeyText(note.key);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `${3 * zoomFactor}px Lato`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
+  });
 
   return canvas;
 }

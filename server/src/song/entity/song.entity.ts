@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SongStats } from '@shared/features/song/SongStats';
 import { SongViewUploader } from '@shared/validation/song/dto/SongView.dto';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import type {
@@ -6,7 +7,6 @@ import type {
   LicenseType,
   VisibilityType,
 } from '@shared/validation/song/dto/types';
-import { Max, Min } from 'class-validator';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 @Schema({
@@ -78,18 +78,10 @@ export class Song {
   @Prop({ type: String, required: false })
   description: string;
 
-  @Prop({ type: String, required: false })
-  @Min(0)
-  @Max(2100)
-  yearReleased: number;
-
   @Prop({ type: MongooseSchema.Types.Date, required: false })
   originalCreationDate: Date;
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
-
-  // TODO: group these into a SongStats object?
-  //@Prop( {type: SongStats, required: false} )
 
   @Prop({ type: MongooseSchema.Types.Buffer, required: false })
   _content: Buffer; // Used for playback
@@ -97,56 +89,11 @@ export class Song {
   @Prop({ type: Array<string>, required: false })
   _sounds: string[]; // Used for playback
 
-  @Prop({ type: Number, required: false })
+  @Prop({ type: Number, required: true })
   fileSize: number;
 
-  @Prop({ type: Boolean, required: false })
-  compatible: boolean;
-
-  @Prop({ type: String, required: false })
-  midiFileName: string;
-
-  @Prop({ type: Number, required: false })
-  noteCount: number;
-
-  @Prop({ type: Number, required: false })
-  vanillaInstrumentCount: number;
-
-  @Prop({ type: Number, required: false })
-  customInstrumentCount: number;
-
-  @Prop({ type: Number, required: false })
-  tickCount: number;
-
-  @Prop({ type: Number, required: false })
-  layerCount: number;
-
-  @Prop({ type: Number, required: false })
-  tempo: number;
-
-  @Prop({ type: Array<number>, required: false })
-  tempoRange: number[];
-
-  @Prop({ type: Array<number>, required: false })
-  timeSignature: number;
-
-  @Prop({ type: Array<number>, required: false })
-  duration: number;
-
-  @Prop({ type: Boolean, required: false })
-  loop: boolean;
-
-  @Prop({ type: Number, required: false })
-  loopStartTick: number;
-
-  @Prop({ type: Number, required: false })
-  minutesSpent: number;
-
-  @Prop({ type: Number, required: false })
-  leftClicks: number;
-
-  @Prop({ type: Number, required: false })
-  rightClicks: number;
+  @Prop({ type: SongStats, required: true })
+  stats: SongStats;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);

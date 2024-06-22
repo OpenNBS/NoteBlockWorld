@@ -64,9 +64,9 @@ export class UploadSongResponseDto {
       publicId: song.publicId,
       title: song.title,
       uploader: song.uploader,
-      duration: song.duration,
+      duration: song.stats.duration,
       thumbnailUrl: song.thumbnailUrl,
-      noteCount: song.noteCount,
+      noteCount: song.stats.noteCount,
     });
   }
 }

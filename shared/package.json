@@ -1,26 +1,27 @@
 {
-    "name": "noteblockworld-shared",
-    "version": "0.1.0",
-    "description": "Shared packages for noteblockworld",
-    "keywords": [],
-    "author": "",
-    "license": "UNLICENSED",
-    "scripts": {
-        "lint": "eslint */**/*.ts --fix"
-    },
-    "dependencies": {
-        "@encode42/nbs.js": "5.0.0",
-        "@nestjs/swagger": "^7.1.1",
-        "canvas": "^2.11.2",
-        "class-transformer": "^0.5.1",
-        "class-validator": "^0.14.0",
-        "express": "^4.18.2",
-        "tailwindcss": "3.4.1"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.17",
-        "@types/multer": "^1.4.11",
-        "@types/node": "^20.3.1",
-        "typescript": "^5.1.3"
-    }
+  "name": "noteblockworld-shared",
+  "version": "0.1.0",
+  "description": "Shared packages for noteblockworld",
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "lint": "eslint */**/*.ts --fix"
+  },
+  "dependencies": {
+    "@encode42/nbs.js": "github:Bentroen/nbs.js#build/commonjs-dist",
+    "@nestjs/swagger": "^7.1.1",
+    "@timohausmann/quadtree-ts": "^2.2.2",
+    "canvas": "^2.11.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "express": "^4.18.2",
+    "tailwindcss": "3.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  }
 }

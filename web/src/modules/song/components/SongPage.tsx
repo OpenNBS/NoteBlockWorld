@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
 
-import SongDetails from './SongDetails';
+import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
   OpenSongInNBSButton,

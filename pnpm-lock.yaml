@@ -52,8 +52,8 @@ importers:
         specifier: ^3.525.0
         version: 3.592.0
       '@encode42/nbs.js':
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: github:Bentroen/nbs.js#build/commonjs-dist
+        version: https://codeload.github.com/Bentroen/nbs.js/tar.gz/8af779e46dd5153622e634fe4565bf7867148316
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -93,6 +93,9 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.1
+      esm:
+        specifier: ^3.2.25
+        version: 3.2.25
       express:
         specifier: ^4.18.2
         version: 4.19.2
@@ -203,11 +206,14 @@ importers:
   shared:
     dependencies:
       '@encode42/nbs.js':
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: github:Bentroen/nbs.js#build/commonjs-dist
+        version: https://codeload.github.com/Bentroen/nbs.js/tar.gz/8af779e46dd5153622e634fe4565bf7867148316
       '@nestjs/swagger':
         specifier: ^7.1.1
         version: 7.3.1(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(reflect-metadata@0.1.14)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)
+      '@timohausmann/quadtree-ts':
+        specifier: ^2.2.2
+        version: 2.2.2
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
@@ -239,9 +245,6 @@ importers:
 
   web:
     dependencies:
-      '@encode42/nbs.js':
-        specifier: 5.0.0
-        version: 5.0.0
       '@fortawesome/free-brands-svg-icons':
         specifier: ^6.4.2
         version: 6.5.2
@@ -766,9 +769,10 @@ packages:
   '@emnapi/runtime@1.2.0':
     resolution: {integrity: sha512-bV21/9LQmcQeCPEg3BDFtvwL6cwiTMksYNWQQ4KOxCZikEGalWtenoZ0wCiukJINlGCIi2KXx01g4FoH/LxpzQ==}
 
-  '@encode42/nbs.js@5.0.0':
-    resolution: {integrity: sha512-h0p+4Rn25c7NGD8MVEqVJMfiIzrqX1gslRau+D5RzipnbNbsT/nMhfFP2CQ3RukxbmTLgPysrCniGxxLgou9gA==}
-    engines: {node: '>=18', pnpm: '>=8'}
+  '@encode42/nbs.js@https://codeload.github.com/Bentroen/nbs.js/tar.gz/8af779e46dd5153622e634fe4565bf7867148316':
+    resolution: {tarball: https://codeload.github.com/Bentroen/nbs.js/tar.gz/8af779e46dd5153622e634fe4565bf7867148316}
+    version: 6.0.0-alpha3
+    engines: {node: '>=18'}
 
   '@eslint-community/eslint-utils@4.4.0':
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
@@ -840,6 +844,7 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1796,6 +1801,9 @@ packages:
 
   '@tanstack/virtual-core@3.5.1':
     resolution: {integrity: sha512-046+AUSiDru/V9pajE1du8WayvBKeCvJ2NmKPy/mR8/SbKKrqmSbj7LJBfXE+nSq4f5TBXvnCzu0kcYebI9WdQ==}
+
+  '@timohausmann/quadtree-ts@2.2.2':
+    resolution: {integrity: sha512-emYbmmbTb+S3F75yvt03KQ3pMO3v/4BzjbAVnflbYq3zJfcurTfZHeriK8o7T0lFzBz3kBw2Pn41vlK3pD8spw==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -2968,6 +2976,10 @@ packages:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
+
+  esm@3.2.25:
+    resolution: {integrity: sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==}
+    engines: {node: '>=6'}
 
   espree@9.6.1:
     resolution: {integrity: sha512-oruZaFkjorTpF32kDSI5/75ViwGeZginGGy2NoOSg3Q9bnwlnmDm4HLnkl0RE3n+njDXR037aY1+x58Z/zFdwQ==}
@@ -6189,7 +6201,7 @@ snapshots:
       tslib: 2.6.3
     optional: true
 
-  '@encode42/nbs.js@5.0.0': {}
+  '@encode42/nbs.js@https://codeload.github.com/Bentroen/nbs.js/tar.gz/8af779e46dd5153622e634fe4565bf7867148316': {}
 
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.0)':
     dependencies:
@@ -7434,6 +7446,8 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
 
   '@tanstack/virtual-core@3.5.1': {}
+
+  '@timohausmann/quadtree-ts@2.2.2': {}
 
   '@tsconfig/node10@1.0.11': {}
 
@@ -8851,6 +8865,8 @@ snapshots:
       text-table: 0.2.0
     transitivePeerDependencies:
       - supports-color
+
+  esm@3.2.25: {}
 
   espree@9.6.1:
     dependencies:

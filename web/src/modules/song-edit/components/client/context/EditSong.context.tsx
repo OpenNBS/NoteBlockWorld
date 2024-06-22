@@ -1,7 +1,8 @@
 'use client';
 
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseSongFromBuffer } from '@shared/features/song/parse';
+import { SongFileType } from '@shared/features/song/types';
 import { UploadSongDtoType } from '@shared/validation/song/dto/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
@@ -27,7 +28,7 @@ export type useEditSongProviderType = {
   submitSong: () => void;
   register: UseFormRegister<EditSongForm>;
   errors: FieldErrors<EditSongForm>;
-  song: Song | null;
+  song: SongFileType | null;
   sendError: string | null;
   isSubmitting: boolean;
   loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
@@ -48,7 +49,7 @@ export const EditSongProvider = ({
     mode: 'onBlur',
   });
 
-  const [song, setSong] = useState<Song | null>(null);
+  const [song, setSong] = useState<SongFileType | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -237,7 +238,7 @@ export const EditSongProvider = ({
       ).data as ArrayBuffer;
 
       // convert to song
-      const song = fromArrayBuffer(songFile);
+      const song = parseSongFromBuffer(songFile);
       setSong(song);
     },
     [formMethods, setSong],

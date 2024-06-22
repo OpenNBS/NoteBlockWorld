@@ -30,6 +30,9 @@ if (typeof document === 'undefined') {
     return canvas.toBuffer('image/png');
   };
 
+  // Load note block image
+  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+
   const useFont = () => {
     registerFont(getPath('/fonts/Lato-Regular.ttf'), { family: 'Lato' });
   };
@@ -43,6 +46,7 @@ if (typeof document === 'undefined') {
     getPath,
     useFont,
     saveToImage,
+    noteBlockImage,
     Canvas,
     Image,
   };
@@ -70,6 +74,11 @@ if (typeof document === 'undefined') {
     console.log('Not implemented');
   };
 
+  // TODO: refactor into resources attribute of some sort
+
+  // Load note block image
+  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+
   // Register font
   const useFont = () => {
     const f = new FontFace('Lato', 'url(/fonts/Lato-Regular.ttf)');
@@ -89,6 +98,7 @@ if (typeof document === 'undefined') {
     loadImage,
     getPath,
     saveToImage,
+    noteBlockImage,
     Canvas,
     Image,
   };
@@ -100,6 +110,7 @@ const {
   getPath,
   useFont,
   saveToImage,
+  noteBlockImage,
   Canvas,
   Image,
 } = content;
@@ -110,6 +121,7 @@ export {
   getPath,
   useFont,
   saveToImage,
+  noteBlockImage,
   Canvas,
   Image,
 };
