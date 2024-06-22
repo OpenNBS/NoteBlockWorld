@@ -109,6 +109,16 @@ function testOutOfRange() {
   assert(stats.compatible === false);
 }
 
+function testOutOfRangeCustomPitch() {
+  // Test that notes outside the 2-octave range are properly counted in a song with
+  // instruments that use custom pitch values. The code should calculate the 2-octave
+  // supported range based on the instrument's pitch value.
+
+  const stats = testSongStats.outOfRangeCustomPitch;
+
+  assert(stats.outOfRangeNoteCount === stats.noteCount - 3);
+}
+
 function testCustomInstrumentNoUsage() {
   // Test that the instrument counts are correctly calculated if the song
   // contains custom instruments, but doesn't use them in any note.
