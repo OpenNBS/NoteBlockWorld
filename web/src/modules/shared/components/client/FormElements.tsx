@@ -27,13 +27,11 @@ export const Area = ({
   isLoading,
   className,
   children,
-  className,
 }: {
   label?: string;
   isLoading?: boolean;
   className?: string;
   children: React.ReactNode;
-  className?: string;
 }) => {
   return (
     <>
