@@ -52,4 +52,19 @@ export class AuthController {
     // Not need for implementation, its handled by passport
     this.authService.verifyToken(req, res);
   }
+
+  @Get('refresh')
+  @ApiOperation({ summary: 'Refresh user token' })
+  @ApiResponse({ status: 200, description: 'User token refreshed' })
+  @ApiResponse({ status: 401, description: 'User token not refreshed' })
+  @UseGuards(AuthGuard('jwt-refresh'))
+  public refresh(
+    @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
+    return this.authService.refreshToken(req, res);
+  }
 }

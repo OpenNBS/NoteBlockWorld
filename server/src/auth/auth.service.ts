@@ -224,4 +224,37 @@ export class AuthService {
 
     return user;
   }
+
+  public async refreshToken(req: Request, res: Response) {
+    const refreshToken = req.cookies.refresh_token;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'No refresh token provided' });
+    }
+
+    try {
+      const decoded = this.jwtService.verify(refreshToken, {
+        secret: this.JWT_REFRESH_SECRET,
+      });
+
+      const user = await this.userService.findByID(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const token = await this.createJwtPayload({
+        id: user._id.toString(),
+        email: user.email,
+        username: user.username,
+      });
+
+      return res.json({
+        access_token: token.access_token,
+        refresh_token: token.refresh_token,
+      });
+    } catch (error) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  }
 }
