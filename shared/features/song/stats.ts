@@ -22,7 +22,10 @@ export class SongStatsGenerator {
       noteCount,
       tickCount,
       layerCount,
-      notesOutsideOctaveRange,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      customInstrumentNoteCount,
+      incompatibleNoteCount,
       instrumentNoteCounts,
     } = this.getCounts();
 
@@ -36,23 +39,18 @@ export class SongStatsGenerator {
     const loopStartTick = this.getLoopStartTick();
     const minutesSpent = this.getMinutesSpent();
 
-    const {
-      vanillaInstrumentCount,
-      customInstrumentCount,
-      customInstrumentNoteCount,
-    } = this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
+    const { vanillaInstrumentCount, customInstrumentCount } =
+      this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
 
-    const compatible =
-      notesOutsideOctaveRange === 0 && customInstrumentNoteCount === 0;
+    const compatible = incompatibleNoteCount === 0;
 
     this.stats = {
       midiFileName,
       noteCount,
       tickCount,
       layerCount,
-      instrumentNoteCounts,
       tempo,
       tempoRange,
       timeSignature,
@@ -60,11 +58,14 @@ export class SongStatsGenerator {
       loop,
       loopStartTick,
       minutesSpent,
-      usesCustomInstruments,
       vanillaInstrumentCount,
       customInstrumentCount,
       firstCustomInstrumentIndex,
-      notesOutsideOctaveRange,
+      instrumentNoteCounts,
+      customInstrumentNoteCount,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      incompatibleNoteCount,
       compatible,
     };
   }
@@ -81,13 +82,19 @@ export class SongStatsGenerator {
     noteCount: number;
     tickCount: number;
     layerCount: number;
-    notesOutsideOctaveRange: number;
+    outOfRangeNoteCount: number;
+    detunedNoteCount: number;
+    customInstrumentNoteCount: number;
+    incompatibleNoteCount: number;
     instrumentNoteCounts: number[];
   } {
     let noteCount = 0;
     let tickCount = 0;
     let layerCount = 0;
-    let notesOutsideOctaveRange = 0;
+    let outOfRangeNoteCount = 0;
+    let detunedNoteCount = 0;
+    let customInstrumentNoteCount = 0;
+    let incompatibleNoteCount = 0;
     const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
 
     for (const [layerId, layer] of this.song.layers.get.entries()) {
@@ -101,9 +108,50 @@ export class SongStatsGenerator {
           layerCount = layerId;
         }
 
-        if (note.key < 33 || note.key > 57) {
-          notesOutsideOctaveRange++;
-        }
+        const effectivePitch = note.key + note.pitch / 100;
+
+        // Differences between Note Block Studio and this implementation:
+
+        // DETUNED NOTES
+        // The behavior here differs from Open Note Block Studio v3.10, since it doesn't consider
+        // non-integer/microtonal notes when deciding if a song is compatible. This is likely to
+        // change in the future. Since this is relevant to knowing accurately if vanilla note blocks
+        // can support the song, NBW uses a more modern approach of counting microtonal notes as
+        // outside the 2-octave range - treating it as only the piano keys between 33-57 and not
+        // anything in the interval between them.
+
+        // INSTRUMENT PITCH
+        // We also use the instrument's original pitch when determining if it's out-of-range.
+        // Note Block Studio also doesn't take this into account - since importing custom sounds
+        // into the game was out of question back in the legacy versions, we used to only need
+        // to worry about vanilla note block compatibility (for schematics).
+        // Now that data packs are a thing, out-of-range notes become relevant not only due to
+        // note block's key range, but also because the same limit applies to Minecraft's audio
+        // engine as a whole (e.g. /playsound etc).
+        // But if the instrument's key is not set to F#4 (45), the range supported by Minecraft
+        // (without needing to re-pitch the sound externally) also changes (it is always one octave
+        // above and below the instrument's key). Note Block Studio doesn't account for this - the
+        // supported range is always F#3 to F#5 (33-57) - but we do because it's useful to know if
+        // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
+        // a custom sounds.json in a resource pack).
+
+        const instrumentKey = this.song.instruments.get[note.instrument].key; // F#4 = 45
+        const minRange = instrumentKey - 12; // F#3 = 33
+        const maxRange = instrumentKey + 12; // F#5 = 57
+
+        const isOutOfRange =
+          effectivePitch < minRange || effectivePitch > maxRange;
+
+        const hasDetune = note.pitch % 100 !== 0;
+
+        const usesCustomInstrument =
+          note.instrument >= this.song.instruments.firstCustomIndex;
+
+        if (isOutOfRange) outOfRangeNoteCount++;
+        if (hasDetune) detunedNoteCount++;
+        if (usesCustomInstrument) customInstrumentNoteCount++;
+        if (isOutOfRange || hasDetune || usesCustomInstrument)
+          incompatibleNoteCount++;
 
         instrumentNoteCounts[note.instrument]++;
         noteCount++;
@@ -118,7 +166,10 @@ export class SongStatsGenerator {
       noteCount,
       tickCount,
       layerCount,
-      notesOutsideOctaveRange,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      customInstrumentNoteCount,
+      incompatibleNoteCount,
       instrumentNoteCounts,
     };
   }
@@ -249,7 +300,6 @@ export class SongStatsGenerator {
   ): {
     vanillaInstrumentCount: number;
     customInstrumentCount: number;
-    customInstrumentNoteCount: number;
   } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
 
@@ -260,22 +310,13 @@ export class SongStatsGenerator {
       .slice(0, firstCustomIndex)
       .filter((count) => count > 0).length;
 
-    const customInstrumentBlockCounts =
-      noteCountsPerInstrument.slice(firstCustomIndex);
-
-    const customInstrumentCount = customInstrumentBlockCounts.filter(
-      (count) => count > 0,
-    ).length;
-
-    const customInstrumentNoteCount = customInstrumentBlockCounts.reduce(
-      (acc, count) => acc + count,
-      0,
-    );
+    const customInstrumentCount = noteCountsPerInstrument
+      .slice(firstCustomIndex)
+      .filter((count) => count > 0).length;
 
     return {
       vanillaInstrumentCount,
       customInstrumentCount,
-      customInstrumentNoteCount,
     };
   }
 

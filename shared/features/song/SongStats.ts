@@ -47,14 +47,20 @@ export class SongStats {
   @IsInt()
   customInstrumentCount: number;
 
-  @IsBoolean()
-  customInstrumentNoteCount: number;
-
   @IsInt()
   firstCustomInstrumentIndex: number;
 
   @IsInt()
-  notesOutsideOctaveRange: number;
+  outOfRangeNoteCount: number;
+
+  @IsInt()
+  detunedNoteCount: number;
+
+  @IsInt()
+  customInstrumentNoteCount: number;
+
+  @IsInt()
+  incompatibleNoteCount: number;
 
   @IsBoolean()
   compatible: boolean;
