@@ -14,6 +14,7 @@ const testSongPaths = {
   simple: 'files/testSimple.nbs',
   extraPopulatedLayer: 'files/testExtraPopulatedLayer.nbs',
   loop: 'files/testLoop.nbs',
+  detune: 'files/testDetune.nbs',
   outOfRange: 'files/testOutOfRange.nbs',
   outOfRangeCustomPitch: 'files/testOutOfRangeCustomPitch.nbs',
   customInstrumentNoUsage: 'files/testCustomInstrumentNoUsage.nbs',
@@ -79,6 +80,20 @@ function testLoop() {
 
   assert(stats.loop === true);
   assert(stats.loopStartTick === 7);
+}
+
+function testDetune() {
+  // Test that notes with microtonal detune values are properly counted, and make
+  // the song incompatible. Also checks that notes crossing the 2-octave range
+  // boundary via pitch values are taken into account.
+
+  const stats = testSongStats.detune;
+
+  assert(stats.noteCount === 10);
+  assert(stats.detunedNoteCount === 4);
+  assert(stats.incompatibleNoteCount === 6);
+  assert(stats.outOfRangeNoteCount === 2);
+  assert(stats.compatible === false);
 }
 
 function testOutOfRange() {
@@ -186,6 +201,7 @@ function runAllTests() {
   runTest(testSimple);
   runTest(testExtraPopulatedLayer);
   runTest(testLoop);
+  runTest(testDetune);
   runTest(testOutOfRange);
   runTest(testOutOfRangeCustomPitch);
   runTest(testCustomInstrumentNoUsage);
