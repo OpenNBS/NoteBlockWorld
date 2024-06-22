@@ -50,9 +50,11 @@ function testSimple() {
   // assert(stats.minutesSpent === 0);
   assert(stats.vanillaInstrumentCount === 5);
   assert(stats.customInstrumentCount === 0);
-  assert(stats.usesCustomInstruments === false);
   assert(stats.firstCustomInstrumentIndex === 16);
-  assert(stats.notesOutsideOctaveRange === 0);
+  assert(stats.customInstrumentNoteCount === 0);
+  assert(stats.outOfRangeNoteCount === 0);
+  assert(stats.detunedNoteCount === 0);
+  assert(stats.incompatibleNoteCount === 0);
   assert(stats.compatible === true);
 
   assert(
@@ -97,9 +99,13 @@ function testDetune() {
 }
 
 function testOutOfRange() {
+  // Test that notes outside the 2-octave range are properly counted in a song where
+  // every instrument uses the default pitch (F#4 - 45).
+
   const stats = testSongStats.outOfRange;
 
-  assert(stats.notesOutsideOctaveRange === 6);
+  assert(stats.outOfRangeNoteCount === 6);
+  assert(stats.incompatibleNoteCount === 6);
   assert(stats.compatible === false);
 }
 
@@ -110,7 +116,9 @@ function testCustomInstrumentNoUsage() {
   const stats = testSongStats.customInstrumentNoUsage;
 
   assert(stats.customInstrumentCount === 0);
-  assert(stats.usesCustomInstruments === false);
+  assert(stats.customInstrumentNoteCount === 0);
+
+  assert(stats.compatible === true);
 }
 
 function testCustomInstrumentUsage() {
@@ -121,11 +129,13 @@ function testCustomInstrumentUsage() {
   const firstCustomIndex = stats.firstCustomInstrumentIndex;
 
   assert(stats.customInstrumentCount === 2);
-  assert(stats.usesCustomInstruments === true);
+  assert(stats.customInstrumentNoteCount > 0);
 
   assert(stats.instrumentNoteCounts[firstCustomIndex + 0] === 3);
   assert(stats.instrumentNoteCounts[firstCustomIndex + 1] === 0);
   assert(stats.instrumentNoteCounts[firstCustomIndex + 2] === 2);
+
+  assert(stats.compatible === false);
 }
 
 function testTempoChangerWithStart() {
