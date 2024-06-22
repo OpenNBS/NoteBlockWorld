@@ -35,13 +35,17 @@ export class SongStatsGenerator {
     const loop = this.getLoop();
     const loopStartTick = this.getLoopStartTick();
     const minutesSpent = this.getMinutesSpent();
-    const usesCustomInstruments = this.getUsesCustomInstruments();
 
-    const { vanillaInstrumentCount, customInstrumentCount } =
-      this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
+    const {
+      vanillaInstrumentCount,
+      customInstrumentCount,
+      customInstrumentNoteCount,
+    } = this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
-    const compatible = notesOutsideOctaveRange === 0 && !usesCustomInstruments;
+
+    const compatible =
+      notesOutsideOctaveRange === 0 && customInstrumentNoteCount === 0;
 
     this.stats = {
       midiFileName,
@@ -218,8 +222,10 @@ export class SongStatsGenerator {
     return this.song.minutesSpent;
   }
 
-  private getUsesCustomInstruments(): boolean {
-    // Having custom instruments isn't enough, the song must have at least a note with one of them
+  private getCustomInstrumentNoteCount(): boolean {
+    // Having custom instruments isn't enough, the song must have at least
+    //  a note with one of them for it to be considered incompatible
+
     const lastInstrumentId = this.song.instruments.total - 1; // e.g. 15
     const firstCustomIndex = this.song.instruments.firstCustomIndex; // e.g. 16
 
@@ -240,21 +246,37 @@ export class SongStatsGenerator {
 
   private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
-  ) {
+  ): {
+    vanillaInstrumentCount: number;
+    customInstrumentCount: number;
+    customInstrumentNoteCount: number;
+  } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
 
     // We want the count of instruments that have at least one note in the song
-    // (which tells us how many songs are effectively used in the song)
+    // (which tells us how many instruments are effectively used in the song)
 
     const vanillaInstrumentCount = noteCountsPerInstrument
       .slice(0, firstCustomIndex)
       .filter((count) => count > 0).length;
 
-    const customInstrumentCount = noteCountsPerInstrument
-      .slice(firstCustomIndex)
-      .filter((count) => count > 0).length;
+    const customInstrumentBlockCounts =
+      noteCountsPerInstrument.slice(firstCustomIndex);
 
-    return { vanillaInstrumentCount, customInstrumentCount };
+    const customInstrumentCount = customInstrumentBlockCounts.filter(
+      (count) => count > 0,
+    ).length;
+
+    const customInstrumentNoteCount = customInstrumentBlockCounts.reduce(
+      (acc, count) => acc + count,
+      0,
+    );
+
+    return {
+      vanillaInstrumentCount,
+      customInstrumentCount,
+      customInstrumentNoteCount,
+    };
   }
 
   private getFirstCustomInstrumentIndex(): number {

@@ -48,7 +48,7 @@ export class SongStats {
   customInstrumentCount: number;
 
   @IsBoolean()
-  usesCustomInstruments: boolean;
+  customInstrumentNoteCount: number;
 
   @IsInt()
   firstCustomInstrumentIndex: number;

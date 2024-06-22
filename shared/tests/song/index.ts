@@ -15,6 +15,7 @@ const testSongPaths = {
   extraPopulatedLayer: 'files/testExtraPopulatedLayer.nbs',
   loop: 'files/testLoop.nbs',
   outOfRange: 'files/testOutOfRange.nbs',
+  outOfRangeCustomPitch: 'files/testOutOfRangeCustomPitch.nbs',
   customInstrumentNoUsage: 'files/testCustomInstrumentNoUsage.nbs',
   customInstrumentUsage: 'files/testCustomInstrumentUsage.nbs',
   tempoChangerWithStart: 'files/testTempoChangerWithStart.nbs',
@@ -186,6 +187,7 @@ function runAllTests() {
   runTest(testExtraPopulatedLayer);
   runTest(testLoop);
   runTest(testOutOfRange);
+  runTest(testOutOfRangeCustomPitch);
   runTest(testCustomInstrumentNoUsage);
   runTest(testCustomInstrumentUsage);
   runTest(testTempoChangerWithStart);
