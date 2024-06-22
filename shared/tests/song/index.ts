@@ -23,6 +23,8 @@ const testSongPaths = {
   tempoChangerNoStart: 'files/testTempoChangerNoStart.nbs',
   tempoChangerDifferentStart: 'files/testTempoChangerDifferentStart.nbs',
   tempoChangerOverlap: 'files/testTempoChangerOverlap.nbs',
+  tempoChangerMultipleInstruments:
+    'files/testTempoChangerMultipleInstruments.nbs',
 };
 
 const testSongStats = Object.fromEntries(
@@ -206,6 +208,20 @@ function testTempoChangerOverlap() {
   assert(stats.tempoRange?.toString() === [4.0, 18.0].toString());
 }
 
+function testTempoChangerMultipleInstruments() {
+  // Test that multiple tempo changer instruments are properly handled.
+
+  const stats = testSongStats.tempoChangerMultipleInstruments;
+
+  const duration = (1 / 10 + 1 / 12 + 1 / 14 + 1 / 16 + 1 / 18) * 4;
+
+  assert(duration.toFixed(2) === stats.duration.toFixed(2));
+  assert(stats.tempo === 10.0);
+  assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
+
+  assert(stats.detunedNoteCount === 0);
+}
+
 function runTest(test: () => void) {
   console.log('\n------------------------------------');
 
@@ -233,6 +249,7 @@ function runAllTests() {
   runTest(testTempoChangerNoStart);
   runTest(testTempoChangerDifferentStart);
   runTest(testTempoChangerOverlap);
+  runTest(testTempoChangerMultipleInstruments);
 }
 
 runAllTests();
