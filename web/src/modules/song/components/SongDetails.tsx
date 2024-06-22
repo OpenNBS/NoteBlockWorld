@@ -2,7 +2,10 @@ import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
-import { formatDuration } from '@web/src/modules/shared/util/format';
+import {
+  formatDuration,
+  formatTimeSpent,
+} from '@web/src/modules/shared/util/format';
 
 type SongDetailsProps = {
   song: SongViewDtoType;
@@ -47,6 +50,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
   // Pre-compute complex values
   const formattedFileSize = `${(song.fileSize / 1024).toFixed(2)} kB`;
   const formattedDuration = formatDuration(stats.duration);
+  const formattedTimeSpent = formatTimeSpent(stats.minutesSpent);
 
   let tpsLabel, bpmLabel;
 
@@ -124,7 +128,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
         {row('Time signature', `${stats.timeSignature}/4`)}
         {row('Running time', formattedDuration)}
         {row('Loop', loopInfo)}
-        {row('Time spent', stats.minutesSpent)}
+        {row('Time spent', formattedTimeSpent)}
         {row('File size', formattedFileSize)}
       </tbody>
     </table>
