@@ -12,7 +12,7 @@ export const CustomMarkdown = ({
   return (
     <>
       <Header />
-      <article className='p-8 max-w-800 mx-auto min-h-screen text-lg'>
+      <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
         <Markdown
           components={{
             p,
@@ -22,6 +22,7 @@ export const CustomMarkdown = ({
             h4,
             h5,
             h6,
+            hr,
             ul,
             ol,
             li,
@@ -46,7 +47,7 @@ function p({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'p'>;
 }) {
-  return <p {...props} className='leading-6' />;
+  return <p {...props} className='leading-6 my-2' />;
 }
 
 function h1({
@@ -56,7 +57,7 @@ function h1({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h1'>;
 }) {
-  return <p {...props} className='text-2xl font-bold' />;
+  return <h1 {...props} className='text-4xl font-bold my-3' />;
 }
 
 function h2({
@@ -66,7 +67,7 @@ function h2({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h2'>;
 }) {
-  return <p {...props} className='text-2xl font-bold' />;
+  return <h2 {...props} className='text-3xl font-bold my-3' />;
 }
 
 function h3({
@@ -76,7 +77,7 @@ function h3({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h3'>;
 }) {
-  return <p {...props} className='text-lg font-bold' />;
+  return <h3 {...props} className='text-2xl font-bold my-3' />;
 }
 
 function h4({
@@ -86,7 +87,7 @@ function h4({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h4'>;
 }) {
-  return <p {...props} className='text-base font-bold' />;
+  return <h4 {...props} className='text-base font-bold' />;
 }
 
 function h5({
@@ -96,7 +97,7 @@ function h5({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h5'>;
 }) {
-  return <p {...props} className='text-sm font-bold' />;
+  return <h5 {...props} className='text-sm font-bold' />;
 }
 
 function h6({
@@ -106,7 +107,17 @@ function h6({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h6'>;
 }) {
-  return <p {...props} className='text-xs font-bold' />;
+  return <h6 {...props} className='text-xs font-bold' />;
+}
+
+function hr({
+  node,
+  ...props
+}: {
+  node: React.ReactNode;
+  props: React.ComponentPropsWithoutRef<'hr'>;
+}) {
+  return <hr {...props} className='border-t-2 border-zinc-600 my-4' />;
 }
 
 function ul({
@@ -116,7 +127,7 @@ function ul({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'ul'>;
 }) {
-  return <p {...props} className='pl-4' />;
+  return <ul {...props} className='list-disc pl-8' />;
 }
 
 function ol({
@@ -126,7 +137,7 @@ function ol({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'ol'>;
 }) {
-  return <p {...props} className='pl-4' />;
+  return <ol {...props} className='list-decimal pl-8' />;
 }
 
 function li({
@@ -136,7 +147,7 @@ function li({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'li'>;
 }) {
-  return <p {...props} className='leading-6' />;
+  return <li {...props} className='leading-6 pl-1' />;
 }
 
 function blockquote({
@@ -146,7 +157,12 @@ function blockquote({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'blockquote'>;
 }) {
-  return <p {...props} className='border-l-2 pl-4' />;
+  return (
+    <blockquote
+      {...props}
+      className='border-l-4 border-zinc-600 text-zinc-400 pl-4 py-1'
+    />
+  );
 }
 
 function pre({
@@ -157,7 +173,10 @@ function pre({
   props: React.ComponentPropsWithoutRef<'pre'>;
 }) {
   return (
-    <p {...props} className='bg-gray-900 text-white p-4 overflow-x-auto' />
+    <pre
+      {...props}
+      className='bg-zinc-900 border border-zinc-700 [&>code]:border-none rounded-lg text-white text-sm p-2 overflow-x-auto'
+    />
   );
 }
 
@@ -168,7 +187,9 @@ function code({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'code'>;
 }) {
-  return <p {...props} className='bg-gray-900 text-white p-1' />;
+  return (
+    <code {...props} className='bg-zinc-900 text-white font-mono px-1 py-0.5' />
+  );
 }
 
 function a({
@@ -183,7 +204,11 @@ function a({
   props: React.ComponentPropsWithoutRef<'a'>;
 }) {
   return (
-    <Link {...props} href={href} className=''>
+    <Link
+      {...props}
+      href={href}
+      className='underline text-blue-500 hover:text-blue-400'
+    >
       {children}
     </Link>
   );
