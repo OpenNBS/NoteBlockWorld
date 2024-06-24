@@ -42,7 +42,7 @@ function p({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'p'>;
 }) {
-  return <p {...props} className='leading-6 my-2' />;
+  return <p {...props} className='leading-6 my-2 font-light' />;
 }
 
 function h1({
@@ -62,7 +62,7 @@ function h2({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h2'>;
 }) {
-  return <h2 {...props} className='text-3xl font-bold my-3' />;
+  return <h2 {...props} className='text-2xl font-bold my-3' />;
 }
 
 function h3({
@@ -72,7 +72,7 @@ function h3({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h3'>;
 }) {
-  return <h3 {...props} className='text-2xl font-bold my-3' />;
+  return <h3 {...props} className='text-xl font-bold my-3' />;
 }
 
 function h4({
