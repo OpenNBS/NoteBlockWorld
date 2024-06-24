@@ -1,9 +1,6 @@
 import Link from 'next/link';
 import Markdown from 'react-markdown';
 
-import { Footer } from './layout/Footer';
-import { Header } from './layout/Header';
-
 export const CustomMarkdown = ({
   MarkdownContent,
 }: {
@@ -11,7 +8,6 @@ export const CustomMarkdown = ({
 }) => {
   return (
     <>
-      <Header />
       <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
         <Markdown
           components={{
@@ -35,7 +31,6 @@ export const CustomMarkdown = ({
           {MarkdownContent}
         </Markdown>
       </article>
-      <Footer />
     </>
   );
 };
