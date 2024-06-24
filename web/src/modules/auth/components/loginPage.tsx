@@ -1,9 +1,10 @@
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { baseApiURL } from '@web/src/lib/axios';
+
+import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
 
 type AuthProvider = 'google' | 'github';
 
@@ -39,22 +40,7 @@ export const LoginPage = () => {
     >
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-900/30 backdrop-blur-md w-fit max-w-2xl rounded-2xl p-10'>
         {/* Left half */}
-        <div className='flex flex-row sm:flex-col items-center justify-center gap-2 mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem] animate-[nbw-glow_3s_ease-in-out_infinite]'>
-          <Image
-            src='/nbw-color.png'
-            alt='Note Block World logo'
-            className='w-[100px] sm:w-[128px]'
-            width={150}
-            height={150}
-          />
-          <Image
-            src='/nbw-logo.png'
-            width={150}
-            height={100}
-            alt=''
-            className='relative right-8 sm:right-0 sm:bottom-10 resize-none min-w-[150px] max-w-[150px]'
-          />
-        </div>
+        <NoteBlockWorldLogo glow={true} orientation='adaptive' size={128} />
 
         {/* Vertical divider (mobile) */}
         <div className='w-[1px] min-h-full hidden sm:block bg-zinc-600'></div>
