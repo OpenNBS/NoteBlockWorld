@@ -17,7 +17,7 @@ import { TokenPayload, Tokens } from './types/token';
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private readonly FRONTEND_URL: string;
-  private readonly APP_DOMAIN: string;
+  private readonly APP_DOMAIN?: string;
   private readonly COOKIE_EXPIRES_IN: string;
   private readonly JWT_SECRET: string;
   private readonly JWT_EXPIRES_IN: string;
@@ -31,7 +31,10 @@ export class AuthService {
   ) {
     const config = {
       FRONTEND_URL: configService.get('FRONTEND_URL'),
-      APP_DOMAIN: configService.get('APP_DOMAIN'),
+      APP_DOMAIN:
+        configService.get('APP_DOMAIN').length > 0
+          ? configService.get('APP_DOMAIN')
+          : undefined,
       COOKIE_EXPIRES_IN:
         configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
       JWT_SECRET: this.configService.get('JWT_SECRET'),
@@ -39,16 +42,6 @@ export class AuthService {
       JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
       JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
     };
-
-    if (Object.values(config).some((value) => value === undefined)) {
-      for (const [key, value] of Object.entries(config)) {
-        if (value === undefined) {
-          this.logger.error(`Missing ${key} environment variable`);
-        }
-      }
-
-      throw new Error('Missing environment variables');
-    }
 
     this.FRONTEND_URL = config.FRONTEND_URL;
     this.APP_DOMAIN = config.APP_DOMAIN;
