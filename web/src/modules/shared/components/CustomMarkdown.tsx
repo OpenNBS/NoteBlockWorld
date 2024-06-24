@@ -52,7 +52,12 @@ function h1({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h1'>;
 }) {
-  return <h1 {...props} className='text-4xl font-bold my-3' />;
+  return (
+    <h1
+      {...props}
+      className='text-3xl text-center uppercase font-light tracking-wider text-zinc-400 mb-24'
+    />
+  );
 }
 
 function h2({
@@ -62,7 +67,7 @@ function h2({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h2'>;
 }) {
-  return <h2 {...props} className='text-2xl font-bold my-3' />;
+  return <h2 {...props} className='text-2xl font-bold font mt-12 mb-3' />;
 }
 
 function h3({
@@ -72,7 +77,7 @@ function h3({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h3'>;
 }) {
-  return <h3 {...props} className='text-xl font-bold my-3' />;
+  return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
 }
 
 function h4({
@@ -82,7 +87,7 @@ function h4({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h4'>;
 }) {
-  return <h4 {...props} className='text-base font-bold' />;
+  return <h4 {...props} className='text-base font-bold my-3' />;
 }
 
 function h5({
@@ -92,7 +97,7 @@ function h5({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h5'>;
 }) {
-  return <h5 {...props} className='text-sm font-bold' />;
+  return <h5 {...props} className='text-sm font-bold my-3' />;
 }
 
 function h6({
@@ -102,7 +107,7 @@ function h6({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h6'>;
 }) {
-  return <h6 {...props} className='text-xs font-bold' />;
+  return <h6 {...props} className='text-xs font-bold my-3' />;
 }
 
 function hr({
