@@ -23,21 +23,11 @@ export class FileService {
     // Load environment variables
     const key = this.configService.get<string>('S3_KEY');
     const secret = this.configService.get<string>('S3_SECRET');
-
-    if (!key || !secret) {
-      throw new Error('Missing S3_KEY or S3_SECRET environment variable');
-    }
-
     const endpoint = this.configService.get<string>('S3_ENDPOINT');
-
-    if (!endpoint) {
-      throw new Error('Missing S3_ENDPOINT environment variable');
-    }
-
     const region = this.configService.get<string>('S3_REGION');
 
-    if (!region) {
-      throw new Error('Missing S3_REGION environment variable');
+    if (!key || !secret || !endpoint || !region) {
+      throw new Error('Missing S3 configuration');
     }
 
     // Create S3 client
