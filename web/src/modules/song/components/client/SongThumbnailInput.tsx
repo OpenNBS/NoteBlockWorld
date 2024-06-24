@@ -8,12 +8,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@web/src/modules/shared/components/tooltip';
-import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);
@@ -133,12 +131,10 @@ export const SongThumbnailInput = ({
   type: 'upload' | 'edit';
   isLocked: boolean;
 }) => {
-  const { song, formMethods } = useSongProvider(type) as
-    | useUploadSongProviderType
-    | useEditSongProviderType;
+  const { song, formMethods } = useSongProvider(type);
 
   const [notes, maxTick, maxLayer] = useMemo(() => {
-    if (!song) return [[], 0, 0];
+    if (!song) return [null, 0, 0];
     const notes = song.notes;
     const maxTick = song.length;
     const maxLayer = song.height;
@@ -155,7 +151,9 @@ export const SongThumbnailInput = ({
         maxLayer={maxLayer}
       />
 
-      <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
+      {song && notes && (
+        <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
+      )}
 
       {/* Background Color */}
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>

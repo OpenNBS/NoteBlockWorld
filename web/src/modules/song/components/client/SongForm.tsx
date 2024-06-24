@@ -1,8 +1,6 @@
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
-import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
-
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
@@ -15,7 +13,6 @@ import {
   TextArea,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
-import type { useEditSongProviderType } from '../../../song-edit/components/client/context/EditSong.context';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -28,9 +25,7 @@ export const SongForm = ({
   isLoading = false,
   isLocked = false,
 }: SongFormProps) => {
-  const useSongProviderData = useSongProvider(
-    type,
-  ) as useUploadSongProviderType & useEditSongProviderType;
+  const useSongProviderData = useSongProvider(type);
 
   const { sendError, errors, submitSong, isSubmitting, formMethods, register } =
     useSongProviderData;
