@@ -42,7 +42,7 @@ export function SongSearchCombo({
                 .find((currentSound) => currentSound === currentSound)
                 ?.replace('minecraft/sounds/', '')
                 .replace('.ogg', '')
-            : 'Select a sound'}
+            : 'No sound'}
           <FontAwesomeIcon
             icon={faChevronDown}
             size='sm'
@@ -54,7 +54,7 @@ export function SongSearchCombo({
         <Command>
           <CommandInput placeholder='Search sounds...' />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No sounds found</CommandEmpty>
             <CommandGroup>
               {(sounds as string[]).map((currentSound) => (
                 <CommandItem
