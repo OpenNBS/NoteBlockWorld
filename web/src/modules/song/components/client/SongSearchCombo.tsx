@@ -35,7 +35,7 @@ export function SongSearchCombo({
       <PopoverTrigger asChild>
         <button
           aria-expanded={open}
-          className='block h-full w-full border-2 text-sm text-left align-top pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
+          className='block relative w-full h-full border-2 text-sm text-left pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
         >
           {value
             ? value.replace('minecraft/sounds/', '').replace('.ogg', '')
@@ -43,7 +43,7 @@ export function SongSearchCombo({
           <FontAwesomeIcon
             icon={faChevronDown}
             size='sm'
-            className='text-white mx-1 h-4 w-4 float-right shrink-0'
+            className='absolute right-0 top-2.5 text-white mx-1 w-3 shrink-0'
           />
         </button>
       </PopoverTrigger>
