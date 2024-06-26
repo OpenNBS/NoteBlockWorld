@@ -144,19 +144,23 @@ export class SongStatsGenerator {
         const isOutOfRange =
           effectivePitch < minRange || effectivePitch > maxRange;
 
-        // Don't consider tempo changers as detuned notes
-        const hasDetune =
-          note.pitch % 100 !== 0 &&
-          !tempoChangerInstruments.includes(note.instrument);
+        // Don't consider tempo changers as detuned notes or custom instruments
+        const isTempoChanger = tempoChangerInstruments.includes(
+          note.instrument,
+        );
+
+        const hasDetune = note.pitch % 100 !== 0;
 
         const usesCustomInstrument =
           note.instrument >= this.song.instruments.firstCustomIndex;
 
-        if (isOutOfRange) outOfRangeNoteCount++;
-        if (hasDetune) detunedNoteCount++;
-        if (usesCustomInstrument) customInstrumentNoteCount++;
-        if (isOutOfRange || hasDetune || usesCustomInstrument)
-          incompatibleNoteCount++;
+        if (!isTempoChanger) {
+          if (isOutOfRange) outOfRangeNoteCount++;
+          if (hasDetune) detunedNoteCount++;
+          if (usesCustomInstrument) customInstrumentNoteCount++;
+          if (isOutOfRange || hasDetune || usesCustomInstrument)
+            incompatibleNoteCount++;
+        }
 
         instrumentNoteCounts[note.instrument]++;
         noteCount++;
@@ -278,28 +282,6 @@ export class SongStatsGenerator {
     return this.song.minutesSpent;
   }
 
-  private getCustomInstrumentNoteCount(): boolean {
-    // Having custom instruments isn't enough, the song must have at least
-    //  a note with one of them for it to be considered incompatible
-
-    const lastInstrumentId = this.song.instruments.total - 1; // e.g. 15
-    const firstCustomIndex = this.song.instruments.firstCustomIndex; // e.g. 16
-
-    if (lastInstrumentId < firstCustomIndex) {
-      return false;
-    }
-
-    for (const layer of this.song.layers.get) {
-      for (const [_, note] of layer.notes) {
-        if (note.instrument >= firstCustomIndex) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
   private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
   ): {
@@ -307,6 +289,7 @@ export class SongStatsGenerator {
     customInstrumentCount: number;
   } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
+    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
     // We want the count of instruments that have at least one note in the song
     // (which tells us how many instruments are effectively used in the song)
@@ -316,6 +299,7 @@ export class SongStatsGenerator {
       .filter((count) => count > 0).length;
 
     const customInstrumentCount = noteCountsPerInstrument
+      .filter((_, index) => !tempoChangerInstruments.includes(index))
       .slice(firstCustomIndex)
       .filter((count) => count > 0).length;
 

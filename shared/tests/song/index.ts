@@ -162,8 +162,13 @@ function testTempoChangerWithStart() {
   assert(stats.tempo === 10.0);
   assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
 
-  // Tempo changers shouldn't count as detuned notes
+  // Tempo changers shouldn't count as detuned notes, increase custom instrument count
+  // or incompatible note count.
   assert(stats.detunedNoteCount === 0);
+  assert(stats.customInstrumentCount === 0);
+  assert(stats.customInstrumentNoteCount === 0);
+  assert(stats.incompatibleNoteCount === 0);
+  assert(stats.compatible === true);
 }
 
 function testTempoChangerNoStart() {

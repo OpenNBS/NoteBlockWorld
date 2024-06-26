@@ -19,10 +19,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const SERVER_URL = configService.get<string>('SERVER_URL');
 
     if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !SERVER_URL) {
-      GoogleStrategy.logger.error(
-        'Missing Google config, define GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET or SERVER_URL',
-      );
-
       throw new Error('Missing Google config');
     }
 
