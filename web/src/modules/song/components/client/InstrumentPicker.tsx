@@ -1,3 +1,4 @@
+import { Instrument } from '@shared/features/song/types';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -41,6 +42,29 @@ const InstrumentTableCell = ({
       )}
     >
       {children}
+    </div>
+  );
+};
+
+const InstrumentTableRow = ({
+  children,
+  instrument,
+}: {
+  children: React.ReactNode;
+  instrument: Instrument;
+}) => {
+  return (
+    <div className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'>
+      <InstrumentTableCell className='col-span-1 text-right'>
+        {instrument.id + 1}
+      </InstrumentTableCell>
+      <InstrumentTableCell className='col-span-3 truncate'>
+        {instrument.name || 'Unnamed instrument'}
+      </InstrumentTableCell>
+      <InstrumentTableCell className='col-span-1 text-right'>
+        {instrument.count.toLocaleString()}
+      </InstrumentTableCell>
+      <div className='col-span-3'>{children}</div>
     </div>
   );
 };
@@ -99,29 +123,15 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
         {/* Instruments */}
         <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
           {instruments.map((instrument, i) => (
-            <div
-              key={i}
-              className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
-            >
-              <InstrumentTableCell className='col-span-1 text-right'>
-                {instrument.id + 1}
-              </InstrumentTableCell>
-              <InstrumentTableCell className='col-span-3 truncate'>
-                {instrument.name || 'Unnamed instrument'}
-              </InstrumentTableCell>
-              <InstrumentTableCell className='col-span-1 text-right'>
-                {instrument.count.toLocaleString()}
-              </InstrumentTableCell>
-              <div className='col-span-3'>
-                <SongSearchCombo
-                  setValue={(value: string) => {
-                    setValue(i, value);
-                  }}
-                  sounds={soundList}
-                  value={values[i]}
-                />
-              </div>
-            </div>
+            <InstrumentTableRow key={i} instrument={instrument}>
+              <SongSearchCombo
+                setValue={(value: string) => {
+                  setValue(i, value);
+                }}
+                sounds={soundList}
+                value={values[i]}
+              />
+            </InstrumentTableRow>
           ))}
         </div>
       </div>
