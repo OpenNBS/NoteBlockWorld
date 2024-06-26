@@ -19,13 +19,11 @@ export class SongObfuscator {
     const song = this.song;
     const output = new Song();
 
-    const tempoChangerIds = getTempoChangerInstrumentIds(song);
-
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    this.processInstruments(tempoChangerIds);
-    this.processNotes(tempoChangerIds);
+    this.processInstruments();
+    this.processNotes();
 
     return output;
   }
@@ -43,7 +41,7 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments(tempoChangerIds: number[]) {
+  private processInstruments() {
     // TODO: Remove unused instruments
     // TODO: Remove instrument info (name, press) - keep sound hash and pitch
 
@@ -64,16 +62,11 @@ export class SongObfuscator {
         continue;
       }
 
-      // Ignore tempo changers (handled later)
-      if (tempoChangerIds.includes(instrumentId)) {
-        continue;
-      }
-
       // Remove instrument info
       const newInstrumentId = this.output.instruments.loaded.length;
 
       const newInstrument = new Instrument(newInstrumentId, {
-        name: '',
+        name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
         soundFile: 'hash.ogg', // TODO: grab from sounds submitted in upload form
         key: instrument.key,
         pressKey: false,
@@ -82,27 +75,9 @@ export class SongObfuscator {
       this.output.instruments.loaded.push(newInstrument);
       instrumentMapping[instrumentId] = newInstrumentId;
     }
-
-    if (tempoChangerIds.length === 0) return;
-
-    // Handle tempo changers
-    const newTempoChangerId = this.output.instruments.loaded.length;
-
-    const newTempoChanger = new Instrument(newTempoChangerId, {
-      name: 'Tempo Changer',
-      soundFile: '',
-      key: 45,
-      pressKey: false,
-    });
-
-    this.output.instruments.loaded.push(newTempoChanger);
-
-    for (const id of tempoChangerIds) {
-      instrumentMapping[id] = newTempoChangerId;
-    }
   }
 
-  private processNotes(tempoChangerIds: number[]) {
+  private processNotes() {
     // ✅ Pile notes at the top
     // ✅ Bake layer volume into note velocity
     // ✅ Bake layer pan into note pan
@@ -186,6 +161,7 @@ export class SongObfuscator {
       this.output.setNote(tick, layerToAddNoteTo, note);
     };
 
+    const tempoChangerIds = getTempoChangerInstrumentIds(this.song);
     const lastLayerInTick = new Map<number, number>();
 
     for (const layer of this.song.layers) {
