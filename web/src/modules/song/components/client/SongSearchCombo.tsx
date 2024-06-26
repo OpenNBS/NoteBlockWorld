@@ -38,10 +38,7 @@ export function SongSearchCombo({
           className='block h-full w-full border-2 text-sm text-left align-top pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
         >
           {value
-            ? sounds
-                .find((currentSound) => currentSound === currentSound)
-                ?.replace('minecraft/sounds/', '')
-                .replace('.ogg', '')
+            ? value.replace('minecraft/sounds/', '').replace('.ogg', '')
             : 'No sound'}
           <FontAwesomeIcon
             icon={faChevronDown}
