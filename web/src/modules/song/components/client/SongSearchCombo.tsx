@@ -53,6 +53,21 @@ export function SongSearchCombo({
           <CommandList>
             <CommandEmpty>No sounds found</CommandEmpty>
             <CommandGroup>
+              <CommandItem
+                value=''
+                onSelect={(currentValue: string) => {
+                  setValue(currentValue);
+                  setOpen(false);
+                }}
+              >
+                <Check
+                  className={cn(
+                    'mr-2 h-4 w-4',
+                    value === '' ? 'opacity-100' : 'opacity-0',
+                  )}
+                />
+                No sound
+              </CommandItem>
               {(sounds as string[]).map((currentSound) => (
                 <CommandItem
                   key={currentSound}
