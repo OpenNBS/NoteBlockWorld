@@ -13,10 +13,10 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
   const quadTree = new NoteQuadTree(song);
 
   return {
-    title: song.name,
-    author: song.author,
-    originalAuthor: song.originalAuthor,
-    description: song.description,
+    title: song.meta.name,
+    author: song.meta.author,
+    originalAuthor: song.meta.originalAuthor,
+    description: song.meta.description,
     length: quadTree.width,
     height: quadTree.height,
     arrayBuffer: buffer,
@@ -30,15 +30,14 @@ const getInstruments = (song: Song): InstrumentArray => {
 
   const firstCustomIndex = song.instruments.firstCustomIndex;
 
-  const customInstruments = Object.keys(song.instruments.get)
-    .map((idString) => parseInt(idString))
-    .filter((id) => id >= firstCustomIndex)
-    .map((id) => song.instruments.get[id]);
+  const customInstruments = song.instruments.loaded.filter(
+    (instrument) => instrument.builtIn === false,
+  );
 
   return customInstruments.map((instrument, id) => {
     return {
       id: id,
-      name: instrument.name || '',
+      name: instrument.meta.name || '',
       count: blockCounts[id + firstCustomIndex] || 0,
     };
   });
@@ -46,11 +45,15 @@ const getInstruments = (song: Song): InstrumentArray => {
 
 export const getInstrumentBlockCounts = (song: Song) => {
   const blockCounts = Object.fromEntries(
-    Object.keys(song.instruments.get).map((instrumentId) => [instrumentId, 0]),
+    Object.keys(song.instruments.loaded).map((instrumentId) => [
+      instrumentId,
+      0,
+    ]),
   );
 
   for (const layer of song.layers) {
-    for (const [_, note] of layer.notes) {
+    for (const tick in layer.notes) {
+      const note = layer.notes[tick];
       const instrumentId = note.instrument;
       blockCounts[instrumentId]++;
     }

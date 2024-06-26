@@ -75,7 +75,7 @@ export class SongStatsGenerator {
   }
 
   private getMidiFileName(): string {
-    return this.song.importName || '';
+    return this.song.meta.importName || '';
   }
 
   private getCounts(): {
@@ -95,12 +95,18 @@ export class SongStatsGenerator {
     let detunedNoteCount = 0;
     let customInstrumentNoteCount = 0;
     let incompatibleNoteCount = 0;
-    const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
+
+    const instrumentNoteCounts = Array(
+      this.song.instruments.loaded.length,
+    ).fill(0);
 
     const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
-    for (const [layerId, layer] of this.song.layers.get.entries()) {
-      for (const [tick, note] of layer.notes) {
+    for (const [layerId, layer] of this.song.layers.entries()) {
+      for (const tickStr in layer.notes) {
+        const note = layer.notes[tickStr];
+        const tick = parseInt(tickStr);
+
         if (tick > tickCount) {
           tickCount = tick;
         }
@@ -137,7 +143,7 @@ export class SongStatsGenerator {
         // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
         // a custom sounds.json in a resource pack).
 
-        const instrumentKey = this.song.instruments.get[note.instrument].key; // F#4 = 45
+        const instrumentKey = this.song.instruments.loaded[note.instrument].key; // F#4 = 45
         const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
         const maxRange = 45 - (instrumentKey - 45) + 12; // F#5 = 57
 
@@ -205,8 +211,12 @@ export class SongStatsGenerator {
     const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
     if (tempoChangerInstruments.length > 0) {
-      for (const layer of Array.from(this.song.layers.get).reverse()) {
-        for (const [tick, note] of layer.notes) {
+      // TODO: toReversed
+      for (const layer of Array.from(this.song.layers).reverse()) {
+        for (const tickStr in layer.notes) {
+          const note = layer.notes[tickStr];
+          const tick = parseInt(tickStr);
+
           // Not a tempo changer
           if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
@@ -228,9 +238,8 @@ export class SongStatsGenerator {
   }
 
   private getTempoChangerInstrumentIds(): number[] {
-    return Object.entries(this.song.instruments.get).flatMap(
-      ([id, instrument]) =>
-        instrument.name === 'Tempo Changer' ? [parseInt(id)] : [],
+    return this.song.instruments.loaded.flatMap((instrument, id) =>
+      instrument.meta.name === 'Tempo Changer' ? [id] : [],
     );
   }
 
@@ -279,7 +288,7 @@ export class SongStatsGenerator {
   }
 
   private getMinutesSpent(): number {
-    return this.song.minutesSpent;
+    return this.song.stats.minutesSpent;
   }
 
   private getVanillaAndCustomUsedInstrumentCounts(
