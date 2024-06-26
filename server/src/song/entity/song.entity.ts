@@ -38,6 +38,9 @@ export class Song {
   @Prop({ type: String, required: true })
   nbsFileUrl: string;
 
+  @Prop({ type: String, required: true })
+  packedSongUrl: string;
+
   // SONG DOCUMENT ATTRIBUTES
 
   @Prop({ type: Number, required: true, default: 0 })

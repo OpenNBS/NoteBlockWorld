@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NoteQuadTree } from '@shared/features/song/notes';
+import { obfuscateAndPackSong } from '@shared/features/song/pack';
 import { SongStats } from '@shared/features/song/SongStats';
 import { SongStatsGenerator } from '@shared/features/song/stats';
 import { drawToImage } from '@shared/features/thumbnail';
@@ -55,6 +56,7 @@ export class SongUploadService {
     body: UploadSongDto,
     thumbUrl: string,
     fileKey: string,
+    packedFileKey: string,
     songStats: SongStats,
     file: Express.Multer.File,
   ) {
@@ -72,6 +74,7 @@ export class SongUploadService {
     song.thumbnailData = body.thumbnailData;
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
+    song.packedSongUrl = packedFileKey;
     song.stats = songStats;
     song.fileSize = file.size;
 
@@ -104,6 +107,28 @@ export class SongUploadService {
     // Upload file
     const fileKey: string = await this.uploadSongFile(file);
 
+    // Upload packed song file
+    const soundsArray = body.customInstruments;
+
+    // TODO: should fetch from the backend's static files, or from S3 bucket
+    // TODO: cache this in memory on service setup for faster access?
+    const response = await fetch('http://localhost:3000/data/soundList.json');
+    const soundsMapping = (await response.json()) as Record<string, string>;
+
+    const packedSongBuffer = await obfuscateAndPackSong(
+      nbsSong,
+      soundsArray,
+      soundsMapping,
+    );
+
+    const packedFileObj = {
+      buffer: packedSongBuffer,
+      originalname: `${file.originalname.replace('.nbs', '')}.zip`,
+      mimetype: 'application/zip',
+    };
+
+    const packedFileKey = await this.uploadSongFile(packedFileObj);
+
     // PROCESS UPLOADED SONG
     // TODO: delete file from S3 if remainder of upload method fails
 
@@ -131,6 +156,7 @@ export class SongUploadService {
       body,
       thumbUrl,
       fileKey,
+      packedFileKey, // TODO: should be packedFileUrl
       songStats,
       file,
     );
