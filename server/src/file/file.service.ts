@@ -44,7 +44,11 @@ export class FileService {
   }
 
   // Uploads a song to the S3 bucket and returns the key
-  public async uploadSong(file: Express.Multer.File) {
+  public async uploadSong(file: {
+    buffer: Buffer;
+    originalname: string;
+    mimetype: string;
+  }) {
     console.log(file);
 
     const bucket =
@@ -57,7 +61,7 @@ export class FileService {
     const newFileName = `${fileName}${extension}`;
 
     await this.s3_upload(
-      file,
+      file.buffer,
       bucket,
       newFileName,
       file.mimetype,
@@ -130,7 +134,7 @@ export class FileService {
     const fileName = uuidv4();
 
     await this.s3_upload(
-      file,
+      file.buffer,
       bucket,
       fileName,
       file.mimetype,
@@ -177,24 +181,16 @@ export class FileService {
   }
 
   async s3_upload(
-    file: Express.Multer.File | Buffer,
+    file: Buffer,
     bucket: string,
     name: string,
     mimetype: string,
     accessControl: ObjectCannedACL = ObjectCannedACL.public_read,
   ) {
-    let buff;
-
-    if (Buffer.isBuffer(file)) {
-      buff = file;
-    } else {
-      buff = file.buffer;
-    }
-
     const params = {
       Bucket: bucket,
       Key: String(name),
-      Body: buff,
+      Body: file,
       ACL: accessControl,
       ContentType: mimetype,
       ContentDisposition: 'attachment; filename=' + name,

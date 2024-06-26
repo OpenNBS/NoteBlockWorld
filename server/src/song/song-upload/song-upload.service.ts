@@ -195,7 +195,11 @@ export class SongUploadService {
     return thumbUrl;
   }
 
-  private async uploadSongFile(file: Express.Multer.File) {
+  private async uploadSongFile(file: {
+    buffer: Buffer;
+    originalname: string;
+    mimetype: string;
+  }) {
     let fileKey: string;
 
     try {
