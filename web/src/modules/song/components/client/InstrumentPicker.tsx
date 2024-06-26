@@ -54,10 +54,16 @@ const InstrumentTableCell = ({
 
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song } = useSongProvider(type);
-  const [value, setValue] = useState('');
+  const [values, setValues] = useState(sounds.map(() => ''));
   if (!song) return null;
 
   const instruments = song.instruments;
+
+  const setValue = (index: number, value: string) => {
+    const newValues = [...values];
+    newValues[index] = value;
+    setValues(newValues);
+  };
 
   return (
     <div className='flex flex-col w-full'>
@@ -92,7 +98,12 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
               {instrument.count.toLocaleString()}
             </InstrumentTableCell>
             <div className='col-span-3'>
-              <SongSearchCombo setValue={setValue} value={value} />
+              <SongSearchCombo
+                setValue={(value: string) => {
+                  setValue(i, value);
+                }}
+                value={values[i]}
+              />
             </div>
           </div>
         ))}
