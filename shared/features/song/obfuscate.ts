@@ -1,4 +1,6 @@
-import { Layer, Note, Song } from '@encode42/nbs.js';
+import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
+
+import { getInstrumentNoteCounts, getTempoChangerInstrumentIds } from './util';
 
 export class SongObfuscator {
   private song: Song;
@@ -17,10 +19,13 @@ export class SongObfuscator {
     const song = this.song;
     const output = new Song();
 
+    const tempoChangerIds = getTempoChangerInstrumentIds(song);
+
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    this.processNotes(song, output);
+    this.processInstruments(tempoChangerIds);
+    this.processNotes(tempoChangerIds);
 
     return output;
   }
@@ -38,34 +43,66 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments(song: Song, output: Song) {
+  private processInstruments(tempoChangerIds: number[]) {
     // TODO: Remove unused instruments
     // TODO: Remove instrument info (name, press) - keep sound hash and pitch
 
-    const noteCountPerInstrument = {};
-    const tempoChangerIds: number[] = [];
+    const noteCountPerInstrument = getInstrumentNoteCounts(this.song);
 
-    const lastLayerInTick = new Map<number, number>();
+    const instrumentMapping: Record<number, number> = {};
 
-    const instrumentMapping: Record<number, number> = {
-      1: 1,
-      2: 2,
-      3: 3,
-      4: 4,
-      5: 5,
-      6: 6,
-      7: 7,
-      8: 8,
-      9: 9,
-      10: 10,
-      11: 11,
-    };
+    for (const [
+      instrumentId,
+      instrument,
+    ] of this.song.instruments.loaded.entries()) {
+      if (instrument.builtIn) {
+        continue;
+      }
+
+      // Remove unused instruments
+      if (noteCountPerInstrument[instrumentId] === 0) {
+        continue;
+      }
+
+      // Ignore tempo changers (handled later)
+      if (tempoChangerIds.includes(instrumentId)) {
+        continue;
+      }
+
+      // Remove instrument info
+      const newInstrumentId = this.output.instruments.loaded.length;
+
+      const newInstrument = new Instrument(newInstrumentId, {
+        name: '',
+        soundFile: 'hash.ogg', // TODO: grab from sounds submitted in upload form
+        key: instrument.key,
+        pressKey: false,
+      });
+
+      this.output.instruments.loaded.push(newInstrument);
+      instrumentMapping[instrumentId] = newInstrumentId;
+    }
+
+    if (tempoChangerIds.length === 0) return;
+
+    // Handle tempo changers
+    const newTempoChangerId = this.output.instruments.loaded.length;
+
+    const newTempoChanger = new Instrument(newTempoChangerId, {
+      name: 'Tempo Changer',
+      soundFile: '',
+      key: 45,
+      pressKey: false,
+    });
+
+    this.output.instruments.loaded.push(newTempoChanger);
+
+    for (const id of tempoChangerIds) {
+      instrumentMapping[id] = newTempoChangerId;
+    }
   }
 
-  private processNotes(
-    tempoChangerIds: number[],
-    lastLayerInTick: Map<number, number>,
-  ) {
+  private processNotes(tempoChangerIds: number[]) {
     // ✅ Pile notes at the top
     // ✅ Bake layer volume into note velocity
     // ✅ Bake layer pan into note pan
@@ -148,6 +185,8 @@ export class SongObfuscator {
 
       this.output.setNote(tick, layerToAddNoteTo, note);
     };
+
+    const lastLayerInTick = new Map<number, number>();
 
     for (const layer of this.song.layers) {
       // Skip locked and silent layers
