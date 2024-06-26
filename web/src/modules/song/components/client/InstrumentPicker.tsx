@@ -6,14 +6,6 @@ import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';
 import { Area } from '../../../shared/components/client/FormElements';
 
-const sounds = [
-  { name: 'sound1' },
-  { name: 'sound2' },
-  { name: 'sound3' },
-  { name: 'sound4' },
-  { name: 'entity/firework_rocket/blast_far.ogg' },
-];
-
 const InstrumentTableHeader = ({
   className,
   children,
@@ -53,62 +45,73 @@ const InstrumentTableCell = ({
 };
 
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
-  const { song } = useSongProvider(type);
-  const [values, setValues] = useState(sounds.map(() => ''));
-  if (!song) return null;
+  const { song, formMethods } = useSongProvider(type);
 
-  const instruments = song.instruments;
+  const instruments = song?.instruments ?? [];
+
+  const { formState } = formMethods;
+
+  const [values, setValues] = useState<Array<string>>(
+    Array(instruments.length).fill(''),
+  );
 
   const setValue = (index: number, value: string) => {
     const newValues = [...values];
     newValues[index] = value;
     setValues(newValues);
+
+    formMethods.setValue('customInstruments', newValues);
   };
 
   return (
-    <div className='flex flex-col w-full'>
-      {/* Header */}
-      <div className='flex-shrink grid grid-cols-8'>
-        <InstrumentTableHeader className='text-right'>#</InstrumentTableHeader>
-        <InstrumentTableHeader className='col-span-3'>
-          Instrument
-        </InstrumentTableHeader>
-        <InstrumentTableHeader className='col-span-1'>
-          Blocks
-        </InstrumentTableHeader>
-        <InstrumentTableHeader className='col-span-3'>
-          Sound file
-        </InstrumentTableHeader>
-      </div>
+    <>
+      <p>{formState.errors.customInstruments?.message}</p>
+      <div className='flex flex-col w-full'>
+        {/* Header */}
+        <div className='flex-shrink grid grid-cols-8'>
+          <InstrumentTableHeader className='text-right'>
+            #
+          </InstrumentTableHeader>
+          <InstrumentTableHeader className='col-span-3'>
+            Instrument
+          </InstrumentTableHeader>
+          <InstrumentTableHeader className='col-span-1'>
+            Blocks
+          </InstrumentTableHeader>
+          <InstrumentTableHeader className='col-span-3'>
+            Sound file
+          </InstrumentTableHeader>
+        </div>
 
-      {/* Instruments */}
-      <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
-        {instruments.map((instrument, i) => (
-          <div
-            key={i}
-            className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
-          >
-            <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.id + 1}
-            </InstrumentTableCell>
-            <InstrumentTableCell className='col-span-3 truncate'>
-              {instrument.name || 'Unnamed instrument'}
-            </InstrumentTableCell>
-            <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.count.toLocaleString()}
-            </InstrumentTableCell>
-            <div className='col-span-3'>
-              <SongSearchCombo
-                setValue={(value: string) => {
-                  setValue(i, value);
-                }}
-                value={values[i]}
-              />
+        {/* Instruments */}
+        <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
+          {instruments.map((instrument, i) => (
+            <div
+              key={i}
+              className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
+            >
+              <InstrumentTableCell className='col-span-1 text-right'>
+                {instrument.id + 1}
+              </InstrumentTableCell>
+              <InstrumentTableCell className='col-span-3 truncate'>
+                {instrument.name || 'Unnamed instrument'}
+              </InstrumentTableCell>
+              <InstrumentTableCell className='col-span-1 text-right'>
+                {instrument.count.toLocaleString()}
+              </InstrumentTableCell>
+              <div className='col-span-3'>
+                <SongSearchCombo
+                  setValue={(value: string) => {
+                    setValue(i, value);
+                  }}
+                  value={values[i]}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
