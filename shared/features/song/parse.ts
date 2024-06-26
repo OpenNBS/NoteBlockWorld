@@ -2,6 +2,7 @@ import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 
 import { NoteQuadTree } from './notes';
 import { InstrumentArray, SongFileType } from './types';
+import { getInstrumentNoteCounts } from './util';
 
 export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
   const song = fromArrayBuffer(buffer);
@@ -26,7 +27,7 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
 }
 
 const getInstruments = (song: Song): InstrumentArray => {
-  const blockCounts = getInstrumentBlockCounts(song);
+  const blockCounts = getInstrumentNoteCounts(song);
 
   const firstCustomIndex = song.instruments.firstCustomIndex;
 
@@ -41,23 +42,4 @@ const getInstruments = (song: Song): InstrumentArray => {
       count: blockCounts[id + firstCustomIndex] || 0,
     };
   });
-};
-
-export const getInstrumentBlockCounts = (song: Song) => {
-  const blockCounts = Object.fromEntries(
-    Object.keys(song.instruments.loaded).map((instrumentId) => [
-      instrumentId,
-      0,
-    ]),
-  );
-
-  for (const layer of song.layers) {
-    for (const tick in layer.notes) {
-      const note = layer.notes[tick];
-      const instrumentId = note.instrument;
-      blockCounts[instrumentId]++;
-    }
-  }
-
-  return blockCounts;
 };
