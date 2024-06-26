@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 
@@ -63,6 +64,18 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
     formMethods.setValue('customInstruments', newValues);
   };
 
+  async function fetchSoundList() {
+    const response = await axios<string[]>('/data/selectSoundList.json');
+    const data = response.data;
+    return data;
+  }
+
+  const [soundList, setSoundList] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchSoundList().then(setSoundList);
+  }, []);
+
   return (
     <>
       <p>{formState.errors.customInstruments?.message}</p>
@@ -104,6 +117,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                   setValue={(value: string) => {
                     setValue(i, value);
                   }}
+                  sounds={soundList}
                   value={values[i]}
                 />
               </div>

@@ -2,7 +2,6 @@
 
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import sounds from '@shared/data/soundListKeys.json';
 import { Check } from 'lucide-react';
 import * as React from 'react';
 
@@ -24,9 +23,11 @@ import {
 export function SongSearchCombo({
   value,
   setValue,
+  sounds,
 }: {
   value: string;
   setValue: (value: string) => void;
+  sounds: string[];
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -68,7 +69,7 @@ export function SongSearchCombo({
                 />
                 No sound
               </CommandItem>
-              {(sounds as string[]).map((currentSound) => (
+              {sounds.map((currentSound) => (
                 <CommandItem
                   key={currentSound}
                   value={currentSound}
