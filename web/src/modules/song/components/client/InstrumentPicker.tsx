@@ -101,41 +101,36 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   }, []);
 
   return (
-    <>
-      <p>{formState.errors.customInstruments?.message}</p>
-      <div className='flex flex-col w-full'>
-        {/* Header */}
-        <div className='flex-shrink grid grid-cols-8'>
-          <InstrumentTableHeader className='text-right'>
-            #
-          </InstrumentTableHeader>
-          <InstrumentTableHeader className='col-span-3'>
-            Instrument
-          </InstrumentTableHeader>
-          <InstrumentTableHeader className='col-span-1'>
-            Blocks
-          </InstrumentTableHeader>
-          <InstrumentTableHeader className='col-span-3'>
-            Sound file
-          </InstrumentTableHeader>
-        </div>
-
-        {/* Instruments */}
-        <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
-          {instruments.map((instrument, i) => (
-            <InstrumentTableRow key={i} instrument={instrument}>
-              <SongSearchCombo
-                setValue={(value: string) => {
-                  setValue(i, value);
-                }}
-                sounds={soundList}
-                value={values[i]}
-              />
-            </InstrumentTableRow>
-          ))}
-        </div>
+    <div className='flex flex-col w-full'>
+      {/* Header */}
+      <div className='flex-shrink grid grid-cols-8'>
+        <InstrumentTableHeader className='text-right'>#</InstrumentTableHeader>
+        <InstrumentTableHeader className='col-span-3'>
+          Instrument
+        </InstrumentTableHeader>
+        <InstrumentTableHeader className='col-span-1'>
+          Blocks
+        </InstrumentTableHeader>
+        <InstrumentTableHeader className='col-span-3'>
+          Sound file
+        </InstrumentTableHeader>
       </div>
-    </>
+
+      {/* Instruments */}
+      <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
+        {instruments.map((instrument, i) => (
+          <InstrumentTableRow key={i} instrument={instrument}>
+            <SongSearchCombo
+              setValue={(value: string) => {
+                setValue(i, value);
+              }}
+              sounds={soundList}
+              value={values[i]}
+            />
+          </InstrumentTableRow>
+        ))}
+      </div>
+    </div>
   );
 };
 
