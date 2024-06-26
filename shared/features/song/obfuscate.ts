@@ -22,8 +22,8 @@ export class SongObfuscator {
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    this.processInstruments();
-    this.processNotes();
+    const instrumentMapping = this.processInstruments();
+    this.processNotes(instrumentMapping);
 
     return output;
   }
@@ -41,7 +41,7 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments() {
+  private processInstruments(): Record<number, number> {
     // TODO: Remove unused instruments
     // TODO: Remove instrument info (name, press) - keep sound hash and pitch
 
@@ -75,9 +75,11 @@ export class SongObfuscator {
       this.output.instruments.loaded.push(newInstrument);
       instrumentMapping[instrumentId] = newInstrumentId;
     }
+
+    return instrumentMapping;
   }
 
-  private processNotes() {
+  private processNotes(instrumentMapping: Record<number, number>) {
     // ✅ Pile notes at the top
     // ✅ Bake layer volume into note velocity
     // ✅ Bake layer pan into note pan
@@ -100,7 +102,7 @@ export class SongObfuscator {
       if (note.instrument < this.song.instruments.firstCustomIndex) {
         instrumentId = note.instrument;
       } else {
-        // TODO: instrument = instrumentMapping[note.instrument];
+        instrumentId = instrumentMapping[note.instrument];
       }
 
       return instrumentId;
