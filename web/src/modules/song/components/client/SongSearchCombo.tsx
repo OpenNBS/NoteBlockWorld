@@ -1,8 +1,7 @@
 'use client';
 
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Check } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '../../../../lib/tailwind.utils';
@@ -61,7 +60,9 @@ export function SongSearchCombo({
                   setOpen(false);
                 }}
               >
-                <Check
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  size='sm'
                   className={cn(
                     'mr-2 h-4 w-4',
                     value === '' ? 'opacity-100' : 'opacity-0',
@@ -78,7 +79,9 @@ export function SongSearchCombo({
                     setOpen(false);
                   }}
                 >
-                  <Check
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    size='sm'
                     className={cn(
                       'mr-2 h-4 w-4',
                       value === currentSound ? 'opacity-100' : 'opacity-0',
