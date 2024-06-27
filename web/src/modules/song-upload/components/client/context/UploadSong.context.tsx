@@ -128,7 +128,9 @@ export const UploadSongProvider = ({
       if (error.response) {
         setSendError(error.response.data.error.file);
       } else {
-        setSendError('An unknown error occurred while submitting the song!');
+        setSendError(
+          'An unknown error occurred while uploading the song! Please contact us.',
+        );
       }
     }
   };
@@ -139,8 +141,11 @@ export const UploadSongProvider = ({
       await submitSongData();
       setIsUploadComplete(true);
     } catch (e) {
-      console.log(e); // TODO: handle error
-      //formMethods.setError('file', { message: 'An error occurred' });
+      console.error('Error submitting song', e);
+
+      setSendError(
+        'An unknown error occurred while submitting the song! Please contact us.',
+      );
     } finally {
       setIsSubmitting(false);
     }

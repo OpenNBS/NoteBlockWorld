@@ -1,3 +1,5 @@
+import { faWarning } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
@@ -5,7 +7,6 @@ import { useUploadSongProviderType } from '@web/src/modules/song-upload/componen
 
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
-import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import {
   Area,
   Checkbox,
@@ -45,7 +46,6 @@ export const SongForm = ({
           submitSong();
         })}
       >
-        {sendError && <ErrorBalloon message={sendError} />}
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
@@ -180,6 +180,13 @@ export const SongForm = ({
               <span className='text-zinc-400 italic'>(Coming soon!)</span>
             </label>
           </div>
+
+          {sendError && (
+            <div className='outline outline-2 text-center text-balance outline-red-500 bg-red-800 p-2 rounded-lg'>
+              <FontAwesomeIcon icon={faWarning} className='mr-2' />
+              {sendError}
+            </div>
+          )}
 
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Uploading label */}
