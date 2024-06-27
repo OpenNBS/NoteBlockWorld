@@ -232,7 +232,10 @@ export const EditSongProvider = ({
 
       // fetch song
       const songFile = (
-        await axiosInstance.get(`/song/${id}/download?src=edit`, {
+        await axiosInstance.get(`/song/${id}/download`, {
+          params: {
+            src: 'edit',
+          },
           responseType: 'arraybuffer',
         })
       ).data as ArrayBuffer;
