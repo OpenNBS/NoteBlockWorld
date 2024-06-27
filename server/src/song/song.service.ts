@@ -338,7 +338,7 @@ export class SongService {
       );
 
       // increment download count
-      if (src !== 'edit') foundSong.downloadCount++;
+      if (src === 'downloadButton') foundSong.downloadCount++;
       await foundSong.save();
 
       return url;
