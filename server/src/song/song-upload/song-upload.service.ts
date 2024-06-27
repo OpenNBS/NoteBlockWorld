@@ -169,10 +169,11 @@ export class SongUploadService {
     body: UploadSongDto,
     user: UserDocument,
   ) {
-    nbsSong.name = removeNonAscii(body.title);
-    nbsSong.author = removeNonAscii(user.username);
-    nbsSong.originalAuthor = removeNonAscii(body.originalAuthor);
-    nbsSong.description = removeNonAscii(body.description);
+    // TODO: move song manipulation to shared module
+    nbsSong.meta.name = removeNonAscii(body.title);
+    nbsSong.meta.author = removeNonAscii(user.username);
+    nbsSong.meta.originalAuthor = removeNonAscii(body.originalAuthor);
+    nbsSong.meta.description = removeNonAscii(body.description);
   }
 
   public async generateThumbnail(
