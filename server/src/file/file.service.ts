@@ -89,7 +89,7 @@ export class FileService {
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {
-      expiresIn: 5 * 60, // 5 minutes
+      expiresIn: 2 * 60, // 2 minutes
     });
 
     return signedUrl;
