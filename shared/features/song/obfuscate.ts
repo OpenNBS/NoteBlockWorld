@@ -7,7 +7,7 @@ export class SongObfuscator {
   private output: Song;
 
   public static obfuscateSong(song: Song) {
-    return new SongObfuscator(song).song;
+    return new SongObfuscator(song).output;
   }
 
   private constructor(song: Song) {
@@ -22,8 +22,8 @@ export class SongObfuscator {
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    const instrumentMapping = this.processInstruments();
-    this.processNotes(instrumentMapping);
+    const instrumentMapping = this.processInstruments(song, output);
+    this.processNotes(song, output, instrumentMapping);
 
     return output;
   }
@@ -41,18 +41,18 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments(): Record<number, number> {
+  private processInstruments(song: Song, output: Song): Record<number, number> {
     // TODO: Remove unused instruments
     // TODO: Remove instrument info (name, press) - keep sound hash and pitch
 
-    const noteCountPerInstrument = getInstrumentNoteCounts(this.song);
+    const noteCountPerInstrument = getInstrumentNoteCounts(song);
 
     const instrumentMapping: Record<number, number> = {};
 
     for (const [
       instrumentId,
       instrument,
-    ] of this.song.instruments.loaded.entries()) {
+    ] of song.instruments.loaded.entries()) {
       if (instrument.builtIn) {
         continue;
       }
@@ -63,7 +63,7 @@ export class SongObfuscator {
       }
 
       // Remove instrument info
-      const newInstrumentId = this.output.instruments.loaded.length;
+      const newInstrumentId = song.instruments.loaded.length;
 
       const newInstrument = new Instrument(newInstrumentId, {
         name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
@@ -72,14 +72,18 @@ export class SongObfuscator {
         pressKey: false,
       });
 
-      this.output.instruments.loaded.push(newInstrument);
+      output.instruments.loaded.push(newInstrument);
       instrumentMapping[instrumentId] = newInstrumentId;
     }
 
     return instrumentMapping;
   }
 
-  private processNotes(instrumentMapping: Record<number, number>) {
+  private processNotes(
+    song: Song,
+    output: Song,
+    instrumentMapping: Record<number, number>,
+  ) {
     // ✅ Pile notes at the top
     // ✅ Bake layer volume into note velocity
     // ✅ Bake layer pan into note pan
@@ -99,7 +103,7 @@ export class SongObfuscator {
     const resolveInstrument = (note: Note) => {
       let instrumentId;
 
-      if (note.instrument < this.song.instruments.firstCustomIndex) {
+      if (note.instrument < song.instruments.firstCustomIndex) {
         instrumentId = note.instrument;
       } else {
         instrumentId = instrumentMapping[note.instrument];
@@ -147,8 +151,6 @@ export class SongObfuscator {
     const addNoteToOutput = (tick: number, note: Note) => {
       // Adds a note at tick at the first row that does not have a note yet
 
-      const output = this.output;
-
       let layerIdToAddNoteTo = lastLayerInTick.get(tick);
 
       if (layerIdToAddNoteTo === undefined) {
@@ -158,15 +160,15 @@ export class SongObfuscator {
       lastLayerInTick.set(tick, layerIdToAddNoteTo + 1);
 
       const layerToAddNoteTo =
-        this.output.layers[layerIdToAddNoteTo] || output.createLayer();
+        output.layers[layerIdToAddNoteTo] || output.createLayer();
 
-      this.output.setNote(tick, layerToAddNoteTo, note);
+      output.setNote(tick, layerToAddNoteTo, note);
     };
 
-    const tempoChangerIds = getTempoChangerInstrumentIds(this.song);
+    const tempoChangerIds = getTempoChangerInstrumentIds(song);
     const lastLayerInTick = new Map<number, number>();
 
-    for (const layer of this.song.layers) {
+    for (const layer of song.layers) {
       // Skip locked and silent layers
       if (layer.isLocked || layer.volume === 0) {
         continue;
