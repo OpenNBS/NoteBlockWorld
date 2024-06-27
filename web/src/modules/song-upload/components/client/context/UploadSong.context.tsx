@@ -197,11 +197,7 @@ export const UploadSongProvider = ({
         ThumbnailConst.backgroundColor.default,
       );
 
-      formMethods.setValue('customInstruments', [
-        'custom1',
-        'custom2',
-        'custom3',
-      ]);
+      formMethods.setValue('customInstruments', []);
 
       formMethods.setValue('allowDownload', true);
 

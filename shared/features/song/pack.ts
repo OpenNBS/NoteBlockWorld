@@ -41,11 +41,12 @@ export async function obfuscateAndPackSong(
       2,
     )}/${hash}`;
 
-    let soundFileBuffer: Blob;
+    let soundFileBuffer: ArrayBuffer;
 
     try {
       const response = await fetch(soundFileUrl);
-      soundFileBuffer = await response.blob();
+      soundFileBuffer = await response.arrayBuffer();
+      console.log(`Retrieved sound file with hash ${hash}`);
     } catch (e) {
       console.error(`Error retrieving sound file with hash ${hash}: ${e}`);
       continue;
