@@ -81,13 +81,7 @@ export class Song {
   @Prop({ type: String, required: false })
   description: string;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: false })
-  originalCreationDate: Date;
-
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
-
-  @Prop({ type: MongooseSchema.Types.Buffer, required: false })
-  _content: Buffer; // Used for playback
 
   @Prop({ type: Array<string>, required: false })
   _sounds: string[]; // Used for playback
