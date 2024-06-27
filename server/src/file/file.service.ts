@@ -25,8 +25,9 @@ export class FileService {
     const secret = this.configService.get<string>('S3_SECRET');
     const endpoint = this.configService.get<string>('S3_ENDPOINT');
     const region = this.configService.get<string>('S3_REGION');
+    const bucket = this.configService.get<string>('S3_BUCKET');
 
-    if (!key || !secret || !endpoint || !region) {
+    if (!key || !secret || !endpoint || !region || !bucket) {
       throw new Error('Missing S3 configuration');
     }
 
@@ -95,6 +96,7 @@ export class FileService {
   }
 
   public async uploadThumbnail(buffer: Buffer, filename: string) {
+    // TODO: standardize the bucket name access
     const bucket =
       this.configService.get<string>('S3_BUCKET_THUMBS') ||
       'noteblockworld-thumbs';
