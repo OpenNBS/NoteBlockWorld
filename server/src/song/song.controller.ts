@@ -118,7 +118,7 @@ export class SongController {
 
   @Get('/:id/open')
   @ApiOperation({ summary: 'Get song .nbs file' })
-  public async getSongDownloadUrl(
+  public async getSongOpenUrl(
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<string> {
