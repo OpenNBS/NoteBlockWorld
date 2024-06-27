@@ -17,7 +17,10 @@ export const FileDisplay = ({
   className?: string;
 }) => (
   <div
-    className={cn('flex flex-row gap-4 items-center text-zinc-500', className)}
+    className={cn(
+      'flex flex-row gap-4 items-center text-zinc-500 truncate',
+      className,
+    )}
   >
     <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
       <FontAwesomeIcon icon={faFile} size='lg' />
