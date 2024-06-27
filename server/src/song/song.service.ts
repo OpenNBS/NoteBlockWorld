@@ -306,6 +306,7 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
     src?: string,
+    packed: boolean = false,
   ): Promise<string> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -324,21 +325,24 @@ export class SongService {
       }
     }
 
-    if (!foundSong.allowDownload) {
+    if (!packed && !foundSong.allowDownload) {
       throw new HttpException(
         'The uploader has disabled downloads of this song',
         HttpStatus.UNAUTHORIZED,
       );
     }
 
+    const fileKey = packed ? foundSong.packedSongUrl : foundSong.nbsFileUrl;
+
     try {
       const url = await this.fileService.getSongDownloadUrl(
-        foundSong.nbsFileUrl,
+        fileKey,
         'song.nbs', // TODO: foundSong.filename
+        // TODO: this has to change according to the file extension being downloaded
       );
 
       // increment download count
-      if (src === 'downloadButton') foundSong.downloadCount++;
+      if (!packed && src === 'downloadButton') foundSong.downloadCount++;
       await foundSong.save();
 
       return url;

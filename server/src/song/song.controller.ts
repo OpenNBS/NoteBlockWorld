@@ -112,7 +112,7 @@ export class SongController {
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
 
-    const url = await this.songService.getSongDownloadUrl(id, user, src);
+    const url = await this.songService.getSongDownloadUrl(id, user, src, false);
     res.redirect(HttpStatus.FOUND, url);
   }
 
@@ -122,7 +122,12 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<string> {
-    const url = await this.songService.getSongDownloadUrl(id, user, 'open');
+    const url = await this.songService.getSongDownloadUrl(
+      id,
+      user,
+      'open',
+      true,
+    );
 
     return url;
   }
