@@ -124,7 +124,10 @@ export const UploadSongProvider = ({
     } catch (error: any) {
       if (error.response) {
         console.log('Error response', error.response);
-        setSendError(error.response.data.message);
+
+        setSendError(
+          error.response.data.message || error.response.data.error.file,
+        );
       } else {
         setSendError(
           'An unknown error occurred while uploading the song! Please contact us.',
