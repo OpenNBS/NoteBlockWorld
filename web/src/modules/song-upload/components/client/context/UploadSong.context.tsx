@@ -160,6 +160,8 @@ export const UploadSongProvider = ({
       song = parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
       setInvalidFile(true);
+      console.error('Error parsing song file', e);
+      toast.error('Invalid song file! Please try again with a different song.');
       setSong(null);
 
       return;
