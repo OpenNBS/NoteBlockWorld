@@ -125,37 +125,6 @@ export class FileService {
     return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
   }
 
-  public async uploadProfilePicture(file: Express.Multer.File) {
-    // TODO: verify if this is working correctly
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_PROFILE') ||
-      'noteblockworld-profiles';
-
-    const fileName = uuidv4();
-
-    await this.s3_upload(
-      file.buffer,
-      bucket,
-      fileName,
-      file.mimetype,
-      ObjectCannedACL.public_read,
-    );
-
-    return this.getProfilePictureUrl(fileName);
-  }
-
-  public async getProfilePictureUrl(fileName: string) {
-    // TODO: verify if this is working correctly
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_PROFILE') ||
-      'noteblockworld-profiles';
-
-    const region = this.configService.get<string>('S3_REGION') || '';
-    const url = this.getPublicFileUrl(fileName, bucket, region);
-
-    return url;
-  }
-
   public async deleteSong(nbsFileUrl: string) {
     const bucket = this.bucketSongs;
 
@@ -169,8 +138,6 @@ export class FileService {
     } catch (error) {
       console.error('Error deleting file: ', error);
       throw error;
-    } finally {
-      // finally
     }
 
     return;
@@ -199,14 +166,10 @@ export class FileService {
 
     try {
       const s3Response = await this.s3Client.send(command);
-      console.log(s3Response);
-
       return s3Response;
     } catch (error) {
       console.error('Error uploading file: ', error);
       throw error;
-    } finally {
-      // finally
     }
   }
 
@@ -230,8 +193,6 @@ export class FileService {
     } catch (error) {
       console.error('Error getting file: ', error);
       throw error;
-    } finally {
-      // finally
     }
   }
 }
