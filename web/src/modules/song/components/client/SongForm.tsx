@@ -66,6 +66,7 @@ export const SongForm = ({
               id='description'
               label='Description'
               isLoading={isLoading}
+              disabled={isLocked}
               errorMessage={errors.description?.message}
               {...register('description')}
             />
@@ -88,6 +89,7 @@ export const SongForm = ({
                 id='originalAuthor'
                 label='Original author'
                 isLoading={isLoading}
+                disabled={isLocked}
                 {...register('originalAuthor')}
               />
               <p className='text-sm text-zinc-500'>
@@ -104,8 +106,9 @@ export const SongForm = ({
                 id='category'
                 label='Category'
                 isLoading={isLoading}
-                {...register('category')}
+                disabled={isLocked}
                 errorMessage={errors.category?.message}
+                {...register('category')}
               >
                 {Object.entries(UploadConst.categories).map(
                   ([key, value]: [string, string]) => (
@@ -132,6 +135,7 @@ export const SongForm = ({
                 id='visibility'
                 label='Visibility'
                 isLoading={isLoading}
+                disabled={isLocked}
                 errorMessage={errors.visibility?.message}
                 {...register('visibility')}
               >
@@ -149,6 +153,7 @@ export const SongForm = ({
                 id='license'
                 label='License'
                 isLoading={isLoading}
+                disabled={isLocked}
                 errorMessage={errors.license?.message}
                 {...register('license')}
               >
