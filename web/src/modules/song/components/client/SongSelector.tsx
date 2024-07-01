@@ -11,15 +11,6 @@ export const SongSelector = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { setFile, invalidFile } = useSongProvider('upload');
 
-  const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      const file = e.target.files[0];
-      setFile(file);
-    },
-    [setFile],
-  );
-
   const handleFileDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (!acceptedFiles) return;
@@ -29,12 +20,20 @@ export const SongSelector = () => {
     [setFile],
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleFileDrop,
-    onDropRejected: () => {
-      toast.error("Oops! This doesn't look like a valid NBS file.", {
-        position: 'bottom-center',
-      });
+    onDropRejected: (fileRejections) => {
+      const error = fileRejections[0].errors[0].code;
+
+      if (error === 'file-invalid-type') {
+        toast.error("Oops! This doesn't look like a valid NBS file.", {
+          position: 'bottom-center',
+        });
+      } else if (error === 'file-too-large') {
+        toast.error('This file is too large! (Max size: 1 MB)', {
+          position: 'bottom-center',
+        });
+      }
     },
     accept: {
       'application/nbs': ['.nbs'],
@@ -65,19 +64,12 @@ export const SongSelector = () => {
         </div>
         <label
           htmlFor='uploadNbsFile'
+          onClick={open}
           className='px-3 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg text-white cursor-pointer'
         >
           Select file
         </label>
-        <input
-          type='file'
-          name='nbsFile'
-          id='uploadNbsFile'
-          accept='.nbs'
-          className='z-[-1] absolute opacity-0'
-          onChange={handleFileSelect}
-          {...getInputProps()}
-        />
+        <input {...getInputProps()} />
       </div>
     </>
   );
