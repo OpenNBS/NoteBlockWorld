@@ -11,6 +11,7 @@ import {
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -25,7 +26,6 @@ export type useUploadSongProviderType = {
   song: SongFileType | null;
   filename: string | null;
   setFile: (file: File | null) => void;
-  invalidFile: boolean;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
   register: UseFormRegister<UploadSongForm>;
@@ -47,7 +47,6 @@ export const UploadSongProvider = ({
 }) => {
   const [song, setSong] = useState<SongFileType | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
-  const [invalidFile, setInvalidFile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   {
@@ -159,7 +158,6 @@ export const UploadSongProvider = ({
     try {
       song = parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
-      setInvalidFile(true);
       console.error('Error parsing song file', e);
       toast.error('Invalid song file! Please try again with a different song.');
       setSong(null);
@@ -233,7 +231,6 @@ export const UploadSongProvider = ({
         errors,
         submitSong,
         song,
-        invalidFile,
         filename,
         setFile: setFileHandler,
         isSubmitting,
