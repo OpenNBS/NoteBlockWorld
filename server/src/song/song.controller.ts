@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,6 +26,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { UploadConst } from '@shared/validation/song/constants';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
@@ -42,7 +44,18 @@ import { SongService } from './song.service';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
-  static multerConfig: object;
+  static multerConfig: MulterOptions = {
+    limits: {
+      fileSize: UploadConst.file.maxSize,
+    },
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(nbs)$/)) {
+        return cb(new Error('Only .nbs files are allowed!'), false);
+      }
+
+      cb(null, true);
+    },
+  };
 
   constructor(
     public readonly songService: SongService,
