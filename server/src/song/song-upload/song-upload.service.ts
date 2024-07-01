@@ -1,4 +1,4 @@
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
+import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
 import {
   HttpException,
   HttpStatus,
@@ -104,8 +104,19 @@ export class SongUploadService {
     // Is the uploaded file a valid .nbs file?
     const nbsSong = this.getSongObject(loadedArrayBuffer);
 
+    // Update NBS file with form values
+    this.updateSongFileMetadata(nbsSong, body, user);
+    const updatedArrayBuffer = toArrayBuffer(nbsSong);
+    const updatedBuffer = Buffer.from(updatedArrayBuffer);
+
+    const nbsFileObj = {
+      buffer: updatedBuffer,
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+    };
+
     // Upload file
-    const fileKey: string = await this.uploadSongFile(file);
+    const fileKey: string = await this.uploadSongFile(nbsFileObj);
 
     // Upload packed song file
     const soundsArray = body.customInstruments;
@@ -137,9 +148,6 @@ export class SongUploadService {
 
     // Calculate song document's data from NBS file
     const songStats = SongStatsGenerator.getSongStats(nbsSong);
-
-    // Update NBS file with form values
-    this.updateSongFileMetadata(nbsSong, body, user);
 
     // Generate thumbnail
     const thumbUrl: string = await this.generateThumbnail(
