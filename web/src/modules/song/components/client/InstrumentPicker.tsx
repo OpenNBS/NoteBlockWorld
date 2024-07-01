@@ -74,8 +74,6 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
   const instruments = song?.instruments ?? [];
 
-  const { formState } = formMethods;
-
   const [values, setValues] = useState<Array<string>>(
     Array(instruments.length).fill(''),
   );

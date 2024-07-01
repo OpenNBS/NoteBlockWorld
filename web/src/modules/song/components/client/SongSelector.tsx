@@ -9,7 +9,7 @@ import { useSongProvider } from './context/Song.context';
 
 export const SongSelector = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { setFile, invalidFile } = useSongProvider('upload');
+  const { setFile } = useSongProvider('upload');
 
   const handleFileDrop = useCallback(
     (acceptedFiles: File[]) => {
