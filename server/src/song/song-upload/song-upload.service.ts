@@ -20,7 +20,7 @@ import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
-import { Song as SongEntity } from '../entity/song.entity';
+import { SongDocument, Song as SongEntity } from '../entity/song.entity';
 import { generateSongId, removeNonAscii } from '../song.util';
 
 @Injectable()
@@ -93,70 +93,43 @@ export class SongUploadService {
     // Is file valid?
     this.checkIsFileValid(file);
 
-    // Load file into memory
-    const loadedArrayBuffer = new ArrayBuffer(file.buffer.byteLength);
-    const view = new Uint8Array(loadedArrayBuffer);
-
-    for (let i = 0; i < file.buffer.byteLength; ++i) {
-      view[i] = file.buffer[i];
-    }
-
-    // Is the uploaded file a valid .nbs file?
-    const nbsSong = this.getSongObject(loadedArrayBuffer);
-
-    // Update NBS file with form values
-    this.updateSongFileMetadata(nbsSong, body, user);
-    const updatedArrayBuffer = toArrayBuffer(nbsSong);
-    const updatedBuffer = Buffer.from(updatedArrayBuffer);
-
-    const nbsFileObj = {
-      buffer: updatedBuffer,
-      originalname: file.originalname,
-      mimetype: file.mimetype,
-    };
-
-    // Upload file
-    const fileKey: string = await this.uploadSongFile(nbsFileObj);
-
-    // Upload packed song file
-    const soundsArray = body.customInstruments;
-
-    // TODO: should fetch from the backend's static files, or from S3 bucket
-    // TODO: cache this in memory on service setup for faster access?
-    const response = await fetch('http://localhost:3000/data/soundList.json');
-    const soundsMapping = (await response.json()) as Record<string, string>;
-
-    this.validateCustomInstruments(soundsArray, soundsMapping);
-
-    const packedSongBuffer = await obfuscateAndPackSong(
-      nbsSong,
-      soundsArray,
-      soundsMapping,
+    // Prepare song for upload
+    const { nbsSong, songBuffer } = this.prepareSongForUpload(
+      file.buffer,
+      body,
+      user,
     );
 
-    const packedFileObj = {
-      buffer: packedSongBuffer,
-      originalname: `${file.originalname.replace('.nbs', '')}.zip`,
-      mimetype: 'application/zip',
-    };
-
-    const packedFileKey = await this.uploadSongFile(packedFileObj);
-
-    // PROCESS UPLOADED SONG
-    // TODO: delete file from S3 if remainder of upload method fails
+    // Prepare packed song for upload
+    // This can generate a client error if the custom instruments are invalid, so it's done before the song is uploaded
+    const packedSongBuffer = await this.preparePackedSongForUpload(
+      nbsSong,
+      body.customInstruments,
+    );
 
     // Generate song public ID
     const publicId = generateSongId();
+
+    // Upload song file
+    const fileKey = await this.uploadSongFile(songBuffer, publicId);
+
+    // Upload packed song file
+    const packedFileKey = await this.uploadPackedSongFile(
+      packedSongBuffer,
+      publicId,
+    );
+
+    // PROCESS UPLOADED SONG
+    // TODO: delete file from S3 if remainder of upload method fails
 
     // Calculate song document's data from NBS file
     const songStats = SongStatsGenerator.getSongStats(nbsSong);
 
     // Generate thumbnail
-    const thumbUrl: string = await this.generateThumbnail(
+    const thumbUrl: string = await this.generateAndUploadThumbnail(
       body.thumbnailData,
       nbsSong,
       publicId,
-      fileKey,
     );
 
     // Create song document
@@ -172,6 +145,131 @@ export class SongUploadService {
     );
 
     return song;
+  }
+
+  public async processSongPatch(
+    songDocument: SongDocument,
+    body: UploadSongDto,
+    user: UserDocument,
+  ) {
+    // Compare arrays of custom instruments including order
+    const customInstrumentsChanged =
+      JSON.stringify(songDocument._sounds) !==
+      JSON.stringify(body.customInstruments);
+
+    const songMetadataChanged = !(
+      customInstrumentsChanged &&
+      songDocument.title === body.title &&
+      songDocument.originalAuthor === body.originalAuthor &&
+      // TODO: verify if song author matches current username
+      // songDocument.uploader.username === user.username &&
+      songDocument.description === body.description
+    );
+
+    // Compare thumbnail data
+    const thumbnailChanged =
+      JSON.stringify(songDocument.thumbnailData) !==
+      JSON.stringify(body.thumbnailData);
+
+    if (songMetadataChanged || thumbnailChanged) {
+      // If either the thumbnail or the song metadata changed, we need to
+      // download the existing song file to replace some fields and reupload it,
+      // and/or regenerate and reupload the thumbnail
+
+      const songFile = await this.fileService.getSongFile(
+        songDocument.nbsFileUrl,
+      );
+
+      const originalSongBuffer = Buffer.from(songFile);
+
+      // Regenerate song file + packed song file if metadata or custom instruments changed
+      if (songMetadataChanged) {
+        this.logger.log('Song metadata changed; reuploading song files');
+
+        const { nbsSong, songBuffer } = this.prepareSongForUpload(
+          originalSongBuffer,
+          body,
+          user,
+        );
+
+        // Obfuscate and pack song with updated custom instruments
+        const packedSongBuffer = await this.preparePackedSongForUpload(
+          nbsSong,
+          body.customInstruments,
+        );
+
+        // Re-upload song file
+        await this.uploadSongFile(songBuffer, songDocument.publicId);
+
+        // Re-upload packed song file
+        await this.uploadPackedSongFile(
+          packedSongBuffer,
+          songDocument.publicId,
+        );
+      }
+
+      if (thumbnailChanged) {
+        this.logger.log('Thumbnail data changed; re-uploading thumbnail');
+
+        const nbsSong = this.getSongObject(originalSongBuffer);
+
+        await this.generateAndUploadThumbnail(
+          body.thumbnailData,
+          nbsSong,
+          songDocument.publicId,
+        );
+      }
+    }
+  }
+
+  private prepareSongForUpload(
+    buffer: Buffer,
+    body: UploadSongDto,
+    user: UserDocument,
+  ) {
+    const loadedArrayBuffer = new ArrayBuffer(buffer.byteLength);
+    const view = new Uint8Array(loadedArrayBuffer);
+
+    for (let i = 0; i < buffer.byteLength; ++i) {
+      view[i] = buffer[i];
+    }
+
+    // Is the uploaded file a valid .nbs file?
+    const nbsSong = this.getSongObject(loadedArrayBuffer);
+
+    // Update NBS file with form values
+    this.updateSongFileMetadata(
+      nbsSong,
+      body.title,
+      user.username,
+      body.originalAuthor,
+      body.description,
+    );
+
+    const updatedSongArrayBuffer = toArrayBuffer(nbsSong);
+    const songBuffer = Buffer.from(updatedSongArrayBuffer);
+
+    return { nbsSong, songBuffer };
+  }
+
+  private async preparePackedSongForUpload(
+    nbsSong: Song,
+    soundsArray: string[],
+  ) {
+    // TODO: should fetch from the backend's static files, or from S3 bucket
+    // TODO: cache this in memory on service setup for faster access?
+    const response = await fetch('http://localhost:3000/data/soundList.json');
+    const soundsMapping = (await response.json()) as Record<string, string>;
+
+    this.validateCustomInstruments(soundsArray, soundsMapping);
+
+    const packedSongBuffer = await obfuscateAndPackSong(
+      nbsSong,
+      soundsArray,
+      soundsMapping,
+    );
+
+    return packedSongBuffer;
   }
 
   private validateCustomInstruments(
@@ -200,21 +298,22 @@ export class SongUploadService {
 
   public updateSongFileMetadata(
     nbsSong: Song,
-    body: UploadSongDto,
-    user: UserDocument,
+    title: string,
+    author: string,
+    originalAuthor: string,
+    description: string,
   ) {
     // TODO: move song manipulation to shared module
-    nbsSong.meta.name = removeNonAscii(body.title);
-    nbsSong.meta.author = removeNonAscii(user.username);
-    nbsSong.meta.originalAuthor = removeNonAscii(body.originalAuthor);
-    nbsSong.meta.description = removeNonAscii(body.description);
+    nbsSong.meta.name = removeNonAscii(title);
+    nbsSong.meta.author = removeNonAscii(author);
+    nbsSong.meta.originalAuthor = removeNonAscii(originalAuthor);
+    nbsSong.meta.description = removeNonAscii(description);
   }
 
-  public async generateThumbnail(
+  public async generateAndUploadThumbnail(
     thumbnailData: ThumbnailData,
     nbsSong: Song,
     publicId: string,
-    fileKey: string,
   ) {
     const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
@@ -234,12 +333,7 @@ export class SongUploadService {
     let thumbUrl: string;
 
     try {
-      thumbUrl = await this.fileService.uploadThumbnail(
-        thumbBuffer,
-        `${publicId}.jpg`,
-      );
-
-      this.logger.log(fileKey);
+      thumbUrl = await this.fileService.uploadThumbnail(thumbBuffer, publicId);
     } catch (e) {
       throw new HttpException(
         {
@@ -251,30 +345,49 @@ export class SongUploadService {
       );
     }
 
-    this.logger.log(thumbUrl);
+    this.logger.log(`Uploaded thumbnail to ${thumbUrl}`);
 
     return thumbUrl;
   }
 
-  private async uploadSongFile(file: {
-    buffer: Buffer;
-    originalname: string;
-    mimetype: string;
-  }) {
+  private async uploadSongFile(file: Buffer, publicId: string) {
     let fileKey: string;
 
     try {
-      fileKey = await this.fileService.uploadSong(file);
+      fileKey = await this.fileService.uploadSong(file, publicId);
     } catch (e) {
       throw new HttpException(
         {
           error: {
-            file: 'An error occurred while uploading the file',
+            file: 'An error occurred while uploading the packed song file',
           },
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+
+    this.logger.log(`Uploaded song file to ${fileKey}`);
+
+    return fileKey;
+  }
+
+  private async uploadPackedSongFile(file: Buffer, publicId: string) {
+    let fileKey: string;
+
+    try {
+      fileKey = await this.fileService.uploadPackedSong(file, publicId);
+    } catch (e) {
+      throw new HttpException(
+        {
+          error: {
+            file: 'An error occurred while uploading the song file',
+          },
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    this.logger.log(`Uploaded packed song file to ${fileKey}`);
 
     return fileKey;
   }
