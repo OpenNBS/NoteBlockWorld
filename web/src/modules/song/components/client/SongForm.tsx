@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
+import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import InstrumentPicker from './InstrumentPicker';
@@ -165,11 +166,12 @@ export const SongForm = ({
           <div className='flex-1'>
             <Area
               label='Custom instruments'
-              className='p-0 border-0'
+              className='p-0 border-0 mb-0'
               isLoading={isLoading}
             >
               <InstrumentPicker type={type} />
             </Area>
+            <ErrorBalloon message={errors.customInstruments?.message} />
           </div>
 
           {/* Allow download */}

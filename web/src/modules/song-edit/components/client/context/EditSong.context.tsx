@@ -175,7 +175,10 @@ export const EditSongProvider = ({
       console.error('Error submitting song', error);
 
       if (error.response) {
-        setSendError(error.response.data.message);
+        setSendError(
+          error.response.data.message ||
+            Object.values(error.response.data.error)[0],
+        );
       } else {
         console.log(error);
         setSendError('An unknown error occurred while submitting the song!');

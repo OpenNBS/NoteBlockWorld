@@ -126,7 +126,8 @@ export const UploadSongProvider = ({
         console.log('Error response', error.response);
 
         setSendError(
-          error.response.data.message || error.response.data.error.file,
+          error.response.data.message ||
+            Object.values(error.response.data.error)[0],
         );
       } else {
         setSendError(

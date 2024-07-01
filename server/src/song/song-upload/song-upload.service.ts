@@ -126,6 +126,8 @@ export class SongUploadService {
     const response = await fetch('http://localhost:3000/data/soundList.json');
     const soundsMapping = (await response.json()) as Record<string, string>;
 
+    this.validateCustomInstruments(soundsArray, soundsMapping);
+
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
       soundsArray,
@@ -170,6 +172,30 @@ export class SongUploadService {
     );
 
     return song;
+  }
+
+  private validateCustomInstruments(
+    soundsArray: string[],
+    soundsMapping: Record<string, string>,
+  ) {
+    const isInstrumentValid = (sound: string) =>
+      sound === '' || soundsMapping[sound] !== undefined;
+
+    const areAllInstrumentsValid = soundsArray.every((sound) =>
+      isInstrumentValid(sound),
+    );
+
+    if (!areAllInstrumentsValid) {
+      throw new HttpException(
+        {
+          error: {
+            customInstruments:
+              'One or more invalid custom instruments have been set',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   public updateSongFileMetadata(
