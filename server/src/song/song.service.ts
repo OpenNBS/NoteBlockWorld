@@ -131,6 +131,10 @@ export class SongService {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
 
+    // TODO: this method easily gets out of sync with the upload method.
+    // We should use the same method to update the song document as we do to create it,
+    // just making checks on the way for if stuff exists or not
+
     if (
       foundSong.title === body.title &&
       foundSong.originalAuthor === body.originalAuthor &&
