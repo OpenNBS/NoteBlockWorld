@@ -14,9 +14,21 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class FileService {
   s3Client: S3Client;
+  bucketSongs: string;
+  bucketThumbs: string;
 
   constructor(private readonly configService: ConfigService) {
     this.s3Client = this.getS3Client();
+
+    const bucketSongs = this.configService.get<string>('S3_BUCKET_SONGS');
+    const bucketThumbs = this.configService.get<string>('S3_BUCKET_THUMBS');
+
+    if (!(bucketSongs && bucketThumbs)) {
+      throw new Error('Missing S3 bucket configuration');
+    }
+
+    this.bucketSongs = bucketSongs;
+    this.bucketThumbs = bucketThumbs;
   }
 
   private getS3Client() {
@@ -25,9 +37,8 @@ export class FileService {
     const secret = this.configService.get<string>('S3_SECRET');
     const endpoint = this.configService.get<string>('S3_ENDPOINT');
     const region = this.configService.get<string>('S3_REGION');
-    const bucket = this.configService.get<string>('S3_BUCKET');
 
-    if (!key || !secret || !endpoint || !region || !bucket) {
+    if (!(key && secret && endpoint && region)) {
       throw new Error('Missing S3 configuration');
     }
 
@@ -51,9 +62,9 @@ export class FileService {
     mimetype: string;
   }) {
     console.log(file);
+    const bucket = this.bucketSongs;
 
-    const bucket =
-      this.configService.get<string>('S3_BUCKET') || 'noteblockworld-songs';
+    const bucket = this.bucketSongs;
 
     const fileName =
       path.parse(file.originalname).name.replace(/\s/g, '') + '_' + uuidv4();
@@ -73,14 +84,7 @@ export class FileService {
   }
 
   public async getSongDownloadUrl(key: string, filename: string) {
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
-
-    console.log('bucket', bucket);
-    console.log('key', key);
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -96,10 +100,7 @@ export class FileService {
   }
 
   public async uploadThumbnail(buffer: Buffer, filename: string) {
-    // TODO: standardize the bucket name access
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_THUMBS') ||
-      'noteblockworld-thumbs';
+    const bucket = this.bucketThumbs;
 
     await this.s3_upload(
       buffer,
@@ -113,17 +114,14 @@ export class FileService {
   }
 
   public getThumbnailUrl(key: string) {
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_THUMBS') ||
-      'noteblockworld-thumbs';
-
-    const region = this.configService.get<string>('S3_REGION') || '';
     const url = this.getPublicFileUrl(key, bucket, region);
 
+    const bucket = this.bucketThumbs;
     return url;
   }
 
-  private getPublicFileUrl(key: string, bucket: string, region: string) {
+  private getPublicFileUrl(key: string, bucket: string) {
+    const region = this.s3Client.config.region;
     return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
   }
 
@@ -159,11 +157,7 @@ export class FileService {
   }
 
   public async deleteSong(nbsFileUrl: string) {
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -217,12 +211,7 @@ export class FileService {
   }
 
   public async getSongFile(nbsFileUrl: string): Promise<ArrayBuffer> {
-    // TODO: verify if this is working correctly
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
