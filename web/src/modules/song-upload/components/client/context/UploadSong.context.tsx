@@ -92,7 +92,6 @@ export const UploadSongProvider = ({
 
     Object.entries(formValues)
       .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
       )
       .forEach(([key, value]) => {
