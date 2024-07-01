@@ -68,17 +68,19 @@ export const UploadSongProvider = ({
     formState: { errors },
   } = formMethods;
 
-  const submitSongData = async (): Promise<void> => {
+  async function submitSongData(): Promise<void> {
     // Get song file from state
     setSendError(null);
 
     if (!song) {
+      setSendError('Song file not found');
       throw new Error('Song file not found');
     }
 
     const arrayBuffer = song.arrayBuffer;
 
     if (arrayBuffer.byteLength === 0) {
+      setSendError('Song file is invalid');
       throw new Error('Song file is invalid');
     }
 
@@ -119,21 +121,19 @@ export const UploadSongProvider = ({
 
       const data = response.data;
       const id = data.publicId as string;
-      console.log('Song uploaded successfully', id);
       setUploadedSongId(id);
       setIsUploadComplete(true);
     } catch (error: any) {
-      console.error('Error submitting song', error);
-
       if (error.response) {
-        setSendError(error.response.data.error.file);
+        console.log('Error response', error.response);
+        setSendError(error.response.data.message);
       } else {
         setSendError(
           'An unknown error occurred while uploading the song! Please contact us.',
         );
       }
     }
-  };
+  }
 
   const submitSong = async () => {
     try {
