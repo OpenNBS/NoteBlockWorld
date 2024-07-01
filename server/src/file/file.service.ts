@@ -9,7 +9,6 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class FileService {
@@ -56,31 +55,42 @@ export class FileService {
   }
 
   // Uploads a song to the S3 bucket and returns the key
-  public async uploadSong(file: {
-    buffer: Buffer;
-    originalname: string;
-    mimetype: string;
-  }) {
-    console.log(file);
-    const bucket = this.bucketSongs;
-
+  public async uploadSong(buffer: Buffer, publicId: string) {
     const bucket = this.bucketSongs;
 
     const fileName =
-      path.parse(file.originalname).name.replace(/\s/g, '') + '_' + uuidv4();
+      'songs/' + path.parse(publicId).name.replace(/\s/g, '') + '.nbs';
 
-    const extension = path.parse(file.originalname).ext;
-    const newFileName = `${fileName}${extension}`;
+    const mimetype = 'application/octet-stream';
 
     await this.s3_upload(
-      file.buffer,
+      buffer,
       bucket,
-      newFileName,
-      file.mimetype,
+      fileName,
+      mimetype,
       ObjectCannedACL.private,
     );
 
-    return newFileName;
+    return fileName;
+  }
+
+  public async uploadPackedSong(buffer: Buffer, publicId: string) {
+    const bucket = this.bucketSongs;
+
+    const fileName =
+      'packed/' + path.parse(publicId).name.replace(/\s/g, '') + '.nbs';
+
+    const mimetype = 'application/zip';
+
+    await this.s3_upload(
+      buffer,
+      bucket,
+      fileName,
+      mimetype,
+      ObjectCannedACL.private,
+    );
+
+    return fileName;
   }
 
   public async getSongDownloadUrl(key: string, filename: string) {
@@ -99,24 +109,28 @@ export class FileService {
     return signedUrl;
   }
 
-  public async uploadThumbnail(buffer: Buffer, filename: string) {
+  public async uploadThumbnail(buffer: Buffer, publicId: string) {
     const bucket = this.bucketThumbs;
+
+    const fileName =
+      'thumbs/' + path.parse(publicId).name.replace(/\s/g, '') + '.jpg';
+
+    const mimetype = 'image/jpeg';
 
     await this.s3_upload(
       buffer,
       bucket,
-      filename,
-      'image/jpeg',
+      fileName,
+      mimetype,
       ObjectCannedACL.public_read,
     );
 
-    return this.getThumbnailUrl(filename);
+    return this.getThumbnailUrl(fileName);
   }
 
   public getThumbnailUrl(key: string) {
-    const url = this.getPublicFileUrl(key, bucket, region);
-
     const bucket = this.bucketThumbs;
+    const url = this.getPublicFileUrl(key, bucket);
     return url;
   }
 
