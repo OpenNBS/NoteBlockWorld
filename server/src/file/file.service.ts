@@ -99,7 +99,9 @@ export class FileService {
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
-      ResponseContentDisposition: `attachment; filename=${filename}`,
+      ResponseContentDisposition: `attachment; filename=${filename
+        .split('/')
+        .pop()}`,
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {
@@ -170,7 +172,7 @@ export class FileService {
       Body: file,
       ACL: accessControl,
       ContentType: mimetype,
-      ContentDisposition: 'attachment; filename=' + name,
+      ContentDisposition: `attachment; filename=${name}`, //.split('/').pop()}`,
       CreateBucketConfiguration: {
         LocationConstraint: 'ap-south-1',
       },
