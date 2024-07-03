@@ -44,8 +44,8 @@ export class SongObfuscator {
   }
 
   private processInstruments(song: Song, output: Song): Record<number, number> {
-    // TODO: Remove unused instruments
-    // TODO: Remove instrument info (name, press) - keep sound hash and pitch
+    // ✅ Remove unused instruments
+    // ✅ Remove instrument info (name, press) - keep sound hash and pitch
 
     const noteCountPerInstrument = getInstrumentNoteCounts(song);
 
@@ -184,7 +184,7 @@ export class SongObfuscator {
         const tick = parseInt(tickStr);
 
         // Skip silent notes except if they are tempo changers
-        const isTempoChanger = tempoChangerIds.includes(note.instrument); // TODO: doesn't work yet
+        const isTempoChanger = tempoChangerIds.includes(note.instrument);
         if (note.velocity === 0 && !isTempoChanger) continue;
 
         // Skip notes with deleted instruments
