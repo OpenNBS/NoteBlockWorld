@@ -169,9 +169,6 @@ export const EditSongProvider = ({
           'Content-Type': 'application/json',
         },
       });
-
-      toaster.success('Song saved successfully!');
-      router.push('/my-songs');
     } catch (error: any) {
       console.error('Error submitting song', error);
 
@@ -184,9 +181,13 @@ export const EditSongProvider = ({
         console.log(error);
         setSendError('An unknown error occurred while submitting the song!');
       }
-    } finally {
+
       setIsSubmitting(false);
+      return;
     }
+
+    toaster.success('Song saved successfully!');
+    router.push('/my-songs');
   };
 
   const loadSong = useCallback(
