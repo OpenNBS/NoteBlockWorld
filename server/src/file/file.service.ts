@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class FileService {
   s3Client: S3Client;
+  region: string;
   bucketSongs: string;
   bucketThumbs: string;
 
@@ -40,6 +41,8 @@ export class FileService {
     if (!(key && secret && endpoint && region)) {
       throw new Error('Missing S3 configuration');
     }
+
+    this.region = region;
 
     // Create S3 client
     const s3Config = new S3Client({
@@ -137,7 +140,7 @@ export class FileService {
   }
 
   private getPublicFileUrl(key: string, bucket: string) {
-    const region = this.s3Client.config.region;
+    const region = this.region;
     return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
   }
 
