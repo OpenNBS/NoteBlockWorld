@@ -51,7 +51,9 @@ export async function SongPage({ id }: { id: string }) {
             {song.playCount} {song.playCount == 1 ? 'view' : 'views'} •{' '}
             {formatTimeAgo(new Date(song.createdAt))}
           </div>
-          <p className='leading-tight'>{song.description}</p>
+          <p className='leading-tight whitespace-pre-line'>
+            {song.description}
+          </p>
         </div>
       </div>
 
