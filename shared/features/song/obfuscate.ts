@@ -99,8 +99,8 @@ export class SongObfuscator {
 
     const resolveKeyAndPitch = (note: Note) => {
       const factoredPitch = note.key * 100 + note.pitch;
-      const key = factoredPitch / 100;
-      const pitch = factoredPitch % 100;
+      const key = (factoredPitch - 0.5) / 100 + 0.5;
+      const pitch = ((factoredPitch - 0.5) % 100) + 0.5;
 
       return { key, pitch };
     };
