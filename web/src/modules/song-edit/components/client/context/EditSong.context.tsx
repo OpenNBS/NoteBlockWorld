@@ -148,7 +148,7 @@ export const EditSongProvider = ({
 
     if (dataWasNotChanged()) {
       toaster.success('No changes were made to the song!');
-
+      router.push('/my-songs');
       return;
     }
 
