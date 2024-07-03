@@ -98,6 +98,12 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
     fetchSoundList().then(setSoundList);
   }, []);
 
+  useEffect(() => {
+    if (song) {
+      setValues(formMethods.getValues().customInstruments);
+    }
+  }, [song, formMethods]);
+
   return (
     <div className='flex flex-col w-full'>
       {/* Header */}
