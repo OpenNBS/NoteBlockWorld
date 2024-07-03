@@ -81,7 +81,7 @@ export class FileService {
     const bucket = this.bucketSongs;
 
     const fileName =
-      'packed/' + path.parse(publicId).name.replace(/\s/g, '') + '.nbs';
+      'packed/' + path.parse(publicId).name.replace(/\s/g, '') + '.zip';
 
     const mimetype = 'application/zip';
 
