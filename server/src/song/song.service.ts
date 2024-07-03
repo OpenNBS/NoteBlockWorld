@@ -144,7 +144,7 @@ export class SongService {
       foundSong.license === body.license &&
       JSON.stringify(foundSong.thumbnailData) ===
         JSON.stringify(body.thumbnailData) &&
-      JSON.stringify(foundSong._sounds) ===
+      JSON.stringify(foundSong.customInstruments) ===
         JSON.stringify(body.customInstruments)
     ) {
       throw new HttpException('No changes detected', HttpStatus.BAD_REQUEST);
@@ -163,7 +163,7 @@ export class SongService {
     foundSong.visibility = body.visibility;
     foundSong.license = body.license;
     foundSong.thumbnailData = body.thumbnailData;
-    foundSong._sounds = body.customInstruments;
+    foundSong.customInstruments = body.customInstruments;
 
     // Update document's last update time
     foundSong.updatedAt = new Date();

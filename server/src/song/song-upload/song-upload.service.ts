@@ -154,7 +154,7 @@ export class SongUploadService {
   ) {
     // Compare arrays of custom instruments including order
     const customInstrumentsChanged =
-      JSON.stringify(songDocument._sounds) !==
+      JSON.stringify(songDocument.customInstruments) !==
       JSON.stringify(body.customInstruments);
 
     const songMetadataChanged =

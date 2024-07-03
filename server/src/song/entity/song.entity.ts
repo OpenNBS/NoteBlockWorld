@@ -83,9 +83,6 @@ export class Song {
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
 
-  @Prop({ type: Array<string>, required: false })
-  _sounds: string[]; // Used for playback
-
   @Prop({ type: Number, required: true })
   fileSize: number;
 
