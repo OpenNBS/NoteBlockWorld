@@ -63,7 +63,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
   } else {
     const tps = stats.tempo;
     const bpm = tps * 15;
-    tpsLabel = `${tps.toFixed(2)}`;
+    tpsLabel = `${tps.toFixed(2)} t/s`;
     bpmLabel = `(${bpm} BPM)`;
   }
 
