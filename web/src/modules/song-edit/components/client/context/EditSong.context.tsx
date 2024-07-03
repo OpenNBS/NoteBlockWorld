@@ -146,6 +146,7 @@ export const EditSongProvider = ({
       file: undefined,
     };
 
+    // TODO: this comparison is not needed. Use isDirty field from react-hook-form
     if (dataWasNotChanged()) {
       toaster.success('No changes were made to the song!');
       router.push('/my-songs');
