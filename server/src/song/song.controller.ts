@@ -119,6 +119,7 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
+    // TODO: no longer used
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
       // Expose the Content-Disposition header to the client
