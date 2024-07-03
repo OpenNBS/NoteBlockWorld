@@ -152,7 +152,7 @@ export class SongService {
 
     // Check if updates to the song files and/or thumbnail are necessary;
     // if so, update and reupload them
-    this.songUploadService.processSongPatch(foundSong, body, user);
+    await this.songUploadService.processSongPatch(foundSong, body, user);
 
     // Update song document
     foundSong.title = body.title;
