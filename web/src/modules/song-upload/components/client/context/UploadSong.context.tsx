@@ -210,7 +210,7 @@ export const UploadSongProvider = ({
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (song) {
+      if (formMethods.formState.isDirty) {
         e.preventDefault();
 
         e.returnValue =
@@ -223,7 +223,7 @@ export const UploadSongProvider = ({
     return () => {
       window.removeEventListener('beforeunload', handler);
     };
-  }, [song]);
+  }, [formMethods.formState.isDirty]);
 
   return (
     <UploadSongContext.Provider
