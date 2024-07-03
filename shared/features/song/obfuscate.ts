@@ -59,8 +59,11 @@ export class SongObfuscator {
         continue;
       }
 
-      // Remove unused instruments
-      if (noteCountPerInstrument[instrumentId] === 0) {
+      // Remove unused instruments (no notes or no sound path)
+      if (
+        noteCountPerInstrument[instrumentId] === 0 ||
+        this.soundPaths[instrumentId] === ''
+      ) {
         continue;
       }
 
@@ -183,6 +186,9 @@ export class SongObfuscator {
         // Skip silent notes except if they are tempo changers
         const isTempoChanger = tempoChangerIds.includes(note.instrument); // TODO: doesn't work yet
         if (note.velocity === 0 && !isTempoChanger) continue;
+
+        // Skip notes with deleted instruments
+        if (instrumentMapping[note.instrument] === undefined) continue;
 
         // Add obfuscated note to output
         const newNote = getObfuscatedNote(note, layer);
