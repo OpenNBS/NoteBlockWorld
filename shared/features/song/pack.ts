@@ -27,6 +27,8 @@ export async function obfuscateAndPackSong(
   }
 
   for (const sound of soundsArray) {
+    if (sound === '') continue;
+
     // Look up hash of the file in the sounds mapping
     const hash = soundsMapping[sound];
 
