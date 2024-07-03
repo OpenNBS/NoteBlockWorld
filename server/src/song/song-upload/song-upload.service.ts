@@ -210,7 +210,7 @@ export class SongUploadService {
       if (thumbnailChanged) {
         this.logger.log('Thumbnail data changed; re-uploading thumbnail');
 
-        const nbsSong = this.getSongObject(originalSongBuffer);
+        const nbsSong = this.getSongObject(songFile);
 
         await this.generateAndUploadThumbnail(
           body.thumbnailData,
