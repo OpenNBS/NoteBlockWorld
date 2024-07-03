@@ -68,7 +68,7 @@ export class SongObfuscator {
       }
 
       // Remove instrument info
-      const newInstrumentId = song.instruments.loaded.length;
+      const newInstrumentId = output.instruments.loaded.length;
 
       const newInstrument = new Instrument(newInstrumentId, {
         name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
