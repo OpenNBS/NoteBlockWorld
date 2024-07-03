@@ -175,7 +175,7 @@ export class FileService {
       Body: file,
       ACL: accessControl,
       ContentType: mimetype,
-      ContentDisposition: `attachment; filename=${name}`, //.split('/').pop()}`,
+      ContentDisposition: `attachment; filename=${name.split('/').pop()}`,
       CreateBucketConfiguration: {
         LocationConstraint: 'ap-south-1',
       },
