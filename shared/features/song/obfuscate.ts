@@ -56,6 +56,7 @@ export class SongObfuscator {
       instrument,
     ] of song.instruments.loaded.entries()) {
       if (instrument.builtIn) {
+        instrumentMapping[instrumentId] = instrumentId;
         continue;
       }
 
@@ -105,17 +106,8 @@ export class SongObfuscator {
       return { key, pitch };
     };
 
-    const resolveInstrument = (note: Note) => {
-      let instrumentId;
-
-      if (note.instrument < song.instruments.firstCustomIndex) {
-        instrumentId = note.instrument;
-      } else {
-        instrumentId = instrumentMapping[note.instrument];
-      }
-
-      return instrumentId;
-    };
+    const resolveInstrument = (note: Note) =>
+      instrumentMapping[note.instrument];
 
     const resolveVelocity = (note: Note, layer: Layer) => {
       let velocity = ((note.velocity / 100) * layer.volume) / 100;
