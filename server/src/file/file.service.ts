@@ -102,9 +102,9 @@ export class FileService {
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
-      ResponseContentDisposition: `attachment; filename=${filename
+      ResponseContentDisposition: `attachment; filename="${filename
         .split('/')
-        .pop()}`,
+        .pop()}"`,
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {

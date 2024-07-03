@@ -317,13 +317,12 @@ export class SongService {
     }
 
     const fileKey = packed ? foundSong.packedSongUrl : foundSong.nbsFileUrl;
+    const fileExt = packed ? '.zip' : '.nbs';
+
+    const fileName = `${foundSong.title}${fileExt}`;
 
     try {
-      const url = await this.fileService.getSongDownloadUrl(
-        fileKey,
-        'song.nbs', // TODO: foundSong.filename
-        // TODO: this has to change according to the file extension being downloaded
-      );
+      const url = await this.fileService.getSongDownloadUrl(fileKey, fileName);
 
       // increment download count
       if (!packed && src === 'downloadButton') foundSong.downloadCount++;
