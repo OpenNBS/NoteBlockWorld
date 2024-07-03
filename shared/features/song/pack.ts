@@ -58,7 +58,7 @@ export async function obfuscateAndPackSong(
   }
 
   // Obfuscate the song and add it to the ZIP file
-  const obfuscatedSong = SongObfuscator.obfuscateSong(nbsSong);
+  const obfuscatedSong = SongObfuscator.obfuscateSong(nbsSong, soundsArray);
   const songBuffer = obfuscatedSong.toArrayBuffer();
   zip.file('song.nbs', songBuffer);
 

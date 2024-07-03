@@ -4,14 +4,16 @@ import { getInstrumentNoteCounts, getTempoChangerInstrumentIds } from './util';
 
 export class SongObfuscator {
   private song: Song;
+  private soundPaths: string[];
   private output: Song;
 
-  public static obfuscateSong(song: Song) {
-    return new SongObfuscator(song).output;
+  public static obfuscateSong(song: Song, soundPaths: string[]) {
+    return new SongObfuscator(song, soundPaths).output;
   }
 
-  private constructor(song: Song) {
+  private constructor(song: Song, soundPaths: string[]) {
     this.song = song;
+    this.soundPaths = soundPaths;
     this.output = this.generateObfuscatedSong();
   }
 
@@ -67,7 +69,7 @@ export class SongObfuscator {
 
       const newInstrument = new Instrument(newInstrumentId, {
         name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
-        soundFile: 'hash.ogg', // TODO: grab from sounds submitted in upload form
+        soundFile: this.soundPaths[instrumentId],
         key: instrument.key,
         pressKey: false,
       });
