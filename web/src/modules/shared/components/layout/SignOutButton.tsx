@@ -27,7 +27,7 @@ export function UploadButton() {
           <div className='h-8 w-8 p-1'>
             <FontAwesomeIcon
               icon={faCloudUpload}
-              className='h-full text-white hover:text-zinc-400 transition-colors duration-150'
+              className='!h-full text-white hover:text-zinc-400 transition-colors duration-150'
             />
           </div>
         </Link>
