@@ -303,6 +303,8 @@ export class SongUploadService {
     description: string,
   ) {
     // TODO: move song manipulation to shared module
+    description += '\n\nUploaded to Note Block World';
+
     nbsSong.meta.name = removeNonAscii(title);
     nbsSong.meta.author = removeNonAscii(author);
     nbsSong.meta.originalAuthor = removeNonAscii(originalAuthor);
