@@ -157,14 +157,13 @@ export class SongUploadService {
       JSON.stringify(songDocument._sounds) !==
       JSON.stringify(body.customInstruments);
 
-    const songMetadataChanged = !(
-      customInstrumentsChanged &&
-      songDocument.title === body.title &&
-      songDocument.originalAuthor === body.originalAuthor &&
+    const songMetadataChanged =
+      customInstrumentsChanged ||
+      songDocument.title !== body.title ||
+      songDocument.originalAuthor !== body.originalAuthor ||
       // TODO: verify if song author matches current username
-      // songDocument.uploader.username === user.username &&
-      songDocument.description === body.description
-    );
+      // songDocument.uploader.username !== user.username &&
+      songDocument.description !== body.description;
 
     // Compare thumbnail data
     const thumbnailChanged =
