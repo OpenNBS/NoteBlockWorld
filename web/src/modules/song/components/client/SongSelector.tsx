@@ -1,4 +1,4 @@
-import { faFileAudio } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import { useCallback } from 'react';
@@ -52,10 +52,17 @@ export const SongSelector = () => {
         {...getRootProps()}
       >
         <FontAwesomeIcon
-          icon={faFileAudio}
+          icon={faFile}
           className={`${
             isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
           } transition-all duration-250 ease-in-out !h-20`}
+        />
+
+        <FontAwesomeIcon
+          icon={faMusic}
+          className={`absolute translate-y-9 !h-8 !w-8 text-zinc-900 ${
+            isDragActive ? 'scale-105' : ''
+          } transition-all duration-250 ease-in-out`}
         />
 
         <div className='text-center'>
