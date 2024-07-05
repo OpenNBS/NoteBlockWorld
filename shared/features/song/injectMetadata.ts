@@ -1,8 +1,5 @@
 import { Song } from '@encode42/nbs.js';
-
-function removeNonAscii(str: string) {
-  return str.replace(/[^\x20-\x7E\n]/g, '_');
-}
+import unidecode from 'unidecode';
 
 export function injectSongFileMetadata(
   nbsSong: Song,
@@ -13,8 +10,8 @@ export function injectSongFileMetadata(
 ) {
   description += '\n\nUploaded to Note Block World';
 
-  nbsSong.meta.name = removeNonAscii(title);
-  nbsSong.meta.author = removeNonAscii(author);
-  nbsSong.meta.originalAuthor = removeNonAscii(originalAuthor);
-  nbsSong.meta.description = removeNonAscii(description);
+  nbsSong.meta.name = unidecode(title);
+  nbsSong.meta.author = unidecode(author);
+  nbsSong.meta.originalAuthor = unidecode(originalAuthor);
+  nbsSong.meta.description = unidecode(description);
 }
