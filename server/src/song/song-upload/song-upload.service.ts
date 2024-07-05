@@ -270,7 +270,14 @@ export class SongUploadService {
     const response = await fetch('http://localhost:3000/data/soundList.json');
     const soundsMapping = (await response.json()) as Record<string, string>;
 
-    this.validateCustomInstruments(soundsArray, soundsMapping);
+    const responseSelect = await fetch(
+      'http://localhost:3000/data/selectSoundList.json',
+    );
+
+    const soundsSubset = (await responseSelect.json()) as string[];
+    const soundsSubsetSet = new Set(soundsSubset);
+
+    this.validateCustomInstruments(soundsArray, soundsSubsetSet);
 
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
@@ -283,10 +290,10 @@ export class SongUploadService {
 
   private validateCustomInstruments(
     soundsArray: string[],
-    soundsMapping: Record<string, string>,
+    soundsMapping: Set<string>,
   ) {
     const isInstrumentValid = (sound: string) =>
-      sound === '' || soundsMapping[sound] !== undefined;
+      sound === '' || soundsMapping.has(sound);
 
     const areAllInstrumentsValid = soundsArray.every((sound) =>
       isInstrumentValid(sound),
