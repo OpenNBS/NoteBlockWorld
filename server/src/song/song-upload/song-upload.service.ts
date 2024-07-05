@@ -25,8 +25,12 @@ import { generateSongId, removeNonAscii } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
+  soundsMapping: Record<string, string>;
+  soundsSubset: Set<string>;
+
   // TODO: move all upload auxiliary methods to new UploadSongService
   private logger = new Logger(SongUploadService.name);
+
   constructor(
     @Inject(FileService)
     private fileService: FileService,
@@ -36,6 +40,33 @@ export class SongUploadService {
     @Inject(UserService)
     private userService: UserService,
   ) {}
+
+  private async getSoundsMapping() {
+    // Object that maps sound paths to their respective hashes
+
+    if (!this.soundsMapping) {
+      // TODO: should fetch from the backend's static files, or from S3 bucket
+      const response = await fetch('http://localhost:3000/data/soundList.json');
+      this.soundsMapping = await response.json();
+    }
+
+    return this.soundsMapping;
+  }
+
+  private async getSoundsSubset() {
+    // Array of valid sound paths, a manually-crafted subset of the sound mapping's keys
+
+    if (!this.soundsSubset) {
+      const response = await fetch(
+        'http://localhost:3000/data/selectSoundList.json',
+      );
+
+      const soundList = await response.json();
+      this.soundsSubset = new Set(Object.keys(soundList));
+    }
+
+    return this.soundsSubset;
+  }
 
   private async validateUploader(user: UserDocument): Promise<Types.ObjectId> {
     const uploader = await this.userService.findByID(user._id.toString());
@@ -265,19 +296,10 @@ export class SongUploadService {
     nbsSong: Song,
     soundsArray: string[],
   ) {
-    // TODO: should fetch from the backend's static files, or from S3 bucket
-    // TODO: cache this in memory on service setup for faster access?
-    const response = await fetch('http://localhost:3000/data/soundList.json');
-    const soundsMapping = (await response.json()) as Record<string, string>;
+    const soundsMapping = await this.getSoundsMapping();
+    const soundsSubset = await this.getSoundsSubset();
 
-    const responseSelect = await fetch(
-      'http://localhost:3000/data/selectSoundList.json',
-    );
-
-    const soundsSubset = (await responseSelect.json()) as string[];
-    const soundsSubsetSet = new Set(soundsSubset);
-
-    this.validateCustomInstruments(soundsArray, soundsSubsetSet);
+    this.validateCustomInstruments(soundsArray, soundsSubset);
 
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
