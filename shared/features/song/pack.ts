@@ -1,4 +1,5 @@
 import { Song } from '@encode42/nbs.js';
+import * as JSZip from 'jszip';
 
 import { SongObfuscator } from './obfuscate';
 
@@ -12,12 +13,9 @@ export async function obfuscateAndPackSong(
 
   // Import JSZip as a CommonJS module
   // (see: https://github.com/Stuk/jszip/issues/890)
-  // TODO: this is ugly as heck
-  // @ts-expect-error - dynamic import
-  const JSZip = await import('jszip/dist/jszip.js');
 
   // Create a new empty ZIP file
-  const zip = new JSZip();
+  const zip = new JSZip.default();
 
   // Create a 'sounds' folder in the ZIP file
   const soundsFolder = zip.folder('sounds');
