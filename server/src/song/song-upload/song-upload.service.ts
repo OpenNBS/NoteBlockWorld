@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { injectSongFileMetadata } from '@shared/features/song/injectMetadata';
 import { NoteQuadTree } from '@shared/features/song/notes';
 import { obfuscateAndPackSong } from '@shared/features/song/pack';
 import { SongStats } from '@shared/features/song/SongStats';
@@ -21,7 +22,7 @@ import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
-import { generateSongId, removeNonAscii } from '../song.util';
+import { generateSongId } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
@@ -278,7 +279,7 @@ export class SongUploadService {
     const nbsSong = this.getSongObject(loadedArrayBuffer);
 
     // Update NBS file with form values
-    this.updateSongFileMetadata(
+    injectSongFileMetadata(
       nbsSong,
       body.title,
       user.username,
@@ -332,22 +333,6 @@ export class SongUploadService {
         HttpStatus.BAD_REQUEST,
       );
     }
-  }
-
-  public updateSongFileMetadata(
-    nbsSong: Song,
-    title: string,
-    author: string,
-    originalAuthor: string,
-    description: string,
-  ) {
-    // TODO: move song manipulation to shared module
-    description += '\n\nUploaded to Note Block World';
-
-    nbsSong.meta.name = removeNonAscii(title);
-    nbsSong.meta.author = removeNonAscii(author);
-    nbsSong.meta.originalAuthor = removeNonAscii(originalAuthor);
-    nbsSong.meta.description = removeNonAscii(description);
   }
 
   public async generateAndUploadThumbnail(
