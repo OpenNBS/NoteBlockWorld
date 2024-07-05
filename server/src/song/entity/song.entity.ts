@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SongStats } from '@shared/features/song/SongStats';
+import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { SongViewUploader } from '@shared/validation/song/dto/SongView.dto';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import type {
