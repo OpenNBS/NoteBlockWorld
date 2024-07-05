@@ -52,7 +52,7 @@ export const SongFormSchema = zod.object({
     message: `Description must be less than ${UploadConst.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
-  customInstruments: zod.array(zod.string()).default([]),
+  customInstruments: zod.array(zod.string()),
   license: zod
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

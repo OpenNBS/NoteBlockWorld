@@ -231,7 +231,6 @@ export const EditSongProvider = ({
         songData.thumbnailData.backgroundColor,
       );
 
-      formMethods.setValue('customInstruments', songData.customInstruments);
       formMethods.setValue('license', songData.license);
       formMethods.setValue('category', songData.category);
 
@@ -247,6 +246,16 @@ export const EditSongProvider = ({
 
       // convert to song
       const song = parseSongFromBuffer(songFile);
+
+      // pad instruments array for safety
+      const songInstruments = Array(song.instruments.length).fill('');
+
+      songData.customInstruments.forEach((instrument, index) => {
+        songInstruments[index] = instrument;
+      });
+
+      formMethods.setValue('customInstruments', songInstruments);
+
       setSong(song);
     },
     [formMethods, setSong],

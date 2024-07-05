@@ -70,7 +70,17 @@ export class SongUploadService {
     song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
     song.license = body.license;
-    song.customInstruments = body.customInstruments;
+
+    // Pad custom instruments to number of instruments in the song, just for safety
+    const customInstrumentCount =
+      songStats.instrumentNoteCounts.length -
+      songStats.firstCustomInstrumentIndex;
+
+    const paddedInstruments = body.customInstruments.concat(
+      Array(customInstrumentCount - body.customInstruments.length).fill(''),
+    );
+
+    song.customInstruments = paddedInstruments;
     song.thumbnailData = body.thumbnailData;
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
