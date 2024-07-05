@@ -105,8 +105,9 @@ export const EditSongProvider = ({
           originalData.thumbnailData.backgroundColor,
         formValues.customInstruments.length ===
           originalData.customInstruments.length &&
-          formValues.customInstruments.every((val) =>
-            originalData.customInstruments.includes(val),
+          formValues.customInstruments.every(
+            (instrument, index) =>
+              instrument === originalData.customInstruments[index],
           ),
         formValues.license === originalData.license,
         formValues.category === originalData.category,
