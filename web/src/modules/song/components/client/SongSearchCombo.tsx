@@ -1,7 +1,7 @@
 'use client';
 
-import { SOUND_LIST_KEYS } from '@shared/features/sounds/constants';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { faCheck, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 
 import { cn } from '../../../../lib/tailwind.utils';
@@ -19,49 +19,77 @@ import {
   PopoverTrigger,
 } from '../../../shared/components/client/Popover';
 
-const sounds = SOUND_LIST_KEYS;
-
 export function SongSearchCombo({
   value,
   setValue,
+  sounds,
 }: {
   value: string;
   setValue: (value: string) => void;
+  sounds: string[];
 }) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button aria-expanded={open} className='w-[200px] justify-between'>
+        <button
+          aria-expanded={open}
+          className='block relative w-full h-full border-2 text-sm text-left pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
+        >
           {value
-            ? sounds.find((currentSound) => currentSound === currentSound)
-            : 'Select a sound'}
-          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+            ? value.replace('minecraft/sounds/', '').replace('.ogg', '')
+            : 'No sound'}
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            size='sm'
+            className='absolute right-0 top-2.5 text-white mx-1 w-3 shrink-0'
+          />
         </button>
       </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0'>
+      <PopoverContent className='w-fit p-0 bg-zinc-900 border-2 border-zinc-500'>
         <Command>
-          <CommandInput placeholder='Search framework...' />
+          <CommandInput placeholder='Search sounds...' />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No sounds found</CommandEmpty>
             <CommandGroup>
+              <CommandItem
+                value=''
+                onSelect={(currentValue: string) => {
+                  setValue(currentValue);
+                  setOpen(false);
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  size='sm'
+                  className={cn(
+                    'mr-2 h-4 w-4',
+                    value === '' ? 'opacity-100' : 'opacity-0',
+                  )}
+                />
+                No sound
+              </CommandItem>
               {sounds.map((currentSound) => (
                 <CommandItem
                   key={currentSound}
                   value={currentSound}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
+                  onSelect={(currentValue: string) => {
+                    setValue(currentValue);
                     setOpen(false);
                   }}
                 >
-                  <Check
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    size='sm'
                     className={cn(
                       'mr-2 h-4 w-4',
                       value === currentSound ? 'opacity-100' : 'opacity-0',
                     )}
                   />
-                  {currentSound}
+                  {currentSound
+                    .replace('minecraft/sounds/', '')
+                    .replace('.ogg', '')}
                 </CommandItem>
               ))}
             </CommandGroup>

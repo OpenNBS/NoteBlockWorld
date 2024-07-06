@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import * as strategy from 'passport-github';
+import strategy from 'passport-github';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(strategy, 'github') {
@@ -19,10 +19,6 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
     const SERVER_URL = configService.get<string>('SERVER_URL');
 
     if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET || !SERVER_URL) {
-      GithubStrategy.logger.error(
-        'Missing GitHub config, define GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, SERVER_URL',
-      );
-
       throw new Error('Missing GitHub config');
     }
 

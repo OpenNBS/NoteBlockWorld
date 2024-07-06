@@ -45,9 +45,9 @@ export class SongBrowserService {
       // from the nearest timestamp, regardless of view count
       if (
         songPage.length > 0 &&
-        songPage.length < BROWSER_SONGS.featuredPageSize
+        songPage.length < BROWSER_SONGS.paddedFeaturedPageSize
       ) {
-        const missing = BROWSER_SONGS.featuredPageSize - songPage.length;
+        const missing = BROWSER_SONGS.paddedFeaturedPageSize - songPage.length;
 
         const additionalSongs = await this.songService.getSongsBeforeTimespan(
           time,

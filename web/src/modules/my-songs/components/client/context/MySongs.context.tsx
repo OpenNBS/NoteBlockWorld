@@ -83,14 +83,17 @@ export const MySongProvider = ({
     const token = getTokenLocal();
 
     try {
-      const response = await axiosInstance.get(
-        `/my-songs?page=${currentPage}&limit=${pageSize}&sort=createdAt&order=false`,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+      const response = await axiosInstance.get('/my-songs', {
+        params: {
+          page: currentPage,
+          limit: pageSize,
+          sort: 'createdAt',
+          order: 'false',
         },
-      );
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = response.data as SongPageDtoType;
 

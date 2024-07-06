@@ -105,8 +105,9 @@ export const EditSongProvider = ({
           originalData.thumbnailData.backgroundColor,
         formValues.customInstruments.length ===
           originalData.customInstruments.length &&
-          formValues.customInstruments.every((val) =>
-            originalData.customInstruments.includes(val),
+          formValues.customInstruments.every(
+            (instrument, index) =>
+              instrument === originalData.customInstruments[index],
           ),
         formValues.license === originalData.license,
         formValues.category === originalData.category,
@@ -146,9 +147,10 @@ export const EditSongProvider = ({
       file: undefined,
     };
 
+    // TODO: this comparison is not needed. Use isDirty field from react-hook-form
     if (dataWasNotChanged()) {
       toaster.success('No changes were made to the song!');
-
+      router.push('/my-songs');
       return;
     }
 
@@ -168,21 +170,25 @@ export const EditSongProvider = ({
           'Content-Type': 'application/json',
         },
       });
-
-      toaster.success('Song saved successfully!');
-      router.push('/my-songs');
     } catch (error: any) {
       console.error('Error submitting song', error);
 
       if (error.response) {
-        setSendError(error.response.data.message);
+        setSendError(
+          error.response.data.message ||
+            Object.values(error.response.data.error)[0],
+        );
       } else {
         console.log(error);
         setSendError('An unknown error occurred while submitting the song!');
       }
-    } finally {
+
       setIsSubmitting(false);
+      return;
     }
+
+    toaster.success('Song saved successfully!');
+    router.push('/my-songs');
   };
 
   const loadSong = useCallback(
@@ -226,19 +232,31 @@ export const EditSongProvider = ({
         songData.thumbnailData.backgroundColor,
       );
 
-      formMethods.setValue('customInstruments', songData.customInstruments);
       formMethods.setValue('license', songData.license);
       formMethods.setValue('category', songData.category);
 
       // fetch song
       const songFile = (
-        await axiosInstance.get(`/song/${id}/download?src=edit`, {
+        await axiosInstance.get(`/song/${id}/download`, {
+          params: {
+            src: 'edit',
+          },
           responseType: 'arraybuffer',
         })
       ).data as ArrayBuffer;
 
       // convert to song
       const song = parseSongFromBuffer(songFile);
+
+      // pad instruments array for safety
+      const songInstruments = Array(song.instruments.length).fill('');
+
+      songData.customInstruments.forEach((instrument, index) => {
+        songInstruments[index] = instrument;
+      });
+
+      formMethods.setValue('customInstruments', songInstruments);
+
       setSong(song);
     },
     [formMethods, setSong],

@@ -5,6 +5,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
+import { PopoverClose } from './popover';
+
 const UserMenuSplitLine = () => (
   <hr className='w-full h-0.5 bg-zinc-600 border-0 my-1' />
 );
@@ -22,8 +24,13 @@ const UserMenuLink = ({
   external?: boolean;
   textColor?: string;
 }) => (
-  <button className='cursor-pointer px-2 py-1.5 hover:bg-zinc-700 transition-colors duration-150'>
-    <Link href={href} passHref target={external ? '_blank' : undefined}>
+  <PopoverClose asChild>
+    <Link
+      href={href}
+      passHref
+      target={external ? '_blank' : undefined}
+      className='cursor-pointer px-2 py-1.5 hover:bg-zinc-700 transition-colors duration-150'
+    >
       <div className='flex flex-row items-center gap-2'>
         <div className='h-8 w-8 flex items-center justify-center'>
           <FontAwesomeIcon icon={icon} size='lg' className={textColor} />
@@ -40,7 +47,7 @@ const UserMenuLink = ({
         )}
       </div>
     </Link>
-  </button>
+  </PopoverClose>
 );
 
 export { UserMenuSplitLine, UserMenuLink };

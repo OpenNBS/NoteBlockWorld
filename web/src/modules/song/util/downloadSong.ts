@@ -10,6 +10,9 @@ export const downloadSongFile = async (song: {
 }) => {
   axios
     .get(`/song/${song.publicId}/download`, {
+      params: {
+        src: 'downloadButton',
+      },
       responseType: 'blob',
       withCredentials: true,
     })

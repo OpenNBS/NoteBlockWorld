@@ -1,6 +1,7 @@
 import { Song } from '@encode42/nbs.js';
 
 import { SongStatsType } from './types';
+import { getTempoChangerInstrumentIds } from './util';
 
 // Usage:
 // SongStatsGenerator.getSongStats(song)
@@ -18,15 +19,20 @@ export class SongStatsGenerator {
 
     const midiFileName = this.getMidiFileName();
 
+    const tempoChangerInstrumentIds = getTempoChangerInstrumentIds(this.song);
+
     const {
       noteCount,
       tickCount,
       layerCount,
-      notesOutsideOctaveRange,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      customInstrumentNoteCount,
+      incompatibleNoteCount,
       instrumentNoteCounts,
-    } = this.getCounts();
+    } = this.getCounts(tempoChangerInstrumentIds);
 
-    const tempoSegments = this.getTempoSegments();
+    const tempoSegments = this.getTempoSegments(tempoChangerInstrumentIds);
 
     const tempo = this.getTempo();
     const tempoRange = this.getTempoRange(tempoSegments);
@@ -35,20 +41,22 @@ export class SongStatsGenerator {
     const loop = this.getLoop();
     const loopStartTick = this.getLoopStartTick();
     const minutesSpent = this.getMinutesSpent();
-    const usesCustomInstruments = this.getUsesCustomInstruments();
 
     const { vanillaInstrumentCount, customInstrumentCount } =
-      this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
+      this.getVanillaAndCustomUsedInstrumentCounts(
+        instrumentNoteCounts,
+        tempoChangerInstrumentIds,
+      );
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
-    const compatible = notesOutsideOctaveRange === 0 && !usesCustomInstruments;
+
+    const compatible = incompatibleNoteCount === 0;
 
     this.stats = {
       midiFileName,
       noteCount,
       tickCount,
       layerCount,
-      instrumentNoteCounts,
       tempo,
       tempoRange,
       timeSignature,
@@ -56,11 +64,14 @@ export class SongStatsGenerator {
       loop,
       loopStartTick,
       minutesSpent,
-      usesCustomInstruments,
       vanillaInstrumentCount,
       customInstrumentCount,
       firstCustomInstrumentIndex,
-      notesOutsideOctaveRange,
+      instrumentNoteCounts,
+      customInstrumentNoteCount,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      incompatibleNoteCount,
       compatible,
     };
   }
@@ -70,24 +81,36 @@ export class SongStatsGenerator {
   }
 
   private getMidiFileName(): string {
-    return this.song.importName || '';
+    return this.song.meta.importName || '';
   }
 
-  private getCounts(): {
+  private getCounts(tempoChangerInstruments: number[]): {
     noteCount: number;
     tickCount: number;
     layerCount: number;
-    notesOutsideOctaveRange: number;
+    outOfRangeNoteCount: number;
+    detunedNoteCount: number;
+    customInstrumentNoteCount: number;
+    incompatibleNoteCount: number;
     instrumentNoteCounts: number[];
   } {
     let noteCount = 0;
     let tickCount = 0;
     let layerCount = 0;
-    let notesOutsideOctaveRange = 0;
-    const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
+    let outOfRangeNoteCount = 0;
+    let detunedNoteCount = 0;
+    let customInstrumentNoteCount = 0;
+    let incompatibleNoteCount = 0;
 
-    for (const [layerId, layer] of this.song.layers.get.entries()) {
-      for (const [tick, note] of layer.notes) {
+    const instrumentNoteCounts = Array(
+      this.song.instruments.loaded.length,
+    ).fill(0);
+
+    for (const [layerId, layer] of this.song.layers.entries()) {
+      for (const tickStr in layer.notes) {
+        const note = layer.notes[tickStr];
+        const tick = parseInt(tickStr);
+
         if (tick > tickCount) {
           tickCount = tick;
         }
@@ -97,8 +120,56 @@ export class SongStatsGenerator {
           layerCount = layerId;
         }
 
-        if (note.key < 33 || note.key > 57) {
-          notesOutsideOctaveRange++;
+        const effectivePitch = note.key + note.pitch / 100;
+
+        // Differences between Note Block Studio and this implementation:
+
+        // DETUNED NOTES
+        // The behavior here differs from Open Note Block Studio v3.10, since it doesn't consider
+        // non-integer/microtonal notes when deciding if a song is compatible. This is likely to
+        // change in the future. Since this is relevant to knowing accurately if vanilla note blocks
+        // can support the song, NBW uses a more modern approach of counting microtonal notes as
+        // outside the 2-octave range - treating it as only the piano keys between 33-57 and not
+        // anything in the interval between them.
+
+        // INSTRUMENT PITCH
+        // We also use the instrument's original pitch when determining if it's out-of-range.
+        // Note Block Studio also doesn't take this into account - since importing custom sounds
+        // into the game was out of question back in the legacy versions, we used to only need
+        // to worry about vanilla note block compatibility (for schematics).
+        // Now that data packs are a thing, out-of-range notes become relevant not only due to
+        // note block's key range, but also because the same limit applies to Minecraft's audio
+        // engine as a whole (e.g. /playsound etc).
+        // But if the instrument's key is not set to F#4 (45), the range supported by Minecraft
+        // (without needing to re-pitch the sound externally) also changes (it is always one octave
+        // above and below the instrument's key). Note Block Studio doesn't account for this - the
+        // supported range is always F#3 to F#5 (33-57) - but we do because it's useful to know if
+        // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
+        // a custom sounds.json in a resource pack).
+
+        const instrumentKey = this.song.instruments.loaded[note.instrument].key; // F#4 = 45
+        const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
+        const maxRange = 45 - (instrumentKey - 45) + 12; // F#5 = 57
+
+        const isOutOfRange =
+          effectivePitch < minRange || effectivePitch > maxRange;
+
+        // Don't consider tempo changers as detuned notes or custom instruments
+        const isTempoChanger = tempoChangerInstruments.includes(
+          note.instrument,
+        );
+
+        const hasDetune = note.pitch % 100 !== 0;
+
+        const usesCustomInstrument =
+          note.instrument >= this.song.instruments.firstCustomIndex;
+
+        if (!isTempoChanger) {
+          if (isOutOfRange) outOfRangeNoteCount++;
+          if (hasDetune) detunedNoteCount++;
+          if (usesCustomInstrument) customInstrumentNoteCount++;
+          if (isOutOfRange || hasDetune || usesCustomInstrument)
+            incompatibleNoteCount++;
         }
 
         instrumentNoteCounts[note.instrument]++;
@@ -114,7 +185,10 @@ export class SongStatsGenerator {
       noteCount,
       tickCount,
       layerCount,
-      notesOutsideOctaveRange,
+      outOfRangeNoteCount,
+      detunedNoteCount,
+      customInstrumentNoteCount,
+      incompatibleNoteCount,
       instrumentNoteCounts,
     };
   }
@@ -136,13 +210,18 @@ export class SongStatsGenerator {
     return [minTempo, maxTempo];
   }
 
-  private getTempoSegments(): Record<number, number> {
+  private getTempoSegments(
+    tempoChangerInstruments: number[],
+  ): Record<number, number> {
     const tempoSegments: Record<number, number> = {};
-    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
     if (tempoChangerInstruments.length > 0) {
-      for (const layer of Array.from(this.song.layers.get).reverse()) {
-        for (const [tick, note] of layer.notes) {
+      // TODO: toReversed
+      for (const layer of Array.from(this.song.layers).reverse()) {
+        for (const tickStr in layer.notes) {
+          const note = layer.notes[tickStr];
+          const tick = parseInt(tickStr);
+
           // Not a tempo changer
           if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
@@ -161,13 +240,6 @@ export class SongStatsGenerator {
     tempoSegments[0] = 0 in tempoSegments ? tempoSegments[0] : this.song.tempo;
 
     return tempoSegments;
-  }
-
-  private getTempoChangerInstrumentIds(): number[] {
-    return Object.entries(this.song.instruments.get).flatMap(
-      ([id, instrument]) =>
-        instrument.name === 'Tempo Changer' ? [parseInt(id)] : [],
-    );
   }
 
   private getTimeSignature(): number {
@@ -215,46 +287,34 @@ export class SongStatsGenerator {
   }
 
   private getMinutesSpent(): number {
-    return this.song.minutesSpent;
-  }
-
-  private getUsesCustomInstruments(): boolean {
-    // Having custom instruments isn't enough, the song must have at least a note with one of them
-    const lastInstrumentId = this.song.instruments.total - 1; // e.g. 15
-    const firstCustomIndex = this.song.instruments.firstCustomIndex; // e.g. 16
-
-    if (lastInstrumentId < firstCustomIndex) {
-      return false;
-    }
-
-    for (const layer of this.song.layers.get) {
-      for (const [_, note] of layer.notes) {
-        if (note.instrument >= firstCustomIndex) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return this.song.stats.minutesSpent;
   }
 
   private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
-  ) {
+    tempoChangerInstruments: number[],
+  ): {
+    vanillaInstrumentCount: number;
+    customInstrumentCount: number;
+  } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
 
     // We want the count of instruments that have at least one note in the song
-    // (which tells us how many songs are effectively used in the song)
+    // (which tells us how many instruments are effectively used in the song)
 
     const vanillaInstrumentCount = noteCountsPerInstrument
       .slice(0, firstCustomIndex)
       .filter((count) => count > 0).length;
 
     const customInstrumentCount = noteCountsPerInstrument
+      .filter((_, index) => !tempoChangerInstruments.includes(index))
       .slice(firstCustomIndex)
       .filter((count) => count > 0).length;
 
-    return { vanillaInstrumentCount, customInstrumentCount };
+    return {
+      vanillaInstrumentCount,
+      customInstrumentCount,
+    };
   }
 
   private getFirstCustomInstrumentIndex(): number {

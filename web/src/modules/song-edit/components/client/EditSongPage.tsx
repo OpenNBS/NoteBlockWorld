@@ -52,6 +52,7 @@ export async function EditSongPage({ id }: { id: string }) {
               <span className='font-light'>Editing </span>
               {songData.title}
             </h1>
+            {/* TODO: This should be the file's original name, which is not sent in the DTO */}
             <FileDisplay fileName={`${songData.title}.nbs`}>
               <DownloadFileButton
                 song={{ publicId: songId, title: songData.title }}

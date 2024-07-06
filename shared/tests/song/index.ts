@@ -14,13 +14,17 @@ const testSongPaths = {
   simple: 'files/testSimple.nbs',
   extraPopulatedLayer: 'files/testExtraPopulatedLayer.nbs',
   loop: 'files/testLoop.nbs',
+  detune: 'files/testDetune.nbs',
   outOfRange: 'files/testOutOfRange.nbs',
+  outOfRangeCustomPitch: 'files/testOutOfRangeCustomPitch.nbs',
   customInstrumentNoUsage: 'files/testCustomInstrumentNoUsage.nbs',
   customInstrumentUsage: 'files/testCustomInstrumentUsage.nbs',
   tempoChangerWithStart: 'files/testTempoChangerWithStart.nbs',
   tempoChangerNoStart: 'files/testTempoChangerNoStart.nbs',
   tempoChangerDifferentStart: 'files/testTempoChangerDifferentStart.nbs',
   tempoChangerOverlap: 'files/testTempoChangerOverlap.nbs',
+  tempoChangerMultipleInstruments:
+    'files/testTempoChangerMultipleInstruments.nbs',
 };
 
 const testSongStats = Object.fromEntries(
@@ -48,9 +52,11 @@ function testSimple() {
   // assert(stats.minutesSpent === 0);
   assert(stats.vanillaInstrumentCount === 5);
   assert(stats.customInstrumentCount === 0);
-  assert(stats.usesCustomInstruments === false);
   assert(stats.firstCustomInstrumentIndex === 16);
-  assert(stats.notesOutsideOctaveRange === 0);
+  assert(stats.customInstrumentNoteCount === 0);
+  assert(stats.outOfRangeNoteCount === 0);
+  assert(stats.detunedNoteCount === 0);
+  assert(stats.incompatibleNoteCount === 0);
   assert(stats.compatible === true);
 
   assert(
@@ -80,11 +86,39 @@ function testLoop() {
   assert(stats.loopStartTick === 7);
 }
 
+function testDetune() {
+  // Test that notes with microtonal detune values are properly counted, and make
+  // the song incompatible. Also checks that notes crossing the 2-octave range
+  // boundary via pitch values are taken into account.
+
+  const stats = testSongStats.detune;
+
+  assert(stats.noteCount === 10);
+  assert(stats.detunedNoteCount === 4);
+  assert(stats.incompatibleNoteCount === 6);
+  assert(stats.outOfRangeNoteCount === 2);
+  assert(stats.compatible === false);
+}
+
 function testOutOfRange() {
+  // Test that notes outside the 2-octave range are properly counted in a song where
+  // every instrument uses the default pitch (F#4 - 45).
+
   const stats = testSongStats.outOfRange;
 
-  assert(stats.notesOutsideOctaveRange === 6);
+  assert(stats.outOfRangeNoteCount === 6);
+  assert(stats.incompatibleNoteCount === 6);
   assert(stats.compatible === false);
+}
+
+function testOutOfRangeCustomPitch() {
+  // Test that notes outside the 2-octave range are properly counted in a song with
+  // instruments that use custom pitch values. The code should calculate the 2-octave
+  // supported range based on the instrument's pitch value.
+
+  const stats = testSongStats.outOfRangeCustomPitch;
+
+  assert(stats.outOfRangeNoteCount === stats.noteCount - 3);
 }
 
 function testCustomInstrumentNoUsage() {
@@ -94,7 +128,9 @@ function testCustomInstrumentNoUsage() {
   const stats = testSongStats.customInstrumentNoUsage;
 
   assert(stats.customInstrumentCount === 0);
-  assert(stats.usesCustomInstruments === false);
+  assert(stats.customInstrumentNoteCount === 0);
+
+  assert(stats.compatible === true);
 }
 
 function testCustomInstrumentUsage() {
@@ -105,11 +141,13 @@ function testCustomInstrumentUsage() {
   const firstCustomIndex = stats.firstCustomInstrumentIndex;
 
   assert(stats.customInstrumentCount === 2);
-  assert(stats.usesCustomInstruments === true);
+  assert(stats.customInstrumentNoteCount > 0);
 
   assert(stats.instrumentNoteCounts[firstCustomIndex + 0] === 3);
   assert(stats.instrumentNoteCounts[firstCustomIndex + 1] === 0);
   assert(stats.instrumentNoteCounts[firstCustomIndex + 2] === 2);
+
+  assert(stats.compatible === false);
 }
 
 function testTempoChangerWithStart() {
@@ -123,6 +161,14 @@ function testTempoChangerWithStart() {
   assert(duration.toFixed(2) === stats.duration.toFixed(2));
   assert(stats.tempo === 10.0);
   assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
+
+  // Tempo changers shouldn't count as detuned notes, increase custom instrument count
+  // or incompatible note count.
+  assert(stats.detunedNoteCount === 0);
+  assert(stats.customInstrumentCount === 0);
+  assert(stats.customInstrumentNoteCount === 0);
+  assert(stats.incompatibleNoteCount === 0);
+  assert(stats.compatible === true);
 }
 
 function testTempoChangerNoStart() {
@@ -167,6 +213,20 @@ function testTempoChangerOverlap() {
   assert(stats.tempoRange?.toString() === [4.0, 18.0].toString());
 }
 
+function testTempoChangerMultipleInstruments() {
+  // Test that multiple tempo changer instruments are properly handled.
+
+  const stats = testSongStats.tempoChangerMultipleInstruments;
+
+  const duration = (1 / 10 + 1 / 12 + 1 / 14 + 1 / 16 + 1 / 18) * 4;
+
+  assert(duration.toFixed(2) === stats.duration.toFixed(2));
+  assert(stats.tempo === 10.0);
+  assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
+
+  assert(stats.detunedNoteCount === 0);
+}
+
 function runTest(test: () => void) {
   console.log('\n------------------------------------');
 
@@ -185,13 +245,16 @@ function runAllTests() {
   runTest(testSimple);
   runTest(testExtraPopulatedLayer);
   runTest(testLoop);
+  runTest(testDetune);
   runTest(testOutOfRange);
+  runTest(testOutOfRangeCustomPitch);
   runTest(testCustomInstrumentNoUsage);
   runTest(testCustomInstrumentUsage);
   runTest(testTempoChangerWithStart);
   runTest(testTempoChangerNoStart);
   runTest(testTempoChangerDifferentStart);
   runTest(testTempoChangerOverlap);
+  runTest(testTempoChangerMultipleInstruments);
 }
 
 runAllTests();

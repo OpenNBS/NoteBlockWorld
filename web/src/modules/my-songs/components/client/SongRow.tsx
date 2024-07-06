@@ -82,7 +82,7 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
             <Skeleton />
           ) : (
             <p
-              className={`text-ellipsis text-sm leading-tight line-clamp-2 ${
+              className={`text-ellipsis text-sm leading-tight whitespace-pre-line line-clamp-2 ${
                 !song.description ? 'text-zinc-500 italic' : 'text-zinc-400'
               }`}
             >

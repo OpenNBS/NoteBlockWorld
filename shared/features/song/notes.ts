@@ -15,12 +15,15 @@ export class NoteQuadTree {
 
   constructor(song: Song) {
     const width = song.length;
-    const height = song.layers.total;
+    const height = song.layers.length;
 
     this.quadtree = new Quadtree({ width, height });
 
-    for (const [layerId, layer] of song.layers.get.entries()) {
-      for (const [tick, note] of layer.notes) {
+    for (const [layerId, layer] of song.layers.entries()) {
+      for (const tickStr in layer.notes) {
+        const note = layer.notes[tickStr];
+        const tick = parseInt(tickStr);
+
         const treeItem = new Rectangle({
           x: tick,
           y: layerId,

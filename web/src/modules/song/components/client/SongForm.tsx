@@ -1,11 +1,13 @@
+import { faWarning } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
+import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
-import { ErrorBalloon } from '../../../shared/components/client/ErrorBalloon';
 import {
   Area,
   Checkbox,
@@ -45,7 +47,6 @@ export const SongForm = ({
           submitSong();
         })}
       >
-        {sendError && <ErrorBalloon message={sendError} />}
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
@@ -65,6 +66,7 @@ export const SongForm = ({
               id='description'
               label='Description'
               isLoading={isLoading}
+              disabled={isLocked}
               errorMessage={errors.description?.message}
               {...register('description')}
             />
@@ -87,6 +89,7 @@ export const SongForm = ({
                 id='originalAuthor'
                 label='Original author'
                 isLoading={isLoading}
+                disabled={isLocked}
                 {...register('originalAuthor')}
               />
               <p className='text-sm text-zinc-500'>
@@ -103,8 +106,9 @@ export const SongForm = ({
                 id='category'
                 label='Category'
                 isLoading={isLoading}
-                {...register('category')}
+                disabled={isLocked}
                 errorMessage={errors.category?.message}
+                {...register('category')}
               >
                 {Object.entries(UploadConst.categories).map(
                   ([key, value]: [string, string]) => (
@@ -131,6 +135,7 @@ export const SongForm = ({
                 id='visibility'
                 label='Visibility'
                 isLoading={isLoading}
+                disabled={isLocked}
                 errorMessage={errors.visibility?.message}
                 {...register('visibility')}
               >
@@ -148,6 +153,7 @@ export const SongForm = ({
                 id='license'
                 label='License'
                 isLoading={isLoading}
+                disabled={isLocked}
                 errorMessage={errors.license?.message}
                 {...register('license')}
               >
@@ -165,11 +171,12 @@ export const SongForm = ({
           <div className='flex-1'>
             <Area
               label='Custom instruments'
-              className='p-0 border-0'
+              className='p-0 border-0 mb-0'
               isLoading={isLoading}
             >
               <InstrumentPicker type={type} />
             </Area>
+            <ErrorBalloon message={errors.customInstruments?.message} />
           </div>
 
           {/* Allow download */}
@@ -180,6 +187,13 @@ export const SongForm = ({
               <span className='text-zinc-400 italic'>(Coming soon!)</span>
             </label>
           </div>
+
+          {sendError && (
+            <div className='outline outline-2 text-center text-balance outline-red-500 bg-red-800 p-2 rounded-lg'>
+              <FontAwesomeIcon icon={faWarning} className='mr-2' />
+              {sendError}
+            </div>
+          )}
 
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Uploading label */}

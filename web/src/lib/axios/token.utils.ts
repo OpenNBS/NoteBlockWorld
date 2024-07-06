@@ -7,6 +7,7 @@ export const getTokenLocal = (): string | never => {
     .find((row) => row.startsWith('token'))
     ?.split('=')[1];
 
+  // TODO: should be changed to a redirect to the login page?
   if (!token) throw new Error('Failed to get token');
 
   return token;

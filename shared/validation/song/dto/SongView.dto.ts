@@ -7,7 +7,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-import { SongStats } from '@shared/features/song/SongStats';
+import { SongStats } from '@shared/validation/song/dto/SongStats';
 
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 

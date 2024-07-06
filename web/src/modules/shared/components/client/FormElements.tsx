@@ -25,13 +25,13 @@ Label.displayName = 'Label';
 export const Area = ({
   label,
   isLoading,
-  children,
   className,
+  children,
 }: {
   label?: string;
   isLoading?: boolean;
-  children: React.ReactNode;
   className?: string;
+  children: React.ReactNode;
 }) => {
   return (
     <>
