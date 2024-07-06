@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export function deleteAuthCookies() {
   // delete cookie
-  const cookiesToBeDeleted = ['refresh_token', 'user', 'token'];
+  const cookiesToBeDeleted = ['refresh_token', 'token'];
 
   cookiesToBeDeleted.forEach((cookie) => {
     if (!document) return;

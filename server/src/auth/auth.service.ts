@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
@@ -50,6 +56,34 @@ export class AuthService {
     this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
     this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
     this.JWT_REFRESH_EXPIRES_IN = config.JWT_REFRESH_EXPIRES_IN;
+  }
+
+  private getMaxAge(time: string): number {
+    type TimeUnit = 's' | 'm' | 'h' | 'd' | 'w' | 'y';
+    const times: TimeUnit[] = ['s', 'm', 'h', 'd', 'w', 'y'];
+
+    const quantities: Record<TimeUnit, number> = {
+      s: 1000,
+      m: 1000 * 60,
+      h: 1000 * 60 * 60,
+      d: 1000 * 60 * 60 * 24,
+      w: 1000 * 60 * 60 * 24 * 7,
+      y: 1000 * 60 * 60 * 24 * 365,
+    };
+
+    const unit = time.charAt(time.length - 1) as TimeUnit;
+
+    if (!times.includes(unit)) {
+      throw new Error('Invalid unit');
+    }
+
+    const amount = parseInt(time.slice(0, -1));
+
+    if (isNaN(amount)) {
+      throw new Error('Invalid amount');
+    }
+
+    return amount * quantities[unit];
   }
 
   public async verifyToken(req: Request, res: Response) {
@@ -183,24 +217,34 @@ export class AuthService {
       username: user_registered.username,
     });
 
-    const userId = user_registered._id.toString();
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
-    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
+    const accessTokenMaxAge = this.getMaxAge(this.JWT_EXPIRES_IN);
+
+    const refreshTokenMaxAge = this.getMaxAge(this.JWT_REFRESH_EXPIRES_IN);
+
+    this.logger.debug(
+      `User ${user_registered.username} (${user_registered.email}) logged in`,
+    );
+
+    this.logger.debug(
+      `Access token: ${token.access_token} , Refresh token: ${token.refresh_token}`,
+    );
+
+    this.logger.debug(
+      `Access token max age: ${accessTokenMaxAge} , Refresh token max age: ${refreshTokenMaxAge}`,
+    );
+
+    this.logger.debug(`Frontend URL: ${frontEndURL} , Domain: ${domain}`);
 
     res.cookie('token', token.access_token, {
       domain: domain,
-      maxAge: maxAge,
+      maxAge: accessTokenMaxAge,
     });
 
     res.cookie('refresh_token', token.refresh_token, {
       domain: domain,
-      maxAge: maxAge,
-    });
-
-    res.cookie('user', userId, {
-      domain: domain,
-      maxAge: maxAge,
+      maxAge: refreshTokenMaxAge,
     });
 
     res.redirect(frontEndURL + '/');
@@ -242,12 +286,35 @@ export class AuthService {
         username: user.username,
       });
 
-      return res.json({
-        access_token: token.access_token,
+      const domain = this.APP_DOMAIN;
+
+      res.cookie('token', token.access_token, {
+        domain: domain,
+        maxAge: this.getMaxAge(this.JWT_EXPIRES_IN),
+      });
+
+      res.cookie('refresh_token', token.refresh_token, {
+        domain: domain,
+        maxAge: this.getMaxAge(this.JWT_REFRESH_EXPIRES_IN),
+      });
+
+      this.logger.debug(
+        `User ${user.username} (${user.email}) refreshed token`,
+      );
+
+      return res.status(200).json({
         refresh_token: token.refresh_token,
+        token: token.access_token,
       });
     } catch (error) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      this.logger.debug(error);
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Unauthorized',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }
