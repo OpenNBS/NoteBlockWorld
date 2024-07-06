@@ -24,7 +24,6 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private readonly FRONTEND_URL: string;
   private readonly APP_DOMAIN?: string;
-  private readonly COOKIE_EXPIRES_IN: string;
   private readonly JWT_SECRET: string;
   private readonly JWT_EXPIRES_IN: string;
   private readonly JWT_REFRESH_SECRET: string;
@@ -41,8 +40,6 @@ export class AuthService {
         configService.get('APP_DOMAIN').length > 0
           ? configService.get('APP_DOMAIN')
           : undefined,
-      COOKIE_EXPIRES_IN:
-        configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
       JWT_SECRET: this.configService.get('JWT_SECRET'),
       JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
       JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
@@ -51,7 +48,6 @@ export class AuthService {
 
     this.FRONTEND_URL = config.FRONTEND_URL;
     this.APP_DOMAIN = config.APP_DOMAIN;
-    this.COOKIE_EXPIRES_IN = config.COOKIE_EXPIRES_IN;
     this.JWT_SECRET = config.JWT_SECRET;
     this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
     this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
