@@ -60,20 +60,32 @@ export class SongObfuscator {
         continue;
       }
 
-      // Remove unused instruments (no notes or no sound path)
-      if (
+      // Remove unused instruments (no notes or no sound defined)
+      const instrumentName = instrument.meta.name;
       const customId = instrumentId - output.instruments.firstCustomIndex;
       const soundFilePath = this.soundPaths[customId];
 
       if (noteCountPerInstrument[instrumentId] === 0 || soundFilePath === '') {
+        console.log(
+          `Skipping instrument '${instrumentName}' with ${noteCountPerInstrument[instrumentId]}`,
+          `notes and sound file '${soundFilePath}' (custom ID: ${customId})`,
+        );
+
         continue;
       }
 
       // Remove instrument info
       const newInstrumentId = output.instruments.loaded.length;
+      const newCustomId = newInstrumentId - output.instruments.firstCustomIndex;
+
+      console.log(
+        `Keeping instrument '${instrumentName}' with`,
+        `${noteCountPerInstrument[instrumentId]} notes and sound file`,
+        `'${this.soundPaths[customId]}' (custom ID: ${customId} -> ${newCustomId})`,
+      );
 
       const newInstrument = new Instrument(newInstrumentId, {
-        name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
+        name: instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
         soundFile: soundFilePath,
         key: instrument.key,
         pressKey: false,
