@@ -7,6 +7,7 @@ export function injectSongFileMetadata(
   author: string,
   originalAuthor: string,
   description: string,
+  soundPaths: string[],
 ) {
   description += '\n\nUploaded to Note Block World';
 
@@ -14,4 +15,12 @@ export function injectSongFileMetadata(
   nbsSong.meta.author = unidecode(author);
   nbsSong.meta.originalAuthor = unidecode(originalAuthor);
   nbsSong.meta.description = unidecode(description);
+
+  // Assign sound files to standard Minecraft asset names (machine- and human-friendly)
+  // (Also ensures the downloaded song matches what the user picked when uploading)
+  for (const [id, soundPath] of soundPaths.entries()) {
+    const customId = nbsSong.instruments.firstCustomIndex + id;
+    const newSoundPath = soundPath.replace('/sounds/', '/');
+    nbsSong.instruments.loaded[customId].meta.soundFile = newSoundPath;
+  }
 }

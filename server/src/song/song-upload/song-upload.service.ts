@@ -299,6 +299,7 @@ export class SongUploadService {
       user.username,
       body.originalAuthor,
       body.description,
+      body.customInstruments,
     );
 
     const updatedSongArrayBuffer = toArrayBuffer(nbsSong);
