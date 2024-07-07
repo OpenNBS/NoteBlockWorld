@@ -24,8 +24,8 @@ export class SongObfuscator {
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    const instrumentMapping = this.processInstruments(song, output);
-    this.processNotes(song, output, instrumentMapping);
+    const instrumentMapping = this.resolveInstruments(song, output);
+    this.resolveNotes(song, output, instrumentMapping);
 
     return output;
   }
@@ -43,7 +43,7 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments(song: Song, output: Song): Record<number, number> {
+  private resolveInstruments(song: Song, output: Song): Record<number, number> {
     // ✅ Remove unused instruments
     // ✅ Remove instrument info (name, press) - keep sound hash and pitch
 
@@ -98,7 +98,7 @@ export class SongObfuscator {
     return instrumentMapping;
   }
 
-  private processNotes(
+  private resolveNotes(
     song: Song,
     output: Song,
     instrumentMapping: Record<number, number>,
