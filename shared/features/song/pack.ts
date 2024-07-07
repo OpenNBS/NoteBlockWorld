@@ -25,10 +25,9 @@ export async function obfuscateAndPackSong(
   }
 
   for (const sound of soundsArray) {
-    if (sound === '') continue;
+    if (!sound) continue;
 
-    // Look up hash of the file in the sounds mapping
-    const hash = soundsMapping[sound];
+    const hash = soundsMapping[sound] || '';
 
     if (!hash) {
       console.error(`Sound file ${sound} not found in sounds mapping`);
@@ -57,8 +56,10 @@ export async function obfuscateAndPackSong(
     soundsFolder.file(soundFileName, soundFileBuffer);
   }
 
+  const soundHashes = soundsArray.map((sound) => soundsMapping[sound] || '');
+
   // Obfuscate the song and add it to the ZIP file
-  const obfuscatedSong = SongObfuscator.obfuscateSong(nbsSong, soundsArray);
+  const obfuscatedSong = SongObfuscator.obfuscateSong(nbsSong, soundHashes);
   const songBuffer = obfuscatedSong.toArrayBuffer();
   zip.file('song.nbs', songBuffer);
 
