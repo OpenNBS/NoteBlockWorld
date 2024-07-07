@@ -64,7 +64,7 @@ export class SongUploadService {
       );
 
       const soundList = await response.json();
-      this.soundsSubset = new Set(Object.keys(soundList));
+      this.soundsSubset = new Set(soundList);
     }
 
     return this.soundsSubset;
