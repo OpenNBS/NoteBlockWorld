@@ -62,9 +62,10 @@ export class SongObfuscator {
 
       // Remove unused instruments (no notes or no sound path)
       if (
-        noteCountPerInstrument[instrumentId] === 0 ||
-        this.soundPaths[instrumentId] === ''
-      ) {
+      const customId = instrumentId - output.instruments.firstCustomIndex;
+      const soundFilePath = this.soundPaths[customId];
+
+      if (noteCountPerInstrument[instrumentId] === 0 || soundFilePath === '') {
         continue;
       }
 
@@ -73,7 +74,7 @@ export class SongObfuscator {
 
       const newInstrument = new Instrument(newInstrumentId, {
         name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
-        soundFile: this.soundPaths[instrumentId],
+        soundFile: soundFilePath,
         key: instrument.key,
         pressKey: false,
       });
