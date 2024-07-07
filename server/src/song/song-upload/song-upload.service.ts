@@ -15,7 +15,6 @@ import { drawToImage } from '@shared/features/thumbnail';
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
-import axios from 'axios';
 import { Model, Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
@@ -47,12 +46,11 @@ export class SongUploadService {
     // Object that maps sound paths to their respective hashes
 
     if (!this.soundsMapping) {
-      // TODO: should fetch from the backend's static files, or from S3 bucket
-      const response = await axios.get<Record<string, string>>(
-        'http://localhost:3000/data/soundList.json',
+      const response = await fetch(
+        process.env.SERVER_URL + '/api/v1/data/soundList.json',
       );
 
-      this.soundsMapping = await response.data;
+      this.soundsMapping = (await response.json()) as Record<string, string>;
     }
 
     return this.soundsMapping;
@@ -63,11 +61,11 @@ export class SongUploadService {
     // a manually-crafted subset of sounds from Minecraft
 
     if (!this.soundsSubset) {
-      const response = await axios.get<string[]>(
-        'http://localhost:3000/data/filteredSoundList.json',
+      const response = await fetch(
+        process.env.SERVER_URL + '/api/v1/data/filteredSoundList.json',
       );
 
-      const soundList = await response.data;
+      const soundList = (await response.json()) as string[];
       this.soundsSubset = new Set(soundList);
     }
 

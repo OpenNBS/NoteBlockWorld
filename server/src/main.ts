@@ -11,7 +11,6 @@ const logger: Logger = new Logger('main.ts');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
-  app.use('/public', express.static('public'));
 
   const parseTokenPipe = app.get<ParseTokenPipe>(ParseTokenPipe);
 
@@ -40,6 +39,8 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL,
     credentials: true,
   });
+
+  app.use('/api/v1', express.static('public'));
 
   const port = process.env.PORT || '4000';
 

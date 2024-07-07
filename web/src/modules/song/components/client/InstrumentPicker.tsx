@@ -1,7 +1,7 @@
 import { Instrument } from '@shared/features/song/types';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import axiosInstance from '@web/src/lib/axios';
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
@@ -87,7 +87,13 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   };
 
   async function fetchSoundList() {
-    const response = await axios<string[]>('/data/filteredSoundList.json');
+    const response = await axiosInstance.get<string[]>(
+      '/data/filteredSoundList.json',
+      {
+        withCredentials: true,
+      },
+    );
+
     const data = response.data;
     return data;
   }

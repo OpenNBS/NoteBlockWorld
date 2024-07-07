@@ -14,29 +14,24 @@ function writeJSONFile(
   writeFileSync(path, jsonString);
 }
 
-const frontEndDataDir = resolve(__dirname, 'web', 'public', 'data');
-const sharedDataDir = resolve(__dirname, 'shared', 'data');
+const dataDir = resolve(__dirname, 'server', 'public', 'data');
 
 const soundListPath = 'soundList.json';
 const filteredSoundListPath = 'filteredSoundList.json';
 
-// Try to create the directories if they don't exist
-[frontEndDataDir, sharedDataDir].forEach((dir) => {
-  try {
-    mkdirSync(dir, { recursive: true });
-  } catch (err) {
-    if (err.code !== 'EEXIST') {
-      throw err;
-    }
+// Try to create the output directory if it doesn't exist
+try {
+  mkdirSync(dataDir, { recursive: true });
+} catch (err) {
+  if (err.code !== 'EEXIST') {
+    throw err;
   }
-});
+}
 
 // If the files already exist, exit early
-const files = [soundListPath, filteredSoundListPath]
-  .map((fileName) =>
-    [frontEndDataDir, sharedDataDir].map((dir) => resolve(dir, fileName)),
-  )
-  .flat();
+const files = [soundListPath, filteredSoundListPath].map((fileName) =>
+  resolve(dataDir, fileName),
+);
 
 if (files.every((file) => existsSync(file))) {
   console.log('Sound data files already exist; skipping generation.');
@@ -53,8 +48,6 @@ getLatestVersionSoundList().then((soundList) => {
     SEARCH_INCLUDE_PATTERNS.some((pattern) => new RegExp(pattern).test(sound)),
   );
 
-  [frontEndDataDir, sharedDataDir].forEach((dir) => {
-    writeJSONFile(dir, soundListPath, soundList);
-    writeJSONFile(dir, filteredSoundListPath, filteredSoundList);
-  });
+  writeJSONFile(dataDir, soundListPath, soundList);
+  writeJSONFile(dataDir, filteredSoundListPath, filteredSoundList);
 });
