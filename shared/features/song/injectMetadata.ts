@@ -9,7 +9,8 @@ export function injectSongFileMetadata(
   description: string,
   soundPaths: string[],
 ) {
-  description += '\n\nUploaded to Note Block World';
+  if (description != '') description += '\n\n';
+  description += 'Uploaded to Note Block World';
 
   nbsSong.meta.name = unidecode(title);
   nbsSong.meta.author = unidecode(author);
