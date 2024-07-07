@@ -30,14 +30,17 @@ const InstrumentTableHeader = ({
 const InstrumentTableCell = ({
   className,
   children,
+  locked,
 }: {
   className?: string;
   children: React.ReactNode;
+  locked: boolean;
 }) => {
   return (
     <div
       className={cn(
         'bg-zinc-900 border-zinc-700 border-2 px-2 py-1',
+        locked ? 'text-zinc-600' : 'text-zinc-100',
         className,
       )}
     >
@@ -49,19 +52,21 @@ const InstrumentTableCell = ({
 const InstrumentTableRow = ({
   children,
   instrument,
+  locked,
 }: {
   children: React.ReactNode;
   instrument: Instrument;
+  locked: boolean;
 }) => {
   return (
     <div className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'>
-      <InstrumentTableCell className='col-span-1 text-right'>
+      <InstrumentTableCell className='col-span-1 text-right' locked={locked}>
         {instrument.id + 1}
       </InstrumentTableCell>
-      <InstrumentTableCell className='col-span-3 truncate'>
+      <InstrumentTableCell className='col-span-3 truncate' locked={locked}>
         {instrument.name || 'Unnamed instrument'}
       </InstrumentTableCell>
-      <InstrumentTableCell className='col-span-1 text-right'>
+      <InstrumentTableCell className='col-span-1 text-right' locked={locked}>
         {instrument.count.toLocaleString()}
       </InstrumentTableCell>
       <div className='col-span-3'>{children}</div>
@@ -134,13 +139,18 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
       {/* Instruments */}
       <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
         {instruments.map((instrument, i) => (
-          <InstrumentTableRow key={i} instrument={instrument}>
+          <InstrumentTableRow
+            key={i}
+            instrument={instrument}
+            locked={instrument.count === 0}
+          >
             <SongSearchCombo
               setValue={(value: string) => {
                 setValue(i, value);
               }}
               sounds={soundList}
               value={values[i]}
+              locked={instrument.count === 0}
             />
           </InstrumentTableRow>
         ))}

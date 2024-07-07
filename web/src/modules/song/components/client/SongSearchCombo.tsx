@@ -23,10 +23,12 @@ export function SongSearchCombo({
   value,
   setValue,
   sounds,
+  locked,
 }: {
   value: string;
   setValue: (value: string) => void;
   sounds: string[];
+  locked: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -36,6 +38,7 @@ export function SongSearchCombo({
         <button
           aria-expanded={open}
           className='block relative w-full h-full border-2 text-sm text-left pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
+          disabled={locked}
         >
           {value
             ? value.replace('minecraft/sounds/', '').replace('.ogg', '')
@@ -43,7 +46,10 @@ export function SongSearchCombo({
           <FontAwesomeIcon
             icon={faChevronDown}
             size='sm'
-            className='absolute right-0 top-2.5 text-white mx-1 w-3 shrink-0'
+            className={cn(
+              'absolute right-0 top-2.5 mx-1 w-3 shrink-0',
+              locked ? 'text-zinc-600' : 'text-zinc-300',
+            )}
           />
         </button>
       </PopoverTrigger>
