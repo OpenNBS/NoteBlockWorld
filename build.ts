@@ -44,9 +44,15 @@ console.log('Generating sound data files...');
 // Filter the list to only include sounds that match the chosen patterns
 // (defined in the shared/ module)
 getLatestVersionSoundList().then((soundList) => {
-  const filteredSoundList: string[] = Object.keys(soundList).filter((sound) =>
-    SEARCH_INCLUDE_PATTERNS.some((pattern) => new RegExp(pattern).test(sound)),
-  );
+  const filteredSoundList: string[] = Object.keys(soundList)
+    .filter((sound) =>
+      SEARCH_INCLUDE_PATTERNS.some((pattern) =>
+        new RegExp(pattern).test(sound),
+      ),
+    )
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }),
+    );
 
   writeJSONFile(dataDir, soundListPath, soundList);
   writeJSONFile(dataDir, filteredSoundListPath, filteredSoundList);
