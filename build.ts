@@ -1,12 +1,26 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-import { getLatestVersionSoundList } from './shared/features/sounds/fetchSoundList';
+import { getLatestVersionSoundList } from './shared/features/sounds';
+import { SEARCH_INCLUDE_PATTERNS } from './shared/features/sounds/filterIncludePatterns';
+
+function writeJSONFile(
+  dir: string,
+  fileName: string,
+  data: Record<string, any> | string[],
+) {
+  const path = resolve(dir, fileName);
+  const jsonString = JSON.stringify(data, null, 0);
+  writeFileSync(path, jsonString);
+}
 
 const frontEndDataDir = resolve(__dirname, 'web', 'public', 'data');
 const sharedDataDir = resolve(__dirname, 'shared', 'data');
 
-// try to create the directories if they don't exist
+const soundListPath = 'soundList.json';
+const filteredSoundListPath = 'filteredSoundList.json';
+
+// Try to create the directories if they don't exist
 [frontEndDataDir, sharedDataDir].forEach((dir) => {
   try {
     mkdirSync(dir, { recursive: true });
@@ -17,53 +31,30 @@ const sharedDataDir = resolve(__dirname, 'shared', 'data');
   }
 });
 
-// if the fles already exist, exit early
-const files = [
-  'soundList',
-  'filteredSoundList',
-  'soundListKeys',
-  'soundListValues',
-]
-  .map((fileName) => `${fileName}.json`)
+// If the files already exist, exit early
+const files = [soundListPath, filteredSoundListPath]
   .map((fileName) =>
-    [frontEndDataDir, sharedDataDir].map((dir) => `${dir}/${fileName}`),
+    [frontEndDataDir, sharedDataDir].map((dir) => resolve(dir, fileName)),
   )
   .flat();
 
 if (files.every((file) => existsSync(file))) {
-  console.log('Files already exist, exiting early');
+  console.log('Sound data files already exist; skipping generation.');
   process.exit(0);
 }
 
-// Write getLatestVersionSoundList to JSON files
+console.log('Generating sound data files...');
+
+// Write list of sounds in the latest MC version to a JSON file
+// Filter the list to only include sounds that match the chosen patterns
+// (defined in the shared/ module)
 getLatestVersionSoundList().then((soundList) => {
-  const SEARCH_INCUDE_PATTERNS = [/random/g, /fireworks/g];
-
-  const filteredSoundList: Record<string, string> = Object.keys(
-    soundList,
-  ).reduce((acc, key) => {
-    const isInclude = SEARCH_INCUDE_PATTERNS.some((pattern) =>
-      pattern.test(key),
-    );
-
-    if (isInclude) {
-      acc[key] = soundList[key];
-    }
-
-    return acc;
-  }, {} as Record<string, string>);
-
-  const SOUND_LIST_KEYS = Object.keys(filteredSoundList);
-  const SOUND_LIST_VALUES = Object.values(filteredSoundList);
-
-  function writeJSONFile(dir: string, fileName: string, data: any) {
-    writeFileSync(`${dir}/${fileName}.json`, JSON.stringify(data, null, 0));
-  }
+  const filteredSoundList: string[] = Object.keys(soundList).filter((sound) =>
+    SEARCH_INCLUDE_PATTERNS.some((pattern) => new RegExp(pattern).test(sound)),
+  );
 
   [frontEndDataDir, sharedDataDir].forEach((dir) => {
-    writeJSONFile(dir, 'soundList', soundList);
-    writeJSONFile(dir, 'filteredSoundList', filteredSoundList);
-    writeJSONFile(dir, 'soundListKeys', SOUND_LIST_KEYS);
-    writeJSONFile(dir, 'soundListValues', SOUND_LIST_VALUES);
+    writeJSONFile(dir, soundListPath, soundList);
+    writeJSONFile(dir, filteredSoundListPath, filteredSoundList);
   });
 });

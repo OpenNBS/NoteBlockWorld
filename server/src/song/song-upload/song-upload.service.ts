@@ -59,12 +59,12 @@ export class SongUploadService {
   }
 
   private async getValidSoundsSubset() {
-    // Creates a set of valid sound paths from selectSoundList.json,
+    // Creates a set of valid sound paths from filteredSoundList.json,
     // a manually-crafted subset of sounds from Minecraft
 
     if (!this.soundsSubset) {
       const response = await axios.get<string[]>(
-        'http://localhost:3000/data/selectSoundList.json',
+        'http://localhost:3000/data/filteredSoundList.json',
       );
 
       const soundList = await response.data;

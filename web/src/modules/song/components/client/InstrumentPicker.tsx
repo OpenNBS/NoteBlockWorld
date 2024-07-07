@@ -87,7 +87,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   };
 
   async function fetchSoundList() {
-    const response = await axios<string[]>('/data/selectSoundList.json');
+    const response = await axios<string[]>('/data/filteredSoundList.json');
     const data = response.data;
     return data;
   }
