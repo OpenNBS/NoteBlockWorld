@@ -64,8 +64,12 @@ export class SongObfuscator {
       const instrumentName = instrument.meta.name;
       const customId = instrumentId - output.instruments.firstCustomIndex;
       const soundFilePath = this.soundPaths[customId];
+      const isTempoChanger = instrument.meta.name === 'Tempo Changer';
 
-      if (noteCountPerInstrument[instrumentId] === 0 || soundFilePath === '') {
+      if (
+        !isTempoChanger &&
+        (noteCountPerInstrument[instrumentId] === 0 || soundFilePath === '')
+      ) {
         console.log(
           `Skipping instrument '${instrumentName}' with ${noteCountPerInstrument[instrumentId]}`,
           `notes and sound file '${soundFilePath}' (custom ID: ${customId})`,
@@ -197,6 +201,7 @@ export class SongObfuscator {
 
         // Add obfuscated note to output
         const newNote = getObfuscatedNote(note, layer);
+        if (isTempoChanger) newNote.pitch = note.pitch;
         addNoteToOutput(tick, newNote);
       }
     }
