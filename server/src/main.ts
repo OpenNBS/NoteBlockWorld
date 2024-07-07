@@ -4,7 +4,7 @@ import * as express from 'express';
 
 import { AppModule } from './app.module';
 import { initializeSwagger } from './initializeSwagger';
-import { ParseTokenPipe } from './song/parseToken';
+import { ParseTokenPipe } from './parseToken';
 
 const logger: Logger = new Logger('main.ts');
 
