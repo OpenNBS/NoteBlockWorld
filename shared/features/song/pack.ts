@@ -53,7 +53,7 @@ export async function obfuscateAndPackSong(
     }
 
     // Add sounds to the 'sounds' folder
-    const soundFileName = `${hash}.ogg`;
+    const soundFileName = hash;
     soundsFolder.file(soundFileName, soundFileBuffer);
   }
 
