@@ -34,7 +34,7 @@ async function bootstrap() {
 
   // enable cors
   app.enableCors({
-    allowedHeaders: ['content-type', 'authorization'],
+    allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
     origin: process.env.FRONTEND_URL,
     credentials: true,
