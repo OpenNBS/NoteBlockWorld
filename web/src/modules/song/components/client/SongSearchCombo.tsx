@@ -40,9 +40,13 @@ export function SongSearchCombo({
           className='block relative w-full h-full border-2 text-sm text-left pl-2 border-zinc-600 disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 overflow-clip'
           disabled={locked}
         >
-          {value
-            ? value.replace('minecraft/sounds/', '').replace('.ogg', '')
-            : 'No sound'}
+          {value ? (
+            value.replace('minecraft/sounds/', '').replace('.ogg', '')
+          ) : (
+            <span className={!locked ? 'text-red-500 font-bold' : ''}>
+              No sound
+            </span>
+          )}
           <FontAwesomeIcon
             icon={faChevronDown}
             size='sm'
