@@ -87,15 +87,20 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   };
 
   async function fetchSoundList() {
-    const response = await axiosInstance.get<string[]>(
-      '/data/filteredSoundList.json',
-      {
-        withCredentials: true,
-      },
-    );
+    try {
+      const response = await axiosInstance.get<string[]>(
+        '/data/filteredSoundList.json',
+        {
+          withCredentials: true,
+        },
+      );
 
-    const data = response.data;
-    return data;
+      const data = response.data;
+      return data;
+    } catch (e) {
+      console.error('Error fetching sound list', e);
+      return [];
+    }
   }
 
   const [soundList, setSoundList] = useState<string[]>([]);

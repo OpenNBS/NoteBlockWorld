@@ -61,12 +61,23 @@ export class SongUploadService {
     // a manually-crafted subset of sounds from Minecraft
 
     if (!this.soundsSubset) {
-      const response = await fetch(
-        process.env.SERVER_URL + '/api/v1/data/filteredSoundList.json',
-      );
+      try {
+        const response = await fetch(
+          process.env.SERVER_URL + '/api/v1/data/filteredSoundList.json',
+        );
 
-      const soundList = (await response.json()) as string[];
-      this.soundsSubset = new Set(soundList);
+        const soundList = (await response.json()) as string[];
+        this.soundsSubset = new Set(soundList);
+      } catch (e) {
+        throw new HttpException(
+          {
+            error: {
+              file: 'An error occurred while retrieving sound list',
+            },
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
 
     return this.soundsSubset;
