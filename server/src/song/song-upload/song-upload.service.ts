@@ -54,8 +54,9 @@ export class SongUploadService {
     return this.soundsMapping;
   }
 
-  private async getSoundsSubset() {
-    // Array of valid sound paths, a manually-crafted subset of the sound mapping's keys
+  private async getValidSoundsSubset() {
+    // Creates a set of valid sound paths from selectSoundList.json,
+    // a manually-crafted subset of sounds from Minecraft
 
     if (!this.soundsSubset) {
       const response = await fetch(
@@ -298,9 +299,9 @@ export class SongUploadService {
     soundsArray: string[],
   ) {
     const soundsMapping = await this.getSoundsMapping();
-    const soundsSubset = await this.getSoundsSubset();
+    const validSoundsSubset = await this.getValidSoundsSubset();
 
-    this.validateCustomInstruments(soundsArray, soundsSubset);
+    this.validateCustomInstruments(soundsArray, validSoundsSubset);
 
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
@@ -313,10 +314,10 @@ export class SongUploadService {
 
   private validateCustomInstruments(
     soundsArray: string[],
-    soundsMapping: Set<string>,
+    validSounds: Set<string>,
   ) {
     const isInstrumentValid = (sound: string) =>
-      sound === '' || soundsMapping.has(sound);
+      sound === '' || validSounds.has(sound);
 
     const areAllInstrumentsValid = soundsArray.every((sound) =>
       isInstrumentValid(sound),
