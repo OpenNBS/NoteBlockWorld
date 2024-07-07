@@ -1,5 +1,9 @@
 import { customAlphabet } from 'nanoid';
 
+export function removeExtraSpaces(input: string): string {
+  return input.replace(/\s+/g, ' ').trim();
+}
+
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 

@@ -22,7 +22,7 @@ import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
-import { generateSongId } from '../song.util';
+import { generateSongId, removeExtraSpaces } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
@@ -109,9 +109,9 @@ export class SongUploadService {
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
     song.publicId = publicId;
-    song.title = body.title;
-    song.originalAuthor = body.originalAuthor;
-    song.description = body.description;
+    song.title = removeExtraSpaces(body.title);
+    song.originalAuthor = removeExtraSpaces(body.originalAuthor);
+    song.description = removeExtraSpaces(body.description);
     song.category = body.category;
     song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
@@ -295,10 +295,10 @@ export class SongUploadService {
     // Update NBS file with form values
     injectSongFileMetadata(
       nbsSong,
-      body.title,
-      user.username,
-      body.originalAuthor,
-      body.description,
+      removeExtraSpaces(body.title),
+      removeExtraSpaces(user.username),
+      removeExtraSpaces(body.originalAuthor),
+      removeExtraSpaces(body.description),
       body.customInstruments,
     );
 
