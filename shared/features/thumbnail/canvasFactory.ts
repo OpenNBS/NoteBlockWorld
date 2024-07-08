@@ -31,7 +31,13 @@ if (typeof document === 'undefined') {
   };
 
   // Load note block image
-  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+  let noteBlockImage;
+
+  try {
+    noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+  } catch (error) {
+    console.log('Error loading image: ', error);
+  }
 
   const useFont = () => {
     GlobalFonts.registerFromPath(getPath('/fonts/Lato-Regular.ttf'), 'Lato');
