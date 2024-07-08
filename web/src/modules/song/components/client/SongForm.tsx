@@ -1,9 +1,8 @@
-import { faWarning } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import { useRouter } from 'next/navigation';
 
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
+import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
 import { useUploadSongProviderType } from '@web/src/modules/song-upload/components/client/context/UploadSong.context';
 
 import InstrumentPicker from './InstrumentPicker';
@@ -188,12 +187,7 @@ export const SongForm = ({
             </label>
           </div>
 
-          {sendError && (
-            <div className='outline outline-2 text-center text-balance outline-red-500 bg-red-800 p-2 rounded-lg'>
-              <FontAwesomeIcon icon={faWarning} className='mr-2' />
-              {sendError}
-            </div>
-          )}
+          {sendError && <ErrorBox message={sendError} />}
 
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Uploading label */}
