@@ -10,10 +10,18 @@ import {
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
+import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
-  const { data: song } = await axios.get<SongViewDtoType>(`/song/${id}`);
+  let song;
+
+  try {
+    const response = await axios.get<SongViewDtoType>(`/song/${id}`);
+    song = await response.data;
+  } catch {
+    return <ErrorBox message='An error occurred while retrieving the song' />;
+  }
 
   return (
     <div className='grid grid-cols-8 gap-12'>

@@ -5,6 +5,7 @@ import {
   getTokenServer,
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
+import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
 import { SongProvider } from '@web/src/modules/song/components/client/context/Song.context';
 import {
   DownloadFileButton,
@@ -38,41 +39,43 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
 }
 
 export async function EditSongPage({ id }: { id: string }) {
-  try {
-    const songData = await fetchSong({ id });
-    const songId = id;
-    const userData = await getUserData();
-    const username = userData?.username;
+  const songId = id;
+  let songData, userData;
+  let username;
 
-    return (
-      <div className='p-8 h-full w-full flex justify-center'>
-        <div className='w-[75vw] max-w-[768px]'>
-          <div className='flex flex-row justify-between items-center gap-12 mb-10'>
-            <h1 className='flex-1 text-3xl font-bold text-nowrap truncate'>
-              <span className='font-light'>Editing </span>
-              {songData.title}
-            </h1>
-            {/* TODO: This should be the file's original name, which is not sent in the DTO */}
-            <FileDisplay fileName={`${songData.title}.nbs`}>
-              <DownloadFileButton
-                song={{ publicId: songId, title: songData.title }}
-              />
-            </FileDisplay>
-          </div>
-          <SongProvider>
-            {songData && (
-              <SongEditForm
-                songId={songId}
-                username={username}
-                songData={songData}
-              />
-            )}
-          </SongProvider>
-        </div>
-      </div>
-    );
-  } catch (error: unknown) {
-    // TODO: present better error message
-    return <div>Failed to fetch song data</div>;
+  try {
+    songData = await fetchSong({ id });
+    userData = await getUserData();
+    username = userData?.username;
+  } catch (error) {
+    return <ErrorBox message='Failed to retrieve song data' />;
   }
+
+  return (
+    <div className='p-8 h-full w-full flex justify-center'>
+      <div className='w-[75vw] max-w-[768px]'>
+        <div className='flex flex-row justify-between items-center gap-12 mb-10'>
+          <h1 className='flex-1 text-3xl font-bold text-nowrap truncate'>
+            <span className='font-light'>Editing </span>
+            {songData.title}
+          </h1>
+          {/* TODO: This should be the file's original name, which is not sent in the DTO */}
+          <FileDisplay fileName={`${songData.title}.nbs`}>
+            <DownloadFileButton
+              song={{ publicId: songId, title: songData.title }}
+            />
+          </FileDisplay>
+        </div>
+        <SongProvider>
+          {songData && (
+            <SongEditForm
+              songId={songId}
+              username={username}
+              songData={songData}
+            />
+          )}
+        </SongProvider>
+      </div>
+    </div>
+  );
 }
