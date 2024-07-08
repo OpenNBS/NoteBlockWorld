@@ -118,7 +118,7 @@ export class FileService {
     const bucket = this.bucketThumbs;
 
     const fileName =
-      'thumbs/' + path.parse(publicId).name.replace(/\s/g, '') + '.jpg';
+      'thumbs/' + path.parse(publicId).name.replace(/\s/g, '') + '.png';
 
     const mimetype = 'image/jpeg';
 
