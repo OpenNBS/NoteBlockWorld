@@ -36,13 +36,13 @@ You agree not to exploit mechanisms in ways that may harm the system’s health,
 
 ### 4. Copyright
 
-By submitting a song to Note Block World, you assure that it is your original creation and that you possess all necessary rights to distribute it. **Do not submit content for which you don't have distribution rights, or haven't obtained permission from the original author to distribute.**
+By submitting a song to Note Block World, you assure that it is your original creation and that you possess all necessary rights to distribute it. **Do not submit content for which you don't have distribution rights, or haven't obtained permission from the original author to distribute!**
 
 Certain exceptions can be made under the Fair Use Policy. Fair Use allows for limited use of copyrighted material without permission from the rights holders for purposes such as commentary, criticism, news reporting, teaching, scholarship, and research. If you believe your submission qualifies under Fair Use, ensure you understand and comply with the guidelines to avoid copyright infringement.
 
 If you find any content on the website to infringe copyright, you can send a copyright violation report to [opennbs@gmail.com](mailto:opennbs@gmail.com). Copyright violation reports will be promptly investigated. If the report is found to be valid, the infringing content will be promptly removed, and restrictive measures may be applied to the uploader’s account.
 
-Some assets displayed on the website are © Microsoft Studios. For Microsoft’s policies on using these assets, please refer to the [Minecraft Asset Usage Guidelines](https://www.minecraft.net/en-us/usage-guidelines). **NOTE BLOCK WORLD AND OPENNBS ARE NOT AFFILIATED WITH, OR APPROVED BY MOJANG OR MICROSOFT.**
+Some assets displayed on the website are © Microsoft Studios. For Microsoft’s policies on using these assets, please refer to the [Minecraft Usage Guidelines](https://www.minecraft.net/en-us/usage-guidelines). **NOTE BLOCK WORLD AND OPENNBS ARE NOT AFFILIATED WITH, OR APPROVED BY MOJANG OR MICROSOFT.**
 
 Unless otherwise specified, all other content belongs to OpenNBS and may not be distributed, copied, or reproduced without our permission.
 
@@ -52,7 +52,9 @@ By submitting content to the website, you grant Note Block World a permanent, ir
 
 We believe open licenses, such as the licenses provided by [Creative Commons](https://creativecommons.org/), are a powerful way of fostering creativity. That's why, when uploading a song, you may choose to license it under a [Creative Commons Attribution-Sharealike](https://creativecommons.org/licenses/by-sa/4.0/deed) license. This will allow anyone to share and adapt your song, provided they give you attribution and retain the same license as the original content. For more information, visit the [Creative Commons](https://creativecommons.org/share-your-work/cclicenses/) website. Keep in mind that, once a work is released under a Creative Commons license, you are unable to revoke the license for material already distributed under that license.
 
-We will **never** claim ownership of your content! You remain the sole owner of your creations and retain all rights not explicitly granted in these Terms.
+All pieces of content you download from the website are owned by their respective authors. This means that, when downloading a song, you must **not** claim it as your own work, or modify, adapt, share, reproduce, reupload or redistribute it, unless the license under which the song was placed allows you to do this. Even then, whenever you use a downloaded song publicly for any purpose other than for your own personal use (for instance, storing and opening it in your computer), you must clearly state that it is not your original creation and credit the original author, preferably providing a link to the song's page in Note Block World. You can find information on how to provide proper attribution in the song's public page.
+
+We will **never** claim ownership of your content! You remain the sole owner of your creations and retain any rights that you may have prior to submitting them to the website.
 
 ### 6. Warranty
 

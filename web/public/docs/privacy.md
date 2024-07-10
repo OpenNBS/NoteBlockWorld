@@ -49,7 +49,7 @@ To provide website functionality, we store cookies on your device. Cookies are s
 
 Upon your first visit, a popup will ask for your consent to store cookies. Dismissing this popup implies that you consent to us storing cookies in your device. You may opt out of cookies at any time by adjusting your browser settings.
 
-## Data Partners and Third-Party Service Providers
+## Third-Party Services
 
 In order to make the website better, we use some services provided by third-parties. These services may collect some data about you, and their data collection practices are governed by their own terms and privacy policies. We recommend you review these policies to understand how your data is used by these services!
 
@@ -70,7 +70,7 @@ website traffic and certain user activities. Google Analytics collects informati
 
 You may request a full copy of the data we store about you by sending an email to [opennbs@gmail.com](mailto:opennbs@gmail.com) from the email address you used to sign in on the website. We are committed to fulfilling requests as soon as possible, though it may take a bit longer depending on the volume of requests we receive.
 
-If you wish to remove your personal data from the website, although we will be sad to see your go, you may request your account to be deleted at any time by emailing us at [opennbs@gmail.com](mailto:opennbs@gmail.com). Upon account deletion, your information will be removed from public view, but we may retain it for a longer period for backup purposes.
+Although we will be sad to see your go, if you wish to remove your personal data from the website, you may request your account to be deleted at any time by emailing us at [opennbs@gmail.com](mailto:opennbs@gmail.com). Upon account deletion, your information will be removed from public view, but we may retain it for a longer period for backup purposes.
 
 ## Changes to This Policy
 
