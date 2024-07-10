@@ -1,4 +1,4 @@
-# Terms of Service
+# Note Block World Terms of Service
 
 > Last updated: July 7, 2024
 
@@ -83,3 +83,9 @@ We reserve the right to modify these Terms at any time in the future, at our dis
 ## Contact Information
 
 If you have any questions or concerns about these Terms, please contact us at [opennbs@gmail.com](mailto:opennbs@gmail.com)!
+
+---
+
+### Change log
+
+- **July 7, 2024**: Initial version.
