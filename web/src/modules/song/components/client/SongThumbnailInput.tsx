@@ -49,7 +49,6 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.zoomLevel', {
             valueAsNumber: true,
-            disabled: isLocked,
           })}
           disabled={isLocked}
           min={ThumbnailConst.zoomLevel.min}
@@ -68,7 +67,6 @@ function ThumbnailSliders({
           {...register('thumbnailData.startTick', {
             valueAsNumber: true,
             max: maxTick,
-            disabled: isLocked,
           })}
           disabled={isLocked}
           min={ThumbnailConst.startTick.default}

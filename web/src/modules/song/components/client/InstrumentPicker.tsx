@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { Instrument } from '@shared/features/song/types';
+import { useEffect, useState } from 'react';
 
+import axiosInstance from '@web/src/lib/axios';
 import { cn } from '@web/src/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';
 import { Area } from '../../../shared/components/client/FormElements';
-
-const sounds = [
-  { name: 'sound1' },
-  { name: 'sound2' },
-  { name: 'sound3' },
-  { name: 'sound4' },
-  { name: 'entity/firework_rocket/blast_far.ogg' },
-];
 
 const InstrumentTableHeader = ({
   className,
@@ -36,14 +30,17 @@ const InstrumentTableHeader = ({
 const InstrumentTableCell = ({
   className,
   children,
+  locked,
 }: {
   className?: string;
   children: React.ReactNode;
+  locked: boolean;
 }) => {
   return (
     <div
       className={cn(
         'bg-zinc-900 border-zinc-700 border-2 px-2 py-1',
+        locked ? 'text-zinc-600' : 'text-zinc-100',
         className,
       )}
     >
@@ -52,12 +49,76 @@ const InstrumentTableCell = ({
   );
 };
 
-const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
-  const { song } = useSongProvider(type);
-  const [value, setValue] = useState('');
-  if (!song) return null;
+const InstrumentTableRow = ({
+  children,
+  instrument,
+  locked,
+}: {
+  children: React.ReactNode;
+  instrument: Instrument;
+  locked: boolean;
+}) => {
+  return (
+    <div className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'>
+      <InstrumentTableCell className='col-span-1 text-right' locked={locked}>
+        {instrument.id + 1}
+      </InstrumentTableCell>
+      <InstrumentTableCell className='col-span-3 truncate' locked={locked}>
+        {instrument.name || 'Unnamed instrument'}
+      </InstrumentTableCell>
+      <InstrumentTableCell className='col-span-1 text-right' locked={locked}>
+        {instrument.count.toLocaleString()}
+      </InstrumentTableCell>
+      <div className='col-span-3'>{children}</div>
+    </div>
+  );
+};
 
-  const instruments = song.instruments;
+const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
+  const { song, formMethods } = useSongProvider(type);
+
+  const instruments = song?.instruments ?? [];
+
+  const [values, setValues] = useState<Array<string>>(
+    Array(instruments.length).fill(''),
+  );
+
+  const setValue = (index: number, value: string) => {
+    const newValues = [...values];
+    newValues[index] = value;
+    setValues(newValues);
+
+    formMethods.setValue('customInstruments', newValues);
+  };
+
+  async function fetchSoundList() {
+    try {
+      const response = await axiosInstance.get<string[]>(
+        '/data/filteredSoundList.json',
+        {
+          withCredentials: true,
+        },
+      );
+
+      const data = response.data;
+      return data;
+    } catch (e) {
+      console.error('Error fetching sound list', e);
+      return [];
+    }
+  }
+
+  const [soundList, setSoundList] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchSoundList().then(setSoundList);
+  }, []);
+
+  useEffect(() => {
+    if (song) {
+      setValues(formMethods.getValues().customInstruments);
+    }
+  }, [song, formMethods]);
 
   return (
     <div className='flex flex-col w-full'>
@@ -78,23 +139,20 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
       {/* Instruments */}
       <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
         {instruments.map((instrument, i) => (
-          <div
+          <InstrumentTableRow
             key={i}
-            className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'
+            instrument={instrument}
+            locked={instrument.count === 0}
           >
-            <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.id + 1}
-            </InstrumentTableCell>
-            <InstrumentTableCell className='col-span-3 truncate'>
-              {instrument.name || 'Unnamed instrument'}
-            </InstrumentTableCell>
-            <InstrumentTableCell className='col-span-1 text-right'>
-              {instrument.count.toLocaleString()}
-            </InstrumentTableCell>
-            <div className='col-span-3'>
-              <SongSearchCombo setValue={setValue} value={value} />
-            </div>
-          </div>
+            <SongSearchCombo
+              setValue={(value: string) => {
+                setValue(i, value);
+              }}
+              sounds={soundList}
+              value={values[i]}
+              locked={instrument.count === 0}
+            />
+          </InstrumentTableRow>
         ))}
       </div>
     </div>

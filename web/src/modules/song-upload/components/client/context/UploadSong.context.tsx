@@ -11,6 +11,7 @@ import {
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -25,7 +26,6 @@ export type useUploadSongProviderType = {
   song: SongFileType | null;
   filename: string | null;
   setFile: (file: File | null) => void;
-  invalidFile: boolean;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
   register: UseFormRegister<UploadSongForm>;
@@ -47,7 +47,6 @@ export const UploadSongProvider = ({
 }) => {
   const [song, setSong] = useState<SongFileType | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
-  const [invalidFile, setInvalidFile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   {
@@ -68,17 +67,19 @@ export const UploadSongProvider = ({
     formState: { errors },
   } = formMethods;
 
-  const submitSongData = async (): Promise<void> => {
+  async function submitSongData(): Promise<void> {
     // Get song file from state
     setSendError(null);
 
     if (!song) {
+      setSendError('Song file not found');
       throw new Error('Song file not found');
     }
 
     const arrayBuffer = song.arrayBuffer;
 
     if (arrayBuffer.byteLength === 0) {
+      setSendError('Song file is invalid');
       throw new Error('Song file is invalid');
     }
 
@@ -91,7 +92,6 @@ export const UploadSongProvider = ({
 
     Object.entries(formValues)
       .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
       )
       .forEach(([key, value]) => {
@@ -119,19 +119,23 @@ export const UploadSongProvider = ({
 
       const data = response.data;
       const id = data.publicId as string;
-      console.log('Song uploaded successfully', id);
       setUploadedSongId(id);
       setIsUploadComplete(true);
     } catch (error: any) {
-      console.error('Error submitting song', error);
-
       if (error.response) {
-        setSendError(error.response.data.error.file);
+        console.log('Error response', error.response);
+
+        setSendError(
+          error.response.data.message ||
+            Object.values(error.response.data.error)[0],
+        );
       } else {
-        setSendError('An unknown error occurred while submitting the song!');
+        setSendError(
+          'An unknown error occurred while uploading the song! Please contact us.',
+        );
       }
     }
-  };
+  }
 
   const submitSong = async () => {
     try {
@@ -139,8 +143,11 @@ export const UploadSongProvider = ({
       await submitSongData();
       setIsUploadComplete(true);
     } catch (e) {
-      console.log(e); // TODO: handle error
-      //formMethods.setError('file', { message: 'An error occurred' });
+      console.error('Error submitting song', e);
+
+      setSendError(
+        'An unknown error occurred while submitting the song! Please contact us.',
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -154,7 +161,8 @@ export const UploadSongProvider = ({
     try {
       song = parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
-      setInvalidFile(true);
+      console.error('Error parsing song file', e);
+      toast.error('Invalid song file! Please try again with a different song.');
       setSong(null);
 
       return;
@@ -192,11 +200,10 @@ export const UploadSongProvider = ({
         ThumbnailConst.backgroundColor.default,
       );
 
-      formMethods.setValue('customInstruments', [
-        'custom1',
-        'custom2',
-        'custom3',
-      ]);
+      formMethods.setValue(
+        'customInstruments',
+        Array(song.instruments.length).fill(''),
+      );
 
       formMethods.setValue('allowDownload', true);
 
@@ -206,7 +213,7 @@ export const UploadSongProvider = ({
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (song) {
+      if (formMethods.formState.isDirty && !isUploadComplete) {
         e.preventDefault();
 
         e.returnValue =
@@ -219,7 +226,7 @@ export const UploadSongProvider = ({
     return () => {
       window.removeEventListener('beforeunload', handler);
     };
-  }, [song]);
+  }, [formMethods.formState.isDirty, isUploadComplete]);
 
   return (
     <UploadSongContext.Provider
@@ -230,7 +237,6 @@ export const UploadSongProvider = ({
         errors,
         submitSong,
         song,
-        invalidFile,
         filename,
         setFile: setFileHandler,
         isSubmitting,

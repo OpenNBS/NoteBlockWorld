@@ -1,4 +1,3 @@
-import { fromArrayBuffer } from '@encode42/nbs.js';
 import {
   HttpException,
   HttpStatus,
@@ -25,6 +24,7 @@ import {
   SongWithUser,
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
+import { removeExtraSpaces } from './song.util';
 
 @Injectable()
 export class SongService {
@@ -123,6 +123,10 @@ export class SongService {
       })
       .exec()) as unknown as SongDocument;
 
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
+
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
     }
@@ -139,50 +143,31 @@ export class SongService {
       foundSong.allowDownload === body.allowDownload &&
       foundSong.visibility === body.visibility &&
       foundSong.license === body.license &&
-      foundSong.customInstruments === body.customInstruments &&
-      foundSong.thumbnailData === body.thumbnailData &&
-      foundSong._sounds === body.customInstruments
+      JSON.stringify(foundSong.thumbnailData) ===
+        JSON.stringify(body.thumbnailData) &&
+      JSON.stringify(foundSong.customInstruments) ===
+        JSON.stringify(body.customInstruments)
     ) {
       throw new HttpException('No changes detected', HttpStatus.BAD_REQUEST);
     }
 
+    // Check if updates to the song files and/or thumbnail are necessary;
+    // if so, update and reupload them
+    await this.songUploadService.processSongPatch(foundSong, body, user);
+
     // Update song document
-    foundSong.title = body.title;
-    foundSong.originalAuthor = body.originalAuthor;
-    foundSong.description = body.description;
+    foundSong.title = removeExtraSpaces(body.title);
+    foundSong.originalAuthor = removeExtraSpaces(body.originalAuthor);
+    foundSong.description = removeExtraSpaces(body.description);
     foundSong.category = body.category;
     foundSong.allowDownload = body.allowDownload;
     foundSong.visibility = body.visibility;
     foundSong.license = body.license;
+    foundSong.thumbnailData = body.thumbnailData;
     foundSong.customInstruments = body.customInstruments;
-    foundSong._sounds = body.customInstruments;
-    // Update NBS file with form values
-    //TODO: Update song metadata
-    const songFile = await this.fileService.getSongFile(foundSong.nbsFileUrl);
-    const nbsSong = fromArrayBuffer(songFile);
-    this.songUploadService.updateSongFileMetadata(nbsSong, body, user);
 
-    // if new thumbnail data the same as existing one?
-    if (
-      !(
-        body.thumbnailData.backgroundColor ===
-          foundSong.thumbnailData.backgroundColor &&
-        body.thumbnailData.startLayer === foundSong.thumbnailData.startLayer &&
-        body.thumbnailData.startTick === foundSong.thumbnailData.startTick &&
-        body.thumbnailData.zoomLevel === foundSong.thumbnailData.zoomLevel
-      )
-    ) {
-      foundSong.thumbnailUrl = await this.songUploadService.generateThumbnail(
-        body.thumbnailData,
-        nbsSong,
-        foundSong.publicId,
-        foundSong.nbsFileUrl,
-      );
-
-      foundSong.thumbnailData = body.thumbnailData;
-    }
-
-    //TODO: update song document
+    // Update document's last update time
+    foundSong.updatedAt = new Date();
 
     // Save song document
     const updatedSong = await foundSong.save();
@@ -306,6 +291,7 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
     src?: string,
+    packed: boolean = false,
   ): Promise<string> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -324,21 +310,23 @@ export class SongService {
       }
     }
 
-    if (!foundSong.allowDownload) {
+    if (!packed && !foundSong.allowDownload) {
       throw new HttpException(
         'The uploader has disabled downloads of this song',
         HttpStatus.UNAUTHORIZED,
       );
     }
 
+    const fileKey = packed ? foundSong.packedSongUrl : foundSong.nbsFileUrl;
+    const fileExt = packed ? '.zip' : '.nbs';
+
+    const fileName = `${foundSong.title}${fileExt}`;
+
     try {
-      const url = await this.fileService.getSongDownloadUrl(
-        foundSong.nbsFileUrl,
-        'song.nbs', // TODO: foundSong.filename
-      );
+      const url = await this.fileService.getSongDownloadUrl(fileKey, fileName);
 
       // increment download count
-      if (src !== 'edit') foundSong.downloadCount++;
+      if (!packed && src === 'downloadButton') foundSong.downloadCount++;
       await foundSong.save();
 
       return url;

@@ -31,7 +31,7 @@ export class CreateUser {
   @IsUrl()
   @ApiProperty({
     description: 'Profile image of the user',
-    example: 'https://example.com/image.jpg',
+    example: 'https://example.com/image.png',
   })
   profileImage: string;
 

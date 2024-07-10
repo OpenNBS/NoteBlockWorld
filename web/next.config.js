@@ -3,11 +3,11 @@
 const nextConfig = {
   // See: https://github.com/Automattic/node-canvas/issues/867#issuecomment-1925284985
   webpack: (config) => {
-    config.externals.push({ canvas: 'commonjs canvas' });
+    config.externals.push({
+      '@napi-rs/canvas': 'commonjs @napi-rs/canvas',
+    });
+
     return config;
-  },
-  experimental: {
-    instrumentationHook: true,
   },
   images: {
     remotePatterns: [

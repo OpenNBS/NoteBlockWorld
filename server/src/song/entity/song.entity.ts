@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SongStats } from '@shared/features/song/SongStats';
+import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { SongViewUploader } from '@shared/validation/song/dto/SongView.dto';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import type {
@@ -37,6 +37,9 @@ export class Song {
 
   @Prop({ type: String, required: true })
   nbsFileUrl: string;
+
+  @Prop({ type: String, required: true })
+  packedSongUrl: string;
 
   // SONG DOCUMENT ATTRIBUTES
 
@@ -78,16 +81,7 @@ export class Song {
   @Prop({ type: String, required: false })
   description: string;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: false })
-  originalCreationDate: Date;
-
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
-
-  @Prop({ type: MongooseSchema.Types.Buffer, required: false })
-  _content: Buffer; // Used for playback
-
-  @Prop({ type: Array<string>, required: false })
-  _sounds: string[]; // Used for playback
 
   @Prop({ type: Number, required: true })
   fileSize: number;

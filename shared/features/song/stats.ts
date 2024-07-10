@@ -1,6 +1,7 @@
 import { Song } from '@encode42/nbs.js';
 
 import { SongStatsType } from './types';
+import { getTempoChangerInstrumentIds } from './util';
 
 // Usage:
 // SongStatsGenerator.getSongStats(song)
@@ -18,6 +19,8 @@ export class SongStatsGenerator {
 
     const midiFileName = this.getMidiFileName();
 
+    const tempoChangerInstrumentIds = getTempoChangerInstrumentIds(this.song);
+
     const {
       noteCount,
       tickCount,
@@ -27,9 +30,9 @@ export class SongStatsGenerator {
       customInstrumentNoteCount,
       incompatibleNoteCount,
       instrumentNoteCounts,
-    } = this.getCounts();
+    } = this.getCounts(tempoChangerInstrumentIds);
 
-    const tempoSegments = this.getTempoSegments();
+    const tempoSegments = this.getTempoSegments(tempoChangerInstrumentIds);
 
     const tempo = this.getTempo();
     const tempoRange = this.getTempoRange(tempoSegments);
@@ -40,7 +43,10 @@ export class SongStatsGenerator {
     const minutesSpent = this.getMinutesSpent();
 
     const { vanillaInstrumentCount, customInstrumentCount } =
-      this.getVanillaAndCustomUsedInstrumentCounts(instrumentNoteCounts);
+      this.getVanillaAndCustomUsedInstrumentCounts(
+        instrumentNoteCounts,
+        tempoChangerInstrumentIds,
+      );
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
 
@@ -75,10 +81,10 @@ export class SongStatsGenerator {
   }
 
   private getMidiFileName(): string {
-    return this.song.importName || '';
+    return this.song.meta.importName || '';
   }
 
-  private getCounts(): {
+  private getCounts(tempoChangerInstruments: number[]): {
     noteCount: number;
     tickCount: number;
     layerCount: number;
@@ -95,12 +101,16 @@ export class SongStatsGenerator {
     let detunedNoteCount = 0;
     let customInstrumentNoteCount = 0;
     let incompatibleNoteCount = 0;
-    const instrumentNoteCounts = Array(this.song.instruments.total).fill(0);
 
-    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
+    const instrumentNoteCounts = Array(
+      this.song.instruments.loaded.length,
+    ).fill(0);
 
-    for (const [layerId, layer] of this.song.layers.get.entries()) {
-      for (const [tick, note] of layer.notes) {
+    for (const [layerId, layer] of this.song.layers.entries()) {
+      for (const tickStr in layer.notes) {
+        const note = layer.notes[tickStr];
+        const tick = parseInt(tickStr);
+
         if (tick > tickCount) {
           tickCount = tick;
         }
@@ -137,7 +147,7 @@ export class SongStatsGenerator {
         // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
         // a custom sounds.json in a resource pack).
 
-        const instrumentKey = this.song.instruments.get[note.instrument].key; // F#4 = 45
+        const instrumentKey = this.song.instruments.loaded[note.instrument].key; // F#4 = 45
         const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
         const maxRange = 45 - (instrumentKey - 45) + 12; // F#5 = 57
 
@@ -200,13 +210,18 @@ export class SongStatsGenerator {
     return [minTempo, maxTempo];
   }
 
-  private getTempoSegments(): Record<number, number> {
+  private getTempoSegments(
+    tempoChangerInstruments: number[],
+  ): Record<number, number> {
     const tempoSegments: Record<number, number> = {};
-    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
     if (tempoChangerInstruments.length > 0) {
-      for (const layer of Array.from(this.song.layers.get).reverse()) {
-        for (const [tick, note] of layer.notes) {
+      // TODO: toReversed
+      for (const layer of Array.from(this.song.layers).reverse()) {
+        for (const tickStr in layer.notes) {
+          const note = layer.notes[tickStr];
+          const tick = parseInt(tickStr);
+
           // Not a tempo changer
           if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
@@ -225,13 +240,6 @@ export class SongStatsGenerator {
     tempoSegments[0] = 0 in tempoSegments ? tempoSegments[0] : this.song.tempo;
 
     return tempoSegments;
-  }
-
-  private getTempoChangerInstrumentIds(): number[] {
-    return Object.entries(this.song.instruments.get).flatMap(
-      ([id, instrument]) =>
-        instrument.name === 'Tempo Changer' ? [parseInt(id)] : [],
-    );
   }
 
   private getTimeSignature(): number {
@@ -279,17 +287,17 @@ export class SongStatsGenerator {
   }
 
   private getMinutesSpent(): number {
-    return this.song.minutesSpent;
+    return this.song.stats.minutesSpent;
   }
 
   private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
+    tempoChangerInstruments: number[],
   ): {
     vanillaInstrumentCount: number;
     customInstrumentCount: number;
   } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
-    const tempoChangerInstruments = this.getTempoChangerInstrumentIds();
 
     // We want the count of instruments that have at least one note in the song
     // (which tells us how many instruments are effectively used in the song)

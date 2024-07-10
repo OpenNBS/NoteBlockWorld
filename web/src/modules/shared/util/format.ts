@@ -77,3 +77,18 @@ export const formatTimeAgo = (date: Date) => {
 
   return `${years} years ago`;
 };
+
+export const formatTimeSpent = (totalMinutes: number) => {
+  if (totalMinutes < 60) {
+    return `${totalMinutes} min`;
+  }
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = Math.ceil(totalMinutes % 60);
+
+  if (minutes === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${minutes}min`;
+};

@@ -1,6 +1,5 @@
 # Data files
-web/public/data/
-shared/data/
+server/public/data/
 
 # Logs
 logs

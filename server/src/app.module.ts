@@ -6,7 +6,7 @@ import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
-import { ParseTokenPipe } from './song/parseToken';
+import { ParseTokenPipe } from './parseToken';
 import { SongModule } from './song/song.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';

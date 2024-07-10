@@ -1,5 +1,5 @@
 import { NoteQuadTree } from './notes';
-import { SongStats } from './SongStats';
+import { SongStats } from '../../validation/song/dto/SongStats';
 
 export type SongFileType = {
   title: string;

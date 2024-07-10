@@ -4,8 +4,8 @@ let content = {} as any;
 
 if (typeof document === 'undefined') {
   // Assume Node.js environment
-  const canvasModule = require('canvas');
-  const { createCanvas, loadImage, registerFont } = canvasModule;
+  const canvasModule = require('@napi-rs/canvas');
+  const { createCanvas, loadImage, registerFont, GlobalFonts } = canvasModule;
 
   const path = require('path');
 
@@ -27,14 +27,20 @@ if (typeof document === 'undefined') {
   };
 
   const saveToImage = (canvas: typeof Canvas) => {
-    return canvas.toBuffer('image/png');
+    return canvas.encode('png');
   };
 
   // Load note block image
-  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+  let noteBlockImage;
+
+  try {
+    noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+  } catch (error) {
+    console.log('Error loading image: ', error);
+  }
 
   const useFont = () => {
-    registerFont(getPath('/fonts/Lato-Regular.ttf'), { family: 'Lato' });
+    GlobalFonts.registerFromPath(getPath('/fonts/Lato-Regular.ttf'), 'Lato');
   };
 
   useFont();

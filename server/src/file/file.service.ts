@@ -9,14 +9,26 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class FileService {
   s3Client: S3Client;
+  region: string;
+  bucketSongs: string;
+  bucketThumbs: string;
 
   constructor(private readonly configService: ConfigService) {
     this.s3Client = this.getS3Client();
+
+    const bucketSongs = this.configService.get<string>('S3_BUCKET_SONGS');
+    const bucketThumbs = this.configService.get<string>('S3_BUCKET_THUMBS');
+
+    if (!(bucketSongs && bucketThumbs)) {
+      throw new Error('Missing S3 bucket configuration');
+    }
+
+    this.bucketSongs = bucketSongs;
+    this.bucketThumbs = bucketThumbs;
   }
 
   private getS3Client() {
@@ -26,9 +38,11 @@ export class FileService {
     const endpoint = this.configService.get<string>('S3_ENDPOINT');
     const region = this.configService.get<string>('S3_REGION');
 
-    if (!key || !secret || !endpoint || !region) {
+    if (!(key && secret && endpoint && region)) {
       throw new Error('Missing S3 configuration');
     }
+
+    this.region = region;
 
     // Create S3 client
     const s3Config = new S3Client({
@@ -44,120 +58,94 @@ export class FileService {
   }
 
   // Uploads a song to the S3 bucket and returns the key
-  public async uploadSong(file: Express.Multer.File) {
-    console.log(file);
-
-    const bucket =
-      this.configService.get<string>('S3_BUCKET') || 'noteblockworld-songs';
+  public async uploadSong(buffer: Buffer, publicId: string) {
+    const bucket = this.bucketSongs;
 
     const fileName =
-      path.parse(file.originalname).name.replace(/\s/g, '') + '_' + uuidv4();
+      'songs/' + path.parse(publicId).name.replace(/\s/g, '') + '.nbs';
 
-    const extension = path.parse(file.originalname).ext;
-    const newFileName = `${fileName}${extension}`;
+    const mimetype = 'application/octet-stream';
 
     await this.s3_upload(
-      file,
+      buffer,
       bucket,
-      newFileName,
-      file.mimetype,
+      fileName,
+      mimetype,
       ObjectCannedACL.private,
     );
 
-    return newFileName;
+    return fileName;
+  }
+
+  public async uploadPackedSong(buffer: Buffer, publicId: string) {
+    const bucket = this.bucketSongs;
+
+    const fileName =
+      'packed/' + path.parse(publicId).name.replace(/\s/g, '') + '.zip';
+
+    const mimetype = 'application/zip';
+
+    await this.s3_upload(
+      buffer,
+      bucket,
+      fileName,
+      mimetype,
+      ObjectCannedACL.private,
+    );
+
+    return fileName;
   }
 
   public async getSongDownloadUrl(key: string, filename: string) {
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
-
-    console.log('bucket', bucket);
-    console.log('key', key);
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
-      ResponseContentDisposition: `attachment; filename=${filename}`,
+      ResponseContentDisposition: `attachment; filename="${filename
+        .split('/')
+        .pop()}"`,
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {
-      expiresIn: 5 * 60, // 5 minutes
+      expiresIn: 2 * 60, // 2 minutes
     });
 
     return signedUrl;
   }
 
-  public async uploadThumbnail(buffer: Buffer, filename: string) {
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_THUMBS') ||
-      'noteblockworld-thumbs';
+  public async uploadThumbnail(buffer: Buffer, publicId: string) {
+    const bucket = this.bucketThumbs;
+
+    const fileName =
+      'thumbs/' + path.parse(publicId).name.replace(/\s/g, '') + '.png';
+
+    const mimetype = 'image/jpeg';
 
     await this.s3_upload(
       buffer,
       bucket,
-      filename,
-      'image/jpeg',
+      fileName,
+      mimetype,
       ObjectCannedACL.public_read,
     );
 
-    return this.getThumbnailUrl(filename);
+    return this.getThumbnailUrl(fileName);
   }
 
   public getThumbnailUrl(key: string) {
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_THUMBS') ||
-      'noteblockworld-thumbs';
-
-    const region = this.configService.get<string>('S3_REGION') || '';
-    const url = this.getPublicFileUrl(key, bucket, region);
-
+    const bucket = this.bucketThumbs;
+    const url = this.getPublicFileUrl(key, bucket);
     return url;
   }
 
-  private getPublicFileUrl(key: string, bucket: string, region: string) {
+  private getPublicFileUrl(key: string, bucket: string) {
+    const region = this.region;
     return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
   }
 
-  public async uploadProfilePicture(file: Express.Multer.File) {
-    // TODO: verify if this is working correctly
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_PROFILE') ||
-      'noteblockworld-profiles';
-
-    const fileName = uuidv4();
-
-    await this.s3_upload(
-      file,
-      bucket,
-      fileName,
-      file.mimetype,
-      ObjectCannedACL.public_read,
-    );
-
-    return this.getProfilePictureUrl(fileName);
-  }
-
-  public async getProfilePictureUrl(fileName: string) {
-    // TODO: verify if this is working correctly
-    const bucket =
-      this.configService.get<string>('S3_BUCKET_PROFILE') ||
-      'noteblockworld-profiles';
-
-    const region = this.configService.get<string>('S3_REGION') || '';
-    const url = this.getPublicFileUrl(fileName, bucket, region);
-
-    return url;
-  }
-
   public async deleteSong(nbsFileUrl: string) {
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -169,35 +157,25 @@ export class FileService {
     } catch (error) {
       console.error('Error deleting file: ', error);
       throw error;
-    } finally {
-      // finally
     }
 
     return;
   }
 
   async s3_upload(
-    file: Express.Multer.File | Buffer,
+    file: Buffer,
     bucket: string,
     name: string,
     mimetype: string,
     accessControl: ObjectCannedACL = ObjectCannedACL.public_read,
   ) {
-    let buff;
-
-    if (Buffer.isBuffer(file)) {
-      buff = file;
-    } else {
-      buff = file.buffer;
-    }
-
     const params = {
       Bucket: bucket,
       Key: String(name),
-      Body: buff,
+      Body: file,
       ACL: accessControl,
       ContentType: mimetype,
-      ContentDisposition: 'attachment; filename=' + name,
+      ContentDisposition: `attachment; filename=${name.split('/').pop()}`,
       CreateBucketConfiguration: {
         LocationConstraint: 'ap-south-1',
       },
@@ -207,24 +185,15 @@ export class FileService {
 
     try {
       const s3Response = await this.s3Client.send(command);
-      console.log(s3Response);
-
       return s3Response;
     } catch (error) {
       console.error('Error uploading file: ', error);
       throw error;
-    } finally {
-      // finally
     }
   }
 
   public async getSongFile(nbsFileUrl: string): Promise<ArrayBuffer> {
-    // TODO: verify if this is working correctly
-    const bucket = this.configService.get<string>('S3_BUCKET');
-
-    if (!bucket) {
-      throw new Error('Missing S3_BUCKET environment variable');
-    }
+    const bucket = this.bucketSongs;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -243,8 +212,6 @@ export class FileService {
     } catch (error) {
       console.error('Error getting file: ', error);
       throw error;
-    } finally {
-      // finally
     }
   }
 }

@@ -2,7 +2,10 @@ import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
-import { formatDuration } from '@web/src/modules/shared/util/format';
+import {
+  formatDuration,
+  formatTimeSpent,
+} from '@web/src/modules/shared/util/format';
 
 type SongDetailsProps = {
   song: SongViewDtoType;
@@ -47,12 +50,26 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
   // Pre-compute complex values
   const formattedFileSize = `${(song.fileSize / 1024).toFixed(2)} kB`;
   const formattedDuration = formatDuration(stats.duration);
-  const bpm = `${stats.tempo * 15} BPM`;
+  const formattedTimeSpent = formatTimeSpent(stats.minutesSpent);
+
+  let tpsLabel, bpmLabel;
+
+  if (stats.tempoRange !== null) {
+    const [minTps, maxTps] = stats.tempoRange;
+    const minBpm = minTps * 15;
+    const maxBpm = maxTps * 15;
+    tpsLabel = `${minTps.toFixed(2)} – ${maxTps.toFixed(2)} t/s`;
+    bpmLabel = `(${minBpm.toFixed(0)} – ${maxBpm.toFixed(0)} BPM)`;
+  } else {
+    const tps = stats.tempo;
+    const bpm = tps * 15;
+    tpsLabel = `${tps.toFixed(2)} t/s`;
+    bpmLabel = `(${bpm} BPM)`;
+  }
 
   const tempoInfo = (
     <>
-      {`${song.stats.tempo} t/s`}{' '}
-      <span className='font-normal text-zinc-400'>{`(${bpm})`}</span>
+      {tpsLabel} <span className='font-normal text-zinc-400'>{bpmLabel}</span>
     </>
   );
 
@@ -86,7 +103,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
           <>(vanilla)</>
         ) : (
           <>
-            {stats.vanillaInstrumentCount} vanilla,{' '}
+            ({stats.vanillaInstrumentCount} vanilla,{' '}
             {stats.customInstrumentCount} custom)
           </>
         )}
@@ -111,7 +128,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
         {row('Time signature', `${stats.timeSignature}/4`)}
         {row('Running time', formattedDuration)}
         {row('Loop', loopInfo)}
-        {row('Time spent', stats.minutesSpent)}
+        {row('Time spent', formattedTimeSpent)}
         {row('File size', formattedFileSize)}
       </tbody>
     </table>

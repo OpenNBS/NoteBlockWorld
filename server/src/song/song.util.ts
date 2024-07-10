@@ -1,8 +1,8 @@
 import { customAlphabet } from 'nanoid';
 
-export const removeNonAscii = (str: string) => {
-  return str.replace(/[^\x20-\x7E]/g, '_');
-};
+export function removeExtraSpaces(input: string): string {
+  return input.replace(/\s+/g, ' ').trim();
+}
 
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

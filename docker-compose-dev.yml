@@ -7,9 +7,9 @@ services:
     ports:
       - 27017:27017
     environment:
-      - MONGO_INITDB_ROOT_PASSWORD=noteblockwordpassword
-      - MONGO_INITDB_DATABASE=noteblockword
-      - MONGO_INITDB_ROOT_USERNAME=noteblockworduser
+      - MONGO_INITDB_ROOT_PASSWORD=noteblockworldpassword
+      - MONGO_INITDB_DATABASE=noteblockworld
+      - MONGO_INITDB_ROOT_USERNAME=noteblockworlduser
 
 volumes:
   mongodb_data:

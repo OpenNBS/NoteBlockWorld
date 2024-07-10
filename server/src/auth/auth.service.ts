@@ -136,15 +136,16 @@ export class AuthService {
     const { profile } = user;
 
     // verify if user exists
-    const response = await axios.get('https://api.github.com/user/emails', {
-      headers: {
-        Authorization: `token ${user.accessToken}`,
+    const response = await axios.get<GithubEmailList>(
+      'https://api.github.com/user/emails',
+      {
+        headers: {
+          Authorization: `token ${user.accessToken}`,
+        },
       },
-    });
+    );
 
-    const email = (response.data as GithubEmailList).filter(
-      (email) => email.primary,
-    )[0].email;
+    const email = response.data.filter((email) => email.primary)[0].email;
 
     const user_registered = await this.verifyAndGetUser({
       username: profile.username,

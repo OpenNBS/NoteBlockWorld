@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpStatus,
   Param,
   Patch,
@@ -11,12 +12,14 @@ import {
   RawBodyRequest,
   Req,
   Res,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,6 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { UploadConst } from '@shared/validation/song/constants';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
@@ -42,7 +46,18 @@ import { SongService } from './song.service';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
-  static multerConfig: object;
+  static multerConfig: MulterOptions = {
+    limits: {
+      fileSize: UploadConst.file.maxSize,
+    },
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(nbs)$/)) {
+        return cb(new Error('Only .nbs files are allowed!'), false);
+      }
+
+      cb(null, true);
+    },
+  };
 
   constructor(
     public readonly songService: SongService,
@@ -106,23 +121,34 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
+    // TODO: no longer used
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
       // Expose the Content-Disposition header to the client
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
 
-    const url = await this.songService.getSongDownloadUrl(id, user, src);
+    const url = await this.songService.getSongDownloadUrl(id, user, src, false);
     res.redirect(HttpStatus.FOUND, url);
   }
 
   @Get('/:id/open')
   @ApiOperation({ summary: 'Get song .nbs file' })
-  public async getSongDownloadUrl(
+  public async getSongOpenUrl(
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
+    @Headers('src') src: string,
   ): Promise<string> {
-    const url = await this.songService.getSongDownloadUrl(id, user, 'open');
+    if (src != 'downloadButton') {
+      throw new UnauthorizedException('Invalid source');
+    }
+
+    const url = await this.songService.getSongDownloadUrl(
+      id,
+      user,
+      'open',
+      true,
+    );
 
     return url;
   }
