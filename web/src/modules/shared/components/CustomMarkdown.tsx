@@ -8,7 +8,7 @@ export const CustomMarkdown = ({
 }) => {
   return (
     <>
-      <article className='p-20 max-w-800 my-auto min-h-screen text-lg'>
+      <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
         <Markdown
           components={{
             p,
