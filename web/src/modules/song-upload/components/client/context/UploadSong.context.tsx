@@ -59,7 +59,19 @@ export const UploadSongProvider = ({
 
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
+    defaultValues: {
+      title: '',
+      description: '',
+      originalAuthor: '',
+      customInstruments: [],
+      thumbnailData: {
+        zoomLevel: ThumbnailConst.zoomLevel.default,
+        startTick: ThumbnailConst.startTick.default,
+        startLayer: ThumbnailConst.startLayer.default,
+        backgroundColor: ThumbnailConst.backgroundColor.default,
+      },
+    },
   });
 
   const {
@@ -156,6 +168,9 @@ export const UploadSongProvider = ({
   const setFileHandler = async (file: File | null) => {
     if (!file) return;
 
+    console.log(formMethods.getValues());
+    console.log(formMethods.formState.isDirty);
+
     let song: SongFileType;
 
     try {
@@ -173,51 +188,50 @@ export const UploadSongProvider = ({
 
     const { title, description, originalAuthor } = song;
     const formTitle = title || file.name.replace('.nbs', '');
-    formMethods.setValue('title', formTitle);
-    formMethods.setValue('description', description);
-    formMethods.setValue('originalAuthor', originalAuthor);
+
+    formMethods.reset(
+      {
+        title: formTitle,
+        description,
+        originalAuthor,
+      },
+      { keepDefaultValues: true },
+    );
+
+    console.log(formMethods.formState.isDirty);
   };
 
   useEffect(() => {
     if (song) {
-      formMethods.setValue(
-        'thumbnailData.zoomLevel',
-        ThumbnailConst.zoomLevel.default,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.startTick',
-        ThumbnailConst.startTick.default,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.startLayer',
-        ThumbnailConst.startLayer.default,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.backgroundColor',
-        ThumbnailConst.backgroundColor.default,
-      );
-
-      formMethods.setValue(
-        'customInstruments',
-        Array(song.instruments.length).fill(''),
-      );
-
-      formMethods.setValue('allowDownload', true);
-
-      // disable allowDownload
+      formMethods.reset({
+        thumbnailData: {
+          zoomLevel: ThumbnailConst.zoomLevel.default,
+          startTick: ThumbnailConst.startTick.default,
+          startLayer: ThumbnailConst.startLayer.default,
+          backgroundColor: ThumbnailConst.backgroundColor.default,
+        },
+        customInstruments: [],
+        allowDownload: true,
+      });
     }
+
+    console.log(formMethods.formState.isDirty);
   }, [song, formMethods]);
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (formMethods.formState.isDirty && !isUploadComplete) {
-        e.preventDefault();
+      console.log(
+        'Unloading page, form dirty: ',
+        formMethods.formState.isDirty,
+      );
 
-        e.returnValue =
-          'Are you sure you want to leave? You have unsaved changes.';
+      console.log(formMethods.formState.defaultValues);
+      console.log(formMethods.getValues());
+
+      console.log(formMethods.formState.dirtyFields);
+
+      if (formMethods.formState.isDirty) {
+        e.preventDefault();
       }
     };
 
@@ -226,7 +240,7 @@ export const UploadSongProvider = ({
     return () => {
       window.removeEventListener('beforeunload', handler);
     };
-  }, [formMethods.formState.isDirty, isUploadComplete]);
+  }, [formMethods.formState.isDirty, formMethods.formState.dirtyFields]);
 
   return (
     <UploadSongContext.Provider

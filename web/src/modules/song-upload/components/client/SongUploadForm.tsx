@@ -21,7 +21,10 @@ export const SongUploadForm = ({
   }, [defaultAuthorName]);
 
   useEffect(() => {
-    formMethods.setValue('author', defaultAuthorNameMemo);
+    formMethods.reset(
+      { author: defaultAuthorNameMemo },
+      { keepDefaultValues: true },
+    );
   }, [defaultAuthorName, defaultAuthorNameMemo, formMethods]);
 
   return <SongForm type={type} isLocked={!song || isSubmitting} />;

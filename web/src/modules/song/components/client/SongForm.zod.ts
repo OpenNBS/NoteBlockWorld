@@ -24,7 +24,7 @@ export const thumbnailDataSchema = zod.object({
     .default(ThumbnailConst.backgroundColor.default),
 });
 
-const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
+const visibility = Object.keys(UploadConst.visibility);
 const categories = Object.keys(UploadConst.categories) as Readonly<string[]>;
 const licenses = Object.keys(UploadConst.licenses) as Readonly<string[]>;
 

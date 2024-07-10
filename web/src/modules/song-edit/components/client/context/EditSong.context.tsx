@@ -3,19 +3,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseSongFromBuffer } from '@shared/features/song/parse';
 import { SongFileType } from '@shared/features/song/types';
+import { ThumbnailConst } from '@shared/validation/song/constants';
 import { UploadSongDtoType } from '@shared/validation/song/dto/types';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
   FieldErrors,
+  FormProvider,
   UseFormRegister,
   UseFormReturn,
   useForm,
 } from 'react-hook-form';
 import toaster from 'react-hot-toast';
-import { undefined } from 'zod';
 
-import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
 import {
@@ -44,127 +45,42 @@ export const EditSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const formMethods = useForm<EditSongForm>({
-    resolver: zodResolver(editSongFormSchema),
-    mode: 'onBlur',
-  });
-
   const [song, setSong] = useState<SongFileType | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [originalData, setOriginalData] = useState<UploadSongDtoType | null>(
-    null,
-  );
+  const router = useRouter();
+
+  const formMethods = useForm<EditSongForm>({
+    resolver: zodResolver(editSongFormSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      thumbnailData: {
+        zoomLevel: ThumbnailConst.zoomLevel.default,
+        startTick: ThumbnailConst.startTick.default,
+        startLayer: ThumbnailConst.startLayer.default,
+        backgroundColor: ThumbnailConst.backgroundColor.default,
+      },
+    },
+  });
 
   const {
     register,
     formState: { errors },
+    reset,
+    getValues,
   } = formMethods;
 
-  const router = useRouter();
-
-  const dataWasNotChanged = useCallback(
-    function () {
-      if (!originalData) {
-        return false;
-      }
-
-      const formValues = {
-        allowDownload: formMethods.getValues().allowDownload,
-        visibility: formMethods.getValues().visibility,
-        title: formMethods.getValues().title,
-        originalAuthor: formMethods.getValues().originalAuthor,
-        description: formMethods.getValues().description,
-        thumbnailData: {
-          zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-          startTick: formMethods.getValues().thumbnailData.startTick,
-          startLayer: formMethods.getValues().thumbnailData.startLayer,
-          backgroundColor:
-            formMethods.getValues().thumbnailData.backgroundColor,
-        },
-        artist: formMethods.getValues().author,
-        customInstruments: formMethods.getValues().customInstruments,
-        license: formMethods.getValues().license,
-        category: formMethods.getValues().category,
-      };
-
-      const comparisons = [
-        formValues.allowDownload === originalData.allowDownload,
-        formValues.visibility === originalData.visibility,
-        formValues.title === originalData.title,
-        formValues.originalAuthor === originalData.originalAuthor,
-        formValues.description === originalData.description,
-        formValues.thumbnailData.zoomLevel ===
-          originalData.thumbnailData.zoomLevel,
-        formValues.thumbnailData.startTick ===
-          originalData.thumbnailData.startTick,
-        formValues.thumbnailData.startLayer ===
-          originalData.thumbnailData.startLayer,
-        formValues.thumbnailData.backgroundColor ===
-          originalData.thumbnailData.backgroundColor,
-        formValues.customInstruments.length ===
-          originalData.customInstruments.length &&
-          formValues.customInstruments.every(
-            (instrument, index) =>
-              instrument === originalData.customInstruments[index],
-          ),
-        formValues.license === originalData.license,
-        formValues.category === originalData.category,
-      ];
-
-      console.log(
-        comparisons.every((value) => value),
-        comparisons,
-      );
-
-      console.log(formValues.customInstruments, originalData.customInstruments);
-
-      return comparisons.every((value) => value);
-    },
-    [formMethods, originalData],
-  );
-
   const submitSong = async (): Promise<void> => {
-    // Build form data
-    const formValues: UploadSongDtoType = {
-      allowDownload: formMethods.getValues().allowDownload,
-      visibility: formMethods.getValues()
-        .visibility as UploadSongDtoType['visibility'],
-      title: formMethods.getValues().title,
-      originalAuthor: formMethods.getValues().originalAuthor,
-      description: formMethods.getValues().description,
-      thumbnailData: {
-        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-        startTick: formMethods.getValues().thumbnailData.startTick,
-        startLayer: formMethods.getValues().thumbnailData.startLayer,
-        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
-      },
-      customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license as UploadSongDtoType['license'],
-      category: formMethods.getValues()
-        .category as UploadSongDtoType['category'],
-      file: undefined,
-    };
-
-    // TODO: this comparison is not needed. Use isDirty field from react-hook-form
-    if (dataWasNotChanged()) {
-      toaster.success('No changes were made to the song!');
-      router.push('/my-songs');
-      return;
-    }
+    const formValues: UploadSongDtoType = { ...getValues(), file: null };
 
     setIsSubmitting(true);
     setSendError(null);
-    const songId = formMethods.getValues().id;
-
-    // Send request
-    // Get authorization token from local storage
+    const songId = getValues().id;
     const token = getTokenLocal();
 
     try {
-      // Send request
-      await axiosInstance.patch(`/song/${songId}/edit`, formValues, {
+      await axios.patch(`/song/${songId}/edit`, formValues, {
         headers: {
           authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -179,7 +95,6 @@ export const EditSongProvider = ({
             Object.values(error.response.data.error)[0],
         );
       } else {
-        console.log(error);
         setSendError('An unknown error occurred while submitting the song!');
       }
 
@@ -193,59 +108,13 @@ export const EditSongProvider = ({
 
   const loadSong = useCallback(
     async (id: string, username: string, songData: UploadSongDtoType) => {
-      setOriginalData(songData);
-
-      formMethods.setValue('allowDownload', true, {
-        shouldValidate: false,
-        shouldDirty: true,
-        shouldTouch: true,
-      });
-
-      formMethods.setValue('author', username, {
-        shouldDirty: true,
-        shouldValidate: false,
-        shouldTouch: true,
-      });
-
-      formMethods.setValue('visibility', songData.visibility);
-      formMethods.setValue('title', songData.title);
-      formMethods.setValue('originalAuthor', songData.originalAuthor);
-      formMethods.setValue('description', songData.description);
-
-      formMethods.setValue(
-        'thumbnailData.zoomLevel',
-        songData.thumbnailData.zoomLevel,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.startTick',
-        songData.thumbnailData.startTick,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.startLayer',
-        songData.thumbnailData.startLayer,
-      );
-
-      formMethods.setValue(
-        'thumbnailData.backgroundColor',
-        songData.thumbnailData.backgroundColor,
-      );
-
-      formMethods.setValue('license', songData.license);
-      formMethods.setValue('category', songData.category);
-
-      // fetch song
       const songFile = (
-        await axiosInstance.get(`/song/${id}/download`, {
-          params: {
-            src: 'edit',
-          },
+        await axios.get(`/song/${id}/download`, {
+          params: { src: 'edit' },
           responseType: 'arraybuffer',
         })
       ).data as ArrayBuffer;
 
-      // convert to song
       const song = parseSongFromBuffer(songFile);
 
       // pad instruments array for safety
@@ -258,18 +127,24 @@ export const EditSongProvider = ({
       formMethods.setValue('customInstruments', songInstruments);
 
       setSong(song);
+
+      reset({
+        ...songData,
+        allowDownload: true,
+        author: username,
+      });
     },
-    [formMethods, setSong],
+    [reset],
   );
 
   const setSongId = useCallback(
-    (id: string) => formMethods.setValue('id', id),
-    [formMethods],
+    (id: string) => reset({ ...getValues(), id }),
+    [getValues, reset],
   );
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (!dataWasNotChanged()) {
+      if (formMethods.formState.isDirty) {
         e.preventDefault();
 
         e.returnValue =
@@ -282,7 +157,7 @@ export const EditSongProvider = ({
     return () => {
       window.removeEventListener('beforeunload', handler);
     };
-  }, [dataWasNotChanged]);
+  }, [formMethods.formState.isDirty]);
 
   return (
     <EditSongContext.Provider
@@ -298,7 +173,7 @@ export const EditSongProvider = ({
         setSongId,
       }}
     >
-      {children}
+      <FormProvider {...formMethods}>{children}</FormProvider>
     </EditSongContext.Provider>
   );
 };

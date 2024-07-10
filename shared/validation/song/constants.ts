@@ -104,6 +104,11 @@ export const UploadConst = deepFreeze({
     public: 'Public',
     private: 'Private',
   },
+
+  visibility2: [
+    { key: 'public', name: 'Public' },
+    { key: 'private', name: 'Private' },
+  ],
 });
 
 export const timespans = [

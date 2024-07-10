@@ -50,7 +50,7 @@ export class SongPreviewDto {
 
   @IsNotEmpty()
   @IsString()
-  visibility: string;
+  visibility: 'public' | 'private';
 
   constructor(partial: Partial<SongPreviewDto>) {
     Object.assign(this, partial);

@@ -141,7 +141,7 @@ export const SongForm = ({
                 {Object.entries(UploadConst.visibility).map(
                   ([key, value]: [string, string]) => (
                     <Option key={key} value={key}>
-                      {value}
+                      {name}
                     </Option>
                   ),
                 )}
