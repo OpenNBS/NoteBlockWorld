@@ -45,7 +45,7 @@ function p({
   return (
     <p
       {...props}
-      className='leading-relaxed text-base my-6 font-light tracking-[0.0125em] text-justify'
+      className='leading-relaxed text-base my-6 tracking-[0.0125em] text-justify'
     />
   );
 }
@@ -82,7 +82,7 @@ function h3({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h3'>;
 }) {
-  return <h3 {...props} className='text-xl font-bold my-8 mb-3 ml-3' />;
+  return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
 }
 
 function h4({
@@ -122,7 +122,7 @@ function hr({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'hr'>;
 }) {
-  return <hr {...props} className='border-t-2 border-zinc-600 my-4' />;
+  return <hr {...props} className='border-t-2 border-zinc-600 my-12' />;
 }
 
 function ul({
@@ -152,7 +152,7 @@ function li({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'li'>;
 }) {
-  return <li {...props} className='leading-6 pl-1' />;
+  return <li {...props} className='text-base leading-relaxed pl-1' />;
 }
 
 function blockquote({
