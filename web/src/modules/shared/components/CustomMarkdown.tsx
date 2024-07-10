@@ -152,7 +152,12 @@ function li({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'li'>;
 }) {
-  return <li {...props} className='text-base leading-relaxed pl-1' />;
+  return (
+    <li
+      {...props}
+      className='text-base leading-relaxed tracking-[0.0125em] pl-1'
+    />
+  );
 }
 
 function blockquote({
@@ -165,7 +170,7 @@ function blockquote({
   return (
     <blockquote
       {...props}
-      className='border-l-4 border-zinc-600 text-zinc-400 pl-4 py-1'
+      className='border-l-4 border-zinc-600 text-zinc-400 pl-4 [&>p]:py-2'
     />
   );
 }
