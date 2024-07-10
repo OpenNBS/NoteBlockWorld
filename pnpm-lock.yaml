@@ -356,9 +356,6 @@ importers:
       react-modal:
         specifier: ^3.16.1
         version: 3.16.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-random-avatars:
-        specifier: ^1.3.1
-        version: 1.3.1(react@18.2.0)
       sharp:
         specifier: ^0.33.4
         version: 0.33.4
@@ -4749,11 +4746,6 @@ packages:
     peerDependencies:
       react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
       react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-
-  react-random-avatars@1.3.1:
-    resolution: {integrity: sha512-HyMGoWniK2D5CRthoA1he4c6LVFIX/yBjp4qarEXN/DsgJ+1R6M5gJwYhTBoATO+3itrGCAGnKZNqimG1sDjAA==}
-    peerDependencies:
-      react: ^18.2.0
 
   react-remove-scroll-bar@2.3.6:
     resolution: {integrity: sha512-DtSYaao4mBmX+HDo5YWYdBWQwYIQQshUV/dVxFxK+KM26Wjwp1gZ6rv6OC3oujI6Bfu6Xyg3TwK533AQutsn/g==}
@@ -11104,10 +11096,6 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       react-lifecycles-compat: 3.0.4
       warning: 4.0.3
-
-  react-random-avatars@1.3.1(react@18.2.0):
-    dependencies:
-      react: 18.2.0
 
   react-remove-scroll-bar@2.3.6(@types/react@18.2.18)(react@18.2.0):
     dependencies:
