@@ -8,7 +8,7 @@ export const CustomMarkdown = ({
 }) => {
   return (
     <>
-      <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
+      <article className='p-20 max-w-800 my-auto min-h-screen text-lg'>
         <Markdown
           components={{
             p,
@@ -42,7 +42,12 @@ function p({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'p'>;
 }) {
-  return <p {...props} className='leading-6 my-2 font-light' />;
+  return (
+    <p
+      {...props}
+      className='leading-relaxed text-base my-6 font-light tracking-[0.0125em] text-justify'
+    />
+  );
 }
 
 function h1({
@@ -77,7 +82,7 @@ function h3({
   node: React.ReactNode;
   props: React.ComponentPropsWithoutRef<'h3'>;
 }) {
-  return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
+  return <h3 {...props} className='text-xl font-bold my-8 mb-3 ml-3' />;
 }
 
 function h4({
@@ -207,7 +212,7 @@ function a({
     <Link
       {...props}
       href={href}
-      className='underline text-blue-500 hover:text-blue-400'
+      className='underline text-blue-400 hover:text-blue-300'
     >
       {children}
     </Link>
