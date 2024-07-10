@@ -1,4 +1,4 @@
-# Note Block World Privacy Policy
+# Privacy Policy
 
 > Last updated: July 7, 2024
 
@@ -6,7 +6,7 @@ Welcome to Note Block World! Although we strive to collect as little data as pos
 
 This Privacy Policy outlines what data we collect, the purposes for which we use it, and how we handle it. Our purpose is to make it clear how your data is used and stored, giving you full control over what information you share with us and how it is used in the context of the website.
 
-This document is inspired by the [Automattic Privacy Policy](https://automattic.com/privacy/) and is available under a [Creative Commons Sharealike](https://creativecommons.org/licenses/by-sa/4.0/) license (CC BY-SA 4.0). You are free to reuse, adapt and repurpose these terms for your own use, provided you revise the document to reflect your actual practices. We'd also appreciate it if you credit us somewhere in your website!
+This document is adapted from the [Automattic Privacy Policy](https://automattic.com/privacy/) and is available under a [Creative Commons Sharealike](https://creativecommons.org/licenses/by-sa/4.0/) license (CC BY-SA 4.0). You are free to reuse, adapt and repurpose this policy for your own use, provided you revise the document to reflect your actual practices. We'd also appreciate it if you credit us somewhere in your website!
 
 ## Data Treatment
 
@@ -78,7 +78,7 @@ We may update this Privacy Policy from time to time. If we make changes, we will
 
 ## Inquiries
 
-If you have any questions about how we handle your data, please email us at [opennbs@gmail.com](mailto:opennbs@gmail.com)! We are happy to help you understand how your data is used and stored.
+If you have any questions about how we handle your data, please email us at [opennbs@gmail.com](mailto:opennbs@gmail.com)! We are happy to help you understand how this policy applies to you.
 
 ---
 

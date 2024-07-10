@@ -1,4 +1,4 @@
-# Note Block World Terms of Service
+# Terms of Service
 
 > Last updated: July 7, 2024
 
@@ -12,11 +12,11 @@ These Terms describe our commitments to you, and your rights and responsibilitie
 
 This is an agreement between Note Block World (Us, the Website, and/or the Service) and You (the User). By using and submitting content to Note Block World, you agree to these Terms and Conditions. We have aimed to keep these terms simple and easy to understand.
 
-These Terms are inspired by [Automattic’s Terms of Service](https://wordpress.com/tos/) and are released under the [Creative Commons Attribution-Sharealike](https://creativecommons.org/licenses/by-sa/4.0/) license (CC BY-SA 4.0). You may freely use and modify these Terms for your own purposes, provided you credit Note Block World and do not imply any affiliation with us!
+These Terms are adapted from the [Wordpress Terms of Service](https://wordpress.com/tos/) provided by [Automattic](https://automattic.com/), and are released under the [Creative Commons Attribution-Sharealike](https://creativecommons.org/licenses/by-sa/4.0/) license (CC BY-SA 4.0). You are free to reuse, adapt and repurpose these terms for your own use, provided you revise the document to reflect your actual practices. We'd also appreciate it if you credit us somewhere in your website!
 
 ### 1. Our Purpose
 
-Note Block World is an online service where you can browse, listen to, and download Note Block Studio song files. Additionally, it allows you to submit your creations to a public database, letting other users discover your music.
+Note Block World is an online service where you can browse, listen to, and download song files created in [Note Block Studio](https://opennbs.org/). Additionally, it allows you to submit your own creations to a public database, letting other users discover your music.
 
 ### 2. Your Account
 
@@ -36,7 +36,7 @@ You agree not to exploit mechanisms in ways that may harm the system’s health,
 
 ### 4. Copyright
 
-By submitting a song to Note Block World, you assure that it is your original creation and that you possess all necessary rights and clearance to distribute it. **Do not submit content without the proper rights or permission from the original author.**
+By submitting a song to Note Block World, you assure that it is your original creation and that you possess all necessary rights to distribute it. **Do not submit content for which you don't have distribution rights, or haven't obtained permission from the original author to distribute.**
 
 Certain exceptions can be made under the Fair Use Policy. Fair Use allows for limited use of copyrighted material without permission from the rights holders for purposes such as commentary, criticism, news reporting, teaching, scholarship, and research. If you believe your submission qualifies under Fair Use, ensure you understand and comply with the guidelines to avoid copyright infringement.
 
@@ -44,21 +44,21 @@ If you find any content on the website to infringe copyright, you can send a cop
 
 Some assets displayed on the website are © Microsoft Studios. For Microsoft’s policies on using these assets, please refer to the [Minecraft Asset Usage Guidelines](https://www.minecraft.net/en-us/usage-guidelines). **NOTE BLOCK WORLD AND OPENNBS ARE NOT AFFILIATED WITH, OR APPROVED BY MOJANG OR MICROSOFT.**
 
-Unless otherwise specified, all other content belongs to OpenNBS and may not be distributed, copied, or reproduced without our consent.
+Unless otherwise specified, all other content belongs to OpenNBS and may not be distributed, copied, or reproduced without our permission.
 
 ### 5. License & Usage Rights
 
-By submitting content to the website, you grant Note Block World a permanent, irrevocable, worldwide license to share, distribute, transfer, store, create derivative works of, and display the content and any metadata attached to it. This is necessary for us to distribute your song, generate thumbnails, and ensure the website’s proper functionality. Your content may also be displayed on OpenNBS’s social media pages and other related websites for promotional purposes.
+By submitting content to the website, you grant Note Block World a permanent, irrevocable, worldwide, non-exclusive license to share, distribute, transfer, store, create derivative works of, and display the content and any metadata attached to it. This is necessary for us to distribute your song, generate thumbnails, and ensure the website’s proper functionality. Your content may also be displayed on OpenNBS’s social media pages and other related websites for promotional purposes.
 
-When uploading a song, you may choose to license it under a [Creative Commons Attribution-Sharealike](https://creativecommons.org/licenses/by-sa/4.0/deed) license, allowing anyone to share and adapt your song, provided they give you attribution and retain the same license as the original content. For more information, visit the [Creative Commons website](https://creativecommons.org/share-your-work/cclicenses/). Once a work is released under a Creative Commons license, you cannot change the license for the material already distributed.
+We believe open licenses, such as the licenses provided by [Creative Commons](https://creativecommons.org/), are a powerful way of fostering creativity. That's why, when uploading a song, you may choose to license it under a [Creative Commons Attribution-Sharealike](https://creativecommons.org/licenses/by-sa/4.0/deed) license. This will allow anyone to share and adapt your song, provided they give you attribution and retain the same license as the original content. For more information, visit the [Creative Commons](https://creativecommons.org/share-your-work/cclicenses/) website. Keep in mind that, once a work is released under a Creative Commons license, you are unable to revoke the license for material already distributed under that license.
 
-Note Block World will **never** claim ownership of your content. You remain the sole owner of your creations and retain all rights not explicitly granted in these Terms.
+We will **never** claim ownership of your content! You remain the sole owner of your creations and retain all rights not explicitly granted in these Terms.
 
 ### 6. Warranty
 
-Your use of the website comes with no warranty. We cannot ensure uninterrupted functionality or stability of the website, although we will do our best to fix issues promptly. We are not liable for technical issues, data loss, or any other damages that may arise from using the website, nor for the website behaving differently than expected.
+Your use of the website comes with no warranty. We cannot ensure uninterrupted functionality or stability of the website, although we will do our best to fix issues promptly. We are not liable for technical issues, data loss, or any other damages that may arise from using the website, nor for it behaving differently than you expect.
 
-We cannot be held responsible in case of data loss, so the website should not be used for permanent, long-term storage of your content. We recommend you keep regular backups of the creations you submit to the website to prevent data loss.
+We cannot be held responsible in case of data loss, so the website should not be used for permanent, long-term storage of your content. We recommend you keep regular backups of the creations you submit to the website.
 
 Promotional materials may mention features planned for future updates but not currently available. There is not necessarily a commitment in releasing these features at any specific time in the future.
 
@@ -66,7 +66,7 @@ Promotional materials may mention features planned for future updates but not cu
 
 Note Block World is offered free of charge. However, we display ads to cover maintenance, hosting, and distribution costs, according to our [Privacy Policy](/privacy).
 
-In future versions of the website, we may offer additional features for a fee. Core features like uploading, browsing, and listening to songs will always be free. Payment options, if introduced, will only extend capabilities in cosmetic, non-advantageous ways.
+In future versions of the website, we may offer additional features in return for a financial contribution. We are committed to keeping the website's core features, such as uploading, browsing, and listening to songs, entirely free. Payment options, if introduced, will only extend capabilities in non-advantageous ways, such as unlocking additional customization options, removing ads or increasing certain limits on your account.
 
 ### 8. Replacement
 
@@ -78,11 +78,11 @@ These Terms may be revoked at any time by either you or Note Block World. If you
 
 ### 10. Updates
 
-We reserve the right to modify these Terms at any time in the future, at our discretion. When an update is made, it will be publicized on this page at least 30 days before taking effect, along with a summary of changes. By continuing to use the website after the new Terms take effect, you agree to the new Terms. Make sure to revisit this page periodically to check for updates!
+We may update these Terms from time to time. If we make changes, we will notify you by revising the change log below, and, if the changes are significant, we may post a notice on the main page of our website at least 30 days prior to the changes taking effect. We encourage you to review the Terms regularly to stay informed about updates. Your further use of the website after a change to this document takes effect will be subject to the updated terms.
 
 ## Contact Information
 
-If you have any questions or concerns about these Terms, please contact us at [opennbs@gmail.com](mailto:opennbs@gmail.com)!
+If you have any questions or concerns about these Terms, please contact us at [opennbs@gmail.com](mailto:opennbs@gmail.com)! We are happy to answer your questions and help you understand how they apply to you.
 
 ---
 
