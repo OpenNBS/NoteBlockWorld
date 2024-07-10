@@ -90,7 +90,7 @@ export const LoginPage = () => {
             >
               Terms of Service
             </Link>{' '}
-            and{' '}
+            and that we process your information according to our{' '}
             <Link
               className='text-blue-400 hover:underline'
               data-test='login-privacy'
@@ -98,15 +98,7 @@ export const LoginPage = () => {
             >
               Privacy Policy
             </Link>
-            . Oh, and be sure to check our{' '}
-            <Link
-              className='text-blue-400 hover:underline'
-              data-test='login-guidelines'
-              href='/guidelines'
-            >
-              Community Guidelines
-            </Link>
-            , too!
+            .
           </p>
         </div>
       </div>
