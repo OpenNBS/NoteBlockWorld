@@ -63,11 +63,14 @@ const InfoTooltip = ({ children }: { children: React.ReactNode }) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button className='float-right relative top-0.5 text-zinc-500'>
+        <button
+          type='button'
+          className='float-right relative top-0.5 text-zinc-500 cursor-default'
+        >
           <FontAwesomeIcon icon={faQuestionCircle} />
         </button>
       </TooltipTrigger>
-      <TooltipContent className='max-w-64 flex flex-col gap-2'>
+      <TooltipContent className='max-w-64 px-2.5 py-2 flex flex-col gap-2 [&_a]:text-blue-400 [&_a:hover]:text-blue-300'>
         {children}
       </TooltipContent>
     </Tooltip>

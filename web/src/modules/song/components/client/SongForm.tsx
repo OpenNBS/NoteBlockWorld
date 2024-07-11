@@ -1,4 +1,5 @@
 import { UploadConst } from '@shared/validation/song/constants';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
@@ -166,8 +167,8 @@ export const SongForm = ({
                     </p>
                     <p>
                       Haven&apos;t found one that fits your song? You can
-                      suggest a new category in our Discord server! (Find it at
-                      the bottom of the page.)
+                      suggest a new category in our{' '}
+                      <Link href='https://discord.gg/'>Discord server</Link>!
                     </p>
                   </>
                 }
@@ -247,14 +248,18 @@ export const SongForm = ({
                     <p>
                       The Standard License allows us to distribute your song.
                       Alternatively, you may place it under{' '}
-                      <strong>CC BY-SA 4.0</strong>, a permissive license that
-                      allows anyone to share and adapt your song — provided
-                      credit is attributed to you and the same license is
-                      retained.
+                      <strong>
+                        <Link href='https://creativecommons.org/licenses/by-sa/4.0/deed'>
+                          CC BY-SA 4.0
+                        </Link>
+                      </strong>
+                      , a permissive license that allows anyone to share and
+                      adapt your song — provided credit is attributed to you and
+                      the same license is retained.
                     </p>
                     <p>
-                      For more information, pleace check out our Terms of
-                      Service!
+                      For more information, pleace check out our{' '}
+                      <Link href='/terms'>Terms of Service</Link>!
                     </p>
                   </>
                 }
@@ -288,8 +293,8 @@ export const SongForm = ({
                   <p>
                     We are testing a limited selection of sounds to start with.
                     If a sound file you want to use is not listed here, please
-                    reach out via our Discord server! (Find it at the bottom of
-                    the page.)
+                    reach out via our{' '}
+                    <Link href='https://discord.gg/'>Discord server</Link>!
                   </p>
                 </>
               }
