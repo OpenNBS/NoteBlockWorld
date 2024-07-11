@@ -28,7 +28,7 @@ export const NoteBlockWorldLogo = ({
     <div
       className={cn(
         flexConfig,
-        'flex items-center justify-center gap-2 min-w-fit',
+        'flex items-center justify-center gap-2 min-w-fit max-w-full',
         glow ? 'animate-[nbw-glow_3s_ease-in-out_infinite]' : '',
       )}
     >
