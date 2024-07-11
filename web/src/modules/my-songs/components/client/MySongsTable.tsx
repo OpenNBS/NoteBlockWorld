@@ -17,13 +17,13 @@ const NoSongs = () => (
   <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
     <div className='flex items-center justify-center'>
       <Image
-        src='/emptyChest.gif'
+        src='/empty-chest.png'
         alt='Note Block World logo'
         className='w-[100px] sm:w-[128px]'
         width={150}
         height={150}
         style={{
-          filter: 'contrast(1) brightness(1.5) grayscale(.8)',
+          filter: 'grayscale(1)',
         }}
       />
     </div>
