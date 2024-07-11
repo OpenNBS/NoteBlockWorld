@@ -9,10 +9,12 @@ import { SongThumbnailInput } from './SongThumbnailInput';
 import {
   Area,
   Checkbox,
+  EditButton,
   Input,
   Option,
   Select,
   TextArea,
+  UploadButton,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 
@@ -350,13 +352,7 @@ export const SongForm = ({
             )}
 
             {/* Upload button */}
-            <button
-              type='submit'
-              className='w-32 p-3 font-semibold bg-blue-500 enabled:hover:bg-blue-400 uppercase rounded-lg disabled:opacity-50'
-              disabled={isLoading || isSubmitting}
-            >
-              {type === 'upload' ? 'Upload' : 'Save'}
-            </button>
+            {type === 'upload' ? <UploadButton /> : <EditButton />}
           </div>
         </div>
       </form>

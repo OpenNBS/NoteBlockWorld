@@ -235,3 +235,27 @@ export const Slider = forwardRef<
   </SliderPrimitive.Root>
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;
+
+export const UploadButton = () => {
+  return (
+    <div className='hover:scale-[115%] hover:rotate-6 hover:red transform motion-reduce:transform-none active:scale-[85%] active:rotate-6 transition duration-150 ease-in-back'>
+      <button
+        type='submit'
+        className='w-32 p-3 hover:animate-[shake_0.25s_linear_infinite] motion-reduce:animate-none rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 hover:bg-blue-500 active:bg-blue-700'
+      >
+        Upload
+      </button>
+    </div>
+  );
+};
+
+export const EditButton = () => {
+  return (
+    <button
+      type='submit'
+      className='w-32 p-3 rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 hover:bg-blue-500'
+    >
+      Save
+    </button>
+  );
+};

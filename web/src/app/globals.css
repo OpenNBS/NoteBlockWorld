@@ -73,6 +73,18 @@ body {
   }
 }
 
+@keyframes shake {
+  0% { transform: translateX(0) translateY(-1px); }
+  12.5% { transform: translateX(1px) translateY(3px); }
+  25% { transform: translateX(-3px) translateY(1px); }
+  37.5% { transform: translateX(3px) translateY(-1px); }
+  50% { transform: translateX(1px) translateY(-3px); }
+  62.5% { transform: translateX(-2px) translateY(3px); }
+  75% { transform: translateX(-1px) translateY(2px) }
+  87.5% { transform: translateX(3px) translateY(-2px); }
+  100% { transform: translateX(0) translateY(-1px); }
+}
+
 /************** Loading bar **************/
 
 #nprogress {
