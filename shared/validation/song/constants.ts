@@ -89,15 +89,8 @@ export const UploadConst = deepFreeze({
   },
 
   licenses: {
-    all_rights_reserved: 'All Rights Reserved',
-    cc_by: 'CC BY',
-    cc_by_sa: 'CC BY-SA',
-    cc_by_nd: 'CC BY-ND',
-    cc_by_nc: 'CC BY-NC',
-    cc_by_nc_sa: 'CC BY-NC-SA',
-    cc_by_nc_nd: 'CC BY-NC-ND',
-    public_domain: 'Public Domain',
-    unknown: 'Unknown',
+    standard: 'Standard License',
+    cc_by_sa: 'Creative Commons - Attribution-ShareAlike 4.0',
   },
 
   visibility: {
