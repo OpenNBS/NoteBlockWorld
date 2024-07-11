@@ -48,6 +48,7 @@ export const SongForm = ({
             <Input
               id='title'
               label='Title*'
+              tooltip='Test'
               isLoading={isLoading}
               disabled={isLocked}
               errorMessage={errors.title?.message}
@@ -60,6 +61,7 @@ export const SongForm = ({
             <TextArea
               id='description'
               label='Description'
+              tooltip='Test'
               isLoading={isLoading}
               disabled={isLocked}
               errorMessage={errors.description?.message}
@@ -73,6 +75,7 @@ export const SongForm = ({
               <Input
                 id='author'
                 label='Author'
+                tooltip='Test'
                 isLoading={isLoading}
                 disabled={true}
                 errorMessage={errors.author?.message}
@@ -83,6 +86,7 @@ export const SongForm = ({
               <Input
                 id='originalAuthor'
                 label='Original author'
+                tooltip='Test'
                 isLoading={isLoading}
                 disabled={isLocked}
                 {...register('originalAuthor')}
@@ -100,6 +104,7 @@ export const SongForm = ({
               <Select
                 id='category'
                 label='Category'
+                tooltip='Test'
                 isLoading={isLoading}
                 disabled={isLocked}
                 errorMessage={errors.category?.message}
@@ -118,7 +123,7 @@ export const SongForm = ({
 
           {/* Thumbnail */}
           <div className='flex-1'>
-            <Area label='Thumbnail' isLoading={isLoading}>
+            <Area label='Thumbnail' tooltip='Test' isLoading={isLoading}>
               <SongThumbnailInput type={type} isLocked={isLocked} />
             </Area>
           </div>
@@ -129,6 +134,7 @@ export const SongForm = ({
               <Select
                 id='visibility'
                 label='Visibility'
+                tooltip='Test'
                 isLoading={isLoading}
                 disabled={isLocked}
                 errorMessage={errors.visibility?.message}
@@ -147,6 +153,7 @@ export const SongForm = ({
               <Select
                 id='license'
                 label='License'
+                tooltip='Test'
                 isLoading={isLoading}
                 disabled={isLocked}
                 errorMessage={errors.license?.message}
@@ -166,6 +173,7 @@ export const SongForm = ({
           <div className='flex-1'>
             <Area
               label='Custom instruments'
+              tooltip='Test'
               className='p-0 border-0 mb-0'
               isLoading={isLoading}
             >
@@ -176,7 +184,11 @@ export const SongForm = ({
 
           {/* Allow download */}
           <div className='flex-1'>
-            <Checkbox disabled {...register('allowDownload')} />
+            <Checkbox
+              tooltip={'Help'}
+              disabled
+              {...register('allowDownload')}
+            />
             <label htmlFor='allowDownload'>
               Allow other users to download the NBS file{' '}
               <span className='text-zinc-400 italic'>(Coming soon!)</span>

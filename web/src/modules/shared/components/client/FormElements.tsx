@@ -1,9 +1,13 @@
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
+
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 
 export const Label = forwardRef<
   HTMLLabelElement,
@@ -24,11 +28,13 @@ Label.displayName = 'Label';
 
 export const Area = ({
   label,
+  tooltip,
   isLoading,
   className,
   children,
 }: {
   label?: string;
+  tooltip?: React.ReactNode;
   isLoading?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -36,6 +42,7 @@ export const Area = ({
   return (
     <>
       {label && <Label label={label} />}
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
@@ -52,11 +59,27 @@ export const Area = ({
   );
 };
 
+const InfoTooltip = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button className='float-right relative top-0.5 text-zinc-500'>
+          <FontAwesomeIcon icon={faQuestionCircle} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className='max-w-64 flex flex-col gap-2'>
+        {children}
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
 export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     id: string;
     label: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -67,6 +90,7 @@ export const Input = forwardRef<
   return (
     <>
       <Label id={id} label={label} />
+      {props.tooltip && <InfoTooltip>{props.tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
@@ -91,15 +115,17 @@ export const TextArea = forwardRef<
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
     id: string;
     label: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
-  const { id, label, isLoading, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, tooltip, ...rest } = props;
 
   return (
     <>
       <Label id={id} label={label} />
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='12rem' containerClassName='block leading-none' />
       ) : (
@@ -123,6 +149,7 @@ export const Select = forwardRef<
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
     label?: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -133,6 +160,7 @@ export const Select = forwardRef<
   return (
     <>
       {label && <Label id={id} label={label} />}
+      {props.tooltip && <InfoTooltip>{props.tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
@@ -158,9 +186,10 @@ export const Checkbox = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     errorMessage?: string;
+    tooltip?: React.ReactNode;
   }
 >((props, ref) => {
-  const { errorMessage, ...rest } = props;
+  const { errorMessage, tooltip, ...rest } = props;
 
   return (
     <>
@@ -172,6 +201,7 @@ export const Checkbox = forwardRef<
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } p-2`}
       />
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       <ErrorBalloon message={errorMessage} />
     </>
   );
