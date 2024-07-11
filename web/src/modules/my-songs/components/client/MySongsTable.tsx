@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MY_SONGS } from '@shared/validation/song/constants';
 import { SongPageDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
+import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
 import { useMySongsProvider } from './context/MySongs.context';
@@ -15,27 +16,22 @@ import { SongRow } from './SongRow';
 
 const NoSongs = () => (
   <div className='flex-col items-center justify-center border-2 border-zinc-700 rounded-lg p-5'>
-    <div className='flex items-center justify-center'>
+    <div className='flex flex-col items-center justify-center gap-4 max-w-52 mx-auto'>
       <Image
         src='/empty-chest.png'
         alt='Note Block World logo'
-        className='w-[100px] sm:w-[128px]'
-        width={150}
+        width={100}
         height={150}
-        style={{
-          filter: 'grayscale(1)',
-        }}
       />
-    </div>
-    <div className='flex items-center justify-center'>
-      <p>
-        {/* // eslint-disable-next-line react/no-unescaped-entities */}
-        {" You haven't uploaded any songs yet. Click the"}
-        <a href='/upload' className='text-blue-500 underline px-1'>
-          {'Upload'}
-        </a>
-        {'button to get started!'}
+      <p className='text-zinc-400 text-sm text-wrap'>
+        {"You haven't uploaded any songs yet! Why not get started?"}
       </p>
+      <Link
+        href='/upload'
+        className='text-sm px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-400'
+      >
+        Upload
+      </Link>
     </div>
   </div>
 );
