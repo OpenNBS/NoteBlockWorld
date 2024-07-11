@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { baseApiURL } from '@web/src/lib/axios';
 
+import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
 
 type AuthProvider = 'google' | 'github';
@@ -36,7 +37,7 @@ export const LoginPage = () => {
   return (
     <main
       data-test='login-page'
-      className='w-full h-screen p-6 text-center text-balance flex items-center justify-center'
+      className='w-full h-screen p-6 text-center text-balance flex flex-col items-center justify-center'
     >
       <div className='flex flex-col sm:flex-row gap-8 sm:gap-12 bg-zinc-900/30 backdrop-blur-md w-fit max-w-2xl rounded-2xl p-10'>
         {/* Left half */}
@@ -102,18 +103,7 @@ export const LoginPage = () => {
           </p>
         </div>
       </div>
-      <div className='absolute bottom-4 mx-auto text-zinc-600 text-xs'>
-        <p>
-          © 2024{' '}
-          <Link
-            data-test='login-opennbs'
-            href='https://opennbs.org/'
-            className='hover:underline'
-          >
-            OpenNBS
-          </Link>
-        </p>
-      </div>
+      <CopyrightFooter className='fixed bottom-4' />
     </main>
   );
 };
