@@ -13,6 +13,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import toast from 'react-hot-toast';
 
 import axiosInstance from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -174,16 +175,20 @@ export const MySongProvider = ({
 
       setIsDeleteDialogOpen(false);
       setSongToDelete(null);
-      await fetchSongsPage();
     } catch (error: unknown) {
+      toast.error('An error occurred while deleting the song!');
+
       if (error instanceof Error) {
-        setError(error.message);
+        console.log('Error deleting song: ', error.message);
+      } else if (error instanceof Response) {
+        console.log('Error deleting song: ', error.statusText);
       }
 
-      if (error instanceof Response) {
-        setError(error.statusText);
-      }
+      return;
     }
+
+    await fetchSongsPage();
+    toast.success('Song deleted successfully!');
   }, [songToDelete, fetchSongsPage]);
 
   return (

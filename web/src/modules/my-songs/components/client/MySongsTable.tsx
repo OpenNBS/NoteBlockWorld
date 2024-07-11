@@ -10,6 +10,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
+import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
+
 import { useMySongsProvider } from './context/MySongs.context';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
@@ -148,9 +150,7 @@ export const MySongsPageComponent = () => {
       />
       <section className='flex flex-col h-full gap-12 justify-between w-full transition-all'>
         <h1 className='text-3xl font-semibold flex-1 pt-8'>My songs</h1>
-        {error && (
-          <div className='bg-red-500 text-white p-4 rounded-lg'>{error}</div>
-        )}
+        {error && <ErrorBox message={error} />}
         <div className='flex flex-col gap-12 w-full'>
           <MySongsTable />
         </div>
