@@ -1,9 +1,13 @@
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
+
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 
 export const Label = forwardRef<
   HTMLLabelElement,
@@ -24,11 +28,13 @@ Label.displayName = 'Label';
 
 export const Area = ({
   label,
+  tooltip,
   isLoading,
   className,
   children,
 }: {
   label?: string;
+  tooltip?: React.ReactNode;
   isLoading?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -36,6 +42,7 @@ export const Area = ({
   return (
     <>
       {label && <Label label={label} />}
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='20rem' />
       ) : (
@@ -52,11 +59,30 @@ export const Area = ({
   );
 };
 
+const InfoTooltip = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type='button'
+          className='float-right relative top-0.5 text-zinc-500 cursor-default'
+        >
+          <FontAwesomeIcon icon={faQuestionCircle} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className='max-w-64 px-2.5 py-2 flex flex-col gap-2 [&_a]:text-blue-400 [&_a:hover]:text-blue-300'>
+        {children}
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
 export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     id: string;
     label: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -67,6 +93,7 @@ export const Input = forwardRef<
   return (
     <>
       <Label id={id} label={label} />
+      {props.tooltip && <InfoTooltip>{props.tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
@@ -91,15 +118,17 @@ export const TextArea = forwardRef<
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
     id: string;
     label: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
-  const { id, label, isLoading, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, tooltip, ...rest } = props;
 
   return (
     <>
       <Label id={id} label={label} />
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='12rem' containerClassName='block leading-none' />
       ) : (
@@ -123,6 +152,7 @@ export const Select = forwardRef<
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     id: string;
     label?: string;
+    tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -133,6 +163,7 @@ export const Select = forwardRef<
   return (
     <>
       {label && <Label id={id} label={label} />}
+      {props.tooltip && <InfoTooltip>{props.tooltip}</InfoTooltip>}
       {isLoading ? (
         <Skeleton height='3rem' containerClassName='block leading-none' />
       ) : (
@@ -158,9 +189,10 @@ export const Checkbox = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     errorMessage?: string;
+    tooltip?: React.ReactNode;
   }
 >((props, ref) => {
-  const { errorMessage, ...rest } = props;
+  const { errorMessage, tooltip, ...rest } = props;
 
   return (
     <>
@@ -172,6 +204,7 @@ export const Checkbox = forwardRef<
           errorMessage ? 'border-red-500' : 'border-zinc-500'
         } p-2`}
       />
+      {tooltip && <InfoTooltip>{tooltip}</InfoTooltip>}
       <ErrorBalloon message={errorMessage} />
     </>
   );
@@ -205,3 +238,27 @@ export const Slider = forwardRef<
   </SliderPrimitive.Root>
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;
+
+export const UploadButton = () => {
+  return (
+    <div className='hover:scale-[115%] hover:rotate-6 hover:red transform motion-reduce:transform-none active:scale-[85%] active:rotate-6 transition duration-150 ease-in-back'>
+      <button
+        type='submit'
+        className='w-32 p-3 hover:animate-[shake_0.25s_linear_infinite] motion-reduce:animate-none rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-green-600 hover:bg-green-500 active:bg-green-700'
+      >
+        Upload
+      </button>
+    </div>
+  );
+};
+
+export const EditButton = () => {
+  return (
+    <button
+      type='submit'
+      className='w-32 p-3 rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 hover:bg-blue-500'
+    >
+      Save
+    </button>
+  );
+};

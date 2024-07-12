@@ -4,14 +4,13 @@ import * as express from 'express';
 
 import { AppModule } from './app.module';
 import { initializeSwagger } from './initializeSwagger';
-import { ParseTokenPipe } from './song/parseToken';
+import { ParseTokenPipe } from './parseToken';
 
 const logger: Logger = new Logger('main.ts');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
-  app.use('/public', express.static('public'));
 
   const parseTokenPipe = app.get<ParseTokenPipe>(ParseTokenPipe);
 
@@ -35,11 +34,13 @@ async function bootstrap() {
 
   // enable cors
   app.enableCors({
-    allowedHeaders: ['content-type', 'authorization'],
+    allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
     origin: process.env.FRONTEND_URL,
     credentials: true,
   });
+
+  app.use('/api/v1', express.static('public'));
 
   const port = process.env.PORT || '4000';
 

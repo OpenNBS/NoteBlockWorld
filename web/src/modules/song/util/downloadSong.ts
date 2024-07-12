@@ -33,7 +33,11 @@ export const downloadSongFile = async (song: {
 
 export const openSongInNBS = async (song: { publicId: string }) => {
   axios
-    .get(`/song/${song.publicId}/open`)
+    .get(`/song/${song.publicId}/open`, {
+      headers: {
+        src: 'downloadButton',
+      },
+    })
     .then((response) => {
       const responseUrl = response.data;
       const nbsUrl = 'nbs://' + responseUrl;

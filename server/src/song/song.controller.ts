@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpStatus,
   Param,
   Patch,
@@ -11,6 +12,7 @@ import {
   RawBodyRequest,
   Req,
   Res,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -135,7 +137,12 @@ export class SongController {
   public async getSongOpenUrl(
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
+    @Headers('src') src: string,
   ): Promise<string> {
+    if (src != 'downloadButton') {
+      throw new UnauthorizedException('Invalid source');
+    }
+
     const url = await this.songService.getSongDownloadUrl(
       id,
       user,

@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class ParseTokenPipe implements CanActivate {

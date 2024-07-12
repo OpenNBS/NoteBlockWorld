@@ -24,6 +24,7 @@ import {
   SongWithUser,
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
+import { removeExtraSpaces } from './song.util';
 
 @Injectable()
 export class SongService {
@@ -155,9 +156,9 @@ export class SongService {
     await this.songUploadService.processSongPatch(foundSong, body, user);
 
     // Update song document
-    foundSong.title = body.title;
-    foundSong.originalAuthor = body.originalAuthor;
-    foundSong.description = body.description;
+    foundSong.title = removeExtraSpaces(body.title);
+    foundSong.originalAuthor = removeExtraSpaces(body.originalAuthor);
+    foundSong.description = removeExtraSpaces(body.description);
     foundSong.category = body.category;
     foundSong.allowDownload = body.allowDownload;
     foundSong.visibility = body.visibility;

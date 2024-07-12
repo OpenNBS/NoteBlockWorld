@@ -22,7 +22,7 @@ import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
-import { generateSongId } from '../song.util';
+import { generateSongId, removeExtraSpaces } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
@@ -46,24 +46,38 @@ export class SongUploadService {
     // Object that maps sound paths to their respective hashes
 
     if (!this.soundsMapping) {
-      // TODO: should fetch from the backend's static files, or from S3 bucket
-      const response = await fetch('http://localhost:3000/data/soundList.json');
-      this.soundsMapping = await response.json();
+      const response = await fetch(
+        process.env.SERVER_URL + '/api/v1/data/soundList.json',
+      );
+
+      this.soundsMapping = (await response.json()) as Record<string, string>;
     }
 
     return this.soundsMapping;
   }
 
-  private async getSoundsSubset() {
-    // Array of valid sound paths, a manually-crafted subset of the sound mapping's keys
+  private async getValidSoundsSubset() {
+    // Creates a set of valid sound paths from filteredSoundList.json,
+    // a manually-crafted subset of sounds from Minecraft
 
     if (!this.soundsSubset) {
-      const response = await fetch(
-        'http://localhost:3000/data/selectSoundList.json',
-      );
+      try {
+        const response = await fetch(
+          process.env.SERVER_URL + '/api/v1/data/filteredSoundList.json',
+        );
 
-      const soundList = await response.json();
-      this.soundsSubset = new Set(Object.keys(soundList));
+        const soundList = (await response.json()) as string[];
+        this.soundsSubset = new Set(soundList);
+      } catch (e) {
+        throw new HttpException(
+          {
+            error: {
+              file: 'An error occurred while retrieving sound list',
+            },
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
 
     return this.soundsSubset;
@@ -95,9 +109,9 @@ export class SongUploadService {
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
     song.publicId = publicId;
-    song.title = body.title;
-    song.originalAuthor = body.originalAuthor;
-    song.description = body.description;
+    song.title = removeExtraSpaces(body.title);
+    song.originalAuthor = removeExtraSpaces(body.originalAuthor);
+    song.description = removeExtraSpaces(body.description);
     song.category = body.category;
     song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
@@ -281,10 +295,11 @@ export class SongUploadService {
     // Update NBS file with form values
     injectSongFileMetadata(
       nbsSong,
-      body.title,
-      user.username,
-      body.originalAuthor,
-      body.description,
+      removeExtraSpaces(body.title),
+      removeExtraSpaces(user.username),
+      removeExtraSpaces(body.originalAuthor),
+      removeExtraSpaces(body.description),
+      body.customInstruments,
     );
 
     const updatedSongArrayBuffer = toArrayBuffer(nbsSong);
@@ -298,9 +313,9 @@ export class SongUploadService {
     soundsArray: string[],
   ) {
     const soundsMapping = await this.getSoundsMapping();
-    const soundsSubset = await this.getSoundsSubset();
+    const validSoundsSubset = await this.getValidSoundsSubset();
 
-    this.validateCustomInstruments(soundsArray, soundsSubset);
+    this.validateCustomInstruments(soundsArray, validSoundsSubset);
 
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
@@ -313,10 +328,10 @@ export class SongUploadService {
 
   private validateCustomInstruments(
     soundsArray: string[],
-    soundsMapping: Set<string>,
+    validSounds: Set<string>,
   ) {
     const isInstrumentValid = (sound: string) =>
-      sound === '' || soundsMapping.has(sound);
+      sound === '' || validSounds.has(sound);
 
     const areAllInstrumentsValid = soundsArray.every((sound) =>
       isInstrumentValid(sound),

@@ -24,8 +24,8 @@ export class SongObfuscator {
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature
     this.copyMetaAndStats(song, output);
-    const instrumentMapping = this.processInstruments(song, output);
-    this.processNotes(song, output, instrumentMapping);
+    const instrumentMapping = this.resolveInstruments(song, output);
+    this.resolveNotes(song, output, instrumentMapping);
 
     return output;
   }
@@ -43,7 +43,7 @@ export class SongObfuscator {
     output.timeSignature = song.timeSignature;
   }
 
-  private processInstruments(song: Song, output: Song): Record<number, number> {
+  private resolveInstruments(song: Song, output: Song): Record<number, number> {
     // ✅ Remove unused instruments
     // ✅ Remove instrument info (name, press) - keep sound hash and pitch
 
@@ -60,20 +60,37 @@ export class SongObfuscator {
         continue;
       }
 
-      // Remove unused instruments (no notes or no sound path)
+      // Remove unused instruments (no notes or no sound defined)
+      const instrumentName = instrument.meta.name;
+      const customId = instrumentId - output.instruments.firstCustomIndex;
+      const soundFilePath = this.soundPaths[customId];
+      const isTempoChanger = instrument.meta.name === 'Tempo Changer';
+
       if (
-        noteCountPerInstrument[instrumentId] === 0 ||
-        this.soundPaths[instrumentId] === ''
+        !isTempoChanger &&
+        (noteCountPerInstrument[instrumentId] === 0 || soundFilePath === '')
       ) {
+        console.log(
+          `Skipping instrument '${instrumentName}' with ${noteCountPerInstrument[instrumentId]}`,
+          `notes and sound file '${soundFilePath}' (custom ID: ${customId})`,
+        );
+
         continue;
       }
 
       // Remove instrument info
       const newInstrumentId = output.instruments.loaded.length;
+      const newCustomId = newInstrumentId - output.instruments.firstCustomIndex;
+
+      console.log(
+        `Keeping instrument '${instrumentName}' with`,
+        `${noteCountPerInstrument[instrumentId]} notes and sound file`,
+        `'${this.soundPaths[customId]}' (custom ID: ${customId} -> ${newCustomId})`,
+      );
 
       const newInstrument = new Instrument(newInstrumentId, {
-        name: instrument.meta.name === 'Tempo Changer' ? 'Tempo Changer' : '',
-        soundFile: this.soundPaths[instrumentId],
+        name: instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
+        soundFile: soundFilePath,
         key: instrument.key,
         pressKey: false,
       });
@@ -85,7 +102,7 @@ export class SongObfuscator {
     return instrumentMapping;
   }
 
-  private processNotes(
+  private resolveNotes(
     song: Song,
     output: Song,
     instrumentMapping: Record<number, number>,
@@ -184,6 +201,7 @@ export class SongObfuscator {
 
         // Add obfuscated note to output
         const newNote = getObfuscatedNote(note, layer);
+        if (isTempoChanger) newNote.pitch = note.pitch;
         addNoteToOutput(tick, newNote);
       }
     }
