@@ -260,10 +260,12 @@ export class AuthService {
   }
 
   public async refreshToken(req: Request, res: Response) {
-    const refreshToken = req.cookies.refresh_token;
+    const refreshToken = req.headers.authorization?.split(' ')[1];
 
     if (!refreshToken) {
-      return res.status(401).json({ message: 'No refresh token provided' });
+      return res
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: 'No refresh token provided' });
     }
 
     try {
@@ -274,7 +276,9 @@ export class AuthService {
       const user = await this.userService.findByID(decoded.id);
 
       if (!user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .json({ message: 'Unauthorized' });
       }
 
       const token = await this.createJwtPayload({
@@ -299,7 +303,7 @@ export class AuthService {
         `User ${user.username} (${user.email}) refreshed token`,
       );
 
-      return res.status(200).json({
+      return res.status(HttpStatus.OK).json({
         refresh_token: token.refresh_token,
         token: token.access_token,
       });

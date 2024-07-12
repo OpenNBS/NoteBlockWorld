@@ -19,8 +19,8 @@ export function getRefreshTokenServer(): { value: string } | null {
 
 export async function checkLogin() {
   // get token from cookies
-  let token = getTokenServer();
-  let refreshToken = getRefreshTokenServer();
+  const token = getTokenServer();
+  const refreshToken = getRefreshTokenServer();
 
   // if there's no refresh token, user has to log in again
   if (!refreshToken || !refreshToken.value) {
@@ -31,37 +31,18 @@ export async function checkLogin() {
   // get a new one with the refresh token
   if (!token || !token.value) {
     // if the token is invalid, try to refresh the token
-    const { token: newToken, refreshToken: newRefreshToken } =
-      await refreshAuthToken(refreshToken);
-
-    token = { value: newToken };
-    refreshToken = { value: newRefreshToken };
+    // TODO: calling this function will cause an infinite loop
+    return false;
+    //await refreshAuthToken(refreshToken);
   }
 
   // both tokens are valid, return true
   return true;
-
-  /*
-  try {
-    // verify the token with the server
-    const res = await axiosInstance.get('/auth/verify', {
-      headers: {
-        authorization: `Bearer ${token.value}`,
-      },
-    });
-
-    // if the token is valid, redirect to home page
-    if (res.status === 200) return true;
-  } catch {
-    console.debug('Invalid token');
-    return false;
-  }
-
-  return false;
-*/
 }
 
 async function refreshAuthToken(refreshToken: { value: string }) {
+  'use server';
+
   try {
     const res = await axiosInstance.get<{
       refresh_token: string;
@@ -76,10 +57,11 @@ async function refreshAuthToken(refreshToken: { value: string }) {
 
     const refreshTokenData = JSON.parse(
       atob(responseData.refresh_token.split('.')[1]),
-    ) as { exp: number };
+    ) as { exp: number; iat: number };
 
     const tokenData = JSON.parse(atob(responseData.token.split('.')[1])) as {
       exp: number;
+      iat: number;
     };
 
     // get res cookies and forward them to the client
@@ -87,20 +69,14 @@ async function refreshAuthToken(refreshToken: { value: string }) {
 
     // set new tokens in cookies
     cookieStore.set('token', responseData.token, {
-      expires: new Date(new Date().getTime() + tokenData.exp * 1000),
+      expires: new Date((tokenData.iat + tokenData.exp) * 1000),
     });
 
     cookieStore.set('refresh_token', responseData.refresh_token, {
-      expires: new Date(new Date().getTime() + refreshTokenData.exp * 1000),
+      expires: new Date((refreshTokenData.iat + refreshTokenData.exp) * 1000),
     });
-
-    return {
-      token: responseData.token,
-      refreshToken: responseData.refresh_token,
-    };
   } catch (e) {
     console.error(e);
-    return { token: '', refreshToken: '' };
   }
 }
 
