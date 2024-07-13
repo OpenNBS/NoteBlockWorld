@@ -1,5 +1,6 @@
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { CookieBanner } from '../client/CookieBanner';
 
 type TNavbarLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
       </main>
       {/* Footer */}
       <Footer />
+      <CookieBanner />
     </div>
   );
 }
