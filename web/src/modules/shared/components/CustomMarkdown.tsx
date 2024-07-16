@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Markdown from 'react-markdown';
+import Markdown, { ExtraProps } from 'react-markdown';
 
 export const CustomMarkdown = ({
   MarkdownContent,
@@ -35,191 +35,109 @@ export const CustomMarkdown = ({
   );
 };
 
-function p({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'p'>;
-}) {
+const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
   return (
     <p
       {...props}
       className='leading-relaxed text-base my-6 tracking-[0.0125em] text-justify'
     />
   );
-}
+};
 
-function h1({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h1'>;
-}) {
+const h1 = ({ node, ...props }: JSX.IntrinsicElements['h1'] & ExtraProps) => {
   return (
     <h1
       {...props}
       className='text-3xl text-center uppercase font-light tracking-wider text-zinc-400 mb-24'
     />
   );
-}
+};
 
-function h2({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h2'>;
-}) {
+const h2 = ({ node, ...props }: JSX.IntrinsicElements['h2'] & ExtraProps) => {
   return <h2 {...props} className='text-2xl font-bold font mt-12 mb-3' />;
-}
+};
 
-function h3({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h3'>;
-}) {
+const h3 = ({ node, ...props }: JSX.IntrinsicElements['h3'] & ExtraProps) => {
   return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
-}
+};
 
-function h4({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h4'>;
-}) {
+const h4 = ({ node, ...props }: JSX.IntrinsicElements['h4'] & ExtraProps) => {
   return <h4 {...props} className='text-base font-bold my-3' />;
-}
+};
 
-function h5({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h5'>;
-}) {
+const h5 = ({ node, ...props }: JSX.IntrinsicElements['h5'] & ExtraProps) => {
   return <h5 {...props} className='text-sm font-bold my-3' />;
-}
+};
 
-function h6({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'h6'>;
-}) {
+const h6 = ({ node, ...props }: JSX.IntrinsicElements['h6'] & ExtraProps) => {
   return <h6 {...props} className='text-xs font-bold my-3' />;
-}
+};
 
-function hr({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'hr'>;
-}) {
+const hr = ({ node, ...props }: JSX.IntrinsicElements['hr'] & ExtraProps) => {
   return <hr {...props} className='border-t-2 border-zinc-600 my-12' />;
-}
+};
 
-function ul({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'ul'>;
-}) {
+const ul = ({ node, ...props }: JSX.IntrinsicElements['ul'] & ExtraProps) => {
   return <ul {...props} className='list-disc pl-8' />;
-}
+};
 
-function ol({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'ol'>;
-}) {
+const ol = ({ node, ...props }: JSX.IntrinsicElements['ol'] & ExtraProps) => {
   return <ol {...props} className='list-decimal pl-8' />;
-}
+};
 
-function li({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'li'>;
-}) {
+const li = ({ node, ...props }: JSX.IntrinsicElements['li'] & ExtraProps) => {
   return (
     <li
       {...props}
       className='text-base leading-relaxed tracking-[0.0125em] pl-1'
     />
   );
-}
+};
 
-function blockquote({
+const blockquote = ({
   node,
   ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'blockquote'>;
-}) {
+}: JSX.IntrinsicElements['blockquote'] & ExtraProps) => {
   return (
     <blockquote
       {...props}
       className='border-l-4 border-zinc-600 text-zinc-400 pl-4 [&>p]:py-2'
     />
   );
-}
+};
 
-function pre({
-  node,
-  ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'pre'>;
-}) {
+const pre = ({ node, ...props }: JSX.IntrinsicElements['pre'] & ExtraProps) => {
   return (
     <pre
       {...props}
       className='bg-zinc-900 border border-zinc-700 [&>code]:border-none rounded-lg text-white text-sm p-2 overflow-x-auto'
     />
   );
-}
+};
 
-function code({
+const code = ({
   node,
   ...props
-}: {
-  node: React.ReactNode;
-  props: React.ComponentPropsWithoutRef<'code'>;
-}) {
+}: JSX.IntrinsicElements['code'] & ExtraProps) => {
   return (
     <code {...props} className='bg-zinc-900 text-white font-mono px-1 py-0.5' />
   );
-}
+};
 
-function a({
+const a = ({
   node,
   children,
-  href,
+  href = '',
   ...props
-}: {
-  node: React.ReactNode;
-  children: React.ReactNode;
-  href: string;
-  props: React.ComponentPropsWithoutRef<'a'>;
-}) {
+}: JSX.IntrinsicElements['a'] & ExtraProps) => {
+  const { ref, ...rest } = props;
   return (
     <Link
-      {...props}
+      {...rest}
       href={href}
       className='underline text-blue-400 hover:text-blue-300'
     >
       {children}
     </Link>
   );
-}
+};
