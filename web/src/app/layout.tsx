@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
+import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
@@ -52,6 +53,7 @@ export default function RootLayout({
             </TooltipProvider>
           </SkeletonTheme>
         </body>
+        <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
       </html>
     </ReCaptchaProvider>
   );
