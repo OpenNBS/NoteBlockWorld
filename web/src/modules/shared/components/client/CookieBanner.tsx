@@ -1,13 +1,36 @@
+'use client';
+
 import { faClose, faCookieBite } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export const CookieBanner = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleAccept = () => {
+    setIsOpen(false);
+    localStorage.setItem('cookie-consent', 'true');
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem('cookie-consent')) {
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
   return (
     <div className='fixed bottom-0 w-full h-32 z-10 flex justify-center bg-blue-900/80 border-t-blue-500/80 border-t-4 border-zinc-700 backdrop-blur-md p-4'>
       <div className='relative min-w-[1280px] max-w-screen-xl px-6 sm:px-10'>
         {/* Close button */}
-        <button className='absolute top-[-0.5rem] right-12 text-lg text-zinc-400 hover:text-zinc-300'>
+        <button
+          onClick={handleAccept}
+          className='absolute top-[-0.5rem] right-12 text-lg text-zinc-400 hover:text-zinc-300'
+        >
           <FontAwesomeIcon icon={faClose} />
         </button>
         <FontAwesomeIcon
@@ -39,7 +62,10 @@ export const CookieBanner = () => {
           >
             Learn more
           </Link>
-          <button className='text-sm bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg'>
+          <button
+            onClick={handleAccept}
+            className='text-sm bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg'
+          >
             Got it!
           </button>
         </div>
