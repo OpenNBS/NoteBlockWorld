@@ -184,7 +184,6 @@ export class AuthService {
       username: user_registered.username,
     });
 
-    const userId = user_registered._id.toString();
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
     const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
@@ -195,11 +194,6 @@ export class AuthService {
     });
 
     res.cookie('refresh_token', token.refresh_token, {
-      domain: domain,
-      maxAge: maxAge,
-    });
-
-    res.cookie('user', userId, {
       domain: domain,
       maxAge: maxAge,
     });
