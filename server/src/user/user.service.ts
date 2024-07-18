@@ -99,9 +99,8 @@ export class UserService {
   }
 
   public async generateUsername(inputUsername: string) {
-    // Normalize username (remove accents, lowercase, replace spaces with underscores)
+    // Normalize username (remove accents, replace spaces with underscores)
     const baseUsername = inputUsername
-      .toLowerCase()
       .replace(' ', '_')
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
