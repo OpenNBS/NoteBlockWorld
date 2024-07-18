@@ -7,7 +7,7 @@
         "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && pnpm run dev && docker-compose down",
         "build:server": "pnpm run --filter ./server build",
         "build:web": "pnpm run --filter ./web build",
-        "start:server": "pnpm run --filter ./server start:prod",
+        "start:server": "pnpm run --filter ./server start",
         "start:web": "pnpm run --filter ./web start",
         "dev": "pnpm build:data && pnpm run --parallel dev",
         "dev:web": "pnpm run --filter ./web dev",
