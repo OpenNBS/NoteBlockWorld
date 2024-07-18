@@ -25,11 +25,14 @@ https://tailwindcss.com/docs/customizing-colors
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import tailwindColors from 'tailwindcss/lib/public/colors';
+import tailwindColors from 'tailwindcss/colors';
 
 import { deepFreeze } from '@shared/validation/common/deepFreeze';
 
-const colors = tailwindColors as Record<string, Record<number, string>>;
+const colors = tailwindColors as unknown as Record<
+  string,
+  Record<number, string>
+>;
 
 export const bgColors = deepFreeze({
   red: {
