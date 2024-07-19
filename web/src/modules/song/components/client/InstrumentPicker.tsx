@@ -111,12 +111,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const [soundList, setSoundList] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchSounds() {
-      const data = await fetchSoundList();
-      setSoundList(data);
-    }
-
-    fetchSounds();
+    fetchSoundList().then(setSoundList);
   }, []);
 
   useEffect(() => {
