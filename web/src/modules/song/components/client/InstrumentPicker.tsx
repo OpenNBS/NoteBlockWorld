@@ -154,7 +154,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
                 setValue(i, value);
               }}
               sounds={soundList}
-              value={values[i]}
+              value={values ? values[i] : ''}
               locked={instrument.count === 0}
             />
           </InstrumentTableRow>
