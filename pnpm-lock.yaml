@@ -78,6 +78,9 @@ importers:
       '@nestjs/swagger':
         specifier: ^7.1.1
         version: 7.3.1(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(reflect-metadata@0.1.14)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)
+      '@types/passport-discord':
+        specifier: ^0.1.13
+        version: 0.1.13
       '@types/uuid':
         specifier: ^9.0.8
         version: 9.0.8
@@ -111,6 +114,9 @@ importers:
       passport:
         specifier: ^0.7.0
         version: 0.7.0
+      passport-discord:
+        specifier: ^0.1.4
+        version: 0.1.4
       passport-github:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1978,6 +1984,9 @@ packages:
 
   '@types/oauth@0.9.5':
     resolution: {integrity: sha512-+oQ3C2Zx6ambINOcdIARF5Z3Tu3x//HipE889/fqo3sgpQZbe9c6ExdQFtN6qlhpR7p83lTZfPJt0tCAW29dog==}
+
+  '@types/passport-discord@0.1.13':
+    resolution: {integrity: sha512-A9fGTf69C19xQr4BQUHvK+/DpGuSLF/v/MEMdw4Z46sQd0dqeP+4ysBZqF5rXxaCWVcJKBxXUpV8MpW5jwWVIQ==}
 
   '@types/passport-github@1.1.12':
     resolution: {integrity: sha512-VJpMEIH+cOoXB694QgcxuvWy2wPd1Oq3gqrg2Y9DMVBYs9TmH9L14qnqPDZsNMZKBDH+SvqRsGZj9SgHYeDgcA==}
@@ -4495,6 +4504,9 @@ packages:
   parseurl@1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
+
+  passport-discord@0.1.4:
+    resolution: {integrity: sha512-VJWPYqSOmh7SaCLw/C+k1ZqCzJnn2frrmQRx1YrcPJ3MQ+Oa31XclbbmqFICSvl8xv3Fqd6YWQ4H4p1MpIN9rA==}
 
   passport-github@1.1.0:
     resolution: {integrity: sha512-XARXJycE6fFh/dxF+Uut8OjlwbFEXgbPVj/+V+K7cvriRK7VcAOm+NgBmbiLM9Qv3SSxEAV+V6fIk89nYHXa8A==}
@@ -7815,6 +7827,12 @@ snapshots:
     dependencies:
       '@types/node': 20.14.2
 
+  '@types/passport-discord@0.1.13':
+    dependencies:
+      '@types/express': 4.17.21
+      '@types/passport': 1.0.16
+      '@types/passport-oauth2': 1.4.17
+
   '@types/passport-github@1.1.12':
     dependencies:
       '@types/express': 4.17.21
@@ -10860,6 +10878,10 @@ snapshots:
       lines-and-columns: 1.2.4
 
   parseurl@1.3.3: {}
+
+  passport-discord@0.1.4:
+    dependencies:
+      passport-oauth2: 1.8.0
 
   passport-github@1.1.0:
     dependencies:

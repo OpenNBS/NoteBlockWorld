@@ -6,6 +6,7 @@ import { UserModule } from '@server/user/user.module';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { DiscordStrategy } from './strategies/discord.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/JWT.strategy';
@@ -41,6 +42,7 @@ import { JwtStrategy } from './strategies/JWT.strategy';
     ConfigService,
     GoogleStrategy,
     GithubStrategy,
+    DiscordStrategy,
     JwtStrategy,
   ],
   exports: [AuthService],

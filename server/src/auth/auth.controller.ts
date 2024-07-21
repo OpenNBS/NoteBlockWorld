@@ -37,6 +37,19 @@ export class AuthController {
     return this.authService.googleLogin(req, res);
   }
 
+  @Get('login/discord')
+  @UseGuards(AuthGuard('discord'))
+  public discordLogin() {
+    // Not need for implementation, its handled by passport
+    this.logger.log('Discord login');
+  }
+
+  @Get('discord/callback')
+  @UseGuards(AuthGuard('discord'))
+  public discordRedirect(@Req() req: Request, @Res() res: Response) {
+    return this.authService.discordLogin(req, res);
+  }
+
   @Get('verify')
   @ApiOperation({ summary: 'Verify user token' })
   @ApiResponse({ status: 200, description: 'User token verified' })

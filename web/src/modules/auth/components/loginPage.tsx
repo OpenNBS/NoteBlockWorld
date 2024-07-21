@@ -1,4 +1,8 @@
-import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import {
+  faDiscord,
+  faGithub,
+  faGoogle,
+} from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -7,7 +11,7 @@ import { baseApiURL } from '@web/src/lib/axios';
 import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
 
-type AuthProvider = 'google' | 'github';
+type AuthProvider = 'google' | 'github' | 'discord';
 
 const getLoginUrl = (provider: AuthProvider) => {
   let AuthURL;
@@ -18,6 +22,9 @@ const getLoginUrl = (provider: AuthProvider) => {
       break;
     case 'github':
       AuthURL = baseApiURL + '/auth/login/github';
+      break;
+    case 'discord':
+      AuthURL = baseApiURL + '/auth/login/discord';
       break;
     default:
       throw new Error('Invalid provider');
@@ -79,6 +86,18 @@ export const LoginPage = () => {
                 className='align-middle mr-2 h-5'
               />
               <span className='flex-1'>Log in with GitHub</span>
+            </Link>
+            {/* Login with Discord */}
+            <Link
+              data-test='login-discord'
+              href={signIn('discord')}
+              className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
+            >
+              <FontAwesomeIcon
+                icon={faDiscord}
+                className='align-middle mr-2 h-5'
+              />
+              <span className='flex-1 text-nowrap'>Log in with Discord</span>
             </Link>
           </div>
 

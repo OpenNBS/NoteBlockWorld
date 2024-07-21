@@ -8,6 +8,7 @@ import type { Request, Response } from 'express';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
+import { DiscordUser } from './types/discordProfile';
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
 import { Profile } from './types/profile';
@@ -152,6 +153,23 @@ export class AuthService {
       email: email,
       profileImage: profile.photos[0].value,
     });
+
+    return this.GenTokenRedirect(user_registered, res);
+  }
+
+  public async discordLogin(req: Request, res: Response) {
+    const user = (req.user as DiscordUser).profile;
+    const profilePictureUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+
+    const profile = {
+      // Generate username from display name
+      username: user.username,
+      email: user.email,
+      profileImage: profilePictureUrl,
+    };
+
+    // verify if user exists
+    const user_registered = await this.verifyAndGetUser(profile);
 
     return this.GenTokenRedirect(user_registered, res);
   }
