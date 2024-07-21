@@ -24,17 +24,14 @@ import { UserModule } from './user/user.module';
       useFactory: (
         configService: ConfigService,
       ): MongooseModuleFactoryOptions => {
-        const url = configService.get<string>('DB_HOST');
-        const password = configService.get<string>('DB_PASSWORD');
-        const user = configService.get<string>('DB_USER');
-        if (!url || !password || !user) {
+        const url = configService.get<string>('MONGO_URL');
+        if (!url) {
           throw new Error('Missing DB config');
         }
-        const uri = `mongodb+srv://${user}:${password}@${url}`;
-        Logger.debug(`Connecting to ${uri}`);
+        Logger.debug(`Connecting to ${url}`);
 
         return {
-          uri: uri,
+          uri: url,
           retryAttempts: 10,
           retryDelay: 3000,
         };
