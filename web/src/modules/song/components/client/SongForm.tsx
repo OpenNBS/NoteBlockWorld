@@ -168,7 +168,10 @@ export const SongForm = ({
                     <p>
                       Haven&apos;t found one that fits your song? You can
                       suggest a new category in our{' '}
-                      <Link href='https://discord.gg/'>Discord server</Link>!
+                      <Link href='https://discord.gg/open-note-block-studio-608692895179997252'>
+                        Discord server
+                      </Link>
+                      !
                     </p>
                   </>
                 }
@@ -294,7 +297,10 @@ export const SongForm = ({
                     We are testing a limited selection of sounds to start with.
                     If a sound file you want to use is not listed here, please
                     reach out via our{' '}
-                    <Link href='https://discord.gg/'>Discord server</Link>!
+                    <Link href='https://discord.gg/open-note-block-studio-608692895179997252'>
+                      Discord server
+                    </Link>
+                    !
                   </p>
                 </>
               }
