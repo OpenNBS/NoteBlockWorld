@@ -4,11 +4,16 @@ import { useEffect } from 'react';
 
 export function deleteAuthCookies() {
   // delete cookie
-  const cookiesToBeDeleted = ['refresh_token', 'user', 'token'];
+  const cookiesToBeDeleted = ['refresh_token', 'token'];
 
   cookiesToBeDeleted.forEach((cookie) => {
     if (!document) return;
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
+
+    if (process.env.NODE_ENV === 'development') {
+      document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/`;
+    } else {
+      document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
+    }
   });
 }
 
