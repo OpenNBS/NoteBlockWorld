@@ -104,7 +104,7 @@ export class UserService {
       .replace(' ', '_')
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9_]/g, '');
+      .replace(/[^a-zA-Z0-9_]/g, '');
 
     // Find if there's already a user with the same username
     let nameTaken = await this.usernameExists(baseUsername);
