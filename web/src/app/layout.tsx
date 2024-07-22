@@ -29,6 +29,7 @@ export default function RootLayout({
     <ReCaptchaProvider useEnterprise>
       <html lang='en'>
         <head>
+          <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
           <link
             rel='apple-touch-icon'
             sizes='180x180'
@@ -85,7 +86,6 @@ export default function RootLayout({
             </TooltipProvider>
           </SkeletonTheme>
         </body>
-        <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
       </html>
     </ReCaptchaProvider>
   );
