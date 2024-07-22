@@ -5,6 +5,7 @@ import {
   faTwitter,
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -30,9 +31,12 @@ export function Footer() {
             icon={faDiscord}
             href='https://discord.gg/open-note-block-studio-608692895179997252'
           />
-          {/* <FooterIcon icon={faEarth} href='https://discord.gg' /> */}
+          {/* <FooterIcon icon={faEarth} href='https://opennbs.org' /> */}
           {/* <FooterIcon icon={faEnvelope} href='mailto:opennbs@gmail.com' /> */}
-          {/* <FooterIcon icon={faHeart} href='https://opencollective.com/OpenNBS' /> */}
+          <FooterIcon
+            icon={faHeart}
+            href='https://opencollective.com/OpenNBS/donate/profile'
+          />
         </div>
 
         <div className='flex-shrink'>
