@@ -43,7 +43,10 @@ export class AuthService {
       JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
       JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
       JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
-      WHITELISTED_USERS: this.configService.get('WHITELISTED_USERS').split(','),
+      WHITELISTED_USERS: this.configService
+        .get('WHITELISTED_USERS')
+        .toLowerCase()
+        .split(','),
     };
 
     this.FRONTEND_URL = config.FRONTEND_URL;
@@ -146,7 +149,7 @@ export class AuthService {
       return true;
     }
 
-    if (whitelist.includes(username)) {
+    if (whitelist.includes(username.toLowerCase())) {
       this.logger.log(`User ${username} is whitelisted; approving login`);
       return true;
     }
