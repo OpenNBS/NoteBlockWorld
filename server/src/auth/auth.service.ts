@@ -24,6 +24,7 @@ export class AuthService {
   private readonly JWT_EXPIRES_IN: string;
   private readonly JWT_REFRESH_SECRET: string;
   private readonly JWT_REFRESH_EXPIRES_IN: string;
+  private readonly WHITELISTED_USERS: string;
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,
@@ -42,6 +43,7 @@ export class AuthService {
       JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
       JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
       JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
+      WHITELISTED_USERS: this.configService.get('WHITELISTED_USERS').split(','),
     };
 
     this.FRONTEND_URL = config.FRONTEND_URL;
@@ -51,6 +53,7 @@ export class AuthService {
     this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
     this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
     this.JWT_REFRESH_EXPIRES_IN = config.JWT_REFRESH_EXPIRES_IN;
+    this.WHITELISTED_USERS = config.WHITELISTED_USERS;
   }
 
   public async verifyToken(req: Request, res: Response) {
@@ -96,6 +99,10 @@ export class AuthService {
       profileImage: user.photos[0].value,
     };
 
+    if (!(await this.verifyWhitelist(profile.username))) {
+      return res.redirect(this.FRONTEND_URL + '/login');
+    }
+
     // verify if user exists
     const user_registered = await this.verifyAndGetUser(profile);
 
@@ -132,6 +139,23 @@ export class AuthService {
     return user_registered;
   }
 
+  private async verifyWhitelist(username: string) {
+    const whitelist = this.WHITELISTED_USERS;
+
+    if (!whitelist) {
+      return true;
+    }
+
+    if (whitelist.includes(username)) {
+      this.logger.log(`User ${username} is whitelisted; approving login`);
+      return true;
+    }
+
+    this.logger.log(`User ${username} is not whitelisted; rejecting login`);
+
+    return false;
+  }
+
   public async githubLogin(req: Request, res: Response) {
     const user = req.user as GithubAccessToken;
     const { profile } = user;
@@ -147,6 +171,10 @@ export class AuthService {
     );
 
     const email = response.data.filter((email) => email.primary)[0].email;
+
+    if (!(await this.verifyWhitelist(profile.username))) {
+      return res.redirect(this.FRONTEND_URL + '/login');
+    }
 
     const user_registered = await this.verifyAndGetUser({
       username: profile.username,
@@ -167,6 +195,10 @@ export class AuthService {
       email: user.email,
       profileImage: profilePictureUrl,
     };
+
+    if (!(await this.verifyWhitelist(profile.username))) {
+      return res.redirect(this.FRONTEND_URL + '/login');
+    }
 
     // verify if user exists
     const user_registered = await this.verifyAndGetUser(profile);
