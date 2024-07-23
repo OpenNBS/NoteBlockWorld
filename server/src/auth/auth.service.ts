@@ -43,10 +43,7 @@ export class AuthService {
       JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
       JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
       JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
-      WHITELISTED_USERS: this.configService
-        .get('WHITELISTED_USERS')
-        .toLowerCase()
-        .split(','),
+      WHITELISTED_USERS: this.configService.get('WHITELISTED_USERS'),
     };
 
     this.FRONTEND_URL = config.FRONTEND_URL;
@@ -56,7 +53,10 @@ export class AuthService {
     this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
     this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
     this.JWT_REFRESH_EXPIRES_IN = config.JWT_REFRESH_EXPIRES_IN;
-    this.WHITELISTED_USERS = config.WHITELISTED_USERS;
+
+    this.WHITELISTED_USERS = config.WHITELISTED_USERS
+      ? config.WHITELISTED_USERS.toLowerCase().split(',')
+      : [];
   }
 
   public async verifyToken(req: Request, res: Response) {
@@ -145,7 +145,7 @@ export class AuthService {
   private async verifyWhitelist(username: string) {
     const whitelist = this.WHITELISTED_USERS;
 
-    if (!whitelist) {
+    if (whitelist.length === 0) {
       return true;
     }
 
