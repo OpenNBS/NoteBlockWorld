@@ -239,12 +239,20 @@ export const Slider = forwardRef<
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;
 
-export const UploadButton = () => {
+export const UploadButton = ({ isDisabled }: { isDisabled: boolean }) => {
   return (
-    <div className='hover:scale-[115%] hover:rotate-6 hover:red transform motion-reduce:transform-none active:scale-[85%] active:rotate-6 transition duration-150 ease-in-back'>
+    <div
+      className={cn(
+        'transform motion-reduce:transform-none transition duration-150 ease-in-back',
+        isDisabled
+          ? ''
+          : 'hover:scale-[115%] hover:rotate-6 active:scale-[85%] active:rotate-6',
+      )}
+    >
       <button
         type='submit'
-        className='w-32 p-3 hover:animate-[shake_0.25s_linear_infinite] motion-reduce:animate-none rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-green-600 hover:bg-green-500 active:bg-green-700'
+        disabled={isDisabled}
+        className='w-32 p-3 enabled:hover:animate-[shake_0.25s_linear_infinite] motion-reduce:animate-none rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-green-600 enabled:hover:bg-green-500 active:bg-green-700 disabled:opacity-50'
       >
         Upload
       </button>
@@ -252,11 +260,12 @@ export const UploadButton = () => {
   );
 };
 
-export const EditButton = () => {
+export const EditButton = ({ isDisabled }: { isDisabled: boolean }) => {
   return (
     <button
       type='submit'
-      className='w-32 p-3 rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 hover:bg-blue-500'
+      disabled={isDisabled}
+      className='w-32 p-3 rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 enabled:hover:bg-blue-500 disabled:opacity-50'
     >
       Save
     </button>

@@ -363,7 +363,11 @@ export const SongForm = ({
             )}
 
             {/* Upload button */}
-            {type === 'upload' ? <UploadButton /> : <EditButton />}
+            {type === 'upload' ? (
+              <UploadButton isDisabled={isLoading || isSubmitting} />
+            ) : (
+              <EditButton isDisabled={isLoading || isSubmitting} />
+            )}
           </div>
         </div>
       </form>
