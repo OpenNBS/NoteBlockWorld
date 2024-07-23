@@ -55,7 +55,7 @@ export class AppModule {
     const encoding = 'utf8';
     const fileData = fs.readFileSync(file, encoding);
 
-    const variableToIgnore = ['APP_DOMAIN', 'NODE_ENV'];
+    const variableToIgnore = ['APP_DOMAIN', 'NODE_ENV', 'WHITELISTED_USERS'];
 
     const variables = fileData
       .split('\n')
