@@ -1,5 +1,6 @@
 import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UploadConst } from '@shared/validation/song/constants';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 
 import {
@@ -118,7 +119,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
         {row('Author', song.uploader?.username)}
         {row('Original author', song.originalAuthor || '--')}
         {row('MIDI file name', song.stats.midiFileName || '--')}
-        {row('Category', song.category)}
+        {row('Category', UploadConst.categories[song.category])}
         {row('Note block compatible', compatibleInfo)}
         {row('Notes', stats.noteCount.toLocaleString('en-US'))}
         {row('Instruments', instrumentInfo)}

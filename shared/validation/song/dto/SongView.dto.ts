@@ -9,6 +9,7 @@ import {
 
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 
+import type { CategoryType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export type SongViewUploader = {
@@ -60,7 +61,7 @@ export class SongViewDto {
 
   @IsString()
   @IsNotEmpty()
-  category: string;
+  category: CategoryType;
 
   @IsString()
   @IsNotEmpty()
