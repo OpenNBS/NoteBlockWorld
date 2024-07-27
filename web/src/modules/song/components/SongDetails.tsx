@@ -124,7 +124,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
         {row('Notes', stats.noteCount.toLocaleString('en-US'))}
         {row('Instruments', instrumentInfo)}
         {row('Layers', stats.layerCount)}
-        {row('Ticks', stats.tickCount)}
+        {row('Ticks', stats.tickCount.toLocaleString('en-US'))}
         {row('Tempo', tempoInfo)}
         {row('Time signature', `${stats.timeSignature}/4`)}
         {row('Running time', formattedDuration)}
