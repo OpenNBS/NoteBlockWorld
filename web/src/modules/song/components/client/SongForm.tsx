@@ -143,6 +143,7 @@ export const SongForm = ({
                 }
                 isLoading={isLoading}
                 disabled={isLocked}
+                errorMessage={errors.originalAuthor?.message}
                 {...register('originalAuthor')}
               />
               <p className='text-sm text-zinc-500'>
