@@ -30,7 +30,7 @@ export function RecentSongsProvider({
     useState<SongPreviewDtoType[]>(initialRecentSongs);
 
   const [recentError, setRecentError] = useState<string>('');
-  const [page, setPage] = useState<number>(2);
+  const [page, setPage] = useState<number>(3);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
