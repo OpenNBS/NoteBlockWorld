@@ -77,7 +77,7 @@ const InstrumentTableRow = ({
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song, formMethods } = useSongProvider(type);
 
-  const instruments = song?.instruments ?? [];
+  const instruments = song?.instruments ?? Array(10).fill('');
 
   const [values, setValues] = useState<Array<string>>(
     Array(instruments.length).fill(''),
