@@ -30,7 +30,7 @@ export const SongSelector = () => {
           position: 'bottom-center',
         });
       } else if (error === 'file-too-large') {
-        toast.error('This file is too large! (Max size: 1 MB)', {
+        toast.error('This file is too large! (Max size: 3 MB)', {
           position: 'bottom-center',
         });
       }
