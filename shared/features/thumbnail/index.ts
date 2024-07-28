@@ -64,7 +64,7 @@ function tintImage(image: Image, color: string): Canvas {
 
   // Apply the note block texture to the color
   ctx.globalCompositeOperation = 'hard-light';
-  ctx.globalAlpha = 0.6;
+  ctx.globalAlpha = 0.67;
   ctx.drawImage(image, 0, 0);
 
   // Reset canvas settings
