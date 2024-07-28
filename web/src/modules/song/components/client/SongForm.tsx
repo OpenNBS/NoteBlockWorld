@@ -141,15 +141,12 @@ export const SongForm = ({
                     </p>
                   </>
                 }
+                description={"(Leave blank if it's an original song)"}
                 isLoading={isLoading}
                 disabled={isLocked}
                 errorMessage={errors.originalAuthor?.message}
                 {...register('originalAuthor')}
               />
-              <p className='text-sm text-zinc-500'>
-                {"(Leave blank if it's an original song)"}
-              </p>
-              {/* TODO: make this into a composable component: <Input.Description>, <Input.Label> etc. */}
             </div>
           </div>
 

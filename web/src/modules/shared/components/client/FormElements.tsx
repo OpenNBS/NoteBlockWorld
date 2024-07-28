@@ -83,6 +83,7 @@ export const Input = forwardRef<
     id: string;
     label: string;
     tooltip?: React.ReactNode;
+    description?: string;
     isLoading?: boolean;
     errorMessage?: string;
   }
@@ -92,6 +93,7 @@ export const Input = forwardRef<
 
   return (
     <>
+      {/* TODO: make this into a composable component: <Input.Description>, <Input.Label> etc. */}
       <Label id={id} label={label} />
       {props.tooltip && <InfoTooltip>{props.tooltip}</InfoTooltip>}
       {isLoading ? (
@@ -106,6 +108,9 @@ export const Input = forwardRef<
             errorMessage ? 'border-red-500' : 'border-zinc-500'
           } disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`}
         />
+      )}
+      {props.description && (
+        <p className='block text-sm text-zinc-500'>{props.description}</p>
       )}
       <ErrorBalloon message={errorMessage} />
     </>
