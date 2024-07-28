@@ -74,7 +74,7 @@ function tintImage(image: Image, color: string): Canvas {
 
 // Function to convert key number to key text
 function getKeyText(key: number): string {
-  const octaves = Math.floor(key / 12);
+  const octaves = Math.floor((key + 9) / 12);
 
   const notes = [
     'C',
@@ -91,7 +91,7 @@ function getKeyText(key: number): string {
     'B',
   ];
 
-  const note = notes[key % 12];
+  const note = notes[(key + 9) % 12];
 
   return `${note}${octaves}`;
 }
