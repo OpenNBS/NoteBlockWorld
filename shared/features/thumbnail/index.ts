@@ -30,7 +30,7 @@ const instrumentColors = [
   '#be6b6b',
   '#bebe19',
   '#9d5a98',
-  '#4d3c98',
+  '#572b21',
   '#bec65c',
   '#be19be',
   '#52908d',
