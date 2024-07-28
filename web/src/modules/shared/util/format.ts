@@ -1,9 +1,9 @@
 export const formatDuration = (totalSeconds: number) => {
-  const minutes = Math.ceil(totalSeconds) / 60;
+  const minutes = Math.floor(Math.ceil(totalSeconds) / 60);
   const seconds = Math.ceil(totalSeconds) % 60;
 
-  const formattedTime = `${minutes.toString().padStart(1, '0')}:${seconds
-    .toString()
+  const formattedTime = `${minutes.toFixed().padStart(1, '0')}:${seconds
+    .toFixed()
     .padStart(2, '0')}`;
 
   return formattedTime;
