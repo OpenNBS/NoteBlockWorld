@@ -84,6 +84,10 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   );
 
   const setValue = (index: number, value: string) => {
+    if (!values) {
+      setValues(Array(instruments.length).fill(''));
+    }
+
     const newValues = [...values];
     newValues[index] = value;
     setValues(newValues);
