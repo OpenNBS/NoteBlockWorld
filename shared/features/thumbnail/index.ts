@@ -58,14 +58,18 @@ function tintImage(image: Image, color: string): Canvas {
     throw new Error('Could not get canvas context');
   }
 
-  ctx.drawImage(image, 0, 0);
-
-  ctx.globalCompositeOperation = 'color';
+  // Fill background with the color
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.globalCompositeOperation = 'destination-in';
+  // Apply the note block texture to the color
+  ctx.globalCompositeOperation = 'hard-light';
+  ctx.globalAlpha = 0.6;
   ctx.drawImage(image, 0, 0);
+
+  // Reset canvas settings
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
 
   tintedImages[color] = canvas;
 
