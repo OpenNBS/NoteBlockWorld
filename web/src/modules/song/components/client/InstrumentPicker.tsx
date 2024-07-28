@@ -112,6 +112,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
   useEffect(() => {
     fetchSoundList().then(setSoundList);
+    setValues(Array(10).fill(''));
   }, []);
 
   useEffect(() => {
