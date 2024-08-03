@@ -10,6 +10,14 @@ import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
+  public static verifyUser(user: UserDocument | null): UserDocument {
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
+  }
+
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
@@ -22,13 +30,13 @@ export class UserService {
     return await user.save();
   }
 
-  public async findByEmail(email: string): Promise<UserDocument | null> {
+  public async findByEmail(email: string) {
     const user = await this.userModel.findOne({ email }).exec();
 
     return user;
   }
 
-  public async findByID(objectID: string): Promise<UserDocument | null> {
+  public async findByID(objectID: string) {
     const user = await this.userModel.findById(objectID).exec();
 
     return user;
@@ -79,9 +87,7 @@ export class UserService {
     return hydratedUser;
   }
 
-  public async getSelfUserData(user: UserDocument | null) {
-    if (!user)
-      throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
+  public async getSelfUserData(user: UserDocument) {
     const usedData = await this.findByID(user._id.toString());
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);

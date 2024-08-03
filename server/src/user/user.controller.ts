@@ -34,6 +34,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get the token owner data' })
   async getMe(@GetRequestToken() user: UserDocument | null) {
+    user = UserService.verifyUser(user);
     return await this.userService.getSelfUserData(user);
   }
 }

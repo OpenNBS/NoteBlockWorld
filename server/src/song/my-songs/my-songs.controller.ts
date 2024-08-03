@@ -6,6 +6,7 @@ import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
 import { GetRequestToken } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import { SongService } from '../song.service';
 
@@ -24,6 +25,7 @@ export class MySongsController {
     @Query() query: PageQueryDTO,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongPageDto> {
+    user = UserService.verifyUser(user);
     return await this.songService.getMySongsPage({
       query,
       user,
