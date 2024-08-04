@@ -17,6 +17,7 @@ import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import {
   SongDocument,
@@ -40,7 +41,7 @@ export class SongService {
     private songUploadService: SongUploadService,
   ) {}
 
-  private isUserValid(user: UserDocument | null) {
+  private isUserValid(user: UserDocument) {
     if (!user) {
       throw new HttpException(
         {
@@ -60,7 +61,7 @@ export class SongService {
   }: {
     body: UploadSongDto;
     file: Express.Multer.File;
-    user: UserDocument | null;
+    user: UserDocument;
   }): Promise<UploadSongResponseDto> {
     // Is user valid?
     this.isUserValid(user);
@@ -86,7 +87,7 @@ export class SongService {
 
   public async deleteSong(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -115,7 +116,7 @@ export class SongService {
   public async patchSong(
     publicId: string,
     body: UploadSongDto,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongResponseDto> {
     const foundSong = (await this.songModel
       .findOne({
@@ -270,9 +271,7 @@ export class SongService {
     }
 
     if (foundSong.visibility === 'private') {
-      if (!user) {
-        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-      }
+      user = UserService.verifyUser(user);
 
       if (foundSong.uploader.toString() !== user._id.toString()) {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -289,7 +288,7 @@ export class SongService {
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
   public async getSongDownloadUrl(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument,
     src?: string,
     packed: boolean = false,
   ): Promise<string> {
@@ -341,7 +340,7 @@ export class SongService {
 
   public async getMySongsPage(arg0: {
     query: PageQueryDTO;
-    user: UserDocument | null;
+    user: UserDocument;
   }): Promise<SongPageDto> {
     const { query, user } = arg0;
 
@@ -383,7 +382,7 @@ export class SongService {
 
   public async getSongEdit(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
