@@ -17,6 +17,7 @@ import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import {
   SongDocument,
@@ -258,7 +259,7 @@ export class SongService {
 
   public async getSong(
     publicId: string,
-    user: UserDocument,
+    user: UserDocument | null,
   ): Promise<SongViewDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -270,9 +271,7 @@ export class SongService {
     }
 
     if (foundSong.visibility === 'private') {
-      if (!user) {
-        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-      }
+      user = UserService.verifyUser(user);
 
       if (foundSong.uploader.toString() !== user._id.toString()) {
         throw new HttpException('Song not found', HttpStatus.NOT_FOUND);

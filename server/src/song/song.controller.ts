@@ -81,7 +81,6 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongViewDto> {
-    user = UserService.verifyUser(user);
     return await this.songService.getSong(id, user);
   }
 
