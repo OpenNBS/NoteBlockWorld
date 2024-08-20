@@ -1,10 +1,4 @@
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import {
-  faHeart,
-  faListCheck,
-  faMusic,
-  faSignOutAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMusic, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
@@ -58,29 +52,6 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
             {/* <UserMenuLink href='/my-profile' icon={faUser} label='Profile' /> */}
             <UserMenuLink href='/my-songs' icon={faMusic} label='My songs' />
             <UserMenuLink href='/logout' icon={faSignOutAlt} label='Sign out' />
-          </div>
-
-          <UserMenuSplitLine />
-
-          <div className='flex flex-col'>
-            <UserMenuLink
-              href='https://github.com/OpenNBS/NoteBlockWorld'
-              icon={faGithub}
-              label='GitHub'
-              external
-            />
-            <UserMenuLink
-              href='https://github.com/orgs/OpenNBS/projects/4'
-              icon={faListCheck}
-              label='Roadmap'
-              external
-            />
-            <UserMenuLink
-              href='https://opencollective.com/opennbs/donate/profile'
-              icon={faHeart}
-              label='Donate'
-              external
-            />
           </div>
         </div>
       </PopoverContent>

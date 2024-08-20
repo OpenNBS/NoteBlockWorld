@@ -1,6 +1,10 @@
 'use client';
 
-import { faCloudUpload, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCloudUpload,
+  faCog,
+  faUserCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -34,6 +38,24 @@ export function UploadButton() {
       </TooltipTrigger>
       <TooltipContent>
         <span className='text-xs'>Upload a song</span>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+export function SettingsButton() {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className='h-8 w-8 p-1'>
+          <FontAwesomeIcon
+            icon={faCog}
+            className='!h-full text-white hover:text-zinc-400 transition-all duration-150 hover:rotate-[45deg]'
+          />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <span className='text-xs'>Settings</span>
       </TooltipContent>
     </Tooltip>
   );
