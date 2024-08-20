@@ -7,31 +7,27 @@ export const CustomMarkdown = ({
   MarkdownContent: string;
 }) => {
   return (
-    <>
-      <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
-        <Markdown
-          components={{
-            p,
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            hr,
-            ul,
-            ol,
-            li,
-            blockquote,
-            pre,
-            code,
-            a,
-          }}
-        >
-          {MarkdownContent}
-        </Markdown>
-      </article>
-    </>
+    <Markdown
+      components={{
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        ul,
+        ol,
+        li,
+        blockquote,
+        pre,
+        code,
+        a,
+      }}
+    >
+      {MarkdownContent}
+    </Markdown>
   );
 };
 
