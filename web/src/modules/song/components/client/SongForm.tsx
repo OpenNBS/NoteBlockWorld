@@ -259,7 +259,7 @@ export const SongForm = ({
                       the same license is retained.
                     </p>
                     <p>
-                      For more information, pleace check out our{' '}
+                      For more information, please check out our{' '}
                       <Link href='/terms'>Terms of Service</Link>!
                     </p>
                   </>
