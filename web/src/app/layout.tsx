@@ -8,6 +8,9 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
+
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
@@ -86,6 +89,10 @@ export default function RootLayout({
             </TooltipProvider>
           </SkeletonTheme>
         </body>
+        {process.env.NODE_ENV === 'production' &&
+          process.env.NEXT_PUBLIC_GA_ID && (
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+          )}
       </html>
     </ReCaptchaProvider>
   );
