@@ -64,7 +64,7 @@ export default function RootLayout({
           />
           <meta name='theme-color' content='#3295ff' />
         </head>
-        <body className={lato.className + ' bg-zinc-900 text-white'}>
+        <body className={lato.className + ' bg-zinc-900 text-white h-full'}>
           <NextTopLoader
             showSpinner={false}
             crawlSpeed={700}
