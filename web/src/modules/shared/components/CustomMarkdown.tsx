@@ -33,10 +33,7 @@ export const CustomMarkdown = ({
 
 const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
   return (
-    <p
-      {...props}
-      className='leading-relaxed text-base my-6 tracking-[0.0125em] text-justify'
-    />
+    <p {...props} className='leading-relaxed text-base my-6 text-zinc-200' />
   );
 };
 
@@ -82,12 +79,7 @@ const ol = ({ node, ...props }: JSX.IntrinsicElements['ol'] & ExtraProps) => {
 };
 
 const li = ({ node, ...props }: JSX.IntrinsicElements['li'] & ExtraProps) => {
-  return (
-    <li
-      {...props}
-      className='text-base leading-relaxed tracking-[0.0125em] pl-1'
-    />
-  );
+  return <li {...props} className='text-base leading-relaxed pl-1' />;
 };
 
 const blockquote = ({
@@ -97,7 +89,7 @@ const blockquote = ({
   return (
     <blockquote
       {...props}
-      className='border-l-4 border-zinc-600 text-zinc-400 pl-4 [&>p]:py-2'
+      className='border-l-4 border-zinc-600 bg-zinc-800/50 rounded-md [&>p]:text-zinc-400 pl-4 [&>p]:py-2'
     />
   );
 };
@@ -116,7 +108,10 @@ const code = ({
   ...props
 }: JSX.IntrinsicElements['code'] & ExtraProps) => {
   return (
-    <code {...props} className='bg-zinc-900 text-white font-mono px-1 py-0.5' />
+    <code
+      {...props}
+      className='bg-zinc-950/50 text-green-400 rounded-md outline outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5'
+    />
   );
 };
 
