@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { getPostData } from '@web/src/lib/posts';
 import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
+import Link from 'next/link';
 
 type HelpPageProps = {
   params: { id: string };
@@ -74,6 +75,12 @@ const HelpPost = ({ params }: HelpPageProps) => {
         </div>
 
         <CustomMarkdown MarkdownContent={post.content} />
+        <p className='text-center italic text-zinc-500 mt-24'>
+          Still need help?{' '}
+          <Link href='/contact' className=' text-blue-500 hover:text-blue-400'>
+            Reach out to us!
+          </Link>{' '}
+        </p>
       </article>
     </>
   );
