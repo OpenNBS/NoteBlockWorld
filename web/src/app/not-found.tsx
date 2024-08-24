@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const lines = [
   'You slipped on a glissando and fell.',
-  'You tuned your note block past F#5.',
+  'You tuned your note block past F♯5.',
   'You forgot the redstone and made a stack of chests.',
   'You went above the polyphony limit.',
   'Note limit for playing is 248.',
@@ -32,6 +32,8 @@ const lines = [
   'You spilled water over your song.',
   "Note blocks don't make good smelting fuel.",
   'You played a birthday song but it was last month.',
+  'That anvil made you A♭ blob.',
+  'You got hit with A♯ sword.',
 ];
 
 export default function NotFound() {
