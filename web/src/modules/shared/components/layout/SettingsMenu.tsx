@@ -1,13 +1,13 @@
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faHeart, faListCheck } from '@fortawesome/free-solid-svg-icons';
 
-import { SettingsButton } from './SignOutButton';
 import {
   Popover,
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
 } from './popover';
+import { SettingsButton } from './SignOutButton';
 import { UserMenuLink } from './UserMenuLink';
 
 export function SettingsMenu() {

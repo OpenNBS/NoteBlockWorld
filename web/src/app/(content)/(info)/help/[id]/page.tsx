@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { getPostData } from '@web/src/lib/posts';
 import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
-import Link from 'next/link';
 
 type HelpPageProps = {
   params: { id: string };
