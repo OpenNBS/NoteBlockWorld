@@ -1,6 +1,9 @@
+import createMDX from '@next/mdx';
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   // See: https://github.com/Automattic/node-canvas/issues/867#issuecomment-1925284985
   webpack: (config) => {
     config.externals.push({
@@ -35,4 +38,6 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);

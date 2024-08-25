@@ -14,6 +14,9 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.4",
+    "@mdx-js/loader": "^3.0.1",
+    "@mdx-js/react": "^3.0.1",
+    "@next/mdx": "^14.2.6",
     "@next/third-parties": "^14.2.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-popover": "^1.0.7",
@@ -55,7 +58,9 @@
   },
   "devDependencies": {
     "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
+    "@types/mdx": "^2.0.13",
     "@types/react-modal": "^3.16.0",
-    "eslint-config-next": "13.4.12"
+    "eslint-config-next": "13.4.12",
+    "eslint-plugin-mdx": "^3.1.5"
   }
 }

@@ -1,5 +1,19 @@
 module.exports = {
-  extends: ['next', 'next/core-web-vitals', '../.eslintrc.js'],
+  extends: [
+    'plugin:mdx/recommended',
+    'next',
+    'next/core-web-vitals',
+    '../.eslintrc.js',
+  ],
+  settings: {
+    'mdx/code-blocks': true,
+  },
+  overrides: [
+    {
+      files: '*.mdx',
+      parser: 'eslint-mdx',
+    },
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
