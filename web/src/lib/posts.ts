@@ -15,7 +15,7 @@ export type PostType = {
 };
 
 export function getSortedPostsData(
-  postsPath: 'help' | 'blog' | 'about',
+  postsPath: 'help' | 'blog',
   sortBy: 'id' | 'date',
 ) {
   const postsDirectory = path.join(process.cwd(), 'posts', postsPath);
@@ -53,10 +53,7 @@ export function getSortedPostsData(
   return allPostsData.sort((a, b) => sortFunction(a, b));
 }
 
-export function getPostData(
-  postsPath: 'help' | 'blog' | 'about',
-  postId: string,
-) {
+export function getPostData(postsPath: 'help' | 'blog', postId: string) {
   // Read markdown file as string
   const fullPath = path.join(process.cwd(), 'posts', postsPath, `${postId}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
