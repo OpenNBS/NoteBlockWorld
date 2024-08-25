@@ -6,10 +6,12 @@ export const NoteBlockWorldLogo = ({
   size,
   orientation = 'adaptive',
   glow,
+  className,
 }: {
   size: number;
   orientation: 'horizontal' | 'vertical' | 'adaptive';
-  glow: boolean;
+  glow?: boolean;
+  className?: string;
 }) => {
   let flexConfig, marginConfig;
 
@@ -30,6 +32,7 @@ export const NoteBlockWorldLogo = ({
         flexConfig,
         'flex items-center justify-center gap-2 min-w-fit max-w-full',
         glow ? 'animate-[nbw-glow_3s_ease-in-out_infinite]' : '',
+        className,
       )}
     >
       <Image

@@ -45,6 +45,8 @@ export const TeamMemberCard = ({
 
 export const Team = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className='flex flex-col gap-8 my-10 mx-8'>{children}</section>
+    <section className='flex flex-col gap-8 mt-10 mx-8 mb-16'>
+      {children}
+    </section>
   );
 };
