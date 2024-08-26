@@ -3,6 +3,7 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { CategoryButtonGroup } from './client/CategoryButton';
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
@@ -56,8 +57,9 @@ export const HomePageComponent = () => {
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
       {/* RECENT SONGS */}
-      <div className='flex flex-row justify-between items-center gap-4'>
+      <div className='flex flex-row flex-wrap justify-between items-center gap-4'>
         <h2 className='text-xl uppercase'>Recent songs</h2>
+        <CategoryButtonGroup />
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
