@@ -123,11 +123,7 @@ const a = ({
 }: JSX.IntrinsicElements['a'] & ExtraProps) => {
   const { ref, ...rest } = props;
   return (
-    <Link
-      {...rest}
-      href={href}
-      className='underline text-blue-400 hover:text-blue-300'
-    >
+    <Link {...rest} href={href} className='text-blue-400 hover:text-blue-300'>
       {children}
     </Link>
   );
