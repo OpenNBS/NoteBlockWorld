@@ -15,7 +15,7 @@ Custom instruments in Note Block Studio allow you to use any sound file you want
 
 Here's how you can create and use custom instruments in Note Block Studio:
 
-1. Open Note Block Studio and click _Create a new song_ to start a new project.
+1. Launch Note Block Studio and click _Create a new song_ to start a new project.
 
 2. Click the _Settings_ menu at the top of the window, and select the _Instrument settings..._ entry.
 
