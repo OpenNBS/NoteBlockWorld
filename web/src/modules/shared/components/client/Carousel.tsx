@@ -178,19 +178,11 @@ export const CarouselContent = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { carouselRef, orientation } = useCarousel();
+  const { carouselRef } = useCarousel();
 
   return (
     <div ref={carouselRef} className='overflow-hidden p-4 m-[-1rem]'>
-      <div
-        ref={ref}
-        className={cn(
-          'flex',
-          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
-          className,
-        )}
-        {...props}
-      />
+      <div ref={ref} className={cn('flex', className)} {...props} />
     </div>
   );
 });
@@ -200,18 +192,12 @@ export const CarouselItem = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { orientation } = useCarousel();
-
   return (
     <div
       ref={ref}
       role='group'
       aria-roledescription='slide'
-      className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full',
-        orientation === 'horizontal' ? 'pl-4' : 'pt-4',
-        className,
-      )}
+      className={cn('w-fit', className)}
       {...props}
     />
   );
@@ -285,6 +271,84 @@ export const CarouselNext = forwardRef<
   );
 });
 CarouselNext.displayName = 'CarouselNext';
+
+const CarouselButtonSmall = forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      className={cn(
+        'absolute h-10 w-10 rounded-full bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 ease-in-out cursor-pointer',
+        className,
+      )}
+      {...props}
+    />
+  );
+});
+
+CarouselButtonSmall.displayName = 'CarouselButtonSmall';
+
+export const CarouselPreviousSmall = forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+
+  if (!canScrollPrev) {
+    return null;
+  }
+
+  return (
+    <CarouselButtonSmall
+      ref={ref}
+      className={cn(
+        orientation === 'horizontal'
+          ? '-left-5 top-1/2 -translate-y-1/2'
+          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+        'shadow-[15px_0_20px_20px_rgb(24,24,27)]',
+        className,
+      )}
+      onClick={scrollPrev}
+      {...props}
+    >
+      <FontAwesomeIcon icon={faChevronLeft} className='h-4 w-4' />
+      <span className='sr-only'>Previous slide</span>
+    </CarouselButtonSmall>
+  );
+});
+CarouselPreviousSmall.displayName = 'CarouselPreviousSmall';
+
+export const CarouselNextSmall = forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { orientation, scrollNext, canScrollNext } = useCarousel();
+
+  if (!canScrollNext) {
+    return null;
+  }
+
+  return (
+    <CarouselButtonSmall
+      ref={ref}
+      className={cn(
+        orientation === 'horizontal'
+          ? '-right-5 top-1/2 -translate-y-1/2'
+          : 'bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+        'shadow-[-15px_0_20px_20px_rgb(24,24,27)]',
+        className,
+      )}
+      onClick={scrollNext}
+      {...props}
+    >
+      <FontAwesomeIcon icon={faChevronRight} className='h-4 w-4' />
+      <span className='sr-only'>Next slide</span>
+    </CarouselButtonSmall>
+  );
+});
+CarouselNextSmall.displayName = 'CarouselNextSmall';
 
 type UseDotButtonType = {
   selectedIndex: number;
