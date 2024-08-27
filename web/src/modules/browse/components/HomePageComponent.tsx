@@ -18,6 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
+import { WelcomeBanner } from '../WelcomeBanner';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
@@ -27,6 +28,9 @@ export const HomePageComponent = () => {
 
   return (
     <>
+      {/* Welcome banner/Hero */}
+      <WelcomeBanner />
+
       {/* FEATURED SONGS */}
       <div className='flex flex-wrap justify-between gap-6 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
