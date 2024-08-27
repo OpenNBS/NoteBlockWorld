@@ -60,7 +60,7 @@ export const HomePageComponent = () => {
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
       {/* RECENT SONGS */}
-      <div className='flex flex-row flex-wrap justify-between items-center gap-4'>
+      <div className='flex flex-row flex-wrap justify-between items-center gap-4 mb-2'>
         <h2 className='text-xl uppercase z-10'>Recent songs</h2>
         <CategoryButtonGroup />
       </div>
