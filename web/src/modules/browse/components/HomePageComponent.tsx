@@ -23,8 +23,7 @@ import { WelcomeBanner } from '../WelcomeBanner';
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
 
-  const { recentSongs, increasePageRecent, isLoading, hasMore } =
-    useRecentSongsProvider();
+  const { recentSongs, increasePageRecent, hasMore } = useRecentSongsProvider();
 
   return (
     <>
