@@ -35,7 +35,7 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   };
 }
 
-const HelpPost = ({ params }: BlogPageProps) => {
+const BlogPost = ({ params }: BlogPageProps) => {
   const { id } = params;
 
   const post = getPostData('blog', id);
@@ -79,4 +79,4 @@ const HelpPost = ({ params }: BlogPageProps) => {
   );
 };
 
-export default HelpPost;
+export default BlogPost;
