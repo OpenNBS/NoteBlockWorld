@@ -1,3 +1,5 @@
+import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -12,9 +14,19 @@ async function BlogPage() {
 const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
   return (
     <>
-      <h1 className='text-center text-5xl text-zinc-300 font-light uppercase mt-12 mb-16'>
+      <div className='relative w-0 h-0' aria-hidden={true}>
+        <FontAwesomeIcon
+          icon={faNewspaper}
+          className='absolute text-[8rem] md:text-[12rem] text-zinc-400 opacity-15 rotate-[-15deg] translate-y-8'
+        />
+      </div>
+
+      <h1 className='text-center text-5xl text-zinc-300 font-light uppercase mt-12 mb-6'>
         Blog
       </h1>
+      <h2 className='text-center text-xl font-light mb-12'>
+        {"See what we've been working on!"}
+      </h2>
 
       <section className='grid grid-auto-fit-xl max-w-screen-md mx-auto justify-center w-full items-center gap-8'>
         {posts.map((post, i) => (
