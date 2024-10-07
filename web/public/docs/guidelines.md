@@ -43,7 +43,7 @@ Be mindful when engaging in discussions that aren't related to the content of th
 
 You may not promote or engage in harassment, bigotry, discrimination, or any form of offensive behavior through the content you contribute. Treat everyone with respect, regardless of gender, ethnicity, religion, origin, sexual orientation, or any other trait of their identity. We take the safety of our members seriously and want this to be a welcoming space for everyone involved.
 
-### Criticism
+#### Criticism
 
 Avoid mocking, sarcasm, or irony when engaging with other members. It’s okay to not like a song, but any criticism must always be constructive. If you wish to provide feedback, kindly point out what details or aspects you think could be improved upon, but do not bash, disrespect or disparage the author. Toxic behavior won’t be tolerated!
 
