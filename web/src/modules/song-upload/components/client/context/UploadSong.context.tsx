@@ -201,6 +201,7 @@ export const UploadSongProvider = ({
 
       formMethods.setValue(
         'thumbnailData.backgroundColor',
+        // @ts-ignore
         bgColors[colorKeys[randomColor]].dark,
       );
 
