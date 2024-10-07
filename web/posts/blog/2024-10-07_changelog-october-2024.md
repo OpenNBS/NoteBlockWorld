@@ -27,15 +27,21 @@ Here's what we've been up to since the last update:
   - The external links (_GitHub_, _Changelog_, and _Donate_) have been moved from inside your user menu into a 'Settings' menu, so they're now accessible even if you aren't logged in.
   - There's now a _Contact_ page accessible from within the new Settings menu.
 
+- Added the Community Guidelines, a document with rules and recommendations we put in place to make sure Note Block World is a safe and welcoming place for everyone. Please read them carefully, and follow them as closely as you can when contributing content to the website!
+
+### Bugfixes and improvements
+
 - Added more mob sounds to the available custom instruments:
+
   - Polar Bear
   - Phantom
   - Evoker
   - Warden
   - All previously missing Ghast sounds such as `affectionate_scream`
+  - Chain breaking sounds (uh, that's not a mob sound, but it's there now!)
 
-### Bugfixes and improvements
-
+- The buttons for the thumbnail background color will now be highlighted according to the selected color.
+- A random background color for the thumbnail will be selected when you open the upload page.
 - Fixed a rounding error in the BPM field of songs that could display it with maaaaaany trailing zeroes.
 - Added a custom 404 (Not Found) page. (Why is that listed here?! You'll see... 😏)
 - Fixed songs uploaded between 28-29 days ago being shown as uploaded '0 months ago'. (Who knew, it's over four weeks but less than a month!)
