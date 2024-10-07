@@ -36,7 +36,7 @@ const HelpPageComponent = ({ posts }: { posts: PostType[] }) => {
               className='relative hover:scale-105 transition-all duration-200'
             >
               <Image
-                src={post.image || '/demo.png'}
+                src={post.image || '/img/post.png'}
                 width={480}
                 height={360}
                 alt={post.title}

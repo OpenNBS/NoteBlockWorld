@@ -25,7 +25,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
           >
             <article key={i} className='flex flex-col'>
               <Image
-                src={post.image || '/demo.png'}
+                src={post.image || '/img/post.png'}
                 width={480}
                 height={360}
                 alt=''
