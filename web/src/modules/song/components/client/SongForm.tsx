@@ -19,7 +19,10 @@ import {
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList, faWarning } from '@fortawesome/free-solid-svg-icons';
+import {
+  faExclamationCircle,
+  faExternalLink,
+} from '@fortawesome/free-solid-svg-icons';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -41,19 +44,32 @@ export const SongForm = ({
 
   return (
     <>
-      <div className='bg-yellow-700 border-yellow-300 text-yellow-300 border-2 rounded-lg px-3 py-2 text-sm'>
-        <FontAwesomeIcon icon={faWarning} className='h-4 relative float-left' />
-        Please make sure to review our{' '}
-        <Link href='/guidelines'>Community Guidelines</Link> before uploading a
-        song!
-      </div>
-
       <form
         className={`flex flex-col gap-6`}
         onSubmit={formMethods.handleSubmit(() => {
           submitSong();
         })}
       >
+        <div className='flex items-center justify-center gap-2 my-3 bg-cyan-800 border-cyan-400 text-cyan-300 border-2 rounded-lg px-3 py-2 text-sm'>
+          <FontAwesomeIcon icon={faExclamationCircle} className='h-5' />
+          <p>
+            Please make sure to carefully review our{' '}
+            <Link
+              href='/guidelines'
+              target='_blank'
+              className='text-blue-400 hover:text-blue-300 hover:underline'
+            >
+              Community Guidelines
+            </Link>
+            <FontAwesomeIcon
+              className='text-blue-400 ml-1 mr-1'
+              size='xs'
+              icon={faExternalLink}
+            />{' '}
+            before uploading a song!
+          </p>
+        </div>
+
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
