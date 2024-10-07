@@ -15,6 +15,7 @@ Here's what we've been up to since the last update:
 
 ### New features
 
+- You can now filter the recent songs by category on the home page! The buttons also show how many songs have been uploaded in each category.
 - Added a Help Center! It contains five articles on using the basic features of Note Block Studio and Note Block World.
 - Added a blog! It will host everything about the website, from change logs on major updates, and technical writing on some of the development aspects of the website, to tips on how to make your note block songs better!
   - The idea is to host guest writers from the community once in a while, so stay tuned!
