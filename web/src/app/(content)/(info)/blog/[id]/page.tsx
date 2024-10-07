@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
-import { getPostData } from '@web/src/lib/posts';
+import { PostType, getPostData } from '@web/src/lib/posts';
 import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
 
@@ -37,8 +38,13 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
 
 const BlogPost = ({ params }: BlogPageProps) => {
   const { id } = params;
+  let post: PostType;
 
-  const post = getPostData('blog', id);
+  try {
+    post = getPostData('blog', id);
+  } catch (error) {
+    notFound();
+  }
 
   return (
     <>

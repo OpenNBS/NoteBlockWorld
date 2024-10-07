@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-import { getPostData } from '@web/src/lib/posts';
+import { PostType, getPostData } from '@web/src/lib/posts';
 import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
 
@@ -38,8 +39,13 @@ export function generateMetadata({ params }: HelpPageProps): Metadata {
 
 const HelpPost = ({ params }: HelpPageProps) => {
   const { id } = params;
+  let post: PostType;
 
-  const post = getPostData('help', id);
+  try {
+    post = getPostData('help', id);
+  } catch (error) {
+    notFound();
+  }
 
   return (
     <>
