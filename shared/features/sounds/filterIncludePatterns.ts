@@ -6,6 +6,7 @@ export const SEARCH_INCLUDE_PATTERNS = [
   'bamboo/place',
   'beacon/',
   'bone_block/break',
+  'block/chain/break',
   'brewing_stand/brew',
   'deepslate/break',
   'enchantment_table/enchant',
