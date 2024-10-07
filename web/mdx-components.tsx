@@ -1,6 +1,9 @@
 import type { MDXComponents } from 'mdx/types';
+
 import {
-  p,
+  a,
+  blockquote,
+  code,
   h1,
   h2,
   h3,
@@ -8,13 +11,11 @@ import {
   h5,
   h6,
   hr,
-  ul,
-  ol,
   li,
-  blockquote,
+  ol,
+  p,
   pre,
-  code,
-  a,
+  ul,
 } from '@web/src/modules/shared/components/CustomMarkdown';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
