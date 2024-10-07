@@ -1,5 +1,9 @@
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { faHeart, faListCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faComment,
+  faHeart,
+  faListCheck,
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
   Popover,
@@ -45,6 +49,7 @@ export function SettingsMenu() {
               label='Donate'
               external
             />
+            <UserMenuLink href='/contact' icon={faComment} label='Contact us' />
           </div>
         </div>
       </PopoverContent>

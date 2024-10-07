@@ -4,7 +4,6 @@ import {
   faQuestionCircle,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -14,6 +13,7 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 
+import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 
 export async function Header() {
@@ -71,34 +71,30 @@ export async function Header() {
 
         {/* Info pages */}
         <div className='flex flex-1 justify-center gap-1 h-8 text-center'>
-          <Link
+          <BlockTab
             href='/'
-            className='bevel p-2 flex-1 sm:min-w-20 max-w-28 flex items-center justify-center gap-2 bg-purple-700 after:bg-purple-900 before:bg-purple-950 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
-          >
-            <FontAwesomeIcon icon={faMusic} />
-            <span className='hidden sm:block'>Songs</span>
-          </Link>
-          <Link
+            icon={faMusic}
+            label='Songs'
+            className='bg-purple-700 after:bg-purple-900 before:bg-purple-950'
+          />
+          <BlockTab
             href='/help'
-            className='bevel p-2 flex-1 sm:min-w-20 max-w-28 flex items-center justify-center gap-2 bg-blue-700 after:bg-blue-900 before:bg-blue-950 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
-          >
-            <FontAwesomeIcon icon={faQuestionCircle} />
-            <span className='hidden sm:block'>Help</span>
-          </Link>
-          <Link
+            icon={faQuestionCircle}
+            label='Help'
+            className='bg-blue-700 after:bg-blue-900 before:bg-blue-950'
+          />
+          <BlockTab
             href='/blog'
-            className='bevel p-2 flex-1 sm:min-w-20 max-w-28 flex items-center justify-center gap-2 bg-green-700 after:bg-green-900 before:bg-green-950 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
-          >
-            <FontAwesomeIcon icon={faNewspaper} />
-            <span className='hidden sm:block'>Blog</span>
-          </Link>
-          <Link
+            icon={faNewspaper}
+            label='Blog'
+            className='bg-green-700 after:bg-green-900 before:bg-green-950'
+          />
+          <BlockTab
             href='/about'
-            className='bevel p-2 flex-1 sm:min-w-20 max-w-28 flex items-center justify-center gap-2 bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
-          >
-            <FontAwesomeIcon icon={faUser} />
-            <span className='hidden sm:block'>About</span>
-          </Link>
+            icon={faUser}
+            label='About'
+            className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
+          />
         </div>
 
         {/* Sign in / Profile */}
