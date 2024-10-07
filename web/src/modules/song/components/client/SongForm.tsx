@@ -18,6 +18,8 @@ import {
   UploadButton,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faList, faWarning } from '@fortawesome/free-solid-svg-icons';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -39,6 +41,13 @@ export const SongForm = ({
 
   return (
     <>
+      <div className='bg-yellow-700 border-yellow-300 text-yellow-300 border-2 rounded-lg px-3 py-2 text-sm'>
+        <FontAwesomeIcon icon={faWarning} className='h-4 relative float-left' />
+        Please make sure to review our{' '}
+        <Link href='/guidelines'>Community Guidelines</Link> before uploading a
+        song!
+      </div>
+
       <form
         className={`flex flex-col gap-6`}
         onSubmit={formMethods.handleSubmit(() => {
