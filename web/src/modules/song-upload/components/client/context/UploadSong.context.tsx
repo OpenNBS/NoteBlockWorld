@@ -201,6 +201,7 @@ export const UploadSongProvider = ({
 
       formMethods.setValue(
         'thumbnailData.backgroundColor',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         bgColors[colorKeys[randomColor]].dark,
       );
