@@ -1,11 +1,19 @@
-<center>
-<img src="img/header.png" alt="Note Block World header" />
+<p align="center">
+  <img src="img/header.png" alt="Note Block World header" />
+</p>
 
-**A website to share, discover and listen to note block music from all around the world!**
+<p align="center">
+  <strong>
+    A website to share, discover and listen to note block music from all around the world!
+  </strong>
+</p>
 
-👥 [Discord](https://discord.gg/open-note-block-studio-608692895179997252) • 📆 [Roadmap](https://github.com/orgs/OpenNBS/projects/4) • 🗨 [Feedback](https://github.com/OpenNBS/NoteBlockWorld/issues/new/choose) • ☕ [Buy us a coffee!](https://opencollective.com/opennbs/donate)
-
-</center>
+<p align="center">
+  👥 <a href="https://discord.gg/open-note-block-studio-608692895179997252">Discord</a> • 
+  📆 <a href="https://github.com/orgs/OpenNBS/projects/4">Roadmap</a> • 
+  🗨 <a href="https://github.com/OpenNBS/NoteBlockWorld/issues/new/choose">Feedback</a> • 
+  ☕ <a href="https://opencollective.com/opennbs/donate">Buy us a coffee!</a>
+</p>
 
 ## ℹ About the project
 
