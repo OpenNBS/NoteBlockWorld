@@ -1,4 +1,4 @@
-Note Block World is the largest public community centered around Minecraft note blocks, developed by the same folks who brought you [Open Note Block Studio](https://opennbs.org). It lets you discover, share and listen to note block music more easily than ever!
+Note Block World is the largest public community centered around Minecraft note blocks, developed by the same folks who brought you [Note Block Studio](https://noteblock.studio/). It lets you discover, share and listen to note block music more easily than ever!
 
 ## History
 

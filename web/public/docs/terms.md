@@ -4,7 +4,7 @@
 
 Welcome to Note Block World! We, at OpenNBS, believe in the power of collaboration, art, and creativity. This platform allows note block musicians to share their creations, discover new works from the community, and enjoy their favorite pieces anywhere they go.
 
-Our core philosophy is that making things out in the open benefits everyone. That’s why, like Open Note Block Studio, this site’s entire source code is available under a permissive license.
+Our core philosophy is that making things out in the open benefits everyone. That’s why, like Note Block Studio, this site’s entire source code is available under a permissive license.
 
 These Terms describe our commitments to you, and your rights and responsibilities when using our service. Please read them carefully and reach out to us if you have any questions. **By using and submitting content to Note Block World, you agree to these Terms!**
 
@@ -76,7 +76,7 @@ These Terms are the only valid bind between you and Note Block World. Unless oth
 
 ### 9. Termination
 
-These Terms may be revoked at any time by either you or Note Block World. If you no longer agree with these Terms and have previously uploaded content, you may terminate your account at any time, which will remove all your content from the website. Deleting your content does not revoke the license you granted us, and we may keep the information you submitted for backup purposes.
+These Terms may be revoked at any time by either you or Note Block World. If you no longer agree with these Terms and have previously uploaded content, you may terminate your account at any time, which will remove all your content from the website. Deleting your content does not revoke the license(s) you granted us when submitting content to the website, and we may keep the information you submitted for backup purposes.
 
 ### 10. Updates
 

@@ -18,7 +18,7 @@ This guide will walk you through the process of uploading a song to Note Block W
 3. Drag and drop your song file into the upload area, or click the upload area to select a file from your computer.
 
    > **Tip:**
-   > You can only upload songs in the `.nbs` format. If you have a song in a different format (such as a MIDI file), you can convert it to `.nbs` using [Open Note Block Studio](https://opennbs.org/).
+   > You can only upload songs in the `.nbs` format. If you have a song in a different format (such as a MIDI file), you can convert it to `.nbs` using [Note Block Studio](https://noteblock.studio/).
 
    > **Tip:**
    > The maximum file size for a song is **3 MB**, although you're unlikely to reach this limit with most songs!

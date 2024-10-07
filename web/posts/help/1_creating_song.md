@@ -1,6 +1,6 @@
 ---
 shortTitle: 'Creating a song'
-title: 'How to create a song in Open Note Block Studio'
+title: 'How to create a song in Note Block Studio'
 date: '2020-01-01'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
