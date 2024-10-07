@@ -12,6 +12,7 @@ import {
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
+import { cn } from '@web/src/lib/tailwind.utils';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);
@@ -99,11 +100,13 @@ function ThumbnailSliders({
 const ColorButton = ({
   color,
   tooltip,
+  active,
   onClick,
   disabled,
 }: {
   color: string;
   tooltip: string;
+  active: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled: boolean;
@@ -112,7 +115,10 @@ const ColorButton = ({
     <TooltipTrigger asChild>
       <button
         type='button'
-        className='w-6 h-6 rounded-full flex-none border-2 border-white border-opacity-30 disabled:opacity-30'
+        className={cn(
+          'w-6 h-6 rounded-full flex-none border-2 border-zinc-200 border-opacity-30 disabled:opacity-30',
+          active && 'outline outline-2 outline-zinc-200',
+        )}
         style={{ backgroundColor: color }}
         disabled={disabled}
         onClick={onClick}
@@ -163,6 +169,9 @@ export const SongThumbnailInput = ({
               color={dark}
               tooltip={name}
               disabled={isLocked}
+              active={
+                formMethods.watch('thumbnailData.backgroundColor') === dark
+              }
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
 
