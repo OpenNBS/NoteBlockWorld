@@ -1,7 +1,7 @@
 ---
 shortTitle: 'Using custom instruments'
 title: 'Working with custom instruments in your note block songs'
-date: '2020-01-01'
+date: '2024-10-07'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
 image: '/img/help/5_custom_instruments.png'

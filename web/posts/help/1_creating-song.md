@@ -1,7 +1,6 @@
 ---
 shortTitle: 'Creating a song'
 title: 'How to create a song in Note Block Studio'
-date: '2020-01-01'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
 image: '/img/help/1_creating_song.png'
@@ -13,7 +12,7 @@ This guide will walk you through the process of creating a song using Note Block
 
 **Note Block Studio** is a free, open-source music editor that lets you create songs using Minecraft note blocks. We'll be using it to create a song that we can upload to Note Block World!
 
-1. Download and install [Note Block Studio](https://opennbs.org/), a free and open-source tool for creating songs in the Note Block format.
+1. Download and install [Note Block Studio](https://noteblock.studio/), a free and open-source tool for creating songs in the Note Block format.
 
 2. Launch Note Block Studio and click 'Create a new song' to start a new project.
 

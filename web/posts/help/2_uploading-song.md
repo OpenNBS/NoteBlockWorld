@@ -1,7 +1,7 @@
 ---
 shortTitle: 'Uploading a song'
 title: 'How to upload a song to Note Block World'
-date: '2020-01-01'
+date: '2024-10-07'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
 image: '/img/help/2_uploading_song.png'
@@ -28,7 +28,7 @@ This guide will walk you through the process of uploading a song to Note Block W
    > **Tip:**
    > Pay close attention to our [Community Guidelines](/guidelines) when uploading a song!
 
-5. Pick a license for your song. You can choose between the **Standard License** and a **[Creative Commons Share-Alike](https://creativecommons.org/licenses/by-sa/4.0/)** License. For more information on the licenses available, check out our guide on [downloading songs](/help/4_downloading_songs).
+5. Pick a license for your song. You can choose between the **Standard License** and a **[Creative Commons Share-Alike](https://creativecommons.org/licenses/by-sa/4.0/)** License. For more information on the licenses available, check out our guide on [downloading songs](/help/downloading-songs).
 
 6. If you've used custom instruments in your song, make sure to pick a sound file for each custom instrument you've used.
 
@@ -36,4 +36,4 @@ This guide will walk you through the process of uploading a song to Note Block W
 
 Congratulations! Your song is now live on Note Block World! You can share it with your friends and followers, and start building a community around your music.
 
-For more tips on how to make the best use of the upload settings, check out our exclusive guide on [Uploading a compelling song](/blog/how-to-upload-a-compelling-song)!
+For more tips on how to make the best use of the upload settings, check out our upcoming guide on [uploading a compelling song](/blog)!

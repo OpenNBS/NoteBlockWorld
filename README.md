@@ -17,7 +17,7 @@
 
 ## ℹ About the project
 
-**Note Block World** is a collaborative, social website where users can share their note block songs made with [Note Block Studio](https://opennbs.org/). Our goal is to give the NBS community a platform to share their creations with the world, discover new music and connect with other creators!
+**Note Block World** is a collaborative, social website where users can share their note block songs made with [Note Block Studio](https://noteblock.studio/). Our goal is to give the NBS community a platform to share their creations with the world, discover new music and connect with other creators!
 
 ## 💬 Issues/Feedback
 

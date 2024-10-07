@@ -1,7 +1,7 @@
 ---
 shortTitle: 'Downloading songs'
 title: 'Listening and downloading songs from Note Block World'
-date: '2020-01-01'
+date: '2024-10-07'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
 image: '/img/help/4_downloading_songs.png'
@@ -41,7 +41,7 @@ When you download a song from Note Block World, it's important to credit the aut
 
 Songs uploaded to Note Block World may be available under either of the following licenses:
 
-- **Standard License**: The author licenses the song only to Note Block World so we can distribute and show it to users on the website. You can listen to the song and use it for personal purposes, but you may not be allowed to use it in projects that you intend to distribute or sell - you may need to get permission from the author to use it for these purposes.
+- **Standard License**: The author licenses the song only to Note Block World so we can distribute and show it to users on the website. You can listen to the song and use it for personal purposes, but you are not allowed to use it in projects that you intend to distribute or sell - you need to get permission from the author to use it for these purposes.
 
 - **Creative Commons Share-Alike**: A Creative Commons license allows you to freely use the song in your projects (even commercially), as well as make adaptations and remixes of the song, as long as you credit the author and share your work under the same license. For more information on Creative Commons licenses, check out the [Creative Commons](https://creativecommons.org/licenses/by-sa/4.0/) website.
 

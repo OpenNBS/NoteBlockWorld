@@ -4,20 +4,20 @@
 
 Welcome to **Note Block World**! We strive to be the best online community for everyone to create, share, and listen to note block music from around the world, no matter your level of experience!
 
-In this page, you’ll find a few guidelines that we've put in place to help keep Note Block World a healthy, safe, and positive space for all of our members. We kindly ask that you read these Guidelines carefully and follow them closely when contributing to the community!
+In this page, you’ll find a few guidelines that we’ve put in place to help keep Note Block World a healthy, safe, and positive space for all of our members. We kindly ask that you read these Guidelines carefully and follow them closely when contributing to the community!
 
 As Note Block World evolves, we’ll update these guidelines to make sure they cover all the different aspects of the community. Check back from time to time to stay up to date!
 
 ## Scope
 
-Any time we refer to "content" below, we’re talking about any form of public, personally identifiable contribution you make while browsing the website. This includes:
+Any time we refer to “content” below, we’re talking about any form of public, personally identifiable contribution you make while browsing the website. This includes:
 
 - uploaded songs and their internal content (including the file name and typable fields inside the song file itself, such as the description, instrument and layer names);
-- any metadata you attach to uploaded songs, e.g. the song's title, description and tags;
+- any metadata you attach to uploaded songs, e.g. the song’s title, description and tags;
 - public profile information, such as your profile picture, profile description and username;
 - any other form of public contribution, such as comments, playlist names, and descriptions.
 
-These Guidelines extend beyond the space of this website. If you contact someone you've found in Note Block World on another platform, your communication and interactions through that platform should also respect these rules.
+These Guidelines extend beyond the space of this website. If you contact someone you’ve found in Note Block World on another platform, your communication and interactions through that platform should also respect these rules.
 
 ## Guidelines
 
@@ -29,7 +29,7 @@ Below are some general rules to keep in mind when using Note Block World:
 
 #### Minimum age
 
-You must be at least 13 years old to sign up for Note Block World. If you’re under this age, do **not** sign up for the website! Your use of the website must be supervised by an adult, parent or legal guardian if you're underage.
+You must be at least 13 years old to sign up for Note Block World. If you’re under this age, do **not** sign up for the website! Your use of the website must be supervised by an adult, parent or legal guardian if you’re underage.
 
 #### Watch your content
 
@@ -37,7 +37,7 @@ Do not submit illegal, sexually suggestive, explicit, or otherwise NSFW (not saf
 
 #### Discussions
 
-Be mindful when engaging in discussions that aren't related to the content of the songs, particularly when they're about sensitive topics, such as tragic world events. Our focus in this community is on the richness and diversity of note block music from creators worldwide. Discussions about real world topics can evoke divisive opinions and detract from that atmosphere, so try to keep discussions light-hearted and friendly!
+Be mindful when engaging in discussions that aren’t related to the content of the songs, particularly when they’re about sensitive topics, such as tragic world events. Our focus in this community is on the richness and diversity of note block music from creators worldwide. Discussions about real world topics can evoke divisive opinions and detract from that atmosphere, so try to keep discussions light-hearted and friendly!
 
 #### Treating other users
 
@@ -61,7 +61,7 @@ Do not upload content that you don’t have permission to use, including images,
 
 #### Misleading or false information
 
-Do not spread false or misleading content meant to confuse, harm, or prejudice others. Do not promote fraud or abuse.
+Do not spread false or misleading content meant to confuse, harm, or prejudice others. Do not promote fraud or abuse. Do not impersonate others, or pretend to be someone you’re not.
 
 #### Usage permissions
 
@@ -75,7 +75,19 @@ Note Block World will never ask for your password or other sensitive information
 
 ### Your content
 
-While these aren't strict rules, we encourage you to watch the following suggestions to ensure a better experience for everyone on Note Block World:
+While these aren’t strict rules, we encourage you to watch the following suggestions to ensure a better experience for everyone on Note Block World:
+
+#### License
+
+Make sure to pay close attention to the license you’re choosing when you upload a song! There are two licenses available:
+
+- **Standard License**: This license allows Note Block World to host and distribute your song on the website, and for other users to listen to it, but not to download it or use it in their own creations. Read our [Terms of Service](/terms) for more information.
+
+- **Creative Commons Share-Alike License**: This license allows other users to download your song and use it in their own creations, as long as they give you credit and share their work under the same license. Check out the [Creative Commons website](https://creativecommons.org/licenses/by-sa/4.0/) for more information.
+
+We believe choosing an open license is a great way to foster creativity and collaboration in the community. However, keep in mind that once you’ve chosen a Creative Commons license, you cannot retroactively revoke the permissions you granted by changing the license to a more restrictive one!
+
+Make sure to review our [licensing guide](/help/downloading_songs) for more information on the licenses available.
 
 #### Low-effort content
 
@@ -85,27 +97,27 @@ We want Note Block World to be a high-quality collection of note block songs! Wh
 - Titles, author names, and metadata should accurately describe your song.
 - Try not to post unfinished works – you can share work-in-progress tracks in our Discord community!
 
-Content that doesn't meet a minimum effort threshold may be removed.
+Content that doesn’t meet a minimum effort threshold may be removed.
 
 #### Language
 
-When submitting songs or comments, please use the English language! As much as we'd love to support other languages, our team is unable to moderate content that’s not written in English. We'd also like to make the website accessible to everyone, and staying limited to one language helps with that.
+When submitting songs or comments, please use the English language! As much as we’d love to support other languages, our team is unable to moderate content that’s not written in English. We’d also like to make the website accessible to everyone, and staying limited to one language helps with that.
 
 If your song title isn’t in a Latin script, include a translation or transliteration (e.g., romanized Japanese) along with the original title. If an official English title exists for your track, prefer using that instead!
 
 #### Spam
 
-Avoid clickbait titles or thumbnails (e.g., using buzzwords or flashy icons deliberately meant to attract attention). Let your song’s content speak for itself! For instance, try to frame an interesting part of your song's arrangement in the thumbnail.
+Avoid clickbait titles or thumbnails (e.g., using buzzwords or flashy icons deliberately meant to attract attention). Let your song’s content speak for itself! For instance, try to frame an interesting part of your song’s arrangement in the thumbnail.
 
-Titles should be descriptive, and free of unnecessary qualifiers like “10,000 NOTES!”, unless relevant to the work you're submitting.
+Titles should be descriptive, and free of unnecessary qualifiers like “10,000 NOTES!”, unless relevant to the work you’re submitting.
 
 Avoid spam submissions, troll content, or adding “garbage” characters (e.g. zalgo script) to your metadata. Content should have meaning, even if it’s personal!
 
 #### Art-oriented submissions
 
-It's fine to use note blocks to make pixel art for your thumbnails, or even upload songs primarily meant to showcase art done within the program. However, since this is a music platform, your songs should sound good, too! It wouldn’t be fun to stumble upon a loud, chaotic arrangement just because it looks cool – it must sound good as well!
+It’s fine to use note blocks to make pixel art for your thumbnails, or even upload songs primarily meant to showcase art done within the program. However, since this is a music platform, your songs should sound good, too! It wouldn’t be fun to stumble upon a loud, chaotic arrangement just because it looks cool – it must sound good as well!
 
-## Enforcement actions
+## Enforcement
 
 If your content is found to infringe these Guidelines, our moderation team will take appropriate action. Depending on the severity of the violation, one or more of the following may be applied to your account:
 
@@ -119,13 +131,13 @@ If your content is found to infringe these Guidelines, our moderation team will 
 
 Attempting to circumvent the restrictive measure(s) applied to your account is also considered a violation of these Guidelines, and may lead to stricter measures being applied.
 
-We always aim to take the lightest action necessary to address the issue. Of course, we won't ban your account straight away if you commit a minor infringement! Our team will work with you in good faith to get it fixed, unless the violation is severe.
+We always aim to take the lightest action necessary to address the issue. Of course, we won’t ban your account straight away if you commit a minor infringement! Our team will work with you in good faith to get it fixed, unless the violation is severe.
 
 ## Appeals
 
 If you feel you’ve been treated unfairly, you may contact us at [opennbs@gmail.com](mailto:opennbs@gmail.com). We’ll review your case as soon as possible. Please provide as much information as you can about the situation, including any relevant context or evidence!
 
-## Reporting content
+## Reporting violations
 
 Everyone plays a role in making the website safe! If you see any content or activity that violates these Guidelines, our Terms of Service or our other policies, please report it to us by sending an email to [opennbs@gmail.com](mailto:opennbs@gmail.com), or by using the Report button next to the infringing content.
 
@@ -135,7 +147,7 @@ Please don’t report content in bad faith! Reports intended to deceive or harm 
 
 These Guidelines will continue to evolve over time. This means we may take action against behavior that violates the spirit of these Guidelines, even if it’s not explicitly covered in the current version.
 
-While we’ll do our best to let you know when an updated version of these Guidelines are available, it's up to you to comply with its message: keep Note Block World safe, and help us keep making it the best place to share, discover and listen to note block music.
+While we’ll do our best to let you know when an updated version of these Guidelines are available, it’s up to you to comply with its message: keep Note Block World safe, and help us keep making it the best place to share, discover and listen to note block music.
 
 Thank you for doing your part to make our community great. Have fun exploring Note Block World!
 

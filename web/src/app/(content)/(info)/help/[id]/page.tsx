@@ -66,24 +66,17 @@ const HelpPost = ({ params }: HelpPageProps) => {
               height={32}
             />
           )}
-          <div className='text-sm text-zinc-400 leading-tight'>
+          <div className='text-md text-zinc-400 leading-tight'>
             <p>
               by <span className='font-bold text-zinc-300'>{post.author}</span>
-            </p>
-            <p>
-              {new Date(post.date).toLocaleDateString('en-UK', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}
             </p>
           </div>
         </div>
 
         <CustomMarkdown MarkdownContent={post.content} />
-        <p className='text-center italic text-zinc-500 mt-24'>
+        <p className='text-center italic text-zinc-400 mt-24'>
           Still need help?{' '}
-          <Link href='/contact' className=' text-blue-500 hover:text-blue-400'>
+          <Link href='/contact' className=' text-blue-400 hover:text-blue-300'>
             Reach out to us!
           </Link>{' '}
         </p>

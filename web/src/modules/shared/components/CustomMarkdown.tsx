@@ -32,30 +32,23 @@ export const CustomMarkdown = ({
 };
 
 const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
-  return (
-    <p {...props} className='leading-relaxed text-base my-6 text-zinc-200' />
-  );
+  return <p {...props} className='leading-relaxed text-base my-4' />;
 };
 
 const h1 = ({ node, ...props }: JSX.IntrinsicElements['h1'] & ExtraProps) => {
-  return (
-    <h1
-      {...props}
-      className='text-3xl text-center uppercase font-light tracking-wider text-zinc-400 mb-24'
-    />
-  );
+  return <h1 {...props} className='text-4xl font-black mb-24 text-center' />;
 };
 
 const h2 = ({ node, ...props }: JSX.IntrinsicElements['h2'] & ExtraProps) => {
-  return <h2 {...props} className='text-2xl font-bold font mt-12 mb-3' />;
+  return <h2 {...props} className='text-3xl font-black mt-12 mb-6' />;
 };
 
 const h3 = ({ node, ...props }: JSX.IntrinsicElements['h3'] & ExtraProps) => {
-  return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
+  return <h3 {...props} className='text-2xl font-bold mt-10 mb-5' />;
 };
 
 const h4 = ({ node, ...props }: JSX.IntrinsicElements['h4'] & ExtraProps) => {
-  return <h4 {...props} className='text-base font-bold my-3' />;
+  return <h4 {...props} className='text-base font-black mt-8 mb-3' />;
 };
 
 const h5 = ({ node, ...props }: JSX.IntrinsicElements['h5'] & ExtraProps) => {

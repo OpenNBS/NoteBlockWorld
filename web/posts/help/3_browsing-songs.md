@@ -1,7 +1,7 @@
 ---
 shortTitle: 'Browsing songs'
 title: 'Browsing songs in Note Block World'
-date: '2020-01-01'
+date: '2024-10-07'
 author: 'Bentroen'
 authorImage: 'bentroen.png'
 image: '/img/help/3_browsing_songs.png'
@@ -21,21 +21,21 @@ By using the timespan buttons, you can change the time period you're looking at 
 
 ### Recent songs
 
-The **Recent songs** section shows the most recent songs uploaded to Note Block World. This is a great way to discover new, fresh music and see what other creators are working on! And the best thing is that you can expand the list infinitely. You're guaranteed to find something you like!
+The **Recent songs** section shows the most recent songs uploaded to Note Block World. This is a great way to discover new, fresh music and see what other creators are working on! You can also use the category buttons to find songs in a particular category. You're guaranteed to find something you like!
 
 ### Searching for songs
 
-As we're still in an early phase, we don't have a search feature yet. But don't worry - we're working on it and it will be available soon! Stay tuned to our [blog](/blog) to know first-hand when it becomes available! In the meantime, you can browse songs by using the sections on the home page.
+As we're still in an early phase, we don't have a search feature yet. But don't worry - we're working on it and it will be available soon! Stay tuned to our [blog](/blog) to know first-hand when it becomes available! In the meantime, you can browse songs by using the category buttons on the home page.
 
 ### Upcoming features
 
-We have a lot of features in mind to make the browsing experience better, such as searching songs by keywords, browsing specific categories/tags, advanced search (e.g. filter and sort songs by vanilla compatibility, note count, downloadable songs, etc.), and more!
+We have a lot of features in mind to make the browsing experience better, such as searching songs by keywords, browsing specific categories/tags, advanced search (e.g. filter and sort songs by vanilla compatibility, note count, whether or not they're available for download), and more!
 
 We're working hard to bring these features to you, so stay tuned to our [blog](/blog) to know when they're available! Also, make sure to check our [roadmap](https://github.com/OpenNBS/projects/4) for the full list of planned features.
 
 ## The song page
 
-Once you've found a song you like, you can click on it to view the song page. Here, you'll find more information about the song, such as the title, description, author, tags, and more. You can also listen to the song by opening it in Note Block Studio, or download it to edit it or use it in your own projects (make sure to check the song's license first!). For more info about downloading songs, check out our dedicated [help page](/help/4_downloading_songs).
+Once you've found a song you like, you can click on it to view the song page. Here, you'll find more information about the song, such as the title, description, author, tags, and more. You can also listen to the song by opening it in Note Block Studio, or download it to edit it or use it in your own projects (make sure to check the song's license first!). For more info about downloading songs, check out our dedicated [help page](/help/downloading_songs).
 
 Let's take a closer look at the different metadata available in each song's page:
 
@@ -133,7 +133,7 @@ The file size of the song is the amount of space the song takes up on your compu
 
 ### License
 
-The license of the song determines how you can use the song in your projects. Note Block World offers two types of licenses: the **Standard License** and the **Creative Commons Share-Alike** License. You can find more information about these licenses in our [Community Guidelines](/guidelines) or in the help page on [downloading songs](/help/4_downloading_songs).
+The license of the song determines how you can use the song in your projects. Note Block World offers two types of licenses: the **Standard License** and the **Creative Commons Share-Alike** License. You can find more information about these licenses in our [Terms of Service](/terms) or in the help page on [downloading songs](/help/downloading_songs).
 
 ## Conclusion
 

@@ -16,7 +16,7 @@ These Terms are adapted from the [Wordpress Terms of Service](https://wordpress.
 
 ### 1. Our Purpose
 
-Note Block World is an online service where you can browse, listen to, and download song files created in [Note Block Studio](https://opennbs.org/). Additionally, it allows you to submit your own creations to a public database, letting other users discover your music.
+Note Block World is an online service where you can browse, listen to, and download song files created in [Note Block Studio](https://noteblock.studio/). Additionally, it allows you to submit your own creations to a public database, letting other users discover your music.
 
 ### 2. Your Account
 
