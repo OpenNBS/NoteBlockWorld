@@ -48,6 +48,6 @@ Here's what we've been up to since the last update:
 
 ## What's next?
 
-For our next update, we'll focus on ironing out the last few critical bugs and improving the website's usability, so we'll be as close as ever to our official launch! Our goal is to make Note Block World available to the general public by **the end of the year** - but it may be available even sooner if everything goes smoothly!
+For our next update, we'll focus on ironing out the last few critical bugs and improving the website's usability, so we'll be closer than ever to our official launch! Our goal is to make Note Block World available to the general public by **the end of the year** - but it may be available even sooner if everything goes smoothly!
 
 As always, we're open to feedback and suggestions. If you find any bug, or have any ideas on how to improve the website, please let us know on our [Discord server](https://discord.gg/8Y3v4bJ) or by using the shiny new [Contact](/contact) page!
