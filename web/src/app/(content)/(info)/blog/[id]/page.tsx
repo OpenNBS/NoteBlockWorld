@@ -70,7 +70,10 @@ const BlogPost = ({ params }: BlogPageProps) => {
               by <span className='font-bold text-zinc-300'>{post.author}</span>
             </p>
             <p>
-              {new Date(post.date).toLocaleDateString('en-UK', {
+              {/* Add 12 hours to the date to display at noon UTC */}
+              {new Date(
+                post.date.getTime() + 12 * 60 * 60 * 1000,
+              ).toLocaleDateString('en-UK', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
