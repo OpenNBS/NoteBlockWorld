@@ -57,7 +57,7 @@ If you are an individual note block creator, feel free to include links to your 
 
 #### Copyright & usage rights
 
-Do not upload content that you don’t have permission to use, including images, songs, and text. Cover songs are generally allowed by fair use exceptions, but these are exceptions and not the rule. Other websites aimed at sharing music have dealt with requests from some authors to have their songs removed. If the original creator of a song requests that we remove it, we have no option but to comply – this means your song may be taken down!
+Do not upload content that you don’t have permission to use, including images, songs, and text. Cover songs are generally allowed by fair use exceptions, but these are exceptions and not the rule. Other websites aimed at sharing music have dealt with requests from some authors to have their songs removed. If the original creator of a song requests that we remove it, we have no option but to comply — this means your song may be taken down!
 
 #### Misleading or false information
 
@@ -95,7 +95,7 @@ We want Note Block World to be a high-quality collection of note block songs! Wh
 
 - Avoid importing MIDI files into Note Block Studio and uploading them without making any modification.
 - Titles, author names, and metadata should accurately describe your song.
-- Try not to post unfinished works – you can share work-in-progress tracks in our Discord community!
+- Try not to post unfinished works — you can share work-in-progress tracks in our Discord community!
 
 Content that doesn’t meet a minimum effort threshold may be removed.
 
@@ -115,7 +115,7 @@ Avoid spam submissions, troll content, or adding “garbage” characters (e.g. 
 
 #### Art-oriented submissions
 
-It’s fine to use note blocks to make pixel art for your thumbnails, or even upload songs primarily meant to showcase art done within the program. However, since this is a music platform, your songs should sound good, too! It wouldn’t be fun to stumble upon a loud, chaotic arrangement just because it looks cool – it must sound good as well!
+It’s fine to use note blocks to make pixel art for your thumbnails, or even upload songs primarily meant to showcase art done within the program. However, since this is a music platform, your songs should sound good, too! It wouldn’t be fun to stumble upon a loud, chaotic arrangement just because it looks cool — it must sound good as well!
 
 ## Enforcement
 

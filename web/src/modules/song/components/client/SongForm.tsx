@@ -81,7 +81,7 @@ export const SongForm = ({
                   <p>
                     The title of the song (required). It&apos;s useful to add
                     the album, game, or media where the song originates from,
-                    e.g. &quot;Sweden – Minecraft: Volume Alpha&quot;. Avoid
+                    e.g. &quot;Sweden - Minecraft: Volume Alpha&quot;. Avoid
                     clickbait words or unrelated catchphrases — keep it simple!
                   </p>
                   <p>
