@@ -72,7 +72,7 @@ const BlogPost = ({ params }: BlogPageProps) => {
             <p>
               {/* Add 12 hours to the date to display at noon UTC */}
               {new Date(
-                post.date.getTime() + 12 * 60 * 60 * 1000,
+                new Date(post.date).getTime() + 12 * 60 * 60 * 1000,
               ).toLocaleDateString('en-UK', {
                 day: 'numeric',
                 month: 'short',
