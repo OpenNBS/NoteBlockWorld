@@ -87,7 +87,7 @@ Make sure to pay close attention to the license you’re choosing when you uploa
 
 We believe choosing an open license is a great way to foster creativity and collaboration in the community. However, keep in mind that once you’ve chosen a Creative Commons license, you cannot retroactively revoke the permissions you granted by changing the license to a more restrictive one!
 
-Make sure to review our [licensing guide](/help/downloading_songs) for more information on the licenses available.
+Make sure to review our [licensing guide](/help/downloading-songs) for more information on the licenses available.
 
 #### Low-effort content
 

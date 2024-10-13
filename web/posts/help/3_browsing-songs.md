@@ -35,7 +35,7 @@ We're working hard to bring these features to you, so stay tuned to our [blog](/
 
 ## The song page
 
-Once you've found a song you like, you can click on it to view the song page. Here, you'll find more information about the song, such as the title, description, author, tags, and more. You can also listen to the song by opening it in Note Block Studio, or download it to edit it or use it in your own projects (make sure to check the song's license first!). For more info about downloading songs, check out our dedicated [help page](/help/downloading_songs).
+Once you've found a song you like, you can click on it to view the song page. Here, you'll find more information about the song, such as the title, description, author, tags, and more. You can also listen to the song by opening it in Note Block Studio, or download it to edit it or use it in your own projects (make sure to check the song's license first!). For more info about downloading songs, check out our dedicated [help page](/help/downloading-songs).
 
 Let's take a closer look at the different metadata available in each song's page:
 
@@ -133,7 +133,7 @@ The file size of the song is the amount of space the song takes up on your compu
 
 ### License
 
-The license of the song determines how you can use the song in your projects. Note Block World offers two types of licenses: the **Standard License** and the **Creative Commons Share-Alike** License. You can find more information about these licenses in our [Terms of Service](/terms) or in the help page on [downloading songs](/help/downloading_songs).
+The license of the song determines how you can use the song in your projects. Note Block World offers two types of licenses: the **Standard License** and the **Creative Commons Share-Alike** License. You can find more information about these licenses in our [Terms of Service](/terms) or in the help page on [downloading songs](/help/downloading-songs).
 
 ## Conclusion
 
