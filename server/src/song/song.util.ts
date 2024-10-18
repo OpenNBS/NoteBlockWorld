@@ -1,4 +1,7 @@
+import { formatDuration } from '@web/src/modules/shared/util/format';
 import { customAlphabet } from 'nanoid';
+
+import { SongWithUser } from './entity/song.entity';
 
 export function removeExtraSpaces(input: string): string {
   return input
@@ -15,3 +18,62 @@ const nanoid = customAlphabet(alphabet, 10);
 export const generateSongId = () => {
   return nanoid();
 };
+
+export function getUploadDiscordEmbed({
+  title,
+  description,
+  uploader,
+  publicId,
+  thumbnailUrl,
+  thumbnailData,
+  originalAuthor,
+  category,
+  stats,
+}: SongWithUser) {
+  return {
+    embeds: [
+      {
+        title: title,
+        description: description,
+        color: Number('0x' + thumbnailData.backgroundColor),
+        footer: {
+          text: '',
+        },
+        author: {
+          name: uploader.username,
+          icon_url: uploader.profileImage,
+          //url: 'https://noteblock.world/user/${uploaderName}',
+        },
+        fields: [
+          {
+            name: 'Original author',
+            value: originalAuthor || '--',
+            inline: true,
+          },
+          {
+            name: 'Category',
+            value: category,
+            inline: true,
+          },
+          {
+            name: 'Notes',
+            value: stats.noteCount.toLocaleString('en-US'),
+            inline: true,
+          },
+          {
+            name: 'Length',
+            value: formatDuration(stats.duration),
+          },
+        ],
+        url: `https://noteblock.world/song/${publicId}`,
+        image: {
+          url: thumbnailUrl,
+        },
+        thumbnail: {
+          url: 'https://noteblock.world/nbw-color.png',
+        },
+      },
+    ],
+    content: 'New song uploaded!',
+  };
+}

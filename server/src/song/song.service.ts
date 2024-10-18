@@ -81,6 +81,9 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
+    // Post Discord webhook
+    this.songUploadService.postDiscordWebhook(populatedSong);
+
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
