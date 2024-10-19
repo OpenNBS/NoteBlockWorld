@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
@@ -26,5 +26,20 @@ export class SongBrowserController {
     @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
     return await this.songBrowserService.getRecentSongs(query);
+  }
+
+  @Get('/categories')
+  @ApiOperation({ summary: 'Get a list of song categories and song counts' })
+  public async getCategories(): Promise<Record<string, number>> {
+    return await this.songBrowserService.getCategories();
+  }
+
+  @Get('/categories/:id')
+  @ApiOperation({ summary: 'Get a list of song categories and song counts' })
+  public async getSongsByCategory(
+    @Param('id') id: string,
+    @Query() query: PageQueryDTO,
+  ): Promise<SongPreviewDto[]> {
+    return await this.songBrowserService.getSongsByCategory(id, query);
   }
 }

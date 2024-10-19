@@ -18,6 +18,11 @@ import {
   UploadButton,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationCircle,
+  faExternalLink,
+} from '@fortawesome/free-solid-svg-icons';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -45,6 +50,26 @@ export const SongForm = ({
           submitSong();
         })}
       >
+        <div className='flex items-center justify-center gap-2 my-3 bg-cyan-800 border-cyan-400 text-cyan-300 border-2 rounded-lg px-3 py-2 text-sm'>
+          <FontAwesomeIcon icon={faExclamationCircle} className='h-5' />
+          <p>
+            Please make sure to carefully review our{' '}
+            <Link
+              href='/guidelines'
+              target='_blank'
+              className='text-blue-400 hover:text-blue-300 hover:underline'
+            >
+              Community Guidelines
+            </Link>
+            <FontAwesomeIcon
+              className='text-blue-400 ml-1 mr-1'
+              size='xs'
+              icon={faExternalLink}
+            />{' '}
+            before uploading a song!
+          </p>
+        </div>
+
         <div className='flex flex-col h-fit gap-12'>
           {/* Title */}
           <div>
@@ -56,7 +81,7 @@ export const SongForm = ({
                   <p>
                     The title of the song (required). It&apos;s useful to add
                     the album, game, or media where the song originates from,
-                    e.g. &quot;Sweden – Minecraft: Volume Alpha&quot;. Avoid
+                    e.g. &quot;Sweden - Minecraft: Volume Alpha&quot;. Avoid
                     clickbait words or unrelated catchphrases — keep it simple!
                   </p>
                   <p>
@@ -259,7 +284,7 @@ export const SongForm = ({
                       the same license is retained.
                     </p>
                     <p>
-                      For more information, pleace check out our{' '}
+                      For more information, please check out our{' '}
                       <Link href='/terms'>Terms of Service</Link>!
                     </p>
                   </>

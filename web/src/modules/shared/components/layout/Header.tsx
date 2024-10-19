@@ -1,3 +1,9 @@
+import {
+  faMusic,
+  faNewspaper,
+  faQuestionCircle,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -7,6 +13,7 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 
+import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 
 export async function Header() {
@@ -27,10 +34,9 @@ export async function Header() {
   return (
     <header className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
       {/* Navbar */}
-      <nav className='w-full flex flex-row justify-between items-center max-w-screen-xl px-6 sm:px-10'>
+      <nav className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-screen-xl px-6 sm:px-10'>
         {/* Logo */}
-
-        <div className='hidden sm:block flex-1 text-lg text-nowrap'>
+        <div className='hidden lg:block flex-0 text-lg text-nowrap'>
           <picture className='w-full h-auto'>
             <Link href='/'>
               <Image
@@ -44,7 +50,9 @@ export async function Header() {
             </Link>
           </picture>
         </div>
-        <div className='flex-1 flex justify-start sm:justify-center min-w-fit'>
+
+        {/* Icon */}
+        <div className='flex-0 flex justify-start lg:justify-center min-w-fit'>
           <Link href='/'>
             <Image
               unoptimized
@@ -60,8 +68,37 @@ export async function Header() {
             />
           </Link>
         </div>
+
+        {/* Info pages */}
+        <div className='flex flex-1 justify-center gap-1 h-8 text-center'>
+          <BlockTab
+            href='/'
+            icon={faMusic}
+            label='Songs'
+            className='bg-purple-700 after:bg-purple-900 before:bg-purple-950'
+          />
+          <BlockTab
+            href='/help'
+            icon={faQuestionCircle}
+            label='Help'
+            className='bg-blue-700 after:bg-blue-900 before:bg-blue-950'
+          />
+          <BlockTab
+            href='/blog'
+            icon={faNewspaper}
+            label='Blog'
+            className='bg-green-700 after:bg-green-900 before:bg-green-950'
+          />
+          <BlockTab
+            href='/about'
+            icon={faUser}
+            label='About'
+            className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
+          />
+        </div>
+
         {/* Sign in / Profile */}
-        <div className='flex-1'>
+        <div className='flex-0'>
           <NavLinks isUserLoggedIn={isLogged} userData={userData} />
         </div>
       </nav>

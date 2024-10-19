@@ -17,7 +17,9 @@ const DocumentLayout = ({ children }: { children: React.ReactNode }) => {
           orientation={'horizontal'}
           size={150}
         />
-        {children}
+        <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
+          {children}
+        </article>
         <div className='flex justify-center'>
           <BackButton className='text-zinc-400 hover:text-zinc-300 w-10 h-10 rounded-full border border-zinc-400 hover:border-zinc-300 p-1.5 my-8'>
             <FontAwesomeIcon icon={faArrowLeft} className='text-lg' />

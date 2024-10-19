@@ -2,7 +2,13 @@
 
 import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import axiosInstance from '@web/src/lib/axios';
 
@@ -12,6 +18,9 @@ type RecentSongsContextType = {
   increasePageRecent: () => Promise<void>;
   isLoading: boolean;
   hasMore: boolean;
+  selectedCategory: string;
+  categories: Record<string, number>;
+  setSelectedCategory: (category: string) => void;
 };
 
 const RecentSongsContext = createContext<RecentSongsContextType>(
@@ -33,47 +42,82 @@ export function RecentSongsProvider({
   const [page, setPage] = useState<number>(3);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [categories, setCategories] = useState<Record<string, number>>({});
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [endpoint, setEndpoint] = useState<string>('/song-browser/recent');
 
   const fetchRecentSongs = useCallback(
     async function () {
       setLoading(true);
 
-      setRecentSongs([...recentSongs, ...Array(8).fill(null)]);
-
       try {
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
-          '/song-browser/recent',
+          endpoint,
           {
             params: {
-              page: page,
-              limit: 8, // TODO: fiz constants
+              page,
+              limit: 8, // TODO: fix constants
               order: false,
             },
           },
         );
 
-        setRecentSongs([
-          ...recentSongs.filter((song) => song !== null),
+        setRecentSongs((prevSongs) => [
+          ...prevSongs.filter((song) => song !== null),
           ...response.data,
         ]);
 
-        setLoading(false);
-
         if (response.data.length < 8) {
           setHasMore(false);
-
-          return;
         }
       } catch (error) {
-        setRecentSongs(recentSongs.filter((song) => song !== null));
+        setRecentSongs((prevSongs) =>
+          prevSongs.filter((song) => song !== null),
+        );
+
         setRecentError('Error loading recent songs');
       } finally {
         setLoading(false);
-        // setHasMore(recentSongs.length < BROWSER_SONGS.max_recent_songs);
       }
     },
-    [page, recentSongs],
+    [page, endpoint],
   );
+
+  const fetchCategories = useCallback(async function () {
+    try {
+      const response = await axiosInstance.get<Record<string, number>>(
+        '/song-browser/categories',
+      );
+
+      return response.data;
+    } catch (error) {
+      return {};
+    }
+  }, []);
+
+  // Fetch categories on initial render
+  useEffect(() => {
+    fetchCategories().then((data) => setCategories(data));
+  }, [fetchCategories]);
+
+  // Reset recent songs and set the endpoint when category changes
+  useEffect(() => {
+    setPage(1);
+    setRecentSongs(Array(12).fill(null));
+    setHasMore(true);
+
+    const newEndpoint =
+      selectedCategory === ''
+        ? '/song-browser/recent'
+        : `/song-browser/categories/${selectedCategory}`;
+
+    setEndpoint(newEndpoint);
+  }, [selectedCategory]);
+
+  // Fetch recent songs when the page or endpoint changes
+  useEffect(() => {
+    fetchRecentSongs();
+  }, [page, endpoint]);
 
   async function increasePageRecent() {
     if (
@@ -86,7 +130,6 @@ export function RecentSongsProvider({
     }
 
     setPage((prev) => prev + 1);
-    await fetchRecentSongs();
   }
 
   return (
@@ -96,6 +139,9 @@ export function RecentSongsProvider({
         recentError,
         isLoading: loading,
         hasMore,
+        categories,
+        selectedCategory,
+        setSelectedCategory,
         increasePageRecent,
       }}
     >

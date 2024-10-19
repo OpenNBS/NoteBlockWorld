@@ -100,4 +100,19 @@ export class SongBrowserService {
 
     return await this.songService.getRecentSongs(page, limit);
   }
+
+  public async getCategories(): Promise<Record<string, number>> {
+    return await this.songService.getCategories();
+  }
+
+  public async getSongsByCategory(
+    category: string,
+    query: PageQueryDTO,
+  ): Promise<SongPreviewDto[]> {
+    return await this.songService.getSongsByCategory(
+      category,
+      query.page ?? 1,
+      query.limit ?? 10,
+    );
+  }
 }

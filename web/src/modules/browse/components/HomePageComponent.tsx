@@ -3,6 +3,7 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { CategoryButtonGroup } from './client/CategoryButton';
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import { useRecentSongsProvider } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
@@ -17,15 +18,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
+import { WelcomeBanner } from '../WelcomeBanner';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
 
-  const { recentSongs, increasePageRecent, isLoading, hasMore } =
-    useRecentSongsProvider();
+  const { recentSongs, increasePageRecent, hasMore } = useRecentSongsProvider();
 
   return (
     <>
+      {/* Welcome banner/Hero */}
+      <WelcomeBanner />
+
       {/* FEATURED SONGS */}
       <div className='flex flex-wrap justify-between gap-6 text-nowrap'>
         <h2 className='flex-1 text-xl uppercase'>Featured songs</h2>
@@ -39,10 +43,10 @@ export const HomePageComponent = () => {
           duration: 15,
         }}
       >
-        <CarouselContent>
+        <CarouselContent className='-ml-4'>
           {featuredSongsPage.map((song, i) => (
             <CarouselItem
-              className='basis-full md:basis-1/2 lg:basis-1/3'
+              className='basis-full md:basis-1/2 lg:basis-1/3 min-w-0 shrink-0 grow-0 pl-4'
               key={i}
             >
               <SongCard song={song} />
@@ -56,8 +60,9 @@ export const HomePageComponent = () => {
       <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
 
       {/* RECENT SONGS */}
-      <div className='flex flex-row justify-between items-center gap-4'>
-        <h2 className='text-xl uppercase'>Recent songs</h2>
+      <div className='flex flex-row flex-wrap justify-between items-center gap-4 mb-2'>
+        <h2 className='text-xl uppercase z-[2]'>Recent songs</h2>
+        <CategoryButtonGroup />
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>

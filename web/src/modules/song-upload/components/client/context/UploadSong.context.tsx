@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseSongFromBuffer } from '@shared/features/song/parse';
 import { SongFileType } from '@shared/features/song/types';
+import { bgColors } from '@shared/features/thumbnail/colors';
 import { ThumbnailConst } from '@shared/validation/song/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
@@ -195,9 +196,14 @@ export const UploadSongProvider = ({
         ThumbnailConst.startLayer.default,
       );
 
+      const colorKeys = Object.keys(bgColors);
+      const randomColor = (colorKeys.length * Math.random()) << 0;
+
       formMethods.setValue(
         'thumbnailData.backgroundColor',
-        ThumbnailConst.backgroundColor.default,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        bgColors[colorKeys[randomColor]].dark,
       );
 
       formMethods.setValue(

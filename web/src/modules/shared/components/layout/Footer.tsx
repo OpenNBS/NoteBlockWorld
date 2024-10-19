@@ -56,6 +56,10 @@ export function Footer() {
           <Link href='/privacy' className='hover:underline'>
             Privacy
           </Link>
+          <span className='mx-1'>|</span>
+          <Link href='/guidelines' className='hover:underline'>
+            Guidelines
+          </Link>
         </div>
       </div>
     </footer>

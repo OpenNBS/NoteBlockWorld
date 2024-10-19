@@ -402,4 +402,55 @@ export class SongService {
 
     return UploadSongDto.fromSongDocument(foundSong);
   }
+
+  public async getCategories(): Promise<Record<string, number>> {
+    // Return an object with categories and their counts, minus empty categories, minus private songs, and sort by count
+
+    const categories = (await this.songModel.aggregate([
+      {
+        $match: {
+          visibility: 'public',
+        },
+      },
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ])) as unknown as { _id: string; count: number }[];
+
+    // Return object with category names as keys and counts as values
+    return categories.reduce((acc, category) => {
+      if (category._id) {
+        acc[category._id] = category.count;
+      }
+
+      return acc;
+    }, {} as Record<string, number>);
+  }
+
+  public async getSongsByCategory(
+    category: string,
+    page: number,
+    limit: number,
+  ): Promise<SongPreviewDto[]> {
+    const songs = (await this.songModel
+      .find({
+        category: category,
+        visibility: 'public',
+      })
+      .sort({ createdAt: -1 })
+      .skip(page * limit - limit)
+      .limit(limit)
+      .populate('uploader', 'username profileImage -_id')
+      .exec()) as unknown as SongWithUser[];
+
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
 }

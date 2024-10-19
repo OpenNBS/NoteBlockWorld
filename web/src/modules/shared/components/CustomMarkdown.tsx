@@ -7,62 +7,48 @@ export const CustomMarkdown = ({
   MarkdownContent: string;
 }) => {
   return (
-    <>
-      <article className='p-8 max-w-800 my-auto min-h-screen text-lg'>
-        <Markdown
-          components={{
-            p,
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            hr,
-            ul,
-            ol,
-            li,
-            blockquote,
-            pre,
-            code,
-            a,
-          }}
-        >
-          {MarkdownContent}
-        </Markdown>
-      </article>
-    </>
+    <Markdown
+      components={{
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        ul,
+        ol,
+        li,
+        blockquote,
+        pre,
+        code,
+        a,
+      }}
+    >
+      {MarkdownContent}
+    </Markdown>
   );
 };
 
 const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
-  return (
-    <p
-      {...props}
-      className='leading-relaxed text-base my-6 tracking-[0.0125em] text-justify'
-    />
-  );
+  return <p {...props} className='leading-relaxed text-base my-4' />;
 };
 
 const h1 = ({ node, ...props }: JSX.IntrinsicElements['h1'] & ExtraProps) => {
-  return (
-    <h1
-      {...props}
-      className='text-3xl text-center uppercase font-light tracking-wider text-zinc-400 mb-24'
-    />
-  );
+  return <h1 {...props} className='text-4xl font-black mb-24 text-center' />;
 };
 
 const h2 = ({ node, ...props }: JSX.IntrinsicElements['h2'] & ExtraProps) => {
-  return <h2 {...props} className='text-2xl font-bold font mt-12 mb-3' />;
+  return <h2 {...props} className='text-3xl font-black mt-12 mb-6' />;
 };
 
 const h3 = ({ node, ...props }: JSX.IntrinsicElements['h3'] & ExtraProps) => {
-  return <h3 {...props} className='text-xl font-bold my-8 mb-3' />;
+  return <h3 {...props} className='text-2xl font-bold mt-10 mb-5' />;
 };
 
 const h4 = ({ node, ...props }: JSX.IntrinsicElements['h4'] & ExtraProps) => {
-  return <h4 {...props} className='text-base font-bold my-3' />;
+  return <h4 {...props} className='text-base font-black mt-8 mb-3' />;
 };
 
 const h5 = ({ node, ...props }: JSX.IntrinsicElements['h5'] & ExtraProps) => {
@@ -86,12 +72,7 @@ const ol = ({ node, ...props }: JSX.IntrinsicElements['ol'] & ExtraProps) => {
 };
 
 const li = ({ node, ...props }: JSX.IntrinsicElements['li'] & ExtraProps) => {
-  return (
-    <li
-      {...props}
-      className='text-base leading-relaxed tracking-[0.0125em] pl-1'
-    />
-  );
+  return <li {...props} className='text-base leading-relaxed pl-1' />;
 };
 
 const blockquote = ({
@@ -101,7 +82,7 @@ const blockquote = ({
   return (
     <blockquote
       {...props}
-      className='border-l-4 border-zinc-600 text-zinc-400 pl-4 [&>p]:py-2'
+      className='border-l-4 border-zinc-600 bg-zinc-800/50 rounded-md [&>p]:text-zinc-400 pl-4 [&>p]:py-2'
     />
   );
 };
@@ -120,7 +101,10 @@ const code = ({
   ...props
 }: JSX.IntrinsicElements['code'] & ExtraProps) => {
   return (
-    <code {...props} className='bg-zinc-900 text-white font-mono px-1 py-0.5' />
+    <code
+      {...props}
+      className='bg-zinc-950/50 text-green-400 rounded-md outline outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5'
+    />
   );
 };
 
@@ -132,12 +116,10 @@ const a = ({
 }: JSX.IntrinsicElements['a'] & ExtraProps) => {
   const { ref, ...rest } = props;
   return (
-    <Link
-      {...rest}
-      href={href}
-      className='underline text-blue-400 hover:text-blue-300'
-    >
+    <Link {...rest} href={href} className='text-blue-400 hover:text-blue-300'>
       {children}
     </Link>
   );
 };
+
+export { p, h1, h2, h3, h4, h5, h6, hr, ul, ol, li, blockquote, pre, code, a };
