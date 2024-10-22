@@ -30,6 +30,36 @@ export function getUploadDiscordEmbed({
   category,
   stats,
 }: SongWithUser) {
+  console.log(Number('0x' + thumbnailData.backgroundColor.replace('#', '')));
+
+  const fieldsArray = [];
+
+  if (originalAuthor) {
+    fieldsArray.push({
+      name: 'Original Author',
+      value: originalAuthor,
+      inline: false,
+    });
+  }
+
+  fieldsArray.concat([
+    {
+      name: 'Category',
+      value: category,
+      inline: true,
+    },
+    {
+      name: 'Notes',
+      value: stats.noteCount.toLocaleString('en-US'),
+      inline: true,
+    },
+    {
+      name: 'Length',
+      value: formatDuration(stats.duration),
+      inline: false,
+    },
+  ]);
+
   return {
     embeds: [
       {
@@ -44,27 +74,7 @@ export function getUploadDiscordEmbed({
           icon_url: uploader.profileImage,
           //url: 'https://noteblock.world/user/${uploaderName}',
         },
-        fields: [
-          {
-            name: 'Original author',
-            value: originalAuthor || '--',
-            inline: true,
-          },
-          {
-            name: 'Category',
-            value: category,
-            inline: true,
-          },
-          {
-            name: 'Notes',
-            value: stats.noteCount.toLocaleString('en-US'),
-            inline: true,
-          },
-          {
-            name: 'Length',
-            value: formatDuration(stats.duration),
-          },
-        ],
+        fields: fieldsArray,
         url: `https://noteblock.world/song/${publicId}`,
         image: {
           url: thumbnailUrl,
@@ -74,6 +84,5 @@ export function getUploadDiscordEmbed({
         },
       },
     ],
-    content: 'New song uploaded!',
   };
 }

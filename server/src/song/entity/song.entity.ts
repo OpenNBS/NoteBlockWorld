@@ -88,6 +88,11 @@ export class Song {
 
   @Prop({ type: SongStats, required: true })
   stats: SongStats;
+
+  // EXTERNAL ATTRIBUTES
+
+  @Prop({ type: String, required: false })
+  webhookMessageId?: string;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);

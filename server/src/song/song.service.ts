@@ -72,17 +72,23 @@ export class SongService {
       body,
     });
 
-    // Save song document
+    // Create song document
     const songDocument = await this.songModel.create(song);
-    const createdSong = await songDocument.save();
 
-    const populatedSong = (await createdSong.populate(
+    // Post Discord webhook
+    const populatedSong = (await songDocument.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    // Post Discord webhook
-    this.songUploadService.postDiscordWebhook(populatedSong);
+    const webhookMessageId = await this.songUploadService.postDiscordWebhook(
+      populatedSong,
+    );
+
+    songDocument.webhookMessageId = webhookMessageId;
+
+    // Save song document
+    await songDocument.save();
 
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }

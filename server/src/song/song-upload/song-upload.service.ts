@@ -482,15 +482,19 @@ export class SongUploadService {
     const webhookData = getUploadDiscordEmbed(song);
 
     try {
-      await fetch(webhookUrl, {
+      const response = await fetch(`${webhookUrl}?wait=true`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(webhookData),
       });
+
+      const data = await response.json();
+      return data.id; // Discord message ID
     } catch (e) {
       this.logger.error('Error sending Discord webhook', e);
+      return;
     }
   }
 }
