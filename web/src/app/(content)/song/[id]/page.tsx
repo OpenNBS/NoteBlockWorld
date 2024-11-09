@@ -30,6 +30,9 @@ export async function generateMetadata({
     openGraph: {
       images: [song.thumbnailUrl],
     },
+    twitter: {
+      card: 'summary_large_image',
+    },
   };
 }
 
