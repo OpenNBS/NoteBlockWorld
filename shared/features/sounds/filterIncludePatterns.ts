@@ -26,6 +26,7 @@ export const SEARCH_INCLUDE_PATTERNS = [
   'liquid/lavapop',
   'mob/allay/',
   'mob/blaze/',
+  'mob/cat/',
   'mob/chicken/hurt',
   'mob/drowned/death',
   'mob/enderdragon/growl',
