@@ -5,15 +5,7 @@ import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import Contact from './contact.mdx';
 
 export const metadata: Metadata = {
-  title: {
-    template: '%s | Help',
-    default: 'Note Block World',
-  },
-  openGraph: {
-    title: 'Create, share and listen to note block music',
-    description: 'Note Block World',
-    siteName: 'Note Block World',
-  },
+  title: 'Contact',
 };
 
 const AboutPage = () => {

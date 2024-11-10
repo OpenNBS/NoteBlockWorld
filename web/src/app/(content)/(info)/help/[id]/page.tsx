@@ -18,15 +18,11 @@ export function generateMetadata({ params }: HelpPageProps): Metadata {
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   return {
-    title: {
-      template: '%s | Help',
-      default: 'Note Block World',
-    },
+    title: post.title,
     authors: [{ name: post.author }],
     openGraph: {
       url: publicUrl + '/help/' + id,
       title: post.title,
-      description: 'Create, share and listen to note block music',
       siteName: 'Note Block World',
       images: [
         {

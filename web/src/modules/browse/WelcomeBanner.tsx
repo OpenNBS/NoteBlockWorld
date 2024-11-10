@@ -20,7 +20,7 @@ export const WelcomeBanner = () => {
         </h1>
         <p className='mb-1 text-green-100'>
           We&apos;re the largest public community centered around Minecraft note
-          blocks, where you can create, share and listen to note block music
+          blocks, where you can discover, share and listen to note block music
           from all around the world.
         </p>
         <p className='mb-2'>

@@ -5,7 +5,11 @@ import Link from 'next/link';
 
 import { getSortedPostsData } from '@web/src/lib/posts';
 import type { PostType } from '@web/src/lib/posts';
+import { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  title: 'Blog',
+};
 async function BlogPage() {
   const allPostsData = getSortedPostsData('blog', 'date');
   return <BlogPageComponent posts={allPostsData}></BlogPageComponent>;
