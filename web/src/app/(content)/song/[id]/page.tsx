@@ -14,6 +14,7 @@ export async function generateMetadata({
   params,
 }: SongPage): Promise<Metadata> {
   let song;
+  const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   try {
     const response = await axios.get<SongViewDtoType>(`/song/${params.id}`);
@@ -27,7 +28,12 @@ export async function generateMetadata({
   return {
     title: song.title,
     description: song.description,
+    authors: [{ name: song.uploader.username }],
     openGraph: {
+      url: publicUrl + '/song/' + song.publicId,
+      title: song.title,
+      description: song.description,
+      siteName: 'Note Block World',
       images: [song.thumbnailUrl],
     },
     twitter: {
