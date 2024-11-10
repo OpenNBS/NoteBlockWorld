@@ -295,9 +295,10 @@ export const SongForm = ({
                 {...register('license')}
               >
                 {Object.entries(UploadConst.licenses).map(
-                  ([key, value]: [string, string]) => (
+                  // @ts-expect-error - TS doesn't like the destructuring here
+                  ([key, { name }]: [string, string]) => (
                     <Option key={key} value={key}>
-                      {value}
+                      {name}
                     </Option>
                   ),
                 )}
