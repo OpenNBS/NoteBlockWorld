@@ -49,7 +49,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
   const stats = song.stats;
 
   // Pre-compute complex values
-  const formattedFileSize = `${(song.fileSize / 1024).toFixed(2)} kB`;
+  const formattedFileSize = `${(song.fileSize / 1024).toFixed(0)} kB`;
   const formattedDuration = formatDuration(stats.duration);
   const formattedTimeSpent = formatTimeSpent(stats.minutesSpent);
 
