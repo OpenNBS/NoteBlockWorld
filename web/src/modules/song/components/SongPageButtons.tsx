@@ -1,7 +1,9 @@
 'use client';
 
 import {
+  faCircleNotch,
   faDownload,
+  faExternalLink,
   faHeart,
   faPlay,
   faPlus,
@@ -10,7 +12,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import ShareModal from './client/ShareModal';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
@@ -110,30 +114,88 @@ const OpenSongInNBSButton = ({
     publicId: string;
   };
 }) => {
+  const [loading, setLoading] = useState(false);
+
+  const setLoadingTimeout = (timeoutMs: number) => {
+    setTimeout(() => {
+      setLoading(false);
+
+      if (!localStorage.getItem('hideOpenFailedToast')) {
+        showOpenFailedToast();
+      }
+    }, timeoutMs);
+  };
+
   return (
     <OpenInNBSButton
+      isLoading={loading}
       handleClick={() => {
         openSongInNBS(song);
+        setLoadingTimeout(3000);
+        setLoading(true);
       }}
     />
   );
 };
 
 const OpenInNBSButton = ({
+  isLoading,
   handleClick,
 }: {
+  isLoading: boolean;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => {
   return (
     <button
       onClick={handleClick}
-      className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:bg-blue-500'
+      disabled={isLoading}
+      className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:enabled:bg-blue-500 disabled:opacity-50'
     >
-      <div className='flex flex-row items-center gap-2'>
-        <FontAwesomeIcon icon={faPlay} />
+      <div className='flex flex-row items-center gap-2 w-max'>
+        {isLoading ? (
+          <FontAwesomeIcon icon={faCircleNotch} className='animate-spin w-3' />
+        ) : (
+          <FontAwesomeIcon icon={faPlay} className='w-3' />
+        )}
+
         <div>Open in NBS</div>
       </div>
     </button>
+  );
+};
+
+const showOpenFailedToast = () => {
+  toast(
+    (t) => (
+      <div className='flex flex-row items-center justify-center gap-3 w-full text-sm text-white'>
+        {"Didn't work?"}
+        <Link
+          href='https://noteblock.studio/'
+          className='bg-blue-500 hover:bg-blue-400 px-2 py-1 ml-2 rounded-md'
+        >
+          Download NBS
+          <FontAwesomeIcon
+            icon={faExternalLink}
+            className='w-3 opacity-50 ml-1'
+          />
+        </Link>
+        <button
+          className='text-blue-500 hover:text-blue-400'
+          onClick={() => {
+            toast.dismiss(t.id);
+            localStorage.setItem('hideOpenFailedToast', 'true');
+          }}
+        >
+          {"Don't show again"}
+        </button>
+      </div>
+    ),
+    {
+      duration: 5000,
+      style: {
+        width: '100%',
+      },
+    },
   );
 };
 
