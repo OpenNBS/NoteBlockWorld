@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import {
@@ -5,7 +6,6 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 import { UploadSongPage } from '@web/src/modules/song-upload/components/client/UploadSongPage';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Upload song',

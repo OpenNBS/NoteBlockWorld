@@ -3,6 +3,7 @@ import { ThumbnailConst } from '@shared/validation/song/constants';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { cn } from '@web/src/lib/tailwind.utils';
 import {
   Tooltip,
   TooltipContent,
@@ -12,7 +13,6 @@ import {
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { cn } from '@web/src/lib/tailwind.utils';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);

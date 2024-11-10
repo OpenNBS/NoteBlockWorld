@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
 import { Metadata } from 'next';
+
+import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
 
 export const metadata: Metadata = {
   title: 'Community Guidelines',

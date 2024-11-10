@@ -1,8 +1,8 @@
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { checkLogin } from '@web/src/modules/auth/features/auth.utils';
 import Page from '@web/src/modules/my-songs/components/MySongsPage';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'My songs',
