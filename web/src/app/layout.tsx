@@ -20,7 +20,7 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: { template: '%s | Note Block World', default: '' },
-  description: 'Create, share and listen to note block music',
+  description: 'Discover, share and listen to note block music',
   openGraph: {
     type: 'website',
     locale: 'en_US',
