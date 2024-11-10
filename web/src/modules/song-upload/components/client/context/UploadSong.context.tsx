@@ -15,7 +15,10 @@ import {
 import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/src/lib/axios';
-import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import {
+  InvalidTokenError,
+  getTokenLocal,
+} from '@web/src/lib/axios/token.utils';
 
 import {
   UploadSongForm,
@@ -146,9 +149,15 @@ export const UploadSongProvider = ({
     } catch (e) {
       console.error('Error submitting song', e);
 
-      setSendError(
-        'An unknown error occurred while submitting the song! Please contact us.',
-      );
+      if (e instanceof InvalidTokenError) {
+        setSendError(
+          'Your session has expired! Please sign in again and try to submit the song.',
+        );
+      } else {
+        setSendError(
+          'An unknown error occurred while submitting the song! Please contact us.',
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
