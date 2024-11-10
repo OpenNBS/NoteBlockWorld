@@ -118,7 +118,7 @@ body {
 /************** Google reCAPTCHA badge **************/
 
 .grecaptcha-badge {
-  visibility: hidden;
+  visibility: hidden !important;
   position: fixed;
   bottom: 100px !important;
 }
