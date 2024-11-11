@@ -2,6 +2,7 @@ import {
   FeaturedSongsDtoType,
   SongPreviewDtoType,
 } from '@shared/validation/song/dto/types';
+import { Metadata } from 'next';
 
 import axiosInstance from '@web/src/lib/axios';
 import { HomePageProvider } from '@web/src/modules/browse/components/client/context/HomePage.context';
@@ -45,6 +46,10 @@ async function fetchFeaturedSongs(): Promise<FeaturedSongsDtoType> {
     };
   }
 }
+
+export const metadata: Metadata = {
+  title: 'Songs',
+};
 
 async function Home() {
   const recentSongs = await fetchRecentSongs();

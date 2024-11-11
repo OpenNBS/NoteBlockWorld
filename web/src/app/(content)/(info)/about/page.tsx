@@ -6,15 +6,7 @@ import { NoteBlockWorldLogo } from '@web/src/modules/shared/components/NoteBlock
 import About from './about.mdx';
 
 export const metadata: Metadata = {
-  title: {
-    template: '%s | Help',
-    default: 'Note Block World',
-  },
-  openGraph: {
-    title: 'Create, share and listen to note block music',
-    description: 'Note Block World',
-    siteName: 'Note Block World',
-  },
+  title: 'About',
 };
 
 const AboutPage = () => {

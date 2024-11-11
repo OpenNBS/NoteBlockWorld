@@ -8,7 +8,16 @@ export const getTokenLocal = (): string | never => {
     ?.split('=')[1];
 
   // TODO: should be changed to a redirect to the login page?
-  if (!token) throw new Error('Failed to get token');
+  if (!token) throw new InvalidTokenError('Token not found');
 
   return token;
 };
+
+export class InvalidTokenError extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, InvalidTokenError.prototype);
+  }
+}

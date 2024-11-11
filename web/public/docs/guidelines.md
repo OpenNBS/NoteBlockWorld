@@ -2,7 +2,7 @@
 
 > Last updated: October 7, 2024
 
-Welcome to **Note Block World**! We strive to be the best online community for everyone to create, share, and listen to note block music from around the world, no matter your level of experience!
+Welcome to **Note Block World**! We strive to be the best online community for everyone to discover, share, and listen to note block music from around the world, no matter your level of experience!
 
 In this page, you’ll find a few guidelines that we’ve put in place to help keep Note Block World a healthy, safe, and positive space for all of our members. We kindly ask that you read these Guidelines carefully and follow them closely when contributing to the community!
 

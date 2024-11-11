@@ -18,9 +18,15 @@ const lato = Lato({
   weight: ['100', '300', '400', '700', '900'],
 });
 
-const metadata: Metadata = {
-  title: 'Note Block World',
-  description: 'Create, share and listen to note block music',
+export const metadata: Metadata = {
+  title: { template: '%s | Note Block World', default: '' },
+  description: 'Discover, share and listen to note block music',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: 'Note Block World',
+  },
 };
 
 export default function RootLayout({
@@ -75,7 +81,7 @@ export default function RootLayout({
           <Toaster
             position='bottom-center'
             toastOptions={{
-              className: '!bg-zinc-700 !text-white',
+              className: '!bg-zinc-700 !text-white !max-w-fit',
               duration: 4000,
             }}
           />

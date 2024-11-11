@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
 
+import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
@@ -62,6 +63,7 @@ export async function SongPage({ id }: { id: string }) {
           <p className='leading-tight whitespace-pre-line'>
             {song.description}
           </p>
+          <LicenseInfo license={song.license} />
         </div>
       </div>
 

@@ -1,7 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Metadata } from 'next';
+
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
+
+export const metadata: Metadata = {
+  title: 'Community Guidelines',
+};
 
 async function TermsOfServicePage() {
   const fullPath = path.join('./public/docs/guidelines.md');

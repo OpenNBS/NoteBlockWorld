@@ -1,3 +1,8 @@
+import {
+  faExclamationCircle,
+  faExternalLink,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,11 +23,6 @@ import {
   UploadButton,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationCircle,
-  faExternalLink,
-} from '@fortawesome/free-solid-svg-icons';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -295,9 +295,10 @@ export const SongForm = ({
                 {...register('license')}
               >
                 {Object.entries(UploadConst.licenses).map(
-                  ([key, value]: [string, string]) => (
+                  // @ts-expect-error - TS doesn't like the destructuring here
+                  ([key, { name }]: [string, string]) => (
                     <Option key={key} value={key}>
-                      {value}
+                      {name}
                     </Option>
                   ),
                 )}

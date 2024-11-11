@@ -11,7 +11,7 @@ Hello everyone! After over eight months of intensive development work, we're hap
 
 As the first step towards the official launch, we're opening the website to a limited number of users to test the platform and provide feedback. This is a crucial stage to ensure everything is working as expected and to fix any bugs that may arise.
 
-Initially, members with one of the **Note Block Expert**, **Community Contributor** and **Supporter** roles in our Discord server have been given access. If you're not in one of these roles, please be patient! We'll be gradually adding more users as we progress through the beta stage. Alternatively, you can support us with any amount on [Open Collective](https://opencollective.com/noteblockworld) or [GitHub Sponsors](https://github.com/sponsors/OpenNBS) to get access right away!
+Initially, members with one of the **Note Block Expert**, **Community Contributor** and **Supporter** roles in our Discord server have been given access. If you're not in one of these roles, please be patient! We'll be gradually adding more users as we progress through the beta stage. Alternatively, you can support us with any amount on [Open Collective](https://opencollective.com/opennbs/donate) or [GitHub Sponsors](https://github.com/sponsors/OpenNBS) to get access right away!
 
 This stage will last a couple weeks, so we can iron out any major bugs before the official launch. The beta will be unlocked to the general server in the following stage.
 

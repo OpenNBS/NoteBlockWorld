@@ -17,15 +17,11 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   return {
-    title: {
-      template: '%s | Blog',
-      default: 'Note Block World',
-    },
+    title: post.title,
     authors: [{ name: post.author }],
     openGraph: {
       url: publicUrl + '/blog/' + id,
       title: post.title,
-      description: 'Create, share and listen to note block music',
       siteName: 'Note Block World',
       images: [
         {

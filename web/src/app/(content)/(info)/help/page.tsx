@@ -1,10 +1,15 @@
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { getSortedPostsData } from '@web/src/lib/posts';
 import type { PostType } from '@web/src/lib/posts';
+
+export const metadata: Metadata = {
+  title: 'Help Center',
+};
 
 async function HelpPage() {
   const allPostsData = getSortedPostsData('help', 'id');

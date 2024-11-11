@@ -3,7 +3,6 @@ import {
   faGithub,
   faGoogle,
 } from '@fortawesome/free-brands-svg-icons';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -63,6 +62,7 @@ export const LoginPage = () => {
             <p>to discover, share and listen to note block music</p>
           </div>
 
+          {/*
           <div className='bg-yellow-700 border-yellow-300 text-yellow-300 border-2 rounded-lg px-3 py-2 text-sm'>
             <FontAwesomeIcon
               icon={faClock}
@@ -71,6 +71,7 @@ export const LoginPage = () => {
             We are running on a whitelist for the beta stage. Please wait for an
             invitation to sign in!
           </div>
+          */}
 
           <div className='flex flex-col w-full gap-4'>
             {/* Login with Google */}
