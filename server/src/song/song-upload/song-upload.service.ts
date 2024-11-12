@@ -6,7 +6,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { injectSongFileMetadata } from '@shared/features/song/injectMetadata';
 import { NoteQuadTree } from '@shared/features/song/notes';
 import { obfuscateAndPackSong } from '@shared/features/song/pack';
@@ -15,7 +14,7 @@ import { drawToImage } from '@shared/features/thumbnail';
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
@@ -35,8 +34,6 @@ export class SongUploadService {
   constructor(
     @Inject(FileService)
     private fileService: FileService,
-    @InjectModel(SongEntity.name)
-    private songModel: Model<SongEntity>,
 
     @Inject(UserService)
     private userService: UserService,

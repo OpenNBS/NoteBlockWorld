@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -11,40 +11,87 @@ import { GithubStrategy } from './strategies/github.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/JWT.strategy';
 
-@Module({
-  imports: [
-    UserModule,
-    ConfigModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        const JWT_SECRET = config.get('JWT_SECRET');
-        const JWT_EXPIRES_IN = config.get('JWT_EXPIRES_IN');
-        if (!JWT_SECRET) {
-          Logger.error('JWT_SECRET is not set');
-          throw new Error('JWT_SECRET is not set');
-        }
-        if (!JWT_EXPIRES_IN) {
-          Logger.warn('JWT_EXPIRES_IN is not set, using default of 60s');
-        }
+@Module({})
+export class AuthModule {
+  static forRootAsync(): DynamicModule {
+    return {
+      module: AuthModule,
+      imports: [
+        UserModule,
+        ConfigModule.forRoot(),
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: async (config: ConfigService) => {
+            const JWT_SECRET = config.get('JWT_SECRET');
+            const JWT_EXPIRES_IN = config.get('JWT_EXPIRES_IN');
 
-        return {
-          secret: JWT_SECRET,
-          signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' },
-        };
-      },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [
-    AuthService,
-    ConfigService,
-    GoogleStrategy,
-    GithubStrategy,
-    DiscordStrategy,
-    JwtStrategy,
-  ],
-  exports: [AuthService],
-})
-export class AuthModule {}
+            if (!JWT_SECRET) {
+              Logger.error('JWT_SECRET is not set');
+              throw new Error('JWT_SECRET is not set');
+            }
+
+            if (!JWT_EXPIRES_IN) {
+              Logger.warn('JWT_EXPIRES_IN is not set, using default of 60s');
+            }
+
+            return {
+              secret: JWT_SECRET,
+              signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' },
+            };
+          },
+        }),
+      ],
+      controllers: [AuthController],
+      providers: [
+        AuthService,
+        ConfigService,
+        GoogleStrategy,
+        GithubStrategy,
+        DiscordStrategy,
+        JwtStrategy,
+        {
+          provide: 'FRONTEND_URL',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('FRONTEND_URL'),
+        },
+        {
+          provide: 'COOKIE_EXPIRES_IN',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
+        },
+        {
+          provide: 'JWT_SECRET',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('JWT_SECRET'),
+        },
+        {
+          provide: 'JWT_EXPIRES_IN',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('JWT_EXPIRES_IN'),
+        },
+        {
+          provide: 'JWT_REFRESH_SECRET',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        },
+        {
+          provide: 'JWT_REFRESH_EXPIRES_IN',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN'),
+        },
+        {
+          provide: 'WHITELISTED_USERS',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('WHITELISTED_USERS'),
+        },
+        {
+          provide: 'APP_DOMAIN',
+          useValue: (configService: ConfigService) =>
+            configService.getOrThrow<string>('APP_DOMAIN'),
+        },
+      ],
+      exports: [AuthService],
+    };
+  }
+}
