@@ -1,3 +1,8 @@
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { FileService } from '@server/file/file.service';
+import { UserService } from '@server/user/user.service';
+
 import { SongUploadService } from './song-upload.service';
 
 describe('SongUploadService', () => {
@@ -5,7 +10,11 @@ describe('SongUploadService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SongUploadService],
+      providers: [
+        SongUploadService,
+        { provide: FileService, useValue: {} },
+        { provide: UserService, useValue: {} },
+      ],
     }).compile();
 
     service = module.get<SongUploadService>(SongUploadService);
