@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
@@ -8,9 +9,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
-
-import { GoogleAnalytics } from '@next/third-parties/google';
-
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
