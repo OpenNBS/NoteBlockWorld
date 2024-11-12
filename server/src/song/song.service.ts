@@ -459,4 +459,8 @@ export class SongService {
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
+
+  public async getAllSongs() {
+    return this.songModel.find({});
+  }
 }

@@ -92,7 +92,7 @@ export class Song {
   // EXTERNAL ATTRIBUTES
 
   @Prop({ type: String, required: false })
-  webhookMessageId?: string;
+  webhookMessageId?: string | null;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
