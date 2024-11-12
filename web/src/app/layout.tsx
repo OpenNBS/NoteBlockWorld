@@ -19,8 +19,11 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: { template: '%s | Note Block World', default: '' },
   description: 'Discover, share and listen to note block music',
+  applicationName: 'Note Block World',
+  keywords: ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
   openGraph: {
     type: 'website',
+    images: `${process.env.NEXT_PUBLIC_URL}/nbw-color.png`,
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_URL,
     siteName: 'Note Block World',
