@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   keywords: ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
   openGraph: {
     type: 'website',
-    images: `${process.env.NEXT_PUBLIC_URL}/nbw-color.png`,
+    images: `${process.env.NEXT_PUBLIC_URL}/nbw-header.png`,
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_URL,
     siteName: 'Note Block World',
