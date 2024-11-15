@@ -79,7 +79,7 @@ export class UserService {
     return hydratedUser;
   }
 
-  public async getSelfUserData(user: UserDocument | null) {
+  public async getSelfUserData(user: UserDocument) {
     if (!user)
       throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
     const usedData = await this.findByID(user._id.toString());

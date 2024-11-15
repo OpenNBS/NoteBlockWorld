@@ -36,7 +36,7 @@ import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongRes
 import type { Response } from 'express';
 
 import { FileService } from '@server/file/file.service';
-import { GetRequestToken } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
 import { SongService } from './song.service';
@@ -80,6 +80,7 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongViewDto> {
+    user = validateUser(user);
     return await this.songService.getSong(id, user);
   }
 
@@ -91,6 +92,7 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
+    user = validateUser(user);
     return await this.songService.getSongEdit(id, user);
   }
 
@@ -107,9 +109,9 @@ export class SongController {
     @Req() req: RawBodyRequest<Request>,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
+    user = validateUser(user);
     //TODO: Fix this weird type casting and raw body access
     const body = req.body as unknown as UploadSongDto;
-
     return await this.songService.patchSong(id, body, user);
   }
 
@@ -128,6 +130,7 @@ export class SongController {
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
 
+    user = validateUser(user);
     const url = await this.songService.getSongDownloadUrl(id, user, src, false);
     res.redirect(HttpStatus.FOUND, url);
   }
@@ -139,6 +142,8 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
     @Headers('src') src: string,
   ): Promise<string> {
+    user = validateUser(user);
+
     if (src != 'downloadButton') {
       throw new UnauthorizedException('Invalid source');
     }
@@ -161,6 +166,7 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<void> {
+    user = validateUser(user);
     await this.songService.deleteSong(id, user);
   }
 
@@ -181,6 +187,7 @@ export class SongController {
     @Body() body: UploadSongDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
+    user = validateUser(user);
     return await this.songService.uploadSong({ body, file, user });
   }
 }
