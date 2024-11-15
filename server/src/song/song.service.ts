@@ -241,7 +241,7 @@ export class SongService {
 
   public async getSong(
     publicId: string,
-    user: UserDocument,
+    user: UserDocument | null,
   ): Promise<SongViewDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -272,7 +272,7 @@ export class SongService {
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
   public async getSongDownloadUrl(
     publicId: string,
-    user: UserDocument,
+    user: UserDocument | null,
     src?: string,
     packed: boolean = false,
   ): Promise<string> {

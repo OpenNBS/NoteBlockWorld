@@ -80,7 +80,6 @@ export class SongController {
     @Param('id') id: string,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongViewDto> {
-    user = validateUser(user);
     return await this.songService.getSong(id, user);
   }
 
@@ -130,7 +129,6 @@ export class SongController {
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
 
-    user = validateUser(user);
     const url = await this.songService.getSongDownloadUrl(id, user, src, false);
     res.redirect(HttpStatus.FOUND, url);
   }
@@ -142,8 +140,6 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
     @Headers('src') src: string,
   ): Promise<string> {
-    user = validateUser(user);
-
     if (src != 'downloadButton') {
       throw new UnauthorizedException('Invalid source');
     }
