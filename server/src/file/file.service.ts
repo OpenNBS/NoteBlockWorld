@@ -7,14 +7,15 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class FileService {
-  s3Client: S3Client;
-  region: string;
-  bucketSongs: string;
-  bucketThumbs: string;
+  private readonly logger = new Logger(FileService.name);
+  private s3Client: S3Client;
+  private region: string;
+  private bucketSongs: string;
+  private bucketThumbs: string;
 
   constructor(
     @Inject('S3_BUCKET_SONGS')
@@ -167,7 +168,7 @@ export class FileService {
     try {
       await this.s3Client.send(command);
     } catch (error) {
-      console.error('Error deleting file: ', error);
+      this.logger.error('Error deleting file: ', error);
       throw error;
     }
 
@@ -199,7 +200,7 @@ export class FileService {
       const s3Response = await this.s3Client.send(command);
       return s3Response;
     } catch (error) {
-      console.error('Error uploading file: ', error);
+      this.logger.error('Error uploading file: ', error);
       throw error;
     }
   }
@@ -222,7 +223,7 @@ export class FileService {
 
       return byteArray.buffer;
     } catch (error) {
-      console.error('Error getting file: ', error);
+      this.logger.error('Error getting file: ', error);
       throw error;
     }
   }
