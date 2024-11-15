@@ -54,7 +54,7 @@ Note Block World lets you use any sound in the latest Minecraft version in your 
 
 When you upload a song that uses custom instruments to Note Block World, you'll need to manually select the sound files for each custom instrument you used. This ensures that your song sounds the way you intended it to sound, even if the listener doesn't have the custom instruments installed.
 
-Uploading a song with custom instruments follows the same process as [uploading a regular song](/blog/1_creating_song), with the addition of manually selecting the sound files for your custom instruments. Here's how you can do it:
+Uploading a song with custom instruments follows the same process as [uploading a regular song](/blog/1-creating-song), with the addition of manually selecting the sound files for your custom instruments. Here's how you can do it:
 
 1. After you've filled in the song's title, description, and other metadata, you'll see a section labeled _Custom instruments_.
 
