@@ -27,7 +27,7 @@ const mockSongService = {
 const mockFileService = {};
 
 describe('SongController', () => {
-  let controller: SongController;
+  let songController: SongController;
   let songService: SongService;
 
   beforeEach(async () => {
@@ -48,12 +48,12 @@ describe('SongController', () => {
       .useValue({ canActivate: jest.fn(() => true) })
       .compile();
 
-    controller = module.get<SongController>(SongController);
+    songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(songController).toBeDefined();
   });
 
   describe('getSongList', () => {
@@ -63,7 +63,7 @@ describe('SongController', () => {
 
       mockSongService.getSongByPage.mockResolvedValueOnce(songList);
 
-      const result = await controller.getSongList(query);
+      const result = await songController.getSongList(query);
 
       expect(result).toEqual(songList);
       expect(songService.getSongByPage).toHaveBeenCalledWith(query);
@@ -74,7 +74,7 @@ describe('SongController', () => {
 
       mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.getSongList(query)).rejects.toThrow('Error');
+      await expect(songController.getSongList(query)).rejects.toThrow('Error');
     });
   });
 
@@ -86,7 +86,7 @@ describe('SongController', () => {
 
       mockSongService.getSong.mockResolvedValueOnce(song);
 
-      const result = await controller.getSong(id, user);
+      const result = await songController.getSong(id, user);
 
       expect(result).toEqual(song);
       expect(songService.getSong).toHaveBeenCalledWith(id, user);
@@ -98,7 +98,7 @@ describe('SongController', () => {
 
       mockSongService.getSong.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.getSong(id, user)).rejects.toThrow('Error');
+      await expect(songController.getSong(id, user)).rejects.toThrow('Error');
     });
   });
 
@@ -110,7 +110,7 @@ describe('SongController', () => {
 
       mockSongService.getSongEdit.mockResolvedValueOnce(song);
 
-      const result = await controller.getEditSong(id, user);
+      const result = await songController.getEditSong(id, user);
 
       expect(result).toEqual(song);
       expect(songService.getSongEdit).toHaveBeenCalledWith(id, user);
@@ -122,7 +122,9 @@ describe('SongController', () => {
 
       mockSongService.getSongEdit.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.getEditSong(id, user)).rejects.toThrow('Error');
+      await expect(songController.getEditSong(id, user)).rejects.toThrow(
+        'Error',
+      );
     });
   });
 
@@ -135,7 +137,7 @@ describe('SongController', () => {
 
       mockSongService.patchSong.mockResolvedValueOnce(response);
 
-      const result = await controller.patchSong(id, req, user);
+      const result = await songController.patchSong(id, req, user);
 
       expect(result).toEqual(response);
       expect(songService.patchSong).toHaveBeenCalledWith(id, req.body, user);
@@ -148,7 +150,7 @@ describe('SongController', () => {
 
       mockSongService.patchSong.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.patchSong(id, req, user)).rejects.toThrow(
+      await expect(songController.patchSong(id, req, user)).rejects.toThrow(
         'Error',
       );
     });
@@ -169,7 +171,7 @@ describe('SongController', () => {
 
       mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
 
-      await controller.getSongFile(id, src, user, res);
+      await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
         'Content-Disposition': 'attachment; filename="song.nbs"',
@@ -200,9 +202,9 @@ describe('SongController', () => {
         new Error('Error'),
       );
 
-      await expect(controller.getSongFile(id, src, user, res)).rejects.toThrow(
-        'Error',
-      );
+      await expect(
+        songController.getSongFile(id, src, user, res),
+      ).rejects.toThrow('Error');
     });
   });
 
@@ -215,7 +217,7 @@ describe('SongController', () => {
 
       mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
 
-      const result = await controller.getSongOpenUrl(id, user, src);
+      const result = await songController.getSongOpenUrl(id, user, src);
 
       expect(result).toEqual(url);
 
@@ -232,9 +234,9 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
       const src = 'invalid-src';
 
-      await expect(controller.getSongOpenUrl(id, user, src)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(
+        songController.getSongOpenUrl(id, user, src),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should handle errors', async () => {
@@ -246,9 +248,9 @@ describe('SongController', () => {
         new Error('Error'),
       );
 
-      await expect(controller.getSongOpenUrl(id, user, src)).rejects.toThrow(
-        'Error',
-      );
+      await expect(
+        songController.getSongOpenUrl(id, user, src),
+      ).rejects.toThrow('Error');
     });
   });
 
@@ -259,7 +261,7 @@ describe('SongController', () => {
 
       mockSongService.deleteSong.mockResolvedValueOnce(undefined);
 
-      await controller.deleteSong(id, user);
+      await songController.deleteSong(id, user);
 
       expect(songService.deleteSong).toHaveBeenCalledWith(id, user);
     });
@@ -270,7 +272,9 @@ describe('SongController', () => {
 
       mockSongService.deleteSong.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.deleteSong(id, user)).rejects.toThrow('Error');
+      await expect(songController.deleteSong(id, user)).rejects.toThrow(
+        'Error',
+      );
     });
   });
 
@@ -301,7 +305,7 @@ describe('SongController', () => {
 
       mockSongService.uploadSong.mockResolvedValueOnce(response);
 
-      const result = await controller.createSong(file, body, user);
+      const result = await songController.createSong(file, body, user);
 
       expect(result).toEqual(response);
       expect(songService.uploadSong).toHaveBeenCalledWith({ body, file, user });
@@ -332,7 +336,7 @@ describe('SongController', () => {
 
       mockSongService.uploadSong.mockRejectedValueOnce(new Error('Error'));
 
-      await expect(controller.createSong(file, body, user)).rejects.toThrow(
+      await expect(songController.createSong(file, body, user)).rejects.toThrow(
         'Error',
       );
     });
