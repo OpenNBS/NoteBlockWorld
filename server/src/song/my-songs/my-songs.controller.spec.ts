@@ -1,3 +1,4 @@
+import { HttpException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
@@ -56,6 +57,18 @@ describe('MySongsController', () => {
 
       expect(result).toEqual(songPageDto);
       expect(songService.getMySongsPage).toHaveBeenCalledWith({ query, user });
+    });
+
+    it('should handle thrown an exception if userDocument is null', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const user = null;
+      const error = new Error('Test error');
+
+      mockSongService.getMySongsPage.mockRejectedValueOnce(error);
+
+      await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
+        HttpException,
+      );
     });
 
     it('should handle exceptions', async () => {
