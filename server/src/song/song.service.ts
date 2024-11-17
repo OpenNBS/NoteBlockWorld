@@ -83,10 +83,7 @@ export class SongService {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
 
-    await this.songModel
-      .deleteOne({ publicId: publicId })
-      .populate('uploader')
-      .exec();
+    await this.songModel.deleteOne({ publicId: publicId }).exec();
 
     await this.fileService.deleteSong(foundSong.nbsFileUrl);
 
