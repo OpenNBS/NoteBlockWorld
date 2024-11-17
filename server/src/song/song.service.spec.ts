@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
@@ -99,7 +100,6 @@ describe('SongService', () => {
         packedSongUrl: 'http://test.com/packed-file.nbs',
         nbsFileUrl: 'http://test.com/file.nbs',
         thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        thumbnailData: {} as ThumbnailData,
         uploader: user._id,
       });
 
@@ -159,7 +159,7 @@ describe('SongService', () => {
 
       const mockFindOne = {
         exec: jest.fn().mockResolvedValue(songEntity),
-        populate: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockResolvedValue(populatedSong),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
@@ -184,7 +184,12 @@ describe('SongService', () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(null);
+      const mockFindOne = {
+        findOne: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(null),
+      };
+
+      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
 
       await expect(service.deleteSong(publicId, user)).rejects.toThrow(
         HttpException,
@@ -354,7 +359,14 @@ describe('SongService', () => {
 
       const songList: SongWithUser[] = [];
 
-      jest.spyOn(songModel, 'find').mockResolvedValue(songList);
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'find').mockResolvedValue(mockFind as any);
 
       const result = await service.getSongByPage(query);
 
@@ -422,12 +434,20 @@ describe('SongService', () => {
     it('should throw an error if song is private and user is unauthorized', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
-      songEntity.visibility = 'private';
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
+      const songEntity = {
+        visibility: 'private',
+        uploader: 'different-user-id',
+      } as unknown as SongEntity;
 
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
+      const mockFindOne = {
+        findOne: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songEntity),
+      };
+
+      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+
+      await expect(service.getSongDownloadUrl(publicId, user)).rejects.toThrow(
         HttpException,
       );
     });
@@ -491,7 +511,14 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
       const songList: SongWithUser[] = [];
 
-      jest.spyOn(songModel, 'find').mockResolvedValue(songList);
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'find').mockResolvedValue(mockFind as any);
       jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
       const result = await service.getMySongsPage({ query, user });
@@ -518,18 +545,19 @@ describe('SongService', () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
       const songEntity = new SongEntity();
+      songEntity.uploader = user._id; // Ensure uploader is set
 
       const mockFindOne = {
-        findOne: jest.fn().mockReturnThis(),
         exec: jest.fn().mockResolvedValue(songEntity),
+        populate: jest.fn().mockReturnThis(),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
 
       const result = await service.getSongEdit(publicId, user);
 
       expect(result).toEqual(UploadSongDto.fromSongDocument(songEntity as any));
+
       expect(songModel.findOne).toHaveBeenCalledWith({ publicId });
     });
 
@@ -537,7 +565,12 @@ describe('SongService', () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(null);
+      const findOneMock = {
+        findOne: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(null),
+      };
+
+      jest.spyOn(songModel, 'findOne').mockReturnValue(findOneMock as any);
 
       await expect(service.getSongEdit(publicId, user)).rejects.toThrow(
         HttpException,
@@ -547,9 +580,38 @@ describe('SongService', () => {
     it('should throw an error if user is unauthorized', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
+      const songEntity = {
+        uploader: 'different-user-id',
+        title: 'Test Song',
+        originalAuthor: 'Test Author',
+        description: 'Test Description',
+        category: 'alternative',
+        visibility: 'public',
+        license: 'standard',
+        customInstruments: [],
+        thumbnailData: {
+          startTick: 0,
+          startLayer: 0,
+          zoomLevel: 1,
+          backgroundColor: '#000000',
+        },
+        allowDownload: true,
+        publicId: 'public-song-id',
+        createdAt: new Date(),
+        stats: {} as SongStats,
+        fileSize: 424242,
+        packedSongUrl: 'http://test.com/packed-file.nbs',
+        nbsFileUrl: 'http://test.com/file.nbs',
+        thumbnailUrl: 'http://test.com/thumbnail.nbs',
+      } as unknown as SongEntity;
+
+      const findOneMock = {
+        findOne: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songEntity),
+      };
+
+      jest.spyOn(songModel, 'findOne').mockReturnValue(findOneMock as any);
 
       await expect(service.getSongEdit(publicId, user)).rejects.toThrow(
         HttpException,
