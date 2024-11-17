@@ -149,8 +149,32 @@ describe('SongService', () => {
     it('should delete a song', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
-      songEntity.uploader = user._id; // Ensure uploader is set
+
+      const songEntity = {
+        title: 'Test Song',
+        originalAuthor: 'Test Author',
+        description: 'Test Description',
+        category: 'alternative',
+        visibility: 'public',
+        license: 'standard',
+        customInstruments: [],
+        thumbnailData: {
+          startTick: 0,
+          startLayer: 0,
+          zoomLevel: 1,
+          backgroundColor: '#000000',
+        },
+        allowDownload: true,
+        file: 'somebytes',
+        publicId: 'public-song-id',
+        createdAt: new Date(),
+        stats: {} as SongStats,
+        fileSize: 424242,
+        packedSongUrl: 'http://test.com/packed-file.nbs',
+        nbsFileUrl: 'http://test.com/file.nbs',
+        thumbnailUrl: 'http://test.com/thumbnail.nbs',
+        uploader: user._id,
+      } as unknown as SongEntity;
 
       const populatedSong = {
         ...songEntity,
@@ -158,12 +182,18 @@ describe('SongService', () => {
       } as unknown as SongWithUser;
 
       const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(songEntity),
-        populate: jest.fn().mockResolvedValue(populatedSong),
+        exec: jest.fn().mockResolvedValue({
+          ...songEntity,
+          populate: jest.fn().mockResolvedValue(populatedSong),
+        }),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
-      jest.spyOn(songModel, 'deleteOne').mockResolvedValue({} as any);
+
+      jest.spyOn(songModel, 'deleteOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValue({}),
+      } as any);
+
       jest.spyOn(fileService, 'deleteSong').mockResolvedValue(undefined);
 
       const result = await service.deleteSong(publicId, user);
