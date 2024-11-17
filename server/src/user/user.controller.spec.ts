@@ -1,3 +1,4 @@
+import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
@@ -83,14 +84,8 @@ describe('UserController', () => {
 
     it('should handle null user', async () => {
       const user = null;
-      const userData = null;
 
-      mockUserService.getSelfUserData.mockResolvedValueOnce(userData);
-
-      const result = await userController.getMe(user);
-
-      expect(result).toEqual(userData);
-      expect(userService.getSelfUserData).toHaveBeenCalledWith(user);
+      await expect(userController.getMe(user)).rejects.toThrow(HttpException);
     });
   });
 });
