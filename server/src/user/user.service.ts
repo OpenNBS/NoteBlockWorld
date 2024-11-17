@@ -80,8 +80,6 @@ export class UserService {
   }
 
   public async getSelfUserData(user: UserDocument) {
-    if (!user)
-      throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
     const usedData = await this.findByID(user._id.toString());
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
