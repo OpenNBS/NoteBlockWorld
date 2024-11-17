@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 
-import { GetRequestToken } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
@@ -34,6 +34,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get the token owner data' })
   async getMe(@GetRequestToken() user: UserDocument | null) {
+    user = validateUser(user);
     return await this.userService.getSelfUserData(user);
   }
 }

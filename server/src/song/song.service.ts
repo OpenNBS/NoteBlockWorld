@@ -40,19 +40,6 @@ export class SongService {
     private songUploadService: SongUploadService,
   ) {}
 
-  private isUserValid(user: UserDocument | null) {
-    if (!user) {
-      throw new HttpException(
-        {
-          error: {
-            user: 'User not found',
-          },
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-  }
-
   public async uploadSong({
     file,
     user,
@@ -60,12 +47,8 @@ export class SongService {
   }: {
     body: UploadSongDto;
     file: Express.Multer.File;
-    user: UserDocument | null;
+    user: UserDocument;
   }): Promise<UploadSongResponseDto> {
-    // Is user valid?
-    this.isUserValid(user);
-    user = user as UserDocument;
-
     const song = await this.songUploadService.processUploadedSong({
       file,
       user,
@@ -86,7 +69,7 @@ export class SongService {
 
   public async deleteSong(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -115,7 +98,7 @@ export class SongService {
   public async patchSong(
     publicId: string,
     body: UploadSongDto,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongResponseDto> {
     const foundSong = (await this.songModel
       .findOne({
@@ -339,16 +322,13 @@ export class SongService {
     }
   }
 
-  public async getMySongsPage(arg0: {
+  public async getMySongsPage({
+    query,
+    user,
+  }: {
     query: PageQueryDTO;
-    user: UserDocument | null;
+    user: UserDocument;
   }): Promise<SongPageDto> {
-    const { query, user } = arg0;
-
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    }
-
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const order = query.order ? query.order : false;
@@ -383,7 +363,7 @@ export class SongService {
 
   public async getSongEdit(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument,
   ): Promise<UploadSongDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
