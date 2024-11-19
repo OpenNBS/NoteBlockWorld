@@ -18,4 +18,18 @@ module.exports = {
     '^@shared/(.*)$': '<rootDir>/../shared/$1',
     '^@server/(.*)$': '<rootDir>/src/$1',
   },
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/dist/',
+    '<rootDir>/coverage/',
+  ],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/coverage/',
+    '<rootDir>/dist/',
+    '<rootDir>/src/.*\\.module\\.ts$',
+    '<rootDir>/src/main.ts',
+    '.eslintrc.js',
+    'jest.config.js',
+  ],
 };
