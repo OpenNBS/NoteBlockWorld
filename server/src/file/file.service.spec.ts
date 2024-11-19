@@ -219,4 +219,15 @@ describe('FileService', () => {
       'Error getting file',
     );
   });
+
+  it('should get upload a packed song', async () => {
+    const buffer = Buffer.from('test');
+    const publicId = 'test-id';
+    const mockResponse = { ETag: 'mock-etag' };
+    (s3Client.send as jest.Mock).mockResolvedValueOnce(mockResponse);
+
+    const result = await fileService.uploadPackedSong(buffer, publicId);
+    expect(result).toBe('packed/test-id.zip');
+    expect(s3Client.send).toHaveBeenCalledWith(expect.any(PutObjectCommand));
+  });
 });
