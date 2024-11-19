@@ -51,10 +51,6 @@ export class FileService {
     const endpoint = this.S3_ENDPOINT;
     const region = this.S3_REGION;
 
-    if (!(key && secret && endpoint && region)) {
-      throw new Error('Missing S3 configuration');
-    }
-
     this.region = region;
 
     // Create S3 client
