@@ -67,7 +67,6 @@ describe('SongService', () => {
 
   describe('uploadSong', () => {
     it('should upload a song', async () => {
-      // TODO: Fix this test
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -89,10 +88,7 @@ describe('SongService', () => {
         file: 'somebytes',
       };
 
-      const songEntity = new SongEntity();
-      songEntity.uploader = user._id;
-
-      const missingData = {
+      const commonData = {
         publicId: 'public-song-id',
         createdAt: new Date(),
         stats: {
@@ -124,30 +120,33 @@ describe('SongService', () => {
         uploader: user._id,
       };
 
+      const songEntity = new SongEntity();
+      songEntity.uploader = user._id;
+
       const songDocument: SongDocument = {
         ...songEntity,
-        ...missingData,
+        ...commonData,
       } as any;
-
-      songDocument.save = jest.fn().mockResolvedValue(songDocument);
 
       songDocument.populate = jest.fn().mockResolvedValue({
         ...songEntity,
-        ...missingData,
+        ...commonData,
         uploader: { username: 'testuser', profileImage: 'testimage' },
-      });
+      } as unknown as SongWithUser);
+
+      songDocument.save = jest.fn().mockResolvedValue(songDocument);
 
       const populatedSong = {
         ...songEntity,
-        ...missingData,
+        ...commonData,
         uploader: { username: 'testuser', profileImage: 'testimage' },
-      };
+      } as unknown as SongWithUser;
 
       jest
         .spyOn(songUploadService, 'processUploadedSong')
-        .mockResolvedValue(songDocument);
+        .mockResolvedValue(songEntity);
 
-      // jest.spyOn(songModel, 'create').mockResolvedValue(songDocument);
+      jest.spyOn(songModel, 'create').mockResolvedValue(songDocument as any);
 
       const result = await service.uploadSong({ file, user, body });
 
@@ -161,7 +160,7 @@ describe('SongService', () => {
         body,
       });
 
-      expect(songModel.create).toHaveBeenCalledWith(songDocument);
+      expect(songModel.create).toHaveBeenCalledWith(songEntity);
       expect(songDocument.save).toHaveBeenCalled();
 
       expect(songDocument.populate).toHaveBeenCalledWith(
