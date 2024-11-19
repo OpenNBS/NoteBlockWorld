@@ -523,7 +523,6 @@ describe('SongService', () => {
 
   describe('getSong', () => {
     it('should return song info by ID', async () => {
-      // TODO: Fix this test
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -546,11 +545,13 @@ describe('SongService', () => {
         uploader: {},
       } as any;
 
-      const findOneMock = {
+      songDocument.save = jest.fn().mockResolvedValue(songDocument);
+
+      const mockFindOne = {
         populate: jest.fn().mockResolvedValue(songDocument),
       };
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(findOneMock);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
 
       const result = await service.getSong(publicId, user);
 
