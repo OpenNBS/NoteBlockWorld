@@ -37,7 +37,7 @@ const mockUserService = {
 describe('SongUploadService', () => {
   let songUploadService: SongUploadService;
   let fileService: FileService;
-  let userService: UserService;
+  let _userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -56,7 +56,7 @@ describe('SongUploadService', () => {
 
     songUploadService = module.get<SongUploadService>(SongUploadService);
     fileService = module.get<FileService>(FileService);
-    userService = module.get<UserService>(UserService);
+    _userService = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
@@ -95,7 +95,7 @@ describe('SongUploadService', () => {
 
       jest
         .spyOn(songUploadService as any, 'checkIsFileValid')
-        .mockImplementation((file: Express.Multer.File) => undefined);
+        .mockImplementation((_file: Express.Multer.File) => undefined);
 
       jest
         .spyOn(songUploadService as any, 'prepareSongForUpload')
