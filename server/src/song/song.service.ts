@@ -18,11 +18,7 @@ import { Model } from 'mongoose';
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 
-import {
-  SongDocument,
-  Song as SongEntity,
-  SongWithUser,
-} from './entity/song.entity';
+import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
 import { removeExtraSpaces } from './song.util';
 
@@ -97,11 +93,9 @@ export class SongService {
     body: UploadSongDto,
     user: UserDocument,
   ): Promise<UploadSongResponseDto> {
-    const foundSong = (await this.songModel
-      .findOne({
-        publicId: publicId,
-      })
-      .exec()) as unknown as SongDocument;
+    const foundSong = await this.songModel.findOne({
+      publicId: publicId,
+    });
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
@@ -242,8 +236,7 @@ export class SongService {
   ): Promise<SongViewDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
-      .populate('uploader', 'username profileImage -_id')
-      .exec();
+      .populate('uploader', 'username profileImage -_id');
 
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -273,9 +266,7 @@ export class SongService {
     src?: string,
     packed: boolean = false,
   ): Promise<string> {
-    const foundSong = await this.songModel
-      .findOne({ publicId: publicId })
-      .exec();
+    const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
       throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
@@ -339,14 +330,11 @@ export class SongService {
         [sort]: order ? 1 : -1,
       })
       .skip(limit * (page - 1))
-      .limit(limit)
-      .exec()) as unknown as SongWithUser[];
+      .limit(limit)) as unknown as SongWithUser[];
 
-    const total = await this.songModel
-      .countDocuments({
-        uploader: user._id,
-      })
-      .exec();
+    const total = await this.songModel.countDocuments({
+      uploader: user._id,
+    });
 
     return {
       content: songData.map((song) =>
