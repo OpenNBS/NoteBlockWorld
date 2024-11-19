@@ -1,24 +1,24 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { GithubStrategy } from './github.strategy';
+import { DiscordStrategy } from './discord.strategy';
 
-describe('GithubStrategy', () => {
-  let githubStrategy: GithubStrategy;
+describe('DiscordStrategy', () => {
+  let discordStrategy: DiscordStrategy;
   let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        GithubStrategy,
+        DiscordStrategy,
         {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string) => {
               switch (key) {
-                case 'GITHUB_CLIENT_ID':
+                case 'DISCORD_CLIENT_ID':
                   return 'test-client-id';
-                case 'GITHUB_CLIENT_SECRET':
+                case 'DISCORD_CLIENT_SECRET':
                   return 'test-client-secret';
                 case 'SERVER_URL':
                   return 'http://localhost:3000';
@@ -31,20 +31,20 @@ describe('GithubStrategy', () => {
       ],
     }).compile();
 
-    githubStrategy = module.get<GithubStrategy>(GithubStrategy);
+    discordStrategy = module.get<DiscordStrategy>(DiscordStrategy);
     configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
-    expect(githubStrategy).toBeDefined();
+    expect(discordStrategy).toBeDefined();
   });
 
   describe('constructor', () => {
-    it('should throw an error if GitHub config is missing', () => {
+    it('should throw an error if Discord config is missing', () => {
       jest.spyOn(configService, 'get').mockReturnValueOnce(null);
 
-      expect(() => new GithubStrategy(configService)).toThrowError(
-        'Missing GitHub config',
+      expect(() => new DiscordStrategy(configService)).toThrowError(
+        'Missing Discord config',
       );
     });
   });
@@ -53,9 +53,9 @@ describe('GithubStrategy', () => {
     it('should return accessToken, refreshToken, and profile', async () => {
       const accessToken = 'test-access-token';
       const refreshToken = 'test-refresh-token';
-      const profile = { id: 'test-id', displayName: 'Test User' };
+      const profile = { id: 'test-id', username: 'Test User' };
 
-      const result = await githubStrategy.validate(
+      const result = await discordStrategy.validate(
         accessToken,
         refreshToken,
         profile,
