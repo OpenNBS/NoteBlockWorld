@@ -1,4 +1,10 @@
-import { Layer, Song } from '@encode42/nbs.js';
+import {
+  Instrument,
+  Layer,
+  Note,
+  Song,
+  fromArrayBuffer,
+} from '@encode42/nbs.js';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
@@ -304,11 +310,35 @@ describe('SongUploadService', () => {
         originalAuthor: 'Nicolas Vycas',
       };
 
-      songTest.addLayer(new Layer(1));
+      songTest.tempo = 20;
+
+      // The following will add 3 layers for 3 instruments, each containing five notes
+      for (let layerCount = 0; layerCount < 3; layerCount++) {
+        const instrument = Instrument.builtIn[layerCount];
+
+        // Create a layer for the instrument
+        const layer = songTest.createLayer();
+        layer.meta.name = instrument.meta.name;
+
+        const notes = [
+          new Note(instrument, { key: 40 }),
+          new Note(instrument, { key: 45 }),
+          new Note(instrument, { key: 50 }),
+          new Note(instrument, { key: 45 }),
+          new Note(instrument, { key: 57 }),
+        ];
+
+        // Place the notes
+        for (let i = 0; i < notes.length; i++) {
+          songTest.setNote(i * 4, layer, notes[i]); // "i * 4" is placeholder - this is the tick to place on
+        }
+      }
 
       const buffer = songTest.toArrayBuffer();
 
-      const song = songUploadService.getSongObject(buffer);
+      console.log(fromArrayBuffer(buffer).length);
+
+      const song = songUploadService.getSongObject(buffer); //TODO: For some reason the song is always empty
 
       expect(song).toBeInstanceOf(Song);
     });
