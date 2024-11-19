@@ -58,7 +58,7 @@ describe('SongBrowserService', () => {
         .spyOn(songService, 'getSongsBeforeTimespan')
         .mockResolvedValue([songWithUser]);
 
-      const result = await service.getFeaturedSongs();
+      await service.getFeaturedSongs();
 
       expect(songService.getSongsForTimespan).toHaveBeenCalled();
       expect(songService.getSongsBeforeTimespan).toHaveBeenCalled();
