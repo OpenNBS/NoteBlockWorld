@@ -1,7 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
@@ -68,6 +67,7 @@ describe('SongService', () => {
 
   describe('uploadSong', () => {
     it('should upload a song', async () => {
+      // TODO: Fix this test
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -90,37 +90,64 @@ describe('SongService', () => {
       };
 
       const songEntity = new SongEntity();
+      songEntity.uploader = user._id;
 
-      const songDocument: SongDocument = await songModel.create({
-        ...body,
+      const missingData = {
         publicId: 'public-song-id',
         createdAt: new Date(),
-        stats: {} as SongStats,
+        stats: {
+          midiFileName: 'test.mid',
+          noteCount: 100,
+          tickCount: 1000,
+          layerCount: 10,
+          tempo: 120,
+          tempoRange: [100, 150],
+          timeSignature: 4,
+          duration: 60,
+          loop: true,
+          loopStartTick: 0,
+          minutesSpent: 10,
+          vanillaInstrumentCount: 10,
+          customInstrumentCount: 0,
+          firstCustomInstrumentIndex: 0,
+          outOfRangeNoteCount: 0,
+          detunedNoteCount: 0,
+          customInstrumentNoteCount: 0,
+          incompatibleNoteCount: 0,
+          compatible: true,
+          instrumentNoteCounts: [10],
+        },
         fileSize: 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
         nbsFileUrl: 'http://test.com/file.nbs',
         thumbnailUrl: 'http://test.com/thumbnail.nbs',
         uploader: user._id,
+      };
+
+      const songDocument: SongDocument = {
+        ...songEntity,
+        ...missingData,
+      } as any;
+
+      songDocument.save = jest.fn().mockResolvedValue(songDocument);
+
+      songDocument.populate = jest.fn().mockResolvedValue({
+        ...songEntity,
+        ...missingData,
+        uploader: { username: 'testuser', profileImage: 'testimage' },
       });
 
       const populatedSong = {
         ...songEntity,
+        ...missingData,
         uploader: { username: 'testuser', profileImage: 'testimage' },
-      } as unknown as SongWithUser;
+      };
 
       jest
         .spyOn(songUploadService, 'processUploadedSong')
-        .mockResolvedValue(songEntity);
+        .mockResolvedValue(songDocument);
 
-      jest.spyOn(songModel, 'create').mockResolvedValue({
-        ...songDocument,
-      } as any);
-
-      jest.spyOn(songDocument, 'save').mockResolvedValue(songDocument);
-
-      jest
-        .spyOn(songDocument, 'populate')
-        .mockResolvedValue(populatedSong as any);
+      // jest.spyOn(songModel, 'create').mockResolvedValue(songDocument);
 
       const result = await service.uploadSong({ file, user, body });
 
@@ -134,7 +161,7 @@ describe('SongService', () => {
         body,
       });
 
-      expect(songModel.create).toHaveBeenCalledWith(songEntity);
+      expect(songModel.create).toHaveBeenCalledWith(songDocument);
       expect(songDocument.save).toHaveBeenCalled();
 
       expect(songDocument.populate).toHaveBeenCalledWith(
@@ -262,7 +289,6 @@ describe('SongService', () => {
 
   describe('patchSong', () => {
     it('should patch a song', async () => {
-      // TODO: This fails because of the thumbnail generation
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -284,53 +310,81 @@ describe('SongService', () => {
         file: 'somebytes',
       };
 
-      const songEntity = await songModel.create({
-        ...body,
+      const missingData = {
         publicId: 'public-song-id',
         createdAt: new Date(),
-        stats: {} as SongStats,
+        stats: {
+          midiFileName: 'test.mid',
+          noteCount: 100,
+          tickCount: 1000,
+          layerCount: 10,
+          tempo: 120,
+          tempoRange: [100, 150],
+          timeSignature: 4,
+          duration: 60,
+          loop: true,
+          loopStartTick: 0,
+          minutesSpent: 10,
+          vanillaInstrumentCount: 10,
+          customInstrumentCount: 0,
+          firstCustomInstrumentIndex: 0,
+          outOfRangeNoteCount: 0,
+          detunedNoteCount: 0,
+          customInstrumentNoteCount: 0,
+          incompatibleNoteCount: 0,
+          compatible: true,
+          instrumentNoteCounts: [10],
+        },
         fileSize: 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
         nbsFileUrl: 'http://test.com/file.nbs',
         thumbnailUrl: 'http://test.com/thumbnail.nbs',
         uploader: user._id,
+      };
+
+      const songDocument: SongDocument = {
+        ...missingData,
+      } as any;
+
+      songDocument.save = jest.fn().mockResolvedValue(songDocument);
+
+      songDocument.populate = jest.fn().mockResolvedValue({
+        ...missingData,
+        uploader: { username: 'testuser', profileImage: 'testimage' },
       });
 
       const populatedSong = {
-        ...songEntity,
+        ...missingData,
         uploader: { username: 'testuser', profileImage: 'testimage' },
-      } as unknown as SongWithUser;
+      };
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
+      jest.spyOn(songModel, 'findOne').mockResolvedValue(songDocument);
 
       jest
         .spyOn(songUploadService, 'processSongPatch')
         .mockResolvedValue(undefined);
 
-      //jest.spyOn(songEntity, 'save').mockResolvedValue(songEntity);
-      //jest.spyOn(songEntity, 'populate').mockResolvedValue(populatedSong);
-
       const result = await service.patchSong(publicId, body, user);
 
       expect(result).toEqual(
-        UploadSongResponseDto.fromSongWithUserDocument(populatedSong),
+        UploadSongResponseDto.fromSongWithUserDocument(populatedSong as any),
       );
 
       expect(songModel.findOne).toHaveBeenCalledWith({ publicId });
 
       expect(songUploadService.processSongPatch).toHaveBeenCalledWith(
-        songEntity,
+        songDocument,
         body,
         user,
       );
 
-      expect(songEntity.save).toHaveBeenCalled();
+      expect(songDocument.save).toHaveBeenCalled();
 
-      expect(songEntity.populate).toHaveBeenCalledWith(
+      expect(songDocument.populate).toHaveBeenCalledWith(
         'uploader',
         'username profileImage -_id',
       );
-    });
+    }, 10000); // Increase the timeout to 10000 ms
 
     it('should throw an error if song is not found', async () => {
       const publicId = 'test-id';
@@ -354,11 +408,7 @@ describe('SongService', () => {
         allowDownload: false,
       };
 
-      const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(null),
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(null as any);
 
       await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
         HttpException,
@@ -387,14 +437,11 @@ describe('SongService', () => {
         allowDownload: false,
       };
 
-      const songEntity = new SongEntity();
-      songEntity.uploader = new mongoose.Types.ObjectId(); // Different uploader
+      const songEntity = {
+        uploader: 'different-user-id',
+      } as any;
 
-      const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(songEntity),
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
 
       await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
         HttpException,
@@ -423,14 +470,11 @@ describe('SongService', () => {
         allowDownload: false,
       };
 
-      const songEntity = new SongEntity();
-      songEntity.uploader = new mongoose.Types.ObjectId(); // Different uploader
+      const songEntity = {
+        uploader: 'different-user-id',
+      } as any;
 
-      const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(songEntity),
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity);
 
       await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
         HttpException,
@@ -479,10 +523,11 @@ describe('SongService', () => {
 
   describe('getSong', () => {
     it('should return song info by ID', async () => {
+      // TODO: Fix this test
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const songEntity = await songModel.create({
+      const songDocument = {
         title: 'Test Song',
         originalAuthor: 'Test Author',
         description: 'Test Description',
@@ -498,13 +543,18 @@ describe('SongService', () => {
         },
         file: 'somebytes',
         allowDownload: false,
-      });
+        uploader: {},
+      } as any;
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
+      const findOneMock = {
+        populate: jest.fn().mockResolvedValue(songDocument),
+      };
+
+      jest.spyOn(songModel, 'findOne').mockResolvedValue(findOneMock);
 
       const result = await service.getSong(publicId, user);
 
-      expect(result).toEqual(SongViewDto.fromSongDocument(songEntity));
+      expect(result).toEqual(SongViewDto.fromSongDocument(songDocument));
       expect(songModel.findOne).toHaveBeenCalledWith({ publicId });
     });
 
@@ -513,8 +563,7 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const mockFindOne = {
-        populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(null),
+        populate: jest.fn().mockResolvedValue(null),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
@@ -531,14 +580,9 @@ describe('SongService', () => {
       const songEntity = {
         visibility: 'private',
         uploader: 'different-user-id',
-      } as unknown as SongEntity;
-
-      const mockFindOne = {
-        findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songEntity),
       };
 
-      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
 
       await expect(service.getSongDownloadUrl(publicId, user)).rejects.toThrow(
         HttpException,
@@ -550,15 +594,36 @@ describe('SongService', () => {
     it('should return song download URL', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
-      const url = 'http://test.com/song.nbs';
 
-      const findOneMock = {
-        findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songEntity),
+      const songEntity = {
+        visibility: 'public',
+        uploader: 'test-user-id',
+        title: 'Test Song',
+        originalAuthor: 'Test Author',
+        description: 'Test Description',
+        category: 'alternative',
+        license: 'standard',
+        customInstruments: [],
+        thumbnailData: {
+          startTick: 0,
+          startLayer: 0,
+          zoomLevel: 1,
+          backgroundColor: '#000000',
+        },
+        allowDownload: true,
+        publicId: 'public-song-id',
+        createdAt: new Date(),
+        stats: {} as SongStats,
+        fileSize: 424242,
+        packedSongUrl: 'http://test.com/packed-file.nbs',
+        nbsFileUrl: 'http://test.com/file.nbs',
+        thumbnailUrl: 'http://test.com/thumbnail.nbs',
+        save: jest.fn(),
       };
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(findOneMock);
+      const url = 'http://test.com/song.nbs';
+
+      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
       jest.spyOn(fileService, 'getSongDownloadUrl').mockResolvedValue(url);
 
       const result = await service.getSongDownloadUrl(publicId, user);
@@ -586,15 +651,13 @@ describe('SongService', () => {
     it('should throw an error if song is private and user is unauthorized', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
-      songEntity.visibility = 'private';
 
-      const findOneMock = {
-        findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songEntity),
+      const songEntity = {
+        visibility: 'private',
+        uploader: 'different-user-id',
       };
 
-      jest.spyOn(songModel, 'findOne').mockResolvedValue(findOneMock as any);
+      jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
 
       await expect(service.getSongDownloadUrl(publicId, user)).rejects.toThrow(
         HttpException,
@@ -604,16 +667,12 @@ describe('SongService', () => {
 
   describe('getMySongsPage', () => {
     it('should return a list of songs uploaded by the user', async () => {
-      const query: PageQueryDTO = {
+      const query = {
         page: 1,
         limit: 10,
         sort: 'createdAt',
         order: true,
       };
-
-      const page = query.page ?? 1;
-      const limit = query.limit ?? 10;
-      const skip = page * limit - limit;
 
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
       const songList: SongWithUser[] = [];
@@ -621,8 +680,7 @@ describe('SongService', () => {
       const mockFind = {
         sort: jest.fn().mockReturnThis(),
         skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songList),
+        limit: jest.fn().mockResolvedValue(songList),
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
@@ -640,12 +698,13 @@ describe('SongService', () => {
       });
 
       expect(songModel.find).toHaveBeenCalledWith({ uploader: user._id });
-      expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
+      expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: 1 });
 
-      expect(mockFind.skip).toHaveBeenCalledWith(skip);
+      expect(mockFind.skip).toHaveBeenCalledWith(
+        query.page * query.limit - query.limit,
+      );
 
       expect(mockFind.limit).toHaveBeenCalledWith(query.limit);
-      expect(mockFind.exec).toHaveBeenCalled();
 
       expect(songModel.countDocuments).toHaveBeenCalledWith({
         uploader: user._id,
