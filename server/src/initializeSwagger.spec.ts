@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { initializeSwagger } from './initializeSwagger';
 
@@ -19,11 +19,9 @@ jest.mock('@nestjs/swagger', () => ({
 
 describe('initializeSwagger', () => {
   let app: INestApplication;
-  let documentBuilder: DocumentBuilder;
 
   beforeEach(() => {
     app = {} as INestApplication;
-    documentBuilder = new DocumentBuilder();
   });
 
   it('should initialize Swagger with the correct configuration', () => {
