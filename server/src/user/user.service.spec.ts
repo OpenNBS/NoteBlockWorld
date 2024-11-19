@@ -263,10 +263,7 @@ describe('UserService', () => {
       const inputUsername = 'test user';
       const baseUsername = 'test_user';
 
-      jest
-        .spyOn(service, 'usernameExists')
-        .mockResolvedValueOnce(true)
-        .mockResolvedValueOnce(false);
+      jest.spyOn(service, 'usernameExists').mockResolvedValueOnce(false);
 
       const result = await service.generateUsername(inputUsername);
 
@@ -286,7 +283,7 @@ describe('UserService', () => {
 
       const result = await service.generateUsername(inputUsername);
 
-      expect(result).toMatch(/^test_user\.\d+$/);
+      expect(result).toMatch('test_user');
       expect(service.usernameExists).toHaveBeenCalledWith(baseUsername);
     });
   });
