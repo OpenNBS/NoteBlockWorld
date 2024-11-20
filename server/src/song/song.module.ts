@@ -16,7 +16,7 @@ import { SongService } from './song.service';
     MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
     AuthModule,
     UserModule,
-    FileModule,
+    FileModule.forRootAsync(),
   ],
   providers: [SongService, SongUploadService],
   controllers: [SongController, MySongsController],
