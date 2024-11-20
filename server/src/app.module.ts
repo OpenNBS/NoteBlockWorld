@@ -24,10 +24,7 @@ import { UserModule } from './user/user.module';
       useFactory: (
         configService: ConfigService,
       ): MongooseModuleFactoryOptions => {
-        const url = configService.get<string>('MONGO_URL');
-        if (!url) {
-          throw new Error('Missing DB config');
-        }
+        const url = configService.getOrThrow<string>('MONGO_URL');
         Logger.debug(`Connecting to ${url}`);
 
         return {
