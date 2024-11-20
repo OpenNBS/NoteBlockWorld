@@ -10,17 +10,14 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
     @Inject(ConfigService)
     configService: ConfigService,
   ) {
-    const GITHUB_CLIENT_ID = configService.get<string>('GITHUB_CLIENT_ID');
+    const GITHUB_CLIENT_ID =
+      configService.getOrThrow<string>('GITHUB_CLIENT_ID');
 
-    const GITHUB_CLIENT_SECRET = configService.get<string>(
+    const GITHUB_CLIENT_SECRET = configService.getOrThrow<string>(
       'GITHUB_CLIENT_SECRET',
     );
 
-    const SERVER_URL = configService.get<string>('SERVER_URL');
-
-    if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET || !SERVER_URL) {
-      throw new Error('Missing GitHub config');
-    }
+    const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
     super({
       clientID: GITHUB_CLIENT_ID,
