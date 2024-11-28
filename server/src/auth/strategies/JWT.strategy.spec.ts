@@ -15,7 +15,7 @@ describe('JwtStrategy', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn().mockReturnValue('test-secret'),
+            getOrThrow: jest.fn().mockReturnValue('test-secret'),
           },
         },
       ],
@@ -31,10 +31,10 @@ describe('JwtStrategy', () => {
 
   describe('constructor', () => {
     it('should throw an error if JWT_SECRET is not set', () => {
-      jest.spyOn(configService, 'get').mockReturnValue(null);
+      jest.spyOn(configService, 'getOrThrow').mockReturnValue(null);
 
       expect(() => new JwtStrategy(configService)).toThrowError(
-        'JWT_SECRET is not set',
+        'JwtStrategy requires a secret or key',
       );
     });
   });
