@@ -14,7 +14,7 @@ describe('GithubStrategy', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn((key: string) => {
+            getOrThrow: jest.fn((key: string) => {
               switch (key) {
                 case 'GITHUB_CLIENT_ID':
                   return 'test-client-id';
@@ -41,10 +41,10 @@ describe('GithubStrategy', () => {
 
   describe('constructor', () => {
     it('should throw an error if GitHub config is missing', () => {
-      jest.spyOn(configService, 'get').mockReturnValueOnce(null);
+      jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new GithubStrategy(configService)).toThrowError(
-        'Missing GitHub config',
+        'OAuth2Strategy requires a clientID option',
       );
     });
   });

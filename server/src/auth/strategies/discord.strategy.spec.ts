@@ -14,7 +14,7 @@ describe('DiscordStrategy', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn((key: string) => {
+            getOrThrow: jest.fn((key: string) => {
               switch (key) {
                 case 'DISCORD_CLIENT_ID':
                   return 'test-client-id';
@@ -41,10 +41,10 @@ describe('DiscordStrategy', () => {
 
   describe('constructor', () => {
     it('should throw an error if Discord config is missing', () => {
-      jest.spyOn(configService, 'get').mockReturnValueOnce(null);
+      jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new DiscordStrategy(configService)).toThrowError(
-        'Missing Discord config',
+        'OAuth2Strategy requires a clientID option',
       );
     });
   });

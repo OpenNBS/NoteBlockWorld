@@ -15,7 +15,7 @@ describe('GoogleStrategy', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn((key: string) => {
+            getOrThrow: jest.fn((key: string) => {
               switch (key) {
                 case 'GOOGLE_CLIENT_ID':
                   return 'test-client-id';
@@ -42,10 +42,10 @@ describe('GoogleStrategy', () => {
 
   describe('constructor', () => {
     it('should throw an error if Google config is missing', () => {
-      jest.spyOn(configService, 'get').mockReturnValueOnce(null);
+      jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new GoogleStrategy(configService)).toThrowError(
-        'Missing Google config',
+        'OAuth2Strategy requires a clientID option',
       );
     });
   });
