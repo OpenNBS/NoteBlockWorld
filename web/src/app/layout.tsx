@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import './globals.css';
@@ -8,9 +9,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
-
-import { GoogleAnalytics } from '@next/third-parties/google';
-
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
@@ -21,8 +19,11 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: { template: '%s | Note Block World', default: '' },
   description: 'Discover, share and listen to note block music',
+  applicationName: 'Note Block World',
+  keywords: ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
   openGraph: {
     type: 'website',
+    images: `${process.env.NEXT_PUBLIC_URL}/nbw-header.png`,
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_URL,
     siteName: 'Note Block World',

@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
-import { GetRequestToken } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
 import { SongService } from '../song.service';
@@ -24,6 +24,7 @@ export class MySongsController {
     @Query() query: PageQueryDTO,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongPageDto> {
+    user = validateUser(user);
     return await this.songService.getMySongsPage({
       query,
       user,

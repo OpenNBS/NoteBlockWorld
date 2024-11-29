@@ -1,4 +1,9 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common';
+import {
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+  createParamDecorator,
+} from '@nestjs/common';
 
 import { UserDocument } from './user/entity/user.entity';
 
@@ -10,3 +15,18 @@ export const GetRequestToken = createParamDecorator(
     return user;
   },
 );
+
+export const validateUser = (user: UserDocument | null) => {
+  if (!user) {
+    throw new HttpException(
+      {
+        error: {
+          user: 'User not found',
+        },
+      },
+      HttpStatus.UNAUTHORIZED,
+    );
+  }
+
+  return user;
+};
