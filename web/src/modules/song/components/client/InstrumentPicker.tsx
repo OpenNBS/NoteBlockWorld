@@ -77,17 +77,16 @@ const InstrumentTableRow = ({
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   const { song, formMethods } = useSongProvider(type);
 
-  const instruments = song?.instruments ?? [];
+  const instruments = song?.instruments ?? Array(10).fill('');
 
-  const [values, setValues] = useState<Array<string>>(() => ['']);
+  const [values, setValues] = useState<Array<string>>(
+    Array(instruments.length).fill(''),
+  );
 
   const setValue = (index: number, value: string) => {
     if (!values) {
-      console.log('Filling values');
       setValues(Array(instruments.length).fill(''));
     }
-
-    console.log(values);
 
     const newValues = [...values];
     newValues[index] = value;
@@ -117,6 +116,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
   useEffect(() => {
     fetchSoundList().then(setSoundList);
+    setValues(Array(10).fill(''));
   }, []);
 
   useEffect(() => {

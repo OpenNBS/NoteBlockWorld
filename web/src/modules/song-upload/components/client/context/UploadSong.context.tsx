@@ -124,7 +124,7 @@ export const UploadSongProvider = ({
       const data = response.data;
       const id = data.publicId as string;
       setUploadedSongId(id);
-      // setIsUploadComplete(true);
+      setIsUploadComplete(true);
     } catch (error: any) {
       if (error.response) {
         console.log('Error response', error.response);
@@ -145,7 +145,7 @@ export const UploadSongProvider = ({
     try {
       setIsSubmitting(true);
       await submitSongData();
-      // setIsUploadComplete(true);
+      setIsUploadComplete(true);
     } catch (e) {
       console.error('Error submitting song', e);
 
