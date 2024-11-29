@@ -1,59 +1,77 @@
-import Modal from 'react-modal';
+'use client';
 
-type TGenericModalProps = {
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+
+export default function GenericModal({
+  isOpen,
+  setIsOpen = () => {
+    return;
+  },
+  title,
+  children,
+}: {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen?: (isOpen: boolean) => void;
+  title: string;
   children: React.ReactNode;
-};
-
-const GenericModal = ({ isOpen, setIsOpen, children }: TGenericModalProps) => {
+}) {
   return (
-    <Modal
-      ariaHideApp={false}
-      closeTimeoutMS={200}
-      onAfterOpen={() => {
-        document.body.style.overflow = 'hidden';
-      }}
-      onAfterClose={() => {
-        document.body.style.overflow = 'unset';
-      }}
-      style={{
-        content: {
-          top: '50%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          transform: 'translate(-50%, -50%)',
-          overflow: 'visible',
-          width: 'auto',
-          height: 'auto',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          zIndex: 99,
-          border: 'none',
-          padding: '0',
-          color: 'white',
-          backgroundColor: 'transparent',
-        },
-        overlay: {
-          position: 'fixed',
-          top: '-25vh',
-          left: '-25vw',
-          right: 0,
-          bottom: 0,
-          width: '150vw',
-          height: '150vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
-          backdropFilter: 'blur(5px)',
-          zIndex: 99,
-        },
-      }}
-      isOpen={isOpen}
-      onRequestClose={() => setIsOpen(false)}
-    >
-      {children}
-    </Modal>
-  );
-};
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog
+        as='div'
+        className='relative z-10'
+        onClose={() => setIsOpen(false)}
+      >
+        <Transition.Child
+          as={Fragment}
+          enter='ease-out-back duration-300'
+          enterFrom='opacity-0'
+          enterTo='opacity-100'
+          leave='ease-in duration-200'
+          leaveFrom='opacity-100'
+          leaveTo='opacity-0'
+        >
+          <div className='fixed inset-0 bg-black/50' />
+        </Transition.Child>
 
-export default GenericModal;
+        <div className='fixed inset-0 w-screen overflow-y-auto'>
+          <div className='flex min-h-full items-center justify-center p-4 text-center'>
+            <Transition.Child
+              as={Fragment}
+              enter='ease-out-back duration-300'
+              enterFrom='opacity-0 scale-50'
+              enterTo='opacity-100 scale-100'
+              leave='ease-in duration-200'
+              leaveFrom='opacity-100 scale-100'
+              leaveTo='opacity-0 scale-90'
+            >
+              <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all'>
+                <Dialog.Title
+                  as='h3'
+                  className='text-2xl font-semibold leading-6 text-white mb-5'
+                >
+                  {title}
+                </Dialog.Title>
+
+                {/* X button */}
+                <button
+                  type='button'
+                  aria-label='Close'
+                  className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FontAwesomeIcon icon={faClose} />
+                </button>
+
+                {children}
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+}
