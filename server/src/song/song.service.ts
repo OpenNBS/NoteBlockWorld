@@ -103,9 +103,14 @@ export class SongService {
 
     await this.fileService.deleteSong(foundSong.nbsFileUrl);
 
-    return UploadSongResponseDto.fromSongWithUserDocument(
-      (await foundSong.populate('uploader')) as unknown as SongWithUser,
-    );
+    const populatedSong = (await foundSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    )) as unknown as SongWithUser;
+
+    await this.songWebhookService.deleteSongWebhook(populatedSong);
+
+    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async patchSong(
@@ -165,13 +170,19 @@ export class SongService {
     // Update document's last update time
     foundSong.updatedAt = new Date();
 
-    // Save song document
-    const updatedSong = await foundSong.save();
-
-    const populatedSong = (await updatedSong.populate(
+    const populatedSong = (await foundSong.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
+
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+      populatedSong,
+    );
+
+    foundSong.webhookMessageId = webhookMessageId;
+
+    // Save song document
+    await foundSong.save();
 
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
