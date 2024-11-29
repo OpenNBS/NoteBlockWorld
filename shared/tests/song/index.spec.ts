@@ -111,9 +111,8 @@ describe('SongStatsGenerator', () => {
     assert(stats.compatible === true);
   });
 
-  it('', () => {
-    // Test that the instrument counts are correctly calculated if the song
-    // contains custom instruments and uses them.
+  it('Test that the instrument counts are correctly calculated if the song contains custom instruments and uses them.', () => {
+    // Test that the instrument counts are correctly calculated if the song contains custom instruments and uses them.
 
     const stats = testSongStats.customInstrumentUsage;
     const firstCustomIndex = stats.firstCustomInstrumentIndex;
@@ -156,7 +155,7 @@ describe('SongStatsGenerator', () => {
     assert(stats.tempoRange?.toString() === [10.0, 18.0].toString());
   });
 
-  it('', () => {
+  it("Includes a tempo changer at the start of the song with a different tempo than the song's default tempo.", () => {
     // Includes a tempo changer at the start of the song with a different tempo
     // than the song's default tempo. The code should ignore the song's default
     // tempo and use the tempo from the tempo changer for calculating the song's
@@ -182,9 +181,7 @@ describe('SongStatsGenerator', () => {
     assert(stats.tempoRange?.toString() === [4.0, 18.0].toString());
   });
 
-  it('', () => {
-    // Test that multiple tempo changer instruments are properly handled.
-
+  it('Test that multiple tempo changer instruments are properly handled.', () => {
     const stats = testSongStats.tempoChangerMultipleInstruments;
 
     const duration = (1 / 10 + 1 / 12 + 1 / 14 + 1 / 16 + 1 / 18) * 4;
