@@ -1,3 +1,4 @@
+import { UploadConst } from '@shared/validation/song/constants';
 import { formatDuration } from '@web/src/modules/shared/util/format';
 import { customAlphabet } from 'nanoid';
 
@@ -23,16 +24,18 @@ export function getUploadDiscordEmbed({
   title,
   description,
   uploader,
+  createdAt,
   publicId,
   thumbnailUrl,
   thumbnailData,
   originalAuthor,
   category,
+  license,
   stats,
 }: SongWithUser) {
   console.log(Number('0x' + thumbnailData.backgroundColor.replace('#', '')));
 
-  const fieldsArray = [];
+  let fieldsArray = [];
 
   if (originalAuthor) {
     fieldsArray.push({
@@ -42,10 +45,10 @@ export function getUploadDiscordEmbed({
     });
   }
 
-  fieldsArray.concat([
+  fieldsArray = fieldsArray.concat([
     {
       name: 'Category',
-      value: category,
+      value: UploadConst.categories[category],
       inline: true,
     },
     {
@@ -56,7 +59,7 @@ export function getUploadDiscordEmbed({
     {
       name: 'Length',
       value: formatDuration(stats.duration),
-      inline: false,
+      inline: true,
     },
   ]);
 
@@ -65,9 +68,12 @@ export function getUploadDiscordEmbed({
       {
         title: title,
         description: description,
-        color: Number('0x' + thumbnailData.backgroundColor),
+        color: Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
+        timestamp: createdAt.toISOString(),
         footer: {
-          text: '',
+          text: UploadConst.licenses[license]
+            ? UploadConst.licenses[license].shortName
+            : 'Unknown License',
         },
         author: {
           name: uploader.username,
