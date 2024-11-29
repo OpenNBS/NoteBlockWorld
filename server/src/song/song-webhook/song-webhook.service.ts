@@ -37,23 +37,24 @@ export class SongWebhookService implements OnModuleInit {
 
     const webhookData = getUploadDiscordEmbed(song);
 
-    try {
-      const response = await fetch(`${webhookUrl}?wait=true`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookData),
+    await fetch(`${webhookUrl}?wait=true`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(webhookData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.logger.log(`Posted webhook message for song ${song.publicId}`);
+        return data.id; // Discord message ID
+      })
+      .catch((e) => {
+        this.logger.error('Error sending Discord webhook', e);
+        return null;
       });
 
-      const data = await response.json();
-
-      this.logger.log(`Posted webhook message for song ${song.publicId}`);
-      return data.id; // Discord message ID
-    } catch (e) {
-      this.logger.error('Error sending Discord webhook', e);
-      return null;
-    }
+    return null;
   }
 
   public async updateSongWebhook(song: SongWithUser) {
@@ -80,19 +81,19 @@ export class SongWebhookService implements OnModuleInit {
 
     const webhookData = getUploadDiscordEmbed(song);
 
-    try {
-      await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookData),
+    await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(webhookData),
+    })
+      .then(() => {
+        this.logger.log(`Updated webhook message for song ${song.publicId}`);
+      })
+      .catch((e) => {
+        this.logger.error('Error updating Discord webhook', e);
       });
-
-      this.logger.log(`Updated webhook message for song ${song.publicId}`);
-    } catch (e) {
-      this.logger.error('Error updating Discord webhook', e);
-    }
   }
 
   public async deleteSongWebhook(song: SongWithUser) {
@@ -117,15 +118,15 @@ export class SongWebhookService implements OnModuleInit {
       return;
     }
 
-    try {
-      await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
-        method: 'DELETE',
+    await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        this.logger.log(`Deleted webhook message for song ${song.publicId}`);
+      })
+      .catch((e) => {
+        this.logger.error('Error deleting Discord webhook', e);
       });
-
-      this.logger.log(`Deleted webhook message for song ${song.publicId}`);
-    } catch (e) {
-      this.logger.error('Error deleting Discord webhook', e);
-    }
   }
 
   public async syncSongWebhook(song: SongWithUser) {
