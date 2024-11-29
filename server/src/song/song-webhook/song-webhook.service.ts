@@ -172,7 +172,7 @@ export class SongWebhookService implements OnModuleInit {
      */
     const songQuery = this.songModel
       .find({ webhookMessageId: { $exists: false } })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .populate('uploader', 'username profileImage -_id');
 
     for await (const songDocument of songQuery) {
