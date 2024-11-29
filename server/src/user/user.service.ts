@@ -114,14 +114,15 @@ export class UserService {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9_]/g, '');
 
-    // Find if there's already a user with the same username
-    let nameTaken = await this.usernameExists(baseUsername);
+    let newUsername = baseUsername;
+    let counter = 1;
 
-    while (nameTaken) {
-      const newUsername = `${baseUsername}.${Math.floor(Math.random() * 100)}`;
-      nameTaken = await this.usernameExists(newUsername);
+    // Check if the base username already exists
+    while (await this.usernameExists(newUsername)) {
+      newUsername = `${baseUsername}_${counter}`;
+      counter++;
     }
 
-    return baseUsername;
+    return newUsername;
   }
 }
