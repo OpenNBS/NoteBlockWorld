@@ -47,6 +47,8 @@ export class SongWebhookService implements OnModuleInit {
       });
 
       const data = await response.json();
+
+      this.logger.log(`Posted webhook message for song ${song.publicId}`);
       return data.id; // Discord message ID
     } catch (e) {
       this.logger.error('Error sending Discord webhook', e);
@@ -86,6 +88,8 @@ export class SongWebhookService implements OnModuleInit {
         },
         body: JSON.stringify(webhookData),
       });
+
+      this.logger.log(`Updated webhook message for song ${song.publicId}`);
     } catch (e) {
       this.logger.error('Error updating Discord webhook', e);
     }
@@ -117,6 +121,8 @@ export class SongWebhookService implements OnModuleInit {
       await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
         method: 'DELETE',
       });
+
+      this.logger.log(`Deleted webhook message for song ${song.publicId}`);
     } catch (e) {
       this.logger.error('Error deleting Discord webhook', e);
     }
