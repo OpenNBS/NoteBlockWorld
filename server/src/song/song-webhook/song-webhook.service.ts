@@ -171,7 +171,7 @@ export class SongWebhookService implements OnModuleInit {
      * @returns {Promise<void>} A promise that resolves when all songs have been processed.
      */
     const songQuery = this.songModel
-      .find({})
+      .find({ webhookMessageId: { $exists: false } })
       .sort({ createdAt: -1 })
       .populate('uploader', 'username profileImage -_id');
 
