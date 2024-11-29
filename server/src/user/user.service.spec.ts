@@ -283,7 +283,7 @@ describe('UserService', () => {
 
       const result = await service.generateUsername(inputUsername);
 
-      expect(result).toMatch('test_user');
+      expect(result).toMatch('test_user_2');
       expect(service.usernameExists).toHaveBeenCalledWith(baseUsername);
     });
   });
