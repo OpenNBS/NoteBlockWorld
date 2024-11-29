@@ -68,7 +68,7 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId = await this.songWebhookService.postDiscordWebhook(
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
       populatedSong,
     );
 
