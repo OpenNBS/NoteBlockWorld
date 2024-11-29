@@ -24,6 +24,7 @@ import {
   SongWithUser,
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
+import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { removeExtraSpaces } from './song.util';
 
 @Injectable()
@@ -38,6 +39,9 @@ export class SongService {
 
     @Inject(SongUploadService)
     private songUploadService: SongUploadService,
+
+    @Inject(SongWebhookService)
+    private songWebhookService: SongWebhookService,
   ) {}
 
   public async uploadSong({
@@ -64,7 +68,7 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId = await this.songUploadService.postDiscordWebhook(
+    const webhookMessageId = await this.songWebhookService.postDiscordWebhook(
       populatedSong,
     );
 

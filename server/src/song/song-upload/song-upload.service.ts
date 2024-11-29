@@ -21,16 +21,8 @@ import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
-import {
-  SongDocument,
-  Song as SongEntity,
-  SongWithUser,
-} from '../entity/song.entity';
-import {
-  generateSongId,
-  getUploadDiscordEmbed,
-  removeExtraSpaces,
-} from '../song.util';
+import { SongDocument, Song as SongEntity } from '../entity/song.entity';
+import { generateSongId, removeExtraSpaces } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
@@ -468,33 +460,6 @@ export class SongUploadService {
         },
         HttpStatus.BAD_REQUEST,
       );
-    }
-  }
-
-  public async postDiscordWebhook(song: SongWithUser) {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-
-    if (!webhookUrl) {
-      this.logger.error('Discord webhook URL not found');
-      return;
-    }
-
-    const webhookData = getUploadDiscordEmbed(song);
-
-    try {
-      const response = await fetch(`${webhookUrl}?wait=true`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookData),
-      });
-
-      const data = await response.json();
-      return data.id; // Discord message ID
-    } catch (e) {
-      this.logger.error('Error sending Discord webhook', e);
-      return;
     }
   }
 }
