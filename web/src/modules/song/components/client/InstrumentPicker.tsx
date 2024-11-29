@@ -75,25 +75,7 @@ const InstrumentTableRow = ({
 };
 
 const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
-  const { song, formMethods } = useSongProvider(type);
-
-  const instruments = song?.instruments ?? Array(10).fill('');
-
-  const [values, setValues] = useState<Array<string>>(
-    Array(instruments.length).fill(''),
-  );
-
-  const setValue = (index: number, value: string) => {
-    if (!values) {
-      setValues(Array(instruments.length).fill(''));
-    }
-
-    const newValues = [...values];
-    newValues[index] = value;
-    setValues(newValues);
-
-    formMethods.setValue('customInstruments', newValues);
-  };
+  const { song, instrumentSounds, setInstrumentSound } = useSongProvider(type);
 
   async function fetchSoundList() {
     try {
@@ -116,14 +98,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
   useEffect(() => {
     fetchSoundList().then(setSoundList);
-    setValues(Array(10).fill(''));
   }, []);
-
-  useEffect(() => {
-    if (song) {
-      setValues(formMethods.getValues().customInstruments);
-    }
-  }, [song, formMethods]);
 
   return (
     <div className='flex flex-col w-full'>
@@ -143,7 +118,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
       {/* Instruments */}
       <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
-        {instruments.map((instrument, i) => (
+        {song?.instruments.map((instrument, i) => (
           <InstrumentTableRow
             key={i}
             instrument={instrument}
@@ -151,10 +126,10 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
           >
             <SongSearchCombo
               setValue={(value: string) => {
-                setValue(i, value);
+                setInstrumentSound(i, value);
               }}
               sounds={soundList}
-              value={values ? values[i] : ''}
+              value={instrumentSounds[i]}
               locked={instrument.count === 0}
             />
           </InstrumentTableRow>

@@ -4,7 +4,22 @@ import { NoteQuadTree } from './notes';
 import { InstrumentArray, SongFileType } from './types';
 import { getInstrumentNoteCounts } from './util';
 
-export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
+async function getVanillaSoundList() {
+  // Object that maps sound paths to their respective hashes
+
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + '/data/soundList.json',
+  );
+
+  const soundsMapping = (await response.json()) as Record<string, string>;
+  const vanillaSoundList = Object.keys(soundsMapping);
+
+  return vanillaSoundList;
+}
+
+export async function parseSongFromBuffer(
+  buffer: ArrayBuffer,
+): Promise<SongFileType> {
   const song = fromArrayBuffer(buffer);
 
   if (song.length === 0) {
@@ -12,6 +27,8 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
   }
 
   const quadTree = new NoteQuadTree(song);
+
+  const vanillaSoundList = await getVanillaSoundList();
 
   return {
     title: song.meta.name,
@@ -22,11 +39,14 @@ export function parseSongFromBuffer(buffer: ArrayBuffer): SongFileType {
     height: quadTree.height,
     arrayBuffer: buffer,
     notes: quadTree,
-    instruments: getInstruments(song),
+    instruments: getInstruments(song, vanillaSoundList),
   };
 }
 
-const getInstruments = (song: Song): InstrumentArray => {
+const getInstruments = (
+  song: Song,
+  vanillaSoundList: string[],
+): InstrumentArray => {
   const blockCounts = getInstrumentNoteCounts(song);
 
   const firstCustomIndex = song.instruments.firstCustomIndex;
@@ -36,9 +56,21 @@ const getInstruments = (song: Song): InstrumentArray => {
   );
 
   return customInstruments.map((instrument, id) => {
+    let soundFile = '';
+
+    const fullSoundPath = instrument.meta.soundFile.replace(
+      'minecraft/',
+      'minecraft/sounds/',
+    );
+
+    if (vanillaSoundList.includes(fullSoundPath)) {
+      soundFile = instrument.meta.soundFile;
+    }
+
     return {
       id: id,
       name: instrument.meta.name || '',
+      file: soundFile,
       count: blockCounts[id + firstCustomIndex] || 0,
     };
   });

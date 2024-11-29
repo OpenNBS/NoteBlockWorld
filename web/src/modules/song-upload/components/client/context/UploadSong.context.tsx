@@ -30,6 +30,8 @@ export type useUploadSongProviderType = {
   song: SongFileType | null;
   filename: string | null;
   setFile: (file: File | null) => void;
+  instrumentSounds: string[];
+  setInstrumentSound: (index: number, value: string) => void;
   formMethods: UseFormReturn<UploadSongForm>;
   submitSong: () => void;
   register: UseFormRegister<UploadSongForm>;
@@ -51,6 +53,7 @@ export const UploadSongProvider = ({
 }) => {
   const [song, setSong] = useState<SongFileType | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
+  const [instrumentSounds, setInstrumentSounds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   {
@@ -169,7 +172,7 @@ export const UploadSongProvider = ({
     let song: SongFileType;
 
     try {
-      song = parseSongFromBuffer(await file.arrayBuffer());
+      song = await parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
       console.error('Error parsing song file', e);
       toast.error('Invalid song file! Please try again with a different song.');
@@ -186,6 +189,20 @@ export const UploadSongProvider = ({
     formMethods.setValue('title', formTitle);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
+
+    const instrumentList = song.instruments.map(
+      (instrument) => instrument.file,
+    );
+
+    formMethods.setValue('customInstruments', instrumentList);
+    setInstrumentSounds(instrumentList);
+  };
+
+  const setInstrumentSound = (index: number, value: string) => {
+    const newValues = [...instrumentSounds];
+    newValues[index] = value;
+    setInstrumentSounds(newValues);
+    formMethods.setValue('customInstruments', newValues);
   };
 
   useEffect(() => {
@@ -253,6 +270,8 @@ export const UploadSongProvider = ({
         submitSong,
         song,
         filename,
+        instrumentSounds,
+        setInstrumentSound,
         setFile: setFileHandler,
         isSubmitting,
         isUploadComplete,
