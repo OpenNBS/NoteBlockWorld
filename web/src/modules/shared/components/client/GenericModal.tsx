@@ -7,9 +7,7 @@ import { Fragment } from 'react';
 
 export default function GenericModal({
   isOpen,
-  setIsOpen = () => {
-    return;
-  },
+  setIsOpen,
   title,
   children,
 }: {
@@ -23,7 +21,13 @@ export default function GenericModal({
       <Dialog
         as='div'
         className='relative z-10'
-        onClose={() => setIsOpen(false)}
+        onClose={
+          setIsOpen
+            ? () => setIsOpen(false)
+            : () => {
+                return;
+              }
+        }
       >
         <Transition.Child
           as={Fragment}
@@ -57,14 +61,16 @@ export default function GenericModal({
                 </Dialog.Title>
 
                 {/* X button */}
-                <button
-                  type='button'
-                  aria-label='Close'
-                  className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
-                  onClick={() => setIsOpen(false)}
-                >
-                  <FontAwesomeIcon icon={faClose} />
-                </button>
+                {setIsOpen && (
+                  <button
+                    type='button'
+                    aria-label='Close'
+                    className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <FontAwesomeIcon icon={faClose} />
+                  </button>
+                )}
 
                 {children}
               </Dialog.Panel>
