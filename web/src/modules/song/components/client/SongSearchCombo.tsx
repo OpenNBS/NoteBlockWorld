@@ -35,17 +35,21 @@ export function SongSearchCombo({
 
   let returnCount = 0;
 
-  const filteredSounds = sounds.filter((sound) => {
-    if (
-      returnCount < 100 &&
-      sound.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      returnCount++;
-      return true;
-    }
+  const filteredSounds = sounds
+    .filter((sound) => {
+      if (
+        returnCount < 100 &&
+        sound.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        returnCount++;
+        return true;
+      }
 
-    return false;
-  });
+      return false;
+    })
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }),
+    );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
