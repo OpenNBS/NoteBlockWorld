@@ -246,7 +246,7 @@ export const EditSongProvider = ({
       ).data as ArrayBuffer;
 
       // convert to song
-      const song = parseSongFromBuffer(songFile);
+      const song = await parseSongFromBuffer(songFile);
 
       // pad instruments array for safety
       const songInstruments = Array(song.instruments.length).fill('');
