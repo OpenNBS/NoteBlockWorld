@@ -232,11 +232,6 @@ export const UploadSongProvider = ({
         bgColors[colorKeys[randomColor]].dark,
       );
 
-      formMethods.setValue(
-        'customInstruments',
-        Array(song.instruments.length).fill(''),
-      );
-
       formMethods.setValue('allowDownload', true);
 
       // disable allowDownload
