@@ -64,7 +64,7 @@ const getInstruments = (
     );
 
     if (vanillaSoundList.includes(fullSoundPath)) {
-      soundFile = instrument.meta.soundFile;
+      soundFile = fullSoundPath;
     }
 
     return {
