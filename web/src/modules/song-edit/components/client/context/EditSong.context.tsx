@@ -29,6 +29,8 @@ export type useEditSongProviderType = {
   register: UseFormRegister<EditSongForm>;
   errors: FieldErrors<EditSongForm>;
   song: SongFileType | null;
+  instrumentSounds: string[];
+  setInstrumentSound: (index: number, value: string) => void;
   sendError: string | null;
   isSubmitting: boolean;
   loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
@@ -50,6 +52,7 @@ export const EditSongProvider = ({
   });
 
   const [song, setSong] = useState<SongFileType | null>(null);
+  const [instrumentSounds, setInstrumentSounds] = useState<string[]>([]);
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -248,18 +251,24 @@ export const EditSongProvider = ({
       // convert to song
       const song = await parseSongFromBuffer(songFile);
 
-      // pad instruments array for safety
-      const songInstruments = Array(song.instruments.length).fill('');
-
-      songData.customInstruments.forEach((instrument, index) => {
-        songInstruments[index] = instrument;
-      });
-
+      // set instruments array
+      const songInstruments = songData.customInstruments;
+      setInstrumentSounds(songInstruments);
       formMethods.setValue('customInstruments', songInstruments);
 
       setSong(song);
     },
     [formMethods, setSong],
+  );
+
+  const setInstrumentSound = useCallback(
+    (index: number, value: string) => {
+      const newValues = [...instrumentSounds];
+      newValues[index] = value;
+      setInstrumentSounds(newValues);
+      formMethods.setValue('customInstruments', newValues);
+    },
+    [formMethods, instrumentSounds],
   );
 
   const setSongId = useCallback(
@@ -289,6 +298,8 @@ export const EditSongProvider = ({
       value={{
         formMethods,
         submitSong,
+        instrumentSounds,
+        setInstrumentSound,
         register,
         errors,
         song,
