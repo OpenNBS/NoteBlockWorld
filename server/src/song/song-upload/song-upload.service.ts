@@ -57,16 +57,16 @@ export class SongUploadService {
   }
 
   private async getValidSoundsSubset() {
-    // Creates a set of valid sound paths from filteredSoundList.json,
-    // a manually-crafted subset of sounds from Minecraft
+    // Creates a set of valid sound paths from the full list of sounds in Minecraft
 
     if (!this.soundsSubset) {
       try {
         const response = await fetch(
-          process.env.SERVER_URL + '/api/v1/data/filteredSoundList.json',
+          process.env.SERVER_URL + '/api/v1/data/soundList.json',
         );
 
-        const soundList = (await response.json()) as string[];
+        const soundMapping = (await response.json()) as Record<string, string>;
+        const soundList = Object.keys(soundMapping);
         this.soundsSubset = new Set(soundList);
       } catch (e) {
         throw new HttpException(
