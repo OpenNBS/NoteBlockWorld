@@ -79,15 +79,16 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
 
   async function fetchSoundList() {
     try {
-      const response = await axiosInstance.get<string[]>(
-        '/data/filteredSoundList.json',
+      const response = await axiosInstance.get<Map<string, string>>(
+        '/data/soundList.json',
         {
           withCredentials: true,
         },
       );
 
       const data = response.data;
-      return data;
+      const sounds = Object.keys(data);
+      return sounds;
     } catch (e) {
       console.error('Error fetching sound list', e);
       return [];
