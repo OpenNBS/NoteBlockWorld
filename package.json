@@ -12,8 +12,8 @@
         "dev": "pnpm build:data && pnpm run --parallel dev",
         "dev:web": "pnpm run --filter ./web dev",
         "dev:server": "pnpm run --filter ./server dev",
-        "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "pnpm run --parallel lint",
+        "test": "pnpm run --parallel test",
         "cy:open": "pnpm run --filter ./tests cy:open",
         "prettier": "prettier --write .",
         "build:data": "ts-node ./build.ts"
