@@ -3,12 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
+import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { AuthService } from './auth.service';
 import { DiscordUser } from './types/discordProfile';
 import { GithubAccessToken } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
+import { Profile } from './types/profile';
 
 jest.mock('axios');
 const mockAxios = axios as jest.Mocked<typeof axios>;
@@ -391,4 +393,189 @@ describe('AuthService', () => {
       expect(result).toEqual({ id: 'test-id' });
     });
   });
+
+  describe('createJwtPayload', () => {
+    it('should create access and refresh tokens', async () => {
+      const payload = { id: 'user-id', username: 'testuser' };
+      const accessToken = 'access-token';
+      const refreshToken = 'refresh-token';
+
+      jest
+        .spyOn(jwtService, 'signAsync')
+        .mockImplementation((payload, options: any) => {
+          if (options.secret === 'test-jwt-secret') {
+            return Promise.resolve(accessToken);
+          } else if (options.secret === 'test-jwt-refresh-secret') {
+            return Promise.resolve(refreshToken);
+          }
+
+          return Promise.reject(new Error('Invalid secret'));
+        });
+
+      const tokens = await (authService as any).createJwtPayload(payload);
+
+      expect(tokens).toEqual({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+
+      expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
+        secret: 'test-jwt-secret',
+        expiresIn: '1d',
+      });
+
+      expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
+        secret: 'test-jwt-refresh-secret',
+        expiresIn: '7d',
+      });
+    });
+  });
+
+  describe('GenTokenRedirect', () => {
+    it('should set cookies and redirect to the frontend URL', async () => {
+      const user_registered = {
+        _id: 'user-id',
+        email: 'test@example.com',
+        username: 'testuser',
+      } as unknown as UserDocument;
+
+      const res = {
+        cookie: jest.fn(),
+        redirect: jest.fn(),
+      } as unknown as Response;
+
+      const tokens = {
+        access_token: 'access-token',
+        refresh_token: 'refresh-token',
+      };
+
+      jest
+        .spyOn(authService as any, 'createJwtPayload')
+        .mockResolvedValue(tokens);
+
+      await (authService as any).GenTokenRedirect(user_registered, res);
+
+      expect((authService as any).createJwtPayload).toHaveBeenCalledWith({
+        id: 'user-id',
+        email: 'test@example.com',
+        username: 'testuser',
+      });
+
+      expect(res.cookie).toHaveBeenCalledWith('token', 'access-token', {
+        domain: '.test.com',
+        maxAge: 1,
+      });
+
+      expect(res.cookie).toHaveBeenCalledWith(
+        'refresh_token',
+        'refresh-token',
+        {
+          domain: '.test.com',
+          maxAge: 1,
+        },
+      );
+
+      expect(res.redirect).toHaveBeenCalledWith('http://frontend.test.com/');
+    });
+  });
+
+  describe('verifyWhitelist', () => {
+    it('should approve login if whitelist is empty', async () => {
+      (authService as any).WHITELISTED_USERS = '';
+      const result = await (authService as any).verifyWhitelist('anyuser');
+      expect(result).toBe(true);
+    });
+
+    it('should approve login if username is in the whitelist', async () => {
+      (authService as any).WHITELISTED_USERS = 'user1,user2,user3';
+      const result = await (authService as any).verifyWhitelist('user1');
+      expect(result).toBe(true);
+    });
+
+    it('should reject login if username is not in the whitelist', async () => {
+      const result = await (authService as any).verifyWhitelist('user4');
+      expect(result).toBe(false);
+    });
+
+    it('should approve login if username is in the whitelist (case insensitive)', async () => {
+      (authService as any).WHITELISTED_USERS = 'user1,user2,user3';
+      const result = await (authService as any).verifyWhitelist('User1');
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('verifyAndGetUser', () => {
+    it('should create a new user if the user is not registered', async () => {
+      const user: Profile = {
+        username: 'testuser',
+        email: 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg',
+      };
+
+      mockUserService.findByEmail.mockResolvedValue(null);
+      mockUserService.create.mockResolvedValue({ id: 'new-user-id' });
+
+      const result = await (authService as any).verifyAndGetUser(user);
+
+      expect(userService.findByEmail).toHaveBeenCalledWith('test@example.com');
+
+      expect(userService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          email: 'test@example.com',
+          profileImage: 'http://example.com/photo.jpg',
+        }),
+      );
+
+      expect(result).toEqual({ id: 'new-user-id' });
+    });
+
+    it('should return the registered user if the user is already registered', async () => {
+      const user: Profile = {
+        username: 'testuser',
+        email: 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg',
+      };
+
+      const registeredUser = {
+        id: 'registered-user-id',
+        profileImage: 'http://example.com/photo.jpg',
+      };
+
+      mockUserService.findByEmail.mockResolvedValue(registeredUser);
+
+      const result = await (authService as any).verifyAndGetUser(user);
+
+      expect(userService.findByEmail).toHaveBeenCalledWith('test@example.com');
+      expect(result).toEqual(registeredUser);
+    });
+
+    it('should update the profile image if it has changed', async () => {
+      const user: Profile = {
+        username: 'testuser',
+        email: 'test@example.com',
+        profileImage: 'http://example.com/new-photo.jpg',
+      };
+
+      const registeredUser = {
+        id: 'registered-user-id',
+        profileImage: 'http://example.com/old-photo.jpg',
+        save: jest.fn(),
+      };
+
+      mockUserService.findByEmail.mockResolvedValue(registeredUser);
+
+      const result = await (authService as any).verifyAndGetUser(user);
+
+      expect(userService.findByEmail).toHaveBeenCalledWith('test@example.com');
+
+      expect(registeredUser.profileImage).toEqual(
+        'http://example.com/new-photo.jpg',
+      );
+
+      expect(registeredUser.save).toHaveBeenCalled();
+      expect(result).toEqual(registeredUser);
+    });
+  });
+
+  describe('createNewUser', () => {});
 });
