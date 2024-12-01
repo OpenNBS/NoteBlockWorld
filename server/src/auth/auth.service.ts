@@ -38,25 +38,7 @@ export class AuthService {
     private readonly WHITELISTED_USERS: string,
     @Inject('APP_DOMAIN')
     private readonly APP_DOMAIN?: string,
-  ) {
-    //const config = {
-    //  FRONTEND_URL: configService.get('FRONTEND_URL'),
-    //  APP_DOMAIN:
-    //    configService.get('APP_DOMAIN').length > 0
-    //      ? configService.get('APP_DOMAIN')
-    //      : undefined,
-    //  COOKIE_EXPIRES_IN:
-    //    configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
-    //  JWT_SECRET: this.configService.get('JWT_SECRET'),
-    //  JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
-    //  JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
-    //  JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
-    //  WHITELISTED_USERS: this.configService.get('WHITELISTED_USERS'),
-    //};
-    //this.WHITELISTED_USERS = this.WHITELISTED_USERS
-    //  ? config.WHITELISTED_USERS.toLowerCase().split(',')
-    //  : [];
-  }
+  ) {}
 
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
