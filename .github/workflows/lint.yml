@@ -11,6 +11,8 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      THUMBNAIL_URL: ${{ variables.THUMBNAIL_URL }}
 
     steps:
       - name: Checkout code
