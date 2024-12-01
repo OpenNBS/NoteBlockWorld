@@ -52,8 +52,8 @@ importers:
         specifier: ^3.525.0
         version: 3.592.0
       '@encode42/nbs.js':
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^5.0.1
+        version: 5.0.1
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -212,8 +212,8 @@ importers:
   shared:
     dependencies:
       '@encode42/nbs.js':
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^5.0.1
+        version: 5.0.1
       '@napi-rs/canvas':
         specifier: ^0.1.53
         version: 0.1.53
@@ -799,9 +799,10 @@ packages:
   '@emnapi/runtime@1.2.0':
     resolution: {integrity: sha512-bV21/9LQmcQeCPEg3BDFtvwL6cwiTMksYNWQQ4KOxCZikEGalWtenoZ0wCiukJINlGCIi2KXx01g4FoH/LxpzQ==}
 
-  '@encode42/nbs.js@5.0.0':
-    resolution: {integrity: sha512-h0p+4Rn25c7NGD8MVEqVJMfiIzrqX1gslRau+D5RzipnbNbsT/nMhfFP2CQ3RukxbmTLgPysrCniGxxLgou9gA==}
+  '@encode42/nbs.js@5.0.1':
+    resolution: {integrity: sha512-MLAvVnHkObJjiGtlgcpHYgnPdlp7eqjYYjKN6LLSlSrVHz7uq+4LsT82Jz2ptngol5hyCptkMctX3zf0FFcmjQ==}
     engines: {node: '>=18', pnpm: '>=8'}
+    deprecated: Moved to @nbsjs/core
 
   '@eslint-community/eslint-utils@4.4.0':
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
@@ -6831,7 +6832,7 @@ snapshots:
       tslib: 2.6.3
     optional: true
 
-  '@encode42/nbs.js@5.0.0': {}
+  '@encode42/nbs.js@5.0.1': {}
 
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.0)':
     dependencies:
