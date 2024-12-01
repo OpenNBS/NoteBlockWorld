@@ -4,6 +4,7 @@ import { customAlphabet } from 'nanoid';
 
 import { SongWithUser } from './entity/song.entity';
 
+// TODO: Move to shared
 export const formatDuration = (totalSeconds: number) => {
   const minutes = Math.floor(Math.ceil(totalSeconds) / 60);
   const seconds = Math.ceil(totalSeconds) % 60;
