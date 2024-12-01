@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import axios from 'axios';
@@ -17,47 +16,29 @@ import { TokenPayload, Tokens } from './types/token';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-  private readonly FRONTEND_URL: string;
-  private readonly APP_DOMAIN?: string;
-  private readonly COOKIE_EXPIRES_IN: string;
-  private readonly JWT_SECRET: string;
-  private readonly JWT_EXPIRES_IN: string;
-  private readonly JWT_REFRESH_SECRET: string;
-  private readonly JWT_REFRESH_EXPIRES_IN: string;
-  private readonly WHITELISTED_USERS: string;
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,
+    @Inject(JwtService)
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {
-    const config = {
-      FRONTEND_URL: configService.get('FRONTEND_URL'),
-      APP_DOMAIN:
-        configService.get('APP_DOMAIN').length > 0
-          ? configService.get('APP_DOMAIN')
-          : undefined,
-      COOKIE_EXPIRES_IN:
-        configService.get('COOKIE_EXPIRES_IN') || String(60 * 60 * 24 * 7), // 7 days
-      JWT_SECRET: this.configService.get('JWT_SECRET'),
-      JWT_EXPIRES_IN: this.configService.get('JWT_EXPIRES_IN'),
-      JWT_REFRESH_SECRET: this.configService.get('JWT_REFRESH_SECRET'),
-      JWT_REFRESH_EXPIRES_IN: this.configService.get('JWT_REFRESH_EXPIRES_IN'),
-      WHITELISTED_USERS: this.configService.get('WHITELISTED_USERS'),
-    };
+    @Inject('FRONTEND_URL')
+    private readonly FRONTEND_URL: string,
 
-    this.FRONTEND_URL = config.FRONTEND_URL;
-    this.APP_DOMAIN = config.APP_DOMAIN;
-    this.COOKIE_EXPIRES_IN = config.COOKIE_EXPIRES_IN;
-    this.JWT_SECRET = config.JWT_SECRET;
-    this.JWT_EXPIRES_IN = config.JWT_EXPIRES_IN;
-    this.JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET;
-    this.JWT_REFRESH_EXPIRES_IN = config.JWT_REFRESH_EXPIRES_IN;
-
-    this.WHITELISTED_USERS = config.WHITELISTED_USERS
-      ? config.WHITELISTED_USERS.toLowerCase().split(',')
-      : [];
-  }
+    @Inject('COOKIE_EXPIRES_IN')
+    private readonly COOKIE_EXPIRES_IN: string,
+    @Inject('JWT_SECRET')
+    private readonly JWT_SECRET: string,
+    @Inject('JWT_EXPIRES_IN')
+    private readonly JWT_EXPIRES_IN: string,
+    @Inject('JWT_REFRESH_SECRET')
+    private readonly JWT_REFRESH_SECRET: string,
+    @Inject('JWT_REFRESH_EXPIRES_IN')
+    private readonly JWT_REFRESH_EXPIRES_IN: string,
+    @Inject('WHITELISTED_USERS')
+    private readonly WHITELISTED_USERS: string,
+    @Inject('APP_DOMAIN')
+    private readonly APP_DOMAIN?: string,
+  ) {}
 
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;

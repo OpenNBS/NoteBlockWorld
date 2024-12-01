@@ -8,12 +8,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   private static logger = new Logger(JwtStrategy.name);
   constructor(@Inject(ConfigService) config: ConfigService) {
-    const JWT_SECRET = config.get('JWT_SECRET');
-
-    if (!JWT_SECRET) {
-      Logger.error('JWT_SECRET is not set');
-      throw new Error('JWT_SECRET is not set');
-    }
+    const JWT_SECRET = config.getOrThrow('JWT_SECRET');
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

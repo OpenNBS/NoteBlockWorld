@@ -17,7 +17,7 @@ import { SongWebhookService } from './song-webhook/song-webhook.service';
     MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
     AuthModule,
     UserModule,
-    FileModule,
+    FileModule.forRootAsync(),
   ],
   providers: [SongService, SongUploadService, SongWebhookService],
   controllers: [SongController, MySongsController],

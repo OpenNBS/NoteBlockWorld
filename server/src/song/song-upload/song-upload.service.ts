@@ -6,7 +6,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { injectSongFileMetadata } from '@shared/features/song/injectMetadata';
 import { NoteQuadTree } from '@shared/features/song/notes';
 import { obfuscateAndPackSong } from '@shared/features/song/pack';
@@ -15,7 +14,7 @@ import { drawToImage } from '@shared/features/thumbnail';
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
@@ -26,23 +25,21 @@ import { generateSongId, removeExtraSpaces } from '../song.util';
 
 @Injectable()
 export class SongUploadService {
-  soundsMapping: Record<string, string>;
-  soundsSubset: Set<string>;
+  private soundsMapping: Record<string, string>;
+  private soundsSubset: Set<string>;
 
   // TODO: move all upload auxiliary methods to new UploadSongService
-  private logger = new Logger(SongUploadService.name);
+  private readonly logger = new Logger(SongUploadService.name);
 
   constructor(
     @Inject(FileService)
     private fileService: FileService,
-    @InjectModel(SongEntity.name)
-    private songModel: Model<SongEntity>,
 
     @Inject(UserService)
     private userService: UserService,
   ) {}
 
-  private async getSoundsMapping() {
+  private async getSoundsMapping(): Promise<Record<string, string>> {
     // Object that maps sound paths to their respective hashes
 
     if (!this.soundsMapping) {
@@ -105,7 +102,7 @@ export class SongUploadService {
     packedFileKey: string,
     songStats: SongStats,
     file: Express.Multer.File,
-  ) {
+  ): Promise<SongEntity> {
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
     song.publicId = publicId;
@@ -207,7 +204,7 @@ export class SongUploadService {
     songDocument: SongDocument,
     body: UploadSongDto,
     user: UserDocument,
-  ) {
+  ): Promise<void> {
     // Compare arrays of custom instruments including order
     const customInstrumentsChanged =
       JSON.stringify(songDocument.customInstruments) !==
@@ -281,7 +278,7 @@ export class SongUploadService {
     buffer: Buffer,
     body: UploadSongDto,
     user: UserDocument,
-  ) {
+  ): { nbsSong: Song; songBuffer: Buffer } {
     const loadedArrayBuffer = new ArrayBuffer(buffer.byteLength);
     const view = new Uint8Array(loadedArrayBuffer);
 
@@ -311,7 +308,7 @@ export class SongUploadService {
   private async preparePackedSongForUpload(
     nbsSong: Song,
     soundsArray: string[],
-  ) {
+  ): Promise<Buffer> {
     const soundsMapping = await this.getSoundsMapping();
     const validSoundsSubset = await this.getValidSoundsSubset();
 
@@ -329,7 +326,7 @@ export class SongUploadService {
   private validateCustomInstruments(
     soundsArray: string[],
     validSounds: Set<string>,
-  ) {
+  ): void {
     const isInstrumentValid = (sound: string) =>
       sound === '' || validSounds.has(sound);
 
@@ -354,7 +351,7 @@ export class SongUploadService {
     thumbnailData: ThumbnailData,
     nbsSong: Song,
     publicId: string,
-  ) {
+  ): Promise<string> {
     const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
     const quadTree = new NoteQuadTree(nbsSong);
@@ -390,7 +387,10 @@ export class SongUploadService {
     return thumbUrl;
   }
 
-  private async uploadSongFile(file: Buffer, publicId: string) {
+  private async uploadSongFile(
+    file: Buffer,
+    publicId: string,
+  ): Promise<string> {
     let fileKey: string;
 
     try {
@@ -411,7 +411,10 @@ export class SongUploadService {
     return fileKey;
   }
 
-  private async uploadPackedSongFile(file: Buffer, publicId: string) {
+  private async uploadPackedSongFile(
+    file: Buffer,
+    publicId: string,
+  ): Promise<string> {
     let fileKey: string;
 
     try {
@@ -432,7 +435,7 @@ export class SongUploadService {
     return fileKey;
   }
 
-  public getSongObject(loadedArrayBuffer: ArrayBuffer) {
+  public getSongObject(loadedArrayBuffer: ArrayBuffer): Song {
     const nbsSong = fromArrayBuffer(loadedArrayBuffer);
 
     // If the above operation fails, it will return an empty song
@@ -450,7 +453,7 @@ export class SongUploadService {
     return nbsSong;
   }
 
-  private checkIsFileValid(file: Express.Multer.File) {
+  private checkIsFileValid(file: Express.Multer.File): void {
     if (!file) {
       throw new HttpException(
         {

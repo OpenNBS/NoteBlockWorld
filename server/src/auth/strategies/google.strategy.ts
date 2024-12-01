@@ -10,17 +10,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     @Inject(ConfigService)
     configService: ConfigService,
   ) {
-    const GOOGLE_CLIENT_ID = configService.get<string>('GOOGLE_CLIENT_ID');
+    const GOOGLE_CLIENT_ID =
+      configService.getOrThrow<string>('GOOGLE_CLIENT_ID');
 
-    const GOOGLE_CLIENT_SECRET = configService.get<string>(
+    const GOOGLE_CLIENT_SECRET = configService.getOrThrow<string>(
       'GOOGLE_CLIENT_SECRET',
     );
 
-    const SERVER_URL = configService.get<string>('SERVER_URL');
-
-    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !SERVER_URL) {
-      throw new Error('Missing Google config');
-    }
+    const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
     const callbackURL = `${SERVER_URL}/api/v1/auth/google/callback`;
     GoogleStrategy.logger.debug(`Google Login callbackURL ${callbackURL}`);

@@ -1,3 +1,4 @@
+// TODO: Move to shared/util
 export const formatDuration = (totalSeconds: number) => {
   const minutes = Math.floor(Math.ceil(totalSeconds) / 60);
   const seconds = Math.ceil(totalSeconds) % 60;

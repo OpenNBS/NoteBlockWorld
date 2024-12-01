@@ -14,7 +14,7 @@ export class UserService {
 
   public async create(user_registered: CreateUser) {
     await validate(user_registered);
-    const user = new this.userModel(user_registered);
+    const user = await this.userModel.create(user_registered);
     user.username = user_registered.username;
     user.email = user_registered.email;
     user.profileImage = user_registered.profileImage;
@@ -34,16 +34,26 @@ export class UserService {
     return user;
   }
 
-  public getUserPaginated(query: PageQueryDTO) {
-    const { page, limit } = query;
+  public async getUserPaginated(query: PageQueryDTO) {
+    const { page = 1, limit = 10, sort = 'createdAt', order = 'asc' } = query;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const options = {
-      page: page || 1,
-      limit: limit || 10,
+    const skip = (page - 1) * limit;
+    const sortOrder = order === 'asc' ? 1 : -1;
+
+    const users = await this.userModel
+      .find({})
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await this.userModel.countDocuments();
+
+    return {
+      users,
+      total,
+      page,
+      limit,
     };
-
-    return this.userModel.find({});
   }
 
   public async getUserByEmailOrId(query: GetUser) {
@@ -80,8 +90,6 @@ export class UserService {
   }
 
   public async getSelfUserData(user: UserDocument) {
-    if (!user)
-      throw new HttpException('not logged in', HttpStatus.UNAUTHORIZED);
     const usedData = await this.findByID(user._id.toString());
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);

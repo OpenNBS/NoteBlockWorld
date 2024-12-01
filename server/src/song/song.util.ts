@@ -1,8 +1,20 @@
 import { UploadConst } from '@shared/validation/song/constants';
-import { formatDuration } from '@web/src/modules/shared/util/format';
+
 import { customAlphabet } from 'nanoid';
 
 import { SongWithUser } from './entity/song.entity';
+
+// TODO: Move to shared
+export const formatDuration = (totalSeconds: number) => {
+  const minutes = Math.floor(Math.ceil(totalSeconds) / 60);
+  const seconds = Math.ceil(totalSeconds) % 60;
+
+  const formattedTime = `${minutes.toFixed().padStart(1, '0')}:${seconds
+    .toFixed()
+    .padStart(2, '0')}`;
+
+  return formattedTime;
+};
 
 export function removeExtraSpaces(input: string): string {
   return input

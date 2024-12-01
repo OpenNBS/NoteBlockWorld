@@ -10,17 +10,14 @@ export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
     @Inject(ConfigService)
     configService: ConfigService,
   ) {
-    const DISCORD_CLIENT_ID = configService.get<string>('DISCORD_CLIENT_ID');
+    const DISCORD_CLIENT_ID =
+      configService.getOrThrow<string>('DISCORD_CLIENT_ID');
 
-    const DISCORD_CLIENT_SECRET = configService.get<string>(
+    const DISCORD_CLIENT_SECRET = configService.getOrThrow<string>(
       'DISCORD_CLIENT_SECRET',
     );
 
-    const SERVER_URL = configService.get<string>('SERVER_URL');
-
-    if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET || !SERVER_URL) {
-      throw new Error('Missing Discord config');
-    }
+    const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
     super({
       clientID: DISCORD_CLIENT_ID,

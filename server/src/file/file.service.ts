@@ -7,21 +7,34 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class FileService {
-  s3Client: S3Client;
-  region: string;
-  bucketSongs: string;
-  bucketThumbs: string;
+  private readonly logger = new Logger(FileService.name);
+  private s3Client: S3Client;
+  private region: string;
+  private bucketSongs: string;
+  private bucketThumbs: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    @Inject('S3_BUCKET_SONGS')
+    private readonly S3_BUCKET_SONGS: string,
+    @Inject('S3_BUCKET_THUMBS')
+    private readonly S3_BUCKET_THUMBS: string,
+
+    @Inject('S3_KEY')
+    private readonly S3_KEY: string,
+    @Inject('S3_SECRET')
+    private readonly S3_SECRET: string,
+    @Inject('S3_ENDPOINT')
+    private readonly S3_ENDPOINT: string,
+    @Inject('S3_REGION')
+    private readonly S3_REGION: string,
+  ) {
+    const bucketSongs = S3_BUCKET_SONGS;
+    const bucketThumbs = S3_BUCKET_THUMBS;
     this.s3Client = this.getS3Client();
-
-    const bucketSongs = this.configService.get<string>('S3_BUCKET_SONGS');
-    const bucketThumbs = this.configService.get<string>('S3_BUCKET_THUMBS');
 
     if (!(bucketSongs && bucketThumbs)) {
       throw new Error('Missing S3 bucket configuration');
@@ -33,14 +46,10 @@ export class FileService {
 
   private getS3Client() {
     // Load environment variables
-    const key = this.configService.get<string>('S3_KEY');
-    const secret = this.configService.get<string>('S3_SECRET');
-    const endpoint = this.configService.get<string>('S3_ENDPOINT');
-    const region = this.configService.get<string>('S3_REGION');
-
-    if (!(key && secret && endpoint && region)) {
-      throw new Error('Missing S3 configuration');
-    }
+    const key = this.S3_KEY;
+    const secret = this.S3_SECRET;
+    const endpoint = this.S3_ENDPOINT;
+    const region = this.S3_REGION;
 
     this.region = region;
 
@@ -153,7 +162,7 @@ export class FileService {
     try {
       await this.s3Client.send(command);
     } catch (error) {
-      console.error('Error deleting file: ', error);
+      this.logger.error('Error deleting file: ', error);
       throw error;
     }
 
@@ -185,7 +194,7 @@ export class FileService {
       const s3Response = await this.s3Client.send(command);
       return s3Response;
     } catch (error) {
-      console.error('Error uploading file: ', error);
+      this.logger.error('Error uploading file: ', error);
       throw error;
     }
   }
@@ -208,7 +217,7 @@ export class FileService {
 
       return byteArray.buffer;
     } catch (error) {
-      console.error('Error getting file: ', error);
+      this.logger.error('Error getting file: ', error);
       throw error;
     }
   }
