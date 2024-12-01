@@ -12,7 +12,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     env:
-      THUMBNAIL_URL: ${{ variables.THUMBNAIL_URL }}
+      THUMBNAIL_URL: ${{ vars.THUMBNAIL_URL }}
 
     steps:
       - name: Checkout code
