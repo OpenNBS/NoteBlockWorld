@@ -19,6 +19,7 @@ import {
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongService } from './song.service';
+import { SongWebhookService } from './song-webhook/song-webhook.service';
 
 const mockFileService = {
   deleteSong: jest.fn(),
@@ -28,6 +29,14 @@ const mockFileService = {
 const mockSongUploadService = {
   processUploadedSong: jest.fn(),
   processSongPatch: jest.fn(),
+};
+
+const mockSongWebhookService = {
+  syncAllSongsWebhook: jest.fn(),
+  postSongWebhook: jest.fn(),
+  updateSongWebhook: jest.fn(),
+  deleteSongWebhook: jest.fn(),
+  syncSongWebhook: jest.fn(),
 };
 
 describe('SongService', () => {
@@ -40,6 +49,10 @@ describe('SongService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SongService,
+        {
+          provide: SongWebhookService,
+          useValue: mockSongWebhookService,
+        },
         {
           provide: getModelToken(SongEntity.name),
           useValue: mongoose.model(SongEntity.name, SongSchema),
