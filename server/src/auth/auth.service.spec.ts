@@ -577,5 +577,5 @@ describe('AuthService', () => {
     });
   });
 
-  describe('createNewUser', () => {});
+  describe('createNewUser', () => undefined);
 });
