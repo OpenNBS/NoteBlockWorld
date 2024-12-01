@@ -25,6 +25,7 @@ export type Note = {
 export type Instrument = {
   id: number;
   name: string;
+  file: string;
   count: number;
 };
 

@@ -24,6 +24,7 @@ import {
   SongWithUser,
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
+import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { removeExtraSpaces } from './song.util';
 
 @Injectable()
@@ -38,6 +39,9 @@ export class SongService {
 
     @Inject(SongUploadService)
     private songUploadService: SongUploadService,
+
+    @Inject(SongWebhookService)
+    private songWebhookService: SongWebhookService,
   ) {}
 
   public async uploadSong({
@@ -55,14 +59,23 @@ export class SongService {
       body,
     });
 
-    // Save song document
+    // Create song document
     const songDocument = await this.songModel.create(song);
-    const createdSong = await songDocument.save();
 
-    const populatedSong = (await createdSong.populate(
+    // Post Discord webhook
+    const populatedSong = (await songDocument.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
+
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+      populatedSong,
+    );
+
+    songDocument.webhookMessageId = webhookMessageId;
+
+    // Save song document
+    await songDocument.save();
 
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
@@ -90,9 +103,14 @@ export class SongService {
 
     await this.fileService.deleteSong(foundSong.nbsFileUrl);
 
-    return UploadSongResponseDto.fromSongWithUserDocument(
-      (await foundSong.populate('uploader')) as unknown as SongWithUser,
-    );
+    const populatedSong = (await foundSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    )) as unknown as SongWithUser;
+
+    await this.songWebhookService.deleteSongWebhook(populatedSong);
+
+    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
   public async patchSong(
@@ -152,13 +170,19 @@ export class SongService {
     // Update document's last update time
     foundSong.updatedAt = new Date();
 
-    // Save song document
-    const updatedSong = await foundSong.save();
-
-    const populatedSong = (await updatedSong.populate(
+    const populatedSong = (await foundSong.populate(
       'uploader',
       'username profileImage -_id',
     )) as unknown as SongWithUser;
+
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+      populatedSong,
+    );
+
+    foundSong.webhookMessageId = webhookMessageId;
+
+    // Save song document
+    await foundSong.save();
 
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
@@ -429,5 +453,9 @@ export class SongService {
       .exec()) as unknown as SongWithUser[];
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
+
+  public async getAllSongs() {
+    return this.songModel.find({});
   }
 }

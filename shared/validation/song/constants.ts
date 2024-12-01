@@ -91,11 +91,13 @@ export const UploadConst = deepFreeze({
   licenses: {
     cc_by_sa: {
       name: 'Creative Commons - Attribution-ShareAlike 4.0',
+      shortName: 'CC BY-SA 4.0',
       description:
         'You can copy, modify, and distribute this song, even for commercial purposes, as long as you credit the author and provide a link to the song. If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.\n\nFor more information, please visit the [Creative Commons website](https://creativecommons.org/licenses/by-sa/4.0/).',
     },
     standard: {
       name: 'Standard License',
+      shortName: 'Standard License',
       description:
         "The author reserves all rights. You may not use this song without the author's permission.",
     },

@@ -31,6 +31,25 @@ export function SongSearchCombo({
   locked: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  let returnCount = 0;
+
+  const filteredSounds = sounds
+    .filter((sound) => {
+      if (
+        returnCount < 100 &&
+        sound.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        returnCount++;
+        return true;
+      }
+
+      return false;
+    })
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }),
+    );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -59,7 +78,11 @@ export function SongSearchCombo({
       </PopoverTrigger>
       <PopoverContent className='w-fit p-0 bg-zinc-900 border-2 border-zinc-500'>
         <Command>
-          <CommandInput placeholder='Search sounds...' />
+          <CommandInput
+            placeholder='Search sounds...'
+            onInput={(e) => setSearchTerm(e.currentTarget.value)}
+            defaultValue={searchTerm}
+          />
           <CommandList>
             <CommandEmpty>No sounds found</CommandEmpty>
             <CommandGroup>
@@ -80,7 +103,7 @@ export function SongSearchCombo({
                 />
                 No sound
               </CommandItem>
-              {sounds.map((currentSound) => (
+              {filteredSounds.map((currentSound) => (
                 <CommandItem
                   key={currentSound}
                   value={currentSound}

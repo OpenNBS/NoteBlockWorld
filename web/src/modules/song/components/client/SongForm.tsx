@@ -318,13 +318,13 @@ export const SongForm = ({
                     environments.
                   </p>
                   <p>
-                    We are testing a limited selection of sounds to start with.
-                    If a sound file you want to use is not listed here, please
-                    reach out via our{' '}
-                    <Link href='https://discord.gg/open-note-block-studio-608692895179997252'>
-                      Discord server
-                    </Link>
-                    !
+                    At the moment, only sound files available in Minecraft are
+                    supported. By selecting sounds extracted with the{' '}
+                    <span className='font-bold underline'>
+                      Import sounds from Minecraft
+                    </span>{' '}
+                    feature in Note Block Studio, we can detect your instruments
+                    automatically!
                   </p>
                 </>
               }
