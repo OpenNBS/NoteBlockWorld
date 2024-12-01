@@ -2,7 +2,6 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { getLatestVersionSoundList } from './shared/features/sounds';
-import { SEARCH_INCLUDE_PATTERNS } from './shared/features/sounds/filterIncludePatterns';
 
 function writeJSONFile(
   dir: string,
@@ -17,7 +16,6 @@ function writeJSONFile(
 const dataDir = resolve(__dirname, 'server', 'public', 'data');
 
 const soundListPath = 'soundList.json';
-const filteredSoundListPath = 'filteredSoundList.json';
 
 // Try to create the output directory if it doesn't exist
 try {
@@ -29,9 +27,7 @@ try {
 }
 
 // If the files already exist, exit early
-const files = [soundListPath, filteredSoundListPath].map((fileName) =>
-  resolve(dataDir, fileName),
-);
+const files = [soundListPath].map((fileName) => resolve(dataDir, fileName));
 
 if (files.every((file) => existsSync(file))) {
   console.log('Sound data files already exist; skipping generation.');
@@ -44,16 +40,5 @@ console.log('Generating sound data files...');
 // Filter the list to only include sounds that match the chosen patterns
 // (defined in the shared/ module)
 getLatestVersionSoundList().then((soundList) => {
-  const filteredSoundList: string[] = Object.keys(soundList)
-    .filter((sound) =>
-      SEARCH_INCLUDE_PATTERNS.some((pattern) =>
-        new RegExp(pattern).test(sound),
-      ),
-    )
-    .sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }),
-    );
-
   writeJSONFile(dataDir, soundListPath, soundList);
-  writeJSONFile(dataDir, filteredSoundListPath, filteredSoundList);
 });
