@@ -1,11 +1,14 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import axios from 'axios';
-import { Request } from 'express';
+import type { Request, Response } from 'express';
 
 import { UserService } from '@server/user/user.service';
 
 import { AuthService } from './auth.service';
+import { DiscordUser } from './types/discordProfile';
+import { GithubAccessToken } from './types/githubProfile';
+import { GoogleProfile } from './types/googleProfile';
 
 jest.mock('axios');
 const mockAxios = axios as jest.Mocked<typeof axios>;
@@ -154,11 +157,222 @@ describe('AuthService', () => {
     });
   });
 
-  describe('googleLogin', () => undefined); // TODO: implement tests for googleLogin
+  describe('googleLogin', () => {
+    it('should generate token and redirect if user is whitelisted', async () => {
+      const req: Partial<Request> = {
+        user: {
+          emails: [{ value: 'test@example.com' }],
+          photos: [{ value: 'http://example.com/photo.jpg' }],
+        } as GoogleProfile,
+      };
 
-  describe('githubLogin', () => undefined); // TODO: implement tests for githubLogin
+      const res: Partial<Response> = {
+        redirect: jest.fn(),
+      };
 
-  describe('discordLogin', () => undefined); // TODO: implement tests for discordLogin
+      jest.spyOn(authService as any, 'verifyWhitelist').mockResolvedValue(true);
+
+      jest
+        .spyOn(authService as any, 'verifyAndGetUser')
+        .mockResolvedValue({ id: 'user-id' });
+
+      jest
+        .spyOn(authService as any, 'GenTokenRedirect')
+        .mockImplementation((user, res: any) => {
+          res.redirect('/dashboard');
+        });
+
+      await authService.googleLogin(
+        req as unknown as Request,
+        res as unknown as Response,
+      );
+
+      expect((authService as any).verifyAndGetUser).toHaveBeenCalledWith({
+        username: 'test',
+        email: 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg',
+      });
+
+      expect(res.redirect).toHaveBeenCalledWith('/dashboard');
+    });
+
+    it('should redirect to login if user is not whitelisted', async () => {
+      const req = {
+        user: {
+          emails: [{ value: 'test@example.com' }],
+          photos: [{ value: 'http://example.com/photo.jpg' }],
+        } as GoogleProfile,
+      };
+
+      const res = {
+        redirect: jest.fn(),
+      };
+
+      jest
+        .spyOn(authService as any, 'verifyWhitelist')
+        .mockResolvedValue(false);
+
+      await authService.googleLogin(
+        req as unknown as Request,
+        res as unknown as Response,
+      );
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        (authService as any).FRONTEND_URL + '/login',
+      );
+    });
+  }); // TODO: implement tests for googleLogin
+
+  describe('githubLogin', () => {
+    it('should generate token and redirect if user is whitelisted', async () => {
+      const req: Partial<Request> = {
+        user: {
+          accessToken: 'test-access-token',
+          profile: {
+            username: 'testuser',
+            photos: [{ value: 'http://example.com/photo.jpg' }],
+          },
+        } as GithubAccessToken,
+      };
+
+      const res: Partial<Response> = {
+        redirect: jest.fn(),
+      };
+
+      jest.spyOn(authService as any, 'verifyWhitelist').mockResolvedValue(true);
+
+      jest
+        .spyOn(authService as any, 'verifyAndGetUser')
+        .mockResolvedValue({ id: 'user-id' });
+
+      jest
+        .spyOn(authService as any, 'GenTokenRedirect')
+        .mockImplementation((user, res: any) => {
+          res.redirect('/dashboard');
+        });
+
+      mockAxios.get.mockResolvedValue({
+        data: [{ email: 'test@example.com', primary: true }],
+      } as any);
+
+      await authService.githubLogin(req as Request, res as Response);
+
+      expect((authService as any).verifyWhitelist).toHaveBeenCalledWith(
+        'testuser',
+      );
+
+      expect((authService as any).verifyAndGetUser).toHaveBeenCalledWith({
+        username: 'testuser',
+        email: 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg',
+      });
+
+      expect(res.redirect).toHaveBeenCalledWith('/dashboard');
+    });
+
+    it('should redirect to login if user is not whitelisted', async () => {
+      const req: Partial<Request> = {
+        user: {
+          accessToken: 'test-access-token',
+          profile: {
+            username: 'testuser',
+            photos: [{ value: 'http://example.com/photo.jpg' }],
+          },
+        } as GithubAccessToken,
+      };
+
+      const res: Partial<Response> = {
+        redirect: jest.fn(),
+      };
+
+      jest
+        .spyOn(authService as any, 'verifyWhitelist')
+        .mockResolvedValue(false);
+
+      mockAxios.get.mockResolvedValue({
+        data: [{ email: 'test@example.com', primary: true }],
+      } as any);
+
+      await authService.githubLogin(req as Request, res as Response);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        (authService as any).FRONTEND_URL + '/login',
+      );
+    });
+  });
+
+  describe('discordLogin', () => {
+    it('should generate token and redirect if user is whitelisted', async () => {
+      const req: Partial<Request> = {
+        user: {
+          profile: {
+            id: 'discord-user-id',
+            username: 'testuser',
+            email: 'test@example.com',
+            avatar: 'avatar-hash',
+          },
+        } as DiscordUser,
+      };
+
+      const res: Partial<Response> = {
+        redirect: jest.fn(),
+      };
+
+      jest.spyOn(authService as any, 'verifyWhitelist').mockResolvedValue(true);
+
+      jest
+        .spyOn(authService as any, 'verifyAndGetUser')
+        .mockResolvedValue({ id: 'user-id' });
+
+      jest
+        .spyOn(authService as any, 'GenTokenRedirect')
+        .mockImplementation((user, res: any) => {
+          res.redirect('/dashboard');
+        });
+
+      await authService.discordLogin(req as Request, res as Response);
+
+      expect((authService as any).verifyWhitelist).toHaveBeenCalledWith(
+        'testuser',
+      );
+
+      expect((authService as any).verifyAndGetUser).toHaveBeenCalledWith({
+        username: 'testuser',
+        email: 'test@example.com',
+        profileImage:
+          'https://cdn.discordapp.com/avatars/discord-user-id/avatar-hash.png',
+      });
+
+      expect(res.redirect).toHaveBeenCalledWith('/dashboard');
+    });
+
+    it('should redirect to login if user is not whitelisted', async () => {
+      const req: Partial<Request> = {
+        user: {
+          profile: {
+            id: 'discord-user-id',
+            username: 'testuser',
+            email: 'test@example.com',
+            avatar: 'avatar-hash',
+          },
+        } as DiscordUser,
+      };
+
+      const res: Partial<Response> = {
+        redirect: jest.fn(),
+      };
+
+      jest
+        .spyOn(authService as any, 'verifyWhitelist')
+        .mockResolvedValue(false);
+
+      await authService.discordLogin(req as Request, res as Response);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        (authService as any).FRONTEND_URL + '/login',
+      );
+    });
+  }); // TODO: implement tests for discordLogin
 
   describe('getUserFromToken', () => {
     it('should return null if token is invalid', async () => {
