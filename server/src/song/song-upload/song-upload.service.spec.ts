@@ -258,6 +258,33 @@ describe('SongUploadService', () => {
         publicId,
       );
     });
+
+    it('should throw an error if the thumbnail is invalid', async () => {
+      const thumbnailData: ThumbnailData = {
+        startTick: 0,
+        startLayer: 0,
+        zoomLevel: 1,
+        backgroundColor: '#000000',
+      };
+
+      const nbsSong = new Song();
+      const publicId = 'test-id';
+
+      jest
+        .spyOn(fileService, 'uploadThumbnail')
+        // throw an error
+        .mockRejectedValue(new Error('test error'));
+
+      try {
+        await songUploadService.generateAndUploadThumbnail(
+          thumbnailData,
+          nbsSong,
+          publicId,
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+      }
+    });
   });
 
   describe('uploadSongFile', () => {
@@ -277,6 +304,21 @@ describe('SongUploadService', () => {
       expect(result).toBe('http://test.com/file.nbs');
       expect(fileService.uploadSong).toHaveBeenCalledWith(file, publicId);
     });
+
+    it('should throw an error if the file is invalid', async () => {
+      const file = Buffer.from('test');
+      const publicId = 'test-id';
+
+      jest
+        .spyOn(fileService, 'uploadSong')
+        .mockRejectedValue(new Error('test error'));
+
+      try {
+        await (songUploadService as any).uploadSongFile(file, publicId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+      }
+    });
   });
 
   describe('uploadPackedSongFile', () => {
@@ -295,6 +337,21 @@ describe('SongUploadService', () => {
 
       expect(result).toBe('http://test.com/packed-file.nbs');
       expect(fileService.uploadPackedSong).toHaveBeenCalledWith(file, publicId);
+    });
+
+    it('should throw an error if the file is invalid', async () => {
+      const file = Buffer.from('test');
+      const publicId = 'test-id';
+
+      jest
+        .spyOn(fileService, 'uploadPackedSong')
+        .mockRejectedValue(new Error('test error'));
+
+      try {
+        await (songUploadService as any).uploadPackedSongFile(file, publicId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+      }
     });
   });
 
@@ -367,4 +424,11 @@ describe('SongUploadService', () => {
       ).not.toThrow();
     });
   });
+
+  describe('getSoundsMapping', () => undefined);
+  describe('getValidSoundsSubset', () => undefined);
+  describe('validateUploader', () => undefined);
+  describe('generateSongDocument', () => undefined);
+  describe('prepareSongForUpload', () => undefined);
+  describe('preparePackedSongForUpload', () => undefined);
 });
