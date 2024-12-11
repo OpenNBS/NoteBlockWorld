@@ -17,7 +17,7 @@ export const InterSectionAdSlot = () => {
   }
 
   return (
-    <>
+    <div className='rounded-xl bg-zinc-800/50 p-2 my-8 h-32 w-full min-w-64 text-sm text-zinc-400'>
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
@@ -31,6 +31,6 @@ export const InterSectionAdSlot = () => {
         data-ad-format='auto'
         data-full-width-responsive='true'
       ></ins>
-    </>
+    </div>
   );
 };
