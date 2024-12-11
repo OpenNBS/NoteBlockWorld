@@ -2,10 +2,6 @@ import Script from 'next/script';
 
 import useAdSenseClient from './useAdSenseClient';
 
-const AdSlot = ({ children }: { children: React.ReactNode }) => {
-  return <div className='rounded-xl bg-zinc-800 p-2 my-4'>{children}</div>;
-};
-
 export const InterSectionAdSlot = () => {
   const pubId = useAdSenseClient();
 
@@ -14,7 +10,7 @@ export const InterSectionAdSlot = () => {
   }
 
   return (
-    <AdSlot>
+    <>
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
@@ -34,6 +30,6 @@ export const InterSectionAdSlot = () => {
           __html: `(adsbygoogle = window.adsbygoogle || []).push({});`,
         }}
       />
-    </AdSlot>
+    </>
   );
 };
