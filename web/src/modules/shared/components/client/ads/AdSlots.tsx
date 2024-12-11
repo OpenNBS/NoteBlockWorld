@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import { useEffect } from 'react';
 
 import useAdSenseClient from './useAdSenseClient';
@@ -16,13 +17,20 @@ export const InterSectionAdSlot = () => {
   }
 
   return (
-    <ins
-      className='adsbygoogle'
-      style={{ display: 'block' }}
-      data-ad-client={pubId}
-      data-ad-slot='4995642586'
-      data-ad-format='auto'
-      data-full-width-responsive='true'
-    ></ins>
+    <>
+      <Script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
+        crossOrigin='anonymous'
+      />
+      <ins
+        className='adsbygoogle'
+        style={{ display: 'block' }}
+        data-ad-client={pubId}
+        data-ad-slot='4995642586'
+        data-ad-format='auto'
+        data-full-width-responsive='true'
+      ></ins>
+    </>
   );
 };
