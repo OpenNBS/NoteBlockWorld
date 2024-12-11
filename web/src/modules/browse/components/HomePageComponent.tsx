@@ -64,7 +64,7 @@ export const HomePageComponent = () => {
         </>
       )}
 
-      <div className='rounded-xl bg-zinc-800/50 p-2 my-8 h-32 lg:max-h-48 w-full min-w-64 text-sm text-zinc-400'>
+      <div className='rounded-xl bg-zinc-800/50 p-2 my-8 h-32 w-full min-w-64 text-sm text-zinc-400'>
         <InterSectionAdSlot />
       </div>
 
