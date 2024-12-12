@@ -55,24 +55,30 @@ const AdTemplate = ({
     return 'AdSense Client ID is not set';
   }
 
-  return (
+  return isHidden ? (
+    <div className={cn(className, 'invisible')}></div>
+  ) : (
     <div className={cn(className, isHidden ? 'invisible' : '')}>
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
         crossOrigin='anonymous'
       />
-      <ins
-        className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
-        style={{
-          display: 'block',
-        }}
-        data-ad-client={pubId}
-        data-ad-slot={adSlot}
-        data-ad-format={adFormat}
-        data-full-width-responsive={fullWidthResponsive}
-      ></ins>
-      <HideAdButton setIsHidden={setIsHidden} />
+      {!isHidden && (
+        <>
+          <ins
+            className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
+            style={{
+              display: 'block',
+            }}
+            data-ad-client={pubId}
+            data-ad-slot={adSlot}
+            data-ad-format={adFormat}
+            data-full-width-responsive={fullWidthResponsive}
+          ></ins>
+          <HideAdButton setIsHidden={setIsHidden} />
+        </>
+      )}
     </div>
   );
 };
