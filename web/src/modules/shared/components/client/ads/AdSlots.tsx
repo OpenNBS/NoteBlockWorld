@@ -63,10 +63,9 @@ const AdTemplate = ({
         crossOrigin='anonymous'
       />
       <ins
-        className='adsbygoogle'
+        className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
         style={{
           display: 'block',
-          visibility: isHidden ? 'hidden' : 'visible',
         }}
         data-ad-client={pubId}
         data-ad-slot={adSlot}
