@@ -15,13 +15,13 @@ async function Layout({ children }: TNavbarLayoutProps) {
         <Header />
         {/* Main content */}
         <div className='flex flex-row justify-around w-full pt-24'>
-          <div className='flex-0 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
+          <div className='flex-0 sticky top-24 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
             <SideRailAdSlot />
           </div>
           <main className='flex-1 w-full max-w-screen-lg px-6 sm:px-10 pb-10'>
             {children}
           </main>
-          <div className='flex-0 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
+          <div className='flex-0 sticky top-24 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
             <SideRailAdSlot />
           </div>
         </div>
