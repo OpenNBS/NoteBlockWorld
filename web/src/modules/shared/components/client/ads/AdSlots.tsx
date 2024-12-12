@@ -14,20 +14,23 @@ const HideAdButton = ({
 }: {
   setIsHidden: (hidden: boolean) => void;
 }) => (
-  <button
-    onClick={() => {
-      setIsHidden(true),
-        setTimeout(() => {
-          setIsHidden(false);
-        }, 1000 * 60 * 5); // Reappers after 5 minutes
-    }}
-  >
-    <FontAwesomeIcon
-      icon={faClose}
-      size='sm'
-      className='absolute top-full right-0 text-zinc-500'
-    />
-  </button>
+  <div className='absolute w-0 h-0 top-full right-[0.75rem]'>
+    <button
+      className='h-6 w-3'
+      onClick={() => {
+        setIsHidden(true),
+          setTimeout(() => {
+            setIsHidden(false);
+          }, 1000 * 60 * 5); // Reappers after 5 minutes
+      }}
+    >
+      <FontAwesomeIcon
+        icon={faClose}
+        size='sm'
+        className='relative text-zinc-500 text-sm'
+      />
+    </button>
+  </div>
 );
 
 const AdTemplate = ({
