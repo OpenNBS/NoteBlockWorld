@@ -16,7 +16,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
         {/* Main content */}
         <div className='flex flex-row justify-around w-full pt-24'>
           <SideRailAdSlot />
-          <main className='flex-1 w-full max-w-screen-lg px-6 sm:px-10 pb-10'>
+          <main className='flex-1 w-full max-w-screen-xl px-6 sm:px-10 pb-10'>
             {children}
           </main>
           <SideRailAdSlot />
