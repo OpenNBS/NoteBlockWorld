@@ -96,7 +96,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
   return (
     <AdTemplate
       className={cn(
-        'flex-0 sticky mb-8 top-24 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl',
+        'flex-0 sticky mb-8 top-24 max-h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl',
         className,
       )}
       adSlot='4995642586'
