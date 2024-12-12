@@ -74,7 +74,7 @@ export async function SongPage({ id }: { id: string }) {
           <SongDetails song={song} />
         </div>
       </div>
-      <InterSectionAdSlot />
+      <InterSectionAdSlot className='mb-0' />
     </>
   );
 }

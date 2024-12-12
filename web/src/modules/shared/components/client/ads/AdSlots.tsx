@@ -77,10 +77,13 @@ const AdTemplate = ({
   );
 };
 
-export const InterSectionAdSlot = () => {
+export const InterSectionAdSlot = ({ className }: { className?: string }) => {
   return (
     <AdTemplate
-      className='relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400'
+      className={cn(
+        'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
       adSlot='4046918224'
       adFormat='auto'
       fullWidthResponsive='true'
@@ -89,10 +92,13 @@ export const InterSectionAdSlot = () => {
   );
 };
 
-export const SideRailAdSlot = () => {
+export const SideRailAdSlot = ({ className }: { className?: string }) => {
   return (
     <AdTemplate
-      className='flex-0 sticky mb-10 top-24 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'
+      className={cn(
+        'flex-0 sticky mb-8 top-24 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl',
+        className,
+      )}
       adSlot='4995642586'
       adFormat='auto'
       fullWidthResponsive='true'
