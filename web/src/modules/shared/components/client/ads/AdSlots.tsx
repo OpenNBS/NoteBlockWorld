@@ -35,11 +35,13 @@ const AdTemplate = ({
   adSlot,
   adFormat = 'auto',
   fullWidthResponsive = 'true',
+  hiddenClassName = 'hidden',
 }: {
   className: string;
   adSlot: string;
   adFormat: string;
   fullWidthResponsive: string;
+  hiddenClassName?: string;
 }) => {
   const pubId = useAdSenseClient();
 
@@ -56,9 +58,9 @@ const AdTemplate = ({
   }
 
   return isHidden ? (
-    <div className={cn(className, 'invisible')}></div>
+    <div className={cn(className, hiddenClassName)}></div>
   ) : (
-    <div className={cn(className, isHidden ? 'invisible' : '')}>
+    <div className={cn(className, isHidden ? hiddenClassName : '')}>
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
@@ -93,6 +95,7 @@ export const InterSectionAdSlot = ({ className }: { className?: string }) => {
       adSlot='4046918224'
       adFormat='auto'
       fullWidthResponsive='true'
+      hiddenClassName='!hidden'
     />
   );
 };
@@ -107,6 +110,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
       adSlot='4995642586'
       adFormat='auto'
       fullWidthResponsive='true'
+      hiddenClassName='invisible'
     />
   );
 };
