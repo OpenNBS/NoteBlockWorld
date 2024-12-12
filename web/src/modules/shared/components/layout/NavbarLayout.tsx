@@ -14,14 +14,16 @@ async function Layout({ children }: TNavbarLayoutProps) {
         {/* Header */}
         <Header />
         {/* Main content */}
-        <div className='fixed left-0 mx-[2%] top-24 h-[calc(100vh-12rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
-          <SideRailAdSlot />
-        </div>
-        <main className='w-full 2xl:max-w-screen-xl max-w-screen-lg pt-24 2xl:px-16 lg:px-28 px-6 sm:px-10 pb-10'>
-          {children}
-        </main>
-        <div className='fixed right-0 mx-[2%] top-24 h-[calc(100vh-12rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
-          <SideRailAdSlot />
+        <div className='flex flex-row justify-around w-full pt-24'>
+          <div className='flex-0 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
+            <SideRailAdSlot />
+          </div>
+          <main className='flex-1 w-full max-w-screen-lg px-6 sm:px-10 pb-10'>
+            {children}
+          </main>
+          <div className='flex-0 h-[calc(100vh-9rem)] hidden xl:block w-36 bg-zinc-800/50 rounded-xl'>
+            <SideRailAdSlot />
+          </div>
         </div>
         {/* Footer */}
         <Footer />
