@@ -7,6 +7,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
+import { WebSite, WithContext } from 'schema-dts';
 
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
@@ -30,6 +31,14 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd: WithContext<WebSite> = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Note Block World',
+  url: process.env.NEXT_PUBLIC_URL,
+  description: 'Discover, share and listen to note block music',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -40,6 +49,11 @@ export default function RootLayout({
       <html lang='en'>
         <head>
           <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
+          {/* https://nextjs.org/docs/app/building-your-application/optimizing/metadata#json-ld */}
+          <script
+            type='application/ld+json'
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
           <link
             rel='apple-touch-icon'
             sizes='180x180'
