@@ -1,7 +1,7 @@
 import { Footer } from './Footer';
 import { Header } from './Header';
-import { CookieBanner } from '../client/CookieBanner';
 import { SideRailAdSlot } from '../client/ads/AdSlots';
+import { CookieBanner } from '../client/CookieBanner';
 
 type TNavbarLayoutProps = {
   children: React.ReactNode;

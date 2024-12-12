@@ -11,9 +11,9 @@ import {
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
+import { InterSectionAdSlot } from '../../shared/components/client/ads/AdSlots';
 import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
-import { InterSectionAdSlot } from '../../shared/components/client/ads/AdSlots';
 
 export async function SongPage({ id }: { id: string }) {
   let song;
