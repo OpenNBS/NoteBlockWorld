@@ -4,6 +4,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UploadConst } from '@shared/validation/song/constants';
+import { LicenseType } from '@shared/validation/song/dto/types';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -292,6 +293,13 @@ export const SongForm = ({
                 isLoading={isLoading}
                 disabled={isLocked}
                 errorMessage={errors.license?.message}
+                description={
+                  formMethods.watch('license') === 'none'
+                    ? ''
+                    : UploadConst.licenses[
+                        formMethods.watch('license') as LicenseType
+                      ]?.uploadDescription
+                }
                 {...register('license')}
               >
                 <Option key={'none'} value={'none'}>
