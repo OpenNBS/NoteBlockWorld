@@ -177,7 +177,9 @@ export const Select = forwardRef<
           {...rest}
           className={cn(
             `block h-12 w-full rounded-lg bg-transparent border-2 ${
-              errorMessage ? 'border-red-500' : 'border-zinc-500'
+              errorMessage
+                ? 'border-red-500 focus:outline-red-500'
+                : 'border-zinc-500'
             }  disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
             props.className,
           )}
