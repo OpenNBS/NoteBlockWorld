@@ -455,6 +455,33 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
+  public async getRandomSongs(
+    count: number,
+    category: string,
+  ): Promise<SongPreviewDto[]> {
+    const songs = (await this.songModel
+      .aggregate([
+        {
+          $match: {
+            visibility: 'public',
+          },
+        },
+        {
+          $sample: {
+            size: count,
+          },
+        },
+      ])
+      .exec()) as unknown as SongWithUser[];
+
+    await this.songModel.populate(songs, {
+      path: 'uploader',
+      select: 'username profileImage -_id',
+    });
+
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
+
   public async getAllSongs() {
     return this.songModel.find({});
   }

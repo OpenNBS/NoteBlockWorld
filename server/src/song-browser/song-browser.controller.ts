@@ -1,4 +1,10 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
@@ -41,5 +47,20 @@ export class SongBrowserController {
     @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
     return await this.songBrowserService.getSongsByCategory(id, query);
+  }
+
+  @Get('/random')
+  @ApiOperation({ summary: 'Get a list of songs at random' })
+  public async getRandomSongs(
+    @Query('count') count: string,
+    @Query('category') category: string,
+  ): Promise<SongPreviewDto[]> {
+    const countInt = parseInt(count);
+
+    if (isNaN(countInt) || countInt < 1 || countInt > 10) {
+      throw new BadRequestException('Invalid query parameters');
+    }
+
+    return await this.songBrowserService.getRandomSongs(countInt, category);
   }
 }
