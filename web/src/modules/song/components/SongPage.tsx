@@ -1,3 +1,4 @@
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
 
@@ -11,6 +12,8 @@ import {
   ShareButton,
   UploaderBadge,
 } from './SongPageButtons';
+import SongCard from '../../browse/components/SongCard';
+import SongCardGroup from '../../browse/components/SongCardGroup';
 import { InterSectionAdSlot } from '../../shared/components/client/ads/AdSlots';
 import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
@@ -23,6 +26,21 @@ export async function SongPage({ id }: { id: string }) {
     song = await response.data;
   } catch {
     return <ErrorBox message='An error occurred while retrieving the song' />;
+  }
+
+  let suggestions: SongPreviewDto[] = [];
+
+  try {
+    const response = await axios.get<SongPreviewDto[]>(`/song-browser/random`, {
+      params: {
+        count: 4,
+        category: song.category,
+      },
+    });
+
+    suggestions = await response.data;
+  } catch {
+    console.error('Failed to retrieve suggested songs');
   }
 
   return (
@@ -75,6 +93,16 @@ export async function SongPage({ id }: { id: string }) {
         </div>
       </div>
       <InterSectionAdSlot className='mb-0' />
+
+      {/* Suggested songs */}
+      <h2 className='text-md uppercase text-zinc-400 mt-10 mb-2'>
+        You might also like
+      </h2>
+      <SongCardGroup>
+        {suggestions.map((suggestion) => (
+          <SongCard key={suggestion.publicId} song={suggestion} />
+        ))}
+      </SongCardGroup>
     </>
   );
 }
