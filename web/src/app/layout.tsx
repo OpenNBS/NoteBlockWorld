@@ -19,7 +19,8 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: { template: '%s | Note Block World', default: '' },
-  description: 'Discover, share and listen to note block music',
+  description:
+    'Discover, share and listen to note block music from all around the world',
   applicationName: 'Note Block World',
   keywords: ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
   openGraph: {
@@ -36,7 +37,8 @@ const jsonLd: WithContext<WebSite> = {
   '@type': 'WebSite',
   name: 'Note Block World',
   url: process.env.NEXT_PUBLIC_URL,
-  description: 'Discover, share and listen to note block music',
+  description:
+    'Discover, share and listen to note block music from all around the world',
 };
 
 export default function RootLayout({
