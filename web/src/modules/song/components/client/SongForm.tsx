@@ -294,6 +294,9 @@ export const SongForm = ({
                 errorMessage={errors.license?.message}
                 {...register('license')}
               >
+                <Option key={'none'} value={'none'}>
+                  Select a license...
+                </Option>
                 {Object.entries(UploadConst.licenses).map(
                   // @ts-expect-error - TS doesn't like the destructuring here
                   ([key, { name }]: [string, string]) => (
