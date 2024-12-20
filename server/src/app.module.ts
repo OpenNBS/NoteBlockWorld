@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
+import { CryptoModule } from './crypto/crypto.module';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './parseToken';
 import { SongModule } from './song/song.module';
@@ -39,6 +40,7 @@ import { UserModule } from './user/user.module';
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
     SongBrowserModule,
+    CryptoModule.forRoot(),
   ],
   controllers: [],
   providers: [ParseTokenPipe],
