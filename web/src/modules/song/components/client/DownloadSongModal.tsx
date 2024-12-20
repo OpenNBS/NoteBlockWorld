@@ -63,6 +63,7 @@ export default function DownloadSongModal({
           {isCopied ? 'Copied!' : 'Copy'}
         </button>
       </div>
+      <DownloadPopupAdSlot className='mb-0' />
     </GenericModal>
   );
 }
