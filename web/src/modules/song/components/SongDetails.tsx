@@ -22,7 +22,7 @@ const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {
 
 const SongDetailsCell = ({ children }: { children: React.ReactNode }) => {
   return (
-    <td className='first:w-[40%] last:max-w-0 p-2 py-[10px] align-top first:text-zinc-400 first:text-right last:font-bold'>
+    <td className='first:w-[40%] last:max-w-0 p-2 py-[10px] break-words align-top first:text-zinc-400 first:text-right last:font-bold'>
       {children}
     </td>
   );
