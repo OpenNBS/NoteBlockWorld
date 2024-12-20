@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
@@ -7,10 +7,16 @@ import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from './entity/user.entity';
+import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
+import { CryptoService } from '@server/crypto/crypto.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    @Inject(CryptoService)
+    private readonly cryptoService: CryptoService,
+  ) {}
 
   public async create(user_registered: CreateUser) {
     await validate(user_registered);
@@ -22,6 +28,34 @@ export class UserService {
     return await user.save();
   }
 
+  public async createWithPassword(registerDto: RegisterDto) {
+    // verify if user exists same email, username or publicName
+    const user_registered = await this.findByEmail(registerDto.email);
+
+    const username_registered = await this.findByUsername(registerDto.username);
+
+    if (user_registered) {
+      throw new HttpException(
+        'Email already registered',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (username_registered) {
+      throw new HttpException(
+        'Username already registered',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = await this.userModel.create({
+      email: registerDto.email,
+      username: registerDto.username,
+      publicName: registerDto.username,
+      password: this.cryptoService.hashPassword(registerDto.password),
+    });
+  }
+
   public async findByEmail(email: string): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email }).exec();
 
@@ -30,6 +64,20 @@ export class UserService {
 
   public async findByID(objectID: string): Promise<UserDocument | null> {
     const user = await this.userModel.findById(objectID).exec();
+
+    return user;
+  }
+
+  public async findByPublicName(
+    publicName: string,
+  ): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ publicName });
+
+    return user;
+  }
+
+  public async findByUsername(username: string): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ username });
 
     return user;
   }
