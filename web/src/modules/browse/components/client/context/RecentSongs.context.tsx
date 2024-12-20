@@ -1,6 +1,5 @@
 'use client';
 
-import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import {
   createContext,
@@ -120,12 +119,7 @@ export function RecentSongsProvider({
   }, [page, endpoint]);
 
   async function increasePageRecent() {
-    if (
-      BROWSER_SONGS.max_recent_songs <= recentSongs.length ||
-      loading ||
-      recentError ||
-      !hasMore
-    ) {
+    if (loading || recentError || !hasMore) {
       return;
     }
 
