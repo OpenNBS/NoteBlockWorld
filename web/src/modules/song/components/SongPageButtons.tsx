@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
+import DownloadSongModal from './client/DownloadSongModal';
 import ShareModal from './client/ShareModal';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 
@@ -199,22 +200,29 @@ const showOpenFailedToast = () => {
   );
 };
 
-const DownloadSongButton = ({
-  song,
-}: {
-  song: {
-    publicId: string;
-    title: string;
-    downloadCount: number;
-  };
-}) => {
+const DownloadSongButton = ({ song }: { song: SongViewDtoType }) => {
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
   return (
-    <DownloadButton
-      downloadCount={song.downloadCount}
-      handleClick={() => {
-        downloadSongFile(song);
-      }}
-    />
+    <>
+      <DownloadButton
+        downloadCount={song.downloadCount}
+        handleClick={() => {
+          setIsDownloadModalOpen(true);
+        }}
+      />{' '}
+      <DownloadSongModal
+        isOpen={isDownloadModalOpen}
+        setIsOpen={(isOpen: boolean) => {
+          setIsDownloadModalOpen(isOpen);
+
+          setTimeout(() => {
+            downloadSongFile(song);
+          }, 3000);
+        }}
+        song={song}
+      />
+    </>
   );
 };
 
