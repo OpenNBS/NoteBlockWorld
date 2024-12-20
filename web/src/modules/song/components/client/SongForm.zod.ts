@@ -56,10 +56,10 @@ export const SongFormSchema = zod.object({
   license: zod
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    .enum(licenses)
-    .refine((value) => Object.keys(UploadConst.licenses).includes(value), {
-      message: 'Invalid license',
+    .enum(licenses, {
+      message: 'Please select a license',
     })
+    .refine((value) => Object.keys(UploadConst.licenses).includes(value))
     .default(UploadConst.license.default),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

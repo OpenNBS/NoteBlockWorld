@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import Markdown from 'react-markdown';
 
 import { cn } from '@web/src/lib/tailwind.utils';
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
@@ -160,10 +161,11 @@ export const Select = forwardRef<
     tooltip?: React.ReactNode;
     isLoading?: boolean;
     errorMessage?: string;
+    description?: string;
   }
 >((props, ref) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, label, isLoading, errorMessage, ...rest } = props;
+  const { id, label, isLoading, errorMessage, description, ...rest } = props;
 
   return (
     <>
@@ -177,13 +179,19 @@ export const Select = forwardRef<
           {...rest}
           className={cn(
             `block h-12 w-full rounded-lg bg-transparent border-2 ${
-              errorMessage ? 'border-red-500' : 'border-zinc-500'
+              errorMessage
+                ? 'border-red-500 focus:outline-red-500'
+                : 'border-zinc-500'
             }  disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
             props.className,
           )}
         />
       )}
-
+      {description && (
+        <p className='block text-sm text-zinc-500 leading-tight pt-1 [&_a]:text-blue-400 [&_a:hover]:text-blue-300'>
+          <Markdown>{description}</Markdown>
+        </p>
+      )}
       <ErrorBalloon message={errorMessage} />
     </>
   );

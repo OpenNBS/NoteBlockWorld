@@ -115,4 +115,11 @@ export class SongBrowserService {
       query.limit ?? 10,
     );
   }
+
+  public async getRandomSongs(
+    count: number,
+    category: string,
+  ): Promise<SongPreviewDto[]> {
+    return await this.songService.getRandomSongs(count, category);
+  }
 }
