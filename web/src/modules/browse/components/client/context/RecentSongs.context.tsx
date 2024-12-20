@@ -55,7 +55,7 @@ export function RecentSongsProvider({
           {
             params: {
               page,
-              limit: 8, // TODO: fix constants
+              limit: 12, // TODO: fix constants
               order: false,
             },
           },
@@ -66,7 +66,7 @@ export function RecentSongsProvider({
           ...response.data,
         ]);
 
-        if (response.data.length < 8) {
+        if (response.data.length < 12) {
           setHasMore(false);
         }
       } catch (error) {
