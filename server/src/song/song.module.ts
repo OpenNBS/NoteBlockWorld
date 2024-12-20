@@ -8,9 +8,9 @@ import { UserModule } from '@server/user/user.module';
 import { Song, SongSchema } from './entity/song.entity';
 import { MySongsController } from './my-songs/my-songs.controller';
 import { SongUploadService } from './song-upload/song-upload.service';
+import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
-import { SongWebhookService } from './song-webhook/song-webhook.service';
 
 @Module({
   imports: [

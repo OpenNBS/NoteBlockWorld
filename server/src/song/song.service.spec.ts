@@ -18,8 +18,8 @@ import {
   SongWithUser,
 } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
-import { SongService } from './song.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
+import { SongService } from './song.service';
 
 const mockFileService = {
   deleteSong: jest.fn(),
