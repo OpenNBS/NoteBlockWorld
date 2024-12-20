@@ -157,7 +157,7 @@ const OpenInNBSButton = ({
     <button
       onClick={handleClick}
       disabled={isLoading}
-      className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:enabled:bg-blue-500 disabled:opacity-50'
+      className='hidden md:block uppercase px-2 py-1 h-fit rounded-md text-sm bg-blue-600 hover:enabled:bg-blue-500 disabled:opacity-50'
     >
       <div className='flex flex-row items-center gap-2 w-max'>
         {isLoading ? (
