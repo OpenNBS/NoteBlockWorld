@@ -1,6 +1,17 @@
-import { Controller, Get, Logger, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from '@shared/validation/user/dto/Login.dto';
+import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
 import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
@@ -22,6 +33,18 @@ export class AuthController {
   @UseGuards(AuthGuard('github'))
   public githubRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.githubLogin(req, res);
+  }
+
+  @Post('register')
+  @ApiOperation({ summary: 'Register user' })
+  public async register(@Body() registerDto: RegisterDto) {
+    return this.authService.register(registerDto);
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login user' })
+  public async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    return this.authService.login(loginDto, res);
   }
 
   @Get('login/google')

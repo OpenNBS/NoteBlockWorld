@@ -1,6 +1,14 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
+import { LoginDto } from '@shared/validation/user/dto/Login.dto';
+import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
@@ -245,5 +253,16 @@ export class AuthService {
     const user = await this.userService.findByID(decoded.id);
 
     return user;
+  }
+
+  public async login(
+    loginDto: LoginDto,
+    res: Response<any, Record<string, any>>,
+  ) {
+    throw new Error('Method not implemented.');
+  }
+
+  public async register(registerDto: RegisterDto) {
+    const newUser = await this.userService.createWithPassword(registerDto);
   }
 }
