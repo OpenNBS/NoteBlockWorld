@@ -38,7 +38,7 @@ export function RecentSongsProvider({
     useState<SongPreviewDtoType[]>(initialRecentSongs);
 
   const [recentError, setRecentError] = useState<string>('');
-  const [page, setPage] = useState<number>(3);
+  const [page, setPage] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [categories, setCategories] = useState<Record<string, number>>({});
@@ -113,10 +113,10 @@ export function RecentSongsProvider({
     setEndpoint(newEndpoint);
   }, [selectedCategory]);
 
-  // Fetch recent songs when the page or endpoint changes
   useEffect(() => {
+    if (page === 0) return;
     fetchRecentSongs();
-  }, [page, endpoint]);
+  }, [page, endpoint, fetchRecentSongs]);
 
   async function increasePageRecent() {
     if (loading || recentError || !hasMore) {
