@@ -62,7 +62,7 @@ export function SongSearchCombo({
           {value ? (
             value.replace('minecraft/sounds/', '').replace('.ogg', '')
           ) : (
-            <span className={!locked ? 'text-red-500 font-bold' : ''}>
+            <span className={!locked ? 'text-orange-400 font-bold' : ''}>
               No sound
             </span>
           )}

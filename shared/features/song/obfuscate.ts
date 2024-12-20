@@ -33,7 +33,9 @@ export class SongObfuscator {
   private copyMetaAndStats(song: Song, output: Song) {
     output.meta.name = song.meta.name;
     output.meta.author = song.meta.author;
+    output.meta.originalAuthor = song.meta.originalAuthor;
     output.meta.description = song.meta.description;
+    output.meta.importName = song.meta.importName;
 
     output.loop.enabled = song.loop.enabled;
     output.loop.startTick = song.loop.startTick;

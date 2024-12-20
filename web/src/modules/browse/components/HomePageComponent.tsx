@@ -10,6 +10,7 @@ import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
+import { InterSectionAdSlot } from '../../shared/components/client/ads/AdSlots';
 import {
   Carousel,
   CarouselContent,
@@ -62,6 +63,8 @@ export const HomePageComponent = () => {
           <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
         </>
       )}
+
+      <InterSectionAdSlot />
 
       {/* RECENT SONGS */}
       <div className='flex flex-row flex-wrap justify-between items-center gap-4 mb-2'>
