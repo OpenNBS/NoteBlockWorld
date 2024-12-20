@@ -221,11 +221,11 @@ const DownloadSongButton = ({ song }: { song: SongViewDtoType }) => {
       <DownloadSongModal
         isOpen={isDownloadModalOpen}
         setIsOpen={(isOpen: boolean) => {
-          setIsDownloadModalOpen(isOpen);
-
           setTimeout(() => {
             downloadSongFile(song);
           }, 3000);
+
+          setIsDownloadModalOpen(isOpen);
         }}
         song={song}
       />
