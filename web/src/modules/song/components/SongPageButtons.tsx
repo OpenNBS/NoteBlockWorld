@@ -16,8 +16,15 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
+import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+
 import DownloadSongModal from './client/DownloadSongModal';
 import ShareModal from './client/ShareModal';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../shared/components/tooltip';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
@@ -233,17 +240,35 @@ const DownloadButton = ({
   downloadCount: number;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => {
+  let isLoggedIn = true;
+
+  try {
+    getTokenLocal();
+  } catch {
+    isLoggedIn = false;
+  }
+
   return (
     <div className='flex gap-0.5'>
-      <button
-        onClick={handleClick}
-        className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:bg-green-500'
-      >
-        <div className='flex flex-row items-center gap-2'>
-          <FontAwesomeIcon icon={faDownload} />
-          <div>Download</div>
-        </div>
-      </button>
+      <Tooltip>
+        <TooltipTrigger>
+          <button
+            onClick={handleClick}
+            className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:enabled:bg-green-500 disabled:opacity-50'
+            disabled={!isLoggedIn}
+          >
+            <div className='flex flex-row items-center gap-2'>
+              <FontAwesomeIcon icon={faDownload} />
+              <div>Download</div>
+            </div>
+          </button>
+        </TooltipTrigger>
+        {!isLoggedIn && (
+          <TooltipContent>
+            {'You must sign in to download this song!'}
+          </TooltipContent>
+        )}
+      </Tooltip>
       <CountBalloon count={downloadCount} />
     </div>
   );

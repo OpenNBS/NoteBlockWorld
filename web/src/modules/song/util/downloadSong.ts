@@ -3,15 +3,21 @@
 import toast from 'react-hot-toast';
 
 import axios from '@web/src/lib/axios';
+import { getTokenLocal } from '@web/src/lib/axios/token.utils';
 
 export const downloadSongFile = async (song: {
   publicId: string;
   title: string;
 }) => {
+  const token = getTokenLocal();
+
   axios
     .get(`/song/${song.publicId}/download`, {
       params: {
         src: 'downloadButton',
+      },
+      headers: {
+        authorization: `Bearer ${token}`,
       },
       responseType: 'blob',
       withCredentials: true,

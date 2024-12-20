@@ -122,6 +122,8 @@ export class SongController {
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
+    user = validateUser(user);
+
     // TODO: no longer used
     res.set({
       'Content-Disposition': 'attachment; filename="song.nbs"',
