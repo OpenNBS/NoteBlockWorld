@@ -249,7 +249,7 @@ const DownloadButton = ({
   return (
     <div className='flex gap-0.5'>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <button
             onClick={handleClick}
             className='uppercase px-2 py-1 h-fit rounded-md text-sm bg-green-600 hover:enabled:bg-green-500 disabled:opacity-50'
