@@ -2,7 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
-import { validate } from 'class-validator';
+import { validate } from './config/EnvironmentVariables';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './parseToken';
@@ -15,7 +15,7 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.development', '.env.production'],
-      validate: validate,
+      validate,
     }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
