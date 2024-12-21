@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    CryptoModule.forRoot(),
+    CryptoModule,
   ],
   providers: [UserService],
   controllers: [UserController],

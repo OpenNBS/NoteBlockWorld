@@ -2,7 +2,6 @@ import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
-import { validate } from 'class-validator';
 import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { FileModule } from './file/file.module';
@@ -10,13 +9,14 @@ import { ParseTokenPipe } from './parseToken';
 import { SongBrowserModule } from './song-browser/song-browser.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
+import { validate } from './config/EnvironmentVariables';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.development', '.env.production'],
-      validate: validate,
+      validate,
     }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
@@ -40,7 +40,7 @@ import { UserModule } from './user/user.module';
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
     SongBrowserModule,
-    CryptoModule.forRoot(),
+    CryptoModule,
   ],
   controllers: [],
   providers: [ParseTokenPipe],
