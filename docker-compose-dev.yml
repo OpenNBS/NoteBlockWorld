@@ -1,6 +1,6 @@
-version: '3.8'
 services:
   mongodb:
+    container_name: opennoteworld-mongodb-dev
     image: mongo
     volumes:
       - mongodb_data:/data/db
@@ -11,5 +11,17 @@ services:
       - MONGO_INITDB_DATABASE=noteblockworld
       - MONGO_INITDB_ROOT_USERNAME=noteblockworlduser
 
+  minio:
+    container_name: minio
+    image: minio/minio
+    command: server /data
+    ports:
+      - 9000:9000
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
 volumes:
   mongodb_data:
+  minio_data:
