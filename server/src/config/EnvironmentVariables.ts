@@ -1,5 +1,11 @@
 import { plainToInstance } from 'class-transformer';
-import { IsEnum, IsOptional, IsString, validateSync } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 enum Environment {
   Development = 'development',
@@ -81,6 +87,9 @@ export class EnvironmentVariables {
 
   @IsString()
   DISCORD_WEBHOOK_URL: string;
+
+  @IsNumber()
+  SALTS_ROUNDS: number;
 }
 
 export function validate(config: Record<string, unknown>) {
