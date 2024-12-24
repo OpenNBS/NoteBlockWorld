@@ -52,42 +52,44 @@ export class AuthModule {
         JwtStrategy,
         {
           provide: 'FRONTEND_URL',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('FRONTEND_URL'),
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
-            configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
-        },
-        {
           provide: 'JWT_SECRET',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_SECRET'),
         },
         {
           provide: 'JWT_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_EXPIRES_IN'),
         },
         {
           provide: 'JWT_REFRESH_SECRET',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
         },
         {
           provide: 'JWT_REFRESH_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN'),
         },
         {
           provide: 'WHITELISTED_USERS',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('WHITELISTED_USERS'),
         },
         {
           provide: 'APP_DOMAIN',
-          useValue: (configService: ConfigService) =>
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('APP_DOMAIN'),
         },
       ],

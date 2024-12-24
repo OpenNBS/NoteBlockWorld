@@ -43,8 +43,8 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Login user' })
-  public async login(@Body() loginDto: LoginDto, @Res() res: Response) {
-    return this.authService.login(loginDto, res);
+  public async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Get('login/google')

@@ -32,8 +32,6 @@ export class AuthService {
     @Inject('FRONTEND_URL')
     private readonly FRONTEND_URL: string,
 
-    @Inject('COOKIE_EXPIRES_IN')
-    private readonly COOKIE_EXPIRES_IN: string,
     @Inject('JWT_SECRET')
     private readonly JWT_SECRET: string,
     @Inject('JWT_EXPIRES_IN')
@@ -46,7 +44,17 @@ export class AuthService {
     private readonly WHITELISTED_USERS: string,
     @Inject('APP_DOMAIN')
     private readonly APP_DOMAIN?: string,
-  ) {}
+  ) {
+    console.log({
+      FRONTEND_URL,
+      JWT_SECRET,
+      JWT_EXPIRES_IN,
+      JWT_REFRESH_SECRET,
+      JWT_REFRESH_EXPIRES_IN,
+      WHITELISTED_USERS,
+      APP_DOMAIN,
+    });
+  }
 
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
@@ -160,9 +168,9 @@ export class AuthService {
           Authorization: `token ${user.accessToken}`,
         },
       },
-    );
+    ).data;
 
-    const email = response.data.filter((email) => email.primary)[0].email;
+    const email = response.filter((email) => email.primary)[0].email;
 
     if (!(await this.verifyWhitelist(profile.username))) {
       return res.redirect(this.FRONTEND_URL + '/login');
@@ -228,7 +236,7 @@ export class AuthService {
 
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
-    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
+    const maxAge = 1000 * 60 * 60 * 24 * 365;
 
     res.cookie('token', token.access_token, {
       domain: domain,
@@ -255,14 +263,32 @@ export class AuthService {
     return user;
   }
 
-  public async login(
-    loginDto: LoginDto,
-    res: Response<any, Record<string, any>>,
-  ) {
-    throw new Error('Method not implemented.');
+  public async login(loginDto: LoginDto) {
+    const user = await this.userService.findByEmailAndValidatePassword(
+      loginDto.email,
+      loginDto.password,
+    );
+
+    // Generate token for user
+    const token = await this.createJwtPayload({
+      id: user._id.toString(),
+      email: user.email,
+      username: user.username,
+    });
+
+    return token;
   }
 
   public async register(registerDto: RegisterDto) {
     const newUser = await this.userService.createWithPassword(registerDto);
+
+    // Generate token for user
+    const token = await this.createJwtPayload({
+      id: newUser._id.toString(),
+      email: newUser.email,
+      username: newUser.username,
+    });
+
+    return token;
   }
 }

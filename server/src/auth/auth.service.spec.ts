@@ -50,10 +50,6 @@ describe('AuthService', () => {
           useValue: 'http://frontend.test.com',
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
-          useValue: '1d',
-        },
-        {
           provide: 'JWT_SECRET',
           useValue: 'test-jwt-secret',
         },
