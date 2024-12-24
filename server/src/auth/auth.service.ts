@@ -168,9 +168,9 @@ export class AuthService {
           Authorization: `token ${user.accessToken}`,
         },
       },
-    ).data;
+    );
 
-    const email = response.filter((email) => email.primary)[0].email;
+    const email = response.data.filter((email) => email.primary)[0].email;
 
     if (!(await this.verifyWhitelist(profile.username))) {
       return res.redirect(this.FRONTEND_URL + '/login');
