@@ -58,7 +58,7 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  APP_DOMAIN?: string;
+  APP_DOMAIN: string = 'localhost';
 
   @IsString()
   RECAPTCHA_KEY: string;
@@ -104,6 +104,8 @@ export function validate(config: Record<string, unknown>) {
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
+
+  console.log(validatedConfig);
 
   return validatedConfig;
 }
