@@ -284,3 +284,15 @@ export const EditButton = ({ isDisabled }: { isDisabled: boolean }) => {
     </button>
   );
 };
+
+export const SubmitButton = ({ isDisabled }: { isDisabled: boolean }) => {
+  return (
+    <button
+      type='submit'
+      disabled={isDisabled}
+      className='w-32 p-3 rounded-lg text-white py-3 px-6 uppercase font-bold transition duration-150 bg-blue-600 enabled:hover:bg-blue-500 disabled:opacity-50'
+    >
+      Submit
+    </button>
+  );
+};
