@@ -44,17 +44,7 @@ export class AuthService {
     private readonly WHITELISTED_USERS: string,
     @Inject('APP_DOMAIN')
     private readonly APP_DOMAIN?: string,
-  ) {
-    console.log({
-      FRONTEND_URL,
-      JWT_SECRET,
-      JWT_EXPIRES_IN,
-      JWT_REFRESH_SECRET,
-      JWT_REFRESH_EXPIRES_IN,
-      WHITELISTED_USERS,
-      APP_DOMAIN,
-    });
-  }
+  ) {}
 
   public async verifyToken(req: Request, res: Response) {
     const headers = req.headers;
