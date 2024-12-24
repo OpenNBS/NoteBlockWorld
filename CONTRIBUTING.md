@@ -2,7 +2,7 @@
 
 Hello! We're glad to have you interested in contributing to Note Block World. This document will guide you through the process of setting up the project and submitting your contributions.
 
-This page is a work-in-progress and will be updated as the project evolves. If you have any questions or need help, feel free to reach out to us on our [Discord server](https://discord.gg/open-note-block-studio-608692895179997252).
+This page is a work-in-progress and will be updated as the project evolves. If you have any questions or need help, feel free to reach out to us on our [Discord server](https://discord.gg/note-block-world-608692895179997252).
 
 ## Stack
 

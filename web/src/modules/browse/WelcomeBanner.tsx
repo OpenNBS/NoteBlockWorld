@@ -40,7 +40,7 @@ export const WelcomeBanner = () => {
           </Link>
           {' • '}
           <Link
-            href='https://github.com/OpenNBS/NoteBlockWorld/issues/new/choose'
+            href='https://discord.gg/note-block-world-608692895179997252'
             className='text-blue-400 hover:text-blue-300'
           >
             Discord Server

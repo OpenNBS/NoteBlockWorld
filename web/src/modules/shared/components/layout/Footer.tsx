@@ -29,7 +29,7 @@ export function Footer() {
           <FooterIcon icon={faGithub} href='https://github.com/OpenNBS' />
           <FooterIcon
             icon={faDiscord}
-            href='https://discord.gg/open-note-block-studio-608692895179997252'
+            href='https://discord.gg/note-block-world-608692895179997252'
           />
           {/* <FooterIcon icon={faEarth} href='https://opennbs.org' /> */}
           {/* <FooterIcon icon={faEnvelope} href='mailto:opennbs@gmail.com' /> */}
