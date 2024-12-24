@@ -10,6 +10,7 @@ import { SongBrowserModule } from './song-browser/song-browser.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { validate } from './config/EnvironmentVariables';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { validate } from './config/EnvironmentVariables';
     FileModule.forRootAsync(),
     SongBrowserModule,
     CryptoModule,
+    SeedModule.forRoot(),
   ],
   controllers: [],
   providers: [ParseTokenPipe],
