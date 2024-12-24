@@ -28,7 +28,9 @@ export class UserService {
     return await user.save();
   }
 
-  public async createWithPassword(registerDto: RegisterDto) {
+  public async createWithPassword(
+    registerDto: RegisterDto,
+  ): Promise<UserDocument> {
     // verify if user exists same email, username or publicName
     const user_registered = await this.findByEmail(registerDto.email);
 
@@ -54,6 +56,8 @@ export class UserService {
       publicName: registerDto.username,
       password: this.cryptoService.hashPassword(registerDto.password),
     });
+
+    return user;
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
@@ -172,5 +176,24 @@ export class UserService {
     }
 
     return newUsername;
+  }
+
+  public async findByEmailAndValidatePassword(email: string, password: string) {
+    const user_registered = await this.findByEmail(email);
+
+    if (!user_registered) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const isPasswordValid = await this.cryptoService.compareHashes(
+      password,
+      user_registered.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return user_registered;
   }
 }
