@@ -4,6 +4,7 @@ import { SeedController } from './seed.controller';
 import { UserModule } from '@server/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { env } from 'node:process';
+import { SongModule } from '@server/song/song.module';
 
 @Module({})
 export class SeedModule {
@@ -18,7 +19,7 @@ export class SeedModule {
       SeedModule.logger.warn('Seeding is allowed in development mode');
       return {
         module: SeedModule,
-        imports: [UserModule, ConfigModule.forRoot()],
+        imports: [UserModule, SongModule, ConfigModule.forRoot()],
         providers: [
           ConfigService,
           SeedService,

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SeedService } from './seed.service';
+import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
+import { SeedService } from './seed.service';
 
 describe('SeedService', () => {
   let service: SeedService;
@@ -15,7 +16,16 @@ describe('SeedService', () => {
         },
         {
           provide: UserService,
-          useValue: {},
+          useValue: {
+            createWithPassword: jest.fn(),
+          },
+        },
+        {
+          provide: SongService,
+          useValue: {
+            uploadSong: jest.fn(),
+            getSongById: jest.fn(),
+          },
         },
       ],
     }).compile();
