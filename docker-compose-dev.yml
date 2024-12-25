@@ -32,7 +32,16 @@ services:
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
-    command: "sleep 10 && mc alias set minio http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD&& mc mb myminio/noteblockworld-songs&& mc mb myminio/noteblockworld-thumbs"
+    command: >
+      -c '
+      while ! mc alias set minio http://minio:9000 minioadmin minioadmin; do
+        echo "Waiting for MinIO to be available..."
+        sleep 2
+      done &&
+      mc mb minio/noteblockworld-songs &&
+      mc mb minio/noteblockworld-thumbs
+      '
+
 volumes:
   mongodb_data:
   minio_data:
