@@ -28,6 +28,16 @@ export class UserService {
     return await user.save();
   }
 
+  public async update(user: UserDocument): Promise<UserDocument> {
+    try {
+      return (await this.userModel.findByIdAndUpdate(user._id, user, {
+        new: true, // return the updated document
+      })) as UserDocument;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   public async createWithPassword(
     registerDto: RegisterDto,
   ): Promise<UserDocument> {
