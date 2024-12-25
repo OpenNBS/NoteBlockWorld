@@ -145,7 +145,6 @@ export class SongUploadService {
   }): Promise<SongEntity> {
     // Is file valid?
     this.checkIsFileValid(file);
-
     // Prepare song for upload
     const { nbsSong, songBuffer } = this.prepareSongForUpload(
       file.buffer,
@@ -275,20 +274,12 @@ export class SongUploadService {
   }
 
   private prepareSongForUpload(
-    buffer: Buffer,
+    songFileBuffer: Buffer,
     body: UploadSongDto,
     user: UserDocument,
   ): { nbsSong: Song; songBuffer: Buffer } {
-    const loadedArrayBuffer = new ArrayBuffer(buffer.byteLength);
-    const view = new Uint8Array(loadedArrayBuffer);
-
-    for (let i = 0; i < buffer.byteLength; ++i) {
-      view[i] = buffer[i];
-    }
-
     // Is the uploaded file a valid .nbs file?
-    const nbsSong = this.getSongObject(loadedArrayBuffer);
-
+    const nbsSong = this.getSongObject(songFileBuffer);
     // Update NBS file with form values
     injectSongFileMetadata(
       nbsSong,
@@ -437,13 +428,13 @@ export class SongUploadService {
 
   public getSongObject(loadedArrayBuffer: ArrayBuffer): Song {
     const nbsSong = fromArrayBuffer(loadedArrayBuffer);
-
     // If the above operation fails, it will return an empty song
     if (nbsSong.length === 0) {
       throw new HttpException(
         {
           error: {
             file: 'Invalid NBS file',
+            errors: nbsSong.errors,
           },
         },
         HttpStatus.BAD_REQUEST,
