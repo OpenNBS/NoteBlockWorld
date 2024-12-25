@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Inject, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { FileService } from './file.service';
@@ -12,33 +12,40 @@ export class FileModule {
       providers: [
         {
           provide: 'S3_BUCKET_SONGS',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_SONGS'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_BUCKET_THUMBS',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_THUMBS'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_KEY',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_KEY'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_SECRET',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_SECRET'),
+
+          inject: [ConfigService],
         },
         {
           provide: 'S3_ENDPOINT',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_ENDPOINT'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_REGION',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_REGION'),
+          inject: [ConfigService],
         },
         FileService,
       ],
