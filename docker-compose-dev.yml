@@ -22,6 +22,17 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin
     volumes:
       - minio_data:/data
+
+  mc:
+    container_name: minio-client
+    image: minio/mc
+    entrypoint: ["/bin/sh", "-c"]
+    depends_on:
+      - minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: "sleep 10 && mc alias set minio http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD&& mc mb myminio/noteblockworld-songs&& mc mb myminio/noteblockworld-thumbs"
 volumes:
   mongodb_data:
   minio_data:
