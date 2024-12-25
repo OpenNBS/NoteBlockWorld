@@ -104,8 +104,5 @@ export function validate(config: Record<string, unknown>) {
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
-
-  console.log(validatedConfig);
-
   return validatedConfig;
 }
