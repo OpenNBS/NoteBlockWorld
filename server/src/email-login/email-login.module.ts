@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { EmailLoginService } from './email-login.service';
+
 import { EmailLoginController } from './email-login.controller';
+import { EmailLoginService } from './email-login.service';
 
 @Module({
   controllers: [EmailLoginController],

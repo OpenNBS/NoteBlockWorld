@@ -1,6 +1,6 @@
-import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
-import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { RegistrationForm } from './client/RegistrationForm';
+import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
+import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
 
 export const RegistrationPage = () => {
   return (

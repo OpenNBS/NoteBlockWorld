@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { SeedService } from './seed.service';
-import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 
 @Controller('seed')
 @ApiTags('seed')

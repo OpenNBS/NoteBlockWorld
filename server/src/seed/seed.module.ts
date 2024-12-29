@@ -1,10 +1,13 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
-import { SeedService } from './seed.service';
-import { SeedController } from './seed.controller';
-import { UserModule } from '@server/user/user.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { env } from 'node:process';
+
+import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { SongModule } from '@server/song/song.module';
+import { UserModule } from '@server/user/user.module';
+
+import { SeedController } from './seed.controller';
+import { SeedService } from './seed.service';
 
 @Module({})
 export class SeedModule {

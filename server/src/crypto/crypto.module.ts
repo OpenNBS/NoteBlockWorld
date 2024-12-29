@@ -1,6 +1,6 @@
-import { DynamicModule, Module } from '@nestjs/common';
-
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { CryptoService } from './crypto.service';
 
 @Module({

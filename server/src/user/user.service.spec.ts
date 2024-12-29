@@ -6,9 +6,10 @@ import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { Model } from 'mongoose';
 
+import { CryptoService } from '@server/crypto/crypto.service';
+
 import { User, UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
-import { CryptoService } from '@server/crypto/crypto.service';
 
 const mockUserModel = {
   create: jest.fn(),

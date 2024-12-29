@@ -58,6 +58,7 @@ export class FileService {
         `Error verifying buckets ${this.S3_BUCKET_SONGS} and ${this.S3_BUCKET_THUMBS}`,
         error,
       );
+
       throw error;
     }
   }

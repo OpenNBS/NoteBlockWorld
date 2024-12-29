@@ -1,4 +1,4 @@
-import { DynamicModule, Inject, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { FileService } from './file.service';

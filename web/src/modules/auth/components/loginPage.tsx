@@ -3,6 +3,7 @@ import {
   faGithub,
   faGoogle,
 } from '@fortawesome/free-brands-svg-icons';
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -10,7 +11,6 @@ import { baseApiURL } from '@web/src/lib/axios';
 
 import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
-import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 type AuthProvider = 'google' | 'github' | 'discord';
 

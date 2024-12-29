@@ -1,6 +1,6 @@
-import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
-import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { LoginForm } from './client/LoginFrom';
+import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
+import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';
 
 export const LoginWithEmailPage = () => {
   return (

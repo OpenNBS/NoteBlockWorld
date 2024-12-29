@@ -7,18 +7,18 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { SongDocument } from '@server/song/entity/song.entity';
-import { SongService } from '@server/song/song.service';
-import { UserDocument } from '@server/user/entity/user.entity';
-import { UserService } from '@server/user/user.service';
 import { UploadConst } from '@shared/validation/song/constants';
-import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import {
   CategoryType,
   LicenseType,
   VisibilityType,
 } from '@shared/validation/song/dto/types';
+import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+
+import { SongDocument } from '@server/song/entity/song.entity';
+import { SongService } from '@server/song/song.service';
+import { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 @Injectable()
 export class SeedService {
@@ -33,6 +33,7 @@ export class SeedService {
     @Inject(SongService)
     private readonly songService: SongService,
   ) {}
+
   public async seedDev() {
     if (this.NODE_ENV !== 'development') {
       this.logger.error('Seeding is only allowed in development mode');
@@ -47,20 +48,24 @@ export class SeedService {
 
   private async seedUsers() {
     const createdUsers: UserDocument[] = [];
+
     for (let i = 0; i < 100; i++) {
       const user = await this.userService.createWithPassword({
         email: faker.internet.email(),
         username: faker.internet.username(),
         password: 'supersecretpassword', // all users have the same password for development purposes
       });
+
       //change user creation date
       (user as any).createdAt = this.generateRandomDate(
         new Date(2020, 0, 1),
         new Date(),
       );
+
       user.loginCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
       user.playCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
       user.description = faker.lorem.paragraph();
+
       user.socialLinks = {
         youtube: faker.internet.url(),
         x: faker.internet.url(),
@@ -85,6 +90,7 @@ export class SeedService {
 
       createdUsers.push(await this.userService.update(user));
     }
+
     return createdUsers;
   }
 
@@ -93,6 +99,7 @@ export class SeedService {
     const licenses = Object.keys(UploadConst.licenses);
     const categories = Object.keys(UploadConst.categories);
     const visibilities = Object.keys(UploadConst.visibility);
+
     for (const user of users) {
       // most users will have 0-5 songs and a few will have 5-10, not a real statist by whatever I just what to test the system in development mode
       const songCount = this.generateExponentialRandom(5, 2, 0.5, 10);
@@ -102,6 +109,7 @@ export class SeedService {
         const fileData = nbsSong.toArrayBuffer();
         const fileBuffer = Buffer.from(fileData);
         this.logger.log(`Generated song has ${fileBuffer.length} bytes.`);
+
         const body: UploadSongDto = {
           file: {
             buffer: fileData,
@@ -126,6 +134,7 @@ export class SeedService {
             zoomLevel: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
           },
         };
+
         const uploadSongResponse = await this.songService.uploadSong({
           user,
           body,
@@ -143,6 +152,7 @@ export class SeedService {
           new Date(2020, 0, 1),
           new Date(),
         );
+
         song.playCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
         song.downloadCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
         song.likeCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
@@ -162,9 +172,11 @@ export class SeedService {
     limit = Number.MAX_SAFE_INTEGER,
   ) {
     let max = start;
+
     while (faker.datatype.boolean(stepProbability) && max < limit) {
       max *= stepScale;
     }
+
     return faker.number.int({ min: 0, max: Math.min(max, limit) });
   }
 
@@ -199,9 +211,11 @@ export class SeedService {
         songTest.setNote(i * 4, layer, notes[i]);
       // "i * 4" is placeholder - this is the tick to place on
     }
+
     this.logger.log(
       `Generated song with ${layerCount} layers, ${songTest.length} ticks`,
     );
+
     return songTest;
   }
 

@@ -1,16 +1,16 @@
 'use client';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Input, Button } from '../../../shared/components/client/FormElements';
-import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   RegistrationFormSchema,
   RegistrationFormType,
 } from './RegistrationForm.zod';
+import { Button, Input } from '../../../shared/components/client/FormElements';
 
 type RegisterFormData = {
   email: string;
@@ -25,6 +25,7 @@ export const RegistrationForm = () => {
     resolver: zodResolver(RegistrationFormSchema),
     mode: 'onBlur',
   });
+
   const router = useRouter();
 
   const {

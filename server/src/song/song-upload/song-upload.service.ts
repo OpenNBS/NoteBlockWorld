@@ -145,6 +145,7 @@ export class SongUploadService {
   }): Promise<SongEntity> {
     // Is file valid?
     this.checkIsFileValid(file);
+
     // Prepare song for upload
     const { nbsSong, songBuffer } = this.prepareSongForUpload(
       file.buffer,
@@ -280,6 +281,7 @@ export class SongUploadService {
   ): { nbsSong: Song; songBuffer: Buffer } {
     // Is the uploaded file a valid .nbs file?
     const nbsSong = this.getSongObject(songFileBuffer);
+
     // Update NBS file with form values
     injectSongFileMetadata(
       nbsSong,
@@ -428,6 +430,7 @@ export class SongUploadService {
 
   public getSongObject(loadedArrayBuffer: ArrayBuffer): Song {
     const nbsSong = fromArrayBuffer(loadedArrayBuffer);
+
     // If the above operation fails, it will return an empty song
     if (nbsSong.length === 0) {
       throw new HttpException(

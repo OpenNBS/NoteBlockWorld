@@ -3,13 +3,14 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
-import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
+
 import {
   Input,
   SubmitButton,
 } from '../../../shared/components/client/FormElements';
-import { useForm } from 'react-hook-form';
 
 type LoginFormProps = {
   isLoading?: boolean;
@@ -20,6 +21,7 @@ type LoginFormData = {
   email: string;
   password: string;
 };
+
 // TODO: Implement login logic
 export const LoginForm = ({
   isLoading = false,
@@ -30,6 +32,7 @@ export const LoginForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
+
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {

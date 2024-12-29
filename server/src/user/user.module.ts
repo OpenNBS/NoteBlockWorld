@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { CryptoModule } from '@server/crypto/crypto.module';
+
 import { User, UserSchema } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';

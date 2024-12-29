@@ -3,16 +3,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
-import { CryptoModule } from './crypto/crypto.module';
-import { FileModule } from './file/file.module';
-import { ParseTokenPipe } from './parseToken';
-import { SongBrowserModule } from './song-browser/song-browser.module';
-import { SongModule } from './song/song.module';
-import { UserModule } from './user/user.module';
 import { validate } from './config/EnvironmentVariables';
-import { SeedModule } from './seed/seed.module';
+import { CryptoModule } from './crypto/crypto.module';
 import { EmailLoginModule } from './email-login/email-login.module';
+import { FileModule } from './file/file.module';
 import { MailingModule } from './mailing/mailing.module';
+import { ParseTokenPipe } from './parseToken';
+import { SeedModule } from './seed/seed.module';
+import { SongModule } from './song/song.module';
+import { SongBrowserModule } from './song-browser/song-browser.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

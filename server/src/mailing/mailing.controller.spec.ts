@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { MailingController } from './mailing.controller';
 import { MailingService } from './mailing.service';
 
