@@ -6,8 +6,6 @@ import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { Model } from 'mongoose';
 
-import { CryptoService } from '@server/crypto/crypto.service';
-
 import { User, UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
@@ -22,10 +20,6 @@ const mockUserModel = {
   countDocuments: jest.fn(),
 };
 
-const mockCryptoService = {
-  hashPassword: jest.fn(),
-};
-
 describe('UserService', () => {
   let service: UserService;
   let userModel: Model<UserDocument>;
@@ -37,10 +31,6 @@ describe('UserService', () => {
         {
           provide: getModelToken(User.name),
           useValue: mockUserModel,
-        },
-        {
-          provide: CryptoService,
-          useValue: mockCryptoService,
         },
       ],
     }).compile();

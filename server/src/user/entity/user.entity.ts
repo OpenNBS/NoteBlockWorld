@@ -59,8 +59,11 @@ export class User {
   @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop({ type: String, required: true, default: 'no password' })
-  password: string;
+  @Prop({ type: String, required: false, default: null })
+  singleUsePass?: string;
+
+  @Prop({ type: String, required: false, default: null })
+  singleUsePassID?: string;
 
   @Prop({ type: String, required: true, default: '#' })
   description: string;

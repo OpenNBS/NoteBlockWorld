@@ -3,21 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
+import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
-
-import { CryptoService } from '@server/crypto/crypto.service';
 
 import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-    @Inject(CryptoService)
-    private readonly cryptoService: CryptoService,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
     await validate(user_registered);
@@ -39,8 +33,8 @@ export class UserService {
     }
   }
 
-  public async createWithPassword(
-    registerDto: RegisterDto,
+  public async createWithEmail(
+    registerDto: NewEmailUserDto,
   ): Promise<UserDocument> {
     // verify if user exists same email, username or publicName
     const user_registered = await this.findByEmail(registerDto.email);
@@ -65,7 +59,6 @@ export class UserService {
       email: registerDto.email,
       username: registerDto.username,
       publicName: registerDto.username,
-      password: this.cryptoService.hashPassword(registerDto.password),
     });
 
     return user;
@@ -187,24 +180,5 @@ export class UserService {
     }
 
     return newUsername;
-  }
-
-  public async findByEmailAndValidatePassword(email: string, password: string) {
-    const user_registered = await this.findByEmail(email);
-
-    if (!user_registered) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-
-    const isPasswordValid = await this.cryptoService.compareHashes(
-      password,
-      user_registered.password,
-    );
-
-    if (!isPasswordValid) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-    }
-
-    return user_registered;
   }
 }
