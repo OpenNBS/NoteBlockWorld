@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { MailingService } from './mailing.service';
 import { MailingController } from './mailing.controller';
+import { MailingService } from './mailing.service';
 
 describe('MailingController', () => {
   let controller: MailingController;
