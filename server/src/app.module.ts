@@ -11,6 +11,8 @@ import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { validate } from './config/EnvironmentVariables';
 import { SeedModule } from './seed/seed.module';
+import { EmailLoginModule } from './email-login/email-login.module';
+import { MailingModule } from './mailing/mailing.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { SeedModule } from './seed/seed.module';
     SongBrowserModule,
     CryptoModule,
     SeedModule.forRoot(),
+    EmailLoginModule,
+    MailingModule,
   ],
   controllers: [],
   providers: [ParseTokenPipe],
