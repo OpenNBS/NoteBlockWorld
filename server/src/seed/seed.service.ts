@@ -50,10 +50,9 @@ export class SeedService {
     const createdUsers: UserDocument[] = [];
 
     for (let i = 0; i < 100; i++) {
-      const user = await this.userService.createWithPassword({
+      const user = await this.userService.createWithEmail({
         email: faker.internet.email(),
         username: faker.internet.username(),
-        password: 'supersecretpassword', // all users have the same password for development purposes
       });
 
       //change user creation date
