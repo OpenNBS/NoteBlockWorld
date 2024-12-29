@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -12,6 +12,8 @@ export class SongWebhookService implements OnModuleInit {
   constructor(
     @InjectModel(SongEntity.name)
     private songModel: Model<SongEntity>,
+    @Inject('DISCORD_WEBHOOK_URL')
+    private readonly discordWebhookUrl: string | undefined,
   ) {}
 
   async onModuleInit() {
@@ -28,7 +30,7 @@ export class SongWebhookService implements OnModuleInit {
      * @throws {Error} If the Discord webhook URL is not found.
      * @throws {Error} If there is an error sending the webhook message.
      */
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    const webhookUrl = this.discordWebhookUrl;
 
     if (!webhookUrl) {
       this.logger.error('Discord webhook URL not found');
@@ -71,7 +73,7 @@ export class SongWebhookService implements OnModuleInit {
       throw new Error('Song does not have a webhook message');
     }
 
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    const webhookUrl = this.discordWebhookUrl;
 
     if (!webhookUrl) {
       this.logger.error('Discord webhook URL not found');
@@ -110,7 +112,7 @@ export class SongWebhookService implements OnModuleInit {
       throw new Error('Song does not have a webhook message');
     }
 
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    const webhookUrl = this.discordWebhookUrl;
 
     if (!webhookUrl) {
       this.logger.error('Discord webhook URL not found');
@@ -175,7 +177,7 @@ export class SongWebhookService implements OnModuleInit {
       .sort({ createdAt: 1 })
       .populate('uploader', 'username profileImage -_id');
 
-    for await (const songDocument of songQuery) {
+    for (const songDocument of await songQuery) {
       const webhookMessageId = await this.syncSongWebhook(
         songDocument as unknown as SongWithUser,
       );
