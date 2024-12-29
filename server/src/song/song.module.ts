@@ -11,6 +11,7 @@ import { SongUploadService } from './song-upload/song-upload.service';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,7 +20,17 @@ import { SongWebhookService } from './song-webhook/song-webhook.service';
     UserModule,
     FileModule.forRootAsync(),
   ],
-  providers: [SongService, SongUploadService, SongWebhookService],
+  providers: [
+    SongService,
+    SongUploadService,
+    SongWebhookService,
+    {
+      provide: 'DISCORD_WEBHOOK_URL',
+      useFactory: (configService: ConfigService) =>
+        configService.getOrThrow('DISCORD_WEBHOOK_URL'),
+      inject: [ConfigService],
+    },
+  ],
   controllers: [SongController, MySongsController],
   exports: [SongService],
 })
