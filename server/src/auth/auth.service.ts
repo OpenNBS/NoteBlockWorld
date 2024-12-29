@@ -1,8 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
-import { LoginDto } from '@shared/validation/user/dto/Login.dto';
-import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
+import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
@@ -190,7 +189,11 @@ export class AuthService {
     return this.GenTokenRedirect(user_registered, res);
   }
 
-  private async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
+  public async loginWithEmail(req: Request, res: Response) {
+    throw new Error('Method not implemented.');
+  }
+
+  public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.JWT_SECRET,
@@ -247,24 +250,8 @@ export class AuthService {
     return user;
   }
 
-  public async login(loginDto: LoginDto) {
-    const user = await this.userService.findByEmailAndValidatePassword(
-      loginDto.email,
-      loginDto.password,
-    );
-
-    // Generate token for user
-    const token = await this.createJwtPayload({
-      id: user._id.toString(),
-      email: user.email,
-      username: user.username,
-    });
-
-    return token;
-  }
-
-  public async register(registerDto: RegisterDto) {
-    const newUser = await this.userService.createWithPassword(registerDto);
+  public async register(registerDto: NewEmailUserDto) {
+    const newUser = await this.userService.createWithEmail(registerDto);
 
     // Generate token for user
     const token = await this.createJwtPayload({

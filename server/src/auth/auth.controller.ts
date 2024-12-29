@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Logger,
   Post,
   Req,
@@ -10,8 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from '@shared/validation/user/dto/Login.dto';
-import { RegisterDto } from '@shared/validation/user/dto/Register.dto';
+import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
@@ -20,13 +20,43 @@ import { AuthService } from './auth.service';
 @ApiTags('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(AuthService)
+    private readonly authService: AuthService,
+  ) {}
+
+  @Post('register')
+  @ApiOperation({
+    summary: 'Register user and send a email with a single use login link',
+  })
+  public async register(@Body() registerDto: NewEmailUserDto) {
+    return this.authService.register(registerDto);
+  }
+
+  @Get('login/email')
+  @ApiOperation({
+    summary: 'Will send the user a email with a single use login link',
+  })
+  @UseGuards(AuthGuard('email'))
+  public async signInWithEmail() {
+    // Not need for implementation, its handled by passport
+    this.logger.debug('Email login');
+  }
+
+  @Post('email/callback')
+  @ApiOperation({
+    summary: 'Will send the user a email with a single use login link',
+  })
+  public async signIn(@Req() req: Request, @Res() res: Response) {
+    return this.authService.loginWithEmail(req, res);
+  }
 
   @Get('login/github')
   @UseGuards(AuthGuard('github'))
+  @ApiOperation({ summary: 'Login with github' })
   public githubLogin() {
     // Not need for implementation, its handled by passport
-    this.logger.log('GitHub login');
+    this.logger.debug('GitHub login');
   }
 
   @Get('github/callback')
@@ -35,39 +65,31 @@ export class AuthController {
     return this.authService.githubLogin(req, res);
   }
 
-  @Post('register')
-  @ApiOperation({ summary: 'Register user' })
-  public async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
-  }
-
-  @Post('login')
-  @ApiOperation({ summary: 'Login user' })
-  public async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
-  }
-
   @Get('login/google')
+  @ApiOperation({ summary: 'Login with google' })
   @UseGuards(AuthGuard('google'))
   public googleLogin() {
     // Not need for implementation, its handled by passport
-    this.logger.log('Google login');
+    this.logger.debug('Google login');
   }
 
   @Get('google/callback')
+  @ApiOperation({ summary: 'Google login callback' })
   @UseGuards(AuthGuard('google'))
   public googleRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.googleLogin(req, res);
   }
 
   @Get('login/discord')
+  @ApiOperation({ summary: 'Login with discord' })
   @UseGuards(AuthGuard('discord'))
   public discordLogin() {
     // Not need for implementation, its handled by passport
-    this.logger.log('Discord login');
+    this.logger.debug('Discord login');
   }
 
   @Get('discord/callback')
+  @ApiOperation({ summary: 'Discord login callback' })
   @UseGuards(AuthGuard('discord'))
   public discordRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.discordLogin(req, res);
@@ -85,7 +107,6 @@ export class AuthController {
     })
     res: Response,
   ) {
-    // Not need for implementation, its handled by passport
     this.authService.verifyToken(req, res);
   }
 }

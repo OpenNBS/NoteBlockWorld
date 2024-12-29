@@ -10,6 +10,7 @@ import { DiscordStrategy } from './strategies/discord.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/JWT.strategy';
+import { EmailStrategy } from './strategies/email.strategy';
 
 @Module({})
 export class AuthModule {
@@ -49,6 +50,7 @@ export class AuthModule {
         GoogleStrategy,
         GithubStrategy,
         DiscordStrategy,
+        EmailStrategy,
         JwtStrategy,
         {
           provide: 'FRONTEND_URL',
