@@ -1,20 +1,16 @@
 'use client';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
-import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Input, Button } from '../../../shared/components/client/FormElements';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Input,
-  SubmitButton,
-} from '../../../shared/components/client/FormElements';
-import { useForm, SubmitHandler } from 'react-hook-form';
-
-type RegisterFormProps = {
-  isLoading?: boolean;
-  isLocked?: boolean;
-};
+  RegistrationFormSchema,
+  RegistrationFormType,
+} from './RegistrationForm.zod';
 
 type RegisterFormData = {
   email: string;
@@ -24,24 +20,22 @@ type RegisterFormData = {
 };
 
 // TODO: Implement registration logic
-export const RegistrationForm = ({
-  isLoading = false,
-  isLocked = false,
-}: RegisterFormProps) => {
+export const RegistrationForm = () => {
+  const formMethods = useForm<RegistrationFormType>({
+    resolver: zodResolver(RegistrationFormSchema),
+    mode: 'onBlur',
+  });
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-  } = useForm<RegisterFormData>();
-  const router = useRouter();
+  } = formMethods;
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    // Handle registration logic here
     console.log(data);
   };
-
-  const password = watch('password');
 
   return (
     <>
@@ -72,8 +66,6 @@ export const RegistrationForm = ({
                   <p>Enter your email address to register.</p>
                 </>
               }
-              isLoading={isLoading}
-              disabled={isLocked}
               errorMessage={errors.email?.message}
               {...register('email', { required: 'Email is required' })}
             />
@@ -89,67 +81,14 @@ export const RegistrationForm = ({
                   <p>Enter your desired username.</p>
                 </>
               }
-              isLoading={isLoading}
-              disabled={isLocked}
               errorMessage={errors.username?.message}
               {...register('username', { required: 'Username is required' })}
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <Input
-              id='password'
-              label='Password*'
-              type='password'
-              tooltip={
-                <>
-                  <p>Enter your password to register.</p>
-                </>
-              }
-              isLoading={isLoading}
-              disabled={isLocked}
-              errorMessage={errors.password?.message}
-              {...register('password', { required: 'Password is required' })}
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div>
-            <Input
-              id='confirmPassword'
-              label='Confirm Password*'
-              type='password'
-              tooltip={
-                <>
-                  <p>Confirm your password.</p>
-                </>
-              }
-              isLoading={isLoading}
-              disabled={isLocked}
-              errorMessage={errors.confirmPassword?.message}
-              {...register('confirmPassword', {
-                required: 'Confirm Password is required',
-                validate: (value) =>
-                  value === password || 'Passwords do not match',
-              })}
-            />
-          </div>
-
-          {errors.email && <ErrorBalloon message={errors.email.message} />}
-          {errors.username && (
-            <ErrorBalloon message={errors.username.message} />
-          )}
-          {errors.password && (
-            <ErrorBalloon message={errors.password.message} />
-          )}
-          {errors.confirmPassword && (
-            <ErrorBalloon message={errors.confirmPassword.message} />
-          )}
-
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Submit button */}
-            <SubmitButton isDisabled={isLoading} />
+            <Button onClick={handleSubmit(onSubmit)}>Register</Button>
           </div>
 
           {/* Link to login page */}
