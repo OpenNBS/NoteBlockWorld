@@ -11,6 +11,16 @@ services:
       - MONGO_INITDB_DATABASE=noteblockworld
       - MONGO_INITDB_ROOT_USERNAME=noteblockworlduser
 
+  maildev:
+    container_name: opennoteworld-maildev-dev
+    image: maildev/maildev
+    ports:
+      - '1080:1080' # Web Interface
+      - '1025:1025' # SMTP Server
+      # to use the maildev container, you need to set the following environment variables in your application:
+      # MAIL_TRANSPORT=smtp://maildev:1025 or MAIL_TRANSPORT=smtp://localhost:1025
+      # MAIL_FROM="Example <noreply@noteblock.world>"
+
   minio:
     container_name: minio
     image: minio/minio
@@ -26,7 +36,7 @@ services:
   mc:
     container_name: minio-client
     image: minio/mc
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: ['/bin/sh', '-c']
     depends_on:
       - minio
     environment:
