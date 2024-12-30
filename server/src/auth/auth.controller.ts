@@ -15,6 +15,7 @@ import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
+import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -23,6 +24,8 @@ export class AuthController {
   constructor(
     @Inject(AuthService)
     private readonly authService: AuthService,
+    @Inject(MagicLinkEmailStrategy)
+    private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy,
   ) {}
 
   @Post('register')
@@ -33,20 +36,37 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Get('login/email')
+  @Post('login/magic-link')
   @ApiOperation({
     summary: 'Will send the user a email with a single use login link',
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              destination: {
+                type: 'string',
+                example: 'vycasnicolas@gmail.com',
+                description: 'Email address to send the magic link to',
+              },
+            },
+            required: ['destination'],
+          },
+        },
+      },
+    },
   })
-  @UseGuards(AuthGuard('email'))
-  public async signInWithEmail() {
-    // Not need for implementation, its handled by passport
-    this.logger.debug('Email login');
+  public async signInWithEmail(@Req() req: Request, @Res() res: Response) {
+    await this.authService.validateEmail(req.body);
+    return this.magicLinkEmailStrategy.send(req, res);
   }
 
-  @Post('email/callback')
+  @Get('magic-link/callback')
   @ApiOperation({
     summary: 'Will send the user a email with a single use login link',
   })
+  @UseGuards(AuthGuard('magic-link'))
   public async signIn(@Req() req: Request, @Res() res: Response) {
     return this.authService.loginWithEmail(req, res);
   }
@@ -61,6 +81,7 @@ export class AuthController {
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
+  @ApiOperation({ summary: 'GitHub login callback' })
   public githubRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.githubLogin(req, res);
   }

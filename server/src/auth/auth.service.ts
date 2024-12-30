@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
@@ -13,6 +19,7 @@ import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
 import { Profile } from './types/profile';
 import { TokenPayload, Tokens } from './types/token';
+import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 @Injectable()
 export class AuthService {
@@ -190,7 +197,13 @@ export class AuthService {
   }
 
   public async loginWithEmail(req: Request, res: Response) {
-    throw new Error('Method not implemented.');
+    const user = req.user as UserDocument;
+
+    if (!user) {
+      return res.redirect(this.FRONTEND_URL + '/login');
+    }
+
+    return this.GenTokenRedirect(user, res);
   }
 
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
@@ -251,15 +264,38 @@ export class AuthService {
   }
 
   public async register(registerDto: NewEmailUserDto) {
-    const newUser = await this.userService.createWithEmail(registerDto);
+    await this.userService.createWithEmail(registerDto);
 
-    // Generate token for user
-    const token = await this.createJwtPayload({
-      id: newUser._id.toString(),
-      email: newUser.email,
-      username: newUser.username,
-    });
+    return {
+      message: 'User created',
+    };
+  }
 
-    return token;
+  public async validateEmail(body: Record<string, string | undefined>) {
+    // get destination from body
+    const { destination } = body;
+
+    if (!destination) {
+      throw new HttpException(
+        {
+          error: 'destination email not provided',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // find user by email
+    const user = await this.userService.findByEmail(destination);
+
+    if (!user) {
+      throw new HttpException(
+        {
+          error: 'User not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    } else {
+      return user;
+    }
   }
 }
