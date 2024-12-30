@@ -65,10 +65,14 @@ export class User {
   @Prop({ type: String, required: false, default: null })
   singleUsePassID?: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: true, default: 'No description provided' })
   description: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({
+    type: String,
+    required: true,
+    default: '/assets/default-profile.png',
+  })
   profileImage: string;
 
   @Prop({ type: SocialLinks, required: false, default: {} })
