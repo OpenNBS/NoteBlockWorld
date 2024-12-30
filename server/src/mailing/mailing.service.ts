@@ -9,14 +9,19 @@ export class MailingService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async sendEmail(
-    to: string,
-    subject: string,
-    template: string,
+  async sendEmail({
+    to,
+    subject,
+    template,
+    context,
+  }: {
+    to: string;
+    subject: string;
+    template: string;
     context: {
       [name: string]: any;
-    },
-  ): Promise<void> {
+    };
+  }): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to,

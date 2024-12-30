@@ -44,7 +44,7 @@ describe('MailingService', () => {
       message: 'Hello, this is a test email!',
     };
 
-    await service.sendEmail(to, subject, template, context);
+    await service.sendEmail({ to, subject, template, context });
 
     expect(sendMailSpy).toHaveBeenCalledWith({
       to,
