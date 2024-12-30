@@ -18,7 +18,7 @@ export class SongWebhookService implements OnModuleInit {
 
   async onModuleInit() {
     this.logger.log('Updating Discord webhooks for all songs');
-    await this.syncAllSongsWebhook();
+    this.syncAllSongsWebhook();
   }
 
   public async postSongWebhook(song: SongWithUser): Promise<string | null> {
@@ -50,7 +50,7 @@ export class SongWebhookService implements OnModuleInit {
 
       const data = await response.json();
 
-      this.logger.log(`Posted webhook message for song ${song.publicId}`);
+      //this.logger.log(`Posted webhook message for song ${song.publicId}`);
       return data.id; // Discord message ID
     } catch (e) {
       this.logger.error('Error sending Discord webhook', e);
