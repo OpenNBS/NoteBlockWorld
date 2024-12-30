@@ -20,6 +20,8 @@ services:
       # to use the maildev container, you need to set the following environment variables in your application:
       # MAIL_TRANSPORT=smtp://maildev:1025 or MAIL_TRANSPORT=smtp://localhost:1025
       # MAIL_FROM="Example <noreply@noteblock.world>"
+      # 
+      # You can also use the maildev web interface to view sent emails at http://localhost:1080
 
   minio:
     container_name: minio
@@ -32,6 +34,7 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin
     volumes:
       - minio_data:/data
+      # You can access the MinIO web interface at http://localhost:9000
 
   mc:
     container_name: minio-client
