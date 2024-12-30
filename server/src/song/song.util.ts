@@ -44,8 +44,6 @@ export function getUploadDiscordEmbed({
   license,
   stats,
 }: SongWithUser) {
-  console.log(Number('0x' + thumbnailData.backgroundColor.replace('#', '')));
-
   let fieldsArray = [];
 
   if (originalAuthor) {
