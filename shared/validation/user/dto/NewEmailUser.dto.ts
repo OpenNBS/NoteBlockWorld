@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class RegisterDto {
+export class NewEmailUserDto {
   @ApiProperty({
     description: 'User name',
     example: 'Tomast1337',
@@ -18,14 +18,6 @@ export class RegisterDto {
   @MinLength(4)
   username: string;
 
-  /*
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(64)
-  @MinLength(4)
-  publicName: string;
-*/
   @ApiProperty({
     description: 'User email',
     example: 'vycasnicolas@gmail.com',
@@ -35,13 +27,4 @@ export class RegisterDto {
   @MaxLength(64)
   @IsEmail()
   email: string;
-
-  @ApiProperty({
-    description: 'User password',
-    example: 'supersecretpassword',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  password: string;
 }
