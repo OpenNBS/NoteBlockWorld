@@ -55,6 +55,12 @@ export class AuthModule {
         MagicLinkEmailStrategy,
         JwtStrategy,
         {
+          inject: [ConfigService],
+          provide: 'COOKIE_EXPIRES_IN',
+          useFactory: (configService: ConfigService) =>
+            configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
+        },
+        {
           provide: 'SERVER_URL',
           inject: [ConfigService],
           useFactory: (configService: ConfigService) =>

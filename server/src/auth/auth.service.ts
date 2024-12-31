@@ -1,13 +1,6 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
-import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
@@ -28,6 +21,8 @@ export class AuthService {
     private readonly userService: UserService,
     @Inject(JwtService)
     private readonly jwtService: JwtService,
+    @Inject('COOKIE_EXPIRES_IN')
+    private readonly COOKIE_EXPIRES_IN: string,
     @Inject('FRONTEND_URL')
     private readonly FRONTEND_URL: string,
 
@@ -235,7 +230,7 @@ export class AuthService {
 
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
-    const maxAge = 1000 * 60 * 60 * 24 * 365;
+    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
 
     res.cookie('token', token.access_token, {
       domain: domain,
