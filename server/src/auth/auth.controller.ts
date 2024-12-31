@@ -16,6 +16,7 @@ import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -51,7 +52,6 @@ export class AuthController {
     },
   })
   public async signInWithEmail(@Req() req: Request, @Res() res: Response) {
-    await this.authService.validateEmail(req.body);
     return this.magicLinkEmailStrategy.send(req, res);
   }
 

@@ -261,32 +261,4 @@ export class AuthService {
 
     return user;
   }
-
-  public async validateEmail(body: Record<string, string | undefined>) {
-    // get destination from body
-    const { destination } = body;
-
-    if (!destination) {
-      throw new HttpException(
-        {
-          error: 'destination email not provided',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // find user by email
-    const user = await this.userService.findByEmail(destination);
-
-    if (!user) {
-      throw new HttpException(
-        {
-          error: 'User not found',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    } else {
-      return user;
-    }
-  }
 }
