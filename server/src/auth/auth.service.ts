@@ -220,7 +220,7 @@ export class AuthService {
 
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
-    const maxAge = parseInt(this.COOKIE_EXPIRES_IN);
+    const maxAge = parseInt(this.COOKIE_EXPIRES_IN) * 1000;
 
     res.cookie('token', token.access_token, {
       domain: domain,

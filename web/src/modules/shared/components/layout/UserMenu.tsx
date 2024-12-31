@@ -1,15 +1,16 @@
 'use client';
+
 import {
+  faCheck,
+  faClose,
   faMusic,
-  faPen,
+  faPencil,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import Image from 'next/image';
-
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import { useState } from 'react';
+import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { UserMenuButton } from '../client/UserMenuButton';
 import { EditUsernameModal } from './EditUsernameModal';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
@@ -20,15 +21,16 @@ import {
   PopoverTrigger,
 } from './popover';
 
-export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
+export function UserMenu({ userData }: { userData: LoggedUserData }) {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  // ERRORS:
+  // 'This username is not available! :('
+  // 'Your username may only contain these characters: A-Z a-z 0-9 - _ .'
+
   return (
-    <Popover>
-      <EditUsernameModal
-        isOpen={isEditingUsername}
-        setIsOpen={setIsEditingUsername}
-        userData={userData}
-      />
+    <Popover onOpenChange={() => setIsEditingUsername(false)}>
       <PopoverTrigger>
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
@@ -44,7 +46,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
         <div className='min-w-48 max-w-64'>
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-3'>
-            <div className='h-8 w-8'>
+            <div className='h-8 w-8 aspect-square'>
               <Image
                 width={32}
                 height={32}
@@ -54,18 +56,47 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               />
             </div>
             <div className='flex-shrink min-w-0 flex flex-col leading-tight'>
-              <h4 className='truncate font-semibold'>
-                {userData.username}
-                <button
-                  className='ml-1 text-zinc-300 hover:text-white'
-                  onClick={() => setIsEditingUsername(true)}
-                >
-                  <FontAwesomeIcon icon={faPen} />
-                </button>
-              </h4>
+              <div className='flex justify-start items-center gap-2'>
+                {!isEditingUsername ? (
+                  <>
+                    <h4 className='truncate font-semibold w-48 py-px'>
+                      {userData.username}
+                    </h4>
+                    <button onClick={() => setIsEditingUsername(true)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size='sm'
+                        className='text-zinc-400 hover:text-zinc-200'
+                      />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      className='w-[calc(12rem-52px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
+                      defaultValue={userData.username}
+                    ></input>
+                    <button onClick={() => setIsEditingUsername(false)}>
+                      <FontAwesomeIcon
+                        icon={faClose}
+                        size='lg'
+                        className='text-zinc-400 hover:text-red-500'
+                      />
+                    </button>
+                    <button onClick={() => setIsEditingUsername(false)}>
+                      <FontAwesomeIcon
+                        icon={faCheck}
+                        size='lg'
+                        className='text-zinc-400 hover:text-green-500'
+                      />
+                    </button>
+                  </>
+                )}
+              </div>
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
+          {error && <p className='text-sm text-red-400 px-4 pb-2'>{error}</p>}
 
           <UserMenuSplitLine />
 
@@ -79,4 +110,4 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
       </PopoverContent>
     </Popover>
   );
-};
+}

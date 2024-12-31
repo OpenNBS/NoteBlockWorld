@@ -1,6 +1,5 @@
 'use client';
 
-import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import {
   createContext,
@@ -39,7 +38,7 @@ export function RecentSongsProvider({
     useState<SongPreviewDtoType[]>(initialRecentSongs);
 
   const [recentError, setRecentError] = useState<string>('');
-  const [page, setPage] = useState<number>(3);
+  const [page, setPage] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [categories, setCategories] = useState<Record<string, number>>({});
@@ -56,7 +55,7 @@ export function RecentSongsProvider({
           {
             params: {
               page,
-              limit: 8, // TODO: fix constants
+              limit: 12, // TODO: fix constants
               order: false,
             },
           },
@@ -67,7 +66,7 @@ export function RecentSongsProvider({
           ...response.data,
         ]);
 
-        if (response.data.length < 8) {
+        if (response.data.length < 12) {
           setHasMore(false);
         }
       } catch (error) {
@@ -114,18 +113,13 @@ export function RecentSongsProvider({
     setEndpoint(newEndpoint);
   }, [selectedCategory]);
 
-  // Fetch recent songs when the page or endpoint changes
   useEffect(() => {
+    if (page === 0) return;
     fetchRecentSongs();
-  }, [page, endpoint]);
+  }, [page, endpoint, fetchRecentSongs]);
 
   async function increasePageRecent() {
-    if (
-      BROWSER_SONGS.max_recent_songs <= recentSongs.length ||
-      loading ||
-      recentError ||
-      !hasMore
-    ) {
+    if (loading || recentError || !hasMore) {
       return;
     }
 

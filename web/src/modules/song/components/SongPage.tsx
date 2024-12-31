@@ -66,7 +66,7 @@ export async function SongPage({ id }: { id: string }) {
             <UploaderBadge user={song.uploader} />
             {/* <FollowButton /> */}
             <div className='flex-grow'></div>
-            <div className='flex flex-row gap-4'>
+            <div className='flex flex-row gap-4 overflow-x-auto'>
               {/* <LikeButton /> */}
               <ShareButton songId={song.publicId} />
               <OpenSongInNBSButton song={song} />

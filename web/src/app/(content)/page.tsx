@@ -52,12 +52,12 @@ export const metadata: Metadata = {
 };
 
 async function Home() {
-  const recentSongs = await fetchRecentSongs();
+  //const recentSongs = await fetchRecentSongs();
   const featuredSongs = await fetchFeaturedSongs();
 
   return (
     <HomePageProvider
-      initialRecentSongs={recentSongs}
+      initialRecentSongs={[]}
       initialFeaturedSongs={featuredSongs}
     >
       <HomePageComponent />
