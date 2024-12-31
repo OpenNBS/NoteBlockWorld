@@ -20,8 +20,8 @@ export class AuthModule {
         UserModule,
         ConfigModule.forRoot(),
         JwtModule.registerAsync({
-          imports: [ConfigModule],
           inject: [ConfigService],
+          imports: [ConfigModule],
           useFactory: async (config: ConfigService) => {
             const JWT_SECRET = config.get('JWT_SECRET');
             const JWT_EXPIRES_IN = config.get('JWT_EXPIRES_IN');
@@ -51,44 +51,64 @@ export class AuthModule {
         DiscordStrategy,
         JwtStrategy,
         {
-          provide: 'FRONTEND_URL',
-          useValue: (configService: ConfigService) =>
-            configService.getOrThrow<string>('FRONTEND_URL'),
-        },
-        {
+          inject: [ConfigService],
           provide: 'COOKIE_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
         },
         {
+          inject: [ConfigService],
+          provide: 'SERVER_URL',
+          useFactory: (configService: ConfigService) =>
+            configService.getOrThrow<string>('SERVER_URL'),
+        },
+        {
+          inject: [ConfigService],
+          provide: 'MAGIC_LINK_SECRET',
+          useFactory: (configService: ConfigService) =>
+            configService.getOrThrow<string>('MAGIC_LINK_SECRET'),
+        },
+        {
+          inject: [ConfigService],
+          provide: 'FRONTEND_URL',
+          useFactory: (configService: ConfigService) =>
+            configService.getOrThrow<string>('FRONTEND_URL'),
+        },
+        {
+          inject: [ConfigService],
           provide: 'JWT_SECRET',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_SECRET'),
         },
         {
+          inject: [ConfigService],
           provide: 'JWT_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_EXPIRES_IN'),
         },
         {
+          inject: [ConfigService],
           provide: 'JWT_REFRESH_SECRET',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
         },
         {
+          inject: [ConfigService],
           provide: 'JWT_REFRESH_EXPIRES_IN',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN'),
         },
         {
+          inject: [ConfigService],
           provide: 'WHITELISTED_USERS',
-          useValue: (configService: ConfigService) =>
+          useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('WHITELISTED_USERS'),
         },
         {
+          inject: [ConfigService],
           provide: 'APP_DOMAIN',
-          useValue: (configService: ConfigService) =>
-            configService.getOrThrow<string>('APP_DOMAIN'),
+          useFactory: (configService: ConfigService) =>
+            configService.get<string>('APP_DOMAIN'),
         },
       ],
       exports: [AuthService],

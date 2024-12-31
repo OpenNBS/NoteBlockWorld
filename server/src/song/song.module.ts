@@ -25,10 +25,10 @@ import { ConfigService } from '@nestjs/config';
     SongUploadService,
     SongWebhookService,
     {
+      inject: [ConfigService],
       provide: 'DISCORD_WEBHOOK_URL',
       useFactory: (configService: ConfigService) =>
         configService.getOrThrow('DISCORD_WEBHOOK_URL'),
-      inject: [ConfigService],
     },
   ],
   controllers: [SongController, MySongsController],
