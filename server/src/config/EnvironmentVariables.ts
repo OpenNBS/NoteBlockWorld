@@ -97,14 +97,8 @@ export class EnvironmentVariables {
   @IsString()
   DISCORD_WEBHOOK_URL: string;
 
-  // mailing
   @IsString()
-  @IsNotEmpty()
-  MAIL_TRANSPORT: string;
-
-  @IsString()
-  @IsNotEmpty()
-  MAIL_FROM: string;
+  COOKIE_EXPIRES_IN: string;
 }
 
 export function validate(config: Record<string, unknown>) {
