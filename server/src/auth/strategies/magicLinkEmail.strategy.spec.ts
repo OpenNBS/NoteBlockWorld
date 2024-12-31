@@ -12,6 +12,7 @@ describe('MagicLinkEmailStrategy', () => {
 
   const mockUserService = {
     findByEmail: jest.fn(),
+    createWithEmail: jest.fn(),
   };
 
   const mockMailingService = {
@@ -57,7 +58,10 @@ describe('MagicLinkEmailStrategy', () => {
   describe('sendMagicLink', () => {
     it('should send a magic link email', async () => {
       const email = 'test@example.com';
-      const magicLink = '/api/v1/auth/magic-link/callback?token=test_token';
+
+      const magicLink =
+        'http://localhost/api/v1/auth/magic-link/callback?token=test_token';
+
       const user = { username: 'testuser', email };
 
       mockUserService.findByEmail.mockResolvedValue(user);
@@ -69,12 +73,12 @@ describe('MagicLinkEmailStrategy', () => {
       )(email, magicLink);
 
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
-      // TODO: Fix this test
+
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
         to: email,
         context: {
           magicLink:
-            'http://localhost:3000/api/v1/auth/magic-link/callback?token=test_token',
+            'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
           username: 'testuser',
         },
         subject: 'Noteblock Magic Link',
@@ -82,13 +86,16 @@ describe('MagicLinkEmailStrategy', () => {
       });
     });
 
-    it('should log an error if user is not found', async () => {
-      const email = 'test@example.com';
-      const magicLink = '/api/v1/auth/magic-link/callback?token=test_token';
+    it('should create a new user if not found and send a magic link email', async () => {
+      const email = 'testuser@test.com';
+
+      const magicLink =
+        'http://localhost/api/v1/auth/magic-link/callback?token=test_token';
+
+      const user = { username: 'testuser', email };
 
       mockUserService.findByEmail.mockResolvedValue(null);
-
-      const loggerSpy = jest.spyOn(MagicLinkEmailStrategy.logger, 'error');
+      mockUserService.createWithEmail.mockResolvedValue(user);
 
       await MagicLinkEmailStrategy.sendMagicLink(
         'http://localhost:3000',
@@ -96,7 +103,20 @@ describe('MagicLinkEmailStrategy', () => {
         mailingService,
       )(email, magicLink);
 
-      expect(loggerSpy).toHaveBeenCalledWith('User not found');
+      expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
+
+      expect(mockUserService.createWithEmail).toHaveBeenCalledWith(email);
+
+      expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
+        to: email,
+        context: {
+          magicLink:
+            'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
+          username: 'testuser',
+        },
+        subject: 'Welcome to Noteblock.world',
+        template: 'magic-link-new-account',
+      });
     });
   });
 

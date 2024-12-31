@@ -55,29 +55,30 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
     async (email: string, magicLink: string) => {
       let user = await userService.findByEmail(email);
 
-      if (!user)
+      if (!user) {
         // Create user if not found
         user = await userService.createWithEmail(email);
 
-      const context = {
-        magicLink: magicLink,
-        username: user.username,
-      };
-
-      MagicLinkEmailStrategy.logger.debug(
-        `Sending magic link to ${email} with data ${JSON.stringify(
-          context,
-          null,
-          2,
-        )}`,
-      );
-
-      mailingService.sendEmail({
-        to: email,
-        context,
-        subject: 'Noteblock Magic Link',
-        template: 'magic-link',
-      });
+        mailingService.sendEmail({
+          to: email,
+          context: {
+            magicLink: magicLink,
+            username: user.username,
+          },
+          subject: 'Welcome to Noteblock.world',
+          template: 'magic-link-new-account',
+        });
+      } else {
+        mailingService.sendEmail({
+          to: email,
+          context: {
+            magicLink: magicLink,
+            username: user.username,
+          },
+          subject: 'Noteblock Magic Link',
+          template: 'magic-link',
+        });
+      }
     };
 
   async validate(payload: authenticationLinkPayload) {
