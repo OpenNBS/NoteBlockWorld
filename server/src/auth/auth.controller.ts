@@ -28,17 +28,10 @@ export class AuthController {
     private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy,
   ) {}
 
-  @Post('register')
-  @ApiOperation({
-    summary: 'Register user and send a email with a single use login link',
-  })
-  public async register(@Body() registerDto: NewEmailUserDto) {
-    return this.authService.register(registerDto);
-  }
-
   @Post('login/magic-link')
   @ApiOperation({
-    summary: 'Will send the user a email with a single use login link',
+    summary:
+      'Will send the user a email with a single use login link, if the user does not exist it will create a new user',
     requestBody: {
       content: {
         'application/json': {

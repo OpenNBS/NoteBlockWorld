@@ -19,7 +19,6 @@ import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
 import { Profile } from './types/profile';
 import { TokenPayload, Tokens } from './types/token';
-import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 @Injectable()
 export class AuthService {
@@ -261,14 +260,6 @@ export class AuthService {
     const user = await this.userService.findByID(decoded.id);
 
     return user;
-  }
-
-  public async register(registerDto: NewEmailUserDto) {
-    await this.userService.createWithEmail(registerDto);
-
-    return {
-      message: 'User created',
-    };
   }
 
   public async validateEmail(body: Record<string, string | undefined>) {
