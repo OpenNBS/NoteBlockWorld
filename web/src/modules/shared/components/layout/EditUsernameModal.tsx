@@ -1,35 +1,45 @@
 'use client';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axiosInstance from '@web/src/lib/axios';
+import ClientAxios from '@web/src/lib/axios/ClientAxios';
+import { LoggedUserData } from '@web/src/modules/auth/types/User';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
-import GenericModal from '../client/GenericModal';
 import { toast } from 'react-hot-toast';
+import GenericModal from '../client/GenericModal';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-type EditUsernameModalProps = {
+interface EditUsernameModalProps {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   userData: LoggedUserData;
-};
+}
+
+interface FormValues {
+  username: string;
+}
 
 export const EditUsernameModal = ({
   isOpen,
   setIsOpen,
   userData,
 }: EditUsernameModalProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    handleSubmit,
+    formState: { isSubmitting, errors },
+    register,
+  } = useForm<FormValues>();
 
-  const onClick = async () => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      setIsLoading(true);
-
-      const result = await axiosInstance.patch('/user/username', {
-        username: userData.username,
+      await ClientAxios.patch('/user/username', {
+        username: data.username,
       });
 
-      console.log(result);
+      toast.success('Username updated successfully');
+
+      // refresh the page
+      window.location.reload();
     } catch (error: unknown) {
       if ((error as any).isAxiosError) {
         const axiosError = error as AxiosError;
@@ -53,37 +63,39 @@ export const EditUsernameModal = ({
       }
 
       toast.error('An error occurred. Please try again later.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <GenericModal title='Edit username' isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className='flex flex-col gap-4'>
-        <div>
+        <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
+          <span className='text-red-500 text-sm font-medium h-4'>
+            {errors.username && errors.username.message}
+          </span>
           <label htmlFor='username' className='block text-white'>
             Username
           </label>
           <input
+            autoFocus
             type='text'
             id='username'
-            name='username'
+            {...register('username', { required: 'Username is required' })}
             className='w-full bg-zinc-700 text-white rounded-lg p-2'
             defaultValue={userData.username}
-            disabled={isLoading}
+            disabled={isSubmitting}
           />
-        </div>
-        <div className='flex justify-end'>
-          <button
-            onClick={onClick}
-            className='text-sm px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-400'
-            disabled={isLoading}
-          >
-            Edit username
-            <FontAwesomeIcon className='ml-2' icon={faPen} />
-          </button>
-        </div>
+          <div className='flex justify-end'>
+            <button
+              type='submit'
+              className='text-sm px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-400'
+              disabled={isSubmitting}
+            >
+              Edit username
+              <FontAwesomeIcon className='ml-2' icon={faPen} />
+            </button>
+          </div>
+        </form>
       </div>
     </GenericModal>
   );
