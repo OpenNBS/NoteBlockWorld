@@ -14,7 +14,7 @@ export default function GenericModal({
   isOpen: boolean;
   setIsOpen?: (isOpen: boolean) => void;
   title: string;
-  children: React.ReactNode;
+  children?: React.ReactNode | React.ReactNode[] | string;
 }) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
