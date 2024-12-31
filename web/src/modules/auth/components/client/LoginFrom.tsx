@@ -3,30 +3,29 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
+
+import axios from 'axios';
 
 import {
   Input,
   SubmitButton,
 } from '../../../shared/components/client/FormElements';
 
-type LoginFormProps = {
-  isLoading?: boolean;
-  isLocked?: boolean;
-};
-
 type LoginFormData = {
   email: string;
-  password: string;
 };
 
+const backendURL = process.env.NEXT_PUBLIC_API_URL;
+
 // TODO: Implement login logic
-export const LoginForm = ({
-  isLoading = false,
-  isLocked = false,
-}: LoginFormProps) => {
+export const LoginForm: FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -35,9 +34,29 @@ export const LoginForm = ({
 
   const router = useRouter();
 
-  const onSubmit = async (data: LoginFormData) => {
-    // Handle login logic here
-    console.log(data);
+  const onSubmit = async ({ email }: LoginFormData) => {
+    try {
+      setIsLoading(true);
+      const url = `${backendURL}/auth/login/email`;
+
+      const response = await axios.post(
+        url,
+        {
+          destination: email,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,45 +95,11 @@ export const LoginForm = ({
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <Input
-              id='password'
-              label='Password*'
-              type='password'
-              tooltip={
-                <>
-                  <p>Enter your password to log in.</p>
-                </>
-              }
-              isLoading={isLoading}
-              disabled={isLocked}
-              errorMessage={errors.password?.message}
-              {...register('password', { required: 'Password is required' })}
-            />
-          </div>
-
           {errors.email && <ErrorBalloon message={errors.email.message} />}
-          {errors.password && (
-            <ErrorBalloon message={errors.password.message} />
-          )}
 
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Submit button */}
             <SubmitButton isDisabled={isLoading} />
-          </div>
-
-          {/* Link to registration page */}
-          <div className='flex items-center justify-center gap-2 my-3'>
-            <p>
-              Don't have an account?{' '}
-              <Link
-                href='/register'
-                className='text-blue-400 hover:text-blue-300 hover:underline'
-              >
-                Register here
-              </Link>
-            </p>
           </div>
         </div>
       </form>
