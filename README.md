@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="img/header.png" alt="Note Block World header" />
+  <a href="https://noteblock.world">
+    <img src="img/header.png" alt="Note Block World header" />
+  </a>
 </p>
 
 <p align="center">
@@ -9,7 +11,7 @@
 </p>
 
 <p align="center">
-  👥 <a href="https://discord.gg/open-note-block-studio-608692895179997252">Discord</a> • 
+  👥 <a href="https://discord.gg/note-block-world-608692895179997252">Discord</a> • 
   📆 <a href="https://github.com/orgs/OpenNBS/projects/4">Roadmap</a> • 
   🗨 <a href="https://github.com/OpenNBS/NoteBlockWorld/issues/new/choose">Feedback</a> • 
   ☕ <a href="https://opencollective.com/opennbs/donate">Buy us a coffee!</a>
@@ -17,7 +19,7 @@
 
 ## ℹ About the project
 
-**Note Block World** is a collaborative, social website where users can share their note block songs made with [Note Block Studio](https://noteblock.studio/). Our goal is to give the NBS community a platform to share their creations with the world, discover new music and connect with other creators!
+[**Note Block World**](https://noteblock.world/) is a collaborative, social website where users can share their note block songs made with [Note Block Studio](https://noteblock.studio/). Our goal is to give the NBS community a platform to share their creations with the world, discover new music and connect with other creators!
 
 ## 💬 Issues/Feedback
 
@@ -27,7 +29,7 @@ If you have found an issue or would like to suggest a feature, please open a [ne
 
 We welcome contributions to the project! Read our [contributor guide](CONTRIBUTING.md) to set up the project and get started.
 
-Please [open an issue](/issues/new/choose) discussing the changes you would like to make before submitting a pull request. Alternatively, you can join our [Discord server](https://discord.gg/open-note-block-studio-608692895179997252) to discuss the changes with our development team!
+Please [open an issue](/issues/new/choose) discussing the changes you would like to make before submitting a pull request. Alternatively, you can join our [Discord server](https://discord.gg/note-block-world-608692895179997252) to discuss the changes with our development team!
 
 ## ❤ Donate
 
@@ -38,6 +40,7 @@ Thanks to all our current and past sponsors for helping us keep Note Block World
 ###### Supporters
 
 <img src="https://opencollective.com/opennbs/backers.svg" height="48px"/>
+<img src="https://opencollective.com/opennbs/sponsors.svg" height="48px"/>
 
 ---
 

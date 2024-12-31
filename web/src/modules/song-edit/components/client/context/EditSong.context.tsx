@@ -239,12 +239,15 @@ export const EditSongProvider = ({
       formMethods.setValue('category', songData.category);
 
       // fetch song
+      const token = getTokenLocal();
+
       const songFile = (
         await axiosInstance.get(`/song/${id}/download`, {
           params: {
             src: 'edit',
           },
           responseType: 'arraybuffer',
+          headers: { authorization: `Bearer ${token}` },
         })
       ).data as ArrayBuffer;
 

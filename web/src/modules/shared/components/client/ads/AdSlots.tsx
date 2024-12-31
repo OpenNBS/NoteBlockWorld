@@ -39,12 +39,14 @@ const AdTemplate = ({
   adFormat = 'auto',
   fullWidthResponsive = 'true',
   hiddenClassName = 'hidden',
+  showCloseButton = true,
 }: {
   className: string;
   adSlot: string;
   adFormat: string;
   fullWidthResponsive: string;
   hiddenClassName?: string;
+  showCloseButton?: boolean;
 }) => {
   const pubId = useAdSenseClient();
 
@@ -81,7 +83,7 @@ const AdTemplate = ({
             data-ad-format={adFormat}
             data-full-width-responsive={fullWidthResponsive}
           ></ins>
-          <HideAdButton setIsHidden={setIsHidden} />
+          {showCloseButton && <HideAdButton setIsHidden={setIsHidden} />}
         </>
       )}
     </div>
@@ -119,6 +121,21 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
       adFormat='auto'
       fullWidthResponsive='true'
       hiddenClassName='invisible'
+    />
+  );
+};
+
+export const DownloadPopupAdSlot = ({ className }: { className?: string }) => {
+  return (
+    <AdTemplate
+      className={cn(
+        'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
+      adSlot='3239923384'
+      adFormat='auto'
+      fullWidthResponsive='true'
+      showCloseButton={false}
     />
   );
 };
