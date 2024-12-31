@@ -29,7 +29,7 @@ If you have found an issue or would like to suggest a feature, please open a [ne
 
 We welcome contributions to the project! Read our [contributor guide](CONTRIBUTING.md) to set up the project and get started.
 
-Please [open an issue](/issues/new/choose) discussing the changes you would like to make before submitting a pull request. Alternatively, you can join our [Discord server](https://discord.gg/open-note-block-studio-608692895179997252) to discuss the changes with our development team!
+Please [open an issue](/issues/new/choose) discussing the changes you would like to make before submitting a pull request. Alternatively, you can join our [Discord server](https://discord.gg/note-block-world-608692895179997252) to discuss the changes with our development team!
 
 ## ❤ Donate
 
