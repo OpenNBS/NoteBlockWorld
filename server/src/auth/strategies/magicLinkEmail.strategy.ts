@@ -31,7 +31,7 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
     super({
       secret: MAGIC_LINK_SECRET,
       confirmUrl: `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
-      callbackURL: `${SERVER_URL}/api/v1/auth/magic-link/callback`,
+      callbackUrl: `${SERVER_URL}/api/v1/auth/magic-link/callback`,
       sendMagicLink: MagicLinkEmailStrategy.sendMagicLink(
         SERVER_URL,
         userService,
@@ -53,18 +53,14 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
       mailingService: MailingService,
     ) =>
     async (email: string, magicLink: string) => {
-      const user = await userService.findByEmail(email);
+      let user = await userService.findByEmail(email);
 
-      if (!user) {
-        MagicLinkEmailStrategy.logger.error('User not found');
-        return;
-      }
+      if (!user)
+        // Create user if not found
+        user = await userService.createWithEmail(email);
 
       const context = {
-        magicLink: magicLink.replace(
-          'undefined',
-          SERVER_URL + '/api/v1/auth/magic-link/callback',
-        ),
+        magicLink: magicLink,
         username: user.username,
       };
 
