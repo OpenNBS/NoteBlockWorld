@@ -18,7 +18,7 @@ export class SongWebhookService implements OnModuleInit {
 
   async onModuleInit() {
     this.logger.log('Updating Discord webhooks for all songs');
-    await this.syncAllSongsWebhook();
+    this.syncAllSongsWebhook();
   }
 
   public async postSongWebhook(song: SongWithUser): Promise<string | null> {
