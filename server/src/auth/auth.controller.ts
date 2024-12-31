@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Inject,
@@ -11,12 +10,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
-import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -51,7 +48,7 @@ export class AuthController {
       },
     },
   })
-  public async signInWithEmail(@Req() req: Request, @Res() res: Response) {
+  public async magicLinkLogin(@Req() req: Request, @Res() res: Response) {
     return this.magicLinkEmailStrategy.send(req, res);
   }
 
@@ -60,7 +57,7 @@ export class AuthController {
     summary: 'Will send the user a email with a single use login link',
   })
   @UseGuards(AuthGuard('magic-link'))
-  public async signIn(@Req() req: Request, @Res() res: Response) {
+  public async magicLinkRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.loginWithEmail(req, res);
   }
 
