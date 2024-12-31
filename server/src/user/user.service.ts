@@ -33,32 +33,25 @@ export class UserService {
     }
   }
 
-  public async createWithEmail(
-    registerDto: NewEmailUserDto,
-  ): Promise<UserDocument> {
+  public async createWithEmail(email: string): Promise<UserDocument> {
     // verify if user exists same email, username or publicName
-    const user_registered = await this.findByEmail(registerDto.email);
+    const userByEmail = await this.findByEmail(email);
 
-    const username_registered = await this.findByUsername(registerDto.username);
-
-    if (user_registered) {
+    if (userByEmail) {
       throw new HttpException(
         'Email already registered',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    if (username_registered) {
-      throw new HttpException(
-        'Username already registered',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const emailPrefixUsername = await this.generateUsername(
+      email.split('@')[0],
+    );
 
     const user = await this.userModel.create({
-      email: registerDto.email,
-      username: registerDto.username,
-      publicName: registerDto.username,
+      email: userByEmail,
+      username: emailPrefixUsername,
+      publicName: emailPrefixUsername,
     });
 
     return user;

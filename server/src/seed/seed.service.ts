@@ -50,10 +50,9 @@ export class SeedService {
     const createdUsers: UserDocument[] = [];
 
     for (let i = 0; i < 100; i++) {
-      const user = await this.userService.createWithEmail({
-        email: faker.internet.email(),
-        username: faker.internet.username(),
-      });
+      const user = await this.userService.createWithEmail(
+        faker.internet.email(),
+      );
 
       //change user creation date
       (user as any).createdAt = this.generateRandomDate(
