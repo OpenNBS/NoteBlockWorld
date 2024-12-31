@@ -46,6 +46,10 @@ describe('AuthService', () => {
           useValue: mockJwtService,
         },
         {
+          provide: 'COOKIE_EXPIRES_IN',
+          useValue: '3600',
+        },
+        {
           provide: 'FRONTEND_URL',
           useValue: 'http://frontend.test.com',
         },
@@ -459,7 +463,7 @@ describe('AuthService', () => {
 
       expect(res.cookie).toHaveBeenCalledWith('token', 'access-token', {
         domain: '.test.com',
-        maxAge: 1,
+        maxAge: 3600,
       });
 
       expect(res.cookie).toHaveBeenCalledWith(
@@ -467,7 +471,7 @@ describe('AuthService', () => {
         'refresh-token',
         {
           domain: '.test.com',
-          maxAge: 1,
+          maxAge: 3600,
         },
       );
 
