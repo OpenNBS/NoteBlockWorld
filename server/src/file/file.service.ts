@@ -168,7 +168,7 @@ export class FileService {
 
   private getPublicFileUrl(key: string, bucket: string) {
     const region = this.region;
-    return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
+    return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`; // TODO: make possible to use custom domain
   }
 
   public async deleteSong(nbsFileUrl: string) {
