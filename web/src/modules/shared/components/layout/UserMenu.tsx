@@ -1,20 +1,34 @@
-import { faMusic, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+'use client';
+import {
+  faMusic,
+  faPen,
+  faSignOutAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { UserMenuButton } from '../client/UserMenuButton';
+import { EditUsernameModal } from './EditUsernameModal';
+import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
 import {
   Popover,
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
 } from './popover';
-import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
-import { UserMenuButton } from '../client/UserMenuButton';
 
-export function UserMenu({ userData }: { userData: LoggedUserData }) {
+export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
   return (
     <Popover>
+      <EditUsernameModal
+        isOpen={isEditingUsername}
+        setIsOpen={setIsEditingUsername}
+        userData={userData}
+      />
       <PopoverTrigger>
         <UserMenuButton userData={userData} />
       </PopoverTrigger>
@@ -40,7 +54,15 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
               />
             </div>
             <div className='flex-shrink min-w-0 flex flex-col leading-tight'>
-              <h4 className='truncate font-semibold'>{userData.username}</h4>
+              <h4 className='truncate font-semibold'>
+                {userData.username}
+                <button
+                  className='ml-1 text-zinc-300 hover:text-white'
+                  onClick={() => setIsEditingUsername(true)}
+                >
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+              </h4>
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
@@ -57,4 +79,4 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
       </PopoverContent>
     </Popover>
   );
-}
+};
