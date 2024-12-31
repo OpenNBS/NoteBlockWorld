@@ -140,6 +140,10 @@ export class UserService {
       );
     }
 
+    if (user.username === username) {
+      throw new HttpException('Username is the same', HttpStatus.BAD_REQUEST);
+    }
+
     user.username = username;
 
     return await user.save();
