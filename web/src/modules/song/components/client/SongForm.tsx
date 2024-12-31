@@ -192,7 +192,7 @@ export const SongForm = ({
                     <p>
                       Haven&apos;t found one that fits your song? You can
                       suggest a new category in our{' '}
-                      <Link href='https://discord.gg/open-note-block-studio-608692895179997252'>
+                      <Link href='https://discord.gg/note-block-world-608692895179997252'>
                         Discord server
                       </Link>
                       !
