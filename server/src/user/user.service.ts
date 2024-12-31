@@ -49,7 +49,7 @@ export class UserService {
     );
 
     const user = await this.userModel.create({
-      email: userByEmail,
+      email: email,
       username: emailPrefixUsername,
       publicName: emailPrefixUsername,
     });
