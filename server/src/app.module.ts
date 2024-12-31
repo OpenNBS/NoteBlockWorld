@@ -14,6 +14,7 @@ import { SeedModule } from './seed/seed.module';
 import { SongModule } from './song/song.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -63,6 +64,29 @@ import { UserModule } from './user/user.module';
       },
       inject: [ConfigService],
     }),
+    // Throttler
+    ThrottlerModule.forRoot([
+      {
+        name: 'global',
+        ttl: 60 * 1000, // 1 minute
+        limit: 200, // 200 requests per minute
+      },
+      {
+        name: 'short',
+        ttl: 1000, // 1 second
+        limit: 5,
+      },
+      {
+        name: 'medium',
+        ttl: 60 * 1000, // 1 minute
+        limit: 100,
+      },
+      {
+        name: 'long',
+        ttl: 60 * 60 * 100, // 1 hour
+        limit: 1000,
+      },
+    ]),
     SongModule,
     UserModule,
     AuthModule.forRootAsync(),

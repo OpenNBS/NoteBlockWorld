@@ -32,6 +32,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.15",
     "@nestjs/swagger": "^7.4.2",
+    "@nestjs/throttler": "^6.3.0",
     "@types/passport-discord": "^0.1.14",
     "@types/uuid": "^9.0.8",
     "axios": "^1.7.9",
