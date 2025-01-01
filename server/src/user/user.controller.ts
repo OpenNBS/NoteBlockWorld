@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
@@ -7,6 +7,7 @@ import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
+import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,5 +37,17 @@ export class UserController {
   async getMe(@GetRequestToken() user: UserDocument | null) {
     user = validateUser(user);
     return await this.userService.getSelfUserData(user);
+  }
+
+  @Patch('username')
+  @ApiTags('user')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update the username' })
+  async updateUsername(
+    @GetRequestToken() user: UserDocument | null,
+    @Body() body: UpdateUsernameDto,
+  ) {
+    user = validateUser(user);
+    return await this.userService.updateUsername(user, body);
   }
 }
