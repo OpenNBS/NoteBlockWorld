@@ -135,7 +135,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                           },
                         })}
                       />
-                      <button onClick={() => setIsEditingUsername(true)}>
+                      <button onClick={() => setIsEditingUsername(false)}>
                         <FontAwesomeIcon
                           icon={faClose}
                           size='lg'
