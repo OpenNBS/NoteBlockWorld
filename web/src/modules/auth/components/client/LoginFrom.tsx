@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
 
@@ -12,6 +13,7 @@ import {
   Input,
   SubmitButton,
 } from '../../../shared/components/client/FormElements';
+import ClientAxios from '@web/src/lib/axios/ClientAxios';
 
 type LoginFormData = {
   email: string;
@@ -33,23 +35,25 @@ export const LoginForm: FC = () => {
   const onSubmit = async ({ email }: LoginFormData) => {
     try {
       setIsLoading(true);
-      const url = `${backendURL}/auth/login/email`;
+      const url = `${backendURL}/auth/login/magic-link`;
 
-      const response = await axios.post(
-        url,
-        {
-          destination: email,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      const response = await ClientAxios.post(url, {
+        destination: email,
+      });
 
       console.log(response.data);
+
+      toast.success('An email has been sent to you with a login link.', {
+        position: 'top-center',
+        duration: 20_000, // 20 seconds
+      });
+
+      toast.success('Please check your inbox and follow the instructions.', {
+        position: 'top-center',
+        duration: 20_000, // 20 seconds
+      });
     } catch (error) {
-      console.error(error);
+      toast.error('An error occurred. Please try again later.');
     } finally {
       setIsLoading(false);
     }
@@ -90,8 +94,6 @@ export const LoginForm: FC = () => {
               {...register('email', { required: 'Email is required' })}
             />
           </div>
-
-          {errors.email && <ErrorBalloon message={errors.email.message} />}
 
           <div className='flex flex-row items-center justify-end gap-8'>
             {/* Submit button */}

@@ -100,9 +100,6 @@ export const LoginPage = () => {
               />
               <span className='flex-1 text-nowrap'>Log in with Discord</span>
             </Link>
-            <div className='ht-[1px] w-full' />
-            <hr className='ht-[1px] w-full' />
-            <div className='ht-[1px] w-full' />
             <Link
               data-test='login-discord'
               href={'/login/email'}
