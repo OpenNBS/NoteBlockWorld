@@ -67,36 +67,19 @@ import { UserModule } from './user/user.module';
     // Throttler
     ThrottlerModule.forRoot([
       {
-        name: 'global',
-        ttl: 60 * 1000, // 1 minute
-        limit: 200, // 200 requests per minute
-      },
-      {
         name: 'short',
-        ttl: 1000, // 1 second
-        limit: 5,
+        ttl: 1000,
+        limit: 3,
       },
       {
         name: 'medium',
-        ttl: 60 * 1000, // 1 minute
-        limit: 100,
+        ttl: 10000,
+        limit: 20,
       },
       {
         name: 'long',
-        ttl: 60 * 60 * 100, // 1 hour
-        limit: 1000,
-      },
-      // one every 15 minutes
-      {
-        name: 'very-long',
-        ttl: 15 * 60 * 1000,
-        limit: 1,
-      },
-      // one every 1 hour
-      {
-        name: 'super-long',
-        ttl: 60 * 60 * 1000,
-        limit: 1,
+        ttl: 60000,
+        limit: 100,
       },
     ]),
     SongModule,
