@@ -71,7 +71,7 @@ export class User {
   @Prop({
     type: String,
     required: true,
-    default: '/assets/default-profile.png',
+    default: '/img/note-block-pfp.jpg',
   })
   profileImage: string;
 
