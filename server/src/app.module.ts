@@ -1,6 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
@@ -14,7 +15,6 @@ import { SeedModule } from './seed/seed.module';
 import { SongModule } from './song/song.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
-import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -85,6 +85,18 @@ import { ThrottlerModule } from '@nestjs/throttler';
         name: 'long',
         ttl: 60 * 60 * 100, // 1 hour
         limit: 1000,
+      },
+      // one every 15 minutes
+      {
+        name: 'very-long',
+        ttl: 15 * 60 * 1000,
+        limit: 1,
+      },
+      // one every 1 hour
+      {
+        name: 'super-long',
+        ttl: 60 * 60 * 1000,
+        limit: 1,
       },
     ]),
     SongModule,

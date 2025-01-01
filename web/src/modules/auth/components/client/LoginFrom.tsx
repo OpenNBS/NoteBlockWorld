@@ -1,14 +1,12 @@
 'use client';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
-
-import axios from 'axios';
 
 import {
   Input,
@@ -24,15 +22,13 @@ const backendURL = process.env.NEXT_PUBLIC_API_URL;
 // TODO: Implement login logic
 export const LoginForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLocked, setIsLocked] = useState(false);
+  const [isLocked] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
-
-  const router = useRouter();
 
   const onSubmit = async ({ email }: LoginFormData) => {
     try {

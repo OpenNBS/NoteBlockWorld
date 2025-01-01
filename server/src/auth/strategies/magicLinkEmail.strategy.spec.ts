@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { MailingService } from '@server/mailing/mailing.service';
 import { UserService } from '@server/user/user.service';
+
 import { MagicLinkEmailStrategy } from './magicLinkEmail.strategy';
 
 describe('MagicLinkEmailStrategy', () => {
@@ -144,6 +146,7 @@ describe('MagicLinkEmailStrategy', () => {
       expect(loggerSpy).toHaveBeenCalledWith(
         'User not found: test@example.com',
       );
+
       expect(result).toBeNull();
     });
   });
