@@ -64,6 +64,18 @@ export const LoginPage = () => {
           </div>
 
           <div className='flex flex-col w-full gap-4'>
+            {/* Login with Email */}
+            <Link
+              data-test='login-discord'
+              href={'/login/email'}
+              className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
+            >
+              <FontAwesomeIcon
+                icon={faRightToBracket}
+                className='align-middle mr-2 h-5'
+              />
+              <span className='flex-1 text-nowrap'>Log in with email</span>
+            </Link>
             {/* Login with Google */}
             <Link
               data-test='login-google'
@@ -99,17 +111,6 @@ export const LoginPage = () => {
                 className='align-middle mr-2 h-5'
               />
               <span className='flex-1 text-nowrap'>Log in with Discord</span>
-            </Link>
-            <Link
-              data-test='login-discord'
-              href={'/login/email'}
-              className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
-            >
-              <FontAwesomeIcon
-                icon={faRightToBracket}
-                className='align-middle mr-2 h-5'
-              />
-              <span className='flex-1 text-nowrap'>Log in with email</span>
             </Link>
           </div>
 
