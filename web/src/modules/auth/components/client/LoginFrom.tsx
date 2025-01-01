@@ -43,12 +43,12 @@ export const LoginForm: FC = () => {
 
       console.log(response.data);
 
-      toast.success('An email has been sent to you with a login link.', {
+      toast.success(`A magic link has been sent to ${email}!`, {
         position: 'top-center',
         duration: 20_000, // 20 seconds
       });
 
-      toast.success('Please check your inbox and follow the instructions.', {
+      toast.success('It will stay valid for one hour!', {
         position: 'top-center',
         duration: 20_000, // 20 seconds
       });
