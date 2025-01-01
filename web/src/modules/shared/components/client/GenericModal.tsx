@@ -5,17 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-export default function GenericModal({
+interface GenericModalProps {
+  isOpen: boolean;
+  setIsOpen?: (isOpen: boolean) => void;
+  title: string;
+  children?: React.ReactNode | React.ReactNode[] | string;
+}
+
+const GenericModal = ({
   isOpen,
   setIsOpen,
   title,
   children,
-}: {
-  isOpen: boolean;
-  setIsOpen?: (isOpen: boolean) => void;
-  title: string;
-  children: React.ReactNode;
-}) {
+}: GenericModalProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -80,4 +82,6 @@ export default function GenericModal({
       </Dialog>
     </Transition>
   );
-}
+};
+
+export default GenericModal;

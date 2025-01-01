@@ -6,7 +6,7 @@ import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { NewEmailUserDto } from '@shared/validation/user/dto/NewEmailUser.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
-
+import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
@@ -155,13 +155,16 @@ export class UserService {
     return !!user;
   }
 
-  public async generateUsername(inputUsername: string) {
-    // Normalize username (remove accents, replace spaces with underscores)
-    const baseUsername = inputUsername
+  private normalizeUsername = (inputUsername: string) =>
+    inputUsername
       .replace(' ', '_')
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9_]/g, '');
+
+  public async generateUsername(inputUsername: string) {
+    // Normalize username (remove accents, replace spaces with underscores)
+    const baseUsername = this.normalizeUsername(inputUsername);
 
     let newUsername = baseUsername;
     let counter = 1;
@@ -173,5 +176,25 @@ export class UserService {
     }
 
     return newUsername;
+  }
+
+  public async updateUsername(user: UserDocument, body: UpdateUsernameDto) {
+    let { username } = body;
+    username = this.normalizeUsername(username);
+
+    if (await this.usernameExists(username)) {
+      throw new HttpException(
+        'Username already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (user.username === username) {
+      throw new HttpException('Username is the same', HttpStatus.BAD_REQUEST);
+    }
+
+    user.username = username;
+
+    return await user.save();
   }
 }

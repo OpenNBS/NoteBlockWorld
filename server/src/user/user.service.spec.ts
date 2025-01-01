@@ -287,4 +287,75 @@ describe('UserService', () => {
       expect(service.usernameExists).toHaveBeenCalledWith(baseUsername);
     });
   });
+
+  describe('normalizeUsername', () => {
+    it('should normalize a username', () => {
+      const inputUsername = 'tést user';
+      const normalizedUsername = 'test_user';
+
+      const result = (service as any).normalizeUsername(inputUsername);
+
+      expect(result).toBe(normalizedUsername);
+    });
+
+    it('should remove special characters from a username', () => {
+      const inputUsername = '静_かな';
+      const normalizedUsername = '_';
+
+      const result = (service as any).normalizeUsername(inputUsername);
+
+      expect(result).toBe(normalizedUsername);
+    });
+
+    it('should replace spaces with underscores in a username', () => {
+      const inputUsername = 'Имя пользователя';
+      const normalizedUsername = '_';
+
+      const result = (service as any).normalizeUsername(inputUsername);
+
+      expect(result).toBe(normalizedUsername);
+    });
+
+    it('should replace spaces with underscores in a username', () => {
+      const inputUsername = 'Eglė Čepulytė';
+      const normalizedUsername = 'Egle_Cepulyte';
+
+      const result = (service as any).normalizeUsername(inputUsername);
+
+      expect(result).toBe(normalizedUsername);
+    });
+  });
+
+  describe('updateUsername', () => {
+    it('should update a user username', async () => {
+      const user = {
+        username: 'testuser',
+        save: jest.fn().mockReturnThis(),
+      } as unknown as UserDocument;
+      const body = { username: 'newuser' };
+
+      jest.spyOn(service, 'usernameExists').mockResolvedValue(false);
+
+      const result = await service.updateUsername(user, body);
+
+      expect(result).toEqual(user);
+      expect(user.username).toBe(body.username);
+      expect(service.usernameExists).toHaveBeenCalledWith(body.username);
+    });
+
+    it('should throw an error if username already exists', async () => {
+      const user = {
+        username: 'testuser',
+        save: jest.fn().mockReturnThis(),
+      } as unknown as UserDocument;
+
+      const body = { username: 'newuser' };
+
+      jest.spyOn(service, 'usernameExists').mockResolvedValue(true);
+
+      await expect(service.updateUsername(user, body)).rejects.toThrow(
+        new HttpException('Username already exists', HttpStatus.BAD_REQUEST),
+      );
+    });
+  });
 });
