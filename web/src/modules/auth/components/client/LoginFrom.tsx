@@ -1,19 +1,16 @@
 'use client';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
-import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
-
+import ClientAxios from '@web/src/lib/axios/ClientAxios';
 import {
   Input,
   SubmitButton,
 } from '../../../shared/components/client/FormElements';
-import ClientAxios from '@web/src/lib/axios/ClientAxios';
 
 type LoginFormData = {
   email: string;
