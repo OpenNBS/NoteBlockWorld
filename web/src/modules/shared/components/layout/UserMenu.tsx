@@ -8,11 +8,10 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
-import { useState } from 'react';
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { UserMenuButton } from '../client/UserMenuButton';
-import { EditUsernameModal } from './EditUsernameModal';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
 import {
   Popover,
@@ -20,14 +19,65 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from './popover';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import ClientAxios from '@web/src/lib/axios/ClientAxios';
+import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
 
-export function UserMenu({ userData }: { userData: LoggedUserData }) {
+interface FormValues {
+  username: string;
+}
+
+export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [name, setName] = useState(userData.username);
 
-  // ERRORS:
-  // 'This username is not available! :('
-  // 'Your username may only contain these characters: A-Z a-z 0-9 - _ .'
+  const {
+    handleSubmit,
+    formState: { isSubmitting, errors },
+    register,
+  } = useForm<FormValues>();
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      await ClientAxios.patch('/user/username', {
+        username: data.username,
+      });
+
+      toast.success('Username updated successfully');
+      setIsEditingUsername(false);
+      setName(data.username);
+    } catch (error: unknown) {
+      if ((error as any).isAxiosError) {
+        const axiosError = error as AxiosError;
+
+        // verify for throttling limit error
+        if (axiosError.response?.status === 429) {
+          toast.error('Too many requests. Please try again later.');
+        }
+
+        // verify for validation error
+        if (axiosError.response?.status === 400) {
+          toast.error('Invalid username');
+        }
+
+        // verify for unauthorized error
+        if (axiosError.response?.status === 401) {
+          toast.error('Unauthorized');
+        }
+
+        return;
+      }
+
+      toast.error('An error occurred. Please try again later.');
+    }
+  };
+
+  useEffect(() => {
+    if (errors.username?.message) {
+      toast.error(errors.username.message);
+    }
+  }, [errors.username?.message]);
 
   return (
     <Popover onOpenChange={() => setIsEditingUsername(false)}>
@@ -60,7 +110,7 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
                 {!isEditingUsername ? (
                   <>
                     <h4 className='truncate font-semibold w-48 py-px'>
-                      {userData.username}
+                      {name}
                     </h4>
                     <button onClick={() => setIsEditingUsername(true)}>
                       <FontAwesomeIcon
@@ -72,31 +122,40 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
                   </>
                 ) : (
                   <>
-                    <input
-                      className='w-[calc(12rem-52px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
-                      defaultValue={userData.username}
-                    ></input>
-                    <button onClick={() => setIsEditingUsername(false)}>
-                      <FontAwesomeIcon
-                        icon={faClose}
-                        size='lg'
-                        className='text-zinc-400 hover:text-red-500'
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <input
+                        className='w-[calc(12rem-52px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
+                        defaultValue={name}
+                        {...register('username', {
+                          required: 'Username is required',
+                          pattern: {
+                            value: /^[a-zA-Z0-9-_.]{1,32}$/,
+                            message:
+                              'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
+                          },
+                        })}
                       />
-                    </button>
-                    <button onClick={() => setIsEditingUsername(false)}>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        size='lg'
-                        className='text-zinc-400 hover:text-green-500'
-                      />
-                    </button>
+                      <button onClick={() => setIsEditingUsername(true)}>
+                        <FontAwesomeIcon
+                          icon={faClose}
+                          size='lg'
+                          className='text-zinc-400 hover:text-red-500'
+                        />
+                      </button>
+                      <button disabled={isSubmitting} type='submit'>
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          size='lg'
+                          className='text-zinc-400 hover:text-green-500'
+                        />
+                      </button>
+                    </form>
                   </>
                 )}
               </div>
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
-          {error && <p className='text-sm text-red-400 px-4 pb-2'>{error}</p>}
 
           <UserMenuSplitLine />
 
@@ -110,4 +169,4 @@ export function UserMenu({ userData }: { userData: LoggedUserData }) {
       </PopoverContent>
     </Popover>
   );
-}
+};
