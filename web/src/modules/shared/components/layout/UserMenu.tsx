@@ -135,18 +135,25 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                           },
                         })}
                       />
-                      <button onClick={() => setIsEditingUsername(false)}>
-                        <FontAwesomeIcon
-                          icon={faClose}
-                          size='lg'
-                          className='text-zinc-400 hover:text-red-500'
-                        />
-                      </button>
-                      <button disabled={isSubmitting} type='submit'>
+                      <button
+                        className='ml-1'
+                        disabled={isSubmitting}
+                        type='submit'
+                      >
                         <FontAwesomeIcon
                           icon={faCheck}
                           size='lg'
                           className='text-zinc-400 hover:text-green-500'
+                        />
+                      </button>
+                      <button
+                        className='ml-1'
+                        onClick={() => setIsEditingUsername(false)}
+                      >
+                        <FontAwesomeIcon
+                          icon={faClose}
+                          size='lg'
+                          className='text-zinc-400 hover:text-red-500'
                         />
                       </button>
                     </form>
