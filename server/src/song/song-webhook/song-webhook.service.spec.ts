@@ -64,6 +64,7 @@ describe('SongWebhookService', () => {
       const result = await service.postSongWebhook(song);
 
       expect(result).toBe('message-id');
+
       expect(fetch).toHaveBeenCalledWith('http://localhost/webhook?wait=true', {
         method: 'POST',
         headers: {

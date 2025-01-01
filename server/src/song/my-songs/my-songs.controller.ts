@@ -1,6 +1,6 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
@@ -11,6 +11,7 @@ import { SongService } from '../song.service';
 
 @UseGuards(AuthGuard('jwt-refresh'))
 @Controller('my-songs')
+@ApiTags('song')
 export class MySongsController {
   constructor(public readonly songService: SongService) {}
 

@@ -1,5 +1,6 @@
 import {
   GetObjectCommand,
+  HeadBucketCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -17,6 +18,7 @@ jest.mock('@aws-sdk/client-s3', () => {
     S3Client: jest.fn(() => mS3Client),
     GetObjectCommand: jest.fn(),
     PutObjectCommand: jest.fn(),
+    HeadBucketCommand: jest.fn(),
     ObjectCannedACL: {
       private: 'private',
       public_read: 'public-read',
@@ -72,17 +74,23 @@ describe('FileService', () => {
     expect(fileService).toBeDefined();
   });
 
-  it('should throw an error if S3 configuration is missing', () => {
-    expect(() => {
-      new FileService(
-        '',
-        'test-bucket-thumbs',
-        'test-key',
-        'test-secret',
-        'test-endpoint',
-        'test-region',
-      );
-    }).toThrow('Missing S3 bucket configuration');
+  describe('verifyBucket', () => {
+    it('should verify the buckets successfully', async () => {
+      (s3Client.send as jest.Mock).mockResolvedValueOnce({});
+      (s3Client.send as jest.Mock).mockResolvedValueOnce({});
+
+      await fileService['verifyBucket']();
+
+      expect(s3Client.send).toHaveBeenCalledWith(expect.any(HeadBucketCommand));
+      expect(s3Client.send).toHaveBeenCalledWith(expect.any(HeadBucketCommand));
+    });
+
+    it('should log an error if bucket verification fails', async () => {
+      const error = new Error('Bucket not found');
+      (s3Client.send as jest.Mock).mockRejectedValueOnce(error);
+
+      await expect(fileService['verifyBucket']()).rejects.toThrow(error);
+    });
   });
 
   it('should upload a song', async () => {

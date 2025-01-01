@@ -1,5 +1,7 @@
 import axios from 'axios';
+
 import { getTokenLocal } from './token.utils';
+
 export const baseApiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ClientAxios = axios.create({
@@ -10,11 +12,15 @@ const ClientAxios = axios.create({
 // Add a request interceptor to add the token to the request
 ClientAxios.interceptors.request.use(
   (config) => {
-    const token = getTokenLocal();
+    try {
+      const token = getTokenLocal();
 
-    config.headers.authorization = `Bearer ${token}`;
+      config.headers.authorization = `Bearer ${token}`;
 
-    return config;
+      return config;
+    } catch {
+      return config;
+    }
   },
   (error) => {
     return Promise.reject(error);

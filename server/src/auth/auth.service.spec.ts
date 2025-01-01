@@ -46,6 +46,10 @@ describe('AuthService', () => {
           useValue: mockJwtService,
         },
         {
+          provide: 'COOKIE_EXPIRES_IN',
+          useValue: '3600',
+        },
+        {
           provide: 'FRONTEND_URL',
           useValue: 'http://frontend.test.com',
         },

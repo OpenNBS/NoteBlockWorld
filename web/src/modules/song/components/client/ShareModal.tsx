@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import GenericModal from '@web/src/modules/shared/components/client/GenericModal';
 
+/*
 const getTwitterIntentUrl = (songId: string) => {
   const baseUrl = 'https://twitter.com/intent/tweet?`';
 
@@ -15,6 +16,7 @@ const getTwitterIntentUrl = (songId: string) => {
   const url = `${baseUrl}${params.toString()}`;
   return url;
 };
+*/
 
 export default function ShareModal({
   isOpen,

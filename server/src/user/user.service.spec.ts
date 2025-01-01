@@ -332,6 +332,7 @@ describe('UserService', () => {
         username: 'testuser',
         save: jest.fn().mockReturnThis(),
       } as unknown as UserDocument;
+
       const body = { username: 'newuser' };
 
       jest.spyOn(service, 'usernameExists').mockResolvedValue(false);
