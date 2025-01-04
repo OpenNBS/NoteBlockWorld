@@ -13,6 +13,9 @@ export class SeedController {
     summary: 'Seed the database with development data',
   })
   async seed() {
-    return await this.seedService.seedDev();
+    this.seedService.seedDev();
+    return {
+      message: 'Seeding in progress',
+    };
   }
 }
