@@ -26,15 +26,17 @@ services:
   minio:
     container_name: minio
     image: minio/minio
-    command: server /data
+    command: server /data --console-address :9001
     ports:
-      - 9000:9000
+      - "9000:9000"
+      - "9001:9001"
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
     volumes:
       - minio_data:/data
-      # You can access the MinIO web interface at http://localhost:9000
+    # You can access the MinIO web interface at http://localhost:9000
+    # You can access the MinIO console at http://localhost:9001
 
   mc:
     container_name: minio-client
@@ -52,7 +54,9 @@ services:
         sleep 2
       done &&
       mc mb minio/noteblockworld-songs &&
-      mc mb minio/noteblockworld-thumbs
+      mc mb minio/noteblockworld-thumbs &&
+      mc policy set public minio/noteblockworld-songs &&
+      mc policy set public minio/noteblockworld-thumbs
       '
 
 volumes:
