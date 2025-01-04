@@ -106,7 +106,6 @@ export class SeedService {
         const nbsSong = this.generateRandomSong();
         const fileData = nbsSong.toArrayBuffer();
         const fileBuffer = Buffer.from(fileData);
-        this.logger.log(`Generated song has ${fileBuffer.length} bytes.`);
 
         const body: UploadSongDto = {
           file: {
@@ -209,10 +208,6 @@ export class SeedService {
         songTest.setNote(i * 4, layer, notes[i]);
       // "i * 4" is placeholder - this is the tick to place on
     }
-
-    this.logger.log(
-      `Generated song with ${layerCount} layers, ${songTest.length} ticks`,
-    );
 
     return songTest;
   }
