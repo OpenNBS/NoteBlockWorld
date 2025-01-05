@@ -51,6 +51,18 @@ describe('MailingService', () => {
       subject,
       template,
       context,
+      attachments: [
+        {
+          filename: 'background-image.png',
+          cid: 'background-image',
+          path: `${__dirname}/templates/img/background-image.png`,
+        },
+        {
+          filename: 'logo.png',
+          cid: 'logo',
+          path: `${__dirname}/templates/img/logo.png`,
+        },
+      ],
     });
   });
 });

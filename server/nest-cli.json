@@ -10,7 +10,7 @@
         ],
         "assets": [
             {
-                "include": "mailing/templates/**/*.hbs",
+                "include": "mailing/templates/**/*.{hbs,png}",
                 "outDir": "dist/server/src/",
                 "exclude": "dist/**/*"
             },
