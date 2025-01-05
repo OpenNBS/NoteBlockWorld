@@ -12,14 +12,6 @@
             padding: 20px;
         }
 
-        .outer {
-            background-image: url('cid:background-image');
-            background-repeat: repeat;
-            background-size: 268px 462px;
-            width: 100%;
-            height: 100%;
-        }
-
         .container {
             background-color: #ffffff;
             max-width: 500px;
@@ -40,13 +32,13 @@
             margin-top: 20px;
             font-size: 16px;
             color: #ffffff;
-            background-color: #28a745;
+            background-color: #007bff;
             text-decoration: none;
             border-radius: 5px;
         }
 
         .btn:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
 
         .footer {
@@ -58,17 +50,15 @@
 </head>
 
 <body>
-    <div class="outer">
-        <div class="container">
-            <img src="cid:logo" alt="OpenNoteBlockWorld Logo" class="logo">
-            <h1>Welcome, {{username}}!</h1>
-            <p>Click the button below to log in to your account:</p>
-            <a href="{{magicLink}}" class="btn">Login</a>
-            <p>If you did not request this login link, please ignore this email.</p>
-            <footer class="footer">
-                <p>OpenNoteBlockWorld</p>
-            </footer>
-        </div>
+    <div class="container">
+        <img src="cid:logo" alt="OpenNoteBlockWorld Logo" class="logo">
+        <h1>Welcome, {{username}}!</h1>
+        <p>Click the button below to log in to your account:</p>
+        <a href="{{magicLink}}" class="btn">Login</a>
+        <p>If you did not request this login link, please ignore this email.</p>
+        <footer class="footer">
+            <p>OpenNoteBlockWorld</p>
+        </footer>
     </div>
 </body>
 
