@@ -107,8 +107,6 @@ describe('MagicLinkEmailStrategy', () => {
 
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
 
-      expect(mockUserService.createWithEmail).toHaveBeenCalledWith(email);
-
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
         to: email,
         context: {
@@ -134,20 +132,21 @@ describe('MagicLinkEmailStrategy', () => {
       expect(result).toEqual(user);
     });
 
-    it('should log an error if user is not found', async () => {
+    it('should create a new user if not found and return the user', async () => {
       const payload = { destination: 'test@example.com' };
 
       mockUserService.findByEmail.mockResolvedValue(null);
-
-      const loggerSpy = jest.spyOn(MagicLinkEmailStrategy.logger, 'error');
+      mockUserService.createWithEmail.mockResolvedValue({
+        email: 'test@example.com',
+        username: 'test',
+      });
 
       const result = await strategy.validate(payload);
 
-      expect(loggerSpy).toHaveBeenCalledWith(
-        'User not found: test@example.com',
-      );
-
-      expect(result).toBeNull();
+      expect(result).toEqual({
+        email: 'test@example.com',
+        username: 'test',
+      });
     });
   });
 });
