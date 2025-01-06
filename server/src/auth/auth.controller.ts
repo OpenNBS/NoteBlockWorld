@@ -12,7 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 
-import { UseThrottle } from '@server/Throttle/Throttles';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
@@ -27,7 +27,13 @@ export class AuthController {
     private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy,
   ) {}
 
-  @UseThrottle('very-long')
+  @Throttle({
+    default: {
+      // one every 1 hour
+      ttl: 60 * 60 * 1000,
+      limit: 1,
+    },
+  })
   @Post('login/magic-link')
   @ApiOperation({
     summary:
