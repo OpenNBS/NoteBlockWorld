@@ -50,7 +50,30 @@ export const LoginForm: FC = () => {
         duration: 20_000, // 20 seconds
       });
     } catch (error) {
-      toast.error('An error occurred. Please try again later.');
+      if ((error as any).isAxiosError) {
+        const axiosError = error as any;
+
+        if (axiosError.response) {
+          const { status } = axiosError.response;
+
+          if (status === 429) {
+            toast.error('Too many requests. Please try again later.', {
+              position: 'top-center',
+              duration: 20_000, // 20 seconds
+            });
+          } else {
+            toast.error('An unexpected error occurred', {
+              position: 'top-center',
+              duration: 20_000, // 20 seconds
+            });
+          }
+        }
+      } else {
+        toast.error('An unexpected error occurred', {
+          position: 'top-center',
+          duration: 20_000, // 20 seconds
+        });
+      }
     } finally {
       setIsLoading(false);
     }
