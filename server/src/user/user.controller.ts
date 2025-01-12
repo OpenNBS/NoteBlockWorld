@@ -4,6 +4,7 @@ import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
@@ -46,5 +47,17 @@ export class UserController {
   ) {
     user = validateUser(user);
     return await this.userService.updateUsername(user, body);
+  }
+
+  @Patch('profile')
+  @ApiTags('user')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update the profile' })
+  async updateProfile(
+    @GetRequestToken() user: UserDocument | null,
+    @Body() body: UpdateUserProfileDto,
+  ) {
+    user = validateUser(user);
+    return await this.userService.updateProfile(user, body);
   }
 }

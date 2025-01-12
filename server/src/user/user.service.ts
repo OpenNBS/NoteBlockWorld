@@ -7,6 +7,7 @@ import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { User, UserDocument } from './entity/user.entity';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 
 @Injectable()
 export class UserService {
@@ -147,5 +148,9 @@ export class UserService {
     user.username = username;
 
     return await user.save();
+  }
+
+  public async updateProfile(user: UserDocument, body: UpdateUserProfileDto) {
+    throw new Error('Method not implemented.');
   }
 }
