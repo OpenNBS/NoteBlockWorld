@@ -1,31 +1,28 @@
-import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Inject, Get, Patch, Body, Query } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 
 @Controller('user')
+@ApiTags('user')
+@ApiBearerAuth()
 export class UserController {
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,
   ) {}
 
-  @Get()
-  @ApiTags('user')
-  @ApiBearerAuth()
+  @Get('by-query')
   async getUser(@Query() query: GetUser) {
     return await this.userService.getUserByEmailOrId(query);
   }
 
-  @Get()
-  @ApiTags('user')
-  @ApiBearerAuth()
+  @Get('paginated')
   async getUserPaginated(@Query() query: PageQueryDTO) {
     return await this.userService.getUserPaginated(query);
   }
