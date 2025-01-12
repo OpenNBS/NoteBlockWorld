@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { deepFreeze } from '@shared/validation/common/deepFreeze';
 import { Type } from 'class-transformer';
 import {
   IsOptional,
@@ -9,7 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export const LinkRegexes = {
+export const LinkRegexes = deepFreeze({
   bandcamp: /https?:\/\/[a-zA-Z0-9_-]+\.bandcamp\.com\/?/,
   discord: /https?:\/\/(www\.)?discord\.com\/[a-zA-Z0-9_]+/,
   facebook: /https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9_]+/,
@@ -26,7 +27,7 @@ export const LinkRegexes = {
   twitch: /https?:\/\/(www\.)?twitch\.tv\/[a-zA-Z0-9_]+/,
   x: /https?:\/\/(www\.)?x\.com\/[a-zA-Z0-9_]+/,
   youtube: /https?:\/\/(www\.)?youtube\.com\/@?[a-zA-Z0-9_-]+/,
-};
+});
 
 export class UserLinks {
   @IsOptional()

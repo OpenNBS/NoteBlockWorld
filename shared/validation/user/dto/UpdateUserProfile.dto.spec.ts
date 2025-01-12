@@ -8,8 +8,10 @@ describe('UpdateUserProfileDto', () => {
 
       userLinks.github = 'https://github.com/tomast1337';
       userLinks.youtube = 'https://www.youtube.com/@Bentroen_';
+
       userLinks.spotify =
         'https://open.spotify.com/artist/1McMsnEElThX1knmY4oliG?si=v95i3XbRRgKT9JwyiFiFEg';
+
       userLinks.bandcamp = 'https://igorrr.bandcamp.com/';
       userLinks.facebook = 'https://www.facebook.com/MrBean';
       userLinks.reddit = 'https://www.reddit.com/user/Unidan/';
