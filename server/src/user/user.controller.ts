@@ -1,10 +1,12 @@
-import { Controller, Inject, Get, Patch, Body, Query } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+
+import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';

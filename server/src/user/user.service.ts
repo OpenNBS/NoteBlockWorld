@@ -151,6 +151,14 @@ export class UserService {
   }
 
   public async updateProfile(user: UserDocument, body: UpdateUserProfileDto) {
-    throw new Error('Method not implemented.');
+    const { description, socialLinks, username } = body;
+
+    if (description) user.description = description;
+    if (socialLinks) user.socialLinks = socialLinks;
+    if (username) user.username = username;
+
+    return await this.userModel.findOneAndUpdate({ _id: user._id }, user, {
+      new: true,
+    });
   }
 }
