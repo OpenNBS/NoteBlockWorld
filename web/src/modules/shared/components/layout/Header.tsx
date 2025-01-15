@@ -16,6 +16,7 @@ import {
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
+import { BlockSearch } from './BlockSearchProps';
 
 export async function Header() {
   let isLogged;
@@ -77,26 +78,31 @@ export async function Header() {
             icon={faMusic}
             label='Songs'
             className='bg-purple-700 after:bg-purple-900 before:bg-purple-950'
+            id='songs-tab'
           />
           <BlockTab
             href='/help'
             icon={faQuestionCircle}
             label='Help'
             className='bg-blue-700 after:bg-blue-900 before:bg-blue-950'
+            id='help-tab'
           />
           <BlockTab
             href='/blog'
             icon={faNewspaper}
             label='Blog'
             className='bg-green-700 after:bg-green-900 before:bg-green-950'
+            id='blog-tab'
           />
           <BlockTab
             href='/about'
             icon={faUser}
             label='About'
             className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
+            id='about-tab'
           />
           <RandomSongButton />
+          <BlockSearch />
         </div>
 
         {/* Sign in / Profile */}
