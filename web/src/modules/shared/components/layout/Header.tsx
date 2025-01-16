@@ -18,7 +18,7 @@ import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
 import { BlockSearch } from './BlockSearchProps';
 
-export async function Header() {
+export const Header = async () => {
   let isLogged;
   let userData;
 
@@ -34,13 +34,19 @@ export async function Header() {
   }
 
   return (
-    <header className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
+    <header
+      id='header'
+      className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'
+    >
       {/* Navbar */}
-      <nav className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-screen-xl px-6 sm:px-10'>
+      <nav
+        id='navbar'
+        className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-screen-xl px-6 sm:px-10'
+      >
         {/* Logo */}
         <div className='hidden lg:block flex-0 text-lg text-nowrap'>
           <picture className='w-full h-auto'>
-            <Link href='/'>
+            <Link id='logo' href='/'>
               <Image
                 unoptimized
                 src='/nbw-logo-flat.png'
@@ -55,7 +61,7 @@ export async function Header() {
 
         {/* Icon */}
         <div className='flex-0 flex justify-start lg:justify-center min-w-fit'>
-          <Link href='/'>
+          <Link id='icon' href='/'>
             <Image
               unoptimized
               quality={100}
@@ -106,10 +112,10 @@ export async function Header() {
         </div>
 
         {/* Sign in / Profile */}
-        <div className='flex-0'>
+        <div id='nav-links' className='flex-0'>
           <NavLinks isUserLoggedIn={isLogged} userData={userData} />
         </div>
       </nav>
     </header>
   );
-}
+};
