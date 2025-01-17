@@ -1,8 +1,8 @@
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-
 import { cn } from '@web/src/lib/tailwind.utils';
+import Link from 'next/link';
+import { MusicalNote } from './MusicalNote';
 
 export const BlockTab = ({
   href,
@@ -25,6 +25,7 @@ export const BlockTab = ({
     >
       <FontAwesomeIcon icon={icon} />
       <span className='hidden sm:block'>{label}</span>
+      <MusicalNote />
     </Link>
   );
 };
