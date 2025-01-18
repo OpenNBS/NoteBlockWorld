@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -48,6 +49,9 @@ export class DiscordStrategyConfig implements DiscordStrategyOptions {
   @IsOptional()
   @IsBoolean()
   fetchScope?: boolean;
+
+  @IsEnum(['none', 'consent'])
+  prompt: 'consent' | 'none';
 
   // The separator for the scope values.
   @IsOptional()

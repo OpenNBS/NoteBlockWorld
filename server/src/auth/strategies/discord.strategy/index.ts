@@ -27,6 +27,7 @@ export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
       callbackUrl: `${SERVER_URL}/api/v1/auth/discord/callback`,
       scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
       fetchScope: true,
+      prompt: 'none',
     };
 
     super(config);
