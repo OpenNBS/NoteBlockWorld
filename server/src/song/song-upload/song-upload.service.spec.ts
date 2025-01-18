@@ -393,8 +393,6 @@ describe('SongUploadService', () => {
 
       const buffer = songTest.toArrayBuffer();
 
-      console.log(fromArrayBuffer(buffer).length);
-
       const song = songUploadService.getSongObject(buffer); //TODO: For some reason the song is always empty
 
       expect(song).toBeInstanceOf(Song);
