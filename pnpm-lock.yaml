@@ -129,6 +129,9 @@ importers:
       passport-local:
         specifier: ^1.0.0
         version: 1.0.0
+      passport-oauth2:
+        specifier: ^1.8.0
+        version: 1.8.0
       reflect-metadata:
         specifier: ^0.1.14
         version: 0.1.14
@@ -169,6 +172,9 @@ importers:
       '@types/node':
         specifier: ^20.17.10
         version: 20.17.10
+      '@types/passport':
+        specifier: ^1.0.17
+        version: 1.0.17
       '@types/passport-github':
         specifier: ^1.1.12
         version: 1.1.12
@@ -181,6 +187,9 @@ importers:
       '@types/passport-local':
         specifier: ^1.0.38
         version: 1.0.38
+      '@types/passport-oauth2':
+        specifier: ^1.4.17
+        version: 1.4.17
       '@types/supertest':
         specifier: ^2.0.16
         version: 2.0.16
