@@ -2,12 +2,12 @@ import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
-import { validate } from './config/EnvironmentVariables';
 import { AuthModule } from './auth/auth.module';
+import { validate } from './config/EnvironmentVariables';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './parseToken';
-import { SongBrowserModule } from './song-browser/song-browser.module';
 import { SongModule } from './song/song.module';
+import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
 
 @Module({
