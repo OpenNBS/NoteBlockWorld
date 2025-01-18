@@ -1,7 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import strategy from 'passport-discord';
+
+import strategy from './Strategy';
+import { DiscordPermissionScope } from './types';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
@@ -19,13 +21,15 @@ export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
 
     const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
-    super({
+    const config = {
       clientID: DISCORD_CLIENT_ID,
       clientSecret: DISCORD_CLIENT_SECRET,
-      redirect_uri: `${SERVER_URL}/api/v1/auth/discord/callback`,
-      scope: ['identify', 'email'],
-      state: false,
-    });
+      callbackUrl: `${SERVER_URL}/api/v1/auth/discord/callback`,
+      scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
+      fetchScope: true,
+    };
+
+    super(config);
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
