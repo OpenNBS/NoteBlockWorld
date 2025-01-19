@@ -1,6 +1,7 @@
-import DiscordStrategy from './Strategy';
-import { DiscordStrategyConfig } from './DiscordStrategyConfig';
 import { VerifyFunction } from 'passport-oauth2';
+
+import { DiscordStrategyConfig } from './DiscordStrategyConfig';
+import DiscordStrategy from './Strategy';
 import { DiscordPermissionScope, Profile } from './types';
 
 describe('DiscordStrategy', () => {
