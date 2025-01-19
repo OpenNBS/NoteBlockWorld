@@ -12,7 +12,12 @@ describe('DiscordStrategy', () => {
       clientID: 'test-client-id',
       clientSecret: 'test-client-secret',
       callbackUrl: 'http://localhost:3000/callback',
-      scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
+      scope: [
+        DiscordPermissionScope.Email,
+        DiscordPermissionScope.Identify,
+        DiscordPermissionScope.Connections,
+        // DiscordPermissionScope.Bot, // Not allowed scope
+      ],
       prompt: 'consent',
     };
 
@@ -114,11 +119,23 @@ describe('DiscordStrategy', () => {
     strategy['makeApiRequest'] = mockMakeApiRequest;
 
     const result = await strategy['fetchScopeData'](
-      'connections',
+      DiscordPermissionScope.Connections,
       'test-access-token',
     );
 
     expect(result).toEqual([{ id: '123' }]);
+  });
+
+  it('should no fetch out of scope data', async () => {
+    const mockMakeApiRequest = jest.fn().mockResolvedValue([{ id: '123' }]);
+    strategy['makeApiRequest'] = mockMakeApiRequest;
+
+    const result = await strategy['fetchScopeData'](
+      DiscordPermissionScope.Bot,
+      'test-access-token',
+    );
+
+    expect(result).toEqual(null);
   });
 
   it('should enrich profile with scopes', async () => {
