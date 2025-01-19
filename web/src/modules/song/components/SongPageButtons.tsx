@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -238,13 +238,16 @@ const DownloadButton = ({
   downloadCount: number;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => {
-  let isLoggedIn = true;
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  try {
-    getTokenLocal();
-  } catch {
-    isLoggedIn = false;
-  }
+  useEffect(() => {
+    try {
+      getTokenLocal();
+      setIsLoggedIn(true);
+    } catch {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   return (
     <div className='flex gap-0.5'>
