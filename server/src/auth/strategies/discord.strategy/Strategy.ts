@@ -6,6 +6,7 @@ import {
   Strategy as OAuth2Strategy,
   StrategyOptions as OAuth2StrategyOptions,
   VerifyCallback,
+  VerifyFunction,
 } from 'passport-oauth2';
 
 import { DiscordStrategyConfig } from './DiscordStrategyConfig';
@@ -17,18 +18,8 @@ import {
   SingleScopeType,
 } from './types';
 
-type VerifyFunction = (
-  accessToken: string,
-  refreshToken: string,
-  profile: Profile,
-  verified: VerifyCallback,
-) => void;
-
 interface AuthorizationParams {
-  permissions?: string;
   prompt?: string;
-  disable_guild_select?: string;
-  guild_id?: string;
 }
 
 export default class Strategy extends OAuth2Strategy {
@@ -43,7 +34,7 @@ export default class Strategy extends OAuth2Strategy {
   private scopeDelay: number;
   private fetchScopeEnabled: boolean;
   public override name = 'discord';
-
+  prompt?: string;
   public constructor(options: DiscordStrategyConfig, verify: VerifyFunction) {
     super(
       {
@@ -60,6 +51,7 @@ export default class Strategy extends OAuth2Strategy {
     this.scopeDelay = options.scopeDelay ?? 0;
     this.fetchScopeEnabled = options.fetchScope ?? true;
     this._oauth2.useAuthorizationHeaderforGET(true);
+    this.prompt = options.prompt;
   }
 
   private async validateConfig(config: DiscordStrategyConfig): Promise<void> {
@@ -180,47 +172,68 @@ export default class Strategy extends OAuth2Strategy {
     };
   }
 
-  public async fetchScope(
+  public fetchScope(
     scope: SingleScopeType,
     accessToken: string,
-  ): Promise<Record<string, unknown> | null> {
-    if (!this.scope.includes(scope)) return null;
+    callback: (err: Error | null, data: Record<string, unknown> | null) => void,
+  ): void {
+    // Early return if scope is not included
+    if (!this.scope.includes(scope)) {
+      callback(null, null);
+      return;
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, this.scopeDelay ?? 0));
+    // Handle scope delay
+    const delayPromise = new Promise<void>((resolve) =>
+      setTimeout(resolve, this.scopeDelay ?? 0),
+    );
 
-    return new Promise((resolve, reject) => {
-      this._oauth2.get(
-        `https://discord.com/api/users/@me/${scope}`,
-        accessToken,
-        (err, body) => {
-          if (err) {
-            return reject(
-              new InternalOAuthError(
-                `Failed to fetch the scope: ${scope}`,
-                err,
-              ),
-            );
-          }
+    delayPromise
+      .then(() => {
+        this._oauth2.get(
+          `${Strategy.DISCORD_API_BASE}/users/@me/${scope}`,
+          accessToken,
+          (err, body) => {
+            if (err) {
+              this.logger.error(`Failed to fetch scope ${scope}:`, err);
 
-          try {
-            if (typeof body !== 'string') {
-              return reject(
-                new Error(`Failed to parse the returned scope data: ${scope}`),
+              callback(
+                new InternalOAuthError(`Failed to fetch scope: ${scope}`, err),
+                null,
               );
+
+              return;
             }
 
-            const json = JSON.parse(body) as Record<string, unknown>;
-            resolve(json);
-          } catch (err) {
-            this.logger.error(err);
+            try {
+              if (typeof body !== 'string') {
+                const error = new Error(
+                  `Invalid response type for scope: ${scope}`,
+                );
 
-            reject(
-              new Error(`Failed to parse the returned scope data: ${scope}`),
-            );
-          }
-        },
-      );
-    });
+                this.logger.error(error.message);
+                callback(error, null);
+                return;
+              }
+
+              const json = JSON.parse(body) as Record<string, unknown>;
+              callback(null, json);
+            } catch (parseError) {
+              const error =
+                parseError instanceof Error
+                  ? parseError
+                  : new Error(`Failed to parse scope data: ${scope}`);
+
+              this.logger.error('Parse error:', error);
+              callback(error, null);
+            }
+          },
+        );
+      })
+      .catch((error) => {
+        this.logger.error('Unexpected error:', error);
+        callback(error, null);
+      });
   }
 
   public override authorizationParams(
@@ -229,14 +242,12 @@ export default class Strategy extends OAuth2Strategy {
     const params: AuthorizationParams & Record<string, unknown> =
       super.authorizationParams(options) as Record<string, unknown>;
 
-    const { permissions, prompt, disable_guild_select, guild_id } = options;
-
-    if (permissions) params.permissions = permissions;
+    const { prompt } = this;
     if (prompt) params.prompt = prompt;
-    if (guild_id) params.guild_id = guild_id;
-    if (disable_guild_select)
-      params.disable_guild_select = disable_guild_select;
 
+    console.log('Authorization Params');
+    console.log('params', params);
+    console.log('options', options);
     return params;
   }
 }
