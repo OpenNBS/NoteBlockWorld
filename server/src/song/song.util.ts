@@ -1,5 +1,4 @@
 import { UploadConst } from '@shared/validation/song/constants';
-
 import { customAlphabet } from 'nanoid';
 
 import { SongWithUser } from './entity/song.entity';
@@ -45,8 +44,6 @@ export function getUploadDiscordEmbed({
   license,
   stats,
 }: SongWithUser) {
-  console.log(Number('0x' + thumbnailData.backgroundColor.replace('#', '')));
-
   let fieldsArray = [];
 
   if (originalAuthor) {

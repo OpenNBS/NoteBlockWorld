@@ -1,10 +1,4 @@
-import {
-  Instrument,
-  Layer,
-  Note,
-  Song,
-  fromArrayBuffer,
-} from '@encode42/nbs.js';
+import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
@@ -392,8 +386,6 @@ describe('SongUploadService', () => {
       }
 
       const buffer = songTest.toArrayBuffer();
-
-      console.log(fromArrayBuffer(buffer).length);
 
       const song = songUploadService.getSongObject(buffer); //TODO: For some reason the song is always empty
 

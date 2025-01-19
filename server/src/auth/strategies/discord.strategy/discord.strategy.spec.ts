@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { DiscordStrategy } from './discord.strategy';
+import { DiscordStrategy } from './index';
 
 describe('DiscordStrategy', () => {
   let discordStrategy: DiscordStrategy;
