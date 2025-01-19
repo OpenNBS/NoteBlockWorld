@@ -25,7 +25,7 @@ export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
 
   const { recentSongs, increasePageRecent, hasMore } = useRecentSongsProvider();
-
+  const { timespan } = useFeaturedSongsProvider();
   return (
     <>
       {/* Welcome banner/Hero */}
@@ -39,7 +39,9 @@ export const HomePageComponent = () => {
             <TimespanButtonGroup />
           </div>
           <div className='h-6' />
+
           <Carousel
+            key={timespan}
             opts={{
               align: 'start',
               loop: false,
@@ -60,6 +62,7 @@ export const HomePageComponent = () => {
             <CarouselNext />
             <CarouselDots />
           </Carousel>
+
           <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
         </>
       )}
@@ -88,31 +91,5 @@ export const HomePageComponent = () => {
         )}
       </div>
     </>
-    //  <InfiniteScroll
-    //    dataLength={recentSongs.length} //This is important field to render the next data
-    //    next={increasePageRecent}
-    //    hasMore={hasMore}
-    //    loader={
-    //      <div className='flex justify-center'>
-    //        <div className='spinner' />
-    //      </div>
-    //    }
-    //    endMessage={
-    //      <p style={{ textAlign: 'center' }}>
-    //        <b>Yay! You have seen it all</b>
-    //      </p>
-    //    }
-    //  >
-    //    <SongCardGroup data-test='recent-songs'>
-    //      {recentSongs.map((song, i) => (
-    //        <SongCard key={i} song={song} />
-    //      ))}
-    //      {isLoading &&
-    //        Array(4 - (recentSongs.length % 4) + 4)
-    //          .fill(null)
-    //          .map((_, i) => <SongCard key={i} song={null} />)}
-    //    </SongCardGroup>
-    //  </InfiniteScroll>
-    //</>
   );
 };
