@@ -3,9 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
+import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+
 import { User, UserDocument } from './entity/user.entity';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 
