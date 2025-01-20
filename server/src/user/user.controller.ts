@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';

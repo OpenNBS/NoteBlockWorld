@@ -1,14 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from './entity/user.entity';
-import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 
 @Injectable()
 export class UserService {
@@ -44,6 +45,37 @@ export class UserService {
 
     const users = await this.userModel
       .find({})
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await this.userModel.countDocuments();
+
+    return {
+      users,
+      total,
+      page,
+      limit,
+    };
+  }
+
+  public async search(queryBody: SearchQueryDTO) {
+    const {
+      query = '',
+      page = 1,
+      limit = 10,
+      sort = 'createdAt',
+      order,
+    } = queryBody;
+
+    const skip = (page - 1) * limit;
+    const sortOrder = order ? 1 : -1;
+
+    const users = await this.userModel
+      .find({
+        $text: { $search: query },
+      })
+      .select('username publicName email profileImage')
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit);
@@ -161,5 +193,23 @@ export class UserService {
     return await this.userModel.findOneAndUpdate({ _id: user._id }, user, {
       new: true,
     });
+  }
+
+  public async createSearchIndexes() {
+    await this.userModel.collection.createIndex(
+      {
+        username: 'text',
+        publicName: 'text',
+        description: 'text',
+      },
+      {
+        weights: {
+          username: 5,
+          publicName: 3,
+          description: 1,
+        },
+        name: 'user_search_index',
+      },
+    );
   }
 }

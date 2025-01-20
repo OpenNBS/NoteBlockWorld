@@ -4,11 +4,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
-import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 
 const mockUserModel = {
   create: jest.fn(),
