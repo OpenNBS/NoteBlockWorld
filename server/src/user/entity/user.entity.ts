@@ -85,6 +85,9 @@ export class User {
 
   @Prop({ type: Array, required: true, default: [] })
   achievements: string[];
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
