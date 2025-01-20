@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
@@ -463,7 +464,58 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
+  public async search(queryBody: SearchQueryDTO) {
+    const {
+      query = '',
+      page = 1,
+      limit = 10,
+      sort = 'createdAt',
+      order,
+      category,
+    } = queryBody;
+
+    const skip = (page - 1) * limit;
+    const sortOrder = order ? 1 : -1;
+
+    const songs = await this.songModel
+      .find({ $text: { $search: query }, category: category }) // Ensure a text index is created
+      .select('title category thumbnailUrl likeCount')
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await this.songModel.countDocuments();
+
+    return {
+      songs: await this.songModel.populate(songs, {
+        path: 'uploader',
+        select: 'username profileImage -_id',
+      }),
+      total,
+      page,
+      limit,
+    };
+  }
+
   public async getAllSongs() {
     return this.songModel.find({});
+  }
+
+  public async createSearchIndexes() {
+    return this.songModel.collection.createIndex(
+      {
+        title: 'text',
+        originalAuthor: 'text',
+        description: 'text',
+      },
+      {
+        weights: {
+          title: 10,
+          originalAuthor: 5,
+          description: 1,
+        },
+        name: 'song_search_index',
+      },
+    );
   }
 }
