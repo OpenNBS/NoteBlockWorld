@@ -15,6 +15,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 'Nirvana - Dumb',
     description: 'Natural language query.',
+    required: false,
   })
   query?: string;
 
@@ -23,6 +24,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 'dubstep',
     description: 'Filters the results by the specified category.',
+    required: false,
   })
   category?: string;
 
@@ -30,6 +32,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 1,
     description: 'Page number.',
+    required: false,
   })
   page?: number = 1;
 
@@ -39,6 +42,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 20,
     description: 'Number of results per page.',
+    required: false,
   })
   limit?: number = 20;
 
@@ -47,6 +51,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 'createdAt',
     description: 'Sort field.',
+    required: false,
   })
   sort?: string = 'createdAt';
 
@@ -55,6 +60,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: false,
     description: 'Sort in ascending order if true, descending if false.',
+    required: false,
   })
   order?: boolean = false;
 
@@ -63,6 +69,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: true,
     description: 'Search Users.',
+    required: false,
   })
   searchUsers?: boolean = true;
 
@@ -71,6 +78,7 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: true,
     description: 'Search Songs.',
+    required: false,
   })
   searchSongs?: boolean = true;
 
