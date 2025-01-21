@@ -57,7 +57,7 @@ export class Song {
   @Prop({ type: ThumbnailData, required: true })
   thumbnailData: ThumbnailData;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   category: CategoryType;
 
   @Prop({ type: String, required: true })
@@ -72,13 +72,13 @@ export class Song {
   @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   title: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({ type: String, required: false, index: true })
   originalAuthor: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({ type: String, required: false, index: true })
   description: string;
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)

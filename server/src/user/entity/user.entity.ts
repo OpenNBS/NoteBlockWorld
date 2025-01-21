@@ -30,10 +30,10 @@ export class User {
   @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   username: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: true, default: '#', index: true })
   publicName: string;
 
   @Prop({ type: String, required: true, unique: true })

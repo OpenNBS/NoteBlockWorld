@@ -477,26 +477,93 @@ export class SongService {
     const skip = (page - 1) * limit;
     const sortOrder = order ? 1 : -1;
 
-    const songs = await this.songModel
-      .find({
-        $or: [
-          { originalAuthor: { $regex: query, $options: 'i' } },
-          { title: { $regex: query, $options: 'i' } },
-          { description: { $regex: query, $options: 'i' } },
-        ],
-        category: category,
-      })
-      .select('title category thumbnailUrl likeCount')
-      .sort({ [sort]: sortOrder })
-      .skip(skip)
-      .limit(limit);
+    const songs: SongViewDto[] = await this.songModel.aggregate([
+      {
+        /**
+        $search: {
+           index: 'song_search_index', 
+           text: {
+                query: query,
+            },
+        },
+         */
+        $match: {
+          $or: [
+            { originalAuthor: { $regex: query, $options: 'i' } },
+            { title: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' } },
+          ],
+          //category: category,
+        },
+      },
+      {
+        $sort: { [sort]: sortOrder },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $lookup: {
+          from: 'users', // The collection to join
+          localField: 'uploader', // The field from the input documents (username)
+          foreignField: 'username', // The field from the documents of the "from" collection (username)
+          as: 'uploader', // The name of the new array field to add to the input documents
+        },
+      },
+      {
+        $unwind: '$uploader', // Unwind the array to include the user document directly
+      },
+      {
+        $project: {
+          publicId: 1,
+          createdAt: 1,
+          thumbnailUrl: 1,
+          playCount: 1,
+          downloadCount: 1,
+          likeCount: 1,
+          allowDownload: 1,
+          title: 1,
+          originalAuthor: 1,
+          description: 1,
+          category: 1,
+          license: 1,
+          customInstruments: 1,
+          fileSize: 1,
+          stats: 1,
+          'uploader.username': 1,
+          'uploader.profileImage': 1,
+        },
+      },
+    ]);
 
-    const total = await this.songModel.countDocuments({
-      originalAuthor: { $regex: query, $options: 'i' },
-      title: { $regex: query, $options: 'i' },
-      description: { $regex: query, $options: 'i' },
-      category: category,
-    });
+    const totalResult = await this.songModel.aggregate([
+      {
+        /**
+        $search: {
+           index: 'song_search_index', 
+           text: {
+                query: query,
+            },
+        },
+         */
+        $match: {
+          $or: [
+            { originalAuthor: { $regex: query, $options: 'i' } },
+            { title: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' } },
+          ],
+          category: category,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
 
     this.logger.debug(
       `Retrieved songs: ${songs.length} documents, with total: ${total}`,

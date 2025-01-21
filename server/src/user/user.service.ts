@@ -72,24 +72,70 @@ export class UserService {
     const skip = (page - 1) * limit;
     const sortOrder = order ? 1 : -1;
 
-    const users = await this.userModel
-      .find({
-        $or: [
-          { username: { $regex: query, $options: 'i' } },
-          { publicName: { $regex: query, $options: 'i' } },
-          { description: { $regex: query, $options: 'i' } },
-        ],
-      })
-      .select('username publicName email profileImage')
-      .sort({ [sort]: sortOrder })
-      .skip(skip)
-      .limit(limit);
+    const users: {
+      username: string;
+      profileImage: string;
+    }[] = await this.userModel.aggregate([
+      {
+        /*
+        $search: {
+          index: 'user_search_index',
+          text: {
+            query: query,
+            path: {
+              wildcard: '*',
+            },
+          },
+        },
+        */
+        $match: {
+          $or: [
+            { username: { $regex: query, $options: 'i' } },
+            { publicName: { $regex: query, $options: 'i' } },
+            // { description: { $regex: query, $options: 'i' } },
+          ],
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          profileImage: 1,
+        },
+      },
+      {
+        $sort: { [sort]: sortOrder }, // Sort the results
+      },
+      {
+        $skip: skip, // Skip the first 'skip' results
+      },
+      {
+        $limit: limit, // Limit the results to 'limit'
+      },
+    ]);
 
-    const total = await this.userModel.countDocuments({
-      username: { $regex: query, $options: 'i' },
-      publicName: { $regex: query, $options: 'i' },
-      description: { $regex: query, $options: 'i' },
-    });
+    const totalResult = await this.userModel.aggregate([
+      {
+        /*
+        $search: {
+          index: 'user_search_index',
+          text: {
+            query: query,
+          },
+        },*/
+        $match: {
+          $or: [
+            { username: { $regex: query, $options: 'i' } },
+            { publicName: { $regex: query, $options: 'i' } },
+            // { description: { $regex: query, $options: 'i' } },
+          ],
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
 
     this.logger.debug(
       `Retrived users: ${users.length} documents, with total: ${total}`,

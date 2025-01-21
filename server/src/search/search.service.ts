@@ -22,6 +22,8 @@ export class SearchService {
   public async search(queryBody: SearchQueryDTO) {
     this.logger.debug(`Searching for ${JSON.stringify(queryBody)}`);
 
+    queryBody.query = (queryBody.query || '').trim().toLowerCase();
+
     const {
       query,
       page = 1,
