@@ -478,13 +478,29 @@ export class SongService {
     const sortOrder = order ? 1 : -1;
 
     const songs = await this.songModel
-      .find({ $text: { $search: query }, category: category }) // Ensure a text index is created
+      .find({
+        $or: [
+          { originalAuthor: { $regex: query, $options: 'i' } },
+          { title: { $regex: query, $options: 'i' } },
+          { description: { $regex: query, $options: 'i' } },
+        ],
+        category: category,
+      })
       .select('title category thumbnailUrl likeCount')
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit);
 
-    const total = await this.songModel.countDocuments();
+    const total = await this.songModel.countDocuments({
+      originalAuthor: { $regex: query, $options: 'i' },
+      title: { $regex: query, $options: 'i' },
+      description: { $regex: query, $options: 'i' },
+      category: category,
+    });
+
+    this.logger.debug(
+      `Retrieved songs: ${songs.length} documents, with total: ${total}`,
+    );
 
     return {
       songs: await this.songModel.populate(songs, {

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
@@ -13,6 +13,7 @@ import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
@@ -73,14 +74,26 @@ export class UserService {
 
     const users = await this.userModel
       .find({
-        $text: { $search: query },
+        $or: [
+          { username: { $regex: query, $options: 'i' } },
+          { publicName: { $regex: query, $options: 'i' } },
+          { description: { $regex: query, $options: 'i' } },
+        ],
       })
       .select('username publicName email profileImage')
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit);
 
-    const total = await this.userModel.countDocuments();
+    const total = await this.userModel.countDocuments({
+      username: { $regex: query, $options: 'i' },
+      publicName: { $regex: query, $options: 'i' },
+      description: { $regex: query, $options: 'i' },
+    });
+
+    this.logger.debug(
+      `Retrived users: ${users.length} documents, with total: ${total}`,
+    );
 
     return {
       users,
@@ -196,7 +209,7 @@ export class UserService {
   }
 
   public async createSearchIndexes() {
-    await this.userModel.collection.createIndex(
+    return await this.userModel.collection.createIndex(
       {
         username: 'text',
         publicName: 'text',
