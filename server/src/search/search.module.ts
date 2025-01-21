@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 
 import { SongModule } from '@server/song/song.module';
 import { UserModule } from '@server/user/user.module';
@@ -11,4 +11,13 @@ import { SearchService } from './search.service';
   controllers: [SearchController],
   providers: [SearchService],
 })
-export class SearchModule {}
+export class SearchModule {
+  constructor(
+    @Inject(SearchService)
+    private readonly searchService: SearchService,
+  ) {}
+
+  onModuleInit() {
+    this.searchService.createIndexes();
+  }
+}

@@ -20,13 +20,13 @@ export class SearchService {
   }
 
   public async search(queryBody: SearchQueryDTO) {
-    this.logger.debug(`Searching for ${queryBody}`);
+    this.logger.debug(`Searching for ${JSON.stringify(queryBody)}`);
 
     const {
       query,
       page = 1,
       limit = 10,
-      sort = 'createdAt',
+      sort,
       order = false,
       category,
       searchSongs,
@@ -67,7 +67,10 @@ export class SearchService {
   }
 
   public async createIndexes() {
-    await this.userService.createSearchIndexes();
-    await this.songService.createSearchIndexes();
+    const userIndexResult = await this.userService.createSearchIndexes();
+    const songIndexResult = await this.songService.createSearchIndexes();
+
+    this.logger.debug(`User index: ${userIndexResult}`);
+    this.logger.debug(`Song index: ${songIndexResult}`);
   }
 }
