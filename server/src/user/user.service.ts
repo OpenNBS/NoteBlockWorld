@@ -77,23 +77,12 @@ export class UserService {
       profileImage: string;
     }[] = await this.userModel.aggregate([
       {
-        /*
-        $search: {
-          index: 'user_search_index',
-          text: {
-            query: query,
-            path: {
-              wildcard: '*',
-            },
-          },
-        },
-        */
         $match: {
-          $or: [
-            { username: { $regex: query, $options: 'i' } },
-            { publicName: { $regex: query, $options: 'i' } },
-            // { description: { $regex: query, $options: 'i' } },
-          ],
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
         },
       },
       {
@@ -103,31 +92,24 @@ export class UserService {
         },
       },
       {
-        $sort: { [sort]: sortOrder }, // Sort the results
+        $sort: { [sort]: sortOrder },
       },
       {
-        $skip: skip, // Skip the first 'skip' results
+        $skip: skip,
       },
       {
-        $limit: limit, // Limit the results to 'limit'
+        $limit: limit,
       },
     ]);
 
     const totalResult = await this.userModel.aggregate([
       {
-        /*
-        $search: {
-          index: 'user_search_index',
-          text: {
-            query: query,
-          },
-        },*/
         $match: {
-          $or: [
-            { username: { $regex: query, $options: 'i' } },
-            { publicName: { $regex: query, $options: 'i' } },
-            // { description: { $regex: query, $options: 'i' } },
-          ],
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
         },
       },
       {

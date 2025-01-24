@@ -20,8 +20,6 @@ export class SearchService {
   }
 
   public async search(queryBody: SearchQueryDTO) {
-    this.logger.debug(`Searching for ${JSON.stringify(queryBody)}`);
-
     queryBody.query = (queryBody.query || '').trim().toLowerCase();
 
     const {
@@ -29,11 +27,24 @@ export class SearchService {
       page = 1,
       limit = 10,
       sort,
-      order = false,
+      order,
       category,
       searchSongs,
       searchUsers,
     } = queryBody;
+
+    this.logger.debug(
+      `Searching for ${JSON.stringify({
+        query,
+        page,
+        limit,
+        sort,
+        order,
+        category,
+        searchSongs,
+        searchUsers,
+      })}`,
+    );
 
     const { users, total: totalUsers } = searchUsers
       ? await this.userService.search({

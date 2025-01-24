@@ -15,7 +15,6 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 'Nirvana - Dumb',
     description: 'Natural language query.',
-    required: false,
   })
   query?: string;
 
@@ -32,9 +31,8 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 1,
     description: 'Page number.',
-    required: false,
   })
-  page?: number = 1;
+  page?: number;
 
   @IsNumber({ maxDecimalPlaces: 0 })
   @Min(1)
@@ -42,7 +40,6 @@ export class SearchQueryDTO {
   @ApiProperty({
     example: 20,
     description: 'Number of results per page.',
-    required: false,
   })
   limit?: number = 20;
 
@@ -53,7 +50,7 @@ export class SearchQueryDTO {
     description: 'Sort field.',
     required: false,
   })
-  sort?: string = 'createdAt';
+  sort?: string;
 
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
@@ -62,25 +59,23 @@ export class SearchQueryDTO {
     description: 'Sort in ascending order if true, descending if false.',
     required: false,
   })
-  order?: boolean = false;
+  order?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @ApiProperty({
     example: true,
     description: 'Search Users.',
-    required: false,
   })
-  searchUsers?: boolean = true;
+  searchUsers?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @ApiProperty({
     example: true,
     description: 'Search Songs.',
-    required: false,
   })
-  searchSongs?: boolean = true;
+  searchSongs?: boolean;
 
   constructor(partial: Partial<SearchQueryDTO>) {
     Object.assign(this, partial);

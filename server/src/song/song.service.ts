@@ -479,25 +479,19 @@ export class SongService {
 
     const songs: SongViewDto[] = await this.songModel.aggregate([
       {
-        /**
-        $search: {
-           index: 'song_search_index', 
-           text: {
-                query: query,
-            },
-        },
-         */
         $match: {
-          $or: [
-            { originalAuthor: { $regex: query, $options: 'i' } },
-            { title: { $regex: query, $options: 'i' } },
-            { description: { $regex: query, $options: 'i' } },
-          ],
-          //category: category,
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+          ...(category && { category: category }),
         },
       },
       {
-        $sort: { [sort]: sortOrder },
+        $sort: {
+          [sort]: sortOrder,
+        },
       },
       {
         $skip: skip,
@@ -550,12 +544,12 @@ export class SongService {
         },
          */
         $match: {
-          $or: [
-            { originalAuthor: { $regex: query, $options: 'i' } },
-            { title: { $regex: query, $options: 'i' } },
-            { description: { $regex: query, $options: 'i' } },
-          ],
-          category: category,
+          $text: {
+            $search: query,
+            $caseSensitive: false, // Case-insensitive search
+            $diacriticSensitive: false, // Diacritic-insensitive search
+          },
+          ...(category && { category: category }),
         },
       },
       {
