@@ -40,6 +40,12 @@ export class SongService {
     private songWebhookService: SongWebhookService,
   ) {}
 
+  public async getSongById(publicId: string) {
+    return this.songModel.findOne({
+      publicId,
+    });
+  }
+
   public async uploadSong({
     file,
     user,

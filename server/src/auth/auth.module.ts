@@ -2,6 +2,7 @@ import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
+import { MailingModule } from '@server/mailing/mailing.module';
 import { UserModule } from '@server/user/user.module';
 
 import { AuthController } from './auth.controller';
@@ -10,6 +11,7 @@ import { DiscordStrategy } from './strategies/discord.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/JWT.strategy';
+import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 @Module({})
 export class AuthModule {
@@ -19,6 +21,7 @@ export class AuthModule {
       imports: [
         UserModule,
         ConfigModule.forRoot(),
+        MailingModule,
         JwtModule.registerAsync({
           inject: [ConfigService],
           imports: [ConfigModule],
@@ -49,6 +52,7 @@ export class AuthModule {
         GoogleStrategy,
         GithubStrategy,
         DiscordStrategy,
+        MagicLinkEmailStrategy,
         JwtStrategy,
         {
           inject: [ConfigService],

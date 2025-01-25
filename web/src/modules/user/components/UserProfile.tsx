@@ -15,7 +15,6 @@ const UserProfile = ({ userData }: UserProfileProps) => {
     description,
     profileImage,
     socialLinks,
-    likedSongs,
     following,
     achievements,
   } = userData;

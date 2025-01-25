@@ -11,6 +11,7 @@ export class EnvironmentVariables {
   @IsOptional()
   NODE_ENV?: Environment;
 
+  // OAuth providers
   @IsString()
   GITHUB_CLIENT_ID: string;
 
@@ -29,6 +30,11 @@ export class EnvironmentVariables {
   @IsString()
   DISCORD_CLIENT_SECRET: string;
 
+  // Email magic link auth
+  @IsString()
+  MAGIC_LINK_SECRET: string;
+
+  // jwt auth
   @IsString()
   JWT_SECRET: string;
 
@@ -41,6 +47,7 @@ export class EnvironmentVariables {
   @IsString()
   JWT_REFRESH_EXPIRES_IN: string;
 
+  // database
   @IsString()
   MONGO_URL: string;
 
@@ -52,11 +59,12 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  APP_DOMAIN?: string;
+  APP_DOMAIN: string = 'localhost';
 
   @IsString()
   RECAPTCHA_KEY: string;
 
+  // s3
   @IsString()
   S3_ENDPOINT: string;
 
@@ -79,6 +87,7 @@ export class EnvironmentVariables {
   @IsOptional()
   WHITELISTED_USERS?: string;
 
+  // discord webhook
   @IsString()
   DISCORD_WEBHOOK_URL: string;
 
