@@ -95,6 +95,27 @@ export class UserService {
     if (!usedData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set the time to the start of the day
+
+    const lastSeenDate = new Date(usedData.lastSeen);
+    lastSeenDate.setHours(0, 0, 0, 0); // Set the time to the start of the day
+
+    if (lastSeenDate < today) {
+      usedData.lastSeen = new Date();
+      usedData.lastSeen = new Date();
+
+      // if the last seen date is not yesterday, reset the login streak
+      // if the last seen date is not yesterday, reset the login streak
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      if (lastSeenDate < yesterday) usedData.loginStreak = 1;
+      else usedData.loginStreak += 1;
+
+      usedData.save(); // no need to await this, we already have the data to sent back
+    } // if equal or greater, do nothing about the login streak
+
     return usedData;
   }
 
