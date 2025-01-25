@@ -222,6 +222,7 @@ describe('UserService', () => {
       const user = { _id: 'test-id' } as UserDocument;
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0);
 
       const userData = {
         ...user,
@@ -258,6 +259,28 @@ describe('UserService', () => {
       expect(result.lastSeen).toEqual(today);
       expect(result.loginStreak).toBe(1);
       expect(userData.save).not.toHaveBeenCalled();
+    });
+
+    it('should reset loginStreak if lastSeen is not yesterday', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+      twoDaysAgo.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: twoDaysAgo,
+        loginStreak: 5,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.lastSeen).toBeInstanceOf(Date);
+      expect(result.loginStreak).toBe(1);
+      expect(userData.save).toHaveBeenCalled();
     });
   });
 
