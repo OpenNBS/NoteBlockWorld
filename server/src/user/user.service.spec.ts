@@ -198,7 +198,7 @@ describe('UserService', () => {
   describe('getSelfUserData', () => {
     it('should return self user data', async () => {
       const user = { _id: 'test-id' } as UserDocument;
-      const userData = { ...user } as UserDocument;
+      const userData = { ...user, lastSeen: new Date() } as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
 
@@ -216,6 +216,48 @@ describe('UserService', () => {
       await expect(service.getSelfUserData(user)).rejects.toThrow(
         new HttpException('user not found', HttpStatus.NOT_FOUND),
       );
+    });
+
+    it('should update lastSeen and increment loginStreak if lastSeen is before today', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const userData = {
+        ...user,
+        lastSeen: yesterday,
+        loginStreak: 1,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.lastSeen).toBeInstanceOf(Date);
+      expect(result.loginStreak).toBe(2);
+      expect(userData.save).toHaveBeenCalled();
+    });
+
+    it('should not update lastSeen or increment loginStreak if lastSeen is today', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: today,
+        loginStreak: 1,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.lastSeen).toEqual(today);
+      expect(result.loginStreak).toBe(1);
+      expect(userData.save).not.toHaveBeenCalled();
     });
   });
 
