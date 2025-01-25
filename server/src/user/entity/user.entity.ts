@@ -19,13 +19,10 @@ export class User {
   lastEdited: Date;
 
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  lastLogin: Date;
+  lastSeen: Date;
 
   @Prop({ type: Number, required: true, default: 0 })
   loginStreak: number;
-
-  @Prop({ type: Number, required: true, default: 0 })
-  loginCount: number;
 
   @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
