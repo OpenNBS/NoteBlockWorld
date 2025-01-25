@@ -1,9 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
@@ -11,6 +13,7 @@ import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
@@ -48,6 +51,77 @@ export class UserService {
       .limit(limit);
 
     const total = await this.userModel.countDocuments();
+
+    return {
+      users,
+      total,
+      page,
+      limit,
+    };
+  }
+
+  public async search(queryBody: SearchQueryDTO) {
+    const {
+      query = '',
+      page = 1,
+      limit = 10,
+      sort = 'createdAt',
+      order,
+    } = queryBody;
+
+    const skip = (page - 1) * limit;
+    const sortOrder = order ? 1 : -1;
+
+    const users: {
+      username: string;
+      profileImage: string;
+    }[] = await this.userModel.aggregate([
+      {
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          profileImage: 1,
+        },
+      },
+      {
+        $sort: { [sort]: sortOrder },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+    ]);
+
+    const totalResult = await this.userModel.aggregate([
+      {
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
+
+    this.logger.debug(
+      `Retrived users: ${users.length} documents, with total: ${total}`,
+    );
 
     return {
       users,
@@ -148,5 +222,35 @@ export class UserService {
     user.username = username;
 
     return await user.save();
+  }
+
+  public async updateProfile(user: UserDocument, body: UpdateUserProfileDto) {
+    const { description, socialLinks, username } = body;
+
+    if (description) user.description = description;
+    if (socialLinks) user.socialLinks = socialLinks;
+    if (username) user.username = username;
+
+    return await this.userModel.findOneAndUpdate({ _id: user._id }, user, {
+      new: true,
+    });
+  }
+
+  public async createSearchIndexes() {
+    return await this.userModel.collection.createIndex(
+      {
+        username: 'text',
+        publicName: 'text',
+        description: 'text',
+      },
+      {
+        weights: {
+          username: 5,
+          publicName: 3,
+          description: 1,
+        },
+        name: 'user_search_index',
+      },
+    );
   }
 }
