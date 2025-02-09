@@ -40,6 +40,11 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
+      if (data.username === name) {
+        setIsEditingUsername(false);
+        return;
+      }
+
       await ClientAxios.patch('/user/username', {
         username: data.username,
       });
