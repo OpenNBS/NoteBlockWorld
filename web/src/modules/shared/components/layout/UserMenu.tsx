@@ -32,6 +32,7 @@ interface FormValues {
 export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [name, setName] = useState(userData.username);
+  const [error, setError] = useState('');
 
   const {
     handleSubmit,
@@ -42,6 +43,8 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
+      setError('');
+
       if (data.username === name) {
         setIsEditingUsername(false);
         return;
@@ -81,14 +84,14 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   };
 
   useEffect(() => {
-    if (errors.username?.message) {
-      toast.error(errors.username.message);
-    }
+    setError(errors.username?.message ?? '');
   }, [errors.username?.message]);
 
   useEffect(() => {
     if (isEditingUsername) {
       reset({ username: name });
+    } else {
+      setError('');
     }
   }, [isEditingUsername, name, reset]);
 
@@ -184,6 +187,11 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
+          {error && (
+            <p className='text-xs text-red-400 px-4 pb-2 max-w-60 leading-tight'>
+              {error}
+            </p>
+          )}
 
           <UserMenuSplitLine />
 
