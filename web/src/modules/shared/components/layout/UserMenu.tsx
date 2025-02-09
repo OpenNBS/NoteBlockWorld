@@ -8,22 +8,24 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
+import { UserConst } from '@shared/validation/user/constants';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { UserMenuButton } from '../client/UserMenuButton';
-import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import ClientAxios from '@web/src/lib/axios/ClientAxios';
+import { LoggedUserData } from '@web/src/modules/auth/types/User';
+
 import {
   Popover,
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
 } from './popover';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import ClientAxios from '@web/src/lib/axios/ClientAxios';
-import { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
-import { UserConst } from '@shared/validation/user/constants';
+import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
+import { UserMenuButton } from '../client/UserMenuButton';
 
 interface FormValues {
   username: string;
