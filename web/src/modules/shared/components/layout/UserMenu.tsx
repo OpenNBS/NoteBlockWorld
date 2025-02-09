@@ -105,7 +105,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
         arrowPadding={10}
       >
         <PopoverArrow className='fill-zinc-600' />
-        <div className='min-w-48 max-w-64'>
+        <div className='min-w-56 max-w-64'>
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-3'>
             <div className='h-8 w-8 aspect-square'>
@@ -121,7 +121,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               <div className='flex justify-start items-center gap-2'>
                 {!isEditingUsername ? (
                   <>
-                    <h4 className='truncate font-semibold w-48 py-px'>
+                    <h4 className='truncate font-semibold w-[155px] py-px'>
                       {name}
                     </h4>
                     <button onClick={() => setIsEditingUsername(true)}>
@@ -136,7 +136,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                   <>
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <input
-                        className='w-[calc(12rem-52px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
+                        className='w-[calc(12rem-55.5px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
                         defaultValue={name}
                         {...register('username', {
                           required: 'Username is required',
