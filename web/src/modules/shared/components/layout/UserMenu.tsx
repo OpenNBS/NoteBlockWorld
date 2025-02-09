@@ -192,6 +192,13 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               {error}
             </p>
           )}
+          {isEditingUsername && (
+            <p className='text-xs text-zinc-500 px-4 pb-2 max-w-60 leading-tight'>
+              NOTE: Your existing song files will{' '}
+              <strong className='font-black'>not</strong> be updated. Make an
+              edit to each song&apos;s title or description to refresh them!
+            </p>
+          )}
 
           <UserMenuSplitLine />
 
