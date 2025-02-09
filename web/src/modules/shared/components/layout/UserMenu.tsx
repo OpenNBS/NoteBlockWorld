@@ -37,7 +37,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
     formState: { isSubmitting, errors },
     register,
     reset,
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
