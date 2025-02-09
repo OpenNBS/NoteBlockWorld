@@ -146,6 +146,7 @@ export class UserService {
     }
 
     user.username = username;
+    user.lastEdited = new Date();
 
     return await user.save();
   }
