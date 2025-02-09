@@ -23,6 +23,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import ClientAxios from '@web/src/lib/axios/ClientAxios';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import { UserConst } from '@shared/validation/user/constants';
 
 interface FormValues {
   username: string;
@@ -141,9 +142,17 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                         {...register('username', {
                           required: 'Username is required',
                           pattern: {
-                            value: /^[a-zA-Z0-9-_.]{1,32}$/,
+                            value: /^[a-zA-Z0-9-_.]*$/,
                             message:
                               'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
+                          },
+                          maxLength: {
+                            value: UserConst.USERNAME_MAX_LENGTH,
+                            message: `The username must be shorter than ${UserConst.USERNAME_MAX_LENGTH} characters`,
+                          },
+                          minLength: {
+                            value: UserConst.USERNAME_MIN_LENGTH,
+                            message: `The username must have at least ${UserConst.USERNAME_MIN_LENGTH} characters`,
                           },
                         })}
                       />
