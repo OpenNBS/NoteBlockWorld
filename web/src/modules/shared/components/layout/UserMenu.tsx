@@ -33,7 +33,7 @@ interface FormValues {
 
 export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
-  const [name, setName] = useState(userData.username);
+  const [currentUsername, setCurrentUsername] = useState(userData.username);
   const [error, setError] = useState('');
 
   const {
@@ -47,7 +47,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
     try {
       setError('');
 
-      if (data.username === name) {
+      if (data.username === currentUsername) {
         setIsEditingUsername(false);
         return;
       }
@@ -58,7 +58,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
 
       toast.success('Username updated successfully!');
       setIsEditingUsername(false);
-      setName(data.username);
+      setCurrentUsername(data.username);
     } catch (error: unknown) {
       if ((error as any).isAxiosError) {
         const axiosError = error as AxiosError;
@@ -91,11 +91,11 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
 
   useEffect(() => {
     if (isEditingUsername) {
-      reset({ username: name });
+      reset({ username: currentUsername });
     } else {
       setError('');
     }
-  }, [isEditingUsername, name, reset]);
+  }, [isEditingUsername, currentUsername, reset]);
 
   return (
     <Popover onOpenChange={() => setIsEditingUsername(false)}>
@@ -128,7 +128,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                 {!isEditingUsername ? (
                   <>
                     <h4 className='truncate font-semibold w-[155px] py-px'>
-                      {name}
+                      {currentUsername}
                     </h4>
                     <button onClick={() => setIsEditingUsername(true)}>
                       <FontAwesomeIcon
@@ -143,7 +143,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <input
                         className='w-[calc(12rem-55.5px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
-                        defaultValue={name}
+                        defaultValue={currentUsername}
                         {...register('username', {
                           required: 'Username is required',
                           pattern: {
@@ -153,7 +153,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                           },
                           maxLength: {
                             value: UserConst.USERNAME_MAX_LENGTH,
-                            message: `The username must be shorter than ${UserConst.USERNAME_MAX_LENGTH} characters`,
+                            message: `The username must have up to ${UserConst.USERNAME_MAX_LENGTH} characters`,
                           },
                           minLength: {
                             value: UserConst.USERNAME_MIN_LENGTH,
