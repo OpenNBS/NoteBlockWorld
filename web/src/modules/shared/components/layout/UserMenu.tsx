@@ -36,6 +36,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
     handleSubmit,
     formState: { isSubmitting, errors },
     register,
+    reset,
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -83,6 +84,12 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
       toast.error(errors.username.message);
     }
   }, [errors.username?.message]);
+
+  useEffect(() => {
+    if (isEditingUsername) {
+      reset({ username: name });
+    }
+  }, [isEditingUsername, name, reset]);
 
   return (
     <Popover onOpenChange={() => setIsEditingUsername(false)}>
