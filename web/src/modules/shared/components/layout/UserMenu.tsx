@@ -142,7 +142,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                         {...register('username', {
                           required: 'Username is required',
                           pattern: {
-                            value: /^[a-zA-Z0-9-_.]*$/,
+                            value: UserConst.ALLOWED_REGEXP,
                             message:
                               'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
                           },
