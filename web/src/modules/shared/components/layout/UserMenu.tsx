@@ -54,7 +54,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
         username: data.username,
       });
 
-      toast.success('Username updated successfully');
+      toast.success('Username updated successfully!');
       setIsEditingUsername(false);
       setName(data.username);
     } catch (error: unknown) {
@@ -63,7 +63,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
 
         // verify for throttling limit error
         if (axiosError.response?.status === 429) {
-          toast.error('Too many requests. Please try again later.');
+          toast.error('Too many requests! Please try again later.');
         }
 
         // verify for validation error
