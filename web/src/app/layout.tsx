@@ -9,6 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { WebSite, WithContext } from 'schema-dts';
 
+import DetectAdBlock from '../modules/shared/components/client/ads/DetectAdBlock';
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
@@ -111,6 +112,7 @@ export default function RootLayout({
               {children}
             </TooltipProvider>
           </SkeletonTheme>
+          <DetectAdBlock />
         </body>
         {process.env.NODE_ENV === 'production' &&
           process.env.NEXT_PUBLIC_GA_ID && (
