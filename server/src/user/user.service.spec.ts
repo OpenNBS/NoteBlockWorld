@@ -339,7 +339,12 @@ describe('UserService', () => {
 
       const result = await service.updateUsername(user, body);
 
-      expect(result).toEqual(user);
+      expect(result).toEqual({
+        username: 'newuser',
+        publicName: undefined,
+        email: undefined,
+      });
+
       expect(user.username).toBe(body.username);
       expect(service.usernameExists).toHaveBeenCalledWith(body.username);
     });
