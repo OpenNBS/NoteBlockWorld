@@ -38,6 +38,7 @@ const AdTemplate = ({
   adSlot,
   adFormat = 'auto',
   fullWidthResponsive = 'true',
+  adLayoutKey,
   hiddenClassName = 'hidden',
   showCloseButton = true,
 }: {
@@ -45,6 +46,7 @@ const AdTemplate = ({
   adSlot: string;
   adFormat: string;
   fullWidthResponsive: string;
+  adLayoutKey?: string;
   hiddenClassName?: string;
   showCloseButton?: boolean;
 }) => {
@@ -86,6 +88,7 @@ const AdTemplate = ({
             data-ad-client={pubId}
             data-ad-slot={adSlot}
             data-ad-format={adFormat}
+            data-ad-layout-key={adLayoutKey}
             data-full-width-responsive={fullWidthResponsive}
           ></ins>
           {showCloseButton && <HideAdButton setIsHidden={setIsHidden} />}
@@ -156,6 +159,21 @@ export const MultiplexAdSlot = ({ className }: { className?: string }) => {
       adFormat='autorelaxed'
       fullWidthResponsive='false'
       showCloseButton={true}
+    />
+  );
+};
+
+export const SongCardAdSlot = ({ className }: { className?: string }) => {
+  return (
+    <AdTemplate
+      className={cn(
+        'relative rounded-xl bg-zinc-800 p-2 my-8 h-full w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
+      adSlot='1737918264'
+      adFormat='fluid'
+      adLayoutKey='-7o+ez-1j-38+bu'
+      showCloseButton={false}
     />
   );
 };
