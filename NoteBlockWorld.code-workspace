@@ -18,7 +18,14 @@
     }
   ],
   "settings": {
+    "editor.formatOnSave": true,
+    "eslint.validate": ["typescript"],
+    "eslint.run": "onType",
+    "eslint.format.enable": true,
     "mdx.server.enable": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
     "jest.disabledWorkspaceFolders": ["Root", "Frontend"]
   }
 }
