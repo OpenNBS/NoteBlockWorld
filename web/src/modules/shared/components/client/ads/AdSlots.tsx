@@ -139,3 +139,18 @@ export const DownloadPopupAdSlot = ({ className }: { className?: string }) => {
     />
   );
 };
+
+export const MultiplexAdSlot = ({ className }: { className?: string }) => {
+  return (
+    <AdTemplate
+      className={cn(
+        'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
+      adSlot='6673081563'
+      adFormat='autorelaxed'
+      fullWidthResponsive='true'
+      showCloseButton={true}
+    />
+  );
+};
