@@ -143,6 +143,7 @@ export const SongForm = ({
                     </p>
                   </>
                 }
+                description={'This can be changed in your user menu at the top'}
                 isLoading={isLoading}
                 disabled={true}
                 errorMessage={errors.author?.message}
