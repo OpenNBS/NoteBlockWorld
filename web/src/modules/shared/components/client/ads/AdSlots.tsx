@@ -58,14 +58,19 @@ const AdTemplate = ({
     }
   }, []);
 
-  if (!pubId) {
-    return 'AdSense Client ID is not set';
-  }
+  const InfoText = !pubId
+    ? () => (
+        <p className='text-center my-auto text-xs text-zinc-500 m-4'>
+          AdSense Client ID is not set
+        </p>
+      )
+    : () => null;
 
   return isHidden ? (
     <div className={cn(className, hiddenClassName)}></div>
   ) : (
     <div className={cn(className, isHidden ? hiddenClassName : '')}>
+      <InfoText />
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
@@ -114,7 +119,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
         // height with this class: "max-h-[calc(100vh-9rem)]", but then the container doesn't fit to
         // the ad content height, always occupying the full viewport height instead. So we use 'max-w-fit'
         // to cap the max height to that of the ad.
-        'flex-0 sticky mb-8 top-24 min-h-96 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
+        'flex-0 sticky mb-8 top-24 p-2 min-h-96 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
         className,
       )}
       adSlot='4995642586'
