@@ -123,6 +123,7 @@ export function RecentSongsProvider({
       return;
     }
 
+    setRecentSongs([...recentSongs, ...Array(12).fill(null)]);
     setPage((prev) => prev + 1);
   }
 
