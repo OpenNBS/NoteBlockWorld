@@ -7,6 +7,7 @@ import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dt
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
+import { UserDto } from './dto/user.dto';
 import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
@@ -147,6 +148,8 @@ export class UserService {
 
     user.username = username;
 
-    return await user.save();
+    await user.save();
+
+    return UserDto.fromEntity(user);
   }
 }
