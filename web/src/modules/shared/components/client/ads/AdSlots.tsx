@@ -37,16 +37,16 @@ const AdTemplate = ({
   className,
   adSlot,
   adFormat = 'auto',
-  fullWidthResponsive = 'true',
   adLayoutKey,
+  fullWidthResponsive,
   hiddenClassName = 'hidden',
   showCloseButton = true,
 }: {
   className: string;
   adSlot: string;
   adFormat: string;
-  fullWidthResponsive: string;
   adLayoutKey?: string;
+  fullWidthResponsive?: string;
   hiddenClassName?: string;
   showCloseButton?: boolean;
 }) => {
@@ -157,7 +157,6 @@ export const MultiplexAdSlot = ({ className }: { className?: string }) => {
       )}
       adSlot='6673081563'
       adFormat='autorelaxed'
-      fullWidthResponsive='false'
       showCloseButton={true}
     />
   );
