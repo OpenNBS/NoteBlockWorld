@@ -152,7 +152,7 @@ export const MultiplexAdSlot = ({ className }: { className?: string }) => {
   return (
     <AdTemplate
       className={cn(
-        'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-auto min-h-32 w-full min-w-64 text-sm text-zinc-400',
+        'relative rounded-xl bg-zinc-800/50 my-8 h-auto min-h-32 w-full min-w-64 text-sm text-zinc-400',
         className,
       )}
       adSlot='6673081563'
