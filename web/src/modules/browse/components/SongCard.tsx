@@ -73,7 +73,7 @@ const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
   return !song ? (
     <SongDataDisplay song={song} />
   ) : (
-    <Link href={`/song/${song.publicId}`} className='h-full max-h-[16.5rem]'>
+    <Link href={`/song/${song.publicId}`} className='h-full max-h-fit'>
       <div
         className='bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'
         style={{ backfaceVisibility: 'hidden' }}

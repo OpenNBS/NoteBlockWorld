@@ -166,7 +166,7 @@ export const SongCardAdSlot = ({ className }: { className?: string }) => {
   return (
     <AdTemplate
       className={cn(
-        'relative rounded-xl bg-zinc-800 p-2 my-8 h-full w-full min-w-64 text-sm text-zinc-400',
+        'relative rounded-xl bg-zinc-800 p-2 h-full w-full min-w-64 text-sm text-zinc-400',
         className,
       )}
       adSlot='1737918264'
