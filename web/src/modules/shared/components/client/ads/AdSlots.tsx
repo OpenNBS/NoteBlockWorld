@@ -122,7 +122,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
         // height with this class: "max-h-[calc(100vh-9rem)]", but then the container doesn't fit to
         // the ad content height, always occupying the full viewport height instead. So we use 'max-w-fit'
         // to cap the max height to that of the ad.
-        'flex-0 sticky mb-8 top-24 p-2 min-h-96 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
+        'flex-0 sticky mb-8 top-24 min-h-96 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
         className,
       )}
       adSlot='4995642586'
@@ -171,7 +171,7 @@ export const SongCardAdSlot = ({ className }: { className?: string }) => {
       )}
       adSlot='1737918264'
       adFormat='fluid'
-      adLayoutKey='-7o+ez-1j-38+bu'
+      adLayoutKey='-6o+ez-1j-38+bu'
       showCloseButton={false}
     />
   );
