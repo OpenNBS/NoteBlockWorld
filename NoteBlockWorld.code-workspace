@@ -26,6 +26,11 @@
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
     },
-    "jest.disabledWorkspaceFolders": ["Root", "Frontend"]
+    "jest.disabledWorkspaceFolders": ["Root", "Frontend"],
+    "search.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/dist": true,
+    }
   }
 }
