@@ -114,6 +114,8 @@ export class UserService {
       if (lastSeenDate < yesterday) usedData.loginStreak = 1;
       else usedData.loginStreak += 1;
 
+      usedData.loginCount++;
+
       usedData.save(); // no need to await this, we already have the data to sent back
     } // if equal or greater, do nothing about the login streak
 

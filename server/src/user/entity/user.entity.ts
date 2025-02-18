@@ -22,6 +22,9 @@ export class User {
   lastSeen: Date;
 
   @Prop({ type: Number, required: true, default: 0 })
+  loginCount: number;
+
+  @Prop({ type: Number, required: true, default: 0 })
   loginStreak: number;
 
   @Prop({ type: Number, required: true, default: 0 })
