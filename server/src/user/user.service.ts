@@ -92,34 +92,32 @@ export class UserService {
   }
 
   public async getSelfUserData(user: UserDocument) {
-    const usedData = await this.findByID(user._id.toString());
-    if (!usedData)
+    const userData = await this.findByID(user._id.toString());
+    if (!userData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set the time to the start of the day
 
-    const lastSeenDate = new Date(usedData.lastSeen);
+    const lastSeenDate = new Date(userData.lastSeen);
     lastSeenDate.setHours(0, 0, 0, 0); // Set the time to the start of the day
 
     if (lastSeenDate < today) {
-      usedData.lastSeen = new Date();
-      usedData.lastSeen = new Date();
+      userData.lastSeen = new Date();
 
-      // if the last seen date is not yesterday, reset the login streak
       // if the last seen date is not yesterday, reset the login streak
       const yesterday = new Date(today);
       yesterday.setDate(today.getDate() - 1);
 
-      if (lastSeenDate < yesterday) usedData.loginStreak = 1;
-      else usedData.loginStreak += 1;
+      if (lastSeenDate < yesterday) userData.loginStreak = 1;
+      else userData.loginStreak += 1;
 
-      usedData.loginCount++;
+      userData.loginCount++;
 
-      usedData.save(); // no need to await this, we already have the data to sent back
+      userData.save(); // no need to await this, we already have the data to send back
     } // if equal or greater, do nothing about the login streak
 
-    return usedData;
+    return userData;
   }
 
   public async usernameExists(username: string) {
