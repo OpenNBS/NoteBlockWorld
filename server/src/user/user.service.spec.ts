@@ -282,6 +282,50 @@ describe('UserService', () => {
       expect(result.loginStreak).toBe(1);
       expect(userData.save).toHaveBeenCalled();
     });
+
+    it('should increment loginCount if lastSeen is not today', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: yesterday,
+        loginCount: 5,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.lastSeen).toBeInstanceOf(Date);
+      expect(result.loginCount).toBe(6);
+      expect(userData.save).toHaveBeenCalled();
+    });
+
+    it('should not increment loginCount if lastSeen is today', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: today,
+        loginCount: 5,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.lastSeen).toEqual(today);
+      expect(result.loginCount).toBe(5);
+      expect(userData.save).not.toHaveBeenCalled();
+    });
   });
 
   describe('usernameExists', () => {
