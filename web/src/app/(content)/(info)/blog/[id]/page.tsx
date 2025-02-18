@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { PostType, getPostData } from '@web/src/lib/posts';
-import BackButton from '@web/src/modules/shared/components/client/BackButton';
 import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
 
 type BlogPageProps = {
@@ -45,9 +45,12 @@ const BlogPost = ({ params }: BlogPageProps) => {
   return (
     <>
       <article className='max-w-screen-md mx-auto mb-36'>
-        <BackButton className='text-zinc-500 hover:text-zinc-400 text-sm'>
-          {'< Back to Help'}
-        </BackButton>
+        <Link
+          href='/help'
+          className='text-zinc-500 hover:text-zinc-400 text-sm'
+        >
+          {'< Back to Blog'}
+        </Link>
         <h1 className='text-4xl font-bold mt-16 mb-8'>{post.title}</h1>
 
         {/* Author */}
