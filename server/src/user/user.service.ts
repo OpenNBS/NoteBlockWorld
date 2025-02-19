@@ -110,7 +110,11 @@ export class UserService {
       yesterday.setDate(today.getDate() - 1);
 
       if (lastSeenDate < yesterday) userData.loginStreak = 1;
-      else userData.loginStreak += 1;
+      else {
+        userData.loginStreak += 1;
+        if (userData.loginStreak > userData.maxLoginStreak)
+          userData.maxLoginStreak = userData.loginStreak;
+      }
 
       userData.loginCount++;
 

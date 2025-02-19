@@ -28,6 +28,9 @@ export class User {
   loginStreak: number;
 
   @Prop({ type: Number, required: true, default: 0 })
+  maxLoginStreak: number;
+
+  @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
   @Prop({ type: String, required: true })
