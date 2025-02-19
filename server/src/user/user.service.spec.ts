@@ -326,6 +326,52 @@ describe('UserService', () => {
       expect(result.loginCount).toBe(5);
       expect(userData.save).not.toHaveBeenCalled();
     });
+
+    it('should increment maxLoginStreak if login streak exceeds max', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: yesterday,
+        loginStreak: 8,
+        maxLoginStreak: 8,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.maxLoginStreak).toBe(9);
+      expect(userData.save).toHaveBeenCalled();
+    });
+
+    it('should not increment maxLoginStreak if login streak is less than the max', async () => {
+      const user = { _id: 'test-id' } as UserDocument;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0);
+
+      const userData = {
+        ...user,
+        lastSeen: yesterday,
+        loginStreak: 4,
+        maxLoginStreak: 8,
+        save: jest.fn().mockResolvedValue(true),
+      } as unknown as UserDocument;
+
+      jest.spyOn(service, 'findByID').mockResolvedValue(userData);
+
+      const result = await service.getSelfUserData(user);
+
+      expect(result.maxLoginStreak).toBe(8);
+      expect(userData.save).toHaveBeenCalled();
+    });
   });
 
   describe('usernameExists', () => {
