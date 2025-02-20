@@ -10,7 +10,10 @@ import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
-import { InterSectionAdSlot } from '../../shared/components/client/ads/AdSlots';
+import {
+  InterSectionAdSlot,
+  SongCardAdSlot,
+} from '../../shared/components/client/ads/AdSlots';
 import {
   Carousel,
   CarouselContent,
@@ -76,9 +79,13 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
-        {recentSongs.map((song, i) => (
-          <SongCard key={i} song={song} />
-        ))}
+        {recentSongs.map((song, i) =>
+          song === undefined ? (
+            <SongCardAdSlot key={i} />
+          ) : (
+            <SongCard key={i} song={song} />
+          ),
+        )}
       </SongCardGroup>
       <div className='flex flex-col w-full justify-between items-center mt-4'>
         {hasMore ? (

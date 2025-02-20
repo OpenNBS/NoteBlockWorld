@@ -1,7 +1,9 @@
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cn } from '@web/src/lib/tailwind.utils';
 import Link from 'next/link';
+
+import { cn } from '@web/src/lib/tailwind.utils';
+
 import { MusicalNote } from './MusicalNote';
 
 interface BlockTabProps {

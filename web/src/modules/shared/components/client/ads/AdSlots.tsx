@@ -37,14 +37,16 @@ const AdTemplate = ({
   className,
   adSlot,
   adFormat = 'auto',
-  fullWidthResponsive = 'true',
+  adLayoutKey,
+  fullWidthResponsive,
   hiddenClassName = 'hidden',
   showCloseButton = true,
 }: {
   className: string;
   adSlot: string;
   adFormat: string;
-  fullWidthResponsive: string;
+  adLayoutKey?: string;
+  fullWidthResponsive?: string;
   hiddenClassName?: string;
   showCloseButton?: boolean;
 }) => {
@@ -58,14 +60,19 @@ const AdTemplate = ({
     }
   }, []);
 
-  if (!pubId) {
-    return 'AdSense Client ID is not set';
-  }
+  const InfoText = !pubId
+    ? () => (
+        <p className='text-center my-auto text-xs text-zinc-500 m-4'>
+          AdSense Client ID is not set
+        </p>
+      )
+    : () => null;
 
   return isHidden ? (
     <div className={cn(className, hiddenClassName)}></div>
   ) : (
     <div className={cn(className, isHidden ? hiddenClassName : '')}>
+      <InfoText />
       <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
@@ -81,6 +88,7 @@ const AdTemplate = ({
             data-ad-client={pubId}
             data-ad-slot={adSlot}
             data-ad-format={adFormat}
+            data-ad-layout-key={adLayoutKey}
             data-full-width-responsive={fullWidthResponsive}
           ></ins>
           {showCloseButton && <HideAdButton setIsHidden={setIsHidden} />}
@@ -114,7 +122,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
         // height with this class: "max-h-[calc(100vh-9rem)]", but then the container doesn't fit to
         // the ad content height, always occupying the full viewport height instead. So we use 'max-w-fit'
         // to cap the max height to that of the ad.
-        'flex-0 sticky mb-8 top-24 min-h-96 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
+        'flex-0 sticky mb-8 top-24 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
         className,
       )}
       adSlot='4995642586'
@@ -135,6 +143,35 @@ export const DownloadPopupAdSlot = ({ className }: { className?: string }) => {
       adSlot='3239923384'
       adFormat='auto'
       fullWidthResponsive='true'
+      showCloseButton={false}
+    />
+  );
+};
+
+export const MultiplexAdSlot = ({ className }: { className?: string }) => {
+  return (
+    <AdTemplate
+      className={cn(
+        'relative rounded-xl bg-zinc-800/50 my-8 h-auto min-h-32 w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
+      adSlot='6673081563'
+      adFormat='autorelaxed'
+      showCloseButton={true}
+    />
+  );
+};
+
+export const SongCardAdSlot = ({ className }: { className?: string }) => {
+  return (
+    <AdTemplate
+      className={cn(
+        'relative rounded-xl bg-zinc-800 p-2 h-full w-full min-w-64 text-sm text-zinc-400',
+        className,
+      )}
+      adSlot='1737918264'
+      adFormat='fluid'
+      adLayoutKey='-6o+ez-1j-38+bu'
       showCloseButton={false}
     />
   );

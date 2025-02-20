@@ -9,6 +9,7 @@ import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProf
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
+import { UserDto } from './dto/user.dto';
 import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
@@ -165,11 +166,36 @@ export class UserService {
   }
 
   public async getSelfUserData(user: UserDocument) {
-    const usedData = await this.findByID(user._id.toString());
-    if (!usedData)
+    const userData = await this.findByID(user._id.toString());
+    if (!userData)
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
-    return usedData;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set the time to the start of the day
+
+    const lastSeenDate = new Date(userData.lastSeen);
+    lastSeenDate.setHours(0, 0, 0, 0); // Set the time to the start of the day
+
+    if (lastSeenDate < today) {
+      userData.lastSeen = new Date();
+
+      // if the last seen date is not yesterday, reset the login streak
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      if (lastSeenDate < yesterday) userData.loginStreak = 1;
+      else {
+        userData.loginStreak += 1;
+        if (userData.loginStreak > userData.maxLoginStreak)
+          userData.maxLoginStreak = userData.loginStreak;
+      }
+
+      userData.loginCount++;
+
+      userData.save(); // no need to await this, we already have the data to send back
+    } // if equal or greater, do nothing about the login streak
+
+    return userData;
   }
 
   public async usernameExists(username: string) {
@@ -220,8 +246,11 @@ export class UserService {
     }
 
     user.username = username;
+    user.lastEdited = new Date();
 
-    return await user.save();
+    await user.save();
+
+    return UserDto.fromEntity(user);
   }
 
   public async updateProfile(user: UserDocument, body: UpdateUserProfileDto) {

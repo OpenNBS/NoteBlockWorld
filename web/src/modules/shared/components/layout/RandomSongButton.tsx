@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import axios from '@web/src/lib/axios';
 
+import { MusicalNote } from './MusicalNote';
+
 export const RandomSongButton = () => {
   const router = useRouter();
 
@@ -41,6 +43,7 @@ export const RandomSongButton = () => {
       onClick={randomSong}
     >
       <FontAwesomeIcon icon={faDice} />
+      <MusicalNote />
     </button>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './MusicalNote.css';
+
 const notesSpritesSheet = '/notes_sprites.png';
 
 const spritesSheetSize = {
