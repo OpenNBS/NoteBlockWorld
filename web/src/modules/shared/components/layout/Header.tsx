@@ -13,10 +13,10 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 
+import { BlockSearch } from './BlockSearchProps';
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
-import { BlockSearch } from './BlockSearchProps';
 
 export const Header = async () => {
   let isLogged;

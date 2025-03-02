@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { deepFreeze } from '@shared/validation/common/deepFreeze';
 import { Type } from 'class-transformer';
 import {
   IsOptional,
@@ -9,6 +8,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+
+import { deepFreeze } from '@shared/validation/common/deepFreeze';
 
 export const LinkRegexes = deepFreeze({
   bandcamp: /https?:\/\/[a-zA-Z0-9_-]+\.bandcamp\.com\/?/,

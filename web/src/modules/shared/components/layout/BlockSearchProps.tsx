@@ -1,8 +1,10 @@
 'use client';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cn } from '@web/src/lib/tailwind.utils';
 import { useState } from 'react';
+
+import { cn } from '@web/src/lib/tailwind.utils';
+
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 export const BlockSearch = () => {
