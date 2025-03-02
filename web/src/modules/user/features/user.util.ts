@@ -5,7 +5,7 @@ export const getUserProfileData = async (
   id: string,
 ): Promise<UserProfileData | never> => {
   try {
-    const res = await axiosInstance.get(`/user/?id=${id}`);
+    const res = await axiosInstance.get(`/user/${id}`);
     if (res.status === 200) return res.data as UserProfileData;
     else throw new Error('Failed to get user data');
   } catch {

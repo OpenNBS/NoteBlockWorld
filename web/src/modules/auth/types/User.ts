@@ -18,12 +18,6 @@ export type LoggedUserData = {
   creationDate: string;
   lastEdited: string;
   lastLogin: string;
-  likedSongs: string[]; // Assuming the array contains strings
-  following: string[]; // Assuming the array contains strings
-  likedComments: string[]; // Assuming the array contains strings
-  dislikedComments: string[]; // Assuming the array contains strings
-  notifications: string[]; // Assuming the array contains strings
-  achievements: string[]; // Assuming the array contains strings
   createdAt: string;
   updatedAt: string;
   id: string;
@@ -60,7 +54,4 @@ export type UserProfileData = {
   description: string;
   profileImage: string;
   socialLinks: SocialLinks;
-  likedSongs: string[];
-  following: string[];
-  achievements: string[];
 };

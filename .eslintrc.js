@@ -36,8 +36,13 @@ module.exports = {
     ],
     '@typescript-eslint/lines-between-class-members': [
       'warn',
-      'always',
-      { exceptAfterSingleLine: true },
+      {
+        enforce: [
+          { blankLine: 'any', prev: '*', next: 'field' },
+          { blankLine: 'any', prev: 'field', next: '*' },
+          { blankLine: 'always', prev: '*', next: 'method' },
+        ],
+      },
     ],
     'padding-line-between-statements': 'off',
     '@typescript-eslint/padding-line-between-statements': [

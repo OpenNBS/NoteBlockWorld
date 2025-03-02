@@ -33,10 +33,10 @@ export class User {
   @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   username: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: true, default: '#', index: true })
   publicName: string;
 
   @Prop({ type: String, required: true, unique: true })
@@ -71,23 +71,9 @@ export class User {
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
 
-  @Prop({ type: Array, required: true, default: [] })
-  likedSongs: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  following: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  likedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  dislikedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  notifications: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  achievements: string[];
+  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+  
+  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -18,6 +18,7 @@
     }
   ],
   "settings": {
+    "window.title": "${dirty}${rootName}",
     "editor.formatOnSave": true,
     "eslint.validate": ["typescript"],
     "eslint.run": "onType",
