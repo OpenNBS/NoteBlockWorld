@@ -71,24 +71,6 @@ export class User {
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
 
-  @Prop({ type: Array, required: true, default: [] })
-  likedSongs: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  following: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  likedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  dislikedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  notifications: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  achievements: string[];
-
   createdAt: Date;
   updatedAt: Date;
 }
