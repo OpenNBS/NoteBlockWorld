@@ -24,10 +24,10 @@ export class Song {
   publicId: string;
 
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  createdAt: Date;
+  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  updatedAt: Date;
+  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'User' })
   uploader: Types.ObjectId;

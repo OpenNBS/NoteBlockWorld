@@ -71,8 +71,8 @@ export class User {
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
