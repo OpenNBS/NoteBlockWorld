@@ -35,6 +35,7 @@ export default class Strategy extends OAuth2Strategy {
   private fetchScopeEnabled: boolean;
   public override name = 'discord';
   prompt?: string;
+
   public constructor(options: DiscordStrategyConfig, verify: VerifyFunction) {
     super(
       {

@@ -7,6 +7,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   private static logger = new Logger(JwtStrategy.name);
+
   constructor(@Inject(ConfigService) config: ConfigService) {
     const JWT_SECRET = config.getOrThrow('JWT_SECRET');
 

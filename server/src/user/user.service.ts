@@ -16,6 +16,7 @@ import { User, UserDocument } from './entity/user.entity';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
+
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {

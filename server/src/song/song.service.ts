@@ -27,6 +27,7 @@ import { removeExtraSpaces } from './song.util';
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
+
   constructor(
     @InjectModel(SongEntity.name)
     private songModel: Model<SongEntity>,
