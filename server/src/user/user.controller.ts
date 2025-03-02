@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
@@ -19,8 +27,13 @@ export class UserController {
     private readonly userService: UserService,
   ) {}
 
+  @Get('/:username')
+  async getUser(@Param('username') username: string) {
+    return await this.userService.getUserByEmailOrId({ username: username });
+  }
+
   @Get('by-query')
-  async getUser(@Query() query: GetUser) {
+  async getUserByQuery(@Query() query: GetUser) {
     return await this.userService.getUserByEmailOrId(query);
   }
 

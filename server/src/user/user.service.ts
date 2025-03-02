@@ -6,6 +6,7 @@ import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+import { UserViewDto } from '@shared/validation/user/dto/UserView.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
@@ -35,6 +36,12 @@ export class UserService {
 
   public async findByID(objectID: string): Promise<UserDocument | null> {
     const user = await this.userModel.findById(objectID).exec();
+
+    return user;
+  }
+
+  public async findByUsername(username: string): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ username }).exec();
 
     return user;
   }
@@ -134,24 +141,24 @@ export class UserService {
 
   public async getUserByEmailOrId(query: GetUser) {
     const { email, id, username } = query;
+    let user;
 
     if (email) {
-      return await this.findByEmail(email);
+      user = await this.findByEmail(email);
     }
 
     if (id) {
-      return await this.findByID(id);
+      user = await this.findByID(id);
     }
 
     if (username) {
-      throw new HttpException(
-        'Username is not supported yet',
-        HttpStatus.BAD_REQUEST,
-      );
+      user = await this.findByUsername(username);
     }
 
+    if (user) return new UserViewDto(user);
+
     throw new HttpException(
-      'You must provide an email or an id',
+      'You must provide an email, ID or username',
       HttpStatus.BAD_REQUEST,
     );
   }
