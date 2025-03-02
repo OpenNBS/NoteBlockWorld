@@ -72,6 +72,7 @@ export class User {
   prefersDarkTheme: boolean;
 
   createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+  
   updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 }
 
