@@ -1,20 +1,19 @@
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import Image from 'next/image';
 
-import { SocialLinksTypes, UserProfileData } from '../../auth/types/User';
-
 type UserProfileProps = {
-  userData: UserProfileData;
+  userData: UserProfileViewDto;
 };
 
 const UserProfile = ({ userData }: UserProfileProps) => {
   const {
-    lastLogin,
+    lastSeen,
     loginStreak,
     playCount,
     publicName,
     description,
     profileImage,
-    socialLinks,
+    // socialLinks,
   } = userData;
 
   return (
@@ -28,12 +27,12 @@ const UserProfile = ({ userData }: UserProfileProps) => {
       />
       <h1 className='text-2xl font-bold'>{publicName}</h1>
       <p className='text-gray-500'>{description}</p>
-      <p className='text-gray-500'>Last Login: {lastLogin.toLocaleString()}</p>
+      <p className='text-gray-500'>Last Login: {lastSeen.toLocaleString()}</p>
       <p className='text-gray-500'>Login Streak: {loginStreak}</p>
       <p className='text-gray-500'>Play Count: {playCount}</p>
-      <ul className='mt-4'>
+      {/* <ul className='mt-4'>
         {Object.keys(socialLinks).map((key, index) => {
-          const link = socialLinks[key as SocialLinksTypes];
+          const link = socialLinks[key as keyof UserLinks];
           if (!link) return null;
 
           return (
@@ -44,7 +43,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
             </li>
           );
         })}
-      </ul>
+      </ul> */}
     </section>
   );
 };

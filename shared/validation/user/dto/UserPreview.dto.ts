@@ -1,8 +1,8 @@
-export class UserViewDto {
+export class UserPreviewDto {
   username: string;
   profileImage: string;
 
-  constructor(partial: UserViewDto) {
+  constructor(partial: UserPreviewDto) {
     Object.assign(this, partial);
   }
 }

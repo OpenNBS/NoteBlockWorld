@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
-import { UserViewDto } from '@shared/validation/user/dto/UserView.dto';
+import { UserPreviewDto } from '@shared/validation/user/dto/UserPreview.dto';
 
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
@@ -61,7 +61,7 @@ export class SearchService {
     return {
       users: users.map(
         ({ username, profileImage }) =>
-          new UserViewDto({
+          new UserPreviewDto({
             username,
             profileImage,
           }),

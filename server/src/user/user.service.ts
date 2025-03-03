@@ -6,7 +6,7 @@ import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
-import { UserViewDto } from '@shared/validation/user/dto/UserView.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
@@ -156,12 +156,14 @@ export class UserService {
       user = await this.findByUsername(username);
     }
 
-    if (user) return new UserViewDto(user);
+    if (!user) {
+      throw new HttpException(
+        'You must provide an email, ID or username',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    throw new HttpException(
-      'You must provide an email, ID or username',
-      HttpStatus.BAD_REQUEST,
-    );
+    return UserProfileViewDto.fromUserDocument(user);
   }
 
   public async getHydratedUser(user: UserDocument) {
