@@ -30,17 +30,22 @@ import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
-      <Image
-        width={32}
-        height={32}
-        src={user.profileImage}
-        alt=''
-        className='rounded-full'
-      />
-      <div className='flex flex-col leading-tight h-full'>
+      <Link href={`/user/${user.username}`}>
+        <Image
+          width={32}
+          height={32}
+          src={user.profileImage}
+          alt=''
+          className='rounded-full'
+        />
+      </Link>
+      <Link
+        className='flex flex-col leading-tight h-full hover:underline'
+        href={`/user/${user.username}`}
+      >
         <p className='font-bold text-white'>{user.username}</p>
         {/* <p className='text-sm text-zinc-400'>410 followers</p> */}
-      </div>
+      </Link>
     </div>
   );
 };
