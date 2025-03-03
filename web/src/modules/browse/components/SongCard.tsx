@@ -48,9 +48,16 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
           {!song ? (
             <Skeleton />
           ) : (
-            `${song.uploader.username} • ${formatTimeAgo(
-              new Date(song.createdAt),
-            )}`
+            <>
+              <Link
+                href={`/user/${song.uploader.username}`}
+                className='hover:underline'
+              >
+                {song.uploader.username}
+              </Link>
+              {' • '}
+              {formatTimeAgo(new Date(song.createdAt))}
+            </>
           )}
         </p>
         {/* Play icon & count */}
