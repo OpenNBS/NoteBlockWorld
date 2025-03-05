@@ -1,14 +1,33 @@
-import axiosInstance from '../../../lib/axios';
-import { UserProfileData } from '../../auth/types/User';
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 
-export const getUserProfileData = async (
-  id: string,
-): Promise<UserProfileData | never> => {
+import axiosInstance from '../../../lib/axios';
+
+export const getUserProfileData = async (username: string) => {
   try {
-    const res = await axiosInstance.get(`/user/${id}`);
-    if (res.status === 200) return res.data as UserProfileData;
+    const res = await axiosInstance.get<UserProfileViewDto>(
+      `/user/${username}`,
+    );
+
+    if (res.status === 200) return res.data;
     else throw new Error('Failed to get user data');
   } catch {
     throw new Error('Failed to get user data');
+  }
+};
+
+export const getUserSongs = async (username: string) => {
+  try {
+    const res = await axiosInstance.get<SongPreviewDto[]>(`/song`, {
+      params: {
+        limit: 12,
+        user: username,
+      },
+    });
+
+    if (res.status === 200) return res.data;
+    else throw new Error('Failed to get user songs');
+  } catch {
+    throw new Error('Failed to get user songs');
   }
 };
