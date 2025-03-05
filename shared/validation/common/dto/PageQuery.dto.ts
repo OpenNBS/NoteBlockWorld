@@ -64,6 +64,15 @@ export class PageQueryDTO {
   })
   timespan?: TimespanType;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    example: 'Bentroen',
+    description: 'Filters results uploaded by a specific user (by username).',
+    required: false,
+  })
+  user?: string;
+
   constructor(partial: Partial<PageQueryDTO>) {
     Object.assign(this, partial);
   }

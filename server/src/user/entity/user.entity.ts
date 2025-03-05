@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 @Schema({
   timestamps: true,
@@ -70,6 +70,8 @@ export class User {
 
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
+
+  _id: Types.ObjectId;
 
   createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
   

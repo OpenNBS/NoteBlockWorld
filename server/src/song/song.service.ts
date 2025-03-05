@@ -18,6 +18,7 @@ import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
@@ -40,6 +41,9 @@ export class SongService {
 
     @Inject(SongWebhookService)
     private songWebhookService: SongWebhookService,
+
+    @Inject(UserService)
+    private userService: UserService,
   ) {}
 
   public async uploadSong({
@@ -177,7 +181,7 @@ export class SongService {
   }
 
   public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
-    const { page, limit, sort, order } = query;
+    const { page, limit, sort, order, user } = query;
 
     if (!page || !limit || !sort) {
       throw new HttpException(
@@ -186,9 +190,24 @@ export class SongService {
       );
     }
 
+    let filter = {};
+
+    if (user) {
+      const userDocument = await this.userService.findByUsername(user);
+
+      if (!userDocument) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      filter = {
+        uploader: userDocument._id,
+      };
+    }
+
     const songs = (await this.songModel
       .find({
         visibility: 'public',
+        ...filter,
       })
       .sort({
         [sort]: order ? 1 : -1,
