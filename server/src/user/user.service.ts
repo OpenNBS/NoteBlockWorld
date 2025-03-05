@@ -146,21 +146,19 @@ export class UserService {
 
     if (email) {
       user = await this.findByEmail(email);
-    }
-
-    if (id) {
+    } else if (id) {
       user = await this.findByID(id);
-    }
-
-    if (username) {
+    } else if (username) {
       user = await this.findByUsername(username);
-    }
-
-    if (!user) {
+    } else {
       throw new HttpException(
         'You must provide an email, ID or username',
         HttpStatus.BAD_REQUEST,
       );
+    }
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     return UserProfileViewDto.fromUserDocument(user);
