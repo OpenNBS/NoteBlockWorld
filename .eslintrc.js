@@ -2,10 +2,11 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   parserOptions: {
     parser: '@typescript-eslint/parser',
-    project: './tsconfig.json',
+    project: ['./tsconfig.json', './*/tsconfig.json'],
     tsconfigRootDir: __dirname,
     sourceType: 'module',
     ecmaVersion: 2021,
+    createDefaultProgram: false,
   },
   plugins: ['@typescript-eslint', 'prettier', 'import', 'unused-imports'], // Merged plugins from both files
   extends: [
