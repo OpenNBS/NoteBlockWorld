@@ -30,6 +30,7 @@ export class UserController {
   @Get('/:username')
   async getUser(@Param('username') username: string) {
     return await this.userService.getUserByEmailOrId({ username: username });
+    // TODO: this may call userService.getUserByUsername directly
   }
 
   @Get('by-query')
