@@ -9,9 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+import { UserQuery } from '@shared/validation/user/dto/UserQuery.dto';
 
 import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 
@@ -27,44 +26,29 @@ export class UserController {
     private readonly userService: UserService,
   ) {}
 
-  @Get('/:username')
-  async getUser(@Param('username') username: string) {
-    return await this.userService.getUserByEmailOrId({ username: username });
-    // TODO: this may call userService.getUserByUsername directly
-  }
-
-  @Get('by-query')
-  async getUserByQuery(@Query() query: GetUser) {
-    return await this.userService.getUserByEmailOrId(query);
-  }
-
-  @Get('paginated')
-  async getUserPaginated(@Query() query: PageQueryDTO) {
-    return await this.userService.getUserPaginated(query);
-  }
-
-  @Get('me')
+  @Get()
   @ApiTags('user')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get the token owner data' })
-  async getMe(@GetRequestToken() user: UserDocument | null) {
-    user = validateUser(user);
-    return await this.userService.getSelfUserData(user);
-  }
-
-  @Patch('username')
-  @ApiTags('user')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update the username' })
-  async updateUsername(
+  @ApiOperation({ summary: 'Get user data' })
+  async getUser(
+    @Query() query: UserQuery,
     @GetRequestToken() user: UserDocument | null,
-    @Body() body: UpdateUsernameDto,
   ) {
-    user = validateUser(user);
-    return await this.userService.updateUsername(user, body);
+    if ('me' in query && query.me) {
+      user = validateUser(user);
+      return await this.userService.getSelfUserData(user);
+    }
+
+    return await this.userService.getUserPaginated(query as PageQueryDTO);
   }
 
-  @Patch('profile')
+  @Get(':username')
+  @ApiTags('user')
+  @ApiOperation({ summary: 'Get user profile by username' })
+  async getUserProfile(@Param('username') username: string) {
+    return await this.userService.findByUsername(username);
+  }
+
+  @Patch()
   @ApiTags('user')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update the profile' })

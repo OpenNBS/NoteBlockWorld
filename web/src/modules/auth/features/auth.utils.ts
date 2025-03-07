@@ -40,9 +40,11 @@ export const getUserData = async (): Promise<LoggedUserData | never> => {
   if (!token) throw new Error('No token found');
   if (!token.value) throw new Error('No token found');
 
+  let res;
+
   try {
     // verify the token with the server
-    const res = await axiosInstance.get('/user/me', {
+    res = await axiosInstance.get('/user?me=true', {
       headers: {
         authorization: `Bearer ${token.value}`,
       },
