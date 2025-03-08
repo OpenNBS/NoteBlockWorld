@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { validate } from './config/EnvironmentVariables';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './parseToken';
+import { SearchModule } from './search/search.module';
 import { SongModule } from './song/song.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
@@ -39,6 +40,7 @@ import { UserModule } from './user/user.module';
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
     SongBrowserModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [ParseTokenPipe],

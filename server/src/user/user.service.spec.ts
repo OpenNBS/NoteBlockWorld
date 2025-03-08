@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from './entity/user.entity';
@@ -18,6 +19,7 @@ const mockUserModel = {
   exec: jest.fn(),
   select: jest.fn(),
   countDocuments: jest.fn(),
+  findOneAndUpdate: jest.fn(),
 };
 
 describe('UserService', () => {
@@ -516,6 +518,74 @@ describe('UserService', () => {
 
       await expect(service.updateUsername(user, body)).rejects.toThrow(
         new HttpException('Username already exists', HttpStatus.BAD_REQUEST),
+      );
+    });
+  });
+
+  describe('updateProfile', () => {
+    it('should update the user profile successfully', async () => {
+      const user = {
+        _id: 'userId',
+        description: 'old description',
+        socialLinks: {},
+        username: 'oldUsername',
+      } as unknown as UserDocument;
+
+      const body: UpdateUserProfileDto = {
+        description: 'new description',
+        socialLinks: { github: 'https://github.com/newuser' },
+        username: 'newUsername',
+      };
+
+      const updatedUser = {
+        ...user,
+        ...body,
+      };
+
+      jest
+        .spyOn(userModel, 'findOneAndUpdate')
+        .mockResolvedValue(updatedUser as any);
+
+      const result = await service.updateProfile(user, body);
+
+      expect(result).toEqual(updatedUser);
+
+      expect(userModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: user._id },
+        user,
+        { new: true },
+      );
+    });
+
+    it('should update only provided fields', async () => {
+      const user = {
+        _id: 'userId',
+        description: 'old description',
+        socialLinks: {},
+        username: 'oldUsername',
+      } as unknown as UserDocument;
+
+      const body: UpdateUserProfileDto = {
+        description: 'new description',
+      };
+
+      const updatedUser = {
+        ...user,
+        description: 'new description',
+      };
+
+      jest
+        .spyOn(userModel, 'findOneAndUpdate')
+        .mockResolvedValue(updatedUser as any);
+
+      const result = await service.updateProfile(user, body);
+
+      expect(result).toEqual(updatedUser);
+
+      expect(userModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: user._id },
+        user,
+        { new: true },
       );
     });
   });

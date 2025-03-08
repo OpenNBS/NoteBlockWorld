@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 @Schema({
   timestamps: true,
@@ -33,10 +33,10 @@ export class User {
   @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   username: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: true, default: '#', index: true })
   publicName: string;
 
   @Prop({ type: String, required: true, unique: true })
@@ -71,23 +71,11 @@ export class User {
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
 
-  @Prop({ type: Array, required: true, default: [] })
-  likedSongs: string[];
+  _id: Types.ObjectId;
 
-  @Prop({ type: Array, required: true, default: [] })
-  following: string[];
+  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 
-  @Prop({ type: Array, required: true, default: [] })
-  likedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  dislikedComments: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  notifications: string[];
-
-  @Prop({ type: Array, required: true, default: [] })
-  achievements: string[];
+  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

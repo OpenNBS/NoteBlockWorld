@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 @ApiTags('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
+
   constructor(private readonly authService: AuthService) {}
 
   @Get('login/github')
