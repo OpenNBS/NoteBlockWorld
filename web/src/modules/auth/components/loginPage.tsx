@@ -3,7 +3,6 @@ import {
   faGithub,
   faGoogle,
 } from '@fortawesome/free-brands-svg-icons';
-import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -65,7 +64,9 @@ export const LoginPage = () => {
 
           <div className='flex flex-col w-full gap-4'>
             {/* Login with Email */}
-            <Link
+            {/*
+            // TODO: Uncomment when email login is implemented
+                <Link
               data-test='login-discord'
               href={'/login/email'}
               className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
@@ -76,6 +77,7 @@ export const LoginPage = () => {
               />
               <span className='flex-1 text-nowrap'>Log in with email</span>
             </Link>
+                */}
             {/* Login with Google */}
             <Link
               data-test='login-google'
