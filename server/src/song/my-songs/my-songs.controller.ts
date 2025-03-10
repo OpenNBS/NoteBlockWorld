@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
 import { SongService } from '../song.service';
