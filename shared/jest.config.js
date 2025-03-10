@@ -4,10 +4,20 @@ module.exports = {
   testRegex: '.*\\.spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': [
-      'ts-jest',
+      '@swc/jest',
       {
-        tsconfig: '<rootDir>/tsconfig.json',
-        ignoreCodes: ['TS151001'],
+        jsc: {
+          target: 'es2022',
+          transform: {
+            hidden: {
+              jest: true,
+            },
+          },
+        },
+        sourceMaps: 'inline',
+        module: {
+          type: 'commonjs',
+        },
       },
     ],
   },
