@@ -45,28 +45,40 @@ export function RecentSongsProvider({
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [endpoint, setEndpoint] = useState<string>('/song-browser/recent');
 
+  const adCount = 1;
+  const pageSize = 12;
+
   const fetchRecentSongs = useCallback(
     async function () {
       setLoading(true);
 
       try {
+        const fetchCount = pageSize - adCount;
+
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           endpoint,
           {
             params: {
               page,
-              limit: 12, // TODO: fix constants
+              limit: fetchCount, // TODO: fix constants
               order: false,
             },
           },
         );
+
+        const newSongs: Array<SongPreviewDtoType | undefined> = response.data;
+
+        for (let i = 0; i < adCount; i++) {
+          const adPosition = Math.floor(Math.random() * newSongs.length) + 1;
+          newSongs.splice(adPosition, 0, undefined);
+        }
 
         setRecentSongs((prevSongs) => [
           ...prevSongs.filter((song) => song !== null),
           ...response.data,
         ]);
 
-        if (response.data.length < 12) {
+        if (response.data.length < fetchCount) {
           setHasMore(false);
         }
       } catch (error) {
@@ -123,6 +135,7 @@ export function RecentSongsProvider({
       return;
     }
 
+    setRecentSongs([...recentSongs, ...Array(12).fill(null)]);
     setPage((prev) => prev + 1);
   }
 

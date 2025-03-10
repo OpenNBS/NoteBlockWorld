@@ -150,3 +150,12 @@ body {
   transform: translatex(100%) skewy(-45deg);
   top: -4px;
 }
+
+
+/************** Google AdSense **************/
+
+/* Hide unfilled ads */
+/* https://support.google.com/adsense/answer/10762946?hl=en */
+ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}

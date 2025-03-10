@@ -8,11 +8,12 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UserConst } from '@shared/validation/user/constants';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 import ClientAxios from '@web/src/lib/axios/ClientAxios';
 import { LoggedUserData } from '@web/src/modules/auth/types/User';
@@ -32,30 +33,39 @@ interface FormValues {
 
 export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
-  const [name, setName] = useState(userData.username);
+  const [currentUsername, setCurrentUsername] = useState(userData.username);
+  const [error, setError] = useState('');
 
   const {
     handleSubmit,
     formState: { isSubmitting, errors },
     register,
-  } = useForm<FormValues>();
+    reset,
+  } = useForm<FormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
+      setError('');
+
+      if (data.username === currentUsername) {
+        setIsEditingUsername(false);
+        return;
+      }
+
       await ClientAxios.patch('/user/username', {
         username: data.username,
       });
 
-      toast.success('Username updated successfully');
+      toast.success('Username updated successfully!');
       setIsEditingUsername(false);
-      setName(data.username);
+      setCurrentUsername(data.username);
     } catch (error: unknown) {
       if ((error as any).isAxiosError) {
         const axiosError = error as AxiosError;
 
         // verify for throttling limit error
         if (axiosError.response?.status === 429) {
-          toast.error('Too many requests. Please try again later.');
+          toast.error('Too many requests! Please try again later.');
         }
 
         // verify for validation error
@@ -76,10 +86,16 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
   };
 
   useEffect(() => {
-    if (errors.username?.message) {
-      toast.error(errors.username.message);
-    }
+    setError(errors.username?.message ?? '');
   }, [errors.username?.message]);
+
+  useEffect(() => {
+    if (isEditingUsername) {
+      reset({ username: currentUsername });
+    } else {
+      setError('');
+    }
+  }, [isEditingUsername, currentUsername, reset]);
 
   return (
     <Popover onOpenChange={() => setIsEditingUsername(false)}>
@@ -95,7 +111,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
         arrowPadding={10}
       >
         <PopoverArrow className='fill-zinc-600' />
-        <div className='min-w-48 max-w-64'>
+        <div className='min-w-56 max-w-64'>
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-3'>
             <div className='h-8 w-8 aspect-square'>
@@ -111,8 +127,8 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               <div className='flex justify-start items-center gap-2'>
                 {!isEditingUsername ? (
                   <>
-                    <h4 className='truncate font-semibold w-48 py-px'>
-                      {name}
+                    <h4 className='truncate font-semibold w-[155px] py-px'>
+                      {currentUsername}
                     </h4>
                     <button onClick={() => setIsEditingUsername(true)}>
                       <FontAwesomeIcon
@@ -126,14 +142,22 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                   <>
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <input
-                        className='w-[calc(12rem-52px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
-                        defaultValue={name}
+                        className='w-[calc(12rem-55.5px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
+                        defaultValue={currentUsername}
                         {...register('username', {
                           required: 'Username is required',
                           pattern: {
-                            value: /^[a-zA-Z0-9-_.]{1,32}$/,
+                            value: UserConst.ALLOWED_REGEXP,
                             message:
                               'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
+                          },
+                          maxLength: {
+                            value: UserConst.USERNAME_MAX_LENGTH,
+                            message: `The username must have up to ${UserConst.USERNAME_MAX_LENGTH} characters`,
+                          },
+                          minLength: {
+                            value: UserConst.USERNAME_MIN_LENGTH,
+                            message: `The username must have at least ${UserConst.USERNAME_MIN_LENGTH} characters`,
                           },
                         })}
                       />
@@ -165,6 +189,18 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
+          {error && (
+            <p className='text-xs text-red-400 px-4 pb-2 max-w-60 leading-tight'>
+              {error}
+            </p>
+          )}
+          {isEditingUsername && (
+            <p className='text-xs text-zinc-500 px-4 pb-2 max-w-60 leading-tight'>
+              NOTE: Your existing song files will{' '}
+              <strong className='font-black'>not</strong> be updated. Make an
+              edit to each song&apos;s title or description to refresh them!
+            </p>
+          )}
 
           <UserMenuSplitLine />
 

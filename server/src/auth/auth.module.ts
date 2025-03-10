@@ -68,12 +68,6 @@ export class AuthModule {
         },
         {
           inject: [ConfigService],
-          provide: 'MAGIC_LINK_SECRET',
-          useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('MAGIC_LINK_SECRET'),
-        },
-        {
-          inject: [ConfigService],
           provide: 'FRONTEND_URL',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('FRONTEND_URL'),
