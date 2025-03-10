@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Logger,
   Post,
@@ -10,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 
-import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
@@ -56,8 +58,11 @@ export class AuthController {
       },
     },
   })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async magicLinkLogin(@Req() req: Request, @Res() res: Response) {
-    return this.magicLinkEmailStrategy.send(req, res);
+    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+    // TODO: uncomment this line to enable magic link login
+    //return this.magicLinkEmailStrategy.send(req, res);
   }
 
   @Get('magic-link/callback')
