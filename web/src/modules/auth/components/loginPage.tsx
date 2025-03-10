@@ -3,6 +3,7 @@ import {
   faGithub,
   faGoogle,
 } from '@fortawesome/free-brands-svg-icons';
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -62,18 +63,19 @@ export const LoginPage = () => {
             <p>to discover, share and listen to note block music</p>
           </div>
 
-          {/*
-          <div className='bg-yellow-700 border-yellow-300 text-yellow-300 border-2 rounded-lg px-3 py-2 text-sm'>
-            <FontAwesomeIcon
-              icon={faClock}
-              className='h-4 relative float-left'
-            />
-            We are running on a whitelist for the beta stage. Please wait for an
-            invitation to sign in!
-          </div>
-          */}
-
           <div className='flex flex-col w-full gap-4'>
+            {/* Login with Email */}
+            <Link
+              data-test='login-discord'
+              href={'/login/email'}
+              className='flex items-center text-white outline outline-white outline-1 bg-none p-2.5 hover:outline-blue-500 hover:text-blue-500 hover:transition-all duration-200 uppercase rounded-lg'
+            >
+              <FontAwesomeIcon
+                icon={faRightToBracket}
+                className='align-middle mr-2 h-5'
+              />
+              <span className='flex-1 text-nowrap'>Log in with email</span>
+            </Link>
             {/* Login with Google */}
             <Link
               data-test='login-google'
