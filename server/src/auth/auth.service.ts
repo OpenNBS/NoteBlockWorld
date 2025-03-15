@@ -22,11 +22,11 @@ export class AuthService {
     private readonly userService: UserService,
     @Inject(JwtService)
     private readonly jwtService: JwtService,
+    @Inject('COOKIE_EXPIRES_IN')
+    private readonly COOKIE_EXPIRES_IN: string,
     @Inject('FRONTEND_URL')
     private readonly FRONTEND_URL: string,
 
-    @Inject('COOKIE_EXPIRES_IN')
-    private readonly COOKIE_EXPIRES_IN: string,
     @Inject('JWT_SECRET')
     private readonly JWT_SECRET: string,
     @Inject('JWT_EXPIRES_IN')
@@ -191,7 +191,17 @@ export class AuthService {
     return this.GenTokenRedirect(user_registered, res);
   }
 
-  private async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
+  public async loginWithEmail(req: Request, res: Response) {
+    const user = req.user as UserDocument;
+
+    if (!user) {
+      return res.redirect(this.FRONTEND_URL + '/login');
+    }
+
+    return this.GenTokenRedirect(user, res);
+  }
+
+  public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.JWT_SECRET,

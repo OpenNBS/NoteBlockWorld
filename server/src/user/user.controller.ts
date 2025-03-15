@@ -12,7 +12,7 @@ import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { UserQuery } from '@shared/validation/user/dto/UserQuery.dto';
 
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
 import { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';

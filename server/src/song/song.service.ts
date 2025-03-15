@@ -46,6 +46,12 @@ export class SongService {
     private userService: UserService,
   ) {}
 
+  public async getSongById(publicId: string) {
+    return this.songModel.findOne({
+      publicId,
+    });
+  }
+
   public async uploadSong({
     file,
     user,

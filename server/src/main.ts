@@ -3,8 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
 
 import { AppModule } from './app.module';
-import { initializeSwagger } from './initializeSwagger';
-import { ParseTokenPipe } from './parseToken';
+import { initializeSwagger } from './lib/initializeSwagger';
+import { ParseTokenPipe } from './lib/parseToken';
 
 const logger: Logger = new Logger('main.ts');
 

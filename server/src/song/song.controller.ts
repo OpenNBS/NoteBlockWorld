@@ -36,7 +36,7 @@ import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongRes
 import type { Response } from 'express';
 
 import { FileService } from '@server/file/file.service';
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 import { UserDocument } from '@server/user/entity/user.entity';
 
 import { SongService } from './song.service';

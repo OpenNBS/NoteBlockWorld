@@ -163,7 +163,7 @@ export const SongThumbnailInput = ({
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
-          {bgColorsArray.map(({ key, name, light, dark }, index) => (
+          {bgColorsArray.map(({ /*key,*/ name, /*light,*/ dark }, index) => (
             <ColorButton
               key={index}
               color={dark}
