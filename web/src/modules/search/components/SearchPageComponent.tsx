@@ -15,9 +15,12 @@ type UserCardProps = {
 
 export const UserCard = ({ user }: UserCardProps) => {
   const { id, profileImage, songCount, username } = user;
-
+  const router = useRouter();
   return (
-    <div className='max-w-sm p-6 bg-zinc-800 rounded-lg shadow-md hover:bg-zinc-750 transition-colors cursor-pointer'>
+    <div
+      className='max-w-sm p-6 bg-zinc-800 rounded-lg shadow-md hover:bg-zinc-750 transition-colors cursor-pointer'
+      onClick={() => router.push(`/user/${id}`)}
+    >
       {/* Profile Image */}
       <div className='flex justify-center'>
         <Image
