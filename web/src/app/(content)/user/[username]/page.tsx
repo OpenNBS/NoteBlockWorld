@@ -23,11 +23,13 @@ const UserPage = async ({ params }: { params: { username: string } }) => {
     console.error('Failed to get song data:', e);
   }
 
-  return !userData ? (
-    <ErrorBox message='Failed to get user data' />
-  ) : (
-    <UserProfile userData={userData} songData={songData} />
-  );
+  if (userData) {
+    // set the page title to the user's name
+    document.title = `${userData?.publicName} - User Profile`;
+    return <UserProfile userData={userData} songData={songData} />;
+  } else {
+    return <ErrorBox message='Failed to get user data' />;
+  }
 };
 
 export default UserPage;

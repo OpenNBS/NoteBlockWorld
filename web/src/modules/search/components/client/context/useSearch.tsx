@@ -1,5 +1,7 @@
 'use client';
 
+import { PageResultDTO } from '@shared/validation/common/dto/PageResult.dto';
+import { UserSearchViewDto } from '@shared/validation/user/dto/UserSearchView.dto';
 import { create } from 'zustand';
 
 import axios from '@web/src/lib/axios';
@@ -13,11 +15,11 @@ type SearchState = {
   query: string;
   page: number;
   limit: number;
-  results: any[];
+  data: UserSearchViewDto[];
   isLoading: boolean;
 };
 
-export const useSearch = create<SearchState>((set, get) => {
+export const useSearch = create<SearchState>((set) => {
   const fetchSearchResults = async (
     query: string,
     page: number,
@@ -25,7 +27,7 @@ export const useSearch = create<SearchState>((set, get) => {
   ) => {
     set({ isLoading: true });
 
-    const result = await axios.get('/user', {
+    const result = await axios.get<PageResultDTO<UserSearchViewDto>>('/user', {
       params: {
         query: query,
         page: page,
@@ -33,11 +35,13 @@ export const useSearch = create<SearchState>((set, get) => {
       },
     });
 
+    const { data } = result;
+
     set({
-      query,
-      page,
-      limit,
-      results: result.data,
+      query: query,
+      page: data.page,
+      limit: data.limit,
+      data: data.data,
       isLoading: false,
     });
   };
@@ -47,7 +51,7 @@ export const useSearch = create<SearchState>((set, get) => {
     query: '',
     page: 1,
     limit: 20,
-    results: [],
+    data: [],
     isLoading: false,
   };
 });

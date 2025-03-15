@@ -41,7 +41,7 @@ export const BlockSearch = () => {
                 query,
               });
 
-              router.push(`/search?${queryParam.toString()}`);
+              router.push(`/search-user?${queryParam.toString()}`);
             }}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
