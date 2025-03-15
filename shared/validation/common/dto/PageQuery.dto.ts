@@ -67,11 +67,12 @@ export class PageQueryDTO {
   @IsString()
   @IsOptional()
   @ApiProperty({
-    example: 'Bentroen',
-    description: 'Filters results uploaded by a specific user (by username).',
+    examples: ['Bentroen', 'Tomast1337', 'Slayer - Raining Blood'],
+    description:
+      'Filters results uploaded by a string matching the specified query.',
     required: false,
   })
-  user?: string;
+  query?: string;
 
   constructor(partial: Partial<PageQueryDTO>) {
     Object.assign(this, partial);
