@@ -13,8 +13,9 @@ type UserProfileProps = {
   songData: SongPreviewDto[] | null;
 };
 
-const UserProfile = ({ userData, songData }: UserProfileProps) => {
-  const { lastSeen, username, description, profileImage } = userData;
+export const UserProfile = ({ userData, songData }: UserProfileProps) => {
+  const { lastSeen, username, description, profileImage, socialLinks } =
+    userData;
 
   return (
     <div className='max-w-screen-lg mx-auto'>
@@ -23,7 +24,7 @@ const UserProfile = ({ userData, songData }: UserProfileProps) => {
         <div className='flex items-center gap-8'>
           <Image
             src={profileImage}
-            alt={username}
+            alt={`Profile picture of ${username}`}
             className='w-32 h-32 rounded-full'
             width={128}
             height={128}
@@ -38,29 +39,30 @@ const UserProfile = ({ userData, songData }: UserProfileProps) => {
             {/* Username/handle */}
             <p className='text-zinc-400 my-1'>
               <span className='font-black text-zinc-200'>{`@${username}`}</span>
-              {` • 5 songs • 2,534 plays`}
+              {` • ${songData?.length || 0} songs • 2,534 plays`}{' '}
+              {/* Dynamic song count */}
             </p>
 
             {/* Description */}
             <p className='text-zinc-400 my-1 line-clamp-3'>
-              Hello! This is my user description.
+              {description || 'No description available.'}{' '}
+              {/* Dynamic description */}
             </p>
 
             {/* Social links */}
             <div className='flex-grow flex flex-row gap-1.5 mt-4'>
-              <UserSocialIcon icon='twitter' href='#' />
-              <UserSocialIcon icon='youtube' href='#' />
-              <UserSocialIcon icon='github' href='#' />
-              <UserSocialIcon icon='discord' href='#' />
-              <UserSocialIcon icon='patreon' href='#' />
+              {Object.entries(socialLinks).map(([key, value], i) => (
+                <UserSocialIcon key={i} icon={key} href={value} />
+              ))}
             </div>
           </div>
+
           <div className='flex-grow'></div>
+
           <div>
             {/* Joined */}
             <p className='text-zinc-500'>Joined</p>
             <p className='font-bold text-zinc-400 mb-4'>
-              {/* TODO: lastSeen is supposed to be a date, but it's a string */}
               {new Date(lastSeen).toLocaleDateString('en-UK')}
               <span className='font-normal text-zinc-400'>{` (${formatTimeAgo(
                 new Date(lastSeen),
@@ -70,7 +72,6 @@ const UserProfile = ({ userData, songData }: UserProfileProps) => {
             {/* Last seen */}
             <p className='text-zinc-500'>Last seen</p>
             <p className='font-bold text-zinc-400'>
-              {/* TODO: lastSeen is supposed to be a date, but it's a string */}
               {new Date(lastSeen).toLocaleDateString('en-UK')}
               <span className='font-normal text-zinc-400'>{` (${formatTimeAgo(
                 new Date(lastSeen),
@@ -85,14 +86,16 @@ const UserProfile = ({ userData, songData }: UserProfileProps) => {
       {/* UPLOADED SONGS */}
       <section>
         <h2 className='flex-1 text-xl uppercase mb-4 text-zinc-200'>Songs</h2>
-        <SongCardGroup>
-          {songData?.map((song, i) => (
-            <SongCard key={i} song={song} />
-          ))}
-        </SongCardGroup>
+        {songData ? (
+          <SongCardGroup>
+            {songData.map((song, i) => (
+              <SongCard key={i} song={song} />
+            ))}
+          </SongCardGroup>
+        ) : (
+          <p className='text-zinc-400'>No songs uploaded yet.</p>
+        )}
       </section>
     </div>
   );
 };
-
-export default UserProfile;

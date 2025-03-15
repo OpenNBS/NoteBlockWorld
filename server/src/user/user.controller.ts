@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  NotFoundException,
   Param,
   Patch,
   Query,
@@ -10,6 +11,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import { UserQuery } from '@shared/validation/user/dto/UserQuery.dto';
 
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
@@ -44,8 +46,16 @@ export class UserController {
   @Get(':username')
   @ApiTags('user')
   @ApiOperation({ summary: 'Get user profile by username' })
-  async getUserProfile(@Param('username') username: string) {
-    return await this.userService.findByUsername(username);
+  async getUserProfile(
+    @Param('username') username: string,
+  ): Promise<UserProfileViewDto> {
+    const doc = await this.userService.findByUsername(username);
+
+    if (!doc) {
+      throw new NotFoundException('User not found');
+    }
+
+    return UserProfileViewDto.fromUserDocument(doc);
   }
 
   @Patch()

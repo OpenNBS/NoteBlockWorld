@@ -187,7 +187,7 @@ export class SongService {
   }
 
   public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
-    const { page, limit, sort, order, user } = query;
+    const { page, limit, sort, order } = query;
 
     if (!page || !limit || !sort) {
       throw new HttpException(
@@ -196,8 +196,10 @@ export class SongService {
       );
     }
 
-    let filter = {};
+    const filter = {};
 
+    /*
+    // TODO: Decide if user filtering is necessary
     if (user) {
       const userDocument = await this.userService.findByUsername(user);
 
@@ -209,6 +211,7 @@ export class SongService {
         uploader: userDocument._id,
       };
     }
+    */
 
     const songs = (await this.songModel
       .find({

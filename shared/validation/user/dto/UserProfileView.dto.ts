@@ -1,4 +1,4 @@
-import { UserDocument } from '@server/user/entity/user.entity';
+import { SocialLinks, UserDocument } from '@server/user/entity/user.entity';
 
 export class UserProfileViewDto {
   username: string;
@@ -9,7 +9,8 @@ export class UserProfileViewDto {
   loginCount: number;
   loginStreak: number;
   playCount: number;
-  // socialLinks: Record<keyof typeof UserLinks, string | undefined>;
+
+  socialLinks: InstanceType<typeof SocialLinks>;
 
   public static fromUserDocument(user: UserDocument): UserProfileViewDto {
     return new UserProfileViewDto({
@@ -21,7 +22,7 @@ export class UserProfileViewDto {
       loginCount: user.loginCount,
       loginStreak: user.loginStreak,
       playCount: user.playCount,
-      // socialLinks: user.socialLinks,
+      socialLinks: user.socialLinks,
     });
   }
 

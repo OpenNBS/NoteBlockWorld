@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 @Schema({})
-class SocialLinks {
+export class SocialLinks {
   bandcamp?: string;
   discord?: string;
   facebook?: string;

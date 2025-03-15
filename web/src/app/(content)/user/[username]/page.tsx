@@ -1,5 +1,5 @@
 import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
-import UserProfile from '@web/src/modules/user/components/UserProfile';
+import { UserProfile } from '@web/src/modules/user/components/UserProfile';
 import {
   getUserProfileData,
   getUserSongs,
