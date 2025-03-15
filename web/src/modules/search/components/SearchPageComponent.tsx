@@ -4,7 +4,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserSearchViewDto } from '@shared/validation/user/dto/UserSearchView.dto';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useSearch } from './client/context/useSearch';
@@ -69,8 +69,9 @@ export const SearchPageComponent = () => {
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, query, isLoading, limit, page, fetchSearchResults } =
-    useSearch();
+  const { data, query, isLoading, limit, fetchSearchResults } = useSearch();
+
+  const router = useRouter();
 
   useEffect(() => {
     const query = searchParams.get('query') || '';
@@ -86,8 +87,13 @@ export const SearchPageComponent = () => {
     const query = searchParams.get('query') || '';
     const limit = searchParams.get('limit') || '20';
 
-    fetchSearchResults(query, newPage, parseInt(limit));
-    setCurrentPage(newPage);
+    const queryParam = new URLSearchParams({
+      page: newPage.toString(),
+      limit: limit,
+      query,
+    });
+
+    router.push(`/search-user?${queryParam.toString()}`);
   };
 
   return (
