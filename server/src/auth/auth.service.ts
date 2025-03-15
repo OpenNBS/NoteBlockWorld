@@ -16,6 +16,7 @@ import { TokenPayload, Tokens } from './types/token';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,

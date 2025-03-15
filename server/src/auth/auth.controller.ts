@@ -22,6 +22,7 @@ import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 @ApiTags('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
+
   constructor(
     @Inject(AuthService)
     private readonly authService: AuthService,

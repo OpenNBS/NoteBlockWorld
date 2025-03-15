@@ -1,63 +1,101 @@
+import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import Image from 'next/image';
 
-import { SocialLinksTypes, UserProfileData } from '../../auth/types/User';
+import { EarlySupporterBadge } from './UserBadges';
+import UserSocialIcon from './UserSocialIcon';
+import SongCard from '../../browse/components/SongCard';
+import SongCardGroup from '../../browse/components/SongCardGroup';
+import { formatTimeAgo } from '../../shared/util/format';
 
 type UserProfileProps = {
-  userData: UserProfileData;
+  userData: UserProfileViewDto;
+  songData: SongPreviewDto[] | null;
 };
 
-const UserProfile = ({ userData }: UserProfileProps) => {
-  const {
-    lastLogin,
-    loginStreak,
-    playCount,
-    publicName,
-    description,
-    profileImage,
-    socialLinks,
-    following,
-    achievements,
-  } = userData;
+export const UserProfile = ({ userData, songData }: UserProfileProps) => {
+  const { lastSeen, username, description, profileImage, socialLinks } =
+    userData;
 
   return (
-    <section className='w-full h-full'>
-      <Image
-        src={profileImage}
-        alt={publicName}
-        className='w-32 h-32 rounded-full'
-        width={128}
-        height={128}
-      />
-      <h1 className='text-2xl font-bold'>{publicName}</h1>
-      <p className='text-gray-500'>{description}</p>
-      <p className='text-gray-500'>Last Login: {lastLogin.toLocaleString()}</p>
-      <p className='text-gray-500'>Login Streak: {loginStreak}</p>
-      <p className='text-gray-500'>Play Count: {playCount}</p>
-      <p className='text-gray-500'>Following: {following}</p>
-      <ul className='mt-4'>
-        {Object.keys(socialLinks).map((key, index) => {
-          const link = socialLinks[key as SocialLinksTypes];
-          if (!link) return null;
+    <div className='max-w-screen-lg mx-auto'>
+      {/* HEADER */}
+      <section>
+        <div className='flex items-center gap-8'>
+          <Image
+            src={profileImage}
+            alt={`Profile picture of ${username}`}
+            className='w-32 h-32 rounded-full'
+            width={128}
+            height={128}
+          />
+          <div>
+            {/* Display name */}
+            <div className='flex items-center gap-8'>
+              <h1 className='text-3xl font-bold mb-1 relative'>{username}</h1>
+              <EarlySupporterBadge />
+            </div>
 
-          return (
-            <li key={index}>
-              <a href={link} className='text-blue-500 hover:underline'>
-                {key}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-      <ul></ul>
-      <ul className='mt-4'>
-        {achievements.map((achievement, index) => (
-          <li key={index} className='text-gray-500'>
-            {achievement}
-          </li>
-        ))}
-      </ul>
-    </section>
+            {/* Username/handle */}
+            <p className='text-zinc-400 my-1'>
+              <span className='font-black text-zinc-200'>{`@${username}`}</span>
+              {` • ${songData?.length || 0} songs • 2,534 plays`}{' '}
+              {/* Dynamic song count */}
+            </p>
+
+            {/* Description */}
+            <p className='text-zinc-400 my-1 line-clamp-3'>
+              {description || 'No description available.'}{' '}
+              {/* Dynamic description */}
+            </p>
+
+            {/* Social links */}
+            <div className='flex-grow flex flex-row gap-1.5 mt-4'>
+              {Object.entries(socialLinks).map(([key, value], i) => (
+                <UserSocialIcon key={i} icon={key} href={value} />
+              ))}
+            </div>
+          </div>
+
+          <div className='flex-grow'></div>
+
+          <div>
+            {/* Joined */}
+            <p className='text-zinc-500'>Joined</p>
+            <p className='font-bold text-zinc-400 mb-4'>
+              {new Date(lastSeen).toLocaleDateString('en-UK')}
+              <span className='font-normal text-zinc-400'>{` (${formatTimeAgo(
+                new Date(lastSeen),
+              )})`}</span>
+            </p>
+
+            {/* Last seen */}
+            <p className='text-zinc-500'>Last seen</p>
+            <p className='font-bold text-zinc-400'>
+              {new Date(lastSeen).toLocaleDateString('en-UK')}
+              <span className='font-normal text-zinc-400'>{` (${formatTimeAgo(
+                new Date(lastSeen),
+              )})`}</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <hr className='my-8 border-none bg-zinc-700 h-[3px]' />
+
+      {/* UPLOADED SONGS */}
+      <section>
+        <h2 className='flex-1 text-xl uppercase mb-4 text-zinc-200'>Songs</h2>
+        {songData ? (
+          <SongCardGroup>
+            {songData.map((song, i) => (
+              <SongCard key={i} song={song} />
+            ))}
+          </SongCardGroup>
+        ) : (
+          <p className='text-zinc-400'>No songs uploaded yet.</p>
+        )}
+      </section>
+    </div>
   );
 };
-
-export default UserProfile;

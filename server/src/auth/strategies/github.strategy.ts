@@ -6,6 +6,7 @@ import strategy from 'passport-github';
 @Injectable()
 export class GithubStrategy extends PassportStrategy(strategy, 'github') {
   private static logger = new Logger(GithubStrategy.name);
+
   constructor(
     @Inject(ConfigService)
     configService: ConfigService,

@@ -1,9 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
@@ -12,6 +15,8 @@ import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
@@ -70,16 +75,8 @@ export class UserService {
     return user;
   }
 
-  public async findByPublicName(
-    publicName: string,
-  ): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ publicName });
-
-    return user;
-  }
-
   public async findByUsername(username: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOne({ username }).exec();
 
     return user;
   }
@@ -87,16 +84,125 @@ export class UserService {
   public async getUserPaginated(query: PageQueryDTO) {
     const { page = 1, limit = 10, sort = 'createdAt', order = 'asc' } = query;
 
+    const queryText = query.query;
+
     const skip = (page - 1) * limit;
     const sortOrder = order === 'asc' ? 1 : -1;
 
-    const users = await this.userModel
-      .find({})
-      .sort({ [sort]: sortOrder })
-      .skip(skip)
-      .limit(limit);
+    const users: (UserDocument & { songCount: number })[] =
+      await this.userModel.aggregate([
+        {
+          $match: queryText
+            ? {
+                username: { $regex: queryText, $options: 'i' }, // Case-insensitive regex search
+              }
+            : {
+                _id: { $exists: true },
+              }, // If no search query, match all documents
+        },
+        {
+          $lookup: {
+            from: 'songs', // The name of the songs collection
+            localField: '_id', // The field from the users collection
+            foreignField: 'userId', // The field from the songs collection
+            as: 'songs', // The array field that will contain the joined songs
+          },
+        },
+        {
+          $addFields: {
+            songCount: { $size: '$songs' }, // Add a new field with the count of songs
+          },
+        },
+        {
+          $project: {
+            songs: 0, // Exclude the songs array from the final output
+          },
+        },
+        {
+          $sort: { [sort]: sortOrder },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
 
-    const total = await this.userModel.countDocuments();
+    const total = await this.userModel.countDocuments(
+      queryText ? { username: { $regex: queryText, $options: 'i' } } : {},
+    );
+
+    return {
+      data: users,
+      total,
+      page,
+      limit,
+    };
+  }
+
+  public async search(queryBody: SearchQueryDTO) {
+    const {
+      query = '',
+      page = 1,
+      limit = 10,
+      sort = 'createdAt',
+      order,
+    } = queryBody;
+
+    const skip = (page - 1) * limit;
+    const sortOrder = order ? 1 : -1;
+
+    const users: {
+      username: string;
+      profileImage: string;
+    }[] = await this.userModel.aggregate([
+      {
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          profileImage: 1,
+        },
+      },
+      {
+        $sort: { [sort]: sortOrder },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+    ]);
+
+    const totalResult = await this.userModel.aggregate([
+      {
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
+
+    this.logger.debug(
+      `Retrived users: ${users.length} documents, with total: ${total}`,
+    );
 
     return {
       users,
@@ -108,26 +214,26 @@ export class UserService {
 
   public async getUserByEmailOrId(query: GetUser) {
     const { email, id, username } = query;
+    let user;
 
     if (email) {
-      return await this.findByEmail(email);
-    }
-
-    if (id) {
-      return await this.findByID(id);
-    }
-
-    if (username) {
+      user = await this.findByEmail(email);
+    } else if (id) {
+      user = await this.findByID(id);
+    } else if (username) {
+      user = await this.findByUsername(username);
+    } else {
       throw new HttpException(
-        'Username is not supported yet',
+        'You must provide an email, ID or username',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    throw new HttpException(
-      'You must provide an email or an id',
-      HttpStatus.BAD_REQUEST,
-    );
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return UserProfileViewDto.fromUserDocument(user);
   }
 
   public async getHydratedUser(user: UserDocument) {
@@ -225,5 +331,35 @@ export class UserService {
     await user.save();
 
     return UserDto.fromEntity(user);
+  }
+
+  public async updateProfile(user: UserDocument, body: UpdateUserProfileDto) {
+    const { description, socialLinks, username } = body;
+
+    if (description) user.description = description;
+    if (socialLinks) user.socialLinks = socialLinks;
+    if (username) user.username = username;
+
+    return await this.userModel.findOneAndUpdate({ _id: user._id }, user, {
+      new: true,
+    });
+  }
+
+  public async createSearchIndexes() {
+    return await this.userModel.collection.createIndex(
+      {
+        username: 'text',
+        publicName: 'text',
+        description: 'text',
+      },
+      {
+        weights: {
+          username: 5,
+          publicName: 3,
+          description: 1,
+        },
+        name: 'user_search_index',
+      },
+    );
   }
 }
