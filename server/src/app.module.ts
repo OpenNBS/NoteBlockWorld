@@ -12,7 +12,6 @@ import { EmailLoginModule } from './email-login/email-login.module';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './lib/parseToken';
 import { MailingModule } from './mailing/mailing.module';
-import { SearchModule } from './search/search.module';
 import { SeedModule } from './seed/seed.module';
 import { SongModule } from './song/song.module';
 import { SongBrowserModule } from './song-browser/song-browser.module';
@@ -78,7 +77,6 @@ import { UserModule } from './user/user.module';
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
     SongBrowserModule,
-    SearchModule,
     SeedModule.forRoot(),
     EmailLoginModule,
     MailingModule,

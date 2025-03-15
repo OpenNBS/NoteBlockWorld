@@ -10,9 +10,11 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { PageResultDTO } from '@shared/validation/common/dto/PageResult.dto';
 import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
 import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 import { UserQuery } from '@shared/validation/user/dto/UserQuery.dto';
+import { UserSearchViewDto } from '@shared/validation/user/dto/UserSearchView.dto';
 
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
@@ -40,7 +42,12 @@ export class UserController {
       return await this.userService.getSelfUserData(user);
     }
 
-    return await this.userService.getUserPaginated(query as PageQueryDTO);
+    const docs = await this.userService.getUserPaginated(query as PageQueryDTO);
+
+    return new PageResultDTO<UserSearchViewDto>({
+      ...docs,
+      data: docs.data.map((doc) => UserSearchViewDto.fromUserDocument(doc)),
+    });
   }
 
   @Get(':username')

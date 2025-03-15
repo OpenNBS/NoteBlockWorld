@@ -84,19 +84,57 @@ export class UserService {
   public async getUserPaginated(query: PageQueryDTO) {
     const { page = 1, limit = 10, sort = 'createdAt', order = 'asc' } = query;
 
+    const queryText = query.query;
+
     const skip = (page - 1) * limit;
     const sortOrder = order === 'asc' ? 1 : -1;
 
-    const users = await this.userModel
-      .find({})
-      .sort({ [sort]: sortOrder })
-      .skip(skip)
-      .limit(limit);
+    const users: (UserDocument & { songCount: number })[] =
+      await this.userModel.aggregate([
+        {
+          $match: queryText
+            ? {
+                username: { $regex: queryText, $options: 'i' }, // Case-insensitive regex search
+              }
+            : {
+                _id: { $exists: true },
+              }, // If no search query, match all documents
+        },
+        {
+          $lookup: {
+            from: 'songs', // The name of the songs collection
+            localField: '_id', // The field from the users collection
+            foreignField: 'userId', // The field from the songs collection
+            as: 'songs', // The array field that will contain the joined songs
+          },
+        },
+        {
+          $addFields: {
+            songCount: { $size: '$songs' }, // Add a new field with the count of songs
+          },
+        },
+        {
+          $project: {
+            songs: 0, // Exclude the songs array from the final output
+          },
+        },
+        {
+          $sort: { [sort]: sortOrder },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
 
-    const total = await this.userModel.countDocuments();
+    const total = await this.userModel.countDocuments(
+      queryText ? { username: { $regex: queryText, $options: 'i' } } : {},
+    );
 
     return {
-      users,
+      data: users,
       total,
       page,
       limit,
