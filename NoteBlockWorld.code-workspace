@@ -1,37 +1,46 @@
 {
-  "folders": [
-    {
-      "path": ".",
-      "name": "Root"
-    },
-    {
-      "path": "./server",
-      "name": "Backend"
-    },
-    {
-      "path": "./shared",
-      "name": "Shared"
-    },
-    {
-      "path": "./web",
-      "name": "Frontend"
+    "folders": [
+        {
+            "path": ".",
+            "name": "Root"
+        },
+        {
+            "path": "./server",
+            "name": "Backend"
+        },
+        {
+            "path": "./shared",
+            "name": "Shared"
+        },
+        {
+            "path": "./web",
+            "name": "Frontend"
+        }
+    ],
+    "settings": {
+        "window.title": "${dirty}${rootName}",
+        "editor.formatOnSave": true,
+        "eslint.validate": [
+            "typescript"
+        ],
+        "eslint.run": "onType",
+        "eslint.format.enable": true,
+        "mdx.server.enable": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit"
+        },
+        "jest.disabledWorkspaceFolders": [
+            "Root",
+            "Frontend"
+        ],
+        "search.exclude": {
+            "**/.git": true,
+            "**/node_modules": true,
+            "**/dist": true,
+        },
+        "cSpell.words": [
+            "Bentroen",
+            "Tomast"
+        ]
     }
-  ],
-  "settings": {
-    "window.title": "${dirty}${rootName}",
-    "editor.formatOnSave": true,
-    "eslint.validate": ["typescript"],
-    "eslint.run": "onType",
-    "eslint.format.enable": true,
-    "mdx.server.enable": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit"
-    },
-    "jest.disabledWorkspaceFolders": ["Root", "Frontend"],
-    "search.exclude": {
-      "**/.git": true,
-      "**/node_modules": true,
-      "**/dist": true,
-    }
-  }
 }
