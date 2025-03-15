@@ -1,6 +1,7 @@
 'use client';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { cn } from '@web/src/lib/tailwind.utils';
@@ -9,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 export const BlockSearch = () => {
   const [query, setQuery] = useState('');
+  const router = useRouter();
 
   return (
     <Popover>
@@ -33,7 +35,13 @@ export const BlockSearch = () => {
           <button
             className='bg-zinc-600 text-white rounded-md p-2 hover:bg-zinc-500 w-12 h-12'
             onClick={() => {
-              console.log('Searching for:', query);
+              const queryParam = new URLSearchParams({
+                page: '1',
+                limit: '20',
+                query,
+              });
+
+              router.push(`/search?${queryParam.toString()}`);
             }}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
