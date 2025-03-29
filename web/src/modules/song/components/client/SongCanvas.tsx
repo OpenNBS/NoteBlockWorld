@@ -40,14 +40,14 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
 
     const argumentsData = {
       font_id: 1, // Math.floor(Math.random() * 6),
-      window_width: fullscreen_window_width,
-      window_height: fullscreen_window_height,
+      window_width: Number((fullscreen_window_width / 2).toFixed(0)),
+      window_height: Number((fullscreen_window_height / 2).toFixed(0)),
       theme: {
-        background_color: '#7EC850', // Grass-like green
-        accent_color: '#FF6A00', // Orange (like Minecraft's iconic dirt/wood)
+        background_color: '#18181B', // Grass-like green
+        accent_color: '#002FA3', // Orange (like Minecraft's iconic dirt/wood)
         text_color: '#F0F0F0', // Light gray
-        white_key_color: '#F5F5DC', // Beige (like sand)
-        black_key_color: '#3B2F2F', // Dark brown (like wood)
+        white_key_color: '#F0F0F0', // Beige (like sand)
+        black_key_color: '#1A1A1A', // Dark brown (like wood)
         white_text_key_color: '#1A1A1A', // Dark gray
         black_text_key_color: '#F0F0F0', // Light gray
       },
@@ -125,8 +125,11 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
 
       // Clear global Module reference
       if (window.Module) {
-        if (window.Module.delete) window.Module.delete();
         delete window.Module;
+      }
+
+      if (window.wasmInstance) {
+        window.wasmInstance.delete();
       }
 
       // Force garbage collection
@@ -145,6 +148,11 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
         width={1280}
         height={720}
         className='w-full h-full rounded-xl'
+        style={{
+          // no filter
+          filter: 'none',
+          imageRendering: 'pixelated',
+        }}
       />
     </div>
   );
