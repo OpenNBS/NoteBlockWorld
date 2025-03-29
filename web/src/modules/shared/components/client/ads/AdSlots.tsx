@@ -51,7 +51,6 @@ const AdTemplate = ({
   showCloseButton?: boolean;
 }) => {
   const pubId = useAdSenseClient();
-
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
@@ -85,6 +84,21 @@ const AdTemplate = ({
       {!isHidden && (
         <>
           <ins
+            ref={(el) => {
+              // detect the add has data-ad-status="unfilled" data
+              if (el) {
+                const observer = new MutationObserver(() => {
+                  if (el.getAttribute('data-ad-status') === 'unfilled') {
+                    setIsHidden(true);
+                  }
+                });
+
+                observer.observe(el, {
+                  attributes: true,
+                  attributeFilter: ['data-ad-status'],
+                });
+              }
+            }}
             className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
             style={{
               display: 'block',
