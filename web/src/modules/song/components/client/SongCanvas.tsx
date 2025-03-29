@@ -8,6 +8,7 @@ import axios from '@web/src/lib/axios';
 export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const wasmModuleRef = useRef<any>(null);
+  let scriptTag: HTMLScriptElement | null = null;
 
   useEffect(() => {
     if (!canvasContainerRef.current) return;
@@ -23,107 +24,79 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
 
     window.addEventListener('keydown', handleKeyDown);
 
-    // Calculate window dimensions
-    let fullscreen_window_width = window.screen.width;
-    let fullscreen_window_height = window.screen.height;
-
-    if (fullscreen_window_width < fullscreen_window_height) {
-      [fullscreen_window_width, fullscreen_window_height] = [
-        fullscreen_window_height,
-        fullscreen_window_width,
-      ];
-    }
-
-    // 720p resolution
-    //const window_width = 1280;
-    //const window_height = 720;
+    const fullscreen_window_width = window.screen.width;
+    const fullscreen_window_height = window.screen.height;
 
     const argumentsData = {
-      font_id: 1, // Math.floor(Math.random() * 6),
-      window_width: Number((fullscreen_window_width / 2).toFixed(0)),
-      window_height: Number((fullscreen_window_height / 2).toFixed(0)),
+      font_id: 1,
+      window_width: Math.floor(fullscreen_window_width / 2),
+      window_height: Math.floor(fullscreen_window_height / 2),
       theme: {
-        background_color: '#18181B', // Grass-like green
-        accent_color: '#002FA3', // Orange (like Minecraft's iconic dirt/wood)
-        text_color: '#F0F0F0', // Light gray
-        white_key_color: '#F0F0F0', // Beige (like sand)
-        black_key_color: '#1A1A1A', // Dark brown (like wood)
-        white_text_key_color: '#1A1A1A', // Dark gray
-        black_text_key_color: '#F0F0F0', // Light gray
+        background_color: '#18181B',
+        accent_color: '#002FA3',
+        text_color: '#F0F0F0',
+        white_key_color: '#F0F0F0',
+        black_key_color: '#1A1A1A',
+        white_text_key_color: '#1A1A1A',
+        black_text_key_color: '#F0F0F0',
       },
     };
 
-    const scriptTag = document.createElement('script');
-
+    // Create and append script dynamically
+    scriptTag = document.createElement('script');
     scriptTag.src = '/nbs-player-rs.js';
-
-    scriptTag.async = true; // Load the script asynchronously
-
-    //scriptTag.onload = () => {
-    //if (!window.Module) return;
-
-    wasmModuleRef.current = window.Module; // Store for cleanup
+    scriptTag.async = true;
 
     window.Module = {
-      canvas: canvas,
+      canvas,
       arguments: [JSON.stringify(argumentsData)],
       noInitialRun: true,
+      onAbort: () => console.log('WASM Module Aborted'),
       preInit: async function () {
-        // wait 2 seconds before starting
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        try {
+          const response = await axios.get(`/song/${song.publicId}/open`, {
+            headers: { src: 'downloadButton' },
+          });
 
-        const response_url = await axios.get(`/song/${song.publicId}/open`, {
-          headers: {
-            src: 'downloadButton',
-          },
-        });
+          const song_url = response.data;
+          console.log('Song URL:', song_url);
 
-        const song_url = response_url.data;
-        console.log('Song URL:', song_url);
+          const responseData = await fetch(song_url);
+          const byteArray = new Uint8Array(await responseData.arrayBuffer());
 
-        const response = await fetch(song_url);
-        const arrayBuffer = await response.arrayBuffer();
-        const byteArray = new Uint8Array(arrayBuffer);
+          if (window.FS) {
+            window.FS.writeFile('/song.nbsx', byteArray);
+          } else {
+            console.error('FS is not defined');
+          }
 
-        if (window.FS) {
-          window.FS.writeFile('/song.nbsx', byteArray);
-        } else {
-          console.error('FS is not defined');
-        }
-
-        if (window.callMain) {
-          window.callMain([JSON.stringify(argumentsData)]);
-        } else {
-          console.error('callMain is not defined');
+          if (window.callMain) {
+            window.callMain([JSON.stringify(argumentsData)]);
+          } else {
+            console.error('callMain is not defined');
+          }
+        } catch (error) {
+          console.error('Error initializing WASM:', error);
         }
       },
     };
-    //};
 
-    // Append the script tag to the body
     element.appendChild(scriptTag);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
 
-      if (canvas) {
-        canvas.removeEventListener('keydown', () => undefined);
-      }
-
-      // Remove script tag
-      const script = element.querySelector('script[src="/nbs-player-rs.js"]');
-      if (script) script.remove();
-
-      // Properly destroy WASM module
       if (wasmModuleRef.current) {
-        if (wasmModuleRef.current.destroy) {
-          wasmModuleRef.current.destroy();
+        try {
+          wasmModuleRef.current._free?.(); // Free memory if `_free()` is available
+          wasmModuleRef.current.quit?.(); // Call `quit()` if it exists
+          wasmModuleRef.current.destroy?.(); // Call `destroy()` if it exists
+          wasmModuleRef.current = null;
+        } catch (error) {
+          console.error('Error cleaning up WASM:', error);
         }
-
-        wasmModuleRef.current = null;
       }
 
-      // Clear global Module reference
       if (window.Module) {
         delete window.Module;
       }
@@ -132,8 +105,15 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
         window.wasmInstance.delete();
       }
 
-      // Force garbage collection
-      if (window.gc) window.gc();
+      // Remove the script tag
+      if (scriptTag && scriptTag.parentNode) {
+        scriptTag.parentNode.removeChild(scriptTag);
+      }
+
+      // Force garbage collection if available
+      if (window.gc) {
+        window.gc();
+      }
     };
   }, [song.publicId]);
 
@@ -148,11 +128,7 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
         width={1280}
         height={720}
         className='w-full h-full rounded-xl'
-        style={{
-          // no filter
-          filter: 'none',
-          imageRendering: 'pixelated',
-        }}
+        style={{ filter: 'none', imageRendering: 'pixelated' }}
       />
     </div>
   );
