@@ -85,7 +85,7 @@ const AdTemplate = ({
         <>
           <ins
             ref={(el) => {
-              // detect the add has data-ad-status="unfilled" data
+              // detect the ad has data-ad-status="unfilled" data
               if (el) {
                 const observer = new MutationObserver(() => {
                   if (el.getAttribute('data-ad-status') === 'unfilled') {
