@@ -36,7 +36,7 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.FRONTEND_URL || '', 'https://bentroen.github.io'],
     credentials: true,
   });
 
