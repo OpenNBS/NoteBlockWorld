@@ -9,7 +9,7 @@ import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongRes
 import mongoose, { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 
 import {
   SongDocument,

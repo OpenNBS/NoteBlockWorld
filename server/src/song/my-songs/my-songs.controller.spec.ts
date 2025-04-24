@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 
 import { MySongsController } from './my-songs.controller';
 import { SongService } from '../song.service';

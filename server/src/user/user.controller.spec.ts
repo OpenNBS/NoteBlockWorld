@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 
-import { UserDocument } from './entity/user.entity';
+import type { UserDocument } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 

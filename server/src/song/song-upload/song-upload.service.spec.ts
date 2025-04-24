@@ -6,7 +6,7 @@ import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongUploadService } from './song-upload.service';

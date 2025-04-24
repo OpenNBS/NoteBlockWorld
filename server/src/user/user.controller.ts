@@ -6,7 +6,7 @@ import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dt
 
 import { GetRequestToken, validateUser } from '@server/GetRequestUser';
 
-import { UserDocument } from './entity/user.entity';
+import type { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')

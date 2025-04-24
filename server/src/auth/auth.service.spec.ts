@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { AuthService } from './auth.service';
