@@ -192,7 +192,7 @@ describe('SongUploadService', () => {
 
       jest
         .spyOn(fileService, 'getSongFile')
-        .mockResolvedValue(Buffer.from('test'));
+        .mockResolvedValue(new ArrayBuffer(0));
 
       jest
         .spyOn(songUploadService as any, 'prepareSongForUpload')

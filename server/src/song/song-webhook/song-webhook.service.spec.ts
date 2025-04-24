@@ -57,7 +57,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockResolvedValue({
+      (global as any).fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({ id: 'message-id' }),
       });
 
@@ -82,7 +82,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
       const result = await service.postSongWebhook(song);
 
@@ -100,7 +100,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockResolvedValue({});
+      (global as any).fetch = jest.fn().mockResolvedValue({});
 
       await service.updateSongWebhook(song);
 
@@ -125,7 +125,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
       const loggerSpy = jest.spyOn(service['logger'], 'error');
 
@@ -146,7 +146,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      global.fetch = jest.fn().mockResolvedValue({});
+      (global as any).fetch = jest.fn().mockResolvedValue({});
 
       await service.deleteSongWebhook(song);
 
@@ -165,7 +165,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
       const loggerSpy = jest.spyOn(service['logger'], 'error');
 
