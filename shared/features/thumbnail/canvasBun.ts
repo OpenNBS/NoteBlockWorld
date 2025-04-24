@@ -1,4 +1,4 @@
-import { createCanvas, loadImage, registerFont, GlobalFonts, Canvas, Image } from '@napi-rs/canvas';
+import { createCanvas, loadImage, GlobalFonts, Canvas, Image } from '@napi-rs/canvas';
 import path from 'path';
 
 const __filename =  path.resolve();
