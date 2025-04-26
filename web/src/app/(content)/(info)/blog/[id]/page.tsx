@@ -55,7 +55,7 @@ const BlogPost = ({ params }: BlogPageProps) => {
       )}
       <article className='max-w-screen-md mx-auto mb-36'>
         <Link
-          href='/help'
+          href='/blog'
           className='text-zinc-500 hover:text-zinc-400 text-sm'
         >
           {'< Back to Blog'}
