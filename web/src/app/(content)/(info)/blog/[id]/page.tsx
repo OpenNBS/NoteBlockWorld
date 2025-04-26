@@ -44,6 +44,15 @@ const BlogPost = ({ params }: BlogPageProps) => {
 
   return (
     <>
+      {post.image && (
+        <Image
+          src={post.image}
+          alt=''
+          className='w-full h-[30vh] md:h-[50vh] object-cover mb-8 mt-[-2.5rem] rounded-xl'
+          width={1920}
+          height={1080}
+        />
+      )}
       <article className='max-w-screen-md mx-auto mb-36'>
         <Link
           href='/help'
