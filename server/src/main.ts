@@ -36,26 +36,8 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
-    origin: (
-      requestOrigin: string | undefined,
-      callback: (err: Error | null, origin?: string | boolean) => void,
-    ) => {
-      const allowedOrigins = [
-        process.env.FRONTEND_URL || '',
-        'https://bentroen.github.io',
-      ];
-
-      logger.log(
-        `CORS request from origin: ${requestOrigin}, allowed origins: ${allowedOrigins}`,
-      );
-
-      if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
-        callback(null, requestOrigin); // Allow the origin
-      } else {
-        callback(new Error('Not allowed by CORS')); // Block the origin
-      }
-    },
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: [process.env.FRONTEND_URL || '', 'https://bentroen.github.io'],
+    credentials: true,
   });
 
   app.use('/api/v1', express.static('public'));
