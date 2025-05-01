@@ -10,7 +10,7 @@ describe('MagicLinkEmailStrategy', () => {
   let strategy: MagicLinkEmailStrategy;
   let userService: UserService;
   let mailingService: MailingService;
-  let configService: ConfigService;
+  let _configService: ConfigService;
 
   const mockUserService = {
     findByEmail: jest.fn(),
@@ -50,7 +50,7 @@ describe('MagicLinkEmailStrategy', () => {
     strategy = module.get<MagicLinkEmailStrategy>(MagicLinkEmailStrategy);
     userService = module.get<UserService>(UserService);
     mailingService = module.get<MailingService>(MailingService);
-    configService = module.get<ConfigService>(ConfigService);
+    _configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
@@ -136,6 +136,7 @@ describe('MagicLinkEmailStrategy', () => {
       const payload = { destination: 'test@example.com' };
 
       mockUserService.findByEmail.mockResolvedValue(null);
+
       mockUserService.createWithEmail.mockResolvedValue({
         email: 'test@example.com',
         username: 'test',
