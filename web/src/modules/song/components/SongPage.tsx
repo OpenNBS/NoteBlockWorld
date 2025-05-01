@@ -1,10 +1,10 @@
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
 
 import { LicenseInfo } from './client/LicenseInfo';
-import { SongCanvas } from './client/SongCanvas';
 import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
@@ -49,7 +49,6 @@ export async function SongPage({ id }: { id: string }) {
         <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
           {/* Song thumbnail */}
           {/* TODO: implement loading https://github.com/vercel/next.js/discussions/50617 */}
-          {/*
           <picture className='bg-zinc-800 aspect-[5/3] rounded-xl'>
             <Image
               width={1280}
@@ -59,9 +58,6 @@ export async function SongPage({ id }: { id: string }) {
               className='w-full h-full rounded-xl'
             />
           </picture>
-          */}
-
-          <SongCanvas song={song} />
 
           <h1 className='text-xl font-bold'>{song.title}</h1>
 
