@@ -56,7 +56,11 @@ const AdTemplate = ({
 
   useEffect(() => {
     if (window) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error(e);
+      }
     }
   }, []);
 

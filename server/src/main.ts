@@ -3,8 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
 
 import { AppModule } from './app.module';
-import { initializeSwagger } from './initializeSwagger';
-import { ParseTokenPipe } from './parseToken';
+import { initializeSwagger } from './lib/initializeSwagger';
+import { ParseTokenPipe } from './lib/parseToken';
 
 const logger: Logger = new Logger('main.ts');
 
@@ -36,7 +36,7 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.FRONTEND_URL || '', 'https://bentroen.github.io'],
     credentials: true,
   });
 

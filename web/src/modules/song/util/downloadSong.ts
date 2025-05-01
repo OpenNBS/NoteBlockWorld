@@ -1,6 +1,6 @@
 'use client';
 
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 import axios from '@web/src/lib/axios';
 import { getTokenLocal } from '@web/src/lib/axios/token.utils';
@@ -56,7 +56,7 @@ export const openSongInNBS = async (song: { publicId: string }) => {
       link.remove();
       window.URL.revokeObjectURL(nbsUrl);
     })
-    .catch((error) => {
+    .catch(() => {
       toast.error('Failed to open song in NBS');
     });
 };

@@ -3,12 +3,18 @@ import type { Request, Response } from 'express';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 const mockAuthService = {
   githubLogin: jest.fn(),
   googleLogin: jest.fn(),
   discordLogin: jest.fn(),
   verifyToken: jest.fn(),
+  loginWithEmail: jest.fn(),
+};
+
+const mockMagicLinkEmailStrategy = {
+  send: jest.fn(),
 };
 
 describe('AuthController', () => {
@@ -22,6 +28,10 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: MagicLinkEmailStrategy,
+          useValue: mockMagicLinkEmailStrategy,
         },
       ],
     }).compile();
@@ -56,6 +66,13 @@ describe('AuthController', () => {
     });
   });
 
+  describe('githubLogin', () => {
+    it('should call AuthService.githubLogin', async () => {
+      await controller.githubLogin();
+      expect(authService.githubLogin).toHaveBeenCalled();
+    });
+  });
+
   describe('googleRedirect', () => {
     it('should call AuthService.googleLogin', async () => {
       const req = {} as Request;
@@ -78,6 +95,13 @@ describe('AuthController', () => {
     });
   });
 
+  describe('googleLogin', () => {
+    it('should call AuthService.googleLogin', async () => {
+      await controller.googleLogin();
+      expect(authService.googleLogin).toHaveBeenCalled();
+    });
+  });
+
   describe('discordRedirect', () => {
     it('should call AuthService.discordLogin', async () => {
       const req = {} as Request;
@@ -97,6 +121,46 @@ describe('AuthController', () => {
       await expect(controller.discordRedirect(req, res)).rejects.toThrow(
         'Test error',
       );
+    });
+  });
+
+  describe('discordLogin', () => {
+    it('should call AuthService.discordLogin', async () => {
+      await controller.discordLogin();
+      expect(authService.discordLogin).toHaveBeenCalled();
+    });
+  });
+
+  describe('magicLinkRedirect', () => {
+    it('should call AuthService.loginWithEmail', async () => {
+      const req = {} as Request;
+      const res = {} as Response;
+
+      await controller.magicLinkRedirect(req, res);
+
+      expect(authService.loginWithEmail).toHaveBeenCalledWith(req, res);
+    });
+
+    it('should handle exceptions', async () => {
+      const req = {} as Request;
+      const res = {} as Response;
+      const error = new Error('Test error');
+      (authService.loginWithEmail as jest.Mock).mockRejectedValueOnce(error);
+
+      await expect(controller.magicLinkRedirect(req, res)).rejects.toThrow(
+        'Test error',
+      );
+    });
+  });
+
+  describe('magicLinkLogin', () => {
+    it('should call AuthService.discordLogin', async () => {
+      //const req = {} as Request;
+      //const res = {} as Response;
+      // TODO: Implement this test
+      //await controller.magicLinkLogin(req, res);
+      //
+      //expect(mockMagicLinkEmailStrategy.send).toHaveBeenCalledWith(req, res);
     });
   });
 

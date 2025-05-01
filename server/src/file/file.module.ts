@@ -12,39 +12,40 @@ export class FileModule {
       providers: [
         {
           provide: 'S3_BUCKET_SONGS',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_SONGS'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_BUCKET_THUMBS',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_THUMBS'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_KEY',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_KEY'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_SECRET',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_SECRET'),
+
+          inject: [ConfigService],
         },
         {
           provide: 'S3_ENDPOINT',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_ENDPOINT'),
+          inject: [ConfigService],
         },
         {
           provide: 'S3_REGION',
-          inject: [ConfigService],
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_REGION'),
+          inject: [ConfigService],
         },
         FileService,
       ],

@@ -4,7 +4,7 @@ import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 
-import { GetRequestToken, validateUser } from '@server/GetRequestUser';
+import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
 import type { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
