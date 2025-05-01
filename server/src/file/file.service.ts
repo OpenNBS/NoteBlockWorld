@@ -131,7 +131,10 @@ export class FileService {
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
-      ResponseContentDisposition: `attachment; filename="${filename}"`,
+      ResponseContentDisposition: `attachment; filename="${filename.replace(
+        /[/"]/g,
+        '_',
+      )}"`,
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {

@@ -15,8 +15,6 @@ const UserProfile = ({ userData }: UserProfileProps) => {
     description,
     profileImage,
     socialLinks,
-    following,
-    achievements,
   } = userData;
 
   return (
@@ -33,7 +31,6 @@ const UserProfile = ({ userData }: UserProfileProps) => {
       <p className='text-gray-500'>Last Login: {lastLogin.toLocaleString()}</p>
       <p className='text-gray-500'>Login Streak: {loginStreak}</p>
       <p className='text-gray-500'>Play Count: {playCount}</p>
-      <p className='text-gray-500'>Following: {following}</p>
       <ul className='mt-4'>
         {Object.keys(socialLinks).map((key, index) => {
           const link = socialLinks[key as SocialLinksTypes];
@@ -47,14 +44,6 @@ const UserProfile = ({ userData }: UserProfileProps) => {
             </li>
           );
         })}
-      </ul>
-      <ul></ul>
-      <ul className='mt-4'>
-        {achievements.map((achievement, index) => (
-          <li key={index} className='text-gray-500'>
-            {achievement}
-          </li>
-        ))}
       </ul>
     </section>
   );
