@@ -39,12 +39,6 @@ if (typeof document === 'undefined') {
     const workingDir = process.cwd();
     const fullPath = path.join(workingDir, filename.split('/').join(path.sep));
 
-    if (!Bun.file(fullPath).exists()) {
-      throw new Error(`File not found: ${fullPath}`);
-    } else {
-      console.log(`File found: ${fullPath}`);
-    }
-
     return 'file://' + fullPath;
   };
 
