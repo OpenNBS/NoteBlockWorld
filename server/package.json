@@ -22,8 +22,8 @@
     "test:e2e": "bun test ./test/app.e2e-spec.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.717.0",
-    "@aws-sdk/s3-request-presigner": "^3.717.0",
+    "@aws-sdk/client-s3": "3.800.0",
+    "@aws-sdk/s3-request-presigner": "3.800.0",
     "@encode42/nbs.js": "^5.0.2",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.4.15",

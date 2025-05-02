@@ -73,9 +73,12 @@ export class FileService {
     this.region = region;
 
     // Create S3 client
-    const s3Config = new S3Client({
+    const s3Client = new S3Client({
       region: region,
       endpoint: endpoint,
+      requestChecksumCalculation: endpoint.includes('localhost')
+        ? 'WHEN_REQUIRED'
+        : undefined,
       credentials: {
         accessKeyId: key,
         secretAccessKey: secret,
@@ -83,7 +86,7 @@ export class FileService {
       forcePathStyle: endpoint.includes('localhost') ? true : false,
     });
 
-    return s3Config;
+    return s3Client;
   }
 
   // Uploads a song to the S3 bucket and returns the key
@@ -245,7 +248,7 @@ export class FileService {
       const arrayBuffer = new ArrayBuffer(byteArray.length);
       const view = new Uint8Array(arrayBuffer);
       for (let i = 0; i < byteArray.length; i++) {
-          view[i] = byteArray[i];
+        view[i] = byteArray[i];
       }
       return arrayBuffer;
     } catch (error) {
