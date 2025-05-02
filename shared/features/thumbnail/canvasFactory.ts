@@ -36,24 +36,23 @@ if (typeof document === 'undefined') {
   } = canvasModule;
 
   const getPath = (filename: string) => {
-    return (
-      'file://' +
-      path.join(
-        __dirname,
-        '..',
-        '..',
-        '..',
-        'web',
-        filename.split('/').join(path.sep),
-      )
-    );
+    const workingDir = process.cwd();
+    const fullPath = path.join(workingDir, filename.split('/').join(path.sep));
+
+    if (!Bun.file(fullPath).exists()) {
+      throw new Error(`File not found: ${fullPath}`);
+    } else {
+      console.log(`File found: ${fullPath}`);
+    }
+
+    return 'file://' + fullPath;
   };
 
   const saveToImage = (canvas: NapiRs.Canvas) => canvas.encode('png');
 
   const useFont = () => {
     GlobalFonts.registerFromPath(
-      'file:' + getPath('/fonts/Lato-Regular.ttf').toString(),
+      'file:' + getPath('assets/fonts/Lato-Regular.ttf').toString(),
       'Lato',
     );
   };
@@ -62,7 +61,7 @@ if (typeof document === 'undefined') {
 
   try {
     noteBlockImage = nodeLoadImage(
-      new URL(getPath('public/img/note-block-grayscale.png')),
+      new URL(getPath('assets/img/note-block-grayscale.png')),
     );
   } catch (error) {
     console.error('Error loading image: ', error);
