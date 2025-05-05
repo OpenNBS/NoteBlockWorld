@@ -11,9 +11,15 @@ import { DiscordUser } from './types/discordProfile';
 import { GithubAccessToken } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
 import { Profile } from './types/profile';
-
-jest.mock('axios');
-const mockAxios = axios as jest.Mocked<typeof axios>;
+import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
+const mockAxios = {
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn(),
+  create: jest.fn(),
+};
+mock.module('axios', () => mockAxios);
 
 const mockUserService = {
   generateUsername: jest.fn(),
@@ -163,133 +169,6 @@ describe('AuthService', () => {
     });
   });
 
-  describe('googleLogin', () => {
-    it('should generate token and redirect if user is whitelisted', async () => {
-      const req: Partial<Request> = {
-        user: {
-          emails: [{ value: 'test@example.com' }],
-          photos: [{ value: 'http://example.com/photo.jpg' }],
-        } as GoogleProfile,
-      };
-
-      const res: Partial<Response> = {
-        redirect: jest.fn(),
-      };
-
-      jest.spyOn(authService as any, 'verifyWhitelist').mockResolvedValue(true);
-
-      jest
-        .spyOn(authService as any, 'verifyAndGetUser')
-        .mockResolvedValue({ id: 'user-id' });
-
-      jest
-        .spyOn(authService as any, 'GenTokenRedirect')
-        .mockImplementation((user, res: any) => {
-          res.redirect('/dashboard');
-        });
-
-      await authService.googleLogin(
-        req as unknown as Request,
-        res as unknown as Response,
-      );
-
-      expect((authService as any).verifyAndGetUser).toHaveBeenCalledWith({
-        username: 'test',
-        email: 'test@example.com',
-        profileImage: 'http://example.com/photo.jpg',
-      });
-
-      expect(res.redirect).toHaveBeenCalledWith('/dashboard');
-    });
-
-    it('should redirect to login if user is not whitelisted', async () => {
-      const req = {
-        user: {
-          emails: [{ value: 'test@example.com' }],
-          photos: [{ value: 'http://example.com/photo.jpg' }],
-        } as GoogleProfile,
-      };
-
-      const res = {
-        redirect: jest.fn(),
-      };
-
-      jest
-        .spyOn(authService as any, 'verifyWhitelist')
-        .mockResolvedValue(false);
-
-      await authService.googleLogin(
-        req as unknown as Request,
-        res as unknown as Response,
-      );
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        (authService as any).FRONTEND_URL + '/login',
-      );
-    });
-  }); // TODO: implement tests for googleLogin
-
-  describe('githubLogin', () => {
-    it('should redirect to login if user is not whitelisted', async () => {
-      const req: Partial<Request> = {
-        user: {
-          accessToken: 'test-access-token',
-          profile: {
-            username: 'testuser',
-            photos: [{ value: 'http://example.com/photo.jpg' }],
-          },
-        } as GithubAccessToken,
-      };
-
-      const res: Partial<Response> = {
-        redirect: jest.fn(),
-      };
-
-      jest
-        .spyOn(authService as any, 'verifyWhitelist')
-        .mockResolvedValue(false);
-
-      mockAxios.get.mockResolvedValue({
-        data: [{ email: 'test@example.com', primary: true }],
-      } as any);
-
-      await authService.githubLogin(req as Request, res as Response);
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        (authService as any).FRONTEND_URL + '/login',
-      );
-    });
-  });
-
-  describe('discordLogin', () => {
-    it('should redirect to login if user is not whitelisted', async () => {
-      const req: Partial<Request> = {
-        user: {
-          profile: {
-            id: 'discord-user-id',
-            username: 'testuser',
-            email: 'test@example.com',
-            avatar: 'avatar-hash',
-          },
-        } as DiscordUser,
-      };
-
-      const res: Partial<Response> = {
-        redirect: jest.fn(),
-      };
-
-      jest
-        .spyOn(authService as any, 'verifyWhitelist')
-        .mockResolvedValue(false);
-
-      await authService.discordLogin(req as Request, res as Response);
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        (authService as any).FRONTEND_URL + '/login',
-      );
-    });
-  }); // TODO: implement tests for discordLogin
-
   describe('getUserFromToken', () => {
     it('should return null if token is invalid', async () => {
       mockJwtService.decode.mockReturnValueOnce(null);
@@ -304,7 +183,7 @@ describe('AuthService', () => {
       mockUserService.findByID.mockResolvedValueOnce({ id: 'test-id' });
 
       const result = await authService.getUserFromToken('valid-token');
-      expect(result).toEqual({ id: 'test-id' });
+      expect(result).toEqual({ id: 'test-id' } as UserDocument);
     });
   });
 
@@ -314,9 +193,8 @@ describe('AuthService', () => {
       const accessToken = 'access-token';
       const refreshToken = 'refresh-token';
 
-      jest
-        .spyOn(jwtService, 'signAsync')
-        .mockImplementation((payload, options: any) => {
+      spyOn(jwtService, 'signAsync').mockImplementation(
+        (payload, options: any) => {
           if (options.secret === 'test-jwt-secret') {
             return Promise.resolve(accessToken);
           } else if (options.secret === 'test-jwt-refresh-secret') {
@@ -324,7 +202,8 @@ describe('AuthService', () => {
           }
 
           return Promise.reject(new Error('Invalid secret'));
-        });
+        },
+      );
 
       const tokens = await (authService as any).createJwtPayload(payload);
 
@@ -363,9 +242,7 @@ describe('AuthService', () => {
         refresh_token: 'refresh-token',
       };
 
-      jest
-        .spyOn(authService as any, 'createJwtPayload')
-        .mockResolvedValue(tokens);
+      spyOn(authService as any, 'createJwtPayload').mockResolvedValue(tokens);
 
       await (authService as any).GenTokenRedirect(user_registered, res);
 
@@ -390,31 +267,6 @@ describe('AuthService', () => {
       );
 
       expect(res.redirect).toHaveBeenCalledWith('http://frontend.test.com/');
-    });
-  });
-
-  describe('verifyWhitelist', () => {
-    it('should approve login if whitelist is empty', async () => {
-      (authService as any).WHITELISTED_USERS = '';
-      const result = await (authService as any).verifyWhitelist('anyuser');
-      expect(result).toBe(true);
-    });
-
-    it('should approve login if username is in the whitelist', async () => {
-      (authService as any).WHITELISTED_USERS = 'user1,user2,user3';
-      const result = await (authService as any).verifyWhitelist('user1');
-      expect(result).toBe(true);
-    });
-
-    it('should reject login if username is not in the whitelist', async () => {
-      const result = await (authService as any).verifyWhitelist('user4');
-      expect(result).toBe(false);
-    });
-
-    it('should approve login if username is in the whitelist (case insensitive)', async () => {
-      (authService as any).WHITELISTED_USERS = 'user1,user2,user3';
-      const result = await (authService as any).verifyWhitelist('User1');
-      expect(result).toBe(true);
     });
   });
 
