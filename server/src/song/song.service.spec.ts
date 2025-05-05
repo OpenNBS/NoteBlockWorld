@@ -829,14 +829,16 @@ describe('SongService', () => {
 
       jest
         .spyOn(fileService, 'getSongDownloadUrl')
-        .mockRejectedValue(new Error());
+        .mockImplementationOnce(() => {
+          throw new Error('Internal error');
+        });
 
       await expect(service.getSongDownloadUrl(publicId, user)).rejects.toThrow(
         HttpException,
       );
     });
 
-    it('should throw an error in case of an internal error on saveing the song', async () => {
+    it('should throw an error in case of an internal error on saving the song', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -863,7 +865,9 @@ describe('SongService', () => {
         packedSongUrl: 'http://test.com/packed-file.nbs',
         nbsFileUrl: 'http://test.com/file.nbs',
         thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        save: jest.fn().mockRejectedValue(new Error()), // Simulate error on save
+        save: jest.fn().mockImplementationOnce(() => {
+          throw new Error('Error saving song');
+        }),
       };
 
       jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
