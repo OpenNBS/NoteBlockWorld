@@ -6,15 +6,16 @@ import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongUploadService } from './song-upload.service';
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
+import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
 
 // mock drawToImage function
-jest.mock('@shared/features/thumbnail', () => ({
-  drawToImage: jest.fn().mockResolvedValue(Buffer.from('test')),
+mock.module('@shared/features/thumbnail', () => ({
+  drawToImage: jest.fn().mockResolvedValue(Buffer.from('test-image-buffer')),
 }));
 
 const mockFileService = {
@@ -87,36 +88,35 @@ describe('SongUploadService', () => {
       const songEntity = new SongEntity();
       songEntity.uploader = user._id;
 
-      jest
-        .spyOn(songUploadService as any, 'checkIsFileValid')
-        .mockImplementation((_file: Express.Multer.File) => undefined);
+      spyOn(songUploadService as any, 'checkIsFileValid').mockImplementation(
+        (_file: Express.Multer.File) => undefined,
+      );
 
-      jest
-        .spyOn(songUploadService as any, 'prepareSongForUpload')
-        .mockReturnValue({
-          nbsSong: new Song(),
-          songBuffer: Buffer.from('test'),
-        });
+      spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
+        nbsSong: new Song(),
+        songBuffer: Buffer.from('test'),
+      });
 
-      jest
-        .spyOn(songUploadService as any, 'preparePackedSongForUpload')
-        .mockResolvedValue(Buffer.from('test'));
+      spyOn(
+        songUploadService as any,
+        'preparePackedSongForUpload',
+      ).mockResolvedValue(Buffer.from('test'));
 
-      jest
-        .spyOn(songUploadService as any, 'generateSongDocument')
-        .mockResolvedValue(songEntity);
+      spyOn(songUploadService as any, 'generateSongDocument').mockResolvedValue(
+        songEntity,
+      );
 
-      jest
-        .spyOn(songUploadService, 'generateAndUploadThumbnail')
-        .mockResolvedValue('http://test.com/thumbnail.png');
+      spyOn(songUploadService, 'generateAndUploadThumbnail').mockResolvedValue(
+        'http://test.com/thumbnail.png',
+      );
 
-      jest
-        .spyOn(songUploadService as any, 'uploadSongFile')
-        .mockResolvedValue('http://test.com/file.nbs');
+      spyOn(songUploadService as any, 'uploadSongFile').mockResolvedValue(
+        'http://test.com/file.nbs',
+      );
 
-      jest
-        .spyOn(songUploadService as any, 'uploadPackedSongFile')
-        .mockResolvedValue('http://test.com/packed-file.nbs');
+      spyOn(songUploadService as any, 'uploadPackedSongFile').mockResolvedValue(
+        'http://test.com/packed-file.nbs',
+      );
 
       const result = await songUploadService.processUploadedSong({
         file,
@@ -190,32 +190,29 @@ describe('SongUploadService', () => {
         save: jest.fn().mockResolvedValue({}),
       } as any;
 
-      jest
-        .spyOn(fileService, 'getSongFile')
-        .mockResolvedValue(Buffer.from('test'));
+      spyOn(fileService, 'getSongFile').mockResolvedValue(new ArrayBuffer(0));
 
-      jest
-        .spyOn(songUploadService as any, 'prepareSongForUpload')
-        .mockReturnValue({
-          nbsSong: new Song(),
-          songBuffer: Buffer.from('test'),
-        });
+      spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
+        nbsSong: new Song(),
+        songBuffer: Buffer.from('test'),
+      });
 
-      jest
-        .spyOn(songUploadService as any, 'preparePackedSongForUpload')
-        .mockResolvedValue(Buffer.from('test'));
+      spyOn(
+        songUploadService as any,
+        'preparePackedSongForUpload',
+      ).mockResolvedValue(Buffer.from('test'));
 
-      jest
-        .spyOn(songUploadService, 'generateAndUploadThumbnail')
-        .mockResolvedValue('http://test.com/thumbnail.png');
+      spyOn(songUploadService, 'generateAndUploadThumbnail').mockResolvedValue(
+        'http://test.com/thumbnail.png',
+      );
 
-      jest
-        .spyOn(songUploadService as any, 'uploadSongFile')
-        .mockResolvedValue('http://test.com/file.nbs');
+      spyOn(songUploadService as any, 'uploadSongFile').mockResolvedValue(
+        'http://test.com/file.nbs',
+      );
 
-      jest
-        .spyOn(songUploadService as any, 'uploadPackedSongFile')
-        .mockResolvedValue('http://test.com/packed-file.nbs');
+      spyOn(songUploadService as any, 'uploadPackedSongFile').mockResolvedValue(
+        'http://test.com/packed-file.nbs',
+      );
 
       await songUploadService.processSongPatch(songDocument, body, user);
     });
@@ -235,9 +232,9 @@ describe('SongUploadService', () => {
       nbsSong.addLayer(new Layer(2));
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadThumbnail')
-        .mockResolvedValue('http://test.com/thumbnail.png');
+      spyOn(fileService, 'uploadThumbnail').mockResolvedValue(
+        'http://test.com/thumbnail.png',
+      );
 
       const result = await songUploadService.generateAndUploadThumbnail(
         thumbnailData,
@@ -264,8 +261,7 @@ describe('SongUploadService', () => {
       const nbsSong = new Song();
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadThumbnail')
+      spyOn(fileService, 'uploadThumbnail')
         // throw an error
         .mockRejectedValue(new Error('test error'));
 
@@ -286,9 +282,9 @@ describe('SongUploadService', () => {
       const file = Buffer.from('test');
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadSong')
-        .mockResolvedValue('http://test.com/file.nbs');
+      spyOn(fileService, 'uploadSong').mockResolvedValue(
+        'http://test.com/file.nbs',
+      );
 
       const result = await (songUploadService as any).uploadSongFile(
         file,
@@ -303,9 +299,9 @@ describe('SongUploadService', () => {
       const file = Buffer.from('test');
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadSong')
-        .mockRejectedValue(new Error('test error'));
+      spyOn(fileService, 'uploadSong').mockRejectedValue(
+        new Error('test error'),
+      );
 
       try {
         await (songUploadService as any).uploadSongFile(file, publicId);
@@ -320,9 +316,9 @@ describe('SongUploadService', () => {
       const file = Buffer.from('test');
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadPackedSong')
-        .mockResolvedValue('http://test.com/packed-file.nbs');
+      spyOn(fileService, 'uploadPackedSong').mockResolvedValue(
+        'http://test.com/packed-file.nbs',
+      );
 
       const result = await (songUploadService as any).uploadPackedSongFile(
         file,
@@ -337,9 +333,9 @@ describe('SongUploadService', () => {
       const file = Buffer.from('test');
       const publicId = 'test-id';
 
-      jest
-        .spyOn(fileService, 'uploadPackedSong')
-        .mockRejectedValue(new Error('test error'));
+      spyOn(fileService, 'uploadPackedSong').mockRejectedValue(
+        new Error('test error'),
+      );
 
       try {
         await (songUploadService as any).uploadPackedSongFile(file, publicId);

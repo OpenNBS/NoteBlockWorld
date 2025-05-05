@@ -11,7 +11,7 @@ import {
   StrategyOptionsWithRequest as OAuth2StrategyOptionsWithRequest,
 } from 'passport-oauth2';
 
-import { ScopeType } from './types';
+import type { ScopeType } from './types';
 
 type MergedOAuth2StrategyOptions =
   | OAuth2StrategyOptions

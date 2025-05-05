@@ -1,6 +1,6 @@
 import {
-  Canvas,
-  Image,
+  DrawingCanvas,
+  RenderedImage,
   createCanvas,
   noteBlockImage,
   saveToImage,
@@ -21,8 +21,8 @@ interface DrawParams {
   imgHeight: number;
 }
 
-type Canvas = typeof Canvas;
-type Image = typeof Image;
+type Canvas = typeof DrawingCanvas;
+type Image = typeof RenderedImage;
 
 const instrumentColors = [
   '#1964ac',
@@ -146,7 +146,7 @@ export async function drawNotesOffscreen({
   zoomLevel,
   backgroundColor,
   canvasWidth,
-  canvasHeight,
+  //canvasHeight,
   imgWidth = 1280,
   imgHeight = 768,
 }: DrawParams) {
@@ -246,7 +246,9 @@ export async function drawToImage(params: DrawParams): Promise<Buffer> {
   }
 
   const output = await drawNotesOffscreen(params);
-  const buffer = saveToImage(output);
+  const byteArray = await saveToImage(output);
 
+  // Convert to Buffer
+  const buffer = Buffer.from(byteArray);
   return buffer;
 }
