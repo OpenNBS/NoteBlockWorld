@@ -4,8 +4,7 @@ import {
   HttpStatus,
   createParamDecorator,
 } from '@nestjs/common';
-
-import { UserDocument } from './user/entity/user.entity';
+import { UserDocument } from '@server/user/entity/user.entity';
 
 export const GetRequestToken = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {

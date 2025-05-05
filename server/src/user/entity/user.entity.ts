@@ -1,6 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
+@Schema({})
+class SocialLinks {
+  bandcamp?: string;
+  discord?: string;
+  facebook?: string;
+  github?: string;
+  instagram?: string;
+  reddit?: string;
+  snapchat?: string;
+  soundcloud?: string;
+  spotify?: string;
+  steam?: string;
+  telegram?: string;
+  tiktok?: string;
+  threads?: string;
+  twitch?: string;
+  x?: string;
+  youtube?: string;
+}
+
 @Schema({
   timestamps: true,
   toJSON: {
@@ -42,31 +62,24 @@ export class User {
   @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: false, default: null })
+  singleUsePass?: string;
+
+  @Prop({ type: String, required: false, default: null })
+  singleUsePassID?: string;
+
+  @Prop({ type: String, required: true, default: 'No description provided' })
   description: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({
+    type: String,
+    required: true,
+    default: '/img/note-block-pfp.jpg',
+  })
   profileImage: string;
 
-  @Prop({ type: Map, of: String, required: false, default: {} })
-  socialLinks: {
-    bandcamp?: string;
-    discord?: string;
-    facebook?: string;
-    github?: string;
-    instagram?: string;
-    reddit?: string;
-    snapchat?: string;
-    soundcloud?: string;
-    spotify?: string;
-    steam?: string;
-    telegram?: string;
-    tiktok?: string;
-    threads?: string;
-    twitch?: string;
-    x?: string;
-    youtube?: string;
-  };
+  @Prop({ type: SocialLinks, required: false, default: {} })
+  socialLinks: SocialLinks;
 
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;

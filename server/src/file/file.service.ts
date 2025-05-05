@@ -2,6 +2,7 @@ import * as path from 'path';
 
 import {
   GetObjectCommand,
+  HeadBucketCommand,
   ObjectCannedACL,
   PutObjectCommand,
   S3Client,
@@ -14,8 +15,6 @@ export class FileService {
   private readonly logger = new Logger(FileService.name);
   private s3Client: S3Client;
   private region: string;
-  private bucketSongs: string;
-  private bucketThumbs: string;
 
   constructor(
     @Inject('S3_BUCKET_SONGS')
@@ -32,16 +31,36 @@ export class FileService {
     @Inject('S3_REGION')
     private readonly S3_REGION: string,
   ) {
-    const bucketSongs = S3_BUCKET_SONGS;
-    const bucketThumbs = S3_BUCKET_THUMBS;
     this.s3Client = this.getS3Client();
+    // verify that the bucket exists
 
-    if (!(bucketSongs && bucketThumbs)) {
-      throw new Error('Missing S3 bucket configuration');
+    this.verifyBucket();
+  }
+
+  private async verifyBucket() {
+    try {
+      this.logger.debug(
+        `Verifying buckets ${this.S3_BUCKET_SONGS} and ${this.S3_BUCKET_THUMBS}`,
+      );
+
+      await Promise.all([
+        this.s3Client.send(
+          new HeadBucketCommand({ Bucket: this.S3_BUCKET_SONGS }),
+        ),
+        this.s3Client.send(
+          new HeadBucketCommand({ Bucket: this.S3_BUCKET_THUMBS }),
+        ),
+      ]);
+
+      this.logger.debug('Buckets verification successful');
+    } catch (error) {
+      this.logger.error(
+        `Error verifying buckets ${this.S3_BUCKET_SONGS} and ${this.S3_BUCKET_THUMBS}`,
+        error,
+      );
+
+      throw error;
     }
-
-    this.bucketSongs = bucketSongs;
-    this.bucketThumbs = bucketThumbs;
   }
 
   private getS3Client() {
@@ -61,6 +80,7 @@ export class FileService {
         accessKeyId: key,
         secretAccessKey: secret,
       },
+      forcePathStyle: endpoint.includes('localhost') ? true : false,
     });
 
     return s3Config;
@@ -68,7 +88,7 @@ export class FileService {
 
   // Uploads a song to the S3 bucket and returns the key
   public async uploadSong(buffer: Buffer, publicId: string) {
-    const bucket = this.bucketSongs;
+    const bucket = this.S3_BUCKET_SONGS;
 
     const fileName =
       'songs/' + path.parse(publicId).name.replace(/\s/g, '') + '.nbs';
@@ -87,7 +107,7 @@ export class FileService {
   }
 
   public async uploadPackedSong(buffer: Buffer, publicId: string) {
-    const bucket = this.bucketSongs;
+    const bucket = this.S3_BUCKET_SONGS;
 
     const fileName =
       'packed/' + path.parse(publicId).name.replace(/\s/g, '') + '.zip';
@@ -106,7 +126,7 @@ export class FileService {
   }
 
   public async getSongDownloadUrl(key: string, filename: string) {
-    const bucket = this.bucketSongs;
+    const bucket = this.S3_BUCKET_SONGS;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -125,7 +145,7 @@ export class FileService {
   }
 
   public async uploadThumbnail(buffer: Buffer, publicId: string) {
-    const bucket = this.bucketThumbs;
+    const bucket = this.S3_BUCKET_THUMBS;
 
     const fileName =
       'thumbs/' + path.parse(publicId).name.replace(/\s/g, '') + '.png';
@@ -144,18 +164,22 @@ export class FileService {
   }
 
   public getThumbnailUrl(key: string) {
-    const bucket = this.bucketThumbs;
+    const bucket = this.S3_BUCKET_THUMBS;
     const url = this.getPublicFileUrl(key, bucket);
     return url;
   }
 
   private getPublicFileUrl(key: string, bucket: string) {
     const region = this.region;
-    return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`;
+    if (this.S3_ENDPOINT.includes('localhost')) {
+      // minio url
+      return `${this.S3_ENDPOINT}/${bucket}/${key}`;
+    } // production blackblaze url
+    else return `https://${bucket}.s3.${region}.backblazeb2.com/${key}`; // TODO: make possible to use custom domain
   }
 
   public async deleteSong(nbsFileUrl: string) {
-    const bucket = this.bucketSongs;
+    const bucket = this.S3_BUCKET_SONGS;
 
     const command = new GetObjectCommand({
       Bucket: bucket,
@@ -203,7 +227,7 @@ export class FileService {
   }
 
   public async getSongFile(nbsFileUrl: string): Promise<ArrayBuffer> {
-    const bucket = this.bucketSongs;
+    const bucket = this.S3_BUCKET_SONGS;
 
     const command = new GetObjectCommand({
       Bucket: bucket,

@@ -24,6 +24,40 @@ export class UserService {
     return await user.save();
   }
 
+  public async update(user: UserDocument): Promise<UserDocument> {
+    try {
+      return (await this.userModel.findByIdAndUpdate(user._id, user, {
+        new: true, // return the updated document
+      })) as UserDocument;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  public async createWithEmail(email: string): Promise<UserDocument> {
+    // verify if user exists same email, username or publicName
+    const userByEmail = await this.findByEmail(email);
+
+    if (userByEmail) {
+      throw new HttpException(
+        'Email already registered',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const emailPrefixUsername = await this.generateUsername(
+      email.split('@')[0],
+    );
+
+    const user = await this.userModel.create({
+      email: email,
+      username: emailPrefixUsername,
+      publicName: emailPrefixUsername,
+    });
+
+    return user;
+  }
+
   public async findByEmail(email: string): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email }).exec();
 
@@ -32,6 +66,20 @@ export class UserService {
 
   public async findByID(objectID: string): Promise<UserDocument | null> {
     const user = await this.userModel.findById(objectID).exec();
+
+    return user;
+  }
+
+  public async findByPublicName(
+    publicName: string,
+  ): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ publicName });
+
+    return user;
+  }
+
+  public async findByUsername(username: string): Promise<UserDocument | null> {
+    const user = await this.userModel.findOne({ username });
 
     return user;
   }
