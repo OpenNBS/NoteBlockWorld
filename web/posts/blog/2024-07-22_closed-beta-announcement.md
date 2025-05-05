@@ -19,7 +19,7 @@ This stage will last a couple weeks, so we can iron out any major bugs before th
 
 - Make sure to test everything as thoroughly as you can! If you find any issues, feedback or improvement suggestions, let us know via our Discord server or our [contact](/contact) page.
 
-- In order for the 'Open in NBS' button to work, you must have installed one of the latest **3.11 beta versions**. You can download them from the [NBS GitHub releases page](https://github.com/OpenNBS/OpenNoteBlockStudio/releases), or by enabling the option _'Check for development versions'_ in the app's preferences.
+- In order for the 'Open in NBS' button to work, you must have installed one of the latest **3.11 beta versions**. You can download them from the [NBS GitHub releases page](https://github.com/OpenNBS/NoteBlockStudio/releases), or by enabling the option _'Check for development versions'_ in the app's preferences.
 
 - At this time, all the songs you upload will be **public** and everyone will be able to download them. You'll be able to disable allowing downloads in the future, in case you wouldn't like your songs to be downloaded by other users.
 
