@@ -34,7 +34,7 @@ export async function generateMetadata({
     song = await response.data;
   } catch {
     return {
-      title: 'Unknown song!',
+      title: 'Song not found',
     };
   }
 
