@@ -244,9 +244,11 @@ export class FileService {
 
       const arrayBuffer = new ArrayBuffer(byteArray.length);
       const view = new Uint8Array(arrayBuffer);
+
       for (let i = 0; i < byteArray.length; i++) {
         view[i] = byteArray[i];
       }
+
       return arrayBuffer;
     } catch (error) {
       this.logger.error('Error getting file: ', error);

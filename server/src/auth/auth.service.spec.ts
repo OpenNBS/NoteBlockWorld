@@ -1,17 +1,14 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import axios from 'axios';
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import type { Request, Response } from 'express';
 
 import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { AuthService } from './auth.service';
-import { DiscordUser } from './types/discordProfile';
-import { GithubAccessToken } from './types/githubProfile';
-import { GoogleProfile } from './types/googleProfile';
 import { Profile } from './types/profile';
-import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
+
 const mockAxios = {
   get: jest.fn(),
   post: jest.fn(),
@@ -19,6 +16,7 @@ const mockAxios = {
   delete: jest.fn(),
   create: jest.fn(),
 };
+
 mock.module('axios', () => mockAxios);
 
 const mockUserService = {

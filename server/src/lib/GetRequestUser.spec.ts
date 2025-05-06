@@ -1,7 +1,8 @@
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
-import { GetRequestToken, validateUser } from './GetRequestUser';
+
 import type { UserDocument } from '@server/user/entity/user.entity';
 
+import { GetRequestToken, validateUser } from './GetRequestUser';
 
 describe('GetRequestToken', () => {
   it('should be a defined decorator', () => {

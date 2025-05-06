@@ -1,12 +1,12 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Model } from 'mongoose';
 
 import { SongWebhookService } from './song-webhook.service';
 import { Song as SongEntity, SongWithUser } from '../entity/song.entity';
 import { getUploadDiscordEmbed } from '../song.util';
-import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
 
 mock.module('../song.util', () => ({
   getUploadDiscordEmbed: jest.fn(),

@@ -3,6 +3,7 @@ import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
 import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
@@ -11,7 +12,6 @@ import { UserService } from '@server/user/user.service';
 
 import { SongUploadService } from './song-upload.service';
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
-import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
 
 // mock drawToImage function
 mock.module('@shared/features/thumbnail', () => ({

@@ -1,14 +1,10 @@
-import {
-  GetObjectCommand,
-  HeadBucketCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { FileService } from './file.service';
-import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
+
 mock.module('@aws-sdk/client-s3', () => {
   const mS3Client = {
     send: jest.fn(),
@@ -194,6 +190,7 @@ describe('FileService', () => {
     const arrayBufferResult = result.slice(0, result.byteLength);
 
     expect(arrayBufferResult).toBeInstanceOf(ArrayBuffer);
+
     expect(new Uint8Array(arrayBufferResult)).toEqual(
       new Uint8Array([1, 2, 3]),
     );

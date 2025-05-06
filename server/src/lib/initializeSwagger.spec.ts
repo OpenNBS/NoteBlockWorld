@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
+import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { initializeSwagger } from './initializeSwagger';
-import { mock, jest, describe, beforeEach, it, expect, spyOn } from 'bun:test';
 
 mock.module('@nestjs/swagger', () => ({
   DocumentBuilder: jest.fn().mockImplementation(() => ({
