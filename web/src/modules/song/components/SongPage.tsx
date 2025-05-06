@@ -12,6 +12,7 @@ import {
   OpenSongInNBSButton,
   ShareButton,
   UploaderBadge,
+  VisibilityBadge,
 } from './SongPageButtons';
 import SongCard from '../../browse/components/SongCard';
 import SongCardGroup from '../../browse/components/SongCardGroup';
@@ -73,7 +74,15 @@ export async function SongPage({ id }: { id: string }) {
             />
           </picture>
 
-          <h1 className='text-xl font-bold'>{song.title}</h1>
+          <div className='text-xl font-bold inline'>
+            <h1 className='inline'>{song.title}</h1>
+            {song.visibility === 'private' && (
+              <>
+                <span className='inline-block w-3 align-middle' />
+                <VisibilityBadge />
+              </>
+            )}
+          </div>
 
           {/* Uploader and actions */}
           <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
