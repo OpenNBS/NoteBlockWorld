@@ -260,7 +260,9 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
-    const foundSong = await this.songModel.findOne({ publicId: publicId });
+    const foundSong = await this.songModel.findOne({
+      publicId: publicId,
+    });
 
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -278,7 +280,11 @@ export class SongService {
 
     // increment view count
     foundSong.playCount++;
-    await foundSong.save();
+
+    this.songModel.updateOne(
+      { publicId: publicId },
+      { playCount: foundSong.playCount },
+    );
 
     const populatedSong = await foundSong.populate(
       'uploader',
