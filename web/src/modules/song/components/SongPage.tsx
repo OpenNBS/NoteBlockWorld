@@ -91,7 +91,9 @@ export async function SongPage({ id }: { id: string }) {
             <div className='flex-grow'></div>
             <div className='flex flex-row gap-4 overflow-x-auto'>
               {/* <LikeButton /> */}
-              <ShareButton songId={song.publicId} />
+              {song.visibility !== 'private' && (
+                <ShareButton songId={song.publicId} />
+              )}
               <OpenSongInNBSButton song={song} />
               <DownloadSongButton song={song} />
             </div>
