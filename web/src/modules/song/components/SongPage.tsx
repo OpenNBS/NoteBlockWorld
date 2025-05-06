@@ -21,7 +21,7 @@ import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
-  let song;
+  let song: SongViewDtoType;
 
   // get 'token' cookie from headers
   const cookieStore = await cookies();
