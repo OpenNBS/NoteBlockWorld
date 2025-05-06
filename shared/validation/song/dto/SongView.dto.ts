@@ -69,7 +69,7 @@ export class SongViewDto {
 
   @IsString()
   @IsNotEmpty()
-  license: string;
+  license: LicenseType;
 
   customInstruments: string[];
 
