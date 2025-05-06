@@ -4,13 +4,17 @@ import {
   HttpStatus,
   createParamDecorator,
 } from '@nestjs/common';
+import type { Request } from 'express';
 
 import type { UserDocument } from '@server/user/entity/user.entity';
 
 export const GetRequestToken = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
-    const req = ctx.switchToHttp().getRequest();
-    const user = req.existingUser as UserDocument;
+    const req = ctx
+      .switchToHttp()
+      .getRequest<Request & { existingUser: UserDocument }>();
+
+    const user = req.existingUser;
 
     return user;
   },
