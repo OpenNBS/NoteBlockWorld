@@ -9,7 +9,7 @@ import {
 
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 
-import type { CategoryType, VisibilityType } from './types';
+import type { CategoryType, LicenseType, VisibilityType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export type SongViewUploader = {
