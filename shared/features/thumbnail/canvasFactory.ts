@@ -46,7 +46,7 @@ if (typeof document === 'undefined') {
 
   const useFont = () => {
     GlobalFonts.registerFromPath(
-      'file:' + getPath('assets/fonts/Lato-Regular.ttf').toString(),
+      getPath('assets/fonts/Lato-Regular.ttf').toString(),
       'Lato',
     );
   };
