@@ -76,8 +76,6 @@ export class FileService {
     const s3Client = new S3Client({
       region: region,
       endpoint: endpoint,
-      requestChecksumCalculation:
-        process.env.NODE_ENV === 'development' ? 'WHEN_REQUIRED' : undefined,
       credentials: {
         accessKeyId: key,
         secretAccessKey: secret,
