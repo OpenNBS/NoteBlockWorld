@@ -18,6 +18,7 @@
     }
   ],
   "settings": {
+    "window.title": "${dirty}${rootName}${separator}${profileName}${separator}${appName}",
     "editor.formatOnSave": true,
     "eslint.validate": ["typescript"],
     "eslint.run": "onType",
