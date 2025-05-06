@@ -34,7 +34,7 @@
     "gray-matter": "^4.0.3",
     "i": "^0.3.7",
     "js-confetti": "^0.12.0",
-    "next": "14.2.5",
+    "next": "14.2.26",
     "next-recaptcha-v3": "^1.4.1",
     "nextjs-toploader": "^1.6.6",
     "npm": "^10.5.1",
