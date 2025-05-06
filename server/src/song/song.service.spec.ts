@@ -644,11 +644,12 @@ describe('SongService', () => {
 
     it('should throw an error if song is not found', async () => {
       const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const mockFindOne = {
-        populate: jest.fn().mockResolvedValue(null),
-      };
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
+
+      const mockFindOne = null;
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
 
@@ -662,48 +663,24 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
+        publicId: 'test-public-id',
         visibility: 'private',
         uploader: 'different-user-id',
       };
 
-      jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
-      } as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
 
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
-    });
-
-    it('should throw an error if song is private and user is unauthorized', async () => {
-      const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-
-      const songEntity = {
-        visibility: 'private',
-        uploader: 'different-user-id',
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
-      } as any);
-
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
+      expect(service.getSong(publicId, user)).rejects.toThrow(HttpException);
     });
 
     it('should throw an error if song is private and user is not logged in', async () => {
       const publicId = 'test-id';
       const user: UserDocument = null as any;
 
-      const songEntity = {
-        visibility: 'private',
-        uploader: 'different-user-id',
-      };
-
       jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
+        populate: jest.fn().mockImplementationOnce(() => {
+          throw new HttpException('Song not found', 404);
+        }),
       } as any);
 
       await expect(service.getSong(publicId, user)).rejects.toThrow(

@@ -77,7 +77,6 @@ describe('FileService', () => {
         .mockResolvedValueOnce({}); // Mock for the second bucket
 
       await fileService['verifyBucket']();
-      console.log((s3Client.send as jest.Mock).mock.calls);
 
       // Ensure the mock was called twice
       expect(s3Client.send).toHaveBeenCalledTimes(4);
