@@ -260,9 +260,7 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
-    const foundSong = await this.songModel
-      .findOne({ publicId: publicId })
-      .populate('uploader', 'username profileImage -_id');
+    const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -282,7 +280,12 @@ export class SongService {
     foundSong.playCount++;
     await foundSong.save();
 
-    return SongViewDto.fromSongDocument(foundSong);
+    const populatedSong = await foundSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    );
+
+    return SongViewDto.fromSongDocument(populatedSong);
   }
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/

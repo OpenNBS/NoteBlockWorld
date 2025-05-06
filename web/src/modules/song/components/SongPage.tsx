@@ -1,5 +1,6 @@
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
@@ -21,8 +22,21 @@ import { formatTimeAgo } from '../../shared/util/format';
 export async function SongPage({ id }: { id: string }) {
   let song;
 
+  // get 'token' cookie from headers
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value || null;
+
+  const headers: Record<string, string> = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${id}`);
+    const response = await axios.get<SongViewDtoType>(`/song/${id}`, {
+      headers,
+    });
+
     song = await response.data;
   } catch {
     return <ErrorBox message='An error occurred while retrieving the song' />;
