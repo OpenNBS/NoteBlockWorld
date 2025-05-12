@@ -13,7 +13,6 @@ import {
   getUserData,
 } from '@web/src/modules/auth/features/auth.utils';
 
-import { BlockSearch } from './BlockSearchProps';
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
@@ -108,7 +107,10 @@ export const Header = async () => {
             id='about-tab'
           />
           <RandomSongButton />
-          <BlockSearch />
+          {/*
+            // TODO: feature song search
+            <BlockSearch />
+            */}
         </div>
 
         {/* Sign in / Profile */}

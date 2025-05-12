@@ -133,7 +133,7 @@ export const SearchPageComponent = () => {
         <>
           {/* User Cards */}
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {data.map((user) => (
+            {data.map((user: any) => (
               <UserCard key={user.id} user={user} />
             ))}
           </div>
