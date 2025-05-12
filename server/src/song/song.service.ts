@@ -17,7 +17,7 @@ import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongRes
 import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { Song as SongEntity, SongWithUser } from './entity/song.entity';
@@ -284,9 +284,9 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
   ): Promise<SongViewDto> {
-    const foundSong = await this.songModel
-      .findOne({ publicId: publicId })
-      .populate('uploader', 'username profileImage -_id');
+    const foundSong = await this.songModel.findOne({
+      publicId: publicId,
+    });
 
     if (!foundSong) {
       throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
@@ -304,9 +304,18 @@ export class SongService {
 
     // increment view count
     foundSong.playCount++;
-    await foundSong.save();
 
-    return SongViewDto.fromSongDocument(foundSong);
+    this.songModel.updateOne(
+      { publicId: publicId },
+      { playCount: foundSong.playCount },
+    );
+
+    const populatedSong = await foundSong.populate(
+      'uploader',
+      'username profileImage -_id',
+    );
+
+    return SongViewDto.fromSongDocument(populatedSong);
   }
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/

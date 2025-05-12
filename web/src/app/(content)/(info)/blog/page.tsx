@@ -46,7 +46,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
                 width={480}
                 height={360}
                 alt=''
-                className='rounded-md aspect-[3/2] w-full object-cover transition-all duration-300 mb-2'
+                className='rounded-md aspect-[16/9] w-full object-cover transition-all duration-300 mb-2'
               />
 
               <h3 className='text-lg font-bold text-opacity-50 mb-2 leading-6 flex-grow'>

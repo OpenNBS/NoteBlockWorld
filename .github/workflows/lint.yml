@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - develop
+      - main
   pull_request:
     branches:
       - develop
+      - main
 
 jobs:
   lint:
@@ -18,16 +20,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Set up Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "${HOME}/.bun/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Run linter
-        run: pnpm lint
+        run: bun run lint

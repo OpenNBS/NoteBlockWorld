@@ -1,6 +1,6 @@
 services:
   mongodb:
-    container_name: opennoteworld-mongodb-dev
+    container_name: noteblockworld-mongodb-dev
     image: mongo
     volumes:
       - mongodb_data:/data/db
@@ -12,7 +12,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=noteblockworlduser
 
   maildev:
-    container_name: opennoteworld-maildev-dev
+    container_name: noteblockworld-maildev-dev
     image: maildev/maildev
     ports:
       - '1080:1080' # Web Interface

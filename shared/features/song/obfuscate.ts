@@ -122,6 +122,7 @@ export class SongObfuscator {
 
       let key, pitch;
 
+      // TODO: add regression test for this behavior
       if (factoredPitch < 0) {
         // Below A0
         key = 0;

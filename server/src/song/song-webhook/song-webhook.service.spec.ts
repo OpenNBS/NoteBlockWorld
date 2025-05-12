@@ -1,13 +1,14 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Model } from 'mongoose';
 
 import { SongWebhookService } from './song-webhook.service';
 import { Song as SongEntity, SongWithUser } from '../entity/song.entity';
 import { getUploadDiscordEmbed } from '../song.util';
 
-jest.mock('../song.util', () => ({
+mock.module('../song.util', () => ({
   getUploadDiscordEmbed: jest.fn(),
 }));
 
@@ -57,7 +58,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockResolvedValue({
+      (global as any).fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({ id: 'message-id' }),
       });
 
@@ -82,7 +83,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
       const result = await service.postSongWebhook(song);
 
@@ -100,7 +101,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockResolvedValue({});
+      (global as any).fetch = jest.fn().mockResolvedValue({});
 
       await service.updateSongWebhook(song);
 
@@ -125,9 +126,9 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
-      const loggerSpy = jest.spyOn(service['logger'], 'error');
+      const loggerSpy = spyOn(service['logger'], 'error');
 
       await service.updateSongWebhook(song);
 
@@ -146,7 +147,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      global.fetch = jest.fn().mockResolvedValue({});
+      (global as any).fetch = jest.fn().mockResolvedValue({});
 
       await service.deleteSongWebhook(song);
 
@@ -165,9 +166,9 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      global.fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
 
-      const loggerSpy = jest.spyOn(service['logger'], 'error');
+      const loggerSpy = spyOn(service['logger'], 'error');
 
       await service.deleteSongWebhook(song);
 
@@ -187,7 +188,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      const updateSpy = jest.spyOn(service, 'updateSongWebhook');
+      const updateSpy = spyOn(service, 'updateSongWebhook');
 
       await service.syncSongWebhook(song);
 
@@ -202,7 +203,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      const deleteSpy = jest.spyOn(service, 'deleteSongWebhook');
+      const deleteSpy = spyOn(service, 'deleteSongWebhook');
 
       await service.syncSongWebhook(song);
 
@@ -216,7 +217,7 @@ describe('SongWebhookService', () => {
         uploader: { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
-      const postSpy = jest.spyOn(service, 'postSongWebhook');
+      const postSpy = spyOn(service, 'postSongWebhook');
 
       await service.syncSongWebhook(song);
 
@@ -251,7 +252,7 @@ describe('SongWebhookService', () => {
         populate: jest.fn().mockResolvedValue(songs),
       });
 
-      const syncSpy = jest.spyOn(service, 'syncSongWebhook');
+      const syncSpy = spyOn(service, 'syncSongWebhook');
 
       await (service as any).syncAllSongsWebhook();
 

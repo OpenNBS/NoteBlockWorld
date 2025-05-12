@@ -1,133 +1,128 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import type Path from 'path';
 
-let content = {} as any;
+import type NapiRs from '@napi-rs/canvas';
+
+/*
+import type {
+  Canvas as NapiCanvas,
+  Image as NapiImage,
+  GlobalFonts as NapiGlobalFonts,
+} from '@napi-rs/canvas';
+*/
+
+export interface CanvasUtils {
+  createCanvas(width: number, height: number): any;
+  loadImage(src: string): Promise<any>;
+  getPath(filename: string): string | URL;
+  useFont(): void;
+  saveToImage(canvas: HTMLCanvasElement | NapiRs.Canvas): Promise<Uint8Array>;
+  noteBlockImage: Promise<any> | any;
+  DrawingCanvas: any;
+  RenderedImage: any;
+}
+
+let canvasUtils: CanvasUtils;
 
 if (typeof document === 'undefined') {
-  // Assume Node.js environment
-  const canvasModule = require('@napi-rs/canvas');
-  const { createCanvas, loadImage, registerFont, GlobalFonts } = canvasModule;
+  // Node.js/Bun environment
+  const canvasModule = require('@napi-rs/canvas') as typeof NapiRs;
+  const path = require('path') as typeof Path;
 
-  const path = require('path');
-
-  const Canvas = canvasModule.Canvas;
-  const Image = canvasModule.Image;
+  const {
+    createCanvas: nodeCreateCanvas,
+    loadImage: nodeLoadImage,
+    GlobalFonts,
+  } = canvasModule;
 
   const getPath = (filename: string) => {
-    const dir = path.join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'assets',
-      filename.split('/').join(path.sep),
-    );
+    const workingDir = process.cwd();
+    const fullPath = path.join(workingDir, filename.split('/').join(path.sep));
 
-    console.log('dir', dir);
-    return dir;
+    return 'file://' + fullPath;
   };
 
-  const saveToImage = (canvas: typeof Canvas) => {
-    return canvas.encode('png');
-  };
-
-  // Load note block image
-  let noteBlockImage;
-
-  try {
-    noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
-  } catch (error) {
-    console.log('Error loading image: ', error);
-  }
+  const saveToImage = (canvas: NapiRs.Canvas) => canvas.encode('png');
 
   const useFont = () => {
-    GlobalFonts.registerFromPath(getPath('/fonts/Lato-Regular.ttf'), 'Lato');
+    GlobalFonts.registerFromPath(
+      getPath('assets/fonts/Lato-Regular.ttf').toString(),
+      'Lato',
+    );
   };
 
-  useFont();
+  let noteBlockImage: Promise<any>;
 
-  content = {
-    createCanvas,
-    loadImage,
-    registerFont,
+  try {
+    noteBlockImage = nodeLoadImage(
+      new URL(getPath('assets/img/note-block-grayscale.png')),
+    );
+  } catch (error) {
+    console.error('Error loading image: ', error);
+    noteBlockImage = Promise.reject(error);
+  }
+
+  canvasUtils = {
+    createCanvas: nodeCreateCanvas,
+    loadImage: nodeLoadImage,
     getPath,
     useFont,
     saveToImage,
     noteBlockImage,
-    Canvas,
-    Image,
+    DrawingCanvas: canvasModule.Canvas,
+    RenderedImage: canvasModule.Image,
   };
 } else {
-  // Assume browser environment
+  // Browser environment
   const createCanvas = (width: number, height: number) => {
-    const canvas = new OffscreenCanvas(width, height);
-    return canvas;
+    return new OffscreenCanvas(width, height);
   };
 
-  const loadImage = function (src: string): Promise<HTMLImageElement> {
+  const loadImage = (src: string): Promise<HTMLImageElement> => {
     return new Promise((resolve, reject) => {
-      const img = document.createElement('img');
+      const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = reject;
       img.src = src;
     });
   };
 
-  const getPath = (filename: string) => {
-    return filename;
+  const getPath = (filename: string) => filename;
+
+  const saveToImage = (_canvas: any) => {
+    console.warn('saveToImage not implemented in browser');
+    throw new Error('saveToImage not implemented in browser');
   };
 
-  const saveToImage = (canvas: HTMLCanvasElement) => {
-    console.log('Not implemented');
-  };
-
-  // TODO: refactor into resources attribute of some sort
-
-  // Load note block image
-  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
-
-  // Register font
   const useFont = () => {
-    const f = new FontFace('Lato', 'url(/fonts/Lato-Regular.ttf)');
+    const font = new FontFace('Lato', 'url(/fonts/Lato-Regular.ttf)');
 
-    f.load().then((font) => {
-      document.fonts.add(font);
+    font.load().then((loadedFont) => {
+      document.fonts.add(loadedFont);
     });
   };
 
-  useFont();
+  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
 
-  const Canvas = HTMLCanvasElement;
-  const Image = HTMLImageElement;
-
-  content = {
+  canvasUtils = {
     createCanvas,
     loadImage,
     getPath,
+    useFont,
     saveToImage,
     noteBlockImage,
-    Canvas,
-    Image,
+    DrawingCanvas: HTMLCanvasElement,
+    RenderedImage: HTMLImageElement,
   };
 }
 
-const {
+export const {
   createCanvas,
   loadImage,
   getPath,
   useFont,
   saveToImage,
   noteBlockImage,
-  Canvas,
-  Image,
-} = content;
-
-export {
-  createCanvas,
-  loadImage,
-  getPath,
-  useFont,
-  saveToImage,
-  noteBlockImage,
-  Canvas,
-  Image,
-};
+  DrawingCanvas,
+  RenderedImage,
+} = canvasUtils;

@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "lint": "eslint */**/*.ts --fix",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@encode42/nbs.js": "^5.0.2",
@@ -23,6 +24,7 @@
     "unidecode": "^1.1.0"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.10",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/multer": "^1.4.11",

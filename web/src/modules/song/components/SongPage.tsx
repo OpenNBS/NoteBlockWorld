@@ -1,5 +1,6 @@
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 import axios from '@web/src/lib/axios';
@@ -11,6 +12,7 @@ import {
   OpenSongInNBSButton,
   ShareButton,
   UploaderBadge,
+  VisibilityBadge,
 } from './SongPageButtons';
 import SongCard from '../../browse/components/SongCard';
 import SongCardGroup from '../../browse/components/SongCardGroup';
@@ -19,10 +21,23 @@ import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
-  let song;
+  let song: SongViewDtoType;
+
+  // get 'token' cookie from headers
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value || null;
+
+  const headers: Record<string, string> = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${id}`);
+    const response = await axios.get<SongViewDtoType>(`/song/${id}`, {
+      headers,
+    });
+
     song = await response.data;
   } catch {
     return <ErrorBox message='An error occurred while retrieving the song' />;
@@ -59,7 +74,15 @@ export async function SongPage({ id }: { id: string }) {
             />
           </picture>
 
-          <h1 className='text-xl font-bold'>{song.title}</h1>
+          <div className='text-xl font-bold inline'>
+            <h1 className='inline'>{song.title}</h1>
+            {song.visibility === 'private' && (
+              <>
+                <span className='inline-block w-3 align-middle' />
+                <VisibilityBadge />
+              </>
+            )}
+          </div>
 
           {/* Uploader and actions */}
           <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
@@ -68,7 +91,9 @@ export async function SongPage({ id }: { id: string }) {
             <div className='flex-grow'></div>
             <div className='flex flex-row gap-4 overflow-x-auto'>
               {/* <LikeButton /> */}
-              <ShareButton songId={song.publicId} />
+              {song.visibility !== 'private' && (
+                <ShareButton songId={song.publicId} />
+              )}
               <OpenSongInNBSButton song={song} />
               <DownloadSongButton song={song} />
             </div>

@@ -17,7 +17,7 @@ import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import { SongDocument, Song as SongEntity } from '../entity/song.entity';
@@ -279,8 +279,13 @@ export class SongUploadService {
     body: UploadSongDto,
     user: UserDocument,
   ): { nbsSong: Song; songBuffer: Buffer } {
+    const songFileArrayBuffer = songFileBuffer.buffer.slice(
+      songFileBuffer.byteOffset,
+      songFileBuffer.byteOffset + songFileBuffer.byteLength,
+    ) as ArrayBuffer;
+
     // Is the uploaded file a valid .nbs file?
-    const nbsSong = this.getSongObject(songFileBuffer);
+    const nbsSong = this.getSongObject(songFileArrayBuffer);
 
     // Update NBS file with form values
     injectSongFileMetadata(

@@ -4,10 +4,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 
-import { MySongsController } from './my-songs.controller';
 import { SongService } from '../song.service';
+import { MySongsController } from './my-songs.controller';
 
 const mockSongService = {
   getMySongsPage: jest.fn(),
@@ -62,9 +62,6 @@ describe('MySongsController', () => {
     it('should handle thrown an exception if userDocument is null', async () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
       const user = null;
-      const error = new Error('Test error');
-
-      mockSongService.getMySongsPage.mockRejectedValueOnce(error);
 
       await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
         HttpException,

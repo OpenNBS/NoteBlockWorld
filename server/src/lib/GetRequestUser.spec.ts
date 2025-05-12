@@ -1,5 +1,6 @@
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
-import { UserDocument } from '@server/user/entity/user.entity';
+
+import type { UserDocument } from '@server/user/entity/user.entity';
 
 import { GetRequestToken, validateUser } from './GetRequestUser';
 

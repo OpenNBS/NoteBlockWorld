@@ -73,7 +73,7 @@ export class FileService {
     this.region = region;
 
     // Create S3 client
-    const s3Config = new S3Client({
+    const s3Client = new S3Client({
       region: region,
       endpoint: endpoint,
       credentials: {
@@ -83,7 +83,7 @@ export class FileService {
       forcePathStyle: endpoint.includes('localhost') ? true : false,
     });
 
-    return s3Config;
+    return s3Client;
   }
 
   // Uploads a song to the S3 bucket and returns the key
@@ -131,7 +131,10 @@ export class FileService {
     const command = new GetObjectCommand({
       Bucket: bucket,
       Key: key,
-      ResponseContentDisposition: `attachment; filename="${filename}"`,
+      ResponseContentDisposition: `attachment; filename="${filename.replace(
+        /[/"]/g,
+        '_',
+      )}"`,
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {
@@ -239,7 +242,14 @@ export class FileService {
         throw new Error('Error getting file');
       }
 
-      return byteArray.buffer;
+      const arrayBuffer = new ArrayBuffer(byteArray.length);
+      const view = new Uint8Array(arrayBuffer);
+
+      for (let i = 0; i < byteArray.length; i++) {
+        view[i] = byteArray[i];
+      }
+
+      return arrayBuffer;
     } catch (error) {
       this.logger.error('Error getting file: ', error);
       throw error;

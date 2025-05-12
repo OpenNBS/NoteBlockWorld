@@ -9,7 +9,7 @@ import {
 
 import { SongStats } from '@shared/validation/song/dto/SongStats';
 
-import type { CategoryType } from './types';
+import type { CategoryType, LicenseType, VisibilityType } from './types';
 import { SongDocument } from '../../../../server/src/song/entity/song.entity';
 
 export type SongViewUploader = {
@@ -61,11 +61,15 @@ export class SongViewDto {
 
   @IsString()
   @IsNotEmpty()
+  visibility: VisibilityType;
+
+  @IsString()
+  @IsNotEmpty()
   category: CategoryType;
 
   @IsString()
   @IsNotEmpty()
-  license: string;
+  license: LicenseType;
 
   customInstruments: string[];
 
@@ -90,6 +94,7 @@ export class SongViewDto {
       originalAuthor: song.originalAuthor,
       description: song.description,
       category: song.category,
+      visibility: song.visibility,
       license: song.license,
       customInstruments: song.customInstruments,
       fileSize: song.fileSize,

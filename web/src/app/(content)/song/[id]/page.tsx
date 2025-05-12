@@ -1,5 +1,6 @@
 import { SongViewDtoType } from '@shared/validation/song/dto/types';
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 
 import axios from '@web/src/lib/axios';
 import { SongPage } from '@web/src/modules/song/components/SongPage';
@@ -16,12 +17,24 @@ export async function generateMetadata({
   let song;
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value || null;
+
+  const headers: Record<string, string> = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${params.id}`);
-    song = response.data;
+    const response = await axios.get<SongViewDtoType>(`/song/${params.id}`, {
+      headers,
+    });
+
+    song = await response.data;
   } catch {
     return {
-      title: 'Unknown song!',
+      title: 'Song not found',
     };
   }
 

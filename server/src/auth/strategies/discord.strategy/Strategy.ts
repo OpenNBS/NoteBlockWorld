@@ -245,10 +245,6 @@ export default class Strategy extends OAuth2Strategy {
 
     const { prompt } = this;
     if (prompt) params.prompt = prompt;
-
-    console.log('Authorization Params');
-    console.log('params', params);
-    console.log('options', options);
     return params;
   }
 }

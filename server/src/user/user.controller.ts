@@ -18,7 +18,7 @@ import { UserSearchViewDto } from '@shared/validation/user/dto/UserSearchView.dt
 
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
-import { UserDocument } from './entity/user.entity';
+import type { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')

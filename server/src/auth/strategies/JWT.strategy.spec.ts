@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 import { JwtStrategy } from './JWT.strategy';
 

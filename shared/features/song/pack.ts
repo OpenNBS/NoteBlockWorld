@@ -1,5 +1,5 @@
 import { Song } from '@encode42/nbs.js';
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
 
 import { SongObfuscator } from './obfuscate';
 
@@ -15,7 +15,7 @@ export async function obfuscateAndPackSong(
   // (see: https://github.com/Stuk/jszip/issues/890)
 
   // Create a new empty ZIP file
-  const zip = new JSZip.default();
+  const zip = new JSZip();
 
   // Create a 'sounds' folder in the ZIP file
   const soundsFolder = zip.folder('sounds');

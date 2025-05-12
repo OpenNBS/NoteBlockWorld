@@ -5,6 +5,7 @@ import {
   faDownload,
   faExternalLink,
   faHeart,
+  faLock,
   faPlay,
   faPlus,
   faShare,
@@ -26,6 +27,15 @@ import {
   TooltipTrigger,
 } from '../../shared/components/tooltip';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
+
+const VisibilityBadge = () => {
+  return (
+    <span className='inline-flex items-center bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded-md text-sm font-semibold'>
+      <FontAwesomeIcon icon={faLock} className='w-3' />
+      <span className='ml-1.5'>Private</span>
+    </span>
+  );
+};
 
 const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
   return (
@@ -281,6 +291,7 @@ const DownloadButton = ({
 };
 
 export {
+  VisibilityBadge,
   UploaderBadge,
   FollowButton,
   LikeButton,

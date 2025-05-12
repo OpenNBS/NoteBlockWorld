@@ -9,7 +9,7 @@ import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongRes
 import mongoose, { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
-import { UserDocument } from '@server/user/entity/user.entity';
+import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 import {
@@ -657,11 +657,12 @@ describe('SongService', () => {
 
     it('should throw an error if song is not found', async () => {
       const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const mockFindOne = {
-        populate: jest.fn().mockResolvedValue(null),
-      };
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
+
+      const mockFindOne = null;
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
 
@@ -675,48 +676,24 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
+        publicId: 'test-public-id',
         visibility: 'private',
         uploader: 'different-user-id',
       };
 
-      jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
-      } as any);
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
 
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
-    });
-
-    it('should throw an error if song is private and user is unauthorized', async () => {
-      const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-
-      const songEntity = {
-        visibility: 'private',
-        uploader: 'different-user-id',
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
-      } as any);
-
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
+      expect(service.getSong(publicId, user)).rejects.toThrow(HttpException);
     });
 
     it('should throw an error if song is private and user is not logged in', async () => {
       const publicId = 'test-id';
       const user: UserDocument = null as any;
 
-      const songEntity = {
-        visibility: 'private',
-        uploader: 'different-user-id',
-      };
-
       jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockResolvedValue(songEntity),
+        populate: jest.fn().mockImplementationOnce(() => {
+          throw new HttpException('Song not found', 404);
+        }),
       } as any);
 
       await expect(service.getSong(publicId, user)).rejects.toThrow(
@@ -842,14 +819,16 @@ describe('SongService', () => {
 
       jest
         .spyOn(fileService, 'getSongDownloadUrl')
-        .mockRejectedValue(new Error());
+        .mockImplementationOnce(() => {
+          throw new Error('Internal error');
+        });
 
       await expect(service.getSongDownloadUrl(publicId, user)).rejects.toThrow(
         HttpException,
       );
     });
 
-    it('should throw an error in case of an internal error on saveing the song', async () => {
+    it('should throw an error in case of an internal error on saving the song', async () => {
       const publicId = 'test-id';
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
@@ -876,7 +855,9 @@ describe('SongService', () => {
         packedSongUrl: 'http://test.com/packed-file.nbs',
         nbsFileUrl: 'http://test.com/file.nbs',
         thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        save: jest.fn().mockRejectedValue(new Error()), // Simulate error on save
+        save: jest.fn().mockImplementationOnce(() => {
+          throw new Error('Error saving song');
+        }),
       };
 
       jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);

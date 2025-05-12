@@ -18,7 +18,7 @@
         }
     ],
     "settings": {
-        "window.title": "${dirty}${rootName}",
+        "window.title": "${dirty}${rootName}${separator}${profileName}${separator}${appName}",
         "editor.formatOnSave": true,
         "eslint.validate": [
             "typescript"
@@ -42,5 +42,5 @@
             "Bentroen",
             "Tomast"
         ]
-    }
+    },
 }
