@@ -1,124 +1,16 @@
 import {
-  DrawingCanvas,
-  RenderedImage,
   createCanvas,
   noteBlockImage,
   saveToImage,
+  useFont,
 } from './canvasFactory';
-import { NoteQuadTree } from '../song/notes';
+import { Canvas, DrawParams } from './types';
+import { getKeyText, instrumentColors, isDarkColor, tintImage } from './utils';
 
 export { bgColorsArray } from './colors';
+useFont();
 
-interface DrawParams {
-  notes: NoteQuadTree;
-  startTick: number;
-  startLayer: number;
-  zoomLevel: number;
-  backgroundColor: string;
-  canvasWidth?: number;
-  canvasHeight?: number;
-  imgWidth: number;
-  imgHeight: number;
-}
-
-type Canvas = typeof DrawingCanvas;
-type Image = typeof RenderedImage;
-
-const instrumentColors = [
-  '#1964ac',
-  '#3c8e48',
-  '#be6b6b',
-  '#bebe19',
-  '#9d5a98',
-  '#572b21',
-  '#bec65c',
-  '#be19be',
-  '#52908d',
-  '#bebebe',
-  '#1991be',
-  '#be2328',
-  '#be5728',
-  '#19be19',
-  '#be1957',
-  '#575757',
-];
-
-const tintedImages: Record<string, Canvas> = {};
-
-// Function to apply tint to an image
-function tintImage(image: Image, color: string): Canvas {
-  if (tintedImages[color]) {
-    return tintedImages[color];
-  }
-
-  const canvas = createCanvas(image.width, image.height);
-  const ctx = canvas.getContext('2d');
-
-  if (!ctx) {
-    throw new Error('Could not get canvas context');
-  }
-
-  // Fill background with the color
-  ctx.fillStyle = color;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Apply the note block texture to the color
-  ctx.globalCompositeOperation = 'hard-light';
-  ctx.globalAlpha = 0.67;
-  ctx.drawImage(image, 0, 0);
-
-  // Reset canvas settings
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.globalAlpha = 1;
-
-  tintedImages[color] = canvas;
-
-  return canvas;
-}
-
-// Function to convert key number to key text
-function getKeyText(key: number): string {
-  const octaves = Math.floor((key + 9) / 12);
-
-  const notes = [
-    'C',
-    'C#',
-    'D',
-    'D#',
-    'E',
-    'F',
-    'F#',
-    'G',
-    'G#',
-    'A',
-    'A#',
-    'B',
-  ];
-
-  const note = notes[(key + 9) % 12];
-
-  return `${note}${octaves}`;
-}
-
-function getLuma(color: string): number {
-  // source: https://stackoverflow.com/a/12043228/9045426
-
-  const c = color?.substring(1) || ''; // strip #
-  const rgb = parseInt(c, 16); // convert rrggbb to decimal
-  const r = (rgb >> 16) & 0xff; // extract red
-  const g = (rgb >> 8) & 0xff; // extract green
-  const b = (rgb >> 0) & 0xff; // extract blue
-
-  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-
-  return luma;
-}
-
-function isDarkColor(color: string, threshold = 40): boolean {
-  return getLuma(color) < threshold;
-}
-
-export async function swap(src: Canvas, dst: Canvas) {
+export const swap = async (src: Canvas, dst: Canvas) => {
   /**
    * Run a `drawFunction` that returns a canvas and draw it to the passed `canvas`.
    *
@@ -127,7 +19,6 @@ export async function swap(src: Canvas, dst: Canvas) {
    *
    * @returns Nothing
    */
-
   // Get canvas context
   const ctx = dst.getContext('2d');
 
@@ -137,9 +28,9 @@ export async function swap(src: Canvas, dst: Canvas) {
 
   // Swap the canvas
   ctx.drawImage(src, 0, 0);
-}
+};
 
-export async function drawNotesOffscreen({
+export const drawNotesOffscreen = async ({
   notes,
   startTick,
   startLayer,
@@ -149,7 +40,7 @@ export async function drawNotesOffscreen({
   //canvasHeight,
   imgWidth = 1280,
   imgHeight = 768,
-}: DrawParams) {
+}: DrawParams) => {
   // Create new offscreen canvas
   const canvas = createCanvas(imgWidth, imgHeight);
   const ctx = canvas.getContext('2d');
@@ -235,9 +126,9 @@ export async function drawNotesOffscreen({
   });
 
   return canvas;
-}
+};
 
-export async function drawToImage(params: DrawParams): Promise<Buffer> {
+export const drawToImage = async (params: DrawParams): Promise<Buffer> => {
   let canvas;
   const { imgWidth, imgHeight } = params;
 
@@ -251,4 +142,4 @@ export async function drawToImage(params: DrawParams): Promise<Buffer> {
   // Convert to Buffer
   const buffer = Buffer.from(byteArray);
   return buffer;
-}
+};
