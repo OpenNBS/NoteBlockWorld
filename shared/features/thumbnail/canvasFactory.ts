@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { console } from 'inspector';
 import type Path from 'path';
 
 import type NapiRs from '@napi-rs/canvas';
@@ -45,10 +46,21 @@ if (typeof document === 'undefined') {
   const saveToImage = (canvas: NapiRs.Canvas) => canvas.encode('png');
 
   const useFont = () => {
-    GlobalFonts.registerFromPath(
-      getPath('assets/fonts/Lato-Regular.ttf').toString(),
-      'Lato',
-    );
+    const path = getPath('assets/fonts/Lato-Regular.ttf').toString();
+    console.log('Font path: ', path);
+
+    // ensure the file exists
+    Bun.file(path)
+      .exists()
+      .then((exists) => {
+        if (exists) {
+          console.log('Font file exists');
+        } else {
+          console.error('Font file does not exist at path: ', path);
+        }
+      });
+
+    GlobalFonts.registerFromPath(path, 'Lato');
   };
 
   let noteBlockImage: Promise<any>;
