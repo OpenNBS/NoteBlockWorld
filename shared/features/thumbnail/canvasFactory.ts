@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { console } from 'inspector';
 import type Path from 'path';
 
 import type NapiRs from '@napi-rs/canvas';
