@@ -1,4 +1,3 @@
-import { Image } from './types';
 import { getKeyText, instrumentColors, isDarkColor } from './utils';
 
 // Mock canvasFactory
@@ -15,12 +14,6 @@ jest.mock('./canvasFactory', () => ({
     }),
   })),
 }));
-
-// Mock Image type
-const mockImage: Image = {
-  width: 100,
-  height: 100,
-};
 
 describe('instrumentColors', () => {
   it('should contain 16 color codes', () => {
