@@ -1,5 +1,5 @@
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
+import type { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
 
 import axiosInstance from '../../../lib/axios';
 

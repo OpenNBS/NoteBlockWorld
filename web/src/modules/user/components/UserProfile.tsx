@@ -13,7 +13,10 @@ type UserProfileProps = {
   songData: SongPreviewDto[] | null;
 };
 
-export const UserProfile = ({ userData, songData }: UserProfileProps) => {
+export const UserProfile: React.FC<UserProfileProps> = ({
+  userData,
+  songData,
+}) => {
   const { lastSeen, username, description, profileImage, socialLinks } =
     userData;
 

@@ -1,4 +1,21 @@
-import { SocialLinks, UserDocument } from '@server/user/entity/user.entity';
+export class SocialLinks {
+  bandcamp?: string;
+  discord?: string;
+  facebook?: string;
+  github?: string;
+  instagram?: string;
+  reddit?: string;
+  snapchat?: string;
+  soundcloud?: string;
+  spotify?: string;
+  steam?: string;
+  telegram?: string;
+  tiktok?: string;
+  threads?: string;
+  twitch?: string;
+  x?: string;
+  youtube?: string;
+}
 
 export class UserProfileViewDto {
   username: string;
@@ -12,7 +29,7 @@ export class UserProfileViewDto {
 
   socialLinks: InstanceType<typeof SocialLinks>;
 
-  public static fromUserDocument(user: UserDocument): UserProfileViewDto {
+  public static fromUserDocument(user: UserProfileViewDto): UserProfileViewDto {
     return new UserProfileViewDto({
       username: user.username,
       publicName: user.publicName,
