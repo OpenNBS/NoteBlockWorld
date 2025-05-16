@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { deepFreeze } from '@shared/validation/common/deepFreeze';
 import type { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,14 +19,7 @@ import {
   Input,
   TextArea,
 } from '@web/src/modules/shared/components/client/FormElements';
-
-type UserProfileEditStore = {
-  isLoading: boolean;
-  isLocked: boolean;
-  userData: UserProfileViewDto | null;
-  setUserData: (data: UserProfileViewDto) => void;
-  updateUserData: (data: Partial<UserProfileViewDto>) => void;
-};
+import { EarlySupporterBadge } from '@web/src/modules/user/components/UserBadges';
 
 export const LinkRegexes = deepFreeze({
   bandcamp: /https?:\/\/[a-zA-Z0-9_-]+\.bandcamp\.com\/?/,
@@ -66,11 +60,20 @@ const socialLinksSchema = zod.object({
 });
 
 const userProfileEditFormSchema = zod.object({
+  username: zod.string().min(3).max(20),
   description: zod.string().optional(),
   socialLinks: socialLinksSchema,
 });
 
 type UserProfileEditFormSchema = zod.infer<typeof userProfileEditFormSchema>;
+
+type UserProfileEditStore = {
+  isLoading: boolean;
+  isLocked: boolean;
+  userData: UserProfileViewDto | null;
+  setUserData: (data: UserProfileViewDto) => void;
+  updateUserData: (data: Partial<UserProfileViewDto>) => void;
+};
 
 const useUserProfileEdit = create<UserProfileEditStore>((set, get) => {
   return {
@@ -109,7 +112,7 @@ type UserEditProfileProps = {
 export const UserEditProfile: React.FC<UserEditProfileProps> = ({
   initialUserData,
 }) => {
-  const { setUserData, isLoading, isLocked } = useUserProfileEdit();
+  const { setUserData, isLoading, isLocked, userData } = useUserProfileEdit();
 
   useEffect(() => {
     setUserData(initialUserData);
@@ -205,12 +208,49 @@ export const UserEditProfile: React.FC<UserEditProfileProps> = ({
     },
   ];
 
+  const { username, profileImage } = initialUserData;
+
   return (
     <div className='max-w-screen-lg mx-auto'>
       <section>
-        <h1>Edit Profile</h1>
-        {/* Add your edit profile form here */}
-
+        <div className='flex items-center justify-center gap-2 my-3 bg-cyan-800 border-cyan-400 text-cyan-300 border-2 rounded-lg px-3 py-2 text-sm'>
+          <FontAwesomeIcon icon={faExclamationCircle} className='h-5' />
+          <p>
+            Please make sure to carefully review our{' '}
+            <Link
+              href='/guidelines'
+              target='_blank'
+              className='text-blue-400 hover:text-blue-300 hover:underline'
+            >
+              Community Guidelines
+            </Link>
+            <FontAwesomeIcon
+              className='text-blue-400 ml-1 mr-1'
+              size='xs'
+              icon={faExternalLink}
+            />{' '}
+            before sharing your profile. We want to ensure a safe and positive
+            environment for all users.
+          </p>
+        </div>
+        <div className='flex items-center gap-8'>
+          <Image
+            src={profileImage}
+            alt={`Profile picture of ${username}`}
+            className='w-32 h-32 rounded-full'
+            width={128}
+            height={128}
+          />
+          <div>
+            {/* Display name */}
+            <div className='flex items-center gap-8'>
+              <h1 className='text-3xl font-bold mb-1 relative'>
+                Editing {username}&apos;s profile
+              </h1>
+              <EarlySupporterBadge />
+            </div>
+          </div>
+        </div>
         <form
           className={`flex flex-col gap-6`}
           onSubmit={formMethods.handleSubmit(() => {
@@ -218,25 +258,24 @@ export const UserEditProfile: React.FC<UserEditProfileProps> = ({
             console.log('Form submitted');
           })}
         >
-          <div className='flex items-center justify-center gap-2 my-3 bg-cyan-800 border-cyan-400 text-cyan-300 border-2 rounded-lg px-3 py-2 text-sm'>
-            <FontAwesomeIcon icon={faExclamationCircle} className='h-5' />
-            <p>
-              Please make sure to carefully review our{' '}
-              <Link
-                href='/guidelines'
-                target='_blank'
-                className='text-blue-400 hover:text-blue-300 hover:underline'
-              >
-                Community Guidelines
-              </Link>
-              <FontAwesomeIcon
-                className='text-blue-400 ml-1 mr-1'
-                size='xs'
-                icon={faExternalLink}
-              />{' '}
-              before sharing your profile. We want to ensure a safe and positive
-              environment for all users.
-            </p>
+          {/* Username */}
+          <div>
+            <Input
+              id='username'
+              label='Username'
+              tooltip={
+                <>
+                  <p>
+                    This is your username. It will be shown on your profile
+                    page, as well in all your songs and comments.
+                  </p>
+                </>
+              }
+              isLoading={isLoading}
+              disabled={isLocked}
+              errorMessage={errors.username?.message}
+              {...register('username')}
+            />
           </div>
           {/* Description */}
           <div>
@@ -264,9 +303,9 @@ export const UserEditProfile: React.FC<UserEditProfileProps> = ({
               Add links to your social media profiles. These links will be shown
               on your profile page.
             </p>
-            <div className='flex-row gap-4 mt-2'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2'>
               {LinkFields.map((link) => (
-                <div key={link.key} className='flex-1 min-w-[200px]'>
+                <div key={link.key} className='min-w-[200px]'>
                   <Input
                     id={link.key}
                     label={link.label}
