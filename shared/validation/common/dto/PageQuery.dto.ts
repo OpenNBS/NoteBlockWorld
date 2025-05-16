@@ -64,6 +64,16 @@ export class PageQueryDTO {
   })
   timespan?: TimespanType;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    examples: ['Bentroen', 'Tomast1337', 'Slayer - Raining Blood'],
+    description:
+      'Filters results uploaded by a string matching the specified query.',
+    required: false,
+  })
+  query?: string;
+
   constructor(partial: Partial<PageQueryDTO>) {
     Object.assign(this, partial);
   }
