@@ -98,12 +98,6 @@ export class AuthModule {
         },
         {
           inject: [ConfigService],
-          provide: 'WHITELISTED_USERS',
-          useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('WHITELISTED_USERS'),
-        },
-        {
-          inject: [ConfigService],
           provide: 'MAGIC_LINK_SECRET',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('MAGIC_LINK_SECRET'),

@@ -3,24 +3,7 @@ import type Path from 'path';
 
 import type NapiRs from '@napi-rs/canvas';
 
-/*
-import type {
-  Canvas as NapiCanvas,
-  Image as NapiImage,
-  GlobalFonts as NapiGlobalFonts,
-} from '@napi-rs/canvas';
-*/
-
-export interface CanvasUtils {
-  createCanvas(width: number, height: number): any;
-  loadImage(src: string): Promise<any>;
-  getPath(filename: string): string | URL;
-  useFont(): void;
-  saveToImage(canvas: HTMLCanvasElement | NapiRs.Canvas): Promise<Uint8Array>;
-  noteBlockImage: Promise<any> | any;
-  DrawingCanvas: any;
-  RenderedImage: any;
-}
+import { CanvasUtils } from './types';
 
 let canvasUtils: CanvasUtils;
 
@@ -39,24 +22,24 @@ if (typeof document === 'undefined') {
     const workingDir = process.cwd();
     const fullPath = path.join(workingDir, filename.split('/').join(path.sep));
 
-    return 'file://' + fullPath;
+    return fullPath;
   };
 
   const saveToImage = (canvas: NapiRs.Canvas) => canvas.encode('png');
 
   const useFont = () => {
-    GlobalFonts.registerFromPath(
-      getPath('assets/fonts/Lato-Regular.ttf').toString(),
-      'Lato',
-    );
+    const path = getPath('assets/fonts/Lato-Regular.ttf').toString();
+    console.log('Font path: ', path);
+
+    GlobalFonts.registerFromPath(path, 'Lato');
   };
 
   let noteBlockImage: Promise<any>;
 
   try {
-    noteBlockImage = nodeLoadImage(
-      new URL(getPath('assets/img/note-block-grayscale.png')),
-    );
+    const path = getPath('assets/img/note-block-grayscale.png');
+
+    noteBlockImage = nodeLoadImage(path);
   } catch (error) {
     console.error('Error loading image: ', error);
     noteBlockImage = Promise.reject(error);
@@ -102,7 +85,9 @@ if (typeof document === 'undefined') {
     });
   };
 
-  const noteBlockImage = loadImage(getPath('/img/note-block-grayscale.png'));
+  const noteBlockImagePath = getPath('/img/note-block-grayscale.png');
+
+  const noteBlockImage = loadImage(noteBlockImagePath);
 
   canvasUtils = {
     createCanvas,
