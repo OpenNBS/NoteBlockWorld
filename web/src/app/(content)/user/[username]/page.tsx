@@ -25,8 +25,7 @@ const UserPage = async ({ params }: { params: { username: string } }) => {
 
   if (userData) {
     // set the page title to the user's name
-
-    return <UserProfile userData={userData} songData={songData} />;
+    return <UserProfile initialUserData={userData} songData={songData} />;
   } else {
     return <ErrorBox message='Failed to get user data' />;
   }
