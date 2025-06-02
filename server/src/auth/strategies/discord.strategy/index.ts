@@ -8,6 +8,7 @@ import { DiscordPermissionScope } from './types';
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
   private static logger = new Logger(DiscordStrategy.name);
+
   constructor(
     @Inject(ConfigService)
     configService: ConfigService,
