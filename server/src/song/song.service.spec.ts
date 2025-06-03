@@ -626,12 +626,14 @@ describe('SongService', () => {
         file: 'somebytes',
         allowDownload: false,
         uploader: {},
+        save: jest.fn(),
       } as any;
 
       songDocument.save = jest.fn().mockResolvedValue(songDocument);
 
       const mockFindOne = {
         populate: jest.fn().mockResolvedValue(songDocument),
+        ...songDocument,
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
@@ -677,15 +679,14 @@ describe('SongService', () => {
       const publicId = 'test-id';
       const user: UserDocument = null as any;
 
-      jest.spyOn(songModel, 'findOne').mockReturnValue({
-        populate: jest.fn().mockImplementationOnce(() => {
-          throw new HttpException('Song not found', 404);
-        }),
-      } as any);
+      const songEntity = {
+        publicId: 'test-public-id',
+        visibility: 'private',
+        uploader: 'different-user-id',
+      };
 
-      await expect(service.getSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
+      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
+      expect(service.getSong(publicId, user)).rejects.toThrow(HttpException);
     });
   });
 
