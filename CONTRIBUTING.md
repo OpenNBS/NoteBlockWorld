@@ -6,23 +6,45 @@ This page is a work in progress and will be updated as the project evolves. If y
 
 ## Stack
 
-This is a multipackage monorepo managed by [pnpm](https://pnpm.io/), which houses both the backend and frontend of the website. The backend is built with [NestJS](https://nestjs.com/) and the frontend is built with [Next.js](https://nextjs.org/) using server-side rendering (SSR). We use [MongoDB](https://www.mongodb.com/) as our database and [Backblaze B2](https://www.backblaze.com/cloud-storage) for file storage via its S3-compatible API.
+This is a multipackage **monorepo** managed by [Bun](https://bun.sh/). It includes both the backend and frontend of the project:
+
+- **Backend**: [NestJS](https://nestjs.com/)
+- **Frontend**: [Next.js](https://nextjs.org/) with Server-Side Rendering (SSR)
+- **Database**: [MongoDB](https://www.mongodb.com/)
+- **File Storage**: [Backblaze B2](https://www.backblaze.com/cloud-storage) via its S3-compatible API
 
 ## Setting up the project for development
 
-To easily install the project, you can use the [docker-compose-dev.yml](docker-compose-dev.yml) file.
+You'll need the following installed on your machine:
+
+- [Bun](https://bun.sh/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+We provide a `docker-compose-dev.yml` file that sets up:
+
+- A MongoDB instance
+- A local mail server (`maildev`)
+- An S3-compatible storage (`minio`)
+- A MinIO client
+
+To start the services, run the following in the root directory:
 
 ```bash
 docker-compose -f docker-compose-dev.yml up -d
 ```
-obs: You can remove the `-d` flag to see the containers' logs.
 
-This will start a database container, a maildev container, a minio container, and a minio-client container.
-You can check the authentication details in the [docker-compose-dev.yml](docker-compose-dev.yml) file.
+> Remove the `-d` flag if you'd like to see container logs in your terminal.
 
-To configure the env variables, create `.env.development` and `.env.local` files in the [backend](server) and [front-end](web) packages, based on the example files provided. Alternatively, set the environment variables directly in your shell like so:
+You can find authentication details in the [`docker-compose-dev.yml`](docker-compose-dev.yml) file.
 
-### backend:
+---
+
+## Environment Variables
+
+Create `.env.development` and `.env.local` files in the `server` and `web` packages respectively, using the provided example files as a base. Alternatively, export them directly in your shell.
+
+### Backend (`server`):
 
 ```bash
 export NODE_ENV=development
@@ -70,46 +92,63 @@ export MAIL_TRANSPORT=smtp://user:pass@localhost:1025
 export MAIL_FROM="Example <noreply@noteblock.world>"
 ```
 
-Note that for the OAuth providers, you will need to create an application on their respective developer portals and replace `UNSET` , in development, you can use the magic link login method for easy testing.
+> You’ll need to register developer applications with GitHub, Google, and Discord and replace the `UNSET` placeholders.
 
-### frontend:
+~~ For development, you can use the magic link login method instead. ~~
 
-```bash
-export THUMBNAIL_URL=localhost:9000
-export NEXT_PUBLIC_RECAPTCHA_SITE_KEY="6Le7JNEpAAAAAN7US0WVtz10Mb-IfnTgw-IvEC6s"
-export NEXT_PUBLIC_URL=http://localhost:3000
-export NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
-```
+### Frontend (`web`):
 
-
-In Windows, you can use `set` instead of `export`.
-```cmd
-set THUMBNAIL_URL=localhost:9000
-set NEXT_PUBLIC_RECAPTCHA_SITE_KEY="6Le7JNEpAAAAAN7US0WVtz10Mb-IfnTgw-IvEC6s"
-set NEXT_PUBLIC_URL=http://localhost:3000
-set NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
-```
-
-Finally, to run the frontend and backend servers:
+On the frontend, you can set the environment variables in a `.env.local` file or directly in your shell. The following variables are required:
 
 ```bash
-pnpm run dev
+THUMBNAIL_URL=localhost:9000
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
+NEXT_PUBLIC_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
 ```
 
-If you only want to run the backend or frontend, you can use the following commands:
+---
+
+## Installing Dependencies
+
+To install all dependencies, run in the root of the project:
 
 ```bash
-pnpm run dev:server
+bun install
 ```
+
+---
+
+## Running the Project
+
+To start both the backend and frontend:
 
 ```bash
-pnpm run dev:web
+bun run dev
 ```
 
-The backend server will be available at [http://localhost:3000](http://localhost:3000) and the frontend server will be available at [http://localhost:4000](http://localhost:4000).
+To start them individually:
 
+- Backend only:
 
-For populating the database with some test data by sending a post request: 
+  ```bash
+  bun run dev:server
+  ```
+
+- Frontend only:
+
+  ```bash
+  bun run dev:web
+  ```
+
+> The frontend will run at [http://localhost:3000](http://localhost:3000)
+> The backend API will be at [http://localhost:4000](http://localhost:4000)
+
+---
+
+## Seeding the Database (Development Only)
+
+You can populate the development database with test data using:
 
 ```bash
 curl -X 'GET' \
@@ -117,19 +156,16 @@ curl -X 'GET' \
   -H 'accept: */*'
 ```
 
-Just so you know, the seed route is only available in development mode.
+> This route is only available in `NODE_ENV=development`. It will create some sample users, songs, and comments.
 
-Currently, tests are only available for the [backend](server), and [shared](shared) packages.
+## Running Tests
 
-We use [Jest](https://jestjs.io/) for testing. To run the tests, you can use the following command on the package you want to test:
+Currently, tests are available for the `server` and `shared` packages.
+
+We use [Jest](https://jestjs.io/) for testing. To run tests:
 
 ```bash
-pnpm test
+bun run test
 ```
 
-## Code style
-
-We provide a [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) configuration for the project. You can run the following command to format your code:
-```bash
-pnpm run lint
-```
+Run this inside the package directory you want to test.
