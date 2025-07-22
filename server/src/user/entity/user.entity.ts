@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 @Schema({})
-class SocialLinks {
+export class SocialLinks {
   bandcamp?: string;
   discord?: string;
   facebook?: string;
@@ -53,10 +53,10 @@ export class User {
   @Prop({ type: Number, required: true, default: 0 })
   playCount: number;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, index: true })
   username: string;
 
-  @Prop({ type: String, required: true, default: '#' })
+  @Prop({ type: String, required: true, default: '#', index: true })
   publicName: string;
 
   @Prop({ type: String, required: true, unique: true })
@@ -83,6 +83,12 @@ export class User {
 
   @Prop({ type: Boolean, required: true, default: true })
   prefersDarkTheme: boolean;
+
+  _id: Types.ObjectId;
+
+  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+
+  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -10,6 +10,7 @@ import mongoose, { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import type { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import {
   SongDocument,
@@ -39,10 +40,17 @@ const mockSongWebhookService = {
   syncSongWebhook: jest.fn(),
 };
 
+const mockUserService = {
+  getUserByEmailOrId: jest.fn(),
+  getUserPaginated: jest.fn(),
+  getSelfUserData: jest.fn(),
+};
+
 describe('SongService', () => {
   let service: SongService;
   let fileService: FileService;
   let songUploadService: SongUploadService;
+  let userService: UserService;
   let songModel: Model<SongEntity>;
 
   beforeEach(async () => {
@@ -65,12 +73,17 @@ describe('SongService', () => {
           provide: SongUploadService,
           useValue: mockSongUploadService,
         },
+        {
+          provide: UserService,
+          useValue: mockUserService,
+        },
       ],
     }).compile();
 
     service = module.get<SongService>(SongService);
     fileService = module.get<FileService>(FileService);
     songUploadService = module.get<SongUploadService>(SongUploadService);
+    userService = module.get<UserService>(UserService);
     songModel = module.get<Model<SongEntity>>(getModelToken(SongEntity.name));
   });
 

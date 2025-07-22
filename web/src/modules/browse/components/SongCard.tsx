@@ -4,6 +4,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton';
 
 import {
@@ -14,6 +15,8 @@ import {
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
 
 const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
+  const router = useRouter();
+
   return (
     <div className='flex flex-col gap-2 pb-2 h-full'>
       {/* Song image */}
@@ -48,9 +51,22 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
           {!song ? (
             <Skeleton />
           ) : (
-            `${song.uploader.username} • ${formatTimeAgo(
-              new Date(song.createdAt),
-            )}`
+            <>
+              {/* TODO: this should be a Link component, but the whole card is a link itself
+              and the <a> tag can't be nested. Figure out a better way to arrange them (likely
+              place a link in the image, title and each of the card's components) */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(`/user/${song.uploader.username}`);
+                }}
+                className='hover:underline'
+              >
+                {song.uploader.username}
+              </button>
+              {' • '}
+              {formatTimeAgo(new Date(song.createdAt))}
+            </>
           )}
         </p>
         {/* Play icon & count */}

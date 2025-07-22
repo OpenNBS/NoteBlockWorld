@@ -1,6 +1,6 @@
-export function deepFreeze<T extends { [key: string]: any }>(
+export const deepFreeze = <T extends { [key: string]: any }>(
   object: T,
-): Readonly<T> {
+): Readonly<T> => {
   const propNames = Object.getOwnPropertyNames(object);
 
   for (const name of propNames) {
@@ -13,4 +13,4 @@ export function deepFreeze<T extends { [key: string]: any }>(
   }
 
   return Object.freeze(object);
-}
+};

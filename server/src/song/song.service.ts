@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
+import { SearchQueryDTO } from '@shared/validation/common/dto/SearchQuery.dto';
 import { BROWSER_SONGS } from '@shared/validation/song/constants';
 import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
 import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
@@ -17,6 +18,7 @@ import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 import type { UserDocument } from '@server/user/entity/user.entity';
+import { UserService } from '@server/user/user.service';
 
 import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
@@ -26,6 +28,7 @@ import { removeExtraSpaces } from './song.util';
 @Injectable()
 export class SongService {
   private logger = new Logger(SongService.name);
+
   constructor(
     @InjectModel(SongEntity.name)
     private songModel: Model<SongEntity>,
@@ -38,6 +41,9 @@ export class SongService {
 
     @Inject(SongWebhookService)
     private songWebhookService: SongWebhookService,
+
+    @Inject(UserService)
+    private userService: UserService,
   ) {}
 
   public async getSongById(publicId: string) {
@@ -190,9 +196,27 @@ export class SongService {
       );
     }
 
+    const filter = {};
+
+    /*
+    // TODO: Decide if user filtering is necessary
+    if (user) {
+      const userDocument = await this.userService.findByUsername(user);
+
+      if (!userDocument) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      filter = {
+        uploader: userDocument._id,
+      };
+    }
+    */
+
     const songs = (await this.songModel
       .find({
         visibility: 'public',
+        ...filter,
       })
       .sort({
         [sort]: order ? 1 : -1,
@@ -472,7 +496,135 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
+  public async search(queryBody: SearchQueryDTO) {
+    const {
+      query = '',
+      page = 1,
+      limit = 10,
+      sort = 'createdAt',
+      order,
+      category,
+    } = queryBody;
+
+    const skip = (page - 1) * limit;
+    const sortOrder = order ? 1 : -1;
+
+    const songs: SongViewDto[] = await this.songModel.aggregate([
+      {
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+          ...(category && { category: category }),
+        },
+      },
+      {
+        $sort: {
+          [sort]: sortOrder,
+        },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $lookup: {
+          from: 'users', // The collection to join
+          localField: 'uploader', // The field from the input documents (username)
+          foreignField: 'username', // The field from the documents of the "from" collection (username)
+          as: 'uploader', // The name of the new array field to add to the input documents
+        },
+      },
+      {
+        $unwind: '$uploader', // Unwind the array to include the user document directly
+      },
+      {
+        $project: {
+          publicId: 1,
+          createdAt: 1,
+          thumbnailUrl: 1,
+          playCount: 1,
+          downloadCount: 1,
+          likeCount: 1,
+          allowDownload: 1,
+          title: 1,
+          originalAuthor: 1,
+          description: 1,
+          category: 1,
+          license: 1,
+          customInstruments: 1,
+          fileSize: 1,
+          stats: 1,
+          'uploader.username': 1,
+          'uploader.profileImage': 1,
+        },
+      },
+    ]);
+
+    const totalResult = await this.songModel.aggregate([
+      {
+        /**
+        $search: {
+           index: 'song_search_index', 
+           text: {
+                query: query,
+            },
+        },
+         */
+        $match: {
+          $text: {
+            $search: query,
+            $caseSensitive: false, // Case-insensitive search
+            $diacriticSensitive: false, // Diacritic-insensitive search
+          },
+          ...(category && { category: category }),
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
+
+    this.logger.debug(
+      `Retrieved songs: ${songs.length} documents, with total: ${total}`,
+    );
+
+    return {
+      songs: await this.songModel.populate(songs, {
+        path: 'uploader',
+        select: 'username profileImage -_id',
+      }),
+      total,
+      page,
+      limit,
+    };
+  }
+
   public async getAllSongs() {
     return this.songModel.find({});
+  }
+
+  public async createSearchIndexes() {
+    return this.songModel.collection.createIndex(
+      {
+        title: 'text',
+        originalAuthor: 'text',
+        description: 'text',
+      },
+      {
+        weights: {
+          title: 10,
+          originalAuthor: 5,
+          description: 1,
+        },
+        name: 'song_search_index',
+      },
+    );
   }
 }

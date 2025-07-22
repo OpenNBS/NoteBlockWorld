@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  NotFoundException,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
+import { PageResultDTO } from '@shared/validation/common/dto/PageResult.dto';
+import { UpdateUserProfileDto } from '@shared/validation/user/dto/UpdateUserProfile.dto';
+import { UserProfileViewDto } from '@shared/validation/user/dto/UserProfileView.dto';
+import { UserQuery } from '@shared/validation/user/dto/UserQuery.dto';
+import { UserSearchViewDto } from '@shared/validation/user/dto/UserSearchView.dto';
 
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
@@ -10,6 +22,8 @@ import type { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
+@ApiTags('user')
+@ApiBearerAuth()
 export class UserController {
   constructor(
     @Inject(UserService)
@@ -18,36 +32,48 @@ export class UserController {
 
   @Get()
   @ApiTags('user')
-  @ApiBearerAuth()
-  async getUser(@Query() query: GetUser) {
-    return await this.userService.getUserByEmailOrId(query);
-  }
-
-  @Get()
-  @ApiTags('user')
-  @ApiBearerAuth()
-  async getUserPaginated(@Query() query: PageQueryDTO) {
-    return await this.userService.getUserPaginated(query);
-  }
-
-  @Get('me')
-  @ApiTags('user')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get the token owner data' })
-  async getMe(@GetRequestToken() user: UserDocument | null) {
-    user = validateUser(user);
-    return await this.userService.getSelfUserData(user);
-  }
-
-  @Patch('username')
-  @ApiTags('user')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update the username' })
-  async updateUsername(
+  @ApiOperation({ summary: 'Get user data' })
+  async getUser(
+    @Query() query: UserQuery,
     @GetRequestToken() user: UserDocument | null,
-    @Body() body: UpdateUsernameDto,
+  ) {
+    if ('me' in query && query.me) {
+      user = validateUser(user);
+      return await this.userService.getSelfUserData(user);
+    }
+
+    const docs = await this.userService.getUserPaginated(query as PageQueryDTO);
+
+    return new PageResultDTO<UserSearchViewDto>({
+      ...docs,
+      data: docs.data.map((doc) => UserSearchViewDto.fromUserDocument(doc)),
+    });
+  }
+
+  @Get(':username')
+  @ApiTags('user')
+  @ApiOperation({ summary: 'Get user profile by username' })
+  async getUserProfile(
+    @Param('username') username: string,
+  ): Promise<UserProfileViewDto> {
+    const doc = await this.userService.findByUsername(username);
+
+    if (!doc) {
+      throw new NotFoundException('User not found');
+    }
+
+    return UserProfileViewDto.fromUserDocument(doc);
+  }
+
+  @Patch()
+  @ApiTags('user')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update the profile' })
+  async updateProfile(
+    @GetRequestToken() user: UserDocument | null,
+    @Body() body: UpdateUserProfileDto,
   ) {
     user = validateUser(user);
-    return await this.userService.updateUsername(user, body);
+    return await this.userService.updateProfile(user, body);
   }
 }

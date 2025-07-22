@@ -6,6 +6,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   private static logger = new Logger(GoogleStrategy.name);
+
   constructor(
     @Inject(ConfigService)
     configService: ConfigService,
