@@ -1,4 +1,4 @@
-import '@web/src/app/enableRecaptchaBadge.css';
+import '@web/app/enableRecaptchaBadge.css';
 
 export default async function UploadLayout({
   children,

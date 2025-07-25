@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@web/src/modules/shared/components/tooltip';
+} from '@web/modules/shared/components/tooltip';
 
 import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
 

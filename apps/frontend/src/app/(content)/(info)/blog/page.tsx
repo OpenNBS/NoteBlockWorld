@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getSortedPostsData } from '@web/src/lib/posts';
-import type { PostType } from '@web/src/lib/posts';
+import { getSortedPostsData } from '@web/lib/posts';
+import type { PostType } from '@web/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Blog',

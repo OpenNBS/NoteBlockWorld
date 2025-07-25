@@ -3,7 +3,7 @@ import path from 'path';
 
 import { Metadata } from 'next';
 
-import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
+import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',

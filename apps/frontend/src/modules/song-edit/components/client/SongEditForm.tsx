@@ -1,10 +1,10 @@
 'use client';
 
-import { UploadSongDtoType } from '@shared/validation/song/dto/types';
+import { UploadSongDtoType } from '@nbw/database';
 import { useEffect } from 'react';
 
-import { useSongProvider } from '@web/src/modules/song/components/client/context/Song.context';
-import { SongForm } from '@web/src/modules/song/components/client/SongForm';
+import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
+import { SongForm } from '@web/modules/song/components/client/SongForm';
 
 import { useEditSongProviderType } from './context/EditSong.context';
 

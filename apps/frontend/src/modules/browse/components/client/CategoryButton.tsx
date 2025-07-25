@@ -1,7 +1,5 @@
 'use client';
-
-import { UploadConst } from '@shared/validation/song/constants';
-import { CategoryType } from '@shared/validation/song/dto/types';
+import { CategoryType, UploadConst } from '@nbw/database';
 
 import {
   Carousel,
@@ -9,7 +7,7 @@ import {
   CarouselItem,
   CarouselNextSmall,
   CarouselPreviousSmall,
-} from '@web/src/modules/shared/components/client/Carousel';
+} from '@web/modules/shared/components/client/Carousel';
 
 import { useRecentSongsProvider } from './context/RecentSongs.context';
 

@@ -4,13 +4,13 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MY_SONGS } from '@shared/validation/song/constants';
-import { SongPageDtoType } from '@shared/validation/song/dto/types';
+import { MY_SONGS } from '@nbw/database';
+import { SongPageDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
+import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
 import { useMySongsProvider } from './context/MySongs.context';
 import DeleteConfirmDialog from './DeleteConfirmDialog';

@@ -3,7 +3,7 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as React from 'react';
 
-import { cn } from '@web/src/lib/tailwind.utils';
+import { cn } from '@web/lib/tailwind.utils';
 
 export const Popover = PopoverPrimitive.Root;
 

@@ -1,5 +1,5 @@
-import { NoteQuadTree } from '@shared/features/song/notes';
-import { drawNotesOffscreen, swap } from '@shared/features/thumbnail';
+import { NoteQuadTree } from '@nbw/song';
+import { drawNotesOffscreen, swap } from '@nbw/thumbnail';
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 

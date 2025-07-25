@@ -6,7 +6,7 @@ import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
-import ClientAxios from '@web/src/lib/axios/ClientAxios';
+import ClientAxios from '@web/lib/axios/ClientAxios';
 
 import {
   Input,

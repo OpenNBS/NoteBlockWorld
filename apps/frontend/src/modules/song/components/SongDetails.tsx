@@ -1,12 +1,12 @@
 import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@shared/validation/song/constants';
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { UploadConst } from '@nbw/database';
+import { SongViewDtoType } from '@nbw/database';
 
 import {
   formatDuration,
   formatTimeSpent,
-} from '@web/src/modules/shared/util/format';
+} from '@web/modules/shared/util/format';
 
 type SongDetailsProps = {
   song: SongViewDtoType;

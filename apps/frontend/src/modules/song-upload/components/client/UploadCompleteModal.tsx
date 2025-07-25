@@ -2,7 +2,7 @@ import JSConfetti from 'js-confetti';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import GenericModal from '@web/src/modules/shared/components/client/GenericModal';
+import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
 export default function UploadCompleteModal({
   isOpen,

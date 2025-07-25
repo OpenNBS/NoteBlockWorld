@@ -4,7 +4,7 @@ import {
   FeaturedSongsDtoType,
   SongPreviewDtoType,
   TimespanType,
-} from '@shared/validation/song/dto/types';
+} from '@nbw/database';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type FeaturedSongsContextType = {

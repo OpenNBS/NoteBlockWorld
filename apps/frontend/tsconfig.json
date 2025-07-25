@@ -33,7 +33,12 @@
         ],
         "types": [
             "mdx"
-        ]
+        ],
+        "paths": {
+            "@web/*": [
+                "./src/*"
+            ]
+        }
     },
     "include": [
         "next-env.d.ts",

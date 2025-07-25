@@ -1,4 +1,4 @@
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
+import { LoggedUserData } from '@web/modules/auth/types/User';
 
 import { SettingsMenu } from './SettingsMenu';
 import { SignInButton, UploadButton } from './SignOutButton';

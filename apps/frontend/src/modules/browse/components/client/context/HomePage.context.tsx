@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  FeaturedSongsDtoType,
-  SongPreviewDtoType,
-} from '@shared/validation/song/dto/types';
+import { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 import { createContext, useContext } from 'react';
 
 import { FeaturedSongsProvider } from './FeaturedSongs.context';

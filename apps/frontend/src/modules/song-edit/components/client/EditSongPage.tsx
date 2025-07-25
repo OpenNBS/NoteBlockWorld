@@ -1,16 +1,16 @@
-import { UploadSongDtoType } from '@shared/validation/song/dto/types';
+import { UploadSongDtoType } from '@nbw/database';
 
-import axiosInstance from '@web/src/lib/axios';
+import axiosInstance from '@web/lib/axios';
 import {
   getTokenServer,
   getUserData,
-} from '@web/src/modules/auth/features/auth.utils';
-import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
-import { SongProvider } from '@web/src/modules/song/components/client/context/Song.context';
+} from '@web/modules/auth/features/auth.utils';
+import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
+import { SongProvider } from '@web/modules/song/components/client/context/Song.context';
 import {
   DownloadFileButton,
   FileDisplay,
-} from '@web/src/modules/song/components/client/FileDisplay';
+} from '@web/modules/song/components/client/FileDisplay';
 
 import { SongEditForm } from './SongEditForm';
 

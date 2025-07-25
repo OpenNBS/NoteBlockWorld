@@ -1,10 +1,10 @@
 'use client';
 
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { SongViewDtoType } from '@nbw/database';
 import { useState } from 'react';
 
-import { DownloadPopupAdSlot } from '@web/src/modules/shared/components/client/ads/AdSlots';
-import GenericModal from '@web/src/modules/shared/components/client/GenericModal';
+import { DownloadPopupAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
+import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
 export default function DownloadSongModal({
   isOpen,

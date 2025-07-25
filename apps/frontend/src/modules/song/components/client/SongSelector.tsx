@@ -1,6 +1,6 @@
 import { faFile, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@shared/validation/song/constants';
+import { UploadConst } from '@nbw/database';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';

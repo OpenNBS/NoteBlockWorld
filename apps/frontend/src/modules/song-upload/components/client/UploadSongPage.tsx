@@ -3,7 +3,7 @@
 import {
   ChangeFileButton,
   FileDisplay,
-} from '@web/src/modules/song/components/client/FileDisplay';
+} from '@web/modules/song/components/client/FileDisplay';
 
 import { SongUploadForm } from './SongUploadForm';
 import {

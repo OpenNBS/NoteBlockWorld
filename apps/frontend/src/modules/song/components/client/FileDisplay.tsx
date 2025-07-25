@@ -3,7 +3,7 @@
 import { faDownload, faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { cn } from '@web/src/lib/tailwind.utils';
+import { cn } from '@web/lib/tailwind.utils';
 
 import { downloadSongFile } from '../../util/downloadSong';
 

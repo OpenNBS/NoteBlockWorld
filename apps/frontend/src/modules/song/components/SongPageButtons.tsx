@@ -11,13 +11,13 @@ import {
   faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { SongViewDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 import DownloadSongModal from './client/DownloadSongModal';
 import ShareModal from './client/ShareModal';

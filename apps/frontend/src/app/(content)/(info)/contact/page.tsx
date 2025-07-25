@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import BackButton from '@web/src/modules/shared/components/client/BackButton';
+import BackButton from '@web/modules/shared/components/client/BackButton';
 
 import Contact from './contact.mdx';
 

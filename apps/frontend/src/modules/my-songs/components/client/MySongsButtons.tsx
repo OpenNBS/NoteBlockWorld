@@ -12,8 +12,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@web/src/modules/shared/components/tooltip';
-import { downloadSongFile } from '@web/src/modules/song/util/downloadSong';
+} from '@web/modules/shared/components/tooltip';
+import { downloadSongFile } from '@web/modules/song/util/downloadSong';
 
 export const DownloadSongButton = ({
   song,

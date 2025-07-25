@@ -1,9 +1,9 @@
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { SongPreviewDto } from '@nbw/database';
+import { SongViewDtoType } from '@nbw/database';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
-import axios from '@web/src/lib/axios';
+import axios from '@web/lib/axios';
 
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';

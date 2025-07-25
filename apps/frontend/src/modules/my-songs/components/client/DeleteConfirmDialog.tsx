@@ -1,4 +1,4 @@
-import GenericModal from '@web/src/modules/shared/components/client/GenericModal';
+import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
 export default function DeleteConfirmDialog({
   isOpen,

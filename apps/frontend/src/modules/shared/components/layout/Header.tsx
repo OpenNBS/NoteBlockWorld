@@ -8,10 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import {
-  checkLogin,
-  getUserData,
-} from '@web/src/modules/auth/features/auth.utils';
+import { checkLogin, getUserData } from '@web/modules/auth/features/auth.utils';
 
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';

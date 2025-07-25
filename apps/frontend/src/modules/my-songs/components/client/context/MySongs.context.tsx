@@ -1,11 +1,11 @@
 'use client';
 
-import { MY_SONGS } from '@shared/validation/song/constants';
+import { MY_SONGS } from '@nbw/database';
 import {
   SongPageDtoType,
   SongPreviewDtoType,
   SongsFolder,
-} from '@shared/validation/song/dto/types';
+} from '@nbw/database';
 import {
   createContext,
   useCallback,
@@ -15,8 +15,8 @@ import {
 } from 'react';
 import { toast } from 'react-hot-toast';
 
-import axiosInstance from '@web/src/lib/axios';
-import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import axiosInstance from '@web/lib/axios';
+import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 type MySongsContextType = {
   page: SongPageDtoType | null;

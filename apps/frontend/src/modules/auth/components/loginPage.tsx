@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
-import { baseApiURL } from '@web/src/lib/axios';
+import { baseApiURL } from '@web/lib/axios';
 
 import { CopyrightFooter } from '../../shared/components/layout/CopyrightFooter';
 import { NoteBlockWorldLogo } from '../../shared/components/NoteBlockWorldLogo';

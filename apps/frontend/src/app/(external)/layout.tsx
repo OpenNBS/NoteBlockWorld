@@ -1,6 +1,6 @@
-import '@web/src/app/globals.css';
-import '@web/src/app/enableRecaptchaBadge.css';
-import '@web/src/app/hideScrollbar.css';
+import '@web/app/globals.css';
+import '@web/app/enableRecaptchaBadge.css';
+import '@web/app/hideScrollbar.css';
 
 export default async function LoginLayout({
   children,

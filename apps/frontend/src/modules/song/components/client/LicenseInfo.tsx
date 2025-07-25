@@ -2,14 +2,14 @@
 
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@shared/validation/song/constants';
+import { UploadConst } from '@nbw/database';
 import Markdown from 'react-markdown';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@web/src/modules/shared/components/tooltip';
+} from '@web/modules/shared/components/tooltip';
 
 export const LicenseTooltip = ({ description }: { description: string }) => {
   return (

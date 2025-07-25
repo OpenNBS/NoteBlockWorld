@@ -1,14 +1,14 @@
-import { bgColorsArray } from '@shared/features/thumbnail';
-import { ThumbnailConst } from '@shared/validation/song/constants';
+import { bgColorsArray } from '@nbw/thumbnail';
+import { ThumbnailConst } from '@nbw/database';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { cn } from '@web/src/lib/tailwind.utils';
+import { cn } from '@web/lib/tailwind.utils';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@web/src/modules/shared/components/tooltip';
+} from '@web/modules/shared/components/tooltip';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';

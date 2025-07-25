@@ -1,3 +1,3 @@
-import DocumentLayout from '@web/src/modules/shared/components/layout/DocumentLayout';
+import DocumentLayout from '@web/modules/shared/components/layout/DocumentLayout';
 
 export default DocumentLayout;

@@ -1,12 +1,9 @@
-import {
-  FeaturedSongsDtoType,
-  SongPreviewDtoType,
-} from '@shared/validation/song/dto/types';
+import { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 import { Metadata } from 'next';
 
-import axiosInstance from '@web/src/lib/axios';
-import { HomePageProvider } from '@web/src/modules/browse/components/client/context/HomePage.context';
-import { HomePageComponent } from '@web/src/modules/browse/components/HomePageComponent';
+import axiosInstance from '@web/lib/axios';
+import { HomePageProvider } from '@web/modules/browse/components/client/context/HomePage.context';
+import { HomePageComponent } from '@web/modules/browse/components/HomePageComponent';
 
 async function fetchRecentSongs() {
   try {

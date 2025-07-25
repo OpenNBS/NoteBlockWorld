@@ -1,6 +1,6 @@
 'use client';
 
-import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import { SongPreviewDtoType } from '@nbw/database';
 import {
   createContext,
   useCallback,
@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import axiosInstance from '@web/src/lib/axios';
+import axiosInstance from '@web/lib/axios';
 
 type RecentSongsContextType = {
   recentSongs: (SongPreviewDtoType | null)[];

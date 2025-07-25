@@ -1,9 +1,9 @@
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { SongViewDtoType } from '@nbw/database';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
-import axios from '@web/src/lib/axios';
-import { SongPage } from '@web/src/modules/song/components/SongPage';
+import axios from '@web/lib/axios';
+import { SongPage } from '@web/modules/song/components/SongPage';
 
 interface SongPage {
   params: {

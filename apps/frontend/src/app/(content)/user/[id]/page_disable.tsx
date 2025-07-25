@@ -1,5 +1,5 @@
-import UserProfile from '@web/src/modules/user/components/UserProfile';
-import { getUserProfileData } from '@web/src/modules/user/features/user.util';
+import UserProfile from '@web/modules/user/components/UserProfile';
+import { getUserProfileData } from '@web/modules/user/features/user.util';
 
 import Layout from '../../layout';
 

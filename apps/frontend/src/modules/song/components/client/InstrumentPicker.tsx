@@ -1,8 +1,8 @@
-import { Instrument } from '@shared/features/song/types';
+import { Instrument } from '@nbw/song';
 import { useEffect, useState } from 'react';
 
-import axiosInstance from '@web/src/lib/axios';
-import { cn } from '@web/src/lib/tailwind.utils';
+import axiosInstance from '@web/lib/axios';
+import { cn } from '@web/lib/tailwind.utils';
 
 import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';

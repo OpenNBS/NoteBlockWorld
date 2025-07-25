@@ -1,10 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { parseSongFromBuffer } from '@shared/features/song/parse';
-import { SongFileType } from '@shared/features/song/types';
-import { bgColors } from '@shared/features/thumbnail/colors';
-import { ThumbnailConst } from '@shared/validation/song/constants';
+import { parseSongFromBuffer } from '@nbw/song';
+import { SongFileType } from '@nbw/song';
+import { bgColors } from '@nbw/thumbnail';
+import { ThumbnailConst } from '@nbw/database';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -14,11 +14,8 @@ import {
 } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
-import axiosInstance from '@web/src/lib/axios';
-import {
-  InvalidTokenError,
-  getTokenLocal,
-} from '@web/src/lib/axios/token.utils';
+import axiosInstance from '@web/lib/axios';
+import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 
 import {
   UploadSongForm,

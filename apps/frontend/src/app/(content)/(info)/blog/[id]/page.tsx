@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { PostType, getPostData } from '@web/src/lib/posts';
-import { CustomMarkdown } from '@web/src/modules/shared/components/CustomMarkdown';
+import { PostType, getPostData } from '@web/lib/posts';
+import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 type BlogPageProps = {
   params: { id: string };

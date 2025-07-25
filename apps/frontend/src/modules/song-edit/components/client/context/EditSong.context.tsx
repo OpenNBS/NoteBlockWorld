@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { parseSongFromBuffer } from '@shared/features/song/parse';
-import { SongFileType } from '@shared/features/song/types';
-import { UploadSongDtoType } from '@shared/validation/song/dto/types';
+import { parseSongFromBuffer } from '@nbw/song';
+import { SongFileType } from '@nbw/song';
+import { UploadSongDtoType } from '@nbw/database';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
@@ -15,8 +15,8 @@ import {
 import toaster from 'react-hot-toast';
 import { undefined } from 'zod';
 
-import axiosInstance from '@web/src/lib/axios';
-import { getTokenLocal } from '@web/src/lib/axios/token.utils';
+import axiosInstance from '@web/lib/axios';
+import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 import {
   EditSongForm,

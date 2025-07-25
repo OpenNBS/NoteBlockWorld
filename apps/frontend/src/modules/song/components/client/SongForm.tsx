@@ -3,13 +3,13 @@ import {
   faExternalLink,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@shared/validation/song/constants';
-import { LicenseType } from '@shared/validation/song/dto/types';
+import { UploadConst } from '@nbw/database';
+import { LicenseType } from '@nbw/database';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { ErrorBalloon } from '@web/src/modules/shared/components/client/ErrorBalloon';
-import { ErrorBox } from '@web/src/modules/shared/components/client/ErrorBox';
+import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
+import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';

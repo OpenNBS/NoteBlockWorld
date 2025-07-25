@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { cn } from '@web/src/lib/tailwind.utils';
+import { cn } from '@web/lib/tailwind.utils';
 
 export const NoteBlockWorldLogo = ({
   size,

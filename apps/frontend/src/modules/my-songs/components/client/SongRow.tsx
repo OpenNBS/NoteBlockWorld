@@ -5,12 +5,12 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongPreviewDtoType } from '@shared/validation/song/dto/types';
+import { SongPreviewDtoType } from '@nbw/database';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import SongThumbnail from '@web/src/modules/shared/components/layout/SongThumbnail';
-import { formatDuration } from '@web/src/modules/shared/util/format';
+import SongThumbnail from '@web/modules/shared/components/layout/SongThumbnail';
+import { formatDuration } from '@web/modules/shared/util/format';
 
 import { useMySongsProvider } from './context/MySongs.context';
 import {

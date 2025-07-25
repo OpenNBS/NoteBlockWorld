@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { SongForm } from '@web/src/modules/song/components/client/SongForm';
+import { SongForm } from '@web/modules/song/components/client/SongForm';
 
 import { useUploadSongProviderType } from './context/UploadSong.context';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';

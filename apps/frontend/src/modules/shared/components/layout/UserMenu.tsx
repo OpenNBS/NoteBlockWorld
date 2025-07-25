@@ -8,15 +8,15 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UserConst } from '@shared/validation/user/constants';
+import { UserConst } from '@nbw/database';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import ClientAxios from '@web/src/lib/axios/ClientAxios';
-import { LoggedUserData } from '@web/src/modules/auth/types/User';
+import ClientAxios from '@web/lib/axios/ClientAxios';
+import { LoggedUserData } from '@web/modules/auth/types/User';
 
 import {
   Popover,

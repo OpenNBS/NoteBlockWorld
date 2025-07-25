@@ -1,10 +1,7 @@
-import { MY_SONGS } from '@shared/validation/song/constants';
-import {
-  SongPageDtoType,
-  SongsFolder,
-} from '@shared/validation/song/dto/types';
+import { MY_SONGS } from '@nbw/database';
+import { SongPageDtoType, SongsFolder } from '@nbw/database';
 
-import axiosInstance from '@web/src/lib/axios';
+import axiosInstance from '@web/lib/axios';
 
 import { MySongProvider } from './client/context/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';

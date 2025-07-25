@@ -1,4 +1,4 @@
-import axiosInstance from '@web/src/lib/axios';
+import axiosInstance from '@web/lib/axios';
 
 export const getUserSongs = async (userId: string) => {
   const res = await axiosInstance.get('/song/user', {

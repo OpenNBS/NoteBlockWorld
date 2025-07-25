@@ -1,9 +1,9 @@
 'use client';
 
-import { SongViewDtoType } from '@shared/validation/song/dto/types';
+import { SongViewDtoType } from '@nbw/database';
 import { useEffect, useRef } from 'react';
 
-import axios from '@web/src/lib/axios';
+import axios from '@web/lib/axios';
 
 export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);

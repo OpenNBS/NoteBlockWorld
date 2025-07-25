@@ -1,4 +1,4 @@
-import { ThumbnailConst, UploadConst } from '@shared/validation/song/constants';
+import { ThumbnailConst, UploadConst } from '@nbw/database';
 import { z as zod } from 'zod';
 
 export const thumbnailDataSchema = zod.object({
