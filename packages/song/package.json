@@ -1,0 +1,33 @@
+{
+  "name": "@nbw/song",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun run clean && bun build src/index.ts --outdir dist --target node && bun run build:types",
+    "build:types": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@encode42/nbs.js": "^5.0.2",
+    "unidecode": "^1.1.0",
+    "@timohausmann/quadtree-ts": "^2.2.2",
+    "@nbw/database": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
