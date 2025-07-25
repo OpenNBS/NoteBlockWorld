@@ -3,8 +3,10 @@ import { faker } from '@faker-js/faker';
 import {
   CategoryType,
   LicenseType,
+  SongDocument,
   UploadConst,
   UploadSongDto,
+  UserDocument,
   VisibilityType,
 } from '@nbw/database';
 import {
@@ -14,9 +16,7 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { SongDocument } from '@server/song/entity/song.entity';
 import { SongService } from '@server/song/song.service';
-import { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
 
 @Injectable()

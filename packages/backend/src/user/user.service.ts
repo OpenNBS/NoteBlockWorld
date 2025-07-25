@@ -1,14 +1,16 @@
+import {
+  CreateUser,
+  GetUser,
+  PageQueryDTO,
+  UpdateUsernameDto,
+  User,
+  UserDocument,
+  UserDto,
+} from '@nbw/database';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
-
-import { UserDto } from './dto/user.dto';
-import { User, UserDocument } from './entity/user.entity';
 
 @Injectable()
 export class UserService {

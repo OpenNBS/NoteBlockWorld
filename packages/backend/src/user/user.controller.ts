@@ -1,12 +1,8 @@
+import type { UserDocument } from '@nbw/database';
+import { GetUser, PageQueryDTO, UpdateUsernameDto } from '@nbw/database';
 import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-import { UpdateUsernameDto } from '@shared/validation/user/dto/UpdateUsername.dto';
-
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
-
-import type { UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')

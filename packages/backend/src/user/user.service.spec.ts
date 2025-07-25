@@ -1,12 +1,14 @@
+import {
+  CreateUser,
+  GetUser,
+  PageQueryDTO,
+  User,
+  UserDocument,
+} from '@nbw/database';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { CreateUser } from '@shared/validation/user/dto/CreateUser.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
 import { Model } from 'mongoose';
-
-import { User, UserDocument } from './entity/user.entity';
 import { UserService } from './user.service';
 
 const mockUserModel = {

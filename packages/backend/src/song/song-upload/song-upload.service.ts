@@ -1,24 +1,29 @@
 import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
 import {
+  SongDocument,
+  Song as SongEntity,
+  SongStats,
+  ThumbnailData,
+  UploadSongDto,
+  UserDocument,
+} from '@nbw/database';
+import {
+  NoteQuadTree,
+  SongStatsGenerator,
+  injectSongFileMetadata,
+  obfuscateAndPackSong,
+} from '@nbw/song';
+import { drawToImage } from '@nbw/thumbnail';
+import {
   HttpException,
   HttpStatus,
   Inject,
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { injectSongFileMetadata } from '@nbw/song';
-import { NoteQuadTree } from '@nbw/song';
-import { obfuscateAndPackSong } from '@nbw/song';
-import { SongStatsGenerator } from '@nbw/song';
-import { drawToImage } from '@nbw/thumbnail';
-import { SongStats, ThumbnailData, UploadSongDto } from '@nbw/database';
-import { Types } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
-import type { UserDocument } from '@server/user/entity/user.entity';
 import { UserService } from '@server/user/user.service';
-
-import { SongDocument, Song as SongEntity } from '../entity/song.entity';
+import { Types } from 'mongoose';
 import { generateSongId, removeExtraSpaces } from '../song.util';
 
 @Injectable()

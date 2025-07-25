@@ -1,13 +1,13 @@
+import {
+  BROWSER_SONGS,
+  FeaturedSongsDto,
+  PageQueryDTO,
+  SongPreviewDto,
+  SongWithUser,
+  TimespanType,
+} from '@nbw/database';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { BROWSER_SONGS } from '@shared/validation/song/constants';
-import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-import { TimespanType } from '@shared/validation/song/dto/types';
-
 import { SongService } from '@server/song/song.service';
-
-import { SongWithUser } from '../song/entity/song.entity';
 
 @Injectable()
 export class SongBrowserService {

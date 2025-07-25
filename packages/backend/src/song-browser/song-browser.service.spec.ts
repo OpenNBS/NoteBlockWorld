@@ -1,12 +1,8 @@
+import { PageQueryDTO, SongPreviewDto, SongWithUser } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-
 import { SongService } from '@server/song/song.service';
-
 import { SongBrowserService } from './song-browser.service';
-import { SongWithUser } from '../song/entity/song.entity';
 
 const mockSongService = {
   getSongsForTimespan: jest.fn(),

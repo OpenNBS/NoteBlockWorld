@@ -1,9 +1,7 @@
+import type { UserDocument } from '@nbw/database';
+import { GetUser, PageQueryDTO } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { GetUser } from '@shared/validation/user/dto/GetUser.dto';
-
-import type { UserDocument } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 

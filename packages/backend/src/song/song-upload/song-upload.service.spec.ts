@@ -1,20 +1,21 @@
 import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
+import type { UserDocument } from '@nbw/database';
+import {
+  SongDocument,
+  Song as SongEntity,
+  ThumbnailData,
+  UploadSongDto,
+} from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ThumbnailData } from '@shared/validation/song/dto/ThumbnailData.dto';
-import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
+import { FileService } from '@server/file/file.service';
+import { UserService } from '@server/user/user.service';
 import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Types } from 'mongoose';
-
-import { FileService } from '@server/file/file.service';
-import type { UserDocument } from '@server/user/entity/user.entity';
-import { UserService } from '@server/user/user.service';
-
 import { SongUploadService } from './song-upload.service';
-import { SongDocument, Song as SongEntity } from '../entity/song.entity';
 
 // mock drawToImage function
-mock.module('@shared/features/thumbnail', () => ({
+mock.module('@nbw/thumbnail', () => ({
   drawToImage: jest.fn().mockResolvedValue(Buffer.from('test-image-buffer')),
 }));
 

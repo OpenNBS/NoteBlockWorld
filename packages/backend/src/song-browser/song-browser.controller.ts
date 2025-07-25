@@ -1,3 +1,4 @@
+import { FeaturedSongsDto, PageQueryDTO, SongPreviewDto } from '@nbw/database';
 import {
   BadRequestException,
   Controller,
@@ -6,10 +7,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-
 import { SongBrowserService } from './song-browser.service';
 
 @Controller('song-browser')

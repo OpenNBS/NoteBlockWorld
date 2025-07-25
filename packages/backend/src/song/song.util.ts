@@ -1,7 +1,5 @@
-import { UploadConst } from '@shared/validation/song/constants';
+import { SongWithUser, UploadConst } from '@nbw/database';
 import { customAlphabet } from 'nanoid';
-
-import { SongWithUser } from './entity/song.entity';
 
 // TODO: Move to shared
 export const formatDuration = (totalSeconds: number) => {

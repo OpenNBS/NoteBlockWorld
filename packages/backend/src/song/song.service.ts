@@ -1,4 +1,13 @@
 import {
+  BROWSER_SONGS,
+  PageQueryDTO,
+  SongPageDto,
+  SongPreviewDto,
+  SongViewDto,
+  UploadSongDto,
+  UploadSongResponseDto,
+} from '@nbw/database';
+import {
   HttpException,
   HttpStatus,
   Inject,
@@ -6,19 +15,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { BROWSER_SONGS } from '@shared/validation/song/constants';
-import { SongPageDto } from '@shared/validation/song/dto/SongPageDto';
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-import { SongViewDto } from '@shared/validation/song/dto/SongView.dto';
-import { UploadSongDto } from '@shared/validation/song/dto/UploadSongDto.dto';
-import { UploadSongResponseDto } from '@shared/validation/song/dto/UploadSongResponseDto.dto';
 import { Model } from 'mongoose';
 
+import type { UserDocument } from '@nbw/database';
+import { Song as SongEntity, SongWithUser } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
-import type { UserDocument } from '@server/user/entity/user.entity';
-
-import { Song as SongEntity, SongWithUser } from './entity/song.entity';
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { removeExtraSpaces } from './song.util';

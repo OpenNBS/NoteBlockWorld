@@ -1,8 +1,5 @@
+import { FeaturedSongsDto, PageQueryDTO, SongPreviewDto } from '@nbw/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@shared/validation/common/dto/PageQuery.dto';
-import { FeaturedSongsDto } from '@shared/validation/song/dto/FeaturedSongsDto.dtc';
-import { SongPreviewDto } from '@shared/validation/song/dto/SongPreview.dto';
-
 import { SongBrowserController } from './song-browser.controller';
 import { SongBrowserService } from './song-browser.service';
 
