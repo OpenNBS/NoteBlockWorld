@@ -29,10 +29,8 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "server",
-    "web",
-    "shared",
-    "tests"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "@types/bun": "^1.2.10",
