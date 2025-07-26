@@ -1,11 +1,8 @@
+import type { UserDocument } from '@nbw/database';
+import { PageQueryDTO, SongPageDto } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PageQueryDTO } from '@nbw/database';
-import { SongPageDto } from '@nbw/database';
-
-import type { UserDocument } from '@server/user/entity/user.entity';
-
 import { SongService } from '../song.service';
 import { MySongsController } from './my-songs.controller';
 

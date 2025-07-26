@@ -1,6 +1,4 @@
-import { HttpStatus, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { UserDocument } from '@nbw/database';
 import {
   PageQueryDTO,
   SongPreviewDto,
@@ -8,11 +6,11 @@ import {
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
-import { Response } from 'express';
-
+import { HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Test, TestingModule } from '@nestjs/testing';
 import { FileService } from '@server/file/file.service';
-import type { UserDocument } from '@server/user/entity/user.entity';
-
+import { Response } from 'express';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 

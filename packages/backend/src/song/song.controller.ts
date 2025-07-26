@@ -1,3 +1,13 @@
+import type { UserDocument } from '@nbw/database';
+import {
+  PageQueryDTO,
+  SongPreviewDto,
+  SongViewDto,
+  UploadConst,
+  UploadSongDto,
+  UploadSongResponseDto,
+} from '@nbw/database';
+import type { RawBodyRequest } from '@nestjs/common';
 import {
   Body,
   Controller,
@@ -16,7 +26,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import type { RawBodyRequest } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
@@ -27,20 +36,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  PageQueryDTO,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-  UploadConst,
-} from '@nbw/database';
-import type { Response } from 'express';
-
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
-import type { UserDocument } from '@server/user/entity/user.entity';
-
+import type { Response } from 'express';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.

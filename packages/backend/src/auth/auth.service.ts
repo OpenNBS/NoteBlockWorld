@@ -1,12 +1,10 @@
+import type { UserDocument } from '@nbw/database';
+import { CreateUser } from '@nbw/database';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUser } from '@nbw/database';
+import { UserService } from '@server/user/user.service';
 import axios from 'axios';
 import type { Request, Response } from 'express';
-
-import type { UserDocument } from '@server/user/entity/user.entity';
-import { UserService } from '@server/user/user.service';
-
 import { DiscordUser } from './types/discordProfile';
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';

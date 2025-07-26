@@ -1,24 +1,20 @@
-import { HttpException } from '@nestjs/common';
-import { getModelToken } from '@nestjs/mongoose';
-import { Test, TestingModule } from '@nestjs/testing';
-import {
-  SongPreviewDto,
-  SongStats,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-} from '@nbw/database';
-import mongoose, { Model } from 'mongoose';
-
-import { FileService } from '@server/file/file.service';
-import type { UserDocument } from '@server/user/entity/user.entity';
-
+import type { UserDocument } from '@nbw/database';
 import {
   SongDocument,
   Song as SongEntity,
+  SongPreviewDto,
   SongSchema,
+  SongStats,
+  SongViewDto,
   SongWithUser,
-} from './entity/song.entity';
+  UploadSongDto,
+  UploadSongResponseDto,
+} from '@nbw/database';
+import { HttpException } from '@nestjs/common';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test, TestingModule } from '@nestjs/testing';
+import { FileService } from '@server/file/file.service';
+import mongoose, { Model } from 'mongoose';
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { SongService } from './song.service';
