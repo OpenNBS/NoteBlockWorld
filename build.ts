@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-import { getLatestVersionSoundList } from './shared/features/sounds';
+import { getLatestVersionSoundList } from '@nbw/sounds';
 
 function writeJSONFile(
   dir: string,

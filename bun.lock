@@ -4,6 +4,7 @@
     "": {
       "name": "note-block-world",
       "dependencies": {
+        "@nbw/sounds": "workspace:*",
         "ts-node": "^10.9.1",
       },
       "devDependencies": {
