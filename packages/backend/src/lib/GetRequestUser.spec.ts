@@ -1,5 +1,6 @@
 import type { UserDocument } from '@nbw/database';
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+
 import { GetRequestToken, validateUser } from './GetRequestUser';
 
 describe('GetRequestToken', () => {

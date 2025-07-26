@@ -8,10 +8,12 @@ import {
 } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FileService } from '@server/file/file.service';
-import { UserService } from '@server/user/user.service';
 import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Types } from 'mongoose';
+
+import { FileService } from '@server/file/file.service';
+import { UserService } from '@server/user/user.service';
+
 import { SongUploadService } from './song-upload.service';
 
 // mock drawToImage function

@@ -1,9 +1,12 @@
+import type { UserDocument } from '@nbw/database';
 import {
   BROWSER_SONGS,
   PageQueryDTO,
+  Song as SongEntity,
   SongPageDto,
   SongPreviewDto,
   SongViewDto,
+  SongWithUser,
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
@@ -17,9 +20,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import type { UserDocument } from '@nbw/database';
-import { Song as SongEntity, SongWithUser } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
+
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { removeExtraSpaces } from './song.util';

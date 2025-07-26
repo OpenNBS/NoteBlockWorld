@@ -2,6 +2,7 @@ import type { UserDocument } from '@nbw/database';
 import { GetUser, PageQueryDTO } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 

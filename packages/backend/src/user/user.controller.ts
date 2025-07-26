@@ -2,7 +2,9 @@ import type { UserDocument } from '@nbw/database';
 import { GetUser, PageQueryDTO, UpdateUsernameDto } from '@nbw/database';
 import { Body, Controller, Get, Inject, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+
 import { UserService } from './user.service';
 
 @Controller('user')

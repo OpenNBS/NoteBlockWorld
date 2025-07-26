@@ -9,6 +9,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+
 import { UserService } from './user.service';
 
 const mockUserModel = {
