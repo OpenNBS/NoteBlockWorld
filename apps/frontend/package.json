@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "test": "jest"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.4.2",

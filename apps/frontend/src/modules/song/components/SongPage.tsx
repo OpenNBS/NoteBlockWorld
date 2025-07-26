@@ -1,5 +1,4 @@
-import { SongPreviewDto } from '@nbw/database';
-import { SongViewDtoType } from '@nbw/database';
+import { SongPreviewDto, SongViewDtoType } from '@nbw/database';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 

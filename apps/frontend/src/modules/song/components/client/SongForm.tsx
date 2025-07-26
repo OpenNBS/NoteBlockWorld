@@ -3,8 +3,7 @@ import {
   faExternalLink,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@nbw/database';
-import { LicenseType } from '@nbw/database';
+import { LicenseType, UploadConst } from '@nbw/database';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

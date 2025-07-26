@@ -1,7 +1,7 @@
 'use client';
 
-import { MY_SONGS } from '@nbw/database';
 import {
+  MY_SONGS,
   SongPageDtoType,
   SongPreviewDtoType,
   SongsFolder,

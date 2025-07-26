@@ -4,8 +4,7 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MY_SONGS } from '@nbw/database';
-import { SongPageDtoType } from '@nbw/database';
+import { MY_SONGS, SongPageDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';

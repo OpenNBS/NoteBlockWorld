@@ -1,10 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { parseSongFromBuffer } from '@nbw/song';
-import { SongFileType } from '@nbw/song';
-import { bgColors } from '@nbw/thumbnail';
 import { ThumbnailConst } from '@nbw/database';
+import { SongFileType, parseSongFromBuffer } from '@nbw/song';
+import { bgColors } from '@nbw/thumbnail';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,

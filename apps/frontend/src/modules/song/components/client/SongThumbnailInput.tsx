@@ -1,5 +1,5 @@
-import { bgColorsArray } from '@nbw/thumbnail';
 import { ThumbnailConst } from '@nbw/database';
+import { bgColorsArray } from '@nbw/thumbnail';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 

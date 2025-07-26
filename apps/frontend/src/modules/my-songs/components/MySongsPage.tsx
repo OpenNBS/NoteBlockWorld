@@ -1,5 +1,4 @@
-import { MY_SONGS } from '@nbw/database';
-import { SongPageDtoType, SongsFolder } from '@nbw/database';
+import { MY_SONGS, SongPageDtoType, SongsFolder } from '@nbw/database';
 
 import axiosInstance from '@web/lib/axios';
 
