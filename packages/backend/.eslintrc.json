@@ -1,6 +1,6 @@
 {
     "extends": [
-        "../.eslintrc.js"
+        "../../.eslintrc.js"
     ],
     "root": true,
     "env": {

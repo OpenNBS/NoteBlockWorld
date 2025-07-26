@@ -3,7 +3,7 @@ module.exports = {
     'plugin:mdx/recommended',
     'next',
     'next/core-web-vitals',
-    '../.eslintrc.js',
+    '../../.eslintrc.js',
   ],
   settings: {
     'mdx/code-blocks': true,
