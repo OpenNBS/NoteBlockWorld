@@ -15,11 +15,11 @@
     "start:debug": "NODE_ENV=development tsc-watch --onSuccess \"bun . --inspect\"",
     "start:prod": "NODE_ENV=production bun dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "bun test",
-    "test:watch": "bun test --watch",
-    "test:cov": "bun test --coverage",
+    "test": "bun test **/*.spec.ts",
+    "test:watch": "bun test **/*.spec.ts --watch",
+    "test:cov": "bun test **/*.spec.ts --coverage",
     "test:debug": "bun --inspect-brk --runInBand",
-    "test:e2e": "bun test ./test/app.e2e-spec.ts"
+    "test:e2e": "bun test **/*.spec.ts ./test/app.e2e-spec.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.717.0",

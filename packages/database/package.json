@@ -18,7 +18,7 @@
     "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
     "clean": "rm -rf dist",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "bun test"
+    "test": "bun test **/*.spec.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
