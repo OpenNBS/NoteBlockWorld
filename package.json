@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    "build:server": "bun run build:data && cd server && bun run build",
-    "build:web": "cd ./web && bun run build",
-    "start:server": "cd ./server && bun run start",
+    "build:server": "bun run build:data && cd packages/backend && bun run build",
+    "build:web": "cd ./apps/frontend && bun run build",
+    "start:server": "cd ./packages/backend && bun run start",
     "start:server:prod": "cd ./server && bun run start",
     "start:web:prod": "cd ./web && bun run start",
     "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\"",
