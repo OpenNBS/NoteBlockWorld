@@ -15,7 +15,9 @@
   "scripts": {
     "build": "bun run clean && bun build src/index.ts --outdir dist --target node && bun run build:types",
     "build:types": "tsc --project tsconfig.build.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/bun": "latest",

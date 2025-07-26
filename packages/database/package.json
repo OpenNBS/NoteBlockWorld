@@ -16,7 +16,9 @@
     "build": "bun run clean && bun run build:js && bun run build:types",
     "build:js": "tsc --project tsconfig.build.json --declaration false --emitDeclarationOnly false",
     "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest",
