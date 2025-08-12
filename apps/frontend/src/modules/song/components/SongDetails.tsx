@@ -1,7 +1,6 @@
 import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType, UploadConst } from '@nbw/database';
-
 import {
   formatDuration,
   formatTimeSpent,
