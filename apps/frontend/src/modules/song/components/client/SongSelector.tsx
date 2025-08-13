@@ -1,6 +1,6 @@
 import { faFile, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
@@ -38,7 +38,7 @@ export const SongSelector = () => {
     accept: {
       'application/nbs': ['.nbs'],
     },
-    maxSize: UploadConst.file.maxSize,
+    maxSize: UPLOAD_CONSTANTS.file.maxSize,
     multiple: false,
     noClick: true,
   });

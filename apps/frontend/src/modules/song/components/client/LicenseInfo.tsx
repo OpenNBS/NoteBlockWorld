@@ -2,7 +2,7 @@
 
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import Markdown from 'react-markdown';
 
 import {
@@ -28,7 +28,7 @@ export const LicenseTooltip = ({ description }: { description: string }) => {
 
 export const LicenseInfo = ({ license }: { license: string }) => {
   // @ts-expect-error - read-only object cannot be indexed with a string
-  const licenseInfo = UploadConst.licenses[license];
+  const licenseInfo = UPLOAD_CONSTANTS.licenses[license];
 
   if (!licenseInfo) {
     return null;

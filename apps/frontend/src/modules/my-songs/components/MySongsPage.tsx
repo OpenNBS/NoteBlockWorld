@@ -1,10 +1,11 @@
-import { MY_SONGS, SongPageDtoType, SongsFolder } from '@nbw/database';
+import { MY_SONGS } from '@nbw/config';
+import type { SongPageDtoType, SongsFolder } from '@nbw/database';
 
 import axiosInstance from '@web/lib/axios';
 
+import { getTokenServer } from '../../auth/features/auth.utils';
 import { MySongProvider } from './client/context/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';
-import { getTokenServer } from '../../auth/features/auth.utils';
 
 async function fetchSongsPage(
   page: number,

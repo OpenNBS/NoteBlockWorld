@@ -1,6 +1,7 @@
 import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongViewDtoType, UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+import type { SongViewDtoType } from '@nbw/database';
 import {
   formatDuration,
   formatTimeSpent,
@@ -117,7 +118,7 @@ export const SongDetails = ({ song }: SongDetailsProps) => {
         {row('Author', song.uploader?.username)}
         {row('Original author', song.originalAuthor || '--')}
         {row('MIDI file name', song.stats.midiFileName || '--')}
-        {row('Category', UploadConst.categories[song.category])}
+        {row('Category', UPLOAD_CONSTANTS.categories[song.category])}
         {row('Note block compatible', compatibleInfo)}
         {row('Notes', stats.noteCount.toLocaleString('en-US'))}
         {row('Instruments', instrumentInfo)}

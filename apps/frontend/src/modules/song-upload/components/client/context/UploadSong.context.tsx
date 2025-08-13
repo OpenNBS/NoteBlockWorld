@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ThumbnailConst } from '@nbw/database';
-import { SongFileType, parseSongFromBuffer } from '@nbw/song';
-import { bgColors } from '@nbw/thumbnail';
+import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { parseSongFromBuffer } from '@nbw/song';
+import { SongFileType } from '@nbw/song/src/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -168,7 +168,9 @@ export const UploadSongProvider = ({
     let song: SongFileType;
 
     try {
-      song = await parseSongFromBuffer(await file.arrayBuffer());
+      song = (await parseSongFromBuffer(
+        await file.arrayBuffer(),
+      )) as unknown as SongFileType; // TODO: Investigate this weird type error
     } catch (e) {
       console.error('Error parsing song file', e);
       toast.error('Invalid song file! Please try again with a different song.');
@@ -205,27 +207,27 @@ export const UploadSongProvider = ({
     if (song) {
       formMethods.setValue(
         'thumbnailData.zoomLevel',
-        ThumbnailConst.zoomLevel.default,
+        THUMBNAIL_CONSTANTS.zoomLevel.default,
       );
 
       formMethods.setValue(
         'thumbnailData.startTick',
-        ThumbnailConst.startTick.default,
+        THUMBNAIL_CONSTANTS.startTick.default,
       );
 
       formMethods.setValue(
         'thumbnailData.startLayer',
-        ThumbnailConst.startLayer.default,
+        THUMBNAIL_CONSTANTS.startLayer.default,
       );
 
-      const colorKeys = Object.keys(bgColors);
+      const colorKeys = Object.keys(BG_COLORS);
       const randomColor = (colorKeys.length * Math.random()) << 0;
 
       formMethods.setValue(
         'thumbnailData.backgroundColor',
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        bgColors[colorKeys[randomColor]].dark,
+        BG_COLORS[colorKeys[randomColor]].dark,
       );
 
       formMethods.setValue('allowDownload', true);

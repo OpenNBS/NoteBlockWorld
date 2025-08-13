@@ -8,7 +8,7 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UserConst } from '@nbw/database';
+import { USER_CONSTANTS } from '@nbw/config';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -147,17 +147,17 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                         {...register('username', {
                           required: 'Username is required',
                           pattern: {
-                            value: UserConst.ALLOWED_REGEXP,
+                            value: USER_CONSTANTS.ALLOWED_REGEXP,
                             message:
                               'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
                           },
                           maxLength: {
-                            value: UserConst.USERNAME_MAX_LENGTH,
-                            message: `The username must have up to ${UserConst.USERNAME_MAX_LENGTH} characters`,
+                            value: USER_CONSTANTS.USERNAME_MAX_LENGTH,
+                            message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`,
                           },
                           minLength: {
-                            value: UserConst.USERNAME_MIN_LENGTH,
-                            message: `The username must have at least ${UserConst.USERNAME_MIN_LENGTH} characters`,
+                            value: USER_CONSTANTS.USERNAME_MIN_LENGTH,
+                            message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`,
                           },
                         })}
                       />

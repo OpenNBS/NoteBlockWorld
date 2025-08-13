@@ -4,7 +4,8 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MY_SONGS, SongPageDtoType } from '@nbw/database';
+import { MY_SONGS } from '@nbw/config';
+import type { SongPageDtoType, SongPreviewDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
@@ -45,7 +46,9 @@ const SongRows = ({
   pageSize: number;
 }) => {
   const maxPage = MY_SONGS.PAGE_SIZE;
-  const content = !page ? Array(pageSize).fill(null) : page.content;
+  const content = !page
+    ? Array(pageSize).fill(null)
+    : (page.content as SongPreviewDtoType[]);
 
   return (
     <>

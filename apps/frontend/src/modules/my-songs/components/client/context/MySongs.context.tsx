@@ -1,11 +1,12 @@
 'use client';
 
-import {
-  MY_SONGS,
+import { MY_SONGS } from '@nbw/config';
+import type {
   SongPageDtoType,
   SongPreviewDtoType,
   SongsFolder,
 } from '@nbw/database';
+
 import {
   createContext,
   useCallback,

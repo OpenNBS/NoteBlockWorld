@@ -1,32 +1,38 @@
-import { ThumbnailConst, UploadConst } from '@nbw/database';
+import { THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 import { z as zod } from 'zod';
 
 export const thumbnailDataSchema = zod.object({
   zoomLevel: zod
     .number()
     .int()
-    .min(ThumbnailConst.zoomLevel.min)
-    .max(ThumbnailConst.zoomLevel.max)
-    .default(ThumbnailConst.zoomLevel.default),
+    .min(THUMBNAIL_CONSTANTS.zoomLevel.min)
+    .max(THUMBNAIL_CONSTANTS.zoomLevel.max)
+    .default(THUMBNAIL_CONSTANTS.zoomLevel.default),
   startTick: zod
     .number()
     .int()
     .min(0)
-    .default(ThumbnailConst.startTick.default),
+    .default(THUMBNAIL_CONSTANTS.startTick.default),
   startLayer: zod
     .number()
     .int()
     .min(0)
-    .default(ThumbnailConst.startLayer.default),
+    .default(THUMBNAIL_CONSTANTS.startLayer.default),
   backgroundColor: zod
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/)
-    .default(ThumbnailConst.backgroundColor.default),
+    .default(THUMBNAIL_CONSTANTS.backgroundColor.default),
 });
 
-const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
-const categories = Object.keys(UploadConst.categories) as Readonly<string[]>;
-const licenses = Object.keys(UploadConst.licenses) as Readonly<string[]>;
+const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
+  string[]
+>;
+
+const categories = Object.keys(UPLOAD_CONSTANTS.categories) as Readonly<
+  string[]
+>;
+
+const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
@@ -35,21 +41,21 @@ export const SongFormSchema = zod.object({
   visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
-    .max(UploadConst.title.maxLength, {
-      message: `Title must be shorter than ${UploadConst.title.maxLength} characters`,
+    .max(UPLOAD_CONSTANTS.title.maxLength, {
+      message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
     })
     .min(1, {
       message: 'Title is required',
     }),
   originalAuthor: zod
     .string()
-    .max(UploadConst.originalAuthor.maxLength, {
-      message: `Original author must be shorter than ${UploadConst.originalAuthor.maxLength} characters`,
+    .max(UPLOAD_CONSTANTS.originalAuthor.maxLength, {
+      message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
     })
     .min(0),
   author: zod.string().optional(),
-  description: zod.string().max(UploadConst.description.maxLength, {
-    message: `Description must be less than ${UploadConst.description.maxLength} characters`,
+  description: zod.string().max(UPLOAD_CONSTANTS.description.maxLength, {
+    message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
@@ -59,11 +65,11 @@ export const SongFormSchema = zod.object({
     .enum(licenses, {
       message: 'Please select a license',
     })
-    .refine((value) => Object.keys(UploadConst.licenses).includes(value))
-    .default(UploadConst.license.default),
+    .refine((value) => Object.keys(UPLOAD_CONSTANTS.licenses).includes(value))
+    .default(UPLOAD_CONSTANTS.license.default),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  category: zod.enum(categories).default(UploadConst.CATEGORY_DEFAULT),
+  category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT),
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});

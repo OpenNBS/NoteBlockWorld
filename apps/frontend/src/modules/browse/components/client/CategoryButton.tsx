@@ -1,5 +1,6 @@
 'use client';
-import { CategoryType, UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+import type { CategoryType } from '@nbw/database';
 
 import {
   Carousel,
@@ -51,7 +52,7 @@ export const CategoryButtonGroup = () => {
                 }
               }}
             >
-              {UploadConst.categories[category as CategoryType]}
+              {UPLOAD_CONSTANTS.categories[category as CategoryType]}
               <span className='text-sm text-zinc-400 ml-1 font-bold'>
                 {count}
               </span>

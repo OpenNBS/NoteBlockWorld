@@ -1,5 +1,4 @@
-import { ThumbnailConst } from '@nbw/database';
-import { bgColorsArray } from '@nbw/thumbnail';
+import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -52,8 +51,8 @@ function ThumbnailSliders({
             valueAsNumber: true,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.zoomLevel.min}
-          max={ThumbnailConst.zoomLevel.max}
+          min={THUMBNAIL_CONSTANTS.zoomLevel.min}
+          max={THUMBNAIL_CONSTANTS.zoomLevel.max}
         />
       </div>
       <div>{formatZoomLevel(zoomLevel)}</div>
@@ -70,7 +69,7 @@ function ThumbnailSliders({
             max: maxTick,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.startTick.default}
+          min={THUMBNAIL_CONSTANTS.startTick.default}
           max={maxTick}
         />
       </div>
@@ -88,7 +87,7 @@ function ThumbnailSliders({
             max: maxLayer,
           })}
           disabled={isLocked}
-          min={ThumbnailConst.startLayer.default}
+          min={THUMBNAIL_CONSTANTS.startLayer.default}
           max={maxLayer}
         />
       </div>
@@ -163,7 +162,7 @@ export const SongThumbnailInput = ({
       <div className='flex flex-row flex-wrap justify-between items-center w-full gap-2'>
         <label className='basis-full sm:basis-auto'>Background Color</label>
         <div className='flex flex-row flex-wrap gap-1.5 justify-center w-full md:w-fit'>
-          {bgColorsArray.map(({ /*key,*/ name, /*light,*/ dark }, index) => (
+          {Object.entries(BG_COLORS).map(([key, { name, dark }], index) => (
             <ColorButton
               key={index}
               color={dark}

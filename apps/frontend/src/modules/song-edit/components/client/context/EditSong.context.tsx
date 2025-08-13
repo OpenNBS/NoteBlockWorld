@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UploadSongDtoType } from '@nbw/database';
-import { SongFileType, parseSongFromBuffer } from '@nbw/song';
+import type { UploadSongDtoType } from '@nbw/database';
+import { parseSongFromBuffer } from '@nbw/song';
+import type { SongFileType } from '@nbw/song/src/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
@@ -258,7 +259,7 @@ export const EditSongProvider = ({
       setInstrumentSounds(songInstruments);
       formMethods.setValue('customInstruments', songInstruments);
 
-      setSong(song);
+      setSong(song as unknown as SongFileType); // TODO: Investigate this weird type error
     },
     [formMethods, setSong],
   );

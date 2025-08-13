@@ -3,7 +3,8 @@ import {
   faExternalLink,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { LicenseType, UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+import type { LicenseType } from '@nbw/database';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -204,7 +205,7 @@ export const SongForm = ({
                 errorMessage={errors.category?.message}
                 {...register('category')}
               >
-                {Object.entries(UploadConst.categories).map(
+                {Object.entries(UPLOAD_CONSTANTS.categories).map(
                   ([key, value]: [string, string]) => (
                     <Option key={key} value={key}>
                       {value}
@@ -257,7 +258,7 @@ export const SongForm = ({
                 errorMessage={errors.visibility?.message}
                 {...register('visibility')}
               >
-                {Object.entries(UploadConst.visibility).map(
+                {Object.entries(UPLOAD_CONSTANTS.visibility).map(
                   ([key, value]: [string, string]) => (
                     <Option key={key} value={key}>
                       {value}
@@ -296,7 +297,7 @@ export const SongForm = ({
                 description={
                   formMethods.watch('license') === 'none'
                     ? ''
-                    : UploadConst.licenses[
+                    : UPLOAD_CONSTANTS.licenses[
                         formMethods.watch('license') as LicenseType
                       ]?.uploadDescription
                 }
@@ -305,7 +306,7 @@ export const SongForm = ({
                 <Option key={'none'} value={'none'}>
                   Select a license...
                 </Option>
-                {Object.entries(UploadConst.licenses).map(
+                {Object.entries(UPLOAD_CONSTANTS.licenses).map(
                   // @ts-expect-error - TS doesn't like the destructuring here
                   ([key, { name }]: [string, string]) => (
                     <Option key={key} value={key}>

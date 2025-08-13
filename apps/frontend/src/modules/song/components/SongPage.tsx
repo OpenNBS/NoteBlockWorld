@@ -1,10 +1,14 @@
-import { SongPreviewDto, SongViewDtoType } from '@nbw/database';
+import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 import axios from '@web/lib/axios';
 
-import { LicenseInfo } from './client/LicenseInfo';
+import SongCard from '../../browse/components/SongCard';
+import SongCardGroup from '../../browse/components/SongCardGroup';
+import { ErrorBox } from '../../shared/components/client/ErrorBox';
+import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
+import { formatTimeAgo } from '../../shared/util/format';
 import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
@@ -13,11 +17,7 @@ import {
   UploaderBadge,
   VisibilityBadge,
 } from './SongPageButtons';
-import SongCard from '../../browse/components/SongCard';
-import SongCardGroup from '../../browse/components/SongCardGroup';
-import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
-import { ErrorBox } from '../../shared/components/client/ErrorBox';
-import { formatTimeAgo } from '../../shared/util/format';
+import { LicenseInfo } from './client/LicenseInfo';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;
@@ -42,15 +42,18 @@ export async function SongPage({ id }: { id: string }) {
     return <ErrorBox message='An error occurred while retrieving the song' />;
   }
 
-  let suggestions: SongPreviewDto[] = [];
+  let suggestions: SongPreviewDtoType[] = [];
 
   try {
-    const response = await axios.get<SongPreviewDto[]>(`/song-browser/random`, {
-      params: {
-        count: 4,
-        category: song.category,
+    const response = await axios.get<SongPreviewDtoType[]>(
+      `/song-browser/random`,
+      {
+        params: {
+          count: 4,
+          category: song.category,
+        },
       },
-    });
+    );
 
     suggestions = await response.data;
   } catch {

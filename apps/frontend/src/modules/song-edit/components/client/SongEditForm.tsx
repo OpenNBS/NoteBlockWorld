@@ -1,6 +1,6 @@
 'use client';
 
-import { UploadSongDtoType } from '@nbw/database';
+import type { UploadSongDtoType } from '@nbw/database';
 import { useEffect } from 'react';
 
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
