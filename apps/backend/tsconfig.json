@@ -27,11 +27,14 @@
         }
     },
     "include": [
-        "src/**/*.ts",
-        "./jest.config.js"
+        "src/**/*.ts"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "e2e/**/*",
+        "test/**/*"
     ]
 }

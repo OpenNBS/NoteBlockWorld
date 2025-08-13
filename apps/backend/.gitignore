@@ -1,2 +1,5 @@
 .env.development
 .env.production
+dist
+coverage
+*.log
