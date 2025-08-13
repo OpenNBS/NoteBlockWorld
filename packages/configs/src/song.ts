@@ -1,6 +1,6 @@
-import { bgColors } from '@nbw/thumbnail';
+import { BG_COLORS } from './colors';
 
-export const ThumbnailConst = {
+export const THUMBNAIL_CONSTANTS = {
   zoomLevel: {
     min: 1,
     max: 5,
@@ -13,13 +13,13 @@ export const ThumbnailConst = {
     default: 0,
   },
   backgroundColor: {
-    default: bgColors.gray.dark,
+    default: BG_COLORS.gray.dark,
   },
 } as const;
 
 export const MIMETYPE_NBS = 'application/octet-stream' as const;
 
-export const UploadConst = {
+export const UPLOAD_CONSTANTS = {
   file: {
     maxSize: 1024 * 1024 * 3, // 3 MB
   },
@@ -111,7 +111,7 @@ export const UploadConst = {
   },
 } as const;
 
-export const timespans = [
+export const TIMESPANS = [
   'hour',
   'day',
   'week',

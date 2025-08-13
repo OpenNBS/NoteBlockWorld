@@ -24,7 +24,7 @@ https://tailwindcss.com/docs/customizing-colors
 */
 import colors from 'tailwindcss/colors';
 
-export const bgColors = {
+export const BG_COLORS = {
   red: {
     key: 'red',
     name: 'Red',
@@ -135,4 +135,4 @@ export const bgColors = {
   },
 } as const;
 
-export const bgColorsArray = Object.values(bgColors);
+export const bgColorsArray = Object.values(BG_COLORS);
