@@ -1,4 +1,4 @@
-import { UploadConst } from '@database/song/constants';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { SongDocument } from '@database/song/entity/song.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
@@ -14,9 +14,13 @@ import {
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
-const visibility = Object.keys(UploadConst.visibility) as Readonly<string[]>;
-const categories = Object.keys(UploadConst.categories) as Readonly<string[]>;
-const licenses = Object.keys(UploadConst.licenses) as Readonly<string[]>;
+const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
+  string[]
+>;
+const categories = Object.keys(UPLOAD_CONSTANTS.categories) as Readonly<
+  string[]
+>;
+const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 
 export class UploadSongDto {
   @ApiProperty({
@@ -49,7 +53,7 @@ export class UploadSongDto {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(UploadConst.title.maxLength)
+  @MaxLength(UPLOAD_CONSTANTS.title.maxLength)
   @ApiProperty({
     description: 'Title of the song',
     example: 'My Song',
@@ -57,7 +61,7 @@ export class UploadSongDto {
   title: string;
 
   @IsString()
-  @MaxLength(UploadConst.originalAuthor.maxLength)
+  @MaxLength(UPLOAD_CONSTANTS.originalAuthor.maxLength)
   @ApiProperty({
     description: 'Original author of the song',
     example: 'Myself',
@@ -65,7 +69,7 @@ export class UploadSongDto {
   originalAuthor: string;
 
   @IsString()
-  @MaxLength(UploadConst.description.maxLength)
+  @MaxLength(UPLOAD_CONSTANTS.description.maxLength)
   @ApiProperty({
     description: 'Description of the song',
     example: 'This is my song',
@@ -104,7 +108,7 @@ export class UploadSongDto {
   license: LicenseType;
 
   @IsArray()
-  @MaxLength(UploadConst.customInstruments.maxCount, { each: true })
+  @MaxLength(UPLOAD_CONSTANTS.customInstruments.maxCount, { each: true })
   @ApiProperty({
     description:
       'List of custom instrument paths, one for each custom instrument in the song, relative to the assets/minecraft/sounds folder',

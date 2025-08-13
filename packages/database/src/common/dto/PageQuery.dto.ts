@@ -11,7 +11,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { timespans } from '@database/song/constants';
+import { TIMESPANS } from '@nbw/config';
 import type { TimespanType } from '@database/song/dto/types';
 
 export class PageQueryDTO {
@@ -55,7 +55,7 @@ export class PageQueryDTO {
   })
   order?: boolean = false;
 
-  @IsEnum(timespans)
+  @IsEnum(TIMESPANS)
   @IsOptional()
   @ApiProperty({
     example: 'hour',

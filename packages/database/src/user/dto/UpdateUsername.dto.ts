@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
-import { UserConst } from '../constants';
+import { USER_CONSTANTS } from '@nbw/config';
 
 export class UpdateUsernameDto {
   @IsString()
-  @MaxLength(UserConst.USERNAME_MAX_LENGTH)
-  @MinLength(UserConst.USERNAME_MIN_LENGTH)
-  @Matches(UserConst.ALLOWED_REGEXP)
+  @MaxLength(USER_CONSTANTS.USERNAME_MAX_LENGTH)
+  @MinLength(USER_CONSTANTS.USERNAME_MIN_LENGTH)
+  @Matches(USER_CONSTANTS.ALLOWED_REGEXP)
   @ApiProperty({
     description: 'Username of the user',
     example: 'tomast1137',

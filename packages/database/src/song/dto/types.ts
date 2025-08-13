@@ -6,7 +6,7 @@ import { SongViewDto } from './SongView.dto';
 import { ThumbnailData as ThumbnailData } from './ThumbnailData.dto';
 import { UploadSongDto } from './UploadSongDto.dto';
 import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
-import { UploadConst, timespans } from '../constants';
+import { UPLOAD_CONSTANTS, TIMESPANS } from '@nbw/config';
 
 export type UploadSongDtoType = InstanceType<typeof UploadSongDto>;
 
@@ -30,12 +30,12 @@ export type FeaturedSongsDtoType = InstanceType<typeof FeaturedSongsDto>;
 
 export type ThumbnailDataType = InstanceType<typeof ThumbnailData>;
 
-export type VisibilityType = keyof typeof UploadConst.visibility;
+export type VisibilityType = keyof typeof UPLOAD_CONSTANTS.visibility;
 
-export type CategoryType = keyof typeof UploadConst.categories;
+export type CategoryType = keyof typeof UPLOAD_CONSTANTS.categories;
 
-export type LicenseType = keyof typeof UploadConst.licenses;
+export type LicenseType = keyof typeof UPLOAD_CONSTANTS.licenses;
 
 export type SongsFolder = Record<number, SongPageDtoType>;
 
-export type TimespanType = (typeof timespans)[number];
+export type TimespanType = (typeof TIMESPANS)[number];

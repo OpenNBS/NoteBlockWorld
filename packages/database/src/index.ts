@@ -1,7 +1,6 @@
 export * from './common/dto/PageQuery.dto';
 export * from './common/dto/types';
 
-export * from './song/constants';
 export * from './song/dto/CustomInstrumentData.dto';
 export * from './song/dto/FeaturedSongsDto.dto';
 export * from './song/dto/SongPage.dto';
@@ -14,7 +13,6 @@ export * from './song/dto/UploadSongResponseDto.dto';
 export * from './song/dto/types';
 export * from './song/entity/song.entity';
 
-export * from './user/constants';
 export * from './user/dto/CreateUser.dto';
 export * from './user/dto/GetUser.dto';
 export * from './user/dto/Login.dto copy';
