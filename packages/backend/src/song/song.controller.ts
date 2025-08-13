@@ -1,9 +1,9 @@
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
 import {
   PageQueryDTO,
   SongPreviewDto,
   SongViewDto,
-  UploadConst,
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
@@ -36,10 +36,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import type { Response } from 'express';
-
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+import type { Response } from 'express';
 
 import { SongService } from './song.service';
 
@@ -50,7 +49,7 @@ import { SongService } from './song.service';
 export class SongController {
   static multerConfig: MulterOptions = {
     limits: {
-      fileSize: UploadConst.file.maxSize,
+      fileSize: UPLOAD_CONSTANTS.file.maxSize,
     },
     fileFilter: (req, file, cb) => {
       if (!file.originalname.match(/\.(nbs)$/)) {

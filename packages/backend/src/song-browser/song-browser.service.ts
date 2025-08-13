@@ -1,5 +1,5 @@
+import { BROWSER_SONGS } from '@nbw/config';
 import {
-  BROWSER_SONGS,
   FeaturedSongsDto,
   PageQueryDTO,
   SongPreviewDto,
@@ -7,7 +7,6 @@ import {
   TimespanType,
 } from '@nbw/database';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-
 import { SongService } from '@server/song/song.service';
 
 @Injectable()

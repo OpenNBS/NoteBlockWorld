@@ -1,6 +1,6 @@
+import { BROWSER_SONGS } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
 import {
-  BROWSER_SONGS,
   PageQueryDTO,
   Song as SongEntity,
   SongPageDto,
@@ -18,9 +18,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
+import { Model } from 'mongoose';
 
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';

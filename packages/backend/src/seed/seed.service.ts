@@ -1,10 +1,10 @@
 import { Instrument, Note, Song } from '@encode42/nbs.js';
 import { faker } from '@faker-js/faker';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import {
   CategoryType,
   LicenseType,
   SongDocument,
-  UploadConst,
   UploadSongDto,
   UserDocument,
   VisibilityType,
@@ -16,7 +16,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
 
@@ -94,9 +93,9 @@ export class SeedService {
 
   private async seedSongs(users: UserDocument[]) {
     const songs: SongDocument[] = [];
-    const licenses = Object.keys(UploadConst.licenses);
-    const categories = Object.keys(UploadConst.categories);
-    const visibilities = Object.keys(UploadConst.visibility);
+    const licenses = Object.keys(UPLOAD_CONSTANTS.licenses);
+    const categories = Object.keys(UPLOAD_CONSTANTS.categories);
+    const visibilities = Object.keys(UPLOAD_CONSTANTS.visibility);
 
     for (const user of users) {
       // most users will have 0-5 songs and a few will have 5-10, not a real statist by whatever I just what to test the system in development mode

@@ -1,4 +1,4 @@
-import { build, $ } from 'bun';
+import { $, build } from 'bun';
 
 await $`rm -rf dist`;
 

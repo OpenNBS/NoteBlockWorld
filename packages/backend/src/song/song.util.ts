@@ -1,4 +1,5 @@
-import { SongWithUser, UploadConst } from '@nbw/database';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+import { SongWithUser } from '@nbw/database';
 import { customAlphabet } from 'nanoid';
 
 // TODO: Move to shared
@@ -55,7 +56,7 @@ export function getUploadDiscordEmbed({
   fieldsArray = fieldsArray.concat([
     {
       name: 'Category',
-      value: UploadConst.categories[category],
+      value: UPLOAD_CONSTANTS.categories[category],
       inline: true,
     },
     {
@@ -78,8 +79,8 @@ export function getUploadDiscordEmbed({
         color: Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
         timestamp: createdAt.toISOString(),
         footer: {
-          text: UploadConst.licenses[license]
-            ? UploadConst.licenses[license].shortName
+          text: UPLOAD_CONSTANTS.licenses[license]
+            ? UPLOAD_CONSTANTS.licenses[license].shortName
             : 'Unknown License',
         },
         author: {
