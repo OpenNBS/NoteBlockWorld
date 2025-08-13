@@ -1,5 +1,4 @@
 export * from './canvasFactory';
-export * from './colors';
 export * from './types';
 export * from './utils';
 import type { Note } from '@nbw/song';
