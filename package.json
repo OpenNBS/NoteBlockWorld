@@ -1,8 +1,39 @@
 {
-  "name": "note-block-world",
+  "name": "@nbw/root",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    },
+    "./backend": {
+      "import": "./packages/backend/dist/index.js",
+      "types": "./packages/backend/dist/index.d.ts"
+    },
+    "./frontend": {
+      "import": "./apps/frontend/dist/index.js",
+      "types": "./apps/frontend/dist/index.d.ts"
+    },
+    "./database": {
+      "import": "./packages/database/dist/index.js",
+      "types": "./packages/database/dist/index.d.ts"
+    },
+    "./thumbnail": {
+      "import": "./packages/thumbnail/dist/index.js",
+      "types": "./packages/thumbnail/dist/index.d.ts"
+    },
+    "./song": {
+      "import": "./packages/song/dist/index.js",
+      "types": "./packages/song/dist/index.d.ts"
+    },
+    "./sounds": {
+      "import": "./packages/sounds/dist/index.js",
+      "types": "./packages/sounds/dist/index.d.ts"
+    }
+  },
   "scripts": {
     "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
     "build:server": "bun run build:data && cd packages/backend && bun run build",
@@ -10,16 +41,15 @@
     "start:server": "cd ./packages/backend && bun run start",
     "start:server:prod": "cd ./packages/backend && bun run start",
     "start:web:prod": "cd ./apps/frontend && bun run start",
-    "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\"",
-    "dev:web": "cd ./apps/frontend && bun run dev",
-    "dev:server": "cd ./packages/backend && bun run start:dev",
-    "lint": "bun run lint:server && bun run lint:web && bun run lint:database && bun run lint:song && bun run lint:sounds && bun run lint:thumbnail",
+    "dev": "concurrently --success first -n \"server,web,database,song,sounds,thumbnail,components\" --prefix-colors \"cyan,magenta,blue,green,yellow,red,white\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\" \"bun run dev:database\" \"bun run dev:song\" \"bun run dev:sounds\" \"bun run dev:thumbnail\" \"bun run dev:components\"",
+    "lint": "bun run lint:server && bun run lint:web && bun run lint:database && bun run lint:song && bun run lint:sounds && bun run lint:thumbnail && bun run lint:components",
     "lint:server": "cd ./packages/backend && bun run lint",
     "lint:web": "cd ./apps/frontend && bun run lint",
     "lint:database": "cd ./packages/database && bun run lint",
     "lint:song": "cd ./packages/song && bun run lint",
     "lint:sounds": "cd ./packages/sounds && bun run lint",
     "lint:thumbnail": "cd ./packages/thumbnail && bun run lint",
+    "lint:components": "cd ./packages/components && bun run lint",
     "test": "bun test **/*.spec.ts --coverage",
     "cy:open": "bun run test:cy",
     "test:cy": "cd ./tests && bun run cy:open",
