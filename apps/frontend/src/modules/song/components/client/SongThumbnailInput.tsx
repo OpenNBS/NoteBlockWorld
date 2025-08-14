@@ -12,6 +12,7 @@ import {
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
+import { NoteQuadTree } from '@nbw/song';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);
@@ -155,7 +156,10 @@ export const SongThumbnailInput = ({
       />
 
       {song && notes && (
-        <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
+        <ThumbnailRendererCanvas
+          notes={notes as unknown as NoteQuadTree} //TODO: fix this bizarre type cast
+          formMethods={formMethods}
+        />
       )}
 
       {/* Background Color */}
