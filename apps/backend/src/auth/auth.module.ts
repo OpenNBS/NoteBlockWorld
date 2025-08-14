@@ -1,6 +1,7 @@
 import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+
 import { MailingModule } from '@server/mailing/mailing.module';
 import { UserModule } from '@server/user/user.module';
 
