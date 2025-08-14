@@ -21,9 +21,6 @@
             "@server/*": [
                 "src/*"
             ],
-            "@shared/*": [
-                "../shared/*"
-            ],
         }
     },
     "include": [
