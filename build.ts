@@ -13,7 +13,7 @@ function writeJSONFile(
   writeFileSync(path, jsonString);
 }
 
-const dataDir = resolve(__dirname, 'packages', 'backend', 'public', 'data');
+const dataDir = resolve(__dirname, 'apps', 'backend', 'public', 'data');
 
 const soundListPath = 'soundList.json';
 
