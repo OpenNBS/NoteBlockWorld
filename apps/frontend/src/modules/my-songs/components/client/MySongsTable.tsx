@@ -46,6 +46,7 @@ const SongRows = ({
   pageSize: number;
 }) => {
   const maxPage = MY_SONGS.PAGE_SIZE;
+
   const content = !page
     ? Array(pageSize).fill(null)
     : (page.content as SongPreviewDtoType[]);

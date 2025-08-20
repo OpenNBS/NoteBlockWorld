@@ -4,11 +4,7 @@ import Image from 'next/image';
 
 import axios from '@web/lib/axios';
 
-import SongCard from '../../browse/components/SongCard';
-import SongCardGroup from '../../browse/components/SongCardGroup';
-import { ErrorBox } from '../../shared/components/client/ErrorBox';
-import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
-import { formatTimeAgo } from '../../shared/util/format';
+import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
@@ -17,7 +13,11 @@ import {
   UploaderBadge,
   VisibilityBadge,
 } from './SongPageButtons';
-import { LicenseInfo } from './client/LicenseInfo';
+import SongCard from '../../browse/components/SongCard';
+import SongCardGroup from '../../browse/components/SongCardGroup';
+import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
+import { ErrorBox } from '../../shared/components/client/ErrorBox';
+import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;

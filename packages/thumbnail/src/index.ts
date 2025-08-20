@@ -2,6 +2,7 @@ export * from './canvasFactory';
 export * from './types';
 export * from './utils';
 import type { Note } from '@nbw/song';
+
 import {
   createCanvas,
   noteBlockImage,

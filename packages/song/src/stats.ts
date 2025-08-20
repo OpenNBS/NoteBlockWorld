@@ -120,6 +120,7 @@ export class SongStatsGenerator {
           layerCount = layerId;
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore //TODO: fix this
         const effectivePitch = note.key + note.pitch / 100;
 
@@ -147,7 +148,7 @@ export class SongStatsGenerator {
         // supported range is always F#3 to F#5 (33-57) - but we do because it's useful to know if
         // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
         // a custom sounds.json in a resource pack).
-
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore //TODO: fix this
         const instrumentKey = this.song.instruments.loaded[note.instrument].key; // F#4 = 45
         const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
@@ -158,12 +159,16 @@ export class SongStatsGenerator {
 
         // Don't consider tempo changers as detuned notes or custom instruments
         const isTempoChanger = tempoChangerInstruments.includes(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore //TODO: fix this
           note.instrument,
         );
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore //TODO: fix this
         const hasDetune = note.pitch % 100 !== 0;
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         const usesCustomInstrument = // @ts-ignore //TODO: fix this
           note.instrument >= this.song.instruments.firstCustomIndex;
 
@@ -174,6 +179,8 @@ export class SongStatsGenerator {
           if (isOutOfRange || hasDetune || usesCustomInstrument)
             incompatibleNoteCount++;
         }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore //TODO: fix this
         instrumentNoteCounts[note.instrument]++;
         noteCount++;
@@ -225,6 +232,7 @@ export class SongStatsGenerator {
           const note = layer.notes[tickStr];
           const tick = parseInt(tickStr);
 
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore //TODO: fix this          // Not a tempo changer
           if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
@@ -232,6 +240,7 @@ export class SongStatsGenerator {
           // so we iterate layers bottom to top and skip the block if a tempo changer has already
           // been found in this tick
           if (tick in tempoSegments) continue;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore //TODO: fix this
           const tempo = Math.abs(note.pitch) / 15; // note pitch = BPM = (t/s) * 15
           tempoSegments[tick] = tempo;
@@ -269,8 +278,10 @@ export class SongStatsGenerator {
     for (let i = 0; i < tempoChangeTicks.length - 1; i++) {
       const currTick = tempoChangeTicks[i];
       const nextTick = tempoChangeTicks[i + 1];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore //TODO: fix this
       const currTempo = tempoSegments[currTick];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore //TODO: fix this
       const segmentDurationTicks = nextTick - currTick;
       const timePerTick = 1 / currTempo;

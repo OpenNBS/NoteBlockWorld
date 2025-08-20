@@ -1,4 +1,5 @@
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { NoteQuadTree } from '@nbw/song';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -12,7 +13,6 @@ import {
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { NoteQuadTree } from '@nbw/song';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);

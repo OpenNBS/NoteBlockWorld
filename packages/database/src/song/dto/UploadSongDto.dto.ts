@@ -1,5 +1,4 @@
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import type { SongDocument } from '@database/song/entity/song.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -11,20 +10,26 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+
+import type { SongDocument } from '@database/song/entity/song.entity';
+
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
   string[]
 >;
+
 const categories = Object.keys(UPLOAD_CONSTANTS.categories) as Readonly<
   string[]
 >;
+
 const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 
 export class UploadSongDto {
   @ApiProperty({
     description: 'The file to upload',
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore //TODO: fix this
     type: 'file',
   })

@@ -1,4 +1,3 @@
-import type { SongWithUser } from '@database/song/entity/song.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -7,6 +6,9 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+
+import type { SongWithUser } from '@database/song/entity/song.entity';
+
 import * as SongViewDto from './SongView.dto';
 import { ThumbnailData } from './ThumbnailData.dto';
 

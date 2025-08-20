@@ -21,6 +21,7 @@ if (typeof document === 'undefined') {
 
     const getPath = (filename: string) => {
       const workingDir = process.cwd();
+
       const fullPath = path.join(
         workingDir,
         filename.split('/').join(path.sep),
@@ -67,6 +68,7 @@ if (typeof document === 'undefined') {
       if (typeof OffscreenCanvas !== 'undefined') {
         return new OffscreenCanvas(width, height);
       }
+
       throw new Error('OffscreenCanvas not available');
     };
 

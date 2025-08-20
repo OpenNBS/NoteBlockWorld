@@ -1,3 +1,5 @@
+import { TIMESPANS, UPLOAD_CONSTANTS } from '@nbw/config';
+
 import { CustomInstrumentData } from './CustomInstrumentData.dto';
 import { FeaturedSongsDto } from './FeaturedSongsDto.dto';
 import { SongPageDto } from './SongPage.dto';
@@ -6,7 +8,6 @@ import { SongViewDto } from './SongView.dto';
 import { ThumbnailData as ThumbnailData } from './ThumbnailData.dto';
 import { UploadSongDto } from './UploadSongDto.dto';
 import { UploadSongResponseDto } from './UploadSongResponseDto.dto';
-import { UPLOAD_CONSTANTS, TIMESPANS } from '@nbw/config';
 
 export type UploadSongDtoType = InstanceType<typeof UploadSongDto>;
 

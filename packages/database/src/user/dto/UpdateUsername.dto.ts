@@ -1,7 +1,6 @@
+import { USER_CONSTANTS } from '@nbw/config';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
-
-import { USER_CONSTANTS } from '@nbw/config';
 
 export class UpdateUsernameDto {
   @IsString()

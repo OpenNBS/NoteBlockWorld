@@ -1,4 +1,5 @@
 import { SongStats } from '@nbw/database';
+
 import { NoteQuadTree } from './notes';
 
 export type SongFileType = {

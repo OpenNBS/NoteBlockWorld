@@ -20,6 +20,7 @@ function asArrayBuffer(buffer: Buffer): ArrayBuffer {
   const view = new Uint8Array(arrayBuffer);
 
   for (let i = 0; i < buffer.length; ++i) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore //TODO: fix this
     view[i] = buffer[i];
   }

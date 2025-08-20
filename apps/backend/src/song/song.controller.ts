@@ -36,9 +36,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import type { Response } from 'express';
+
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
-import type { Response } from 'express';
 
 import { SongService } from './song.service';
 

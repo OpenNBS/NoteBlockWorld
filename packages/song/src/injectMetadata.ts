@@ -22,6 +22,7 @@ export function injectSongFileMetadata(
   for (const [id, soundPath] of soundPaths.entries()) {
     const customId = nbsSong.instruments.firstCustomIndex + id;
     const newSoundPath = soundPath.replace('/sounds/', '/');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore //TODO: fix this
     nbsSong.instruments.loaded[customId].meta.soundFile = newSoundPath;
   }

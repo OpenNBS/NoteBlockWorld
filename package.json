@@ -42,7 +42,7 @@
     "start:server:prod": "cd ./apps/backend && bun run start",
     "start:web:prod": "cd ./apps/frontend && bun run start",
     "dev": "concurrently --success first -n \"server,web,database,song,sounds,thumbnail,components\" --prefix-colors \"cyan,magenta,blue,green,yellow,red,white\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\" \"bun run dev:database\" \"bun run dev:song\" \"bun run dev:sounds\" \"bun run dev:thumbnail\" \"bun run dev:components\"",
-    "lint": "bun run lint:server && bun run lint:web && bun run lint:database && bun run lint:song && bun run lint:sounds && bun run lint:thumbnail && bun run lint:components",
+    "lint": "bun run --filter '*' lint",
     "lint:server": "cd ./apps/backend && bun run lint",
     "lint:web": "cd ./apps/frontend && bun run lint",
     "lint:database": "cd ./packages/database && bun run lint",
