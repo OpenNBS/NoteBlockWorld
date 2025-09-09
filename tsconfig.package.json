@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        // Modern bundler mode
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        // Additional strict checks for packages
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        // Relaxed flags (can be enabled per package)
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noPropertyAccessFromIndexSignature": false
+    }
+}

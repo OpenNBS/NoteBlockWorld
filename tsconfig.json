@@ -1,15 +1,10 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "baseUrl": ".",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "incremental": true,
-        "skipLibCheck": true,
+        // Root project specific overrides
         "strictNullChecks": true,
         "noImplicitAny": true,
         "strictBindCallApply": true,
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "strictPropertyInitialization": false,
+        "strictPropertyInitialization": false
     }
 }
