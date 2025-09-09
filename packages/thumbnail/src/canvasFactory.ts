@@ -19,15 +19,33 @@ if (typeof document === 'undefined') {
       GlobalFonts,
     } = canvasModule;
 
-    const getPath = (filename: string) => {
+    const getPath = (filename: string): string => {
       const workingDir = process.cwd();
 
-      const fullPath = path.join(
-        workingDir,
-        filename.split('/').join(path.sep),
-      );
+      // Try different possible locations for the asset files
+      const possiblePaths = [
+        // When running from package directory
+        path.join(workingDir, filename.split('/').join(path.sep)),
+        // When running from root directory
+        path.join(
+          workingDir,
+          'packages',
+          'thumbnail',
+          filename.split('/').join(path.sep),
+        ),
+      ];
 
-      return fullPath;
+      // Check which path exists
+      const fs = require('fs');
+
+      for (const fullPath of possiblePaths) {
+        if (fs.existsSync(fullPath)) {
+          return fullPath;
+        }
+      }
+
+      // Default to first path if none exist
+      return possiblePaths[0]!;
     };
 
     const saveToImage = (canvas: NapiRs.Canvas) => canvas.encode('png');
