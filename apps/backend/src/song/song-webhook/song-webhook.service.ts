@@ -48,7 +48,7 @@ export class SongWebhookService implements OnModuleInit {
         body: JSON.stringify(webhookData),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { id: string };
 
       //this.logger.log(`Posted webhook message for song ${song.publicId}`);
       return data.id; // Discord message ID

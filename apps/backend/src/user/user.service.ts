@@ -32,7 +32,11 @@ export class UserService {
         new: true, // return the updated document
       })) as UserDocument;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      throw new Error(String(error));
     }
   }
 
