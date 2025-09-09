@@ -1,20 +1,5 @@
 import { getKeyText, instrumentColors, isDarkColor } from './utils';
 
-// Mock canvasFactory
-jest.mock('./canvasFactory', () => ({
-  createCanvas: jest.fn().mockImplementation((width, height) => ({
-    width,
-    height,
-    getContext: jest.fn().mockReturnValue({
-      fillStyle: '',
-      fillRect: jest.fn(),
-      globalCompositeOperation: '',
-      globalAlpha: 0,
-      drawImage: jest.fn(),
-    }),
-  })),
-}));
-
 describe('instrumentColors', () => {
   it('should contain 16 color codes', () => {
     expect(instrumentColors).toHaveLength(16);

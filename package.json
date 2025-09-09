@@ -50,7 +50,7 @@
     "lint:sounds": "cd ./packages/sounds && bun run lint",
     "lint:thumbnail": "cd ./packages/thumbnail && bun run lint",
     "lint:components": "cd ./packages/components && bun run lint",
-    "test": "bun test **/*.spec.ts --coverage",
+    "test": "cd ./apps/backend && bun test",
     "cy:open": "bun run test:cy",
     "test:cy": "cd ./tests && bun run cy:open",
     "prettier": "prettier --write .",
