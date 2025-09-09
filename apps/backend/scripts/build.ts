@@ -15,10 +15,8 @@ const result = await build({
   entrypoints: ['./src/main.ts'],
   outdir: './dist',
   target: 'bun',
-  minify: {
-    syntax: true,
-    whitespace: true,
-  },
+  minify: false,
+  sourcemap: 'linked',
   external: optionalRequirePackages.filter((pkg) => {
     try {
       require(pkg);
