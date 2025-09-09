@@ -2,7 +2,6 @@ import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { SongWithUser } from '@nbw/database';
 import { customAlphabet } from 'nanoid';
 
-// TODO: Move to shared
 export const formatDuration = (totalSeconds: number) => {
   const minutes = Math.floor(Math.ceil(totalSeconds) / 60);
   const seconds = Math.ceil(totalSeconds) % 60;
