@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "test": "jest"
   },
   "dependencies": {
