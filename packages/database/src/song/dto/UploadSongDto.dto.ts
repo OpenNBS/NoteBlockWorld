@@ -29,7 +29,7 @@ const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 export class UploadSongDto {
   @ApiProperty({
     description: 'The file to upload',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore //TODO: fix this
     type: 'file',
   })

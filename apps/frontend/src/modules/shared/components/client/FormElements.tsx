@@ -89,7 +89,6 @@ export const Input = forwardRef<
     errorMessage?: string;
   }
 >((props, ref) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, label, isLoading, errorMessage, ...rest } = props;
 
   return (
@@ -164,7 +163,6 @@ export const Select = forwardRef<
     description?: string;
   }
 >((props, ref) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, label, isLoading, errorMessage, description, ...rest } = props;
 
   return (

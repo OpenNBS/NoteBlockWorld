@@ -17,7 +17,7 @@ export function getInstrumentNoteCounts(song: Song): Record<number, number> {
   for (const layer of song.layers) {
     for (const tick in layer.notes) {
       const note = layer.notes[tick];
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore //TODO: fix this
       const instrumentId = note.instrument;
       blockCounts[instrumentId] = (blockCounts[instrumentId] || 0) + 1;

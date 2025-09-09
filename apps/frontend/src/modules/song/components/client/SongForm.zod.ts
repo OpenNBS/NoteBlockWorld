@@ -36,7 +36,7 @@ const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   // @ts-ignore
   visibility: zod.enum(visibility).default('public'),
   title: zod
@@ -60,14 +60,14 @@ export const SongFormSchema = zod.object({
   thumbnailData: thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
   license: zod
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore
     .enum(licenses, {
       message: 'Please select a license',
     })
     .refine((value) => Object.keys(UPLOAD_CONSTANTS.licenses).includes(value))
     .default(UPLOAD_CONSTANTS.license.default),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   // @ts-ignore
   category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT),
 });

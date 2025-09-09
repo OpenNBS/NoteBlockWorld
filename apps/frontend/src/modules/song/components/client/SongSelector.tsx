@@ -8,7 +8,6 @@ import { toast } from 'react-hot-toast';
 import { useSongProvider } from './context/Song.context';
 
 export const SongSelector = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { setFile } = useSongProvider('upload');
 
   const handleFileDrop = useCallback(

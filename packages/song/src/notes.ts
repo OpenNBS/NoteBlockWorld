@@ -32,7 +32,6 @@ export class NoteQuadTree {
           data: { ...note, tick: tick, layer: layerId },
         });
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore //TODO: fix this
         this.quadtree.insert(treeItem);
 

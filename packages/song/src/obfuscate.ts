@@ -209,23 +209,23 @@ export class SongObfuscator {
         const tick = parseInt(tickStr);
 
         // Skip silent notes except if they are tempo changers
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // @ts-ignore //TODO: fix this
         const isTempoChanger = tempoChangerIds.includes(note.instrument);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // @ts-ignore //TODO: fix this
         if (note.velocity === 0 && !isTempoChanger) continue;
 
         // Skip notes with deleted instruments
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // @ts-ignore //TODO: fix this
         if (instrumentMapping[note.instrument] === undefined) continue;
 
         // Add obfuscated note to output
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // @ts-ignore //TODO: fix this
         const newNote = getObfuscatedNote(note, layer);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // @ts-ignore //TODO: fix this
         if (isTempoChanger) newNote.pitch = note.pitch;
         addNoteToOutput(tick, newNote);
