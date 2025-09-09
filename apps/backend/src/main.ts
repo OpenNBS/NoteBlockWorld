@@ -40,7 +40,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use('/api/v1', express.static('public'));
+  app.use('/v1', express.static('public'));
 
   const port = process.env.PORT || '4000';
 
