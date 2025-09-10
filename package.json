@@ -55,8 +55,7 @@
     "test": "cd ./apps/backend && bun test",
     "cy:open": "bun run test:cy",
     "test:cy": "cd ./tests && bun run cy:open",
-    "prettier": "prettier --write .",
-    "build:data": "bun ./build.ts"
+    "prettier": "prettier --write ."
   },
   "keywords": [],
   "author": "",
