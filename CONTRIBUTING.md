@@ -167,3 +167,5 @@ We use bun's built-in test runner for testing. To run tests:
 ```bash
 bun run test
 ```
+
+For more information, see the [bun test](https://bun.sh/docs/cli/test) documentation.
