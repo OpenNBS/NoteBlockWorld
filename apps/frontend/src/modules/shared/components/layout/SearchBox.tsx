@@ -28,7 +28,7 @@ export const SearchBox = () => {
             type='text'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder='Search for songs and users'
+            placeholder='Search for songs'
             className='w-full bg-zinc-800 text-white border border-zinc-600 rounded-md p-2'
           />
           <button
@@ -37,10 +37,10 @@ export const SearchBox = () => {
               const queryParam = new URLSearchParams({
                 page: '1',
                 limit: '20',
-                query,
+                q: query,
               });
 
-              router.push(`/search-user?${queryParam.toString()}`);
+              router.push(`/search-song?${queryParam.toString()}`);
             }}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
