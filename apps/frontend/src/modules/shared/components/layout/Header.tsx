@@ -13,6 +13,7 @@ import { checkLogin, getUserData } from '@web/modules/auth/features/auth.utils';
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
+import { SearchBox } from './SearchBox';
 
 export async function Header() {
   let isLogged;
@@ -93,6 +94,7 @@ export async function Header() {
             label='About'
             className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
           />
+          <SearchBox />
           <RandomSongButton />
         </div>
 
