@@ -21,5 +21,5 @@ export function initializeSwagger(app: INestApplication<any>) {
     },
   };
 
-  SwaggerModule.setup('api/doc', app, document, swaggerOptions);
+  SwaggerModule.setup('docs', app, document, swaggerOptions);
 }
