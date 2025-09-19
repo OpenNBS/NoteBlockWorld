@@ -76,6 +76,17 @@ export class SongController {
     return await this.songService.getSongByPage(query);
   }
 
+  @Get('/search')
+  @ApiOperation({
+    summary: 'Search songs by keywords with pagination and sorting',
+  })
+  public async searchSongs(
+    @Query() query: PageQueryDTO,
+    @Query('q') q: string,
+  ): Promise<SongPreviewDto[]> {
+    return await this.songService.searchSongs(query, q ?? '');
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Get song info by ID' })
   public async getSong(

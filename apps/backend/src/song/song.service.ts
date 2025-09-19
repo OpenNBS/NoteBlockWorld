@@ -202,6 +202,48 @@ export class SongService {
       })
       .skip(page * limit - limit)
       .limit(limit)
+      .populate('uploader', 'username publicName profileImage -_id')
+      .exec()) as unknown as SongWithUser[];
+
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
+
+  public async searchSongs(
+    query: PageQueryDTO,
+    q: string,
+  ): Promise<SongPreviewDto[]> {
+    const page = parseInt(query.page?.toString() ?? '1');
+    const limit = parseInt(query.limit?.toString() ?? '10');
+    const order = query.order ? query.order : false;
+    const allowedSorts = new Set(['likeCount', 'createdAt', 'playCount']);
+    const sortField = allowedSorts.has(query.sort ?? '')
+      ? (query.sort as string)
+      : 'createdAt';
+
+    const terms = (q || '')
+      .split(/\s+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    // Build Google-like search: all words must appear across any of the fields
+    const andClauses = terms.map((word) => ({
+      $or: [
+        { title: { $regex: word, $options: 'i' } },
+        { originalAuthor: { $regex: word, $options: 'i' } },
+        { description: { $regex: word, $options: 'i' } },
+      ],
+    }));
+
+    const mongoQuery: any = {
+      visibility: 'public',
+      ...(andClauses.length > 0 ? { $and: andClauses } : {}),
+    };
+
+    const songs = (await this.songModel
+      .find(mongoQuery)
+      .sort({ [sortField]: order ? 1 : -1 })
+      .skip(limit * (page - 1))
+      .limit(limit)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
 

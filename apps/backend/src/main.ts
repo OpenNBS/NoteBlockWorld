@@ -10,7 +10,7 @@ const logger: Logger = new Logger('main.ts');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('v1');
 
   const parseTokenPipe = app.get<ParseTokenPipe>(ParseTokenPipe);
 
@@ -56,7 +56,7 @@ bootstrap()
     logger.warn(`Application is running on: http://localhost:${port}`);
 
     if (process.env.NODE_ENV === 'development') {
-      logger.warn(`Swagger is running on: http://localhost:${port}/api/doc`);
+      logger.warn(`Swagger is running on: http://localhost:${port}/docs`);
     }
   })
   .catch((error) => {

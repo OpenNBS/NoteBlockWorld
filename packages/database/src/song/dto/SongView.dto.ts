@@ -14,6 +14,7 @@ import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 export type SongViewUploader = {
   username: string;
+  publicName: string;
   profileImage: string;
 };
 
