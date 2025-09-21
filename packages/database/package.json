@@ -1,0 +1,39 @@
+{
+  "name": "@nbw/database",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun run clean && bun run build:js && bun run build:types",
+    "build:js": "tsc --project tsconfig.build.json --declaration false --emitDeclarationOnly false",
+    "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
+    "clean": "rm -rf dist",
+    "dev": "tsc --project tsconfig.build.json --watch",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "bun test **/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.15",
+    "@nestjs/swagger": "^11.1.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "mongoose": "^7.8.3",
+    "@nbw/config": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

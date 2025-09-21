@@ -1,0 +1,30 @@
+{
+  "name": "@nbw/config",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun run clean && bun build src/index.ts --outdir dist --target node && bun run build:types",
+    "build:types": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "dev": "bun build src/index.ts --outdir dist --target node --watch",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "bun test **/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

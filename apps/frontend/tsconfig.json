@@ -1,0 +1,52 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        // Next.js specific settings
+        "target": "es5",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "preserve",
+        "downlevelIteration": true,
+        "allowJs": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        // Override base strict settings for Next.js compatibility
+        "strict": true,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": false,
+        // Next.js plugins and types
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "types": [
+            "mdx"
+        ],
+        // Path mapping
+        "paths": {
+            "@web/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.mdx",
+        ".next/types/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

@@ -1,53 +1,89 @@
 {
-  "name": "note-block-world",
+  "name": "@nbw/root",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    },
+    "./backend": {
+      "import": "./apps/backend/dist/index.js",
+      "types": "./apps/backend/dist/index.d.ts"
+    },
+    "./frontend": {
+      "import": "./apps/frontend/dist/index.js",
+      "types": "./apps/frontend/dist/index.d.ts"
+    },
+    "./database": {
+      "import": "./packages/database/dist/index.js",
+      "types": "./packages/database/dist/index.d.ts"
+    },
+    "./thumbnail": {
+      "import": "./packages/thumbnail/dist/index.js",
+      "types": "./packages/thumbnail/dist/index.d.ts"
+    },
+    "./song": {
+      "import": "./packages/song/dist/index.js",
+      "types": "./packages/song/dist/index.d.ts"
+    },
+    "./sounds": {
+      "import": "./packages/sounds/dist/index.js",
+      "types": "./packages/sounds/dist/index.d.ts"
+    }
+  },
   "scripts": {
     "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    "build:server": "bun run build:data && cd server && bun run build",
-    "build:web": "cd ./web && bun run build",
-    "start:server": "cd ./server && bun run start",
-    "start:server:prod": "cd ./server && bun run start",
-    "start:web:prod": "cd ./web && bun run start",
-    "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\"",
-    "dev:web": "cd ./web && bun run dev",
-    "dev:server": "cd ./server && bun run start:dev",
-    "lint": "bun run lint:server && bun run lint:web && bun run lint:shared",
-    "lint:server": "cd ./server && bun run lint",
-    "lint:web": "cd ./web && bun run lint",
-    "lint:shared": "cd ./shared && bun run lint",
-    "test": "bun run test:server && bun run test:shared",
-    "test:server": "cd ./server && bun run test",
-    "test:shared": "cd ./shared && bun run test",
+    "build:server": "bun run build:data && cd apps/backend && bun run build",
+    "build:web": "cd ./apps/frontend && bun run build",
+    "start:server": "cd ./apps/backend && bun run start",
+    "start:server:prod": "cd ./apps/backend && bun run start",
+    "start:web:prod": "cd ./apps/frontend && bun run start",
+    "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"cd ./apps/backend && bun run start:dev\" \"cd ./apps/frontend && bun run start\"",
+    "dev:server": "cd ./apps/backend && bun run start:dev",
+    "dev:web": "cd ./apps/frontend && bun run start",
+    "lint": "eslint \"**/*.{ts,tsx}\" --fix --max-warnings 20",
+    "lint:server": "cd ./apps/backend && eslint \"src/**/*.ts\" --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*.test.ts\" --fix --max-warnings 10",
+    "lint:web": "cd ./apps/frontend && eslint \"src/**/*.{ts,tsx}\" --fix --max-warnings 10",
+    "lint:packages": "cd ./packages/configs && eslint \"src/**/*.ts\" --fix && cd ../database && eslint \"src/**/*.ts\" --fix && cd ../song && eslint \"src/**/*.ts\" --fix && cd ../sounds && eslint \"src/**/*.ts\" --fix && cd ../thumbnail && eslint \"src/**/*.ts\" --fix",
+    "lint:database": "cd ./packages/database && bun run lint",
+    "lint:song": "cd ./packages/song && bun run lint",
+    "lint:sounds": "cd ./packages/sounds && bun run lint",
+    "lint:thumbnail": "cd ./packages/thumbnail && bun run lint",
+    "lint:components": "cd ./packages/components && bun run lint",
+    "test": "cd ./apps/backend && bun test",
     "cy:open": "bun run test:cy",
     "test:cy": "cd ./tests && bun run cy:open",
-    "prettier": "prettier --write .",
-    "build:data": "ts-node ./build.ts"
+    "prettier": "prettier --write ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "server",
-    "web",
-    "shared",
-    "tests"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.35.0",
     "@types/bun": "^1.2.10",
     "@types/node": "^20.3.1",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "concurrently": "^9.1.2",
-    "eslint": "^8.46.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^8.10.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-mdx": "^3.6.2",
+    "eslint-plugin-prettier": "^4.2.5",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "globals": "^16.4.0",
     "prettier": "^2.8.8"
   },
   "dependencies": {
+    "@nbw/sounds": "workspace:*",
     "ts-node": "^10.9.1"
   }
 }

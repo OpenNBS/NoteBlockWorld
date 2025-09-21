@@ -31,12 +31,12 @@ We provide a `docker-compose-dev.yml` file that sets up:
 To start the services, run the following in the root directory:
 
 ```bash
-docker-compose -f docker-compose-dev.yml up -d
+docker-compose -f docker-compose.yml up -d
 ```
 
 > Remove the `-d` flag if you'd like to see container logs in your terminal.
 
-You can find authentication details in the [`docker-compose-dev.yml`](docker-compose-dev.yml) file.
+You can find authentication details in the [`docker-compose.yml`](docker-compose.yml) file.
 
 ---
 
@@ -160,12 +160,12 @@ curl -X 'GET' \
 
 ## Running Tests
 
-Currently, tests are available for the `server` and `shared` packages.
+Currently, tests are available for the `backend`and some packages in the `packages` directory.
 
-We use [Jest](https://jestjs.io/) for testing. To run tests:
+We use bun's built-in test runner for testing. To run tests:
 
 ```bash
 bun run test
 ```
 
-Run this inside the package directory you want to test.
+For more information, see the [bun test](https://bun.sh/docs/cli/test) documentation.
