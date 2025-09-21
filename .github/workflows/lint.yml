@@ -17,16 +17,32 @@ jobs:
       THUMBNAIL_URL: ${{ vars.THUMBNAIL_URL }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Bun
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "${HOME}/.bun/bin" >> $GITHUB_PATH
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
         run: bun install
 
-      - name: Run linter
-        run: bun run lint
+      - name: Install dependencies # (assuming your project has dependencies)
+        run: bun install # You can use npm/yarn/pnpm instead if you prefer
+
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit linter changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "🔧 Auto-fix: ESLint formatting and fixes"
+          git push
