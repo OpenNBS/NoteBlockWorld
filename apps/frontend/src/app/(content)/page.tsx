@@ -8,9 +8,10 @@ import { HomePageComponent } from '@web/modules/browse/components/HomePageCompon
 async function fetchRecentSongs() {
   try {
     const response = await axiosInstance.get<SongPreviewDtoType[]>(
-      '/song-browser/recent',
+      '/song',
       {
         params: {
+          q    : 'recent',
           page : 1, // TODO: fiz constants
           limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
           sort : 'recent',
@@ -28,7 +29,7 @@ async function fetchRecentSongs() {
 async function fetchFeaturedSongs(): Promise<FeaturedSongsDtoType> {
   try {
     const response = await axiosInstance.get<FeaturedSongsDtoType>(
-      '/song-browser/featured',
+      '/song?q=featured',
     );
 
     return response.data;

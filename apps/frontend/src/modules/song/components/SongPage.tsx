@@ -12,13 +12,7 @@ import { formatTimeAgo } from '../../shared/util/format';
 
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
-import {
-  DownloadSongButton,
-  OpenSongInNBSButton,
-  ShareButton,
-  UploaderBadge,
-  VisibilityBadge,
-} from './SongPageButtons';
+import {  DownloadSongButton,  OpenSongInNBSButton,  ShareButton,  UploaderBadge,  VisibilityBadge,} from './SongPageButtons';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;
@@ -47,9 +41,10 @@ export async function SongPage({ id }: { id: string }) {
 
   try {
     const response = await axios.get<SongPreviewDtoType[]>(
-      `/song-browser/random`,
+      `/song`,
       {
         params: {
+          q       : 'random',
           count   : 4,
           category: song.category,
         },

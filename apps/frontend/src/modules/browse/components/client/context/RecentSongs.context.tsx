@@ -1,13 +1,7 @@
 'use client';
 
 import { SongPreviewDtoType } from '@nbw/database';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import {  createContext,  useCallback,  useContext,  useEffect,  useState,} from 'react';
 
 import axiosInstance from '@web/lib/axios';
 
@@ -44,7 +38,7 @@ export function RecentSongsProvider({
   const [hasMore, setHasMore] = useState(true);
   const [categories, setCategories] = useState<Record<string, number>>({});
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [endpoint, setEndpoint] = useState<string>('/song-browser/recent');
+  const [endpoint, setEndpoint] = useState<string>('/song?q=recent');
 
   const adCount = 1;
   const pageSize = 12;
@@ -98,7 +92,7 @@ export function RecentSongsProvider({
   const fetchCategories = useCallback(async function () {
     try {
       const response = await axiosInstance.get<Record<string, number>>(
-        '/song-browser/categories',
+        '/songs?q=categories',
       );
 
       return response.data;
@@ -120,8 +114,8 @@ export function RecentSongsProvider({
 
     const newEndpoint =
       selectedCategory === ''
-        ? '/song-browser/recent'
-        : `/song-browser/categories/${selectedCategory}`;
+        ? '/song?q=recent'
+        : `/songs?q=categories&id=${selectedCategory}`;
 
     setEndpoint(newEndpoint);
   }, [selectedCategory]);

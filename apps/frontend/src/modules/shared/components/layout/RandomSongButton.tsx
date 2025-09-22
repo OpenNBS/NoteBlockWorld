@@ -18,9 +18,10 @@ export const RandomSongButton = () => {
 
     try {
       const response = await axios.get<SongPreviewDto[]>(
-        '/song-browser/random',
+        '/song',
         {
           params: {
+            q    : 'random',
             count: 1,
           },
         },
