@@ -94,7 +94,6 @@ export class SongController {
     @Query() query: PageQueryDTO,
     @Query('q') q?: 'featured' | 'recent' | 'categories' | 'random',
     @Param('id') id?: string,
-    @Query('count') count?: string,
     @Query('category') category?: string,
   ): Promise<SongPreviewDto[] | Record<string, number>> {
     if (q) {
@@ -109,12 +108,11 @@ export class SongController {
           }
           return await this.songBrowserService.getCategories();
         case 'random': {
-          const countInt = parseInt(count);
-          if (isNaN(countInt) || countInt < 1 || countInt > 10) {
+          if (query.limit && (query.limit < 1 || query.limit > 10)) {
             throw new BadRequestException('Invalid query parameters');
           }
           return await this.songBrowserService.getRandomSongs(
-            countInt,
+            query.limit ?? 1,
             category,
           );
         }

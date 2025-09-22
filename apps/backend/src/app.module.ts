@@ -75,7 +75,6 @@ import { UserModule } from './user/user.module';
     UserModule,
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
-    SongBrowserModule,
     SeedModule.forRoot(),
     EmailLoginModule,
     MailingModule,

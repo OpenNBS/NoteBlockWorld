@@ -22,7 +22,7 @@ export const RandomSongButton = () => {
         {
           params: {
             q    : 'random',
-            count: 1,
+            limit: 1,
           },
         },
       );

@@ -45,7 +45,7 @@ export async function SongPage({ id }: { id: string }) {
       {
         params: {
           q       : 'random',
-          count   : 4,
+          limit   : 4,
           category: song.category,
         },
       },
