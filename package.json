@@ -45,7 +45,7 @@
     "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"cd ./apps/backend && bun run start:dev\" \"cd ./apps/frontend && bun run start\"",
     "dev:server": "cd ./apps/backend && bun run start:dev",
     "dev:web": "cd ./apps/frontend && bun run start",
-    "lint": "eslint \"**/*.{ts,tsx}\" --fix --max-warnings 20",
+    "lint": "eslint \"**/*.{ts,tsx}\" --fix",
     "lint:server": "cd ./apps/backend && eslint \"src/**/*.ts\" --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*.test.ts\" --fix --max-warnings 10",
     "lint:web": "cd ./apps/frontend && eslint \"src/**/*.{ts,tsx}\" --fix --max-warnings 10",
     "lint:packages": "cd ./packages/configs && eslint \"src/**/*.ts\" --fix && cd ../database && eslint \"src/**/*.ts\" --fix && cd ../song && eslint \"src/**/*.ts\" --fix && cd ../sounds && eslint \"src/**/*.ts\" --fix && cd ../thumbnail && eslint \"src/**/*.ts\" --fix",
