@@ -7,5 +7,12 @@
         "noImplicitAny": true,
         "strictBindCallApply": true,
         "strictPropertyInitialization": false
-    }
+    },
+    "exclude": [
+        "node_modules",
+        "**/dist/**/*",
+        "**/dist/**/*",
+        "**/*.js",
+        "**/*.mjs",
+    ]
 }
