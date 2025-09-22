@@ -86,6 +86,7 @@
   },
   "dependencies": {
     "@nbw/sounds": "workspace:*",
+    "jiti": "^2.6.0",
     "ts-node": "^10.9.1"
   }
 }

@@ -113,15 +113,7 @@ const config: Linter.FlatConfig[] = [
       ],
 
       // Object formatting - allow single line objects
-      'object-curly-newline': [
-        'warn',
-        {
-          ObjectExpression: { multiline: true, consistent: true },
-          ObjectPattern: { multiline: true, consistent: true },
-          ImportDeclaration: { multiline: true, consistent: true },
-          ExportDeclaration: { multiline: true, consistent: true },
-        },
-      ],
+      'object-curly-newline': 'off',
 
       // Align colons in multiline objects
       'key-spacing': [
@@ -130,6 +122,15 @@ const config: Linter.FlatConfig[] = [
           beforeColon: false,
           afterColon: true,
           mode: 'strict',
+          align: 'value',
+        },
+      ],
+
+      // Ensure consistent object property formatting
+      'object-property-newline': [
+        'warn',
+        {
+          allowAllPropertiesOnSameLine: true,
         },
       ],
     },
