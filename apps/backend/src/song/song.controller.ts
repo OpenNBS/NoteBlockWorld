@@ -8,7 +8,9 @@ import {
   UploadSongResponseDto,
 } from '@nbw/database';
 import type { RawBodyRequest } from '@nestjs/common';
+import { SongBrowserService } from './song-browser/song-browser.service';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -64,6 +66,7 @@ export class SongController {
   constructor(
     public readonly songService: SongService,
     public readonly fileService: FileService,
+    public readonly songBrowserService: SongBrowserService,
   ) {}
 
   @Get('/')
@@ -72,7 +75,37 @@ export class SongController {
   })
   public async getSongList(
     @Query() query: PageQueryDTO,
-  ): Promise<SongPreviewDto[]> {
+    @Query('q') q?: 'featured' | 'recent' | 'categories' | 'random',
+    @Param('id') id?: string,
+    @Query('count') count?: string,
+    @Query('category') category?: string,
+  ): Promise<SongPreviewDto[] | Record<string, number>> {
+    if (q) {
+      switch (q) {
+        case 'featured':
+          return await this.songBrowserService.getRecentSongs(query);
+        case 'recent':
+          return await this.songBrowserService.getRecentSongs(query);
+        case 'categories':
+          if (id) {
+            return await this.songBrowserService.getSongsByCategory(id, query);
+          }
+          return await this.songBrowserService.getCategories();
+        case 'random': {
+          const countInt = parseInt(count);
+          if (isNaN(countInt) || countInt < 1 || countInt > 10) {
+            throw new BadRequestException('Invalid query parameters');
+          }
+          return await this.songBrowserService.getRandomSongs(
+            countInt,
+            category,
+          );
+        }
+        default:
+          throw new BadRequestException('Invalid query parameters');
+      }
+    }
+
     return await this.songService.getSongByPage(query);
   }
 

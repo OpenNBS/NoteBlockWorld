@@ -8,18 +8,17 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { SongBrowserService } from './song-browser.service';
-
 @Controller('song-browser')
 @ApiTags('song-browser')
 @ApiTags('song')
 export class SongBrowserController {
-  constructor(public readonly songBrowserService: SongBrowserService) {}
+  constructor /*public readonly songBrowserService: SongBrowserService*/() {}
 
   @Get('/featured')
   @ApiOperation({ summary: 'Get a list of featured songs' })
   public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
-    return await this.songBrowserService.getFeaturedSongs();
+    throw new Error('Unimplemented');
+    //return await this.songBrowserService.getFeaturedSongs();
   }
 
   @Get('/recent')
@@ -29,13 +28,15 @@ export class SongBrowserController {
   public async getSongList(
     @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
-    return await this.songBrowserService.getRecentSongs(query);
+    throw new Error('Unimplemented');
+    //return await this.songBrowserService.getRecentSongs(query);
   }
 
   @Get('/categories')
   @ApiOperation({ summary: 'Get a list of song categories and song counts' })
   public async getCategories(): Promise<Record<string, number>> {
-    return await this.songBrowserService.getCategories();
+    throw new Error('Unimplemented');
+    //return await this.songBrowserService.getCategories();
   }
 
   @Get('/categories/:id')
@@ -44,7 +45,8 @@ export class SongBrowserController {
     @Param('id') id: string,
     @Query() query: PageQueryDTO,
   ): Promise<SongPreviewDto[]> {
-    return await this.songBrowserService.getSongsByCategory(id, query);
+    throw new Error('Unimplemented');
+    //return await this.songBrowserService.getSongsByCategory(id, query);
   }
 
   @Get('/random')
@@ -59,6 +61,7 @@ export class SongBrowserController {
       throw new BadRequestException('Invalid query parameters');
     }
 
-    return await this.songBrowserService.getRandomSongs(countInt, category);
+    throw new Error('Unimplemented');
+    //return await this.songBrowserService.getRandomSongs(countInt, category);
   }
 }
