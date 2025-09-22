@@ -66,8 +66,6 @@ const config: Linter.FlatConfig[] = [
       'no-redeclare': 'off', // TypeScript handles this better
 
       // Turn off rules that don't exist or cause issues
-      'react-hooks/exhaustive-deps': 'off',
-      '@next/next/no-sync-scripts': 'off',
       'no-shadow-restricted-names': 'off',
 
       // TypeScript specific rules - simplified and lenient
@@ -104,13 +102,34 @@ const config: Linter.FlatConfig[] = [
       'max-len': [
         'warn',
         {
-          code: 512,
+          code: 1024,
           tabWidth: 2,
           ignoreUrls: true,
           ignoreStrings: true,
           ignoreTemplateLiterals: true,
           ignoreRegExpLiterals: true,
           ignoreComments: false,
+        },
+      ],
+
+      // Object formatting - allow single line objects
+      'object-curly-newline': [
+        'warn',
+        {
+          ObjectExpression: { multiline: true, consistent: true },
+          ObjectPattern: { multiline: true, consistent: true },
+          ImportDeclaration: { multiline: true, consistent: true },
+          ExportDeclaration: { multiline: true, consistent: true },
+        },
+      ],
+
+      // Align colons in multiline objects
+      'key-spacing': [
+        'warn',
+        {
+          beforeColon: false,
+          afterColon: true,
+          mode: 'strict',
         },
       ],
     },
