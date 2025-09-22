@@ -43,7 +43,6 @@ export function FeaturedSongsProvider({
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setFeaturedSongsPage(featuredSongs[timespan]);
   }, [featuredSongs, timespan]);
 
