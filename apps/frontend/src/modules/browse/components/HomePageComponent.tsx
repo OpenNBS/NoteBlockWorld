@@ -3,13 +3,6 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { CategoryButtonGroup } from './client/CategoryButton';
-import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
-import { useRecentSongsProvider } from './client/context/RecentSongs.context';
-import LoadMoreButton from './client/LoadMoreButton';
-import { TimespanButtonGroup } from './client/TimespanButton';
-import SongCard from './SongCard';
-import SongCardGroup from './SongCardGroup';
 import {
   InterSectionAdSlot,
   SongCardAdSlot,
@@ -23,6 +16,14 @@ import {
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
 import { WelcomeBanner } from '../WelcomeBanner';
+
+import { CategoryButtonGroup } from './client/CategoryButton';
+import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
+import { useRecentSongsProvider } from './client/context/RecentSongs.context';
+import LoadMoreButton from './client/LoadMoreButton';
+import { TimespanButtonGroup } from './client/TimespanButton';
+import SongCard from './SongCard';
+import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
@@ -46,8 +47,8 @@ export const HomePageComponent = () => {
           <Carousel
             key={timespan}
             opts={{
-              align: 'start',
-              loop: false,
+              align   : 'start',
+              loop    : false,
               duration: 15,
             }}
           >

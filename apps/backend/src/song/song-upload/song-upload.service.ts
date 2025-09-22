@@ -1,26 +1,8 @@
 import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
-import {
-  SongDocument,
-  Song as SongEntity,
-  SongStats,
-  ThumbnailData,
-  UploadSongDto,
-  UserDocument,
-} from '@nbw/database';
-import {
-  NoteQuadTree,
-  SongStatsGenerator,
-  injectSongFileMetadata,
-  obfuscateAndPackSong,
-} from '@nbw/song';
+import {  SongDocument,  Song as SongEntity,  SongStats,  ThumbnailData,  UploadSongDto,  UserDocument,} from '@nbw/database';
+import {  NoteQuadTree,  SongStatsGenerator,  injectSongFileMetadata,  obfuscateAndPackSong,} from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger,} from '@nestjs/common';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
@@ -115,7 +97,7 @@ export class SongUploadService {
     song.originalAuthor = removeExtraSpaces(body.originalAuthor);
     song.description = removeExtraSpaces(body.description);
     song.category = body.category;
-    song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
+    song.allowDownload = true ;//|| body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
     song.license = body.license;
 
@@ -360,13 +342,13 @@ export class SongUploadService {
     const quadTree = new NoteQuadTree(nbsSong);
 
     const thumbBuffer = await drawToImage({
-      notes: quadTree,
-      startTick: startTick,
-      startLayer: startLayer,
-      zoomLevel: zoomLevel,
+      notes          : quadTree,
+      startTick      : startTick,
+      startLayer     : startLayer,
+      zoomLevel      : zoomLevel,
       backgroundColor: backgroundColor,
-      imgWidth: 1280,
-      imgHeight: 768,
+      imgWidth       : 1280,
+      imgHeight      : 768,
     });
 
     // Upload thumbnail
@@ -446,7 +428,7 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: 'Invalid NBS file',
+            file  : 'Invalid NBS file',
             errors: nbsSong.errors,
           },
         },

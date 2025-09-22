@@ -3,25 +3,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { UploadSongDtoType } from '@nbw/database';
 import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song/src/types';
+import type { SongFileType } from '@nbw/song';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormReturn,
-  useForm,
-} from 'react-hook-form';
+import {  FieldErrors,  UseFormRegister,  UseFormReturn,  useForm,} from 'react-hook-form';
 import toaster from 'react-hot-toast';
-import { undefined } from 'zod';
+import { undefined as ZodUndefined } from 'zod';
 
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
-
-import {
-  EditSongForm,
-  editSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
+import {  EditSongForm,  editSongFormSchema,} from '@web/modules/song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
@@ -48,7 +39,7 @@ export const EditSongProvider = ({
 }) => {
   const formMethods = useForm<EditSongForm>({
     resolver: zodResolver(editSongFormSchema),
-    mode: 'onBlur',
+    mode    : 'onBlur',
   });
 
   const [song, setSong] = useState<SongFileType | null>(null);
@@ -74,22 +65,22 @@ export const EditSongProvider = ({
       }
 
       const formValues = {
-        allowDownload: formMethods.getValues().allowDownload,
-        visibility: formMethods.getValues().visibility,
-        title: formMethods.getValues().title,
+        allowDownload : formMethods.getValues().allowDownload,
+        visibility    : formMethods.getValues().visibility,
+        title         : formMethods.getValues().title,
         originalAuthor: formMethods.getValues().originalAuthor,
-        description: formMethods.getValues().description,
-        thumbnailData: {
-          zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-          startTick: formMethods.getValues().thumbnailData.startTick,
+        description   : formMethods.getValues().description,
+        thumbnailData : {
+          zoomLevel : formMethods.getValues().thumbnailData.zoomLevel,
+          startTick : formMethods.getValues().thumbnailData.startTick,
           startLayer: formMethods.getValues().thumbnailData.startLayer,
           backgroundColor:
             formMethods.getValues().thumbnailData.backgroundColor,
         },
-        artist: formMethods.getValues().author,
+        artist           : formMethods.getValues().author,
         customInstruments: formMethods.getValues().customInstruments,
-        license: formMethods.getValues().license,
-        category: formMethods.getValues().category,
+        license          : formMethods.getValues().license,
+        category         : formMethods.getValues().category,
       };
 
       const comparisons = [
@@ -132,22 +123,22 @@ export const EditSongProvider = ({
     // Build form data
     const formValues: UploadSongDtoType = {
       allowDownload: formMethods.getValues().allowDownload,
-      visibility: formMethods.getValues()
+      visibility   : formMethods.getValues()
         .visibility as UploadSongDtoType['visibility'],
-      title: formMethods.getValues().title,
+      title         : formMethods.getValues().title,
       originalAuthor: formMethods.getValues().originalAuthor,
-      description: formMethods.getValues().description,
-      thumbnailData: {
-        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-        startTick: formMethods.getValues().thumbnailData.startTick,
-        startLayer: formMethods.getValues().thumbnailData.startLayer,
+      description   : formMethods.getValues().description,
+      thumbnailData : {
+        zoomLevel      : formMethods.getValues().thumbnailData.zoomLevel,
+        startTick      : formMethods.getValues().thumbnailData.startTick,
+        startLayer     : formMethods.getValues().thumbnailData.startLayer,
         backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
       },
       customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license as UploadSongDtoType['license'],
-      category: formMethods.getValues()
+      license          : formMethods.getValues().license as UploadSongDtoType['license'],
+      category         : formMethods.getValues()
         .category as UploadSongDtoType['category'],
-      file: undefined,
+      file: ZodUndefined,
     };
 
     // TODO: this comparison is not needed. Use isDirty field from react-hook-form
@@ -169,7 +160,7 @@ export const EditSongProvider = ({
       // Send request
       await axiosInstance.patch(`/song/${songId}/edit`, formValues, {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization : `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -200,14 +191,14 @@ export const EditSongProvider = ({
 
       formMethods.setValue('allowDownload', true, {
         shouldValidate: false,
-        shouldDirty: true,
-        shouldTouch: true,
+        shouldDirty   : true,
+        shouldTouch   : true,
       });
 
       formMethods.setValue('author', username, {
-        shouldDirty: true,
+        shouldDirty   : true,
         shouldValidate: false,
-        shouldTouch: true,
+        shouldTouch   : true,
       });
 
       formMethods.setValue('visibility', songData.visibility);
@@ -247,7 +238,7 @@ export const EditSongProvider = ({
             src: 'edit',
           },
           responseType: 'arraybuffer',
-          headers: { authorization: `Bearer ${token}` },
+          headers     : { authorization: `Bearer ${token}` },
         })
       ).data as ArrayBuffer;
 

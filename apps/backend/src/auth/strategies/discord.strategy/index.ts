@@ -22,12 +22,12 @@ export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
     const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
     const config = {
-      clientID: DISCORD_CLIENT_ID,
+      clientID    : DISCORD_CLIENT_ID,
       clientSecret: DISCORD_CLIENT_SECRET,
-      callbackUrl: `${SERVER_URL}/api/v1/auth/discord/callback`,
-      scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
-      fetchScope: true,
-      prompt: 'none',
+      callbackUrl : `${SERVER_URL}/api/v1/auth/discord/callback`,
+      scope       : [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
+      fetchScope  : true,
+      prompt      : 'none',
     };
 
     super(config);

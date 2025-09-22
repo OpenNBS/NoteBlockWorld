@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import BackButton from '@web/modules/shared/components/client/BackButton';
 
+
 import Contact from './contact.mdx';
 
 export const metadata: Metadata = {

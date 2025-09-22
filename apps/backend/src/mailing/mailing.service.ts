@@ -28,18 +28,18 @@ export class MailingService {
       await this.mailerService.sendMail({
         to,
         subject,
-        template: `${template}`, // The template file name (without extension)
+        template   : `${template}`, // The template file name (without extension)
         context, // The context to be passed to the template
         attachments: [
           {
             filename: 'background-image.png',
-            cid: 'background-image',
-            path: `${__dirname}/templates/img/background-image.png`,
+            cid     : 'background-image',
+            path    : `${__dirname}/templates/img/background-image.png`,
           },
           {
             filename: 'logo.png',
-            cid: 'logo',
-            path: `${__dirname}/templates/img/logo.png`,
+            cid     : 'logo',
+            path    : `${__dirname}/templates/img/logo.png`,
           },
         ],
       });

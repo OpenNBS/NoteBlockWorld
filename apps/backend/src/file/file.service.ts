@@ -74,10 +74,10 @@ export class FileService {
 
     // Create S3 client
     const s3Client = new S3Client({
-      region: region,
-      endpoint: endpoint,
+      region     : region,
+      endpoint   : endpoint,
       credentials: {
-        accessKeyId: key,
+        accessKeyId    : key,
         secretAccessKey: secret,
       },
       forcePathStyle: endpoint.includes('localhost') ? true : false,
@@ -129,8 +129,8 @@ export class FileService {
     const bucket = this.S3_BUCKET_SONGS;
 
     const command = new GetObjectCommand({
-      Bucket: bucket,
-      Key: key,
+      Bucket                    : bucket,
+      Key                       : key,
       ResponseContentDisposition: `attachment; filename="${filename.replace(
         /[/"]/g,
         '_',
@@ -183,7 +183,7 @@ export class FileService {
 
     const command = new GetObjectCommand({
       Bucket: bucket,
-      Key: nbsFileUrl,
+      Key   : nbsFileUrl,
     });
 
     try {
@@ -204,12 +204,12 @@ export class FileService {
     accessControl: ObjectCannedACL = ObjectCannedACL.public_read,
   ) {
     const params = {
-      Bucket: bucket,
-      Key: String(name),
-      Body: file,
-      ACL: accessControl,
-      ContentType: mimetype,
-      ContentDisposition: `attachment; filename=${name.split('/').pop()}`,
+      Bucket                   : bucket,
+      Key                      : String(name),
+      Body                     : file,
+      ACL                      : accessControl,
+      ContentType              : mimetype,
+      ContentDisposition       : `attachment; filename=${name.split('/').pop()}`,
       CreateBucketConfiguration: {
         LocationConstraint: 'ap-south-1',
       },
@@ -231,7 +231,7 @@ export class FileService {
 
     const command = new GetObjectCommand({
       Bucket: bucket,
-      Key: nbsFileUrl,
+      Key   : nbsFileUrl,
     });
 
     try {

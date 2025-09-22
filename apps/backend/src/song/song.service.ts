@@ -22,6 +22,7 @@ import { Model } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
 
+
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { removeExtraSpaces } from './song.util';
@@ -275,7 +276,7 @@ export class SongService {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
+        createdAt : {
           $gte: timespan,
         },
       })
@@ -291,7 +292,7 @@ export class SongService {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
+        createdAt : {
           $lt: timespan,
         },
       })
@@ -414,7 +415,7 @@ export class SongService {
       content: songData.map((song) =>
         SongPreviewDto.fromSongDocumentWithUser(song),
       ),
-      page: page,
+      page : page,
       limit: limit,
       total: total,
     };
@@ -450,7 +451,7 @@ export class SongService {
       },
       {
         $group: {
-          _id: '$category',
+          _id  : '$category',
           count: { $sum: 1 },
         },
       },
@@ -478,7 +479,7 @@ export class SongService {
   ): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .find({
-        category: category,
+        category  : category,
         visibility: 'public',
       })
       .sort({ createdAt: -1 })
@@ -510,7 +511,7 @@ export class SongService {
       .exec()) as unknown as SongWithUser[];
 
     await this.songModel.populate(songs, {
-      path: 'uploader',
+      path  : 'uploader',
       select: 'username profileImage -_id',
     });
 

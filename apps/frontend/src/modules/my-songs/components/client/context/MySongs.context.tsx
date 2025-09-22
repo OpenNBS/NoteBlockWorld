@@ -18,6 +18,7 @@ import { toast } from 'react-hot-toast';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
+
 type MySongsContextType = {
   page: SongPageDtoType | null;
   nextpage: () => void;
@@ -86,9 +87,9 @@ export const MySongProvider = ({
     try {
       const response = await axiosInstance.get('/my-songs', {
         params: {
-          page: currentPage,
+          page : currentPage,
           limit: pageSize,
-          sort: 'createdAt',
+          sort : 'createdAt',
           order: 'false',
         },
         headers: {
@@ -100,7 +101,7 @@ export const MySongProvider = ({
 
       // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       putPage({
-        key: currentPage,
+        key : currentPage,
         page: data,
       });
 

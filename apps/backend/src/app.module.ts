@@ -19,14 +19,14 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal   : true,
       envFilePath: ['.env.development', '.env.production'],
       validate,
     }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+      imports   : [ConfigModule],
+      inject    : [ConfigService],
       useFactory: (
         configService: ConfigService,
       ): MongooseModuleFactoryOptions => {
@@ -34,15 +34,15 @@ import { UserModule } from './user/user.module';
         Logger.debug(`Connecting to ${url}`);
 
         return {
-          uri: url,
+          uri          : url,
           retryAttempts: 10,
-          retryDelay: 3000,
+          retryDelay   : 3000,
         };
       },
     }),
     // Mailing
     MailerModule.forRootAsync({
-      imports: [ConfigModule],
+      imports   : [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const transport = configService.getOrThrow<string>('MAIL_TRANSPORT');
         const from = configService.getOrThrow<string>('MAIL_FROM');
@@ -50,11 +50,11 @@ import { UserModule } from './user/user.module';
         AppModule.logger.debug(`MAIL_FROM: ${from}`);
         return {
           transport: transport,
-          defaults: {
+          defaults : {
             from: from,
           },
           template: {
-            dir: __dirname + '/mailing/templates',
+            dir    : __dirname + '/mailing/templates',
             adapter: new HandlebarsAdapter(),
             options: {
               strict: true,
@@ -67,7 +67,7 @@ import { UserModule } from './user/user.module';
     // Throttler
     ThrottlerModule.forRoot([
       {
-        ttl: 60,
+        ttl  : 60,
         limit: 256, // 256 requests per minute
       },
     ]),
@@ -81,10 +81,10 @@ import { UserModule } from './user/user.module';
     MailingModule,
   ],
   controllers: [],
-  providers: [
+  providers  : [
     ParseTokenPipe,
     {
-      provide: APP_GUARD,
+      provide : APP_GUARD,
       useClass: ThrottlerGuard,
     },
   ],

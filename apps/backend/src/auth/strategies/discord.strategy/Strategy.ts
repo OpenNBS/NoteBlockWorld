@@ -38,10 +38,10 @@ export default class Strategy extends OAuth2Strategy {
   public constructor(options: DiscordStrategyConfig, verify: VerifyFunction) {
     super(
       {
-        scopeSeparator: ' ',
+        scopeSeparator  : ' ',
         ...options,
         authorizationURL: 'https://discord.com/api/oauth2/authorize',
-        tokenURL: 'https://discord.com/api/oauth2/token',
+        tokenURL        : 'https://discord.com/api/oauth2/token',
       } as OAuth2StrategyOptions,
       verify,
     );
@@ -148,27 +148,27 @@ export default class Strategy extends OAuth2Strategy {
   private buildProfile(data: Profile, accessToken: string): Profile {
     const { id } = data;
     return {
-      provider: 'discord',
-      id: id,
-      username: data.username,
-      displayName: data.displayName,
-      avatar: data.avatar,
-      banner: data.banner,
-      email: data.email,
-      verified: data.verified,
-      mfa_enabled: data.mfa_enabled,
+      provider    : 'discord',
+      id          : id,
+      username    : data.username,
+      displayName : data.displayName,
+      avatar      : data.avatar,
+      banner      : data.banner,
+      email       : data.email,
+      verified    : data.verified,
+      mfa_enabled : data.mfa_enabled,
       public_flags: data.public_flags,
-      flags: data.flags,
-      locale: data.locale,
-      global_name: data.global_name,
+      flags       : data.flags,
+      locale      : data.locale,
+      global_name : data.global_name,
       premium_type: data.premium_type,
-      connections: data.connections,
-      guilds: data.guilds,
+      connections : data.connections,
+      guilds      : data.guilds,
       access_token: accessToken,
-      fetchedAt: new Date(),
-      createdAt: this.calculateCreationDate(id),
-      _raw: JSON.stringify(data),
-      _json: data as unknown as Record<string, unknown>,
+      fetchedAt   : new Date(),
+      createdAt   : this.calculateCreationDate(id),
+      _raw        : JSON.stringify(data),
+      _json       : data as unknown as Record<string, unknown>,
     };
   }
 

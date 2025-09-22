@@ -9,6 +9,7 @@ import {
 
 import type { SongWithUser } from '@database/song/entity/song.entity';
 
+
 import * as SongViewDto from './SongView.dto';
 import { ThumbnailData } from './ThumbnailData.dto';
 
@@ -17,7 +18,7 @@ export class UploadSongResponseDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'ID of the song',
-    example: '1234567890abcdef12345678',
+    example    : '1234567890abcdef12345678',
   })
   publicId: string;
 
@@ -26,7 +27,7 @@ export class UploadSongResponseDto {
   @MaxLength(128)
   @ApiProperty({
     description: 'Title of the song',
-    example: 'My Song',
+    example    : 'My Song',
   })
   title: string;
 
@@ -34,7 +35,7 @@ export class UploadSongResponseDto {
   @MaxLength(64)
   @ApiProperty({
     description: 'Original author of the song',
-    example: 'Myself',
+    example    : 'Myself',
   })
   uploader: SongViewDto.SongViewUploader;
 
@@ -44,7 +45,7 @@ export class UploadSongResponseDto {
   @Transform(({ value }) => JSON.parse(value))
   @ApiProperty({
     description: 'Thumbnail data of the song',
-    example: ThumbnailData.getApiExample(),
+    example    : ThumbnailData.getApiExample(),
   })
   thumbnailUrl: string;
 
@@ -62,12 +63,12 @@ export class UploadSongResponseDto {
     song: SongWithUser,
   ): UploadSongResponseDto {
     return new UploadSongResponseDto({
-      publicId: song.publicId,
-      title: song.title,
-      uploader: song.uploader,
-      duration: song.stats.duration,
+      publicId    : song.publicId,
+      title       : song.title,
+      uploader    : song.uploader,
+      duration    : song.stats.duration,
       thumbnailUrl: song.thumbnailUrl,
-      noteCount: song.stats.noteCount,
+      noteCount   : song.stats.noteCount,
     });
   }
 }

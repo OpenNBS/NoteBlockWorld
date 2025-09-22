@@ -7,6 +7,8 @@ import type { Request, Response } from 'express';
 
 import { UserService } from '@server/user/user.service';
 
+
+
 import { DiscordUser } from './types/discordProfile';
 import { GithubAccessToken, GithubEmailList } from './types/githubProfile';
 import { GoogleProfile } from './types/googleProfile';
@@ -76,8 +78,8 @@ export class AuthService {
 
     const profile = {
       // Generate username from display name
-      username: email.split('@')[0],
-      email: email,
+      username    : email.split('@')[0],
+      email       : email,
       profileImage: user.photos[0].value,
     };
 
@@ -93,8 +95,8 @@ export class AuthService {
     const newUsername = await this.userService.generateUsername(baseUsername);
 
     const newUser = new CreateUser({
-      username: newUsername,
-      email: email,
+      username    : newUsername,
+      email       : email,
       profileImage: profileImage,
     });
 
@@ -134,8 +136,8 @@ export class AuthService {
     const email = response.data.filter((email) => email.primary)[0].email;
 
     const user_registered = await this.verifyAndGetUser({
-      username: profile.username,
-      email: email,
+      username    : profile.username,
+      email       : email,
       profileImage: profile.photos[0].value,
     });
 
@@ -148,8 +150,8 @@ export class AuthService {
 
     const profile = {
       // Generate username from display name
-      username: user.username,
-      email: user.email,
+      username    : user.username,
+      email       : user.email,
       profileImage: profilePictureUrl,
     };
 
@@ -172,17 +174,17 @@ export class AuthService {
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.JWT_SECRET,
+        secret   : this.JWT_SECRET,
         expiresIn: this.JWT_EXPIRES_IN,
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.JWT_REFRESH_SECRET,
+        secret   : this.JWT_REFRESH_SECRET,
         expiresIn: this.JWT_REFRESH_EXPIRES_IN,
       }),
     ]);
 
     return {
-      access_token: accessToken,
+      access_token : accessToken,
       refresh_token: refreshToken,
     };
   }
@@ -192,8 +194,8 @@ export class AuthService {
     res: Response<any, Record<string, any>>,
   ): Promise<void> {
     const token = await this.createJwtPayload({
-      id: user_registered._id.toString(),
-      email: user_registered.email,
+      id      : user_registered._id.toString(),
+      email   : user_registered.email,
       username: user_registered.username,
     });
 

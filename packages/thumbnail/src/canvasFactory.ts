@@ -68,8 +68,8 @@ if (typeof document === 'undefined') {
     }
 
     canvasUtils = {
-      createCanvas: nodeCreateCanvas,
-      loadImage: nodeLoadImage,
+      createCanvas : nodeCreateCanvas,
+      loadImage    : nodeLoadImage,
       getPath,
       useFont,
       saveToImage,

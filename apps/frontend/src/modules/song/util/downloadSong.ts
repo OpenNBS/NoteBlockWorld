@@ -1,5 +1,6 @@
 'use client';
 
+
 import { toast } from 'react-hot-toast';
 
 import axios from '@web/lib/axios';
@@ -19,7 +20,7 @@ export const downloadSongFile = async (song: {
       headers: {
         authorization: `Bearer ${token}`,
       },
-      responseType: 'blob',
+      responseType   : 'blob',
       withCredentials: true,
     })
     .then((res) => {

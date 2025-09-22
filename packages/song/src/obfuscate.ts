@@ -91,10 +91,10 @@ export class SongObfuscator {
       );
 
       const newInstrument = new Instrument(newInstrumentId, {
-        name: instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
+        name     : instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
         soundFile: soundFilePath,
-        key: instrument.key,
-        pressKey: false,
+        key      : instrument.key,
+        pressKey : false,
       });
 
       output.instruments.loaded.push(newInstrument);

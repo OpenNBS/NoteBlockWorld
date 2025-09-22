@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { cn } from '@web/lib/tailwind.utils';
+
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 export const SearchBox = () => {
@@ -35,9 +36,9 @@ export const SearchBox = () => {
             className='bg-zinc-600 text-white rounded-md p-2 hover:bg-zinc-500 w-12 h-12'
             onClick={() => {
               const queryParam = new URLSearchParams({
-                page: '1',
+                page : '1',
                 limit: '20',
-                q: query,
+                q    : query,
               });
 
               router.push(`/search-song?${queryParam.toString()}`);

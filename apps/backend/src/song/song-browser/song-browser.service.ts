@@ -21,21 +21,21 @@ export class SongBrowserService {
     const now = new Date(Date.now());
 
     const times: Record<TimespanType, number> = {
-      hour: new Date(Date.now()).setHours(now.getHours() - 1),
-      day: new Date(Date.now()).setDate(now.getDate() - 1),
-      week: new Date(Date.now()).setDate(now.getDate() - 7),
+      hour : new Date(Date.now()).setHours(now.getHours() - 1),
+      day  : new Date(Date.now()).setDate(now.getDate() - 1),
+      week : new Date(Date.now()).setDate(now.getDate() - 7),
       month: new Date(Date.now()).setMonth(now.getMonth() - 1),
-      year: new Date(Date.now()).setFullYear(now.getFullYear() - 1),
-      all: new Date(0).getTime(),
+      year : new Date(Date.now()).setFullYear(now.getFullYear() - 1),
+      all  : new Date(0).getTime(),
     };
 
     const songs: Record<TimespanType, SongWithUser[]> = {
-      hour: [],
-      day: [],
-      week: [],
+      hour : [],
+      day  : [],
+      week : [],
       month: [],
-      year: [],
-      all: [],
+      year : [],
+      all  : [],
     };
 
     for (const [timespan, time] of Object.entries(times)) {

@@ -9,7 +9,7 @@ export class ThumbnailData {
   @IsInt()
   @ApiProperty({
     description: 'Zoom level of the cover image',
-    example: THUMBNAIL_CONSTANTS.zoomLevel.default,
+    example    : THUMBNAIL_CONSTANTS.zoomLevel.default,
   })
   zoomLevel: number;
 
@@ -18,7 +18,7 @@ export class ThumbnailData {
   @IsInt()
   @ApiProperty({
     description: 'X position of the cover image',
-    example: THUMBNAIL_CONSTANTS.startTick.default,
+    example    : THUMBNAIL_CONSTANTS.startTick.default,
   })
   startTick: number;
 
@@ -26,7 +26,7 @@ export class ThumbnailData {
   @Min(0)
   @ApiProperty({
     description: 'Y position of the cover image',
-    example: THUMBNAIL_CONSTANTS.startLayer.default,
+    example    : THUMBNAIL_CONSTANTS.startLayer.default,
   })
   startLayer: number;
 
@@ -34,15 +34,15 @@ export class ThumbnailData {
   @IsHexColor()
   @ApiProperty({
     description: 'Background color of the cover image',
-    example: THUMBNAIL_CONSTANTS.backgroundColor.default,
+    example    : THUMBNAIL_CONSTANTS.backgroundColor.default,
   })
   backgroundColor: string;
 
   static getApiExample(): ThumbnailData {
     return {
-      zoomLevel: 3,
-      startTick: 0,
-      startLayer: 0,
+      zoomLevel      : 3,
+      startTick      : 0,
+      startLayer     : 0,
       backgroundColor: '#F0F0F0',
     };
   }

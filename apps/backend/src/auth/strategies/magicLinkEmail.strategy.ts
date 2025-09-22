@@ -29,9 +29,9 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
     private readonly mailingService: MailingService,
   ) {
     super({
-      secret: MAGIC_LINK_SECRET,
-      confirmUrl: `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
-      callbackUrl: `${SERVER_URL}/api/v1/auth/magic-link/callback`,
+      secret       : MAGIC_LINK_SECRET,
+      confirmUrl   : `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
+      callbackUrl  : `${SERVER_URL}/api/v1/auth/magic-link/callback`,
       sendMagicLink: MagicLinkEmailStrategy.sendMagicLink(
         SERVER_URL,
         userService,
@@ -57,22 +57,22 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
 
       if (!user) {
         mailingService.sendEmail({
-          to: email,
+          to     : email,
           context: {
             magicLink: magicLink,
-            username: email.split('@')[0],
+            username : email.split('@')[0],
           },
-          subject: 'Welcome to Noteblock.world',
+          subject : 'Welcome to Noteblock.world',
           template: 'magic-link-new-account',
         });
       } else {
         mailingService.sendEmail({
-          to: email,
+          to     : email,
           context: {
             magicLink: magicLink,
-            username: user.username,
+            username : user.username,
           },
-          subject: 'Noteblock Magic Link',
+          subject : 'Noteblock Magic Link',
           template: 'magic-link',
         });
       }

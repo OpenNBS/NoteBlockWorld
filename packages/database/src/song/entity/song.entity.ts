@@ -4,6 +4,7 @@ import { Schema as MongooseSchema, Types } from 'mongoose';
 
 import { User } from '@database/user/entity/user.entity';
 
+
 import { SongStats } from '../dto/SongStats';
 import type { SongViewUploader } from '../dto/SongView.dto';
 import { ThumbnailData } from '../dto/ThumbnailData.dto';
@@ -12,8 +13,8 @@ import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
 @Schema({
   timestamps: true,
   versionKey: false,
-  toJSON: {
-    virtuals: true,
+  toJSON    : {
+    virtuals : true,
     transform: (doc, ret) => {
       delete ret._id;
     },

@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
 
+
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
@@ -67,7 +68,7 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.startTick', {
             valueAsNumber: true,
-            max: maxTick,
+            max          : maxTick,
           })}
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startTick.default}
@@ -85,7 +86,7 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.startLayer', {
             valueAsNumber: true,
-            max: maxLayer,
+            max          : maxLayer,
           })}
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startLayer.default}

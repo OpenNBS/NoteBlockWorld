@@ -2,24 +2,15 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { parseSongFromBuffer } from '@nbw/song';
-import { SongFileType } from '@nbw/song/src/types';
+import { type SongFileType, parseSongFromBuffer } from '@nbw/song';
 import { createContext, useContext, useEffect, useState } from 'react';
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormReturn,
-  useForm,
-} from 'react-hook-form';
+import {  FieldErrors,  UseFormRegister,  UseFormReturn,  useForm,} from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
+import {  UploadSongForm,  uploadSongFormSchema,} from '@web/modules/song/components/client/SongForm.zod';
 
-import {
-  UploadSongForm,
-  uploadSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
 import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {
@@ -62,7 +53,7 @@ export const UploadSongProvider = ({
 
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
-    mode: 'onBlur',
+    mode    : 'onBlur',
   });
 
   const {
@@ -115,7 +106,7 @@ export const UploadSongProvider = ({
       // Send request
       const response = await axiosInstance.post(`/song`, formData, {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization : `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });

@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
 
+
 export const LicenseTooltip = ({ description }: { description: string }) => {
   return (
     <Tooltip>

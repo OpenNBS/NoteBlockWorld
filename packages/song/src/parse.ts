@@ -31,15 +31,15 @@ export async function parseSongFromBuffer(
   const vanillaSoundList = await getVanillaSoundList();
 
   return {
-    title: song.meta.name,
-    author: song.meta.author,
+    title         : song.meta.name,
+    author        : song.meta.author,
     originalAuthor: song.meta.originalAuthor,
-    description: song.meta.description,
-    length: quadTree.width,
-    height: quadTree.height,
-    arrayBuffer: buffer,
-    notes: quadTree,
-    instruments: getInstruments(song, vanillaSoundList),
+    description   : song.meta.description,
+    length        : quadTree.width,
+    height        : quadTree.height,
+    arrayBuffer   : buffer,
+    notes         : quadTree,
+    instruments   : getInstruments(song, vanillaSoundList),
   };
 }
 
@@ -68,9 +68,9 @@ const getInstruments = (
     }
 
     return {
-      id: id,
-      name: instrument.meta.name || '',
-      file: soundFile,
+      id   : id,
+      name : instrument.meta.name || '',
+      file : soundFile,
       count: blockCounts[id + firstCustomIndex] || 0,
     };
   });

@@ -1,8 +1,8 @@
-import * as Bun from 'bun';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { getLatestVersionSoundList } from '@nbw/sounds';
+import * as Bun from 'bun';
 
 const writeSoundList = async () => {
   function writeJSONFile(
@@ -61,11 +61,11 @@ const build = async () => {
 
   const result = await Bun.build({
     entrypoints: ['./src/main.ts'],
-    outdir: './dist',
-    target: 'bun',
-    minify: false,
-    sourcemap: 'linked',
-    external: optionalRequirePackages.filter((pkg) => {
+    outdir     : './dist',
+    target     : 'bun',
+    minify     : false,
+    sourcemap  : 'linked',
+    external   : optionalRequirePackages.filter((pkg) => {
       try {
         require(pkg);
         return false;

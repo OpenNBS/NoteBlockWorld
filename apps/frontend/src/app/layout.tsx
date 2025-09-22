@@ -15,7 +15,7 @@ import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 const lato = Lato({
   subsets: ['latin'],
-  weight: ['100', '300', '400', '700', '900'],
+  weight : ['100', '300', '400', '700', '900'],
 });
 
 export const metadata: Metadata = {
@@ -23,21 +23,21 @@ export const metadata: Metadata = {
   description:
     'Discover, share and listen to note block music from all around the world',
   applicationName: 'Note Block World',
-  keywords: ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
-  openGraph: {
-    type: 'website',
-    images: `${process.env.NEXT_PUBLIC_URL}/nbw-header.png`,
-    locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_URL,
+  keywords       : ['note block', 'music', 'minecraft', 'nbs', 'note block studio'],
+  openGraph      : {
+    type    : 'website',
+    images  : `${process.env.NEXT_PUBLIC_URL}/nbw-header.png`,
+    locale  : 'en_US',
+    url     : process.env.NEXT_PUBLIC_URL,
     siteName: 'Note Block World',
   },
 };
 
 const jsonLd: WithContext<WebSite> = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Note Block World',
-  url: process.env.NEXT_PUBLIC_URL,
+  '@type'   : 'WebSite',
+  name      : 'Note Block World',
+  url       : process.env.NEXT_PUBLIC_URL,
   description:
     'Discover, share and listen to note block music from all around the world',
 };
@@ -100,7 +100,7 @@ export default function RootLayout({
             position='bottom-center'
             toastOptions={{
               className: '!bg-zinc-700 !text-white !max-w-fit',
-              duration: 4000,
+              duration : 4000,
             }}
           />
           <SkeletonTheme

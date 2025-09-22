@@ -56,8 +56,8 @@ export class UserService {
     );
 
     const user = await this.userModel.create({
-      email: email,
-      username: emailPrefixUsername,
+      email     : email,
+      username  : emailPrefixUsername,
       publicName: emailPrefixUsername,
     });
 

@@ -14,24 +14,25 @@ import {
 
 import type { TimespanType } from '@database/song/dto/types';
 
+
 export class PageQueryDTO {
   @Min(1)
   @ApiProperty({
-    example: 1,
+    example    : 1,
     description: 'page',
   })
   page?: number = 1;
 
   @IsNotEmpty()
   @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
+    allowNaN        : false,
+    allowInfinity   : false,
     maxDecimalPlaces: 0,
   })
   @Min(1)
   @Max(100)
   @ApiProperty({
-    example: 20,
+    example    : 20,
     description: 'limit',
   })
   limit?: number;
@@ -39,9 +40,9 @@ export class PageQueryDTO {
   @IsString()
   @IsOptional()
   @ApiProperty({
-    example: 'field',
+    example    : 'field',
     description: 'Sorts the results by the specified field.',
-    required: false,
+    required   : false,
   })
   sort?: string = 'createdAt';
 
@@ -58,9 +59,9 @@ export class PageQueryDTO {
   @IsEnum(TIMESPANS)
   @IsOptional()
   @ApiProperty({
-    example: 'hour',
+    example    : 'hour',
     description: 'Filters the results by the specified timespan.',
-    required: false,
+    required   : false,
   })
   timespan?: TimespanType;
 

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import { cn } from '@web/lib/tailwind.utils';
 
+
 import useAdSenseClient from './useAdSenseClient';
 
 const HideAdButton = ({
@@ -18,10 +19,8 @@ const HideAdButton = ({
     <button
       className='h-6 w-3'
       onClick={() => {
-        setIsHidden(true),
-          setTimeout(() => {
-            setIsHidden(false);
-          }, 1000 * 60 * 5); // Reappers after 5 minutes
+        setIsHidden(true);
+        setTimeout(() => {   setIsHidden(false); }, 1000 * 60 * 5); // Reappers after 5 minutes
       }}
     >
       <FontAwesomeIcon
@@ -66,10 +65,10 @@ const AdTemplate = ({
 
   const InfoText = !pubId
     ? () => (
-        <p className='text-center my-auto text-xs text-zinc-500 m-4'>
+      <p className='text-center my-auto text-xs text-zinc-500 m-4'>
           AdSense Client ID is not set
-        </p>
-      )
+      </p>
+    )
     : () => null;
 
   return isHidden ? (

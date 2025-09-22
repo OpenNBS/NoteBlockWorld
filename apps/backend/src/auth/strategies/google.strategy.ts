@@ -23,10 +23,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     GoogleStrategy.logger.debug(`Google Login callbackURL ${callbackURL}`);
 
     super({
-      clientID: GOOGLE_CLIENT_ID,
+      clientID    : GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: callbackURL,
-      scope: ['email', 'profile'],
+      callbackURL : callbackURL,
+      scope       : ['email', 'profile'],
     });
   }
 

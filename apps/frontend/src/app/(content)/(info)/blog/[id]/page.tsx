@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
+
 type BlogPageProps = {
   params: { id: string };
 };
@@ -17,13 +18,13 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   return {
-    title: post.title,
-    authors: [{ name: post.author }],
+    title    : post.title,
+    authors  : [{ name: post.author }],
     openGraph: {
-      url: publicUrl + '/blog/' + id,
-      title: post.title,
+      url     : publicUrl + '/blog/' + id,
+      title   : post.title,
       siteName: 'Note Block World',
-      images: [
+      images  : [
         {
           url: publicUrl + post.image,
         },
@@ -82,9 +83,9 @@ const BlogPost = ({ params }: BlogPageProps) => {
               {new Date(
                 new Date(post.date).getTime() + 12 * 60 * 60 * 1000,
               ).toLocaleDateString('en-UK', {
-                day: 'numeric',
+                day  : 'numeric',
                 month: 'short',
-                year: 'numeric',
+                year : 'numeric',
               })}
             </p>
           </div>

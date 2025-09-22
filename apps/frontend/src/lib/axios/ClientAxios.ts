@@ -5,7 +5,7 @@ import { getTokenLocal } from './token.utils';
 export const baseApiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ClientAxios = axios.create({
-  baseURL: baseApiURL,
+  baseURL        : baseApiURL,
   withCredentials: true,
 });
 

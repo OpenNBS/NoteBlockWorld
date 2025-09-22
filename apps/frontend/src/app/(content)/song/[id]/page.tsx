@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import axios from '@web/lib/axios';
 import { SongPage } from '@web/modules/song/components/SongPage';
 
+
 interface SongPage {
   params: {
     id: string;
@@ -39,15 +40,15 @@ export async function generateMetadata({
   }
 
   return {
-    title: song.title,
+    title      : song.title,
     description: song.description,
-    authors: [{ name: song.uploader.username }],
-    openGraph: {
-      url: publicUrl + '/song/' + song.publicId,
-      title: song.title,
+    authors    : [{ name: song.uploader.username }],
+    openGraph  : {
+      url        : publicUrl + '/song/' + song.publicId,
+      title      : song.title,
       description: song.description,
-      siteName: 'Note Block World',
-      images: [song.thumbnailUrl],
+      siteName   : 'Note Block World',
+      images     : [song.thumbnailUrl],
     },
     twitter: {
       card: 'summary_large_image',

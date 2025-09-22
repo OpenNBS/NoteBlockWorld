@@ -1,51 +1,18 @@
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
-import {
-  PageQueryDTO,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-} from '@nbw/database';
+import {  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto,} from '@nbw/database';
 import type { RawBodyRequest } from '@nestjs/common';
-import { SongBrowserService } from './song-browser/song-browser.service';
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Headers,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
-  Req,
-  Res,
-  UnauthorizedException,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import {  BadRequestException,  Body,  Controller,  Delete,  Get,  Headers,  HttpStatus,  Param,  Patch,  Post,  Query,  Req,  Res,  UnauthorizedException,  UploadedFile,  UseGuards,  UseInterceptors,} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import {  ApiBearerAuth,  ApiBody,  ApiConsumes,  ApiOperation,  ApiParam,  ApiQuery,  ApiResponse,  ApiTags,} from '@nestjs/swagger';
 import type { Response } from 'express';
 
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
+import { SongBrowserService } from './song-browser/song-browser.service';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.
@@ -54,7 +21,7 @@ import { SongService } from './song.service';
 @ApiTags('song')
 export class SongController {
   static multerConfig: MulterOptions = {
-    limits: { fileSize: UPLOAD_CONSTANTS.file.maxSize },
+    limits    : { fileSize: UPLOAD_CONSTANTS.file.maxSize },
     fileFilter: (req, file, cb) => {
       if (!file.originalname.match(/\.(nbs)$/))
         return cb(new Error('Only .nbs files are allowed!'), false);
@@ -62,15 +29,11 @@ export class SongController {
     },
   };
 
-  constructor(
-    public readonly songService: SongService,
-    public readonly fileService: FileService,
-    public readonly songBrowserService: SongBrowserService,
-  ) {}
+  constructor(  public readonly songService: SongService,  public readonly fileService: FileService,  public readonly songBrowserService: SongBrowserService,) {}
 
   @Get('/')
   @ApiOperation({
-    summary: 'Get songs with various filtering and browsing options',
+    summary    : 'Get songs with various filtering and browsing options',
     description: `
       Retrieves songs based on the provided query parameters. Supports multiple modes:
       
@@ -96,37 +59,10 @@ export class SongController {
       - Record<string, number>: Category name to count mapping (when q=categories without id)
     `,
   })
-  @ApiQuery({
-    name: 'q',
-    required: false,
-    enum: ['featured', 'recent', 'categories', 'random'],
-    description:
-      'Special query mode. If not provided, returns standard paginated song list.',
-    example: 'recent',
-  })
-  @ApiParam({
-    name: 'id',
-    required: false,
-    type: 'string',
-    description:
-      'Category ID. Only used when q=categories to get songs from a specific category.',
-    example: 'pop',
-  })
-  @ApiQuery({
-    name: 'count',
-    required: false,
-    type: 'string',
-    description:
-      'Number of random songs to return (1-10). Only used when q=random.',
-    example: '5',
-  })
-  @ApiQuery({
-    name: 'category',
-    required: false,
-    type: 'string',
-    description: 'Category filter for random songs. Only used when q=random.',
-    example: 'electronic',
-  })
+  @ApiQuery({  name: 'q',  required: false,  enum: ['featured', 'recent', 'categories', 'random'],  description: 'Special query mode. If not provided, returns standard paginated song list.',  example: 'recent',})
+  @ApiParam({  name: 'id',  required: false,  type: 'string',  description: 'Category ID. Only used when q=categories to get songs from a specific category.',  example: 'pop',})
+  @ApiQuery({  name: 'count',  required: false,  type: 'string',  description: 'Number of random songs to return (1-10). Only used when q=random.',  example: '5',})
+  @ApiQuery({  name: 'category',  required: false,  type: 'string',  description: 'Category filter for random songs. Only used when q=random.',  example: 'electronic',})
   @ApiResponse({
     status: 200,
     description:
@@ -134,13 +70,13 @@ export class SongController {
     schema: {
       oneOf: [
         {
-          type: 'array',
+          type : 'array',
           items: { $ref: '#/components/schemas/SongPreviewDto' },
           description:
             'Array of song previews (default behavior and most query modes)',
         },
         {
-          type: 'object',
+          type                : 'object',
           additionalProperties: { type: 'number' },
           description:
             'Category name to song count mapping (only when q=categories without id)',
@@ -226,10 +162,7 @@ export class SongController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Edit song info by ID' })
-  @ApiBody({
-    description: 'Upload Song',
-    type: UploadSongResponseDto,
-  })
+  @ApiBody({   description: 'Upload Song',   type: UploadSongResponseDto, })
   public async patchSong(
     @Param('id') id: string,
     @Req() req: RawBodyRequest<Request>,
@@ -253,7 +186,7 @@ export class SongController {
 
     // TODO: no longer used
     res.set({
-      'Content-Disposition': 'attachment; filename="song.nbs"',
+      'Content-Disposition'          : 'attachment; filename="song.nbs"',
       // Expose the Content-Disposition header to the client
       'Access-Control-Expose-Headers': 'Content-Disposition',
     });
@@ -299,14 +232,9 @@ export class SongController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'Upload Song',
-    type: UploadSongResponseDto,
-  })
+  @ApiBody({  description: 'Upload Song',  type: UploadSongResponseDto,})
   @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
-  @ApiOperation({
-    summary: 'Upload a .nbs file and send the song data, creating a new song',
-  })
+  @ApiOperation({    summary: 'Upload a .nbs file and send the song data, creating a new song',})
   public async createSong(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadSongDto,
