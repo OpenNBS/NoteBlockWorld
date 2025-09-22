@@ -1,6 +1,7 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
+        "module": "nodenext",
         // Root project specific overrides
         "strictNullChecks": true,
         "noImplicitAny": true,

@@ -1,11 +1,12 @@
 import js from '@eslint/js';
+import type { ESLint } from 'eslint';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 
-export default [
+const config: ESLint.ConfigData = [
   // Base JavaScript configuration
   js.configs.recommended,
 
@@ -109,3 +110,5 @@ export default [
   // Prettier config (must be last to override conflicting rules)
   prettierConfig,
 ];
+
+export default config;
