@@ -18,6 +18,10 @@
       "import": "./apps/frontend/dist/index.js",
       "types": "./apps/frontend/dist/index.d.ts"
     },
+    "./config": {
+      "import": "./packages/configs/dist/index.js",
+      "types": "./packages/configs/dist/index.d.ts"
+    },
     "./database": {
       "import": "./packages/database/dist/index.js",
       "types": "./packages/database/dist/index.d.ts"
@@ -37,8 +41,8 @@
   },
   "scripts": {
     "postinstall": "bun run build:packages && bun run link:packages",
-    "build:packages": "cd packages/database && bun run build && cd ../song && bun run build && cd ../thumbnail && bun run build && cd ../sounds && bun run build",
-    "link:packages": "mkdir -p apps/backend/node_modules/@nbw && cd apps/backend/node_modules/@nbw && ln -sf ../../../../packages/database database && ln -sf ../../../../packages/song song && ln -sf ../../../../packages/thumbnail thumbnail && ln -sf ../../../../packages/sounds sounds",
+    "build:packages": "cd packages/configs && bun run build && cd ../database && bun run build && cd ../song && bun run build && cd ../thumbnail && bun run build && cd ../sounds && bun run build",
+    "link:packages": "mkdir -p apps/backend/node_modules/@nbw && cd apps/backend/node_modules/@nbw && ln -sf ../../../../packages/configs config && ln -sf ../../../../packages/database database && ln -sf ../../../../packages/song song && ln -sf ../../../../packages/thumbnail thumbnail && ln -sf ../../../../packages/sounds sounds",
     "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
     "build:server": "bun run build:data && cd apps/backend && bun run build",
     "build:web": "cd ./apps/frontend && bun run build",
