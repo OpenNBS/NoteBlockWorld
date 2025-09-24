@@ -1,3 +1,5 @@
+import { jest, describe, beforeEach, expect, it } from 'bun:test';
+
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { EmailLoginService } from './email-login.service';

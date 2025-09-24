@@ -1,3 +1,5 @@
+import { jest, describe, beforeEach, expect, it } from 'bun:test';
+
 import { ExecutionContext } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 

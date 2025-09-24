@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'bun:test';
+
 import { getKeyText, instrumentColors, isDarkColor } from './utils';
 
 describe('instrumentColors', () => {
