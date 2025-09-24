@@ -1,1 +1,1 @@
-console.log('Hello via Bun!');
+// Entry point for the configs package
