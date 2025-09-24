@@ -455,7 +455,7 @@ describe('SongService', () => {
                 uploader: 'different-user-id'
             } as any;
 
-            jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
+            jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity);
 
             await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
                 HttpException
@@ -536,7 +536,7 @@ describe('SongService', () => {
                 customInstruments: []
             } as any;
 
-            jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
+            jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity);
 
             await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
                 HttpException
@@ -638,7 +638,7 @@ describe('SongService', () => {
                 ...songDocument
             };
 
-            jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+            jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne);
 
             const result = await service.getSong(publicId, user);
 
@@ -655,7 +655,7 @@ describe('SongService', () => {
 
             const mockFindOne = null;
 
-            jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
+            jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne);
 
             await expect(service.getSong(publicId, user)).rejects.toThrow(
                 HttpException

@@ -30,7 +30,7 @@ export class UserService {
         try {
             return (await this.userModel.findByIdAndUpdate(user._id, user, {
                 new: true // return the updated document
-            })) as UserDocument;
+            }));
         } catch (error) {
             if (error instanceof Error) {
                 throw error;

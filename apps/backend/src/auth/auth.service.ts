@@ -215,7 +215,7 @@ export class AuthService {
     }
 
     public async getUserFromToken(token: string): Promise<UserDocument | null> {
-        const decoded = this.jwtService.decode(token) as TokenPayload;
+        const decoded = this.jwtService.decode(token);
 
         if (!decoded) {
             return null;

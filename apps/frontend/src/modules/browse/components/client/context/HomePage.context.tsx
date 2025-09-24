@@ -9,7 +9,7 @@ import { RecentSongsProvider } from './RecentSongs.context';
 type HomePageContextType = null;
 
 const HomePageContext = createContext<HomePageContextType>(
-  null as HomePageContextType
+  null
 );
 
 export function HomePageProvider({

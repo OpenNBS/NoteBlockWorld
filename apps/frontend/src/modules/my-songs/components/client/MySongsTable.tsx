@@ -49,7 +49,7 @@ const SongRows = ({
 
   const content = !page
     ? Array(pageSize).fill(null)
-    : (page.content as SongPreviewDtoType[]);
+    : (page.content);
 
   return (
     <>
