@@ -18,6 +18,9 @@ import toast from 'react-hot-toast';
 import ClientAxios from '@web/lib/axios/ClientAxios';
 import { LoggedUserData } from '@web/modules/auth/types/User';
 
+
+import { UserMenuButton } from '../client/UserMenuButton';
+
 import {
   Popover,
   PopoverArrow,
@@ -25,7 +28,6 @@ import {
   PopoverTrigger,
 } from './popover';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
-import { UserMenuButton } from '../client/UserMenuButton';
 
 interface FormValues {
   username: string;
@@ -146,17 +148,17 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                         defaultValue={currentUsername}
                         {...register('username', {
                           required: 'Username is required',
-                          pattern: {
+                          pattern : {
                             value: USER_CONSTANTS.ALLOWED_REGEXP,
                             message:
                               'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
                           },
                           maxLength: {
-                            value: USER_CONSTANTS.USERNAME_MAX_LENGTH,
+                            value  : USER_CONSTANTS.USERNAME_MAX_LENGTH,
                             message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`,
                           },
                           minLength: {
-                            value: USER_CONSTANTS.USERNAME_MIN_LENGTH,
+                            value  : USER_CONSTANTS.USERNAME_MIN_LENGTH,
                             message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`,
                           },
                         })}

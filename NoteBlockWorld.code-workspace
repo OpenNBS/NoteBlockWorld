@@ -1,10 +1,6 @@
 {
     "folders": [
         {
-            "path": ".",
-            "name": "Root"
-        },
-        {
             "path": "./apps/backend",
             "name": "Backend"
         },
@@ -31,6 +27,10 @@
         {
             "path": "./packages/thumbnail",
             "name": "thumbnail"
+        },
+        {
+            "path": ".",
+            "name": "Root"
         },
     ],
     "settings": {

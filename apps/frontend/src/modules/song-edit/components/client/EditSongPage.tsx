@@ -23,10 +23,10 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
 
   try {
     const response = await axiosInstance.get(`/song/${id}/edit`, {
-      method: 'GET',
+      method : 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${token.value}`,
+        authorization : `Bearer ${token.value}`,
       },
     });
 

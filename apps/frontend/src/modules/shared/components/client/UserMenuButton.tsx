@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import { LoggedUserData } from '@web/modules/auth/types/User';
 
+
 export function UserMenuButton({ userData }: { userData: LoggedUserData }) {
   return (
     <>

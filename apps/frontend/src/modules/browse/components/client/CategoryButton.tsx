@@ -28,11 +28,11 @@ export const CategoryButtonGroup = () => {
     <Carousel
       className='w-fit max-w-full'
       opts={{
-        align: 'start',
-        loop: false,
-        duration: 10,
+        align         : 'start',
+        loop          : false,
+        duration      : 10,
         slidesToScroll: 2,
-        dragFree: true,
+        dragFree      : true,
       }}
       orientation='horizontal'
     >

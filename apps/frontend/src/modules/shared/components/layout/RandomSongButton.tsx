@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import axios from '@web/lib/axios';
 
+
 import { MusicalNote } from './MusicalNote';
 
 export const RandomSongButton = () => {
@@ -17,10 +18,11 @@ export const RandomSongButton = () => {
 
     try {
       const response = await axios.get<SongPreviewDto[]>(
-        '/song-browser/random',
+        '/song',
         {
           params: {
-            count: 1,
+            q    : 'random',
+            limit: 1,
           },
         },
       );

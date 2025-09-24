@@ -32,7 +32,7 @@ export class AuthController {
   @Throttle({
     default: {
       // one every 1 hour
-      ttl: 60 * 60 * 1000,
+      ttl  : 60 * 60 * 1000,
       limit: 1,
     },
   })
@@ -44,11 +44,11 @@ export class AuthController {
       content: {
         'application/json': {
           schema: {
-            type: 'object',
+            type      : 'object',
             properties: {
               destination: {
-                type: 'string',
-                example: 'vycasnicolas@gmail.com',
+                type       : 'string',
+                example    : 'vycasnicolas@gmail.com',
                 description: 'Email address to send the magic link to',
               },
             },
@@ -58,7 +58,7 @@ export class AuthController {
       },
     },
   })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public async magicLinkLogin(@Req() req: Request, @Res() res: Response) {
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
     // TODO: uncomment this line to enable magic link login

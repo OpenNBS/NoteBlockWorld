@@ -10,12 +10,12 @@ export class FeaturedSongsDto {
 
   public static create(): FeaturedSongsDto {
     return {
-      hour: [],
-      day: [],
-      week: [],
+      hour : [],
+      day  : [],
+      week : [],
       month: [],
-      year: [],
-      all: [],
+      year : [],
+      all  : [],
     };
   }
 }

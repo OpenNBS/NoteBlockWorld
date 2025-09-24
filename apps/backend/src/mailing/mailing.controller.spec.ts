@@ -9,9 +9,9 @@ describe('MailingController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MailingController],
-      providers: [
+      providers  : [
         {
-          provide: MailingService,
+          provide : MailingService,
           useValue: {},
         },
       ],

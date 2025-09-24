@@ -4,20 +4,15 @@ import Image from 'next/image';
 
 import axios from '@web/lib/axios';
 
-import { LicenseInfo } from './client/LicenseInfo';
-import { SongDetails } from './SongDetails';
-import {
-  DownloadSongButton,
-  OpenSongInNBSButton,
-  ShareButton,
-  UploaderBadge,
-  VisibilityBadge,
-} from './SongPageButtons';
 import SongCard from '../../browse/components/SongCard';
 import SongCardGroup from '../../browse/components/SongCardGroup';
 import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
 import { ErrorBox } from '../../shared/components/client/ErrorBox';
 import { formatTimeAgo } from '../../shared/util/format';
+
+import { LicenseInfo } from './client/LicenseInfo';
+import { SongDetails } from './SongDetails';
+import {  DownloadSongButton,  OpenSongInNBSButton,  ShareButton,  UploaderBadge,  VisibilityBadge, } from './SongPageButtons';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;
@@ -46,10 +41,11 @@ export async function SongPage({ id }: { id: string }) {
 
   try {
     const response = await axios.get<SongPreviewDtoType[]>(
-      `/song-browser/random`,
+      `/song`,
       {
         params: {
-          count: 4,
+          q       : 'random',
+          limit   : 4,
           category: song.category,
         },
       },

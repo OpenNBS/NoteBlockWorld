@@ -5,12 +5,13 @@ import {
   FileDisplay,
 } from '@web/modules/song/components/client/FileDisplay';
 
-import { SongUploadForm } from './SongUploadForm';
 import {
   SongProvider,
   useSongProvider,
 } from '../../../song/components/client/context/Song.context';
 import { SongSelector } from '../../../song/components/client/SongSelector';
+
+import { SongUploadForm } from './SongUploadForm';
 
 const UploadSongPageComponent = ({
   defaultAuthorName,

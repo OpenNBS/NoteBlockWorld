@@ -6,10 +6,10 @@ import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 const mockAuthService = {
-  githubLogin: jest.fn(),
-  googleLogin: jest.fn(),
-  discordLogin: jest.fn(),
-  verifyToken: jest.fn(),
+  githubLogin   : jest.fn(),
+  googleLogin   : jest.fn(),
+  discordLogin  : jest.fn(),
+  verifyToken   : jest.fn(),
   loginWithEmail: jest.fn(),
 };
 
@@ -24,13 +24,13 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
+      providers  : [
         {
-          provide: AuthService,
+          provide : AuthService,
           useValue: mockAuthService,
         },
         {
-          provide: MagicLinkEmailStrategy,
+          provide : MagicLinkEmailStrategy,
           useValue: mockMagicLinkEmailStrategy,
         },
       ],

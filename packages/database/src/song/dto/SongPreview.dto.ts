@@ -2,6 +2,7 @@ import { IsNotEmpty, IsString, IsUrl, MaxLength } from 'class-validator';
 
 import type { SongWithUser } from '@database/song/entity/song.entity';
 
+
 type SongPreviewUploader = {
   username: string;
   profileImage: string;
@@ -58,18 +59,18 @@ export class SongPreviewDto {
 
   public static fromSongDocumentWithUser(song: SongWithUser): SongPreviewDto {
     return new SongPreviewDto({
-      publicId: song.publicId,
-      uploader: song.uploader,
-      title: song.title,
-      description: song.description,
+      publicId      : song.publicId,
+      uploader      : song.uploader,
+      title         : song.title,
+      description   : song.description,
       originalAuthor: song.originalAuthor,
-      duration: song.stats.duration,
-      noteCount: song.stats.noteCount,
-      thumbnailUrl: song.thumbnailUrl,
-      createdAt: song.createdAt,
-      updatedAt: song.updatedAt,
-      playCount: song.playCount,
-      visibility: song.visibility,
+      duration      : song.stats.duration,
+      noteCount     : song.stats.noteCount,
+      thumbnailUrl  : song.thumbnailUrl,
+      createdAt     : song.createdAt,
+      updatedAt     : song.updatedAt,
+      playCount     : song.playCount,
+      visibility    : song.visibility,
     });
   }
 }

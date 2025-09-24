@@ -20,7 +20,7 @@ export const SongSelector = () => {
   );
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    onDrop: handleFileDrop,
+    onDrop        : handleFileDrop,
     onDropRejected: (fileRejections) => {
       const error = fileRejections[0].errors[0].code;
 
@@ -37,9 +37,9 @@ export const SongSelector = () => {
     accept: {
       'application/nbs': ['.nbs'],
     },
-    maxSize: UPLOAD_CONSTANTS.file.maxSize,
+    maxSize : UPLOAD_CONSTANTS.file.maxSize,
     multiple: false,
-    noClick: true,
+    noClick : true,
   });
 
   return (

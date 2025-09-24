@@ -1,22 +1,6 @@
 import { BROWSER_SONGS } from '@nbw/config';
-import type { UserDocument } from '@nbw/database';
-import {
-  PageQueryDTO,
-  Song as SongEntity,
-  SongPageDto,
-  SongPreviewDto,
-  SongViewDto,
-  SongWithUser,
-  UploadSongDto,
-  UploadSongResponseDto,
-} from '@nbw/database';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { FeaturedSongsDto, TimespanType, UserDocument,  PageQueryDTO,  Song as SongEntity,  SongPageDto,  SongPreviewDto,  SongViewDto,  SongWithUser,  UploadSongDto,  UploadSongResponseDto, } from '@nbw/database';
+import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -49,15 +33,7 @@ export class SongService {
     });
   }
 
-  public async uploadSong({
-    file,
-    user,
-    body,
-  }: {
-    body: UploadSongDto;
-    file: Express.Multer.File;
-    user: UserDocument;
-  }): Promise<UploadSongResponseDto> {
+  public async uploadSong({  file,  user,  body, }: {  body: UploadSongDto;  file: Express.Multer.File;  user: UserDocument;}): Promise<UploadSongResponseDto> {
     const song = await this.songUploadService.processUploadedSong({
       file,
       user,
@@ -85,10 +61,7 @@ export class SongService {
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async deleteSong(
-    publicId: string,
-    user: UserDocument,
-  ): Promise<UploadSongResponseDto> {
+  public async deleteSong(publicId: string,  user: UserDocument,): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
@@ -115,11 +88,7 @@ export class SongService {
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async patchSong(
-    publicId: string,
-    body: UploadSongDto,
-    user: UserDocument,
-  ): Promise<UploadSongResponseDto> {
+  public async patchSong(publicId: string,  body: UploadSongDto,  user: UserDocument,): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel.findOne({
       publicId: publicId,
     });
@@ -202,16 +171,52 @@ export class SongService {
       })
       .skip(page * limit - limit)
       .limit(limit)
+      .populate('uploader', 'username publicName profileImage -_id')
+      .exec()) as unknown as SongWithUser[];
+
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
+
+  public async searchSongs(query: PageQueryDTO,  q: string,): Promise<SongPreviewDto[]> {
+    const page = parseInt(query.page?.toString() ?? '1');
+    const limit = parseInt(query.limit?.toString() ?? '10');
+    const order = query.order ? query.order : false;
+    const allowedSorts = new Set(['likeCount', 'createdAt', 'playCount']);
+    const sortField = allowedSorts.has(query.sort ?? '')
+      ? (query.sort as string)
+      : 'createdAt';
+
+    const terms = (q || '')
+      .split(/\s+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    // Build Google-like search: all words must appear across any of the fields
+    const andClauses = terms.map((word) => ({
+      $or: [
+        { title: { $regex: word, $options: 'i' } },
+        { originalAuthor: { $regex: word, $options: 'i' } },
+        { description: { $regex: word, $options: 'i' } },
+      ],
+    }));
+
+    const mongoQuery: any = {
+      visibility: 'public',
+      ...(andClauses.length > 0 ? { $and: andClauses } : {}),
+    };
+
+    const songs = (await this.songModel
+      .find(mongoQuery)
+      .sort({ [sortField]: order ? 1 : -1 })
+      .skip(limit * (page - 1))
+      .limit(limit)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getRecentSongs(
-    page: number,
-    limit: number,
-  ): Promise<SongPreviewDto[]> {
+  public async getRecentSongs(page: number,  limit: number,): Promise<SongPreviewDto[]> {
     const queryObject: any = {
       visibility: 'public',
     };
@@ -233,7 +238,7 @@ export class SongService {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
+        createdAt : {
           $gte: timespan,
         },
       })
@@ -243,13 +248,11 @@ export class SongService {
       .exec();
   }
 
-  public async getSongsBeforeTimespan(
-    timespan: number,
-  ): Promise<SongWithUser[]> {
+  public async getSongsBeforeTimespan(timespan: number,): Promise<SongWithUser[]> {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
+        createdAt : {
           $lt: timespan,
         },
       })
@@ -259,10 +262,7 @@ export class SongService {
       .exec();
   }
 
-  public async getSong(
-    publicId: string,
-    user: UserDocument | null,
-  ): Promise<SongViewDto> {
+  public async getSong(publicId: string,  user: UserDocument | null,): Promise<SongViewDto> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
@@ -292,12 +292,7 @@ export class SongService {
   }
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
-  public async getSongDownloadUrl(
-    publicId: string,
-    user: UserDocument | null,
-    src?: string,
-    packed: boolean = false,
-  ): Promise<string> {
+  public async getSongDownloadUrl(publicId: string,  user: UserDocument | null,  src?: string,  packed: boolean = false,): Promise<string> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
@@ -342,13 +337,7 @@ export class SongService {
     }
   }
 
-  public async getMySongsPage({
-    query,
-    user,
-  }: {
-    query: PageQueryDTO;
-    user: UserDocument;
-  }): Promise<SongPageDto> {
+  public async getMySongsPage({  query,  user, }: {  query: PageQueryDTO;  user: UserDocument;}): Promise<SongPageDto> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const order = query.order ? query.order : false;
@@ -372,16 +361,13 @@ export class SongService {
       content: songData.map((song) =>
         SongPreviewDto.fromSongDocumentWithUser(song),
       ),
-      page: page,
+      page : page,
       limit: limit,
       total: total,
     };
   }
 
-  public async getSongEdit(
-    publicId: string,
-    user: UserDocument,
-  ): Promise<UploadSongDto> {
+  public async getSongEdit(publicId: string,  user: UserDocument,): Promise<UploadSongDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
@@ -408,7 +394,7 @@ export class SongService {
       },
       {
         $group: {
-          _id: '$category',
+          _id  : '$category',
           count: { $sum: 1 },
         },
       },
@@ -429,14 +415,10 @@ export class SongService {
     }, {} as Record<string, number>);
   }
 
-  public async getSongsByCategory(
-    category: string,
-    page: number,
-    limit: number,
-  ): Promise<SongPreviewDto[]> {
+  public async getSongsByCategory(category: string,  page: number,  limit: number,): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .find({
-        category: category,
+        category  : category,
         visibility: 'public',
       })
       .sort({ createdAt: -1 })
@@ -448,15 +430,13 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getRandomSongs(
-    count: number,
-    category: string,
-  ): Promise<SongPreviewDto[]> {
+  public async getRandomSongs(count: number,  category: string,): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .aggregate([
         {
           $match: {
             visibility: 'public',
+            category  : category,
           },
         },
         {
@@ -468,14 +448,58 @@ export class SongService {
       .exec()) as unknown as SongWithUser[];
 
     await this.songModel.populate(songs, {
-      path: 'uploader',
+      path  : 'uploader',
       select: 'username profileImage -_id',
     });
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getAllSongs() {
-    return this.songModel.find({});
+  public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
+    const now = new Date(Date.now());
+
+    const times: Record<TimespanType, number> = {
+      hour : new Date(Date.now()).setHours(now.getHours() - 1),
+      day  : new Date(Date.now()).setDate(now.getDate() - 1),
+      week : new Date(Date.now()).setDate(now.getDate() - 7),
+      month: new Date(Date.now()).setMonth(now.getMonth() - 1),
+      year : new Date(Date.now()).setFullYear(now.getFullYear() - 1),
+      all  : new Date(0).getTime(),
+    };
+    
+    const songs: Record<TimespanType, SongWithUser[]> = {  hour: [],  day: [],  week: [],  month: [],  year: [],  all: [], };
+
+    for (const [timespan, time] of Object.entries(times)) {
+      const songPage = await this.getSongsForTimespan(time);
+
+      // If the length is 0, send an empty array (no songs available in that timespan)
+      // If the length is less than the page size, pad it with songs "borrowed"
+      // from the nearest timestamp, regardless of view count
+      if (
+        songPage.length > 0 &&
+        songPage.length < BROWSER_SONGS.paddedFeaturedPageSize
+      ) {
+        const missing = BROWSER_SONGS.paddedFeaturedPageSize - songPage.length;
+
+        const additionalSongs = await this.getSongsBeforeTimespan(
+          time,
+        );
+
+        songPage.push(...additionalSongs.slice(0, missing));
+      }
+
+      songs[timespan as TimespanType] = songPage;
+    }
+
+    const featuredSongs = FeaturedSongsDto.create();
+
+    featuredSongs.hour = songs.hour.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
+    featuredSongs.day = songs.day.map((song) =>   SongPreviewDto.fromSongDocumentWithUser(song),);
+    featuredSongs.week = songs.week.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
+    featuredSongs.month = songs.month.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
+    featuredSongs.year = songs.year.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
+    featuredSongs.all = songs.all.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
+
+    return featuredSongs;
   }
 }

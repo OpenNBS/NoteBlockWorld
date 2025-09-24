@@ -19,14 +19,16 @@ import { toast } from 'react-hot-toast';
 
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
-import DownloadSongModal from './client/DownloadSongModal';
-import ShareModal from './client/ShareModal';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '../../shared/components/tooltip';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
+
+import DownloadSongModal from './client/DownloadSongModal';
+import ShareModal from './client/ShareModal';
 
 const VisibilityBadge = () => {
   return (
@@ -210,7 +212,7 @@ const showOpenFailedToast = () => {
     ),
     {
       duration: 5000,
-      style: {
+      style   : {
         width: '100%',
       },
     },

@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
+
 import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 import type { UserDocument } from '@nbw/database';
 import {
@@ -8,7 +10,6 @@ import {
 } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
@@ -22,10 +23,10 @@ mock.module('@nbw/thumbnail', () => ({
 }));
 
 const mockFileService = {
-  uploadSong: jest.fn(),
+  uploadSong      : jest.fn(),
   uploadPackedSong: jest.fn(),
-  uploadThumbnail: jest.fn(),
-  getSongFile: jest.fn(),
+  uploadThumbnail : jest.fn(),
+  getSongFile     : jest.fn(),
 };
 
 const mockUserService = {
@@ -42,11 +43,11 @@ describe('SongUploadService', () => {
       providers: [
         SongUploadService,
         {
-          provide: FileService,
+          provide : FileService,
           useValue: mockFileService,
         },
         {
-          provide: UserService,
+          provide : UserService,
           useValue: mockUserService,
         },
       ],
@@ -66,26 +67,26 @@ describe('SongUploadService', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const user: UserDocument = {
-        _id: new Types.ObjectId(),
+        _id     : new Types.ObjectId(),
         username: 'testuser',
       } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes',
       };
 
       const songEntity = new SongEntity();
@@ -96,7 +97,7 @@ describe('SongUploadService', () => {
       );
 
       spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
-        nbsSong: new Song(),
+        nbsSong   : new Song(),
         songBuffer: Buffer.from('test'),
       });
 
@@ -161,42 +162,42 @@ describe('SongUploadService', () => {
   describe('processSongPatch', () => {
     it('should process and patch a song', async () => {
       const user: UserDocument = {
-        _id: new Types.ObjectId(),
+        _id     : new Types.ObjectId(),
         username: 'testuser',
       } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes',
       };
 
       const songDocument: SongDocument = {
         ...body,
-        publicId: 'test-id',
-        uploader: user._id,
+        publicId         : 'test-id',
+        uploader         : user._id,
         customInstruments: [],
-        thumbnailData: body.thumbnailData,
-        nbsFileUrl: 'http://test.com/file.nbs',
-        save: jest.fn().mockResolvedValue({}),
+        thumbnailData    : body.thumbnailData,
+        nbsFileUrl       : 'http://test.com/file.nbs',
+        save             : jest.fn().mockResolvedValue({}),
       } as any;
 
       spyOn(fileService, 'getSongFile').mockResolvedValue(new ArrayBuffer(0));
 
       spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
-        nbsSong: new Song(),
+        nbsSong   : new Song(),
         songBuffer: Buffer.from('test'),
       });
 
@@ -224,9 +225,9 @@ describe('SongUploadService', () => {
   describe('generateAndUploadThumbnail', () => {
     it('should generate and upload a thumbnail', async () => {
       const thumbnailData: ThumbnailData = {
-        startTick: 0,
-        startLayer: 0,
-        zoomLevel: 1,
+        startTick      : 0,
+        startLayer     : 0,
+        zoomLevel      : 1,
         backgroundColor: '#000000',
       };
 
@@ -255,9 +256,9 @@ describe('SongUploadService', () => {
 
     it('should throw an error if the thumbnail is invalid', async () => {
       const thumbnailData: ThumbnailData = {
-        startTick: 0,
-        startLayer: 0,
-        zoomLevel: 1,
+        startTick      : 0,
+        startLayer     : 0,
+        zoomLevel      : 1,
         backgroundColor: '#000000',
       };
 
@@ -353,10 +354,10 @@ describe('SongUploadService', () => {
       const songTest = new Song();
 
       songTest.meta = {
-        author: 'Nicolas Vycas',
-        description: 'super cool song',
-        importName: 'test',
-        name: 'Cool Test Song',
+        author        : 'Nicolas Vycas',
+        description   : 'super cool song',
+        importName    : 'test',
+        name          : 'Cool Test Song',
         originalAuthor: 'Nicolas Vycas',
       };
 

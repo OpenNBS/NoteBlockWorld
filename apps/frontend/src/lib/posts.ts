@@ -93,7 +93,7 @@ export function getPostData(
 
   // Combine the data with the id
   return {
-    id: postId,
+    id     : postId,
     ...(matterResult.data as Omit<PostType, 'id'>),
     content: matterResult.content,
   };

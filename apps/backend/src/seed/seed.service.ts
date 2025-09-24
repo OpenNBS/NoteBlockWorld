@@ -65,21 +65,21 @@ export class SeedService {
       user.description = faker.lorem.paragraph();
 
       user.socialLinks = {
-        youtube: faker.internet.url(),
-        x: faker.internet.url(),
-        discord: faker.internet.url(),
-        instagram: faker.internet.url(),
-        twitch: faker.internet.url(),
-        bandcamp: faker.internet.url(),
-        facebook: faker.internet.url(),
-        github: faker.internet.url(),
-        reddit: faker.internet.url(),
-        snapchat: faker.internet.url(),
+        youtube   : faker.internet.url(),
+        x         : faker.internet.url(),
+        discord   : faker.internet.url(),
+        instagram : faker.internet.url(),
+        twitch    : faker.internet.url(),
+        bandcamp  : faker.internet.url(),
+        facebook  : faker.internet.url(),
+        github    : faker.internet.url(),
+        reddit    : faker.internet.url(),
+        snapchat  : faker.internet.url(),
         soundcloud: faker.internet.url(),
-        spotify: faker.internet.url(),
-        steam: faker.internet.url(),
-        telegram: faker.internet.url(),
-        tiktok: faker.internet.url(),
+        spotify   : faker.internet.url(),
+        steam     : faker.internet.url(),
+        telegram  : faker.internet.url(),
+        tiktok    : faker.internet.url(),
       };
 
       // remove some social links randomly to simulate users not having all of them or having none
@@ -109,26 +109,26 @@ export class SeedService {
 
         const body: UploadSongDto = {
           file: {
-            buffer: fileData,
-            size: fileBuffer.length,
-            mimetype: 'application/octet-stream',
+            buffer      : fileData,
+            size        : fileBuffer.length,
+            mimetype    : 'application/octet-stream',
             originalname: `${faker.music.songName()}.nbs`,
           },
           allowDownload: faker.datatype.boolean(),
-          visibility: faker.helpers.arrayElement(
+          visibility   : faker.helpers.arrayElement(
             visibilities,
           ) as VisibilityType,
-          title: faker.music.songName(),
-          originalAuthor: faker.music.artist(),
-          description: faker.lorem.paragraph(),
-          license: faker.helpers.arrayElement(licenses) as LicenseType,
-          category: faker.helpers.arrayElement(categories) as CategoryType,
+          title            : faker.music.songName(),
+          originalAuthor   : faker.music.artist(),
+          description      : faker.lorem.paragraph(),
+          license          : faker.helpers.arrayElement(licenses) as LicenseType,
+          category         : faker.helpers.arrayElement(categories) as CategoryType,
           customInstruments: [],
-          thumbnailData: {
+          thumbnailData    : {
             backgroundColor: faker.internet.color(),
-            startLayer: faker.helpers.rangeToNumber({ min: 0, max: 4 }),
-            startTick: faker.helpers.rangeToNumber({ min: 0, max: 100 }),
-            zoomLevel: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
+            startLayer     : faker.helpers.rangeToNumber({ min: 0, max: 4 }),
+            startTick      : faker.helpers.rangeToNumber({ min: 0, max: 100 }),
+            zoomLevel      : faker.helpers.rangeToNumber({ min: 1, max: 5 }),
           },
         };
 
@@ -197,10 +197,10 @@ export class SeedService {
       }).map(
         () =>
           new Note(instrument, {
-            key: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
+            key     : faker.helpers.rangeToNumber({ min: 0, max: 127 }),
             velocity: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
-            panning: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
-            pitch: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
+            panning : faker.helpers.rangeToNumber({ min: -1, max: 1 }),
+            pitch   : faker.helpers.rangeToNumber({ min: -1, max: 1 }),
           }),
       );
 
@@ -216,7 +216,7 @@ export class SeedService {
     return new Date(
       faker.date.between({
         from: from.getTime(),
-        to: to.getTime(),
+        to  : to.getTime(),
       }),
     );
   }

@@ -61,11 +61,11 @@ const build = async () => {
 
   const result = await Bun.build({
     entrypoints: ['./src/main.ts'],
-    outdir: './dist',
-    target: 'bun',
-    minify: false,
-    sourcemap: 'linked',
-    external: optionalRequirePackages.filter((pkg) => {
+    outdir     : './dist',
+    target     : 'bun',
+    minify     : false,
+    sourcemap  : 'linked',
+    external   : optionalRequirePackages.filter((pkg) => {
       try {
         require(pkg);
         return false;

@@ -1,7 +1,8 @@
+import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
+
 import { S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { FileService } from './file.service';
 
@@ -11,12 +12,12 @@ mock.module('@aws-sdk/client-s3', () => {
   };
 
   return {
-    S3Client: jest.fn(() => mS3Client),
-    GetObjectCommand: jest.fn(),
-    PutObjectCommand: jest.fn(),
+    S3Client         : jest.fn(() => mS3Client),
+    GetObjectCommand : jest.fn(),
+    PutObjectCommand : jest.fn(),
     HeadBucketCommand: jest.fn(),
-    ObjectCannedACL: {
-      private: 'private',
+    ObjectCannedACL  : {
+      private    : 'private',
       public_read: 'public-read',
     },
   };
@@ -35,27 +36,27 @@ describe('FileService', () => {
       providers: [
         FileService,
         {
-          provide: 'S3_BUCKET_THUMBS',
+          provide : 'S3_BUCKET_THUMBS',
           useValue: 'test-bucket-thumbs',
         },
         {
-          provide: 'S3_BUCKET_SONGS',
+          provide : 'S3_BUCKET_SONGS',
           useValue: 'test-bucket-songs',
         },
         {
-          provide: 'S3_KEY',
+          provide : 'S3_KEY',
           useValue: 'test-key',
         },
         {
-          provide: 'S3_SECRET',
+          provide : 'S3_SECRET',
           useValue: 'test-secret',
         },
         {
-          provide: 'S3_ENDPOINT',
+          provide : 'S3_ENDPOINT',
           useValue: 'test-endpoint',
         },
         {
-          provide: 'S3_REGION',
+          provide : 'S3_REGION',
           useValue: 'test-region',
         },
       ],

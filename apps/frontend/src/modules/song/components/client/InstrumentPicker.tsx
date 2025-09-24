@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@web/lib/axios';
 import { cn } from '@web/lib/tailwind.utils';
 
+
+import { Area } from '../../../shared/components/client/FormElements';
+
 import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';
-import { Area } from '../../../shared/components/client/FormElements';
 
 const InstrumentTableHeader = ({
   className,

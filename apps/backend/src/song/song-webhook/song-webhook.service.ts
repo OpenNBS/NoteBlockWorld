@@ -41,7 +41,7 @@ export class SongWebhookService implements OnModuleInit {
 
     try {
       const response = await fetch(`${webhookUrl}?wait=true`, {
-        method: 'POST',
+        method : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -84,7 +84,7 @@ export class SongWebhookService implements OnModuleInit {
 
     try {
       await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
-        method: 'PATCH',
+        method : 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },

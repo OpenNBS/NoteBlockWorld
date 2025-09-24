@@ -39,7 +39,7 @@ export const SongFormSchema = zod.object({
 
   // @ts-ignore
   visibility: zod.enum(visibility).default('public'),
-  title: zod
+  title     : zod
     .string()
     .max(UPLOAD_CONSTANTS.title.maxLength, {
       message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
@@ -53,13 +53,13 @@ export const SongFormSchema = zod.object({
       message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
     })
     .min(0),
-  author: zod.string().optional(),
+  author     : zod.string().optional(),
   description: zod.string().max(UPLOAD_CONSTANTS.description.maxLength, {
     message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
   }),
-  thumbnailData: thumbnailDataSchema,
+  thumbnailData    : thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
-  license: zod
+  license          : zod
 
     // @ts-ignore
     .enum(licenses, {

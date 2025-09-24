@@ -12,7 +12,7 @@ describe('DiscordStrategy', () => {
       providers: [
         DiscordStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
             getOrThrow: jest.fn((key: string) => {
               switch (key) {

@@ -1,7 +1,8 @@
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
+
 import type { UserDocument } from '@nbw/database';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import type { Request, Response } from 'express';
 
 import { UserService } from '@server/user/user.service';
@@ -10,9 +11,9 @@ import { AuthService } from './auth.service';
 import { Profile } from './types/profile';
 
 const mockAxios = {
-  get: jest.fn(),
-  post: jest.fn(),
-  put: jest.fn(),
+  get   : jest.fn(),
+  post  : jest.fn(),
+  put   : jest.fn(),
   delete: jest.fn(),
   create: jest.fn(),
 };
@@ -21,15 +22,15 @@ mock.module('axios', () => mockAxios);
 
 const mockUserService = {
   generateUsername: jest.fn(),
-  findByEmail: jest.fn(),
-  findByID: jest.fn(),
-  create: jest.fn(),
+  findByEmail     : jest.fn(),
+  findByID        : jest.fn(),
+  create          : jest.fn(),
 };
 
 const mockJwtService = {
-  decode: jest.fn(),
+  decode   : jest.fn(),
   signAsync: jest.fn(),
-  verify: jest.fn(),
+  verify   : jest.fn(),
 };
 
 describe('AuthService', () => {
@@ -42,47 +43,47 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         {
-          provide: UserService,
+          provide : UserService,
           useValue: mockUserService,
         },
         {
-          provide: JwtService,
+          provide : JwtService,
           useValue: mockJwtService,
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
+          provide : 'COOKIE_EXPIRES_IN',
           useValue: '3600',
         },
         {
-          provide: 'FRONTEND_URL',
+          provide : 'FRONTEND_URL',
           useValue: 'http://frontend.test.com',
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
+          provide : 'COOKIE_EXPIRES_IN',
           useValue: '3600',
         },
         {
-          provide: 'JWT_SECRET',
+          provide : 'JWT_SECRET',
           useValue: 'test-jwt-secret',
         },
         {
-          provide: 'JWT_EXPIRES_IN',
+          provide : 'JWT_EXPIRES_IN',
           useValue: '1d',
         },
         {
-          provide: 'JWT_REFRESH_SECRET',
+          provide : 'JWT_REFRESH_SECRET',
           useValue: 'test-jwt-refresh-secret',
         },
         {
-          provide: 'JWT_REFRESH_EXPIRES_IN',
+          provide : 'JWT_REFRESH_EXPIRES_IN',
           useValue: '7d',
         },
         {
-          provide: 'WHITELISTED_USERS',
+          provide : 'WHITELISTED_USERS',
           useValue: 'tomast1337,bentroen,testuser',
         },
         {
-          provide: 'APP_DOMAIN',
+          provide : 'APP_DOMAIN',
           useValue: '.test.com',
         },
       ],
@@ -103,7 +104,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn(),
       } as any;
 
       await authService.verifyToken(req, res);
@@ -120,7 +121,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn(),
       } as any;
 
       await authService.verifyToken(req, res);
@@ -136,7 +137,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn(),
       } as any;
 
       mockJwtService.verify.mockReturnValueOnce({ id: 'test-id' });
@@ -155,7 +156,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn(),
       } as any;
 
       const decodedToken = { id: 'test-id' };
@@ -206,17 +207,17 @@ describe('AuthService', () => {
       const tokens = await (authService as any).createJwtPayload(payload);
 
       expect(tokens).toEqual({
-        access_token: accessToken,
+        access_token : accessToken,
         refresh_token: refreshToken,
       });
 
       expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
-        secret: 'test-jwt-secret',
+        secret   : 'test-jwt-secret',
         expiresIn: '1d',
       });
 
       expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
-        secret: 'test-jwt-refresh-secret',
+        secret   : 'test-jwt-refresh-secret',
         expiresIn: '7d',
       });
     });
@@ -225,18 +226,18 @@ describe('AuthService', () => {
   describe('GenTokenRedirect', () => {
     it('should set cookies and redirect to the frontend URL', async () => {
       const user_registered = {
-        _id: 'user-id',
-        email: 'test@example.com',
+        _id     : 'user-id',
+        email   : 'test@example.com',
         username: 'testuser',
       } as unknown as UserDocument;
 
       const res = {
-        cookie: jest.fn(),
+        cookie  : jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
       const tokens = {
-        access_token: 'access-token',
+        access_token : 'access-token',
         refresh_token: 'refresh-token',
       };
 
@@ -245,8 +246,8 @@ describe('AuthService', () => {
       await (authService as any).GenTokenRedirect(user_registered, res);
 
       expect((authService as any).createJwtPayload).toHaveBeenCalledWith({
-        id: 'user-id',
-        email: 'test@example.com',
+        id      : 'user-id',
+        email   : 'test@example.com',
         username: 'testuser',
       });
 
@@ -271,8 +272,8 @@ describe('AuthService', () => {
   describe('verifyAndGetUser', () => {
     it('should create a new user if the user is not registered', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
+        username    : 'testuser',
+        email       : 'test@example.com',
         profileImage: 'http://example.com/photo.jpg',
       };
 
@@ -285,7 +286,7 @@ describe('AuthService', () => {
 
       expect(userService.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          email: 'test@example.com',
+          email       : 'test@example.com',
           profileImage: 'http://example.com/photo.jpg',
         }),
       );
@@ -295,13 +296,13 @@ describe('AuthService', () => {
 
     it('should return the registered user if the user is already registered', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
+        username    : 'testuser',
+        email       : 'test@example.com',
         profileImage: 'http://example.com/photo.jpg',
       };
 
       const registeredUser = {
-        id: 'registered-user-id',
+        id          : 'registered-user-id',
         profileImage: 'http://example.com/photo.jpg',
       };
 
@@ -315,15 +316,15 @@ describe('AuthService', () => {
 
     it('should update the profile image if it has changed', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
+        username    : 'testuser',
+        email       : 'test@example.com',
         profileImage: 'http://example.com/new-photo.jpg',
       };
 
       const registeredUser = {
-        id: 'registered-user-id',
+        id          : 'registered-user-id',
         profileImage: 'http://example.com/old-photo.jpg',
-        save: jest.fn(),
+        save        : jest.fn(),
       };
 
       mockUserService.findByEmail.mockResolvedValue(registeredUser);

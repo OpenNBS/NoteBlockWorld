@@ -46,26 +46,26 @@ export function getUploadDiscordEmbed({
 
   if (originalAuthor) {
     fieldsArray.push({
-      name: 'Original Author',
-      value: originalAuthor,
+      name  : 'Original Author',
+      value : originalAuthor,
       inline: false,
     });
   }
 
   fieldsArray = fieldsArray.concat([
     {
-      name: 'Category',
-      value: UPLOAD_CONSTANTS.categories[category],
+      name  : 'Category',
+      value : UPLOAD_CONSTANTS.categories[category],
       inline: true,
     },
     {
-      name: 'Notes',
-      value: stats.noteCount.toLocaleString('en-US'),
+      name  : 'Notes',
+      value : stats.noteCount.toLocaleString('en-US'),
       inline: true,
     },
     {
-      name: 'Length',
-      value: formatDuration(stats.duration),
+      name  : 'Length',
+      value : formatDuration(stats.duration),
       inline: true,
     },
   ]);
@@ -73,23 +73,23 @@ export function getUploadDiscordEmbed({
   return {
     embeds: [
       {
-        title: title,
+        title      : title,
         description: description,
-        color: Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
-        timestamp: createdAt.toISOString(),
-        footer: {
+        color      : Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
+        timestamp  : createdAt.toISOString(),
+        footer     : {
           text: UPLOAD_CONSTANTS.licenses[license]
             ? UPLOAD_CONSTANTS.licenses[license].shortName
             : 'Unknown License',
         },
         author: {
-          name: uploader.username,
+          name    : uploader.username,
           icon_url: uploader.profileImage,
           //url: 'https://noteblock.world/user/${uploaderName}',
         },
         fields: fieldsArray,
-        url: `https://noteblock.world/song/${publicId}`,
-        image: {
+        url   : `https://noteblock.world/song/${publicId}`,
+        image : {
           url: thumbnailUrl,
         },
         thumbnail: {

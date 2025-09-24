@@ -11,8 +11,7 @@ import { useRouter } from 'next/navigation';
 import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
-import InstrumentPicker from './InstrumentPicker';
-import { SongThumbnailInput } from './SongThumbnailInput';
+
 import {
   Area,
   Checkbox,
@@ -24,6 +23,9 @@ import {
   UploadButton,
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
+
+import InstrumentPicker from './InstrumentPicker';
+import { SongThumbnailInput } from './SongThumbnailInput';
 
 type SongFormProps = {
   type: 'upload' | 'edit';

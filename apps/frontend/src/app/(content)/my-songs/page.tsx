@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { checkLogin } from '@web/modules/auth/features/auth.utils';
 import Page from '@web/modules/my-songs/components/MySongsPage';
 
+
 export const metadata: Metadata = {
   title: 'My songs',
 };

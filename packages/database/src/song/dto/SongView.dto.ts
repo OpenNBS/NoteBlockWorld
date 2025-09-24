@@ -1,3 +1,4 @@
+
 import {
   IsBoolean,
   IsDate,
@@ -14,6 +15,7 @@ import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 export type SongViewUploader = {
   username: string;
+  publicName: string;
   profileImage: string;
 };
 
@@ -82,23 +84,23 @@ export class SongViewDto {
 
   public static fromSongDocument(song: SongDocument): SongViewDto {
     return new SongViewDto({
-      publicId: song.publicId,
-      createdAt: song.createdAt,
-      uploader: song.uploader as unknown as SongViewUploader,
-      thumbnailUrl: song.thumbnailUrl,
-      playCount: song.playCount,
-      downloadCount: song.downloadCount,
-      likeCount: song.likeCount,
-      allowDownload: song.allowDownload,
-      title: song.title,
-      originalAuthor: song.originalAuthor,
-      description: song.description,
-      category: song.category,
-      visibility: song.visibility,
-      license: song.license,
+      publicId         : song.publicId,
+      createdAt        : song.createdAt,
+      uploader         : song.uploader as unknown as SongViewUploader,
+      thumbnailUrl     : song.thumbnailUrl,
+      playCount        : song.playCount,
+      downloadCount    : song.downloadCount,
+      likeCount        : song.likeCount,
+      allowDownload    : song.allowDownload,
+      title            : song.title,
+      originalAuthor   : song.originalAuthor,
+      description      : song.description,
+      category         : song.category,
+      visibility       : song.visibility,
+      license          : song.license,
       customInstruments: song.customInstruments,
-      fileSize: song.fileSize,
-      stats: song.stats,
+      fileSize         : song.fileSize,
+      stats            : song.stats,
     });
   }
 

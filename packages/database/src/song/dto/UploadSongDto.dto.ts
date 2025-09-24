@@ -13,6 +13,7 @@ import {
 
 import type { SongDocument } from '@database/song/entity/song.entity';
 
+
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
@@ -39,9 +40,9 @@ export class UploadSongDto {
   @IsBoolean()
   @Type(() => Boolean)
   @ApiProperty({
-    default: true,
+    default    : true,
     description: 'Whether the song can be downloaded by other users',
-    example: true,
+    example    : true,
   })
   allowDownload: boolean;
 
@@ -49,10 +50,10 @@ export class UploadSongDto {
   @IsString()
   @IsIn(visibility)
   @ApiProperty({
-    enum: visibility,
-    default: visibility[0],
+    enum       : visibility,
+    default    : visibility[0],
     description: 'The visibility of the song',
-    example: visibility[0],
+    example    : visibility[0],
   })
   visibility: VisibilityType;
 
@@ -61,7 +62,7 @@ export class UploadSongDto {
   @MaxLength(UPLOAD_CONSTANTS.title.maxLength)
   @ApiProperty({
     description: 'Title of the song',
-    example: 'My Song',
+    example    : 'My Song',
   })
   title: string;
 
@@ -69,7 +70,7 @@ export class UploadSongDto {
   @MaxLength(UPLOAD_CONSTANTS.originalAuthor.maxLength)
   @ApiProperty({
     description: 'Original author of the song',
-    example: 'Myself',
+    example    : 'Myself',
   })
   originalAuthor: string;
 
@@ -77,7 +78,7 @@ export class UploadSongDto {
   @MaxLength(UPLOAD_CONSTANTS.description.maxLength)
   @ApiProperty({
     description: 'Description of the song',
-    example: 'This is my song',
+    example    : 'This is my song',
   })
   description: string;
 
@@ -85,9 +86,9 @@ export class UploadSongDto {
   @IsString()
   @IsIn(categories)
   @ApiProperty({
-    enum: categories,
+    enum       : categories,
     description: 'Category of the song',
-    example: categories[0],
+    example    : categories[0],
   })
   category: CategoryType;
 
@@ -97,7 +98,7 @@ export class UploadSongDto {
   @Transform(({ value }) => JSON.parse(value))
   @ApiProperty({
     description: 'Thumbnail data of the song',
-    example: ThumbnailData.getApiExample(),
+    example    : ThumbnailData.getApiExample(),
   })
   thumbnailData: ThumbnailData;
 
@@ -105,10 +106,10 @@ export class UploadSongDto {
   @IsString()
   @IsIn(licenses)
   @ApiProperty({
-    enum: licenses,
-    default: licenses[0],
+    enum       : licenses,
+    default    : licenses[0],
     description: 'The visibility of the song',
-    example: licenses[0],
+    example    : licenses[0],
   })
   license: LicenseType;
 
@@ -127,14 +128,14 @@ export class UploadSongDto {
 
   public static fromSongDocument(song: SongDocument): UploadSongDto {
     return new UploadSongDto({
-      allowDownload: song.allowDownload,
-      visibility: song.visibility,
-      title: song.title,
-      originalAuthor: song.originalAuthor,
-      description: song.description,
-      category: song.category,
-      thumbnailData: song.thumbnailData,
-      license: song.license,
+      allowDownload    : song.allowDownload,
+      visibility       : song.visibility,
+      title            : song.title,
+      originalAuthor   : song.originalAuthor,
+      description      : song.description,
+      category         : song.category,
+      thumbnailData    : song.thumbnailData,
+      license          : song.license,
       customInstruments: song.customInstruments ?? [],
     });
   }

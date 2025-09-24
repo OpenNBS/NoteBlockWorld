@@ -1,29 +1,24 @@
 import type { UserDocument } from '@nbw/database';
-import {
-  PageQueryDTO,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-} from '@nbw/database';
+import {  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto, } from '@nbw/database';
 import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 
-import { FileService } from '@server/file/file.service';
+import { FileService } from '../file/file.service';
 
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 const mockSongService = {
-  getSongByPage: jest.fn(),
-  getSong: jest.fn(),
-  getSongEdit: jest.fn(),
-  patchSong: jest.fn(),
+  getSongByPage     : jest.fn(),
+  searchSongs       : jest.fn(),
+  getSong           : jest.fn(),
+  getSongEdit       : jest.fn(),
+  patchSong         : jest.fn(),
   getSongDownloadUrl: jest.fn(),
-  deleteSong: jest.fn(),
-  uploadSong: jest.fn(),
+  deleteSong        : jest.fn(),
+  uploadSong        : jest.fn(),
 };
 
 const mockFileService = {};
@@ -35,13 +30,13 @@ describe('SongController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongController],
-      providers: [
+      providers  : [
         {
-          provide: SongService,
+          provide : SongService,
           useValue: mockSongService,
         },
         {
-          provide: FileService,
+          provide : FileService,
           useValue: mockFileService,
         },
       ],
@@ -52,6 +47,9 @@ describe('SongController', () => {
 
     songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
+
+    // Clear all mocks
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -69,6 +67,83 @@ describe('SongController', () => {
 
       expect(result).toEqual(songList);
       expect(songService.getSongByPage).toHaveBeenCalledWith(query);
+    });
+
+    it('should handle featured songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+
+      const result = await songController.getSongList(query, 'featured');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should handle recent songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+
+
+      const result = await songController.getSongList(query, 'recent');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should return categories when q=categories without id', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const categories = { pop: 42, rock: 38 };
+
+
+      const result = await songController.getSongList(query, 'categories');
+
+      expect(result).toEqual(categories);
+    });
+
+    it('should return songs by category when q=categories with id', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+      const categoryId = 'pop';
+
+
+      const result = await songController.getSongList(query, 'categories', categoryId);
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should return random songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 5 };
+      const songList: SongPreviewDto[] = [];
+      const category = 'electronic';
+
+
+      const result = await songController.getSongList(query, 'random', undefined, category);
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should throw error for invalid random count', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 15 }; // Invalid limit > 10
+
+      await expect(
+        songController.getSongList(query, 'random')
+      ).rejects.toThrow('Invalid query parameters');
+    });
+
+    it('should handle zero limit for random (uses default)', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 0 }; // limit 0 is falsy, so uses default
+      const songList: SongPreviewDto[] = [];
+
+
+      const result = await songController.getSongList(query, 'random');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should throw error for invalid query mode', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+
+      await expect(
+        songController.getSongList(query, 'invalid' as any)
+      ).rejects.toThrow('Invalid query parameters');
     });
 
     it('should handle errors', async () => {
@@ -165,7 +240,7 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
+        set     : jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
@@ -176,7 +251,7 @@ describe('SongController', () => {
       await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
-        'Content-Disposition': 'attachment; filename="song.nbs"',
+        'Content-Disposition'          : 'attachment; filename="song.nbs"',
         'Access-Control-Expose-Headers': 'Content-Disposition',
       });
 
@@ -196,7 +271,7 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
+        set     : jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
@@ -285,20 +360,20 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: undefined,
+        file         : undefined,
         allowDownload: false,
       };
 
@@ -317,20 +392,20 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: undefined,
+        file         : undefined,
         allowDownload: false,
       };
 

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
+
 type HelpPageProps = {
   params: { id: string };
 };
@@ -17,13 +18,13 @@ export function generateMetadata({ params }: HelpPageProps): Metadata {
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   return {
-    title: post.title,
-    authors: [{ name: post.author }],
+    title    : post.title,
+    authors  : [{ name: post.author }],
     openGraph: {
-      url: publicUrl + '/help/' + id,
-      title: post.title,
+      url     : publicUrl + '/help/' + id,
+      title   : post.title,
       siteName: 'Note Block World',
-      images: [
+      images  : [
         {
           url: publicUrl + post.image,
         },

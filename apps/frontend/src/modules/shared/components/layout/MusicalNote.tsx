@@ -5,7 +5,7 @@ import './MusicalNote.css';
 const notesSpritesSheet = '/notes_sprites.png';
 
 const spritesSheetSize = {
-  width: 120,
+  width : 120,
   height: 8,
 };
 
@@ -15,7 +15,7 @@ const gridDimensions = {
 };
 
 const singleNoteSize = {
-  width: spritesSheetSize.width / gridDimensions.x,
+  width : spritesSheetSize.width / gridDimensions.x,
   height: spritesSheetSize.height / gridDimensions.y,
 };
 
@@ -70,22 +70,22 @@ export const MusicalNote = ({ size = 4 }: MusicalNoteProps) => {
       className='musical-note animate-note-active'
       ref={ref}
       style={{
-        width: singleNoteSize.width * size, // Scale display size
-        height: singleNoteSize.height * size, // Scale display size
-        backgroundImage: `url(${notesSpritesSheet})`,
+        width             : singleNoteSize.width * size, // Scale display size
+        height            : singleNoteSize.height * size, // Scale display size
+        backgroundImage   : `url(${notesSpritesSheet})`,
         backgroundPosition: `-${cell.x * singleNoteSize.width * size}px -${
           cell.y * singleNoteSize.height * size
         }px`,
         backgroundSize: `${spritesSheetSize.width * size}px ${
           spritesSheetSize.height * size
         }px`, // Scale background
-        zIndex: 999,
+        zIndex        : 999,
         imageRendering: 'pixelated',
-        cursor: 'pointer',
-        position: 'absolute', // Ensure the parent element is positioned relatively
-        opacity: 0,
+        cursor        : 'pointer',
+        position      : 'absolute', // Ensure the parent element is positioned relatively
+        opacity       : 0,
         // disable pointer events to allow the parent element to handle the click event
-        pointerEvents: 'none',
+        pointerEvents : 'none',
       }}
     />
   );

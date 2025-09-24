@@ -6,9 +6,9 @@ export class UserDto {
   email: string;
   static fromEntity(user: User): UserDto {
     const userDto: UserDto = {
-      username: user.username,
+      username  : user.username,
       publicName: user.publicName,
-      email: user.email,
+      email     : user.email,
     };
 
     return userDto;
