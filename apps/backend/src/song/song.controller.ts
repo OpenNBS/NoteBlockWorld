@@ -1,6 +1,5 @@
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import type { UserDocument } from '@nbw/database';
-import {  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto,} from '@nbw/database';
+import { PageDto, UserDocument ,  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto, FeaturedSongsDto,} from '@nbw/database';
 import type { RawBodyRequest } from '@nestjs/common';
 import {  BadRequestException,  Body,  Controller,  Delete,  Get,  Headers,  HttpStatus,  Param,  Patch,  Post,  Query,  Req,  Res,  UnauthorizedException,  UploadedFile,  UseGuards,  UseInterceptors,} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -12,7 +11,6 @@ import type { Response } from 'express';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
-import { SongBrowserService } from './song-browser/song-browser.service';
 import { SongService } from './song.service';
 
 // Handles public-facing song routes.
@@ -29,7 +27,7 @@ export class SongController {
     },
   };
 
-  constructor(  public readonly songService: SongService,  public readonly fileService: FileService,  public readonly songBrowserService: SongBrowserService,) {}
+  constructor(  public readonly songService: SongService,  public readonly fileService: FileService, ) {}
 
   @Get('/')
   @ApiOperation({
@@ -95,33 +93,59 @@ export class SongController {
     @Query('q') q?: 'featured' | 'recent' | 'categories' | 'random',
     @Param('id') id?: string,
     @Query('category') category?: string,
-  ): Promise<SongPreviewDto[] | Record<string, number>> {
+  ): Promise<PageDto<SongPreviewDto> | Record<string, number> | FeaturedSongsDto> {
     if (q) {
       switch (q) {
         case 'featured':
-          return await this.songBrowserService.getRecentSongs(query);
+          return await this.songService.getFeaturedSongs();
         case 'recent':
-          return await this.songBrowserService.getRecentSongs(query);
+          return new PageDto<SongPreviewDto>({
+            content: await this.songService.getRecentSongs(     query.page,     query.limit, ),
+            page   : query.page,
+            limit  : query.limit,
+            total  : 0,
+          });
         case 'categories':
           if (id) {
-            return await this.songBrowserService.getSongsByCategory(id, query);
+            return new PageDto<SongPreviewDto>({
+              content: await this.songService.getSongsByCategory(
+                category,
+                query.page,
+                query.limit,
+              ),
+              page : query.page,
+              limit: query.limit,
+              total: 0,
+            });
           }
-          return await this.songBrowserService.getCategories();
+          return await this.songService.getCategories();
         case 'random': {
           if (query.limit && (query.limit < 1 || query.limit > 10)) {
             throw new BadRequestException('Invalid query parameters');
           }
-          return await this.songBrowserService.getRandomSongs(
+          const data = await this.songService.getRandomSongs(
             query.limit ?? 1,
             category,
           );
+          return new PageDto<SongPreviewDto>({
+            content: data,
+            page   : query.page,
+            limit  : query.limit,
+            total  : data.length,
+          });
         }
         default:
           throw new BadRequestException('Invalid query parameters');
       }
     }
 
-    return await this.songService.getSongByPage(query);
+    const data = await this.songService.getSongByPage(query);
+    return new PageDto<SongPreviewDto>({
+      content: data,
+      page   : query.page,
+      limit  : query.limit,
+      total  : data.length,
+    });
   }
 
   @Get('/search')
@@ -131,8 +155,14 @@ export class SongController {
   public async searchSongs(
     @Query() query: PageQueryDTO,
     @Query('q') q: string,
-  ): Promise<SongPreviewDto[]> {
-    return await this.songService.searchSongs(query, q ?? '');
+  ): Promise<PageDto<SongPreviewDto>> {
+    const data = await this.songService.searchSongs(query, q ?? '');
+    return new PageDto<SongPreviewDto>({
+      content: data,
+      page   : query.page,
+      limit  : query.limit,
+      total  : data.length,
+    });
   }
 
   @Get('/:id')

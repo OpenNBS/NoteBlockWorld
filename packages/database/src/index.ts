@@ -1,3 +1,4 @@
+export * from './common/dto/Page.dto';
 export * from './common/dto/PageQuery.dto';
 export * from './common/dto/types';
 

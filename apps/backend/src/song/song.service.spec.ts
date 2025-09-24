@@ -1047,4 +1047,30 @@ describe('SongService', () => {
       expect(mockFind.exec).toHaveBeenCalled();
     });
   });
+
+  describe('getFeaturedSongs', () => {
+    it('should return featured songs', async () => {
+      const songWithUser: SongWithUser = {
+        title: 'Test Song',
+        uploader: { username: 'testuser', profileImage: 'testimage' },
+        stats: {
+          duration: 100,
+          noteCount: 100,
+        },
+      } as any;
+
+      jest
+        .spyOn(songService, 'getSongsForTimespan')
+        .mockResolvedValue([songWithUser]);
+
+      jest
+        .spyOn(songService, 'getSongsBeforeTimespan')
+        .mockResolvedValue([songWithUser]);
+
+      await service.getFeaturedSongs();
+
+      expect(songService.getSongsForTimespan).toHaveBeenCalled();
+      expect(songService.getSongsBeforeTimespan).toHaveBeenCalled();
+    });
+  });
 });
