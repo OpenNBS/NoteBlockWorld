@@ -3,7 +3,7 @@
 export type RecordKey = string | number | symbol;
 
 export class TwoWayMap<T extends RecordKey, U extends RecordKey> {
-  private map: Map<T, U>;
+  private map       : Map<T, U>;
   private reverseMap: Map<U, T>;
 
   constructor(map: Map<T, U>) {

@@ -13,7 +13,7 @@ import type { SongDocument } from '@database/song/entity/song.entity';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 export type SongViewUploader = {
-  username: string;
+  username    : string;
   profileImage: string;
 };
 

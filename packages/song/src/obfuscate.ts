@@ -3,9 +3,9 @@ import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 import { getInstrumentNoteCounts, getTempoChangerInstrumentIds } from './util';
 
 export class SongObfuscator {
-  private song: Song;
+  private song      : Song;
   private soundPaths: string[];
-  private output: Song;
+  private output    : Song;
 
   public static obfuscateSong(song: Song, soundPaths: string[]) {
     return new SongObfuscator(song, soundPaths).output;

@@ -1,16 +1,16 @@
 export type VersionSummary = {
-  id: string;
-  type: 'release' | 'snapshot' | 'old_beta' | 'old_alpha';
-  url: string;
-  time: string;
-  releaseTime: string;
-  sha1: string;
+  id             : string;
+  type           : 'release' | 'snapshot' | 'old_beta' | 'old_alpha';
+  url            : string;
+  time           : string;
+  releaseTime    : string;
+  sha1           : string;
   complianceLevel: number;
 };
 
 export type VersionManifest = {
   latest: {
-    release: string;
+    release : string;
     snapshot: string;
   };
   versions: VersionSummary[];
@@ -24,14 +24,14 @@ type OS = {
 
 type Rule = {
   action: Action;
-  os: OS;
+  os    : OS;
 };
 
 type Artifact = {
   path: string;
   sha1: string;
   size: number;
-  url: string;
+  url : string;
 };
 
 type Downloads = {
@@ -40,21 +40,21 @@ type Downloads = {
 
 type Library = {
   downloads: Downloads;
-  name: string;
-  rules?: Rule[];
+  name     : string;
+  rules?   : Rule[];
 };
 
 type File = {
-  id: string;
+  id  : string;
   sha1: string;
   size: number;
-  url: string;
+  url : string;
 };
 
 type Client = {
   argument: string;
-  file: File;
-  type: string;
+  file    : File;
+  type    : string;
 };
 
 type Logging = {
@@ -64,31 +64,31 @@ type Logging = {
 export type VersionData = {
   arguments: {
     game: (string | { rules: Rule[]; value: string })[];
-    jvm: string[];
+    jvm : string[];
   };
   assetIndex: {
-    id: string;
-    sha1: string;
-    size: number;
+    id       : string;
+    sha1     : string;
+    size     : number;
     totalSize: number;
-    url: string;
+    url      : string;
   };
-  assets: string;
+  assets         : string;
   complianceLevel: number;
   downloads: {
-    client: Artifact;
+    client         : Artifact;
     client_mappings: Artifact;
-    server: Artifact;
+    server         : Artifact;
     server_mappings: Artifact;
   };
-  id: string;
-  libraries: Library[];
-  logging: Logging;
-  mainClass: string;
+  id                    : string;
+  libraries             : Library[];
+  logging               : Logging;
+  mainClass             : string;
   minimumLauncherVersion: number;
-  releaseTime: string;
-  time: string;
-  type: string;
+  releaseTime           : string;
+  time                  : string;
+  type                  : string;
 };
 
 export type AssetIndexRecord = Record<string, { hash: string; size: number }>;

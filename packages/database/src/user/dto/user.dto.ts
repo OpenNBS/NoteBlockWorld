@@ -1,9 +1,9 @@
 import { User } from '../entity/user.entity';
 
 export class UserDto {
-  username: string;
+  username  : string;
   publicName: string;
-  email: string;
+  email     : string;
   static fromEntity(user: User): UserDto {
     const userDto: UserDto = {
       username  : user.username,

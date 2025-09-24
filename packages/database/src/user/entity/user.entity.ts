@@ -4,22 +4,22 @@ import { Schema as MongooseSchema } from 'mongoose';
 
 @Schema({})
 class SocialLinks {
-  bandcamp?: string;
-  discord?: string;
-  facebook?: string;
-  github?: string;
-  instagram?: string;
-  reddit?: string;
-  snapchat?: string;
+  bandcamp?  : string;
+  discord?   : string;
+  facebook?  : string;
+  github?    : string;
+  instagram? : string;
+  reddit?    : string;
+  snapchat?  : string;
   soundcloud?: string;
-  spotify?: string;
-  steam?: string;
-  telegram?: string;
-  tiktok?: string;
-  threads?: string;
-  twitch?: string;
-  x?: string;
-  youtube?: string;
+  spotify?   : string;
+  steam?     : string;
+  telegram?  : string;
+  tiktok?    : string;
+  threads?   : string;
+  twitch?    : string;
+  x?         : string;
+  youtube?   : string;
 }
 
 @Schema({

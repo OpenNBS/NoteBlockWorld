@@ -11,7 +11,7 @@ export class SongStatsGenerator {
     return new SongStatsGenerator(song).toObject();
   }
 
-  private song: Song;
+  private song : Song;
   private stats: SongStatsType;
 
   private constructor(song: Song) {
@@ -85,14 +85,14 @@ export class SongStatsGenerator {
   }
 
   private getCounts(tempoChangerInstruments: number[]): {
-    noteCount: number;
-    tickCount: number;
-    layerCount: number;
-    outOfRangeNoteCount: number;
-    detunedNoteCount: number;
+    noteCount                : number;
+    tickCount                : number;
+    layerCount               : number;
+    outOfRangeNoteCount      : number;
+    detunedNoteCount         : number;
     customInstrumentNoteCount: number;
-    incompatibleNoteCount: number;
-    instrumentNoteCounts: number[];
+    incompatibleNoteCount    : number;
+    instrumentNoteCounts     : number[];
   } {
     let noteCount = 0;
     let tickCount = 0;
@@ -303,7 +303,7 @@ export class SongStatsGenerator {
     tempoChangerInstruments: number[]
   ): {
     vanillaInstrumentCount: number;
-    customInstrumentCount: number;
+    customInstrumentCount : number;
   } {
     const firstCustomIndex = this.song.instruments.firstCustomIndex;
 
