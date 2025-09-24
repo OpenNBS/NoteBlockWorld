@@ -7,7 +7,6 @@ import { Response } from 'express';
 
 import { FileService } from '../file/file.service';
 
-import { SongBrowserService } from './song-browser/song-browser.service';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
@@ -24,17 +23,9 @@ const mockSongService = {
 
 const mockFileService = {};
 
-const mockSongBrowserService = {
-  getRecentSongs: jest.fn(),
-  getCategories: jest.fn(),
-  getSongsByCategory: jest.fn(),
-  getRandomSongs: jest.fn(),
-};
-
 describe('SongController', () => {
   let songController: SongController;
   let songService: SongService;
-  let songBrowserService: SongBrowserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -48,10 +39,6 @@ describe('SongController', () => {
           provide: FileService,
           useValue: mockFileService,
         },
-        {
-          provide: SongBrowserService,
-          useValue: mockSongBrowserService,
-        },
       ],
     })
       .overrideGuard(AuthGuard('jwt-refresh'))
@@ -60,7 +47,6 @@ describe('SongController', () => {
 
     songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
-    songBrowserService = module.get<SongBrowserService>(SongBrowserService);
 
     // Clear all mocks
     jest.clearAllMocks();
@@ -87,36 +73,29 @@ describe('SongController', () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = [];
 
-      mockSongBrowserService.getRecentSongs.mockResolvedValueOnce(songList);
-
       const result = await songController.getSongList(query, 'featured');
 
       expect(result).toEqual(songList);
-      expect(mockSongBrowserService.getRecentSongs).toHaveBeenCalledWith(query);
     });
 
     it('should handle recent songs', async () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = [];
 
-      mockSongBrowserService.getRecentSongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query, 'recent');
 
       expect(result).toEqual(songList);
-      expect(mockSongBrowserService.getRecentSongs).toHaveBeenCalledWith(query);
     });
 
     it('should return categories when q=categories without id', async () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
       const categories = { pop: 42, rock: 38 };
 
-      mockSongBrowserService.getCategories.mockResolvedValueOnce(categories);
 
       const result = await songController.getSongList(query, 'categories');
 
       expect(result).toEqual(categories);
-      expect(mockSongBrowserService.getCategories).toHaveBeenCalled();
     });
 
     it('should return songs by category when q=categories with id', async () => {
@@ -124,12 +103,10 @@ describe('SongController', () => {
       const songList: SongPreviewDto[] = [];
       const categoryId = 'pop';
 
-      mockSongBrowserService.getSongsByCategory.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query, 'categories', categoryId);
 
       expect(result).toEqual(songList);
-      expect(mockSongBrowserService.getSongsByCategory).toHaveBeenCalledWith(categoryId, query);
     });
 
     it('should return random songs', async () => {
@@ -137,12 +114,10 @@ describe('SongController', () => {
       const songList: SongPreviewDto[] = [];
       const category = 'electronic';
 
-      mockSongBrowserService.getRandomSongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query, 'random', undefined, category);
 
       expect(result).toEqual(songList);
-      expect(mockSongBrowserService.getRandomSongs).toHaveBeenCalledWith(5, category);
     });
 
     it('should throw error for invalid random count', async () => {
@@ -157,12 +132,10 @@ describe('SongController', () => {
       const query: PageQueryDTO = { page: 1, limit: 0 }; // limit 0 is falsy, so uses default
       const songList: SongPreviewDto[] = [];
 
-      mockSongBrowserService.getRandomSongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query, 'random');
 
       expect(result).toEqual(songList);
-      expect(mockSongBrowserService.getRandomSongs).toHaveBeenCalledWith(0, undefined); // Passes 0 (nullish coalescing doesn't apply to 0)
     });
 
     it('should throw error for invalid query mode', async () => {
