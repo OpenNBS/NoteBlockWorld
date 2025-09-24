@@ -35,7 +35,7 @@ describe('initializeSwagger', () => {
         );
 
         expect(SwaggerModule.setup).toHaveBeenCalledWith(
-            'api/doc',
+            'docs',
             app,
             expect.any(Object),
             {
