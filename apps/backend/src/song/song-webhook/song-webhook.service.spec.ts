@@ -60,9 +60,9 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      (global as any).fetch = jest.fn().mockResolvedValue({
+      global.fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({ id: 'message-id' })
-      });
+      } as unknown as Response) as unknown as typeof global.fetch;
 
       const result = await service.postSongWebhook(song);
 
@@ -85,7 +85,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      global.fetch = jest.fn().mockRejectedValue(new Error('Error')) as unknown as typeof global.fetch;
 
       const result = await service.postSongWebhook(song);
 
@@ -103,7 +103,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      (global as any).fetch = jest.fn().mockResolvedValue({});
+      global.fetch = jest.fn().mockResolvedValue({} as Response) as unknown as typeof global.fetch;
 
       await service.updateSongWebhook(song);
 
@@ -128,7 +128,7 @@ describe('SongWebhookService', () => {
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
 
-      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      global.fetch = jest.fn().mockRejectedValue(new Error('Error')) as unknown as typeof global.fetch;
 
       const loggerSpy = spyOn(service['logger'], 'error');
 
@@ -149,7 +149,7 @@ describe('SongWebhookService', () => {
         uploader        : { username: 'testuser', profileImage: 'testimage' }
       } as SongWithUser;
 
-      (global as any).fetch = jest.fn().mockResolvedValue({});
+      global.fetch = jest.fn().mockResolvedValue({} as Response) as unknown as typeof global.fetch;
 
       await service.deleteSongWebhook(song);
 
@@ -168,7 +168,7 @@ describe('SongWebhookService', () => {
         uploader        : { username: 'testuser', profileImage: 'testimage' }
       } as SongWithUser;
 
-      (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
+      global.fetch = jest.fn().mockRejectedValue(new Error('Error')) as unknown as typeof global.fetch;
 
       const loggerSpy = spyOn(service['logger'], 'error');
 
@@ -256,7 +256,7 @@ describe('SongWebhookService', () => {
 
       const syncSpy = spyOn(service, 'syncSongWebhook');
 
-      await (service as any).syncAllSongsWebhook();
+      await service['syncAllSongsWebhook']();
 
       expect(syncSpy).toHaveBeenCalledWith(songs[0]);
     });

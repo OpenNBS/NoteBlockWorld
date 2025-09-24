@@ -1,5 +1,9 @@
+import { describe, beforeEach, it, expect, jest } from 'bun:test';
+
+import { UserDocument } from '@nbw/database';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { MailingService } from '@server/mailing/mailing.service';
 import { UserService } from '@server/user/user.service';
 
@@ -128,7 +132,7 @@ describe('MagicLinkEmailStrategy', () => {
 
       const result = await strategy.validate(payload);
 
-      expect(result).toEqual(user);
+      expect(result).toEqual(user as UserDocument);
     });
 
     it('should create a new user if not found and return the user', async () => {
@@ -146,7 +150,7 @@ describe('MagicLinkEmailStrategy', () => {
       expect(result).toEqual({
         email   : 'test@example.com',
         username: 'test'
-      });
+      } as UserDocument);
     });
   });
 });

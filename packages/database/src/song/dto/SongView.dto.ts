@@ -7,9 +7,9 @@ import {
   IsUrl
 } from 'class-validator';
 
-import { SongStats } from '@database/song/dto/SongStats';
-import type { SongDocument } from '@database/song/entity/song.entity';
+import type { SongDocument } from '../entity/song.entity';
 
+import { SongStats } from './SongStats';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 export type SongViewUploader = {

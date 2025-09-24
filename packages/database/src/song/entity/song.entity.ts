@@ -2,8 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import type { HydratedDocument } from 'mongoose';
 import { Schema as MongooseSchema, Types } from 'mongoose';
 
-import { User } from '@database/user/entity/user.entity';
-
+import { User } from '../../user/entity/user.entity';
 import { SongStats } from '../dto/SongStats';
 import type { SongViewUploader } from '../dto/SongView.dto';
 import { ThumbnailData } from '../dto/ThumbnailData.dto';

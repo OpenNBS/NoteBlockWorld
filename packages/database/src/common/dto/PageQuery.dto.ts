@@ -12,7 +12,7 @@ import {
   Min
 } from 'class-validator';
 
-import type { TimespanType } from '@database/song/dto/types';
+import type { TimespanType } from '../../song/dto/types';
 
 export class PageQueryDTO {
   @Min(1)
