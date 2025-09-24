@@ -13,8 +13,6 @@ import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
 import { SongService } from './song.service';
 
-// Handles public-facing song routes.
-
 @Controller('song')
 @ApiTags('song')
 export class SongController {
@@ -62,31 +60,27 @@ export class SongController {
   @ApiQuery({  name: 'count',  required: false,  type: 'string',  description: 'Number of random songs to return (1-10). Only used when q=random.',  example: '5',})
   @ApiQuery({  name: 'category',  required: false,  type: 'string',  description: 'Category filter for random songs. Only used when q=random.',  example: 'electronic',})
   @ApiResponse({
-    status: 200,
-    description:
-      'Success. Returns either an array of song previews or category counts.',
-    schema: {
+    status     : 200,
+    description: 'Success. Returns either an array of song previews or category counts.',
+    schema     : {
       oneOf: [
         {
-          type : 'array',
-          items: { $ref: '#/components/schemas/SongPreviewDto' },
-          description:
-            'Array of song previews (default behavior and most query modes)',
+          type       : 'array',
+          items      : { $ref: '#/components/schemas/SongPreviewDto' },
+          description: 'Array of song previews (default behavior and most query modes)',
         },
         {
           type                : 'object',
           additionalProperties: { type: 'number' },
-          description:
-            'Category name to song count mapping (only when q=categories without id)',
-          example: { pop: 42, rock: 38, electronic: 15 },
+          description         : 'Category name to song count mapping (only when q=categories without id)',
+          example             : { pop: 42, rock: 38, electronic: 15 },
         },
       ],
     },
   })
   @ApiResponse({
-    status: 400,
-    description:
-      'Bad Request. Invalid query parameters (e.g., invalid count for random query).',
+    status     : 400,
+    description: 'Bad Request. Invalid query parameters (e.g., invalid count for random query).',
   })
   public async getSongList(
     @Query() query: PageQueryDTO,
@@ -149,13 +143,8 @@ export class SongController {
   }
 
   @Get('/search')
-  @ApiOperation({
-    summary: 'Search songs by keywords with pagination and sorting',
-  })
-  public async searchSongs(
-    @Query() query: PageQueryDTO,
-    @Query('q') q: string,
-  ): Promise<PageDto<SongPreviewDto>> {
+  @ApiOperation({ summary: 'Search songs by keywords with pagination and sorting',  })
+  public async searchSongs(  @Query() query: PageQueryDTO,  @Query('q') q: string,): Promise<PageDto<SongPreviewDto>> {
     const data = await this.songService.searchSongs(query, q ?? '');
     return new PageDto<SongPreviewDto>({
       content: data,
@@ -167,10 +156,7 @@ export class SongController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Get song info by ID' })
-  public async getSong(
-    @Param('id') id: string,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<SongViewDto> {
+  public async getSong(  @Param('id') id: string,  @GetRequestToken() user: UserDocument | null,): Promise<SongViewDto> {
     return await this.songService.getSong(id, user);
   }
 
@@ -178,10 +164,7 @@ export class SongController {
   @ApiOperation({ summary: 'Get song info for editing by ID' })
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
-  public async getEditSong(
-    @Param('id') id: string,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongDto> {
+  public async getEditSong(  @Param('id') id: string,  @GetRequestToken() user: UserDocument | null,): Promise<UploadSongDto> {
     user = validateUser(user);
     return await this.songService.getSongEdit(id, user);
   }
@@ -191,11 +174,7 @@ export class SongController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Edit song info by ID' })
   @ApiBody({   description: 'Upload Song',   type: UploadSongResponseDto, })
-  public async patchSong(
-    @Param('id') id: string,
-    @Req() req: RawBodyRequest<Request>,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongResponseDto> {
+  public async patchSong(  @Param('id') id: string,  @Req() req: RawBodyRequest<Request>,  @GetRequestToken() user: UserDocument | null,): Promise<UploadSongResponseDto> {
     user = validateUser(user);
     //TODO: Fix this weird type casting and raw body access
     const body = req.body as unknown as UploadSongDto;
@@ -204,12 +183,7 @@ export class SongController {
 
   @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
-  public async getSongFile(
-    @Param('id') id: string,
-    @Query('src') src: string,
-    @GetRequestToken() user: UserDocument | null,
-    @Res() res: Response,
-  ): Promise<void> {
+  public async getSongFile(  @Param('id') id: string,  @Query('src') src: string,  @GetRequestToken() user: UserDocument | null,  @Res() res: Response,): Promise<void> {
     user = validateUser(user);
 
     // TODO: no longer used
@@ -225,11 +199,7 @@ export class SongController {
 
   @Get('/:id/open')
   @ApiOperation({ summary: 'Get song .nbs file' })
-  public async getSongOpenUrl(
-    @Param('id') id: string,
-    @GetRequestToken() user: UserDocument | null,
-    @Headers('src') src: string,
-  ): Promise<string> {
+  public async getSongOpenUrl(  @Param('id') id: string,  @GetRequestToken() user: UserDocument | null,  @Headers('src') src: string,): Promise<string> {
     if (src != 'downloadButton') {
       throw new UnauthorizedException('Invalid source');
     }
@@ -248,10 +218,7 @@ export class SongController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a song' })
-  public async deleteSong(
-    @Param('id') id: string,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<void> {
+  public async deleteSong(  @Param('id') id: string,  @GetRequestToken() user: UserDocument | null,): Promise<void> {
     user = validateUser(user);
     await this.songService.deleteSong(id, user);
   }
@@ -263,11 +230,7 @@ export class SongController {
   @ApiBody({  description: 'Upload Song',  type: UploadSongResponseDto,})
   @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
   @ApiOperation({    summary: 'Upload a .nbs file and send the song data, creating a new song',})
-  public async createSong(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() body: UploadSongDto,
-    @GetRequestToken() user: UserDocument | null,
-  ): Promise<UploadSongResponseDto> {
+  public async createSong(  @UploadedFile() file: Express.Multer.File,  @Body() body: UploadSongDto,  @GetRequestToken() user: UserDocument | null,): Promise<UploadSongResponseDto> {
     user = validateUser(user);
     return await this.songService.uploadSong({ body, file, user });
   }
