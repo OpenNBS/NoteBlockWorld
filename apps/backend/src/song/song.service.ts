@@ -347,7 +347,7 @@ export class SongService {
     user
   }: {
     query: PageQueryDTO;
-    user: UserDocument;
+    user : UserDocument;
   }): Promise<SongPageDto> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');

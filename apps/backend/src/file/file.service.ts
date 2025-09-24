@@ -14,7 +14,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 export class FileService {
   private readonly logger = new Logger(FileService.name);
   private s3Client: S3Client;
-  private region: string;
+  private region  : string;
 
   constructor(
     @Inject('S3_BUCKET_SONGS')

@@ -13,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 export const Label = forwardRef<
   HTMLLabelElement,
   React.InputHTMLAttributes<HTMLLabelElement> & {
-    id?: string;
+    id?  : string;
     label: string;
   }
 >((props, ref) => {
@@ -34,11 +34,11 @@ export const Area = ({
   className,
   children
 }: {
-  label?: string;
-  tooltip?: React.ReactNode;
+  label?    : string;
+  tooltip?  : React.ReactNode;
   isLoading?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children  : React.ReactNode;
 }) => {
   return (
     <>
@@ -81,11 +81,11 @@ const InfoTooltip = ({ children }: { children: React.ReactNode }) => {
 export const Input = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
-    id: string;
-    label: string;
-    tooltip?: React.ReactNode;
-    description?: string;
-    isLoading?: boolean;
+    id           : string;
+    label        : string;
+    tooltip?     : React.ReactNode;
+    description? : string;
+    isLoading?   : boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
@@ -121,10 +121,10 @@ Input.displayName = 'Input';
 export const TextArea = forwardRef<
   HTMLTextAreaElement,
   React.InputHTMLAttributes<HTMLTextAreaElement> & {
-    id: string;
-    label: string;
-    tooltip?: React.ReactNode;
-    isLoading?: boolean;
+    id           : string;
+    label        : string;
+    tooltip?     : React.ReactNode;
+    isLoading?   : boolean;
     errorMessage?: string;
   }
 >((props, ref) => {
@@ -155,12 +155,12 @@ TextArea.displayName = 'TextArea';
 export const Select = forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & {
-    id: string;
-    label?: string;
-    tooltip?: React.ReactNode;
-    isLoading?: boolean;
+    id           : string;
+    label?       : string;
+    tooltip?     : React.ReactNode;
+    isLoading?   : boolean;
     errorMessage?: string;
-    description?: string;
+    description? : string;
   }
 >((props, ref) => {
   const { id, label, isLoading, errorMessage, description, ...rest } = props;
@@ -200,7 +200,7 @@ export const Checkbox = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     errorMessage?: string;
-    tooltip?: React.ReactNode;
+    tooltip?     : React.ReactNode;
   }
 >((props, ref) => {
   const { errorMessage, tooltip, ...rest } = props;

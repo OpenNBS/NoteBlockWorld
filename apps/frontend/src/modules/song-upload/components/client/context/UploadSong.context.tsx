@@ -14,30 +14,26 @@ import { UploadSongForm, uploadSongFormSchema } from '../../../../song/component
 import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {
-  song: SongFileType | null;
-  filename: string | null;
-  setFile: (file: File | null) => void;
-  instrumentSounds: string[];
+  song              : SongFileType | null;
+  filename          : string | null;
+  setFile           : (file: File | null) => void;
+  instrumentSounds  : string[];
   setInstrumentSound: (index: number, value: string) => void;
-  formMethods: UseFormReturn<UploadSongForm>;
-  submitSong: () => void;
-  register: UseFormRegister<UploadSongForm>;
-  errors: FieldErrors<UploadSongForm>;
-  sendError: string | null;
-  isSubmitting: boolean;
-  isUploadComplete: boolean;
-  uploadedSongId: string | null;
+  formMethods       : UseFormReturn<UploadSongForm>;
+  submitSong        : () => void;
+  register          : UseFormRegister<UploadSongForm>;
+  errors            : FieldErrors<UploadSongForm>;
+  sendError         : string | null;
+  isSubmitting      : boolean;
+  isUploadComplete  : boolean;
+  uploadedSongId    : string | null;
 };
 
 export const UploadSongContext = createContext<useUploadSongProviderType>(
   null as unknown as useUploadSongProviderType
 );
 
-export const UploadSongProvider = ({
-  children
-}: {
-  children: React.ReactNode;
-}) => {
+export const UploadSongProvider = ({  children }: {  children: React.ReactNode; }) => {
   const [song, setSong] = useState<SongFileType | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const [instrumentSounds, setInstrumentSounds] = useState<string[]>([]);

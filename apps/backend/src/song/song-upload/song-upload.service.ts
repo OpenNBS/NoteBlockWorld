@@ -31,7 +31,7 @@ import { generateSongId, removeExtraSpaces } from '../song.util';
 @Injectable()
 export class SongUploadService {
   private soundsMapping: Record<string, string>;
-  private soundsSubset: Set<string>;
+  private soundsSubset : Set<string>;
 
   // TODO: move all upload auxiliary methods to new UploadSongService
   private readonly logger = new Logger(SongUploadService.name);

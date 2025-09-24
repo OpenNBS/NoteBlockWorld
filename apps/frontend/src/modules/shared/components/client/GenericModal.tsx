@@ -6,10 +6,10 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
 interface GenericModalProps {
-  isOpen: boolean;
+  isOpen    : boolean;
   setIsOpen?: (isOpen: boolean) => void;
-  title: string;
-  children?: React.ReactNode | React.ReactNode[] | string;
+  title     : string;
+  children? : React.ReactNode | React.ReactNode[] | string;
 }
 
 const GenericModal = ({

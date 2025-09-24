@@ -14,7 +14,7 @@ const InstrumentTableHeader = ({
   children
 }: {
   className?: string;
-  children: React.ReactNode;
+  children  : React.ReactNode;
 }) => {
   return (
     <div
@@ -34,8 +34,8 @@ const InstrumentTableCell = ({
   locked
 }: {
   className?: string;
-  children: React.ReactNode;
-  locked: boolean;
+  children  : React.ReactNode;
+  locked    : boolean;
 }) => {
   return (
     <div
@@ -55,9 +55,9 @@ const InstrumentTableRow = ({
   instrument,
   locked
 }: {
-  children: React.ReactNode;
+  children  : React.ReactNode;
   instrument: Instrument;
-  locked: boolean;
+  locked    : boolean;
 }) => {
   return (
     <div className='grid grid-cols-8 first:[&_div]:last:rounded-bl-lg last:[&_select]:last:rounded-br-lg'>

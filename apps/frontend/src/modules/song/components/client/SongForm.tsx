@@ -27,9 +27,9 @@ import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 
 type SongFormProps = {
-  type: 'upload' | 'edit';
+  type      : 'upload' | 'edit';
   isLoading?: boolean;
-  isLocked?: boolean;
+  isLocked? : boolean;
 };
 
 export const SongForm = ({

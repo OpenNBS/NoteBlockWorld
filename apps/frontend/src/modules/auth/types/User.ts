@@ -1,26 +1,26 @@
 export type UserTokenData = {
-  id: string;
-  email: string;
+  id      : string;
+  email   : string;
   username: string;
 };
 
 export type LoggedUserData = {
-  loginStreak: number;
-  loginCount: number;
-  playCount: number;
-  username: string;
-  publicName: string;
-  email: string;
-  description: string;
-  profileImage: string;
-  socialLinks: SocialLinks;
+  loginStreak     : number;
+  loginCount      : number;
+  playCount       : number;
+  username        : string;
+  publicName      : string;
+  email           : string;
+  description     : string;
+  profileImage    : string;
+  socialLinks     : SocialLinks;
   prefersDarkTheme: boolean;
-  creationDate: string;
-  lastEdited: string;
-  lastLogin: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
+  creationDate    : string;
+  lastEdited      : string;
+  lastLogin       : string;
+  createdAt       : string;
+  updatedAt       : string;
+  id              : string;
 };
 
 export enum SocialLinksTypes {
@@ -39,7 +39,7 @@ export enum SocialLinksTypes {
   THREADS = 'threads',
   TWITCH = 'twitch',
   X = 'x',
-  YOUTUBE = 'youtube',
+  YOUTUBE = 'youtube'
 }
 
 export type SocialLinks = {
@@ -47,11 +47,11 @@ export type SocialLinks = {
 };
 
 export type UserProfileData = {
-  lastLogin: Date;
-  loginStreak: number;
-  playCount: number;
-  publicName: string;
-  description: string;
+  lastLogin   : Date;
+  loginStreak : number;
+  playCount   : number;
+  publicName  : string;
+  description : string;
   profileImage: string;
-  socialLinks: SocialLinks;
+  socialLinks : SocialLinks;
 };

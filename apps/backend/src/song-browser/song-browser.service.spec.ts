@@ -1,7 +1,6 @@
 import { PageQueryDTO, SongPreviewDto, SongWithUser } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { SongService } from '@server/song/song.service';
 
 import { SongBrowserService } from './song-browser.service';

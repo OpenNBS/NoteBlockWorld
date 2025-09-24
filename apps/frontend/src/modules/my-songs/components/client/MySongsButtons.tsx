@@ -20,7 +20,7 @@ export const DownloadSongButton = ({
 }: {
   song: {
     publicId: string;
-    title: string;
+    title   : string;
   };
 }) => {
   return (

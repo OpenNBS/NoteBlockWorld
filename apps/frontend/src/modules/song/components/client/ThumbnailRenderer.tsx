@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { UploadSongForm } from './SongForm.zod';
 
 type ThumbnailRendererCanvasProps = {
-  notes: NoteQuadTree;
+  notes      : NoteQuadTree;
   formMethods: UseFormReturn<UploadSongForm>;
 };
 

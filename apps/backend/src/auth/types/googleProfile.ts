@@ -1,5 +1,5 @@
 type Email = {
-  value: string;
+  value   : string;
   verified: boolean;
 };
 
@@ -8,27 +8,27 @@ type Photo = {
 };
 
 type ProfileJson = {
-  sub: string;
-  name: string;
-  given_name: string;
-  family_name?: string;
-  picture: string;
-  email: string;
+  sub           : string;
+  name          : string;
+  given_name    : string;
+  family_name?  : string;
+  picture       : string;
+  email         : string;
   email_verified: boolean;
-  locale: string;
+  locale        : string;
 };
 
 // TODO: this is a uniform profile type standardized by passport for all providers
 export type GoogleProfile = {
-  id: string;
+  id         : string;
   displayName: string;
   name: {
     familyName?: string;
-    givenName: string;
+    givenName  : string;
   };
-  emails: Email[];
-  photos: Photo[];
+  emails  : Email[];
+  photos  : Photo[];
   provider: string;
-  _raw: string;
-  _json: ProfileJson;
+  _raw    : string;
+  _json   : ProfileJson;
 };

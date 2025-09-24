@@ -6,7 +6,7 @@ const SongThumbnail = ({
   src,
   fallbackSrc = '/demo.png'
 }: {
-  src: string;
+  src         : string;
   fallbackSrc?: string;
 }) => {
   return (

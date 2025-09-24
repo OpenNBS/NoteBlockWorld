@@ -23,9 +23,9 @@ export default function ShareModal({
   setIsOpen,
   songId
 }: {
-  isOpen: boolean;
+  isOpen   : boolean;
   setIsOpen: (isOpen: boolean) => void;
-  songId: string;
+  songId   : string;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 

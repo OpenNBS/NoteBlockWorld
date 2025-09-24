@@ -10,10 +10,9 @@ import {
 } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Types } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
 import { UserService } from '@server/user/user.service';
+import { Types } from 'mongoose';
 
 import { SongUploadService } from './song-upload.service';
 

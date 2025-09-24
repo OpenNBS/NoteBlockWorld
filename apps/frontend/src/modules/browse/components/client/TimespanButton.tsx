@@ -9,11 +9,11 @@ import {
 import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
 
 interface TimespanButtonProps {
-  children: React.ReactNode;
-  isActive: boolean;
+  children  : React.ReactNode;
+  isActive  : boolean;
   isDisabled: boolean;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  id: string;
+  onClick   : (e: React.MouseEvent<HTMLButtonElement>) => void;
+  id        : string;
 }
 
 export const TimespanButtonGroup = () => {

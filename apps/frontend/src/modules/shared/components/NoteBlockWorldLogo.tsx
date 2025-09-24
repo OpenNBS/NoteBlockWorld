@@ -8,10 +8,10 @@ export const NoteBlockWorldLogo = ({
   glow,
   className
 }: {
-  size: number;
+  size       : number;
   orientation: 'horizontal' | 'vertical' | 'adaptive';
-  glow?: boolean;
-  className?: string;
+  glow?      : boolean;
+  className? : string;
 }) => {
   let flexConfig, marginConfig;
 

@@ -11,9 +11,9 @@ export default function DownloadSongModal({
   setIsOpen,
   song
 }: {
-  isOpen: boolean;
+  isOpen   : boolean;
   setIsOpen: (isOpen: boolean) => void;
-  song: SongViewDtoType;
+  song     : SongViewDtoType;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 

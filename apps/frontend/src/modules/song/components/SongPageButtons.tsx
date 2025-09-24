@@ -161,7 +161,7 @@ const OpenInNBSButton = ({
   isLoading,
   handleClick
 }: {
-  isLoading: boolean;
+  isLoading  : boolean;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => {
   return (
@@ -247,7 +247,7 @@ const DownloadButton = ({
   handleClick
 }: {
   downloadCount: number;
-  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+  handleClick  : React.MouseEventHandler<HTMLButtonElement>;
 }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 

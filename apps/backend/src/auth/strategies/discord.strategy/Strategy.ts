@@ -30,11 +30,11 @@ export default class Strategy extends OAuth2Strategy {
   public static DISCORD_API_BASE = 'https://discord.com/api';
 
   private readonly logger = new Logger('DiscordStrategy');
-  private scope: ScopeType;
-  private scopeDelay: number;
+  private scope            : ScopeType;
+  private scopeDelay       : number;
   private fetchScopeEnabled: boolean;
   public override name = 'discord';
-  prompt?: string;
+  prompt?                  : string;
   public constructor(options: DiscordStrategyConfig, verify: VerifyFunction) {
     super(
       {

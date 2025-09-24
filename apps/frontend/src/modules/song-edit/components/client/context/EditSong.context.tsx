@@ -14,17 +14,17 @@ import { getTokenLocal } from '@web/lib/axios/token.utils';
 import { EditSongForm, editSongFormSchema } from '../../../../song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
-  formMethods: UseFormReturn<EditSongForm>;
-  submitSong: () => void;
-  register: UseFormRegister<EditSongForm>;
-  errors: FieldErrors<EditSongForm>;
-  song: SongFileType | null;
-  instrumentSounds: string[];
+  formMethods       : UseFormReturn<EditSongForm>;
+  submitSong        : () => void;
+  register          : UseFormRegister<EditSongForm>;
+  errors            : FieldErrors<EditSongForm>;
+  song              : SongFileType | null;
+  instrumentSounds  : string[];
   setInstrumentSound: (index: number, value: string) => void;
-  sendError: string | null;
-  isSubmitting: boolean;
-  loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
-  setSongId: (id: string) => void;
+  sendError         : string | null;
+  isSubmitting      : boolean;
+  loadSong          : (id: string, username: string, song: UploadSongDtoType) => void;
+  setSongId         : (id: string) => void;
 };
 
 export const EditSongContext = createContext<useEditSongProviderType>(

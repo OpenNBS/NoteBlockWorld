@@ -4,13 +4,13 @@ import path from 'path';
 import matter from 'gray-matter';
 
 export type PostType = {
-  id: string;
-  title: string;
-  shortTitle?: string;
-  date: Date;
-  image: string;
-  content: string;
-  author?: string;
+  id          : string;
+  title       : string;
+  shortTitle? : string;
+  date        : Date;
+  image       : string;
+  content     : string;
+  author?     : string;
   authorImage?: string;
 };
 

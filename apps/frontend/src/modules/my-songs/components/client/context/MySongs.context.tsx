@@ -19,21 +19,21 @@ import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 type MySongsContextType = {
-  page: SongPageDtoType | null;
-  nextpage: () => void;
-  prevpage: () => void;
-  gotoPage: (page: number) => void;
-  totalSongs: number;
-  totalPages: number;
-  currentPage: number;
-  pageSize: number;
-  isLoading: boolean;
-  error: string | null;
-  isDeleteDialogOpen: boolean;
+  page                 : SongPageDtoType | null;
+  nextpage             : () => void;
+  prevpage             : () => void;
+  gotoPage             : (page: number) => void;
+  totalSongs           : number;
+  totalPages           : number;
+  currentPage          : number;
+  pageSize             : number;
+  isLoading            : boolean;
+  error                : string | null;
+  isDeleteDialogOpen   : boolean;
   setIsDeleteDialogOpen: (isOpen: boolean) => void;
-  songToDelete: SongPreviewDtoType | null;
-  setSongToDelete: (song: SongPreviewDtoType) => void;
-  deleteSong: () => void;
+  songToDelete         : SongPreviewDtoType | null;
+  setSongToDelete      : (song: SongPreviewDtoType) => void;
+  deleteSong           : () => void;
 };
 
 const MySongsContext = createContext<MySongsContextType>(
@@ -42,10 +42,10 @@ const MySongsContext = createContext<MySongsContextType>(
 
 type MySongProviderProps = {
   InitialsongsFolder?: SongsFolder;
-  children?: React.ReactNode;
-  totalPagesInit?: number;
-  currentPageInit?: number;
-  pageSizeInit?: number;
+  children?          : React.ReactNode;
+  totalPagesInit?    : number;
+  currentPageInit?   : number;
+  pageSizeInit?      : number;
 };
 
 export const MySongProvider = ({

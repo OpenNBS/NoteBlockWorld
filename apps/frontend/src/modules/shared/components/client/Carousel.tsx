@@ -28,17 +28,17 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 type CarouselProps = {
-  opts?: CarouselOptions;
-  plugins?: CarouselPlugin;
+  opts?       : CarouselOptions;
+  plugins?    : CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
-  setApi?: (api: CarouselApi) => void;
+  setApi?     : (api: CarouselApi) => void;
 };
 
 type CarouselContextProps = {
-  carouselRef: ReturnType<typeof useEmblaCarousel>[0];
-  api: ReturnType<typeof useEmblaCarousel>[1];
-  scrollPrev: () => void;
-  scrollNext: () => void;
+  carouselRef  : ReturnType<typeof useEmblaCarousel>[0];
+  api          : ReturnType<typeof useEmblaCarousel>[1];
+  scrollPrev   : () => void;
+  scrollNext   : () => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
 } & CarouselProps;
@@ -351,8 +351,8 @@ export const CarouselNextSmall = forwardRef<
 CarouselNextSmall.displayName = 'CarouselNextSmall';
 
 type UseDotButtonType = {
-  selectedIndex: number;
-  scrollSnaps: number[];
+  selectedIndex   : number;
+  scrollSnaps     : number[];
   onDotButtonClick: (index: number) => void;
 };
 

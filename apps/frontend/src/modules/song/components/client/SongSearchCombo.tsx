@@ -25,10 +25,10 @@ export function SongSearchCombo({
   sounds,
   locked
 }: {
-  value: string;
+  value   : string;
   setValue: (value: string) => void;
-  sounds: string[];
-  locked: boolean;
+  sounds  : string[];
+  locked  : boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');

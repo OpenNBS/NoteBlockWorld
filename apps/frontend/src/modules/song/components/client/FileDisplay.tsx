@@ -12,8 +12,8 @@ export const FileDisplay = ({
   children,
   className
 }: {
-  fileName: string;
-  children: React.ReactNode;
+  fileName  : string;
+  children  : React.ReactNode;
   className?: string;
 }) => (
   <div
@@ -50,7 +50,7 @@ export const DownloadFileButton = ({
 }: {
   song: {
     publicId: string;
-    title: string;
+    title   : string;
   };
 }) => {
   return (

@@ -18,10 +18,10 @@ const UserMenuLink = ({
   external = false,
   textColor = 'text-white'
 }: {
-  icon: IconDefinition;
-  href: string;
-  label: string;
-  external?: boolean;
+  icon      : IconDefinition;
+  href      : string;
+  label     : string;
+  external? : boolean;
   textColor?: string;
 }) => (
   <PopoverClose asChild>

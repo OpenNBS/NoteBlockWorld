@@ -2,8 +2,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
 interface EmailOptions {
-  to: string;
-  subject: string;
+  to      : string;
+  subject : string;
   template: string;
   context: {
     [name: string]: any;

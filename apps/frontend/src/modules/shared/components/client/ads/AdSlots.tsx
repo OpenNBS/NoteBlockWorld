@@ -42,13 +42,13 @@ const AdTemplate = ({
   hiddenClassName = 'hidden',
   showCloseButton = true
 }: {
-  className: string;
-  adSlot: string;
-  adFormat: string;
-  adLayoutKey?: string;
+  className           : string;
+  adSlot              : string;
+  adFormat            : string;
+  adLayoutKey?        : string;
   fullWidthResponsive?: string;
-  hiddenClassName?: string;
-  showCloseButton?: boolean;
+  hiddenClassName?    : string;
+  showCloseButton?    : boolean;
 }) => {
   const pubId = useAdSenseClient();
 

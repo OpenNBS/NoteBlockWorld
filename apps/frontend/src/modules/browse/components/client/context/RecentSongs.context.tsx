@@ -12,13 +12,13 @@ import {
 import axiosInstance from '@web/lib/axios';
 
 type RecentSongsContextType = {
-  recentSongs: (SongPreviewDtoType | null)[];
-  recentError: string;
-  increasePageRecent: () => Promise<void>;
-  isLoading: boolean;
-  hasMore: boolean;
-  selectedCategory: string;
-  categories: Record<string, number>;
+  recentSongs        : (SongPreviewDtoType | null)[];
+  recentError        : string;
+  increasePageRecent : () => Promise<void>;
+  isLoading          : boolean;
+  hasMore            : boolean;
+  selectedCategory   : string;
+  categories         : Record<string, number>;
   setSelectedCategory: (category: string) => void;
 };
 
@@ -30,7 +30,7 @@ export function RecentSongsProvider({
   children,
   initialRecentSongs
 }: {
-  children: React.ReactNode;
+  children          : React.ReactNode;
   initialRecentSongs: SongPreviewDtoType[];
 }) {
   // Recent songs

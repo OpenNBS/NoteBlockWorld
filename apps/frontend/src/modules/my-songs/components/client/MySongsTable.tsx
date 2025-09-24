@@ -42,7 +42,7 @@ const SongRows = ({
   page,
   pageSize
 }: {
-  page: SongPageDtoType | null;
+  page    : SongPageDtoType | null;
   pageSize: number;
 }) => {
   const maxPage = MY_SONGS.PAGE_SIZE;

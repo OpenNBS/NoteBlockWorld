@@ -7,7 +7,7 @@ import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 export const downloadSongFile = async (song: {
   publicId: string;
-  title: string;
+  title   : string;
 }) => {
   const token = getTokenLocal();
 

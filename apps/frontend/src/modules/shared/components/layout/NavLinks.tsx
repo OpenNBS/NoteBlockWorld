@@ -9,7 +9,7 @@ export function NavLinks({
   userData
 }: {
   isUserLoggedIn: boolean;
-  userData?: LoggedUserData;
+  userData?     : LoggedUserData;
 }) {
   return (
     <div className='flex items-center justify-center w-fit gap-1 md:gap-6'>

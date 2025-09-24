@@ -1,6 +1,5 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { MailingService } from '@server/mailing/mailing.service';
 import { UserService } from '@server/user/user.service';
 

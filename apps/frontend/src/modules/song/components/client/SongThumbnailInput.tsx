@@ -26,9 +26,9 @@ function ThumbnailSliders({
   maxLayer
 }: {
   formMethods: UseFormReturn<UploadSongForm> & UseFormReturn<EditSongForm>;
-  isLocked: boolean;
-  maxTick: number;
-  maxLayer: number;
+  isLocked   : boolean;
+  maxTick    : number;
+  maxLayer   : number;
 }) {
   const { register } = formMethods;
 
@@ -104,11 +104,11 @@ const ColorButton = ({
   onClick,
   disabled
 }: {
-  color: string;
+  color  : string;
   tooltip: string;
-  active: boolean;
+  active : boolean;
 
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick : (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled: boolean;
 }) => (
   <Tooltip>
@@ -132,7 +132,7 @@ export const SongThumbnailInput = ({
   type,
   isLocked
 }: {
-  type: 'upload' | 'edit';
+  type    : 'upload' | 'edit';
   isLocked: boolean;
 }) => {
   const { song, formMethods } = useSongProvider(type);

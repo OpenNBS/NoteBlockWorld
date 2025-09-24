@@ -5,16 +5,16 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 type FeaturedSongsContextType = {
   featuredSongsPage: SongPreviewDtoType[];
-  timespan: TimespanType;
-  setTimespan: (timespan: TimespanType) => void;
-  timespanEmpty: Record<string, boolean>;
+  timespan         : TimespanType;
+  setTimespan      : (timespan: TimespanType) => void;
+  timespanEmpty    : Record<string, boolean>;
 };
 
 const FeaturedSongsContext = createContext<FeaturedSongsContextType>(
   {} as FeaturedSongsContextType
 );
 
-export function FeaturedSongsProvider({  children,  initialFeaturedSongs }: {  children: React.ReactNode;  initialFeaturedSongs: FeaturedSongsDtoType;}) {
+export function FeaturedSongsProvider({  children,  initialFeaturedSongs }: {  children: React.ReactNode;  initialFeaturedSongs: FeaturedSongsDtoType; }) {
   // Featured songs
   const [featuredSongs] = useState<FeaturedSongsDtoType>(initialFeaturedSongs);
 

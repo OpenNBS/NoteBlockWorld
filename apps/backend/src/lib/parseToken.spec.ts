@@ -1,6 +1,5 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { AuthService } from '@server/auth/auth.service';
 
 import { ParseTokenPipe } from './parseToken';

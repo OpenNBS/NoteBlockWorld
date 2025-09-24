@@ -13,11 +13,11 @@ import {
 import { useRecentSongsProvider } from './context/RecentSongs.context';
 
 type CategoryButtonProps = {
-  children: React.ReactNode;
-  isActive: boolean;
+  children   : React.ReactNode;
+  isActive   : boolean;
   isDisabled?: boolean;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  id: string;
+  onClick    : (e: React.MouseEvent<HTMLButtonElement>) => void;
+  id         : string;
 };
 
 export const CategoryButtonGroup = () => {

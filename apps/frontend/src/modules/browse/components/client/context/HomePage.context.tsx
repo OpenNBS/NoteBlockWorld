@@ -17,8 +17,8 @@ export function HomePageProvider({
   initialRecentSongs,
   initialFeaturedSongs
 }: {
-  children: React.ReactNode;
-  initialRecentSongs: SongPreviewDtoType[];
+  children            : React.ReactNode;
+  initialRecentSongs  : SongPreviewDtoType[];
   initialFeaturedSongs: FeaturedSongsDtoType;
 }) {
   return (

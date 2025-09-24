@@ -12,9 +12,9 @@ export const BlockTab = ({
   label,
   className
 }: {
-  href: string;
-  icon: IconDefinition;
-  label: string;
+  href      : string;
+  icon      : IconDefinition;
+  label     : string;
   className?: string;
 }) => {
   return (
