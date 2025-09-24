@@ -103,6 +103,7 @@ export default tseslint.config(
       'import/no-duplicates': 'error',
 
       // Spacing rules for consistency
+      '@stylistic/indent': ['error', 4], // Set default indentation to 4 spaces.
       '@stylistic/space-infix-ops': 'error', // Enforces spaces around operators like +, =, etc.
       '@stylistic/keyword-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around keywords like if, else.
       '@stylistic/arrow-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around arrow in arrow functions.
@@ -120,4 +121,12 @@ export default tseslint.config(
       }],
     },
   },
+  // Override for JSX files
+  {
+    files: ['**/*.jsx', '**/*.tsx'],
+    rules: {
+        '@stylistic/indent': ['error', 2], // Set indentation to 2 spaces for JSX files.
+    },
+  },
 );
+
