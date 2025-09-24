@@ -17,8 +17,6 @@ export default tseslint.config(
       '**/*.config.ts',
       '**/generated/**',
       '.eslintrc.js',
-      '**/*.spec.ts',
-      '**/*.test.ts',
     ],
   },
   
@@ -50,6 +48,8 @@ export default tseslint.config(
             },
             node: true,
         },
+        // Allow Bun built-in modules
+        'import/core-modules': ['bun:test', 'bun:sqlite', 'bun'],
     },
     rules: {
       // Manually include rules from the import plugin's recommended configs.
@@ -110,6 +110,15 @@ export default tseslint.config(
       }],
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
+
+      // Spacing rules for consistency
+      'space-infix-ops': 'error', // Enforces spaces around operators like +, =, etc.
+      'keyword-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around keywords like if, else.
+      'arrow-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around arrow in arrow functions.
+      'space-before-blocks': 'error', // Enforces a space before opening curly braces.
+      'object-curly-spacing': ['error', 'always'], // Enforces spaces inside curly braces: { foo } not {foo}.
+      'comma-spacing': ['error', { 'before': false, 'after': true }], // Enforces space after a comma, not before.
+      'space-before-function-paren': ['error', { 'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always' }], // Controls space before function parentheses.
     },
   },
 );
