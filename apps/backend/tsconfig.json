@@ -24,13 +24,13 @@
         }
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts"
     ],
     "exclude": [
         "node_modules",
         "dist",
-        "**/*.spec.ts",
-        "**/*.test.ts",
         "e2e/**/*",
         "test/**/*"
     ]
