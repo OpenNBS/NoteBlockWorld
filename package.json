@@ -33,6 +33,10 @@
     "./sounds": {
       "import": "./packages/sounds/dist/index.js",
       "types": "./packages/sounds/dist/index.d.ts"
+    },
+    "./api-client": {
+      "import": "./packages/api-client/dist/index.js",
+      "types": "./packages/api-client/dist/index.d.ts"
     }
   },
   "scripts": {
