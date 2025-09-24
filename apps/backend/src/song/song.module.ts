@@ -14,24 +14,24 @@ import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
-    AuthModule,
-    UserModule,
-    FileModule.forRootAsync()
-  ],
-  providers: [
-    SongService,
-    SongUploadService,
-    SongWebhookService,
-    {
-      inject    : [ConfigService],
-      provide   : 'DISCORD_WEBHOOK_URL',
-      useFactory: (configService: ConfigService) =>
-        configService.getOrThrow('DISCORD_WEBHOOK_URL')
-    }
-  ],
-  controllers: [SongController, MySongsController],
-  exports    : [SongService]
+    imports: [
+        MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
+        AuthModule,
+        UserModule,
+        FileModule.forRootAsync()
+    ],
+    providers: [
+        SongService,
+        SongUploadService,
+        SongWebhookService,
+        {
+            inject    : [ConfigService],
+            provide   : 'DISCORD_WEBHOOK_URL',
+            useFactory: (configService: ConfigService) =>
+                configService.getOrThrow('DISCORD_WEBHOOK_URL')
+        }
+    ],
+    controllers: [SongController, MySongsController],
+    exports    : [SongService]
 })
 export class SongModule {}

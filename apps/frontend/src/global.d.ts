@@ -4,9 +4,9 @@
 import type { SoundListType } from '@nbw/database';
 
 interface Window {
-  latestVersionSoundList: SoundListType;
+    latestVersionSoundList: SoundListType;
 }
 
 declare global {
-  var latestVersionSoundList: SoundListType;
+    var latestVersionSoundList: SoundListType;
 }

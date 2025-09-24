@@ -1,69 +1,69 @@
 import {
-  IsBoolean,
-  IsInt,
-  IsNumber,
-  IsString,
-  ValidateIf
+    IsBoolean,
+    IsInt,
+    IsNumber,
+    IsString,
+    ValidateIf
 } from 'class-validator';
 
 export class SongStats {
-  @IsString()
-  midiFileName: string;
+    @IsString()
+    midiFileName: string;
 
-  @IsInt()
-  noteCount: number;
+    @IsInt()
+    noteCount: number;
 
-  @IsInt()
-  tickCount: number;
+    @IsInt()
+    tickCount: number;
 
-  @IsInt()
-  layerCount: number;
+    @IsInt()
+    layerCount: number;
 
-  @IsNumber()
-  tempo: number;
+    @IsNumber()
+    tempo: number;
 
-  @IsNumber()
-  @ValidateIf((_, value) => value !== null)
-  tempoRange: number[] | null;
+    @IsNumber()
+    @ValidateIf((_, value) => value !== null)
+    tempoRange: number[] | null;
 
-  @IsNumber()
-  timeSignature: number;
+    @IsNumber()
+    timeSignature: number;
 
-  @IsNumber()
-  duration: number;
+    @IsNumber()
+    duration: number;
 
-  @IsBoolean()
-  loop: boolean;
+    @IsBoolean()
+    loop: boolean;
 
-  @IsInt()
-  loopStartTick: number;
+    @IsInt()
+    loopStartTick: number;
 
-  @IsNumber()
-  minutesSpent: number;
+    @IsNumber()
+    minutesSpent: number;
 
-  @IsInt()
-  vanillaInstrumentCount: number;
+    @IsInt()
+    vanillaInstrumentCount: number;
 
-  @IsInt()
-  customInstrumentCount: number;
+    @IsInt()
+    customInstrumentCount: number;
 
-  @IsInt()
-  firstCustomInstrumentIndex: number;
+    @IsInt()
+    firstCustomInstrumentIndex: number;
 
-  @IsInt()
-  outOfRangeNoteCount: number;
+    @IsInt()
+    outOfRangeNoteCount: number;
 
-  @IsInt()
-  detunedNoteCount: number;
+    @IsInt()
+    detunedNoteCount: number;
 
-  @IsInt()
-  customInstrumentNoteCount: number;
+    @IsInt()
+    customInstrumentNoteCount: number;
 
-  @IsInt()
-  incompatibleNoteCount: number;
+    @IsInt()
+    incompatibleNoteCount: number;
 
-  @IsBoolean()
-  compatible: boolean;
+    @IsBoolean()
+    compatible: boolean;
 
-  instrumentNoteCounts: number[];
+    instrumentNoteCounts: number[];
 }

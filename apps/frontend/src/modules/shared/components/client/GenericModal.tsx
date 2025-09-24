@@ -27,8 +27,8 @@ const GenericModal = ({
           setIsOpen
             ? () => setIsOpen(false)
             : () => {
-                return;
-              }
+              return;
+            }
         }
       >
         <Transition.Child

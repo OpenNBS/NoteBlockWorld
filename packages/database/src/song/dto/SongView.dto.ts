@@ -1,10 +1,10 @@
 import {
-  IsBoolean,
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  IsUrl
+    IsBoolean,
+    IsDate,
+    IsNotEmpty,
+    IsNumber,
+    IsString,
+    IsUrl
 } from 'class-validator';
 
 import type { SongDocument } from '../entity/song.entity';
@@ -13,96 +13,96 @@ import { SongStats } from './SongStats';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
 
 export type SongViewUploader = {
-  username    : string;
-  profileImage: string;
+    username    : string;
+    profileImage: string;
 };
 
 export class SongViewDto {
-  @IsString()
-  @IsNotEmpty()
-  publicId: string;
+    @IsString()
+    @IsNotEmpty()
+    publicId: string;
 
-  @IsDate()
-  @IsNotEmpty()
-  createdAt: Date;
+    @IsDate()
+    @IsNotEmpty()
+    createdAt: Date;
 
-  @IsNotEmpty()
-  uploader: SongViewUploader;
+    @IsNotEmpty()
+    uploader: SongViewUploader;
 
-  @IsUrl()
-  @IsNotEmpty()
-  thumbnailUrl: string;
+    @IsUrl()
+    @IsNotEmpty()
+    thumbnailUrl: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  playCount: number;
+    @IsNumber()
+    @IsNotEmpty()
+    playCount: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  downloadCount: number;
+    @IsNumber()
+    @IsNotEmpty()
+    downloadCount: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  likeCount: number;
+    @IsNumber()
+    @IsNotEmpty()
+    likeCount: number;
 
-  @IsBoolean()
-  @IsNotEmpty()
-  allowDownload: boolean;
+    @IsBoolean()
+    @IsNotEmpty()
+    allowDownload: boolean;
 
-  @IsString()
-  @IsNotEmpty()
-  title: string;
+    @IsString()
+    @IsNotEmpty()
+    title: string;
 
-  @IsString()
-  originalAuthor: string;
+    @IsString()
+    originalAuthor: string;
 
-  @IsString()
-  description: string;
+    @IsString()
+    description: string;
 
-  @IsString()
-  @IsNotEmpty()
-  visibility: VisibilityType;
+    @IsString()
+    @IsNotEmpty()
+    visibility: VisibilityType;
 
-  @IsString()
-  @IsNotEmpty()
-  category: CategoryType;
+    @IsString()
+    @IsNotEmpty()
+    category: CategoryType;
 
-  @IsString()
-  @IsNotEmpty()
-  license: LicenseType;
+    @IsString()
+    @IsNotEmpty()
+    license: LicenseType;
 
-  customInstruments: string[];
+    customInstruments: string[];
 
-  @IsNumber()
-  @IsNotEmpty()
-  fileSize: number;
+    @IsNumber()
+    @IsNotEmpty()
+    fileSize: number;
 
-  @IsNotEmpty()
-  stats: SongStats;
+    @IsNotEmpty()
+    stats: SongStats;
 
-  public static fromSongDocument(song: SongDocument): SongViewDto {
-    return new SongViewDto({
-      publicId         : song.publicId,
-      createdAt        : song.createdAt,
-      uploader         : song.uploader as unknown as SongViewUploader,
-      thumbnailUrl     : song.thumbnailUrl,
-      playCount        : song.playCount,
-      downloadCount    : song.downloadCount,
-      likeCount        : song.likeCount,
-      allowDownload    : song.allowDownload,
-      title            : song.title,
-      originalAuthor   : song.originalAuthor,
-      description      : song.description,
-      category         : song.category,
-      visibility       : song.visibility,
-      license          : song.license,
-      customInstruments: song.customInstruments,
-      fileSize         : song.fileSize,
-      stats            : song.stats
-    });
-  }
+    public static fromSongDocument(song: SongDocument): SongViewDto {
+        return new SongViewDto({
+            publicId         : song.publicId,
+            createdAt        : song.createdAt,
+            uploader         : song.uploader as unknown as SongViewUploader,
+            thumbnailUrl     : song.thumbnailUrl,
+            playCount        : song.playCount,
+            downloadCount    : song.downloadCount,
+            likeCount        : song.likeCount,
+            allowDownload    : song.allowDownload,
+            title            : song.title,
+            originalAuthor   : song.originalAuthor,
+            description      : song.description,
+            category         : song.category,
+            visibility       : song.visibility,
+            license          : song.license,
+            customInstruments: song.customInstruments,
+            fileSize         : song.fileSize,
+            stats            : song.stats
+        });
+    }
 
-  constructor(song: SongViewDto) {
-    Object.assign(this, song);
-  }
+    constructor(song: SongViewDto) {
+        Object.assign(this, song);
+    }
 }

@@ -15,330 +15,330 @@ import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 const mockSongService = {
-  getSongByPage     : jest.fn(),
-  getSong           : jest.fn(),
-  getSongEdit       : jest.fn(),
-  patchSong         : jest.fn(),
-  getSongDownloadUrl: jest.fn(),
-  deleteSong        : jest.fn(),
-  uploadSong        : jest.fn()
+    getSongByPage     : jest.fn(),
+    getSong           : jest.fn(),
+    getSongEdit       : jest.fn(),
+    patchSong         : jest.fn(),
+    getSongDownloadUrl: jest.fn(),
+    deleteSong        : jest.fn(),
+    uploadSong        : jest.fn()
 };
 
 const mockFileService = {};
 
 describe('SongController', () => {
-  let songController: SongController;
-  let songService: SongService;
+    let songController: SongController;
+    let songService: SongService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [SongController],
-      providers  : [
-        {
-          provide : SongService,
-          useValue: mockSongService
-        },
-        {
-          provide : FileService,
-          useValue: mockFileService
-        }
-      ]
-    })
-      .overrideGuard(AuthGuard('jwt-refresh'))
-      .useValue({ canActivate: jest.fn(() => true) })
-      .compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [SongController],
+            providers  : [
+                {
+                    provide : SongService,
+                    useValue: mockSongService
+                },
+                {
+                    provide : FileService,
+                    useValue: mockFileService
+                }
+            ]
+        })
+            .overrideGuard(AuthGuard('jwt-refresh'))
+            .useValue({ canActivate: jest.fn(() => true) })
+            .compile();
 
-    songController = module.get<SongController>(SongController);
-    songService = module.get<SongService>(SongService);
-  });
-
-  it('should be defined', () => {
-    expect(songController).toBeDefined();
-  });
-
-  describe('getSongList', () => {
-    it('should return a list of songs', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
-      const songList: SongPreviewDto[] = [];
-
-      mockSongService.getSongByPage.mockResolvedValueOnce(songList);
-
-      const result = await songController.getSongList(query);
-
-      expect(result).toEqual(songList);
-      expect(songService.getSongByPage).toHaveBeenCalledWith(query);
+        songController = module.get<SongController>(SongController);
+        songService = module.get<SongService>(SongService);
     });
 
-    it('should handle errors', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
-
-      mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
-
-      await expect(songController.getSongList(query)).rejects.toThrow('Error');
-    });
-  });
-
-  describe('getSong', () => {
-    it('should return song info by ID', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const song: SongViewDto = {} as SongViewDto;
-
-      mockSongService.getSong.mockResolvedValueOnce(song);
-
-      const result = await songController.getSong(id, user);
-
-      expect(result).toEqual(song);
-      expect(songService.getSong).toHaveBeenCalledWith(id, user);
+    it('should be defined', () => {
+        expect(songController).toBeDefined();
     });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+    describe('getSongList', () => {
+        it('should return a list of songs', async () => {
+            const query: PageQueryDTO = { page: 1, limit: 10 };
+            const songList: SongPreviewDto[] = [];
 
-      mockSongService.getSong.mockRejectedValueOnce(new Error('Error'));
+            mockSongService.getSongByPage.mockResolvedValueOnce(songList);
 
-      await expect(songController.getSong(id, user)).rejects.toThrow('Error');
-    });
-  });
+            const result = await songController.getSongList(query);
 
-  describe('getEditSong', () => {
-    it('should return song info for editing by ID', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const song: UploadSongDto = {} as UploadSongDto;
+            expect(result).toEqual(songList);
+            expect(songService.getSongByPage).toHaveBeenCalledWith(query);
+        });
 
-      mockSongService.getSongEdit.mockResolvedValueOnce(song);
+        it('should handle errors', async () => {
+            const query: PageQueryDTO = { page: 1, limit: 10 };
 
-      const result = await songController.getEditSong(id, user);
+            mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
 
-      expect(result).toEqual(song);
-      expect(songService.getSongEdit).toHaveBeenCalledWith(id, user);
+            await expect(songController.getSongList(query)).rejects.toThrow('Error');
+        });
     });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+    describe('getSong', () => {
+        it('should return song info by ID', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const song: SongViewDto = {} as SongViewDto;
 
-      mockSongService.getSongEdit.mockRejectedValueOnce(new Error('Error'));
+            mockSongService.getSong.mockResolvedValueOnce(song);
 
-      await expect(songController.getEditSong(id, user)).rejects.toThrow(
-        'Error'
-      );
-    });
-  });
+            const result = await songController.getSong(id, user);
 
-  describe('patchSong', () => {
-    it('should edit song info by ID', async () => {
-      const id = 'test-id';
-      const req = { body: {} } as any;
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const response: UploadSongResponseDto = {} as UploadSongResponseDto;
+            expect(result).toEqual(song);
+            expect(songService.getSong).toHaveBeenCalledWith(id, user);
+        });
 
-      mockSongService.patchSong.mockResolvedValueOnce(response);
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const result = await songController.patchSong(id, req, user);
+            mockSongService.getSong.mockRejectedValueOnce(new Error('Error'));
 
-      expect(result).toEqual(response);
-      expect(songService.patchSong).toHaveBeenCalledWith(id, req.body, user);
+            await expect(songController.getSong(id, user)).rejects.toThrow('Error');
+        });
     });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const req = { body: {} } as any;
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+    describe('getEditSong', () => {
+        it('should return song info for editing by ID', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const song: UploadSongDto = {} as UploadSongDto;
 
-      mockSongService.patchSong.mockRejectedValueOnce(new Error('Error'));
+            mockSongService.getSongEdit.mockResolvedValueOnce(song);
 
-      await expect(songController.patchSong(id, req, user)).rejects.toThrow(
-        'Error'
-      );
-    });
-  });
+            const result = await songController.getEditSong(id, user);
 
-  describe('getSongFile', () => {
-    it('should get song .nbs file', async () => {
-      const id = 'test-id';
-      const src = 'test-src';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            expect(result).toEqual(song);
+            expect(songService.getSongEdit).toHaveBeenCalledWith(id, user);
+        });
 
-      const res = {
-        set     : jest.fn(),
-        redirect: jest.fn()
-      } as unknown as Response;
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const url = 'test-url';
+            mockSongService.getSongEdit.mockRejectedValueOnce(new Error('Error'));
 
-      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
-
-      await songController.getSongFile(id, src, user, res);
-
-      expect(res.set).toHaveBeenCalledWith({
-        'Content-Disposition'          : 'attachment; filename="song.nbs"',
-        'Access-Control-Expose-Headers': 'Content-Disposition'
-      });
-
-      expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, url);
-
-      expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
-        id,
-        user,
-        src,
-        false
-      );
+            await expect(songController.getEditSong(id, user)).rejects.toThrow(
+                'Error'
+            );
+        });
     });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const src = 'test-src';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+    describe('patchSong', () => {
+        it('should edit song info by ID', async () => {
+            const id = 'test-id';
+            const req = { body: {} } as any;
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const response: UploadSongResponseDto = {} as UploadSongResponseDto;
 
-      const res = {
-        set     : jest.fn(),
-        redirect: jest.fn()
-      } as unknown as Response;
+            mockSongService.patchSong.mockResolvedValueOnce(response);
 
-      mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
-        new Error('Error')
-      );
+            const result = await songController.patchSong(id, req, user);
 
-      await expect(
-        songController.getSongFile(id, src, user, res)
-      ).rejects.toThrow('Error');
-    });
-  });
+            expect(result).toEqual(response);
+            expect(songService.patchSong).toHaveBeenCalledWith(id, req.body, user);
+        });
 
-  describe('getSongOpenUrl', () => {
-    it('should get song .nbs file open URL', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const src = 'downloadButton';
-      const url = 'test-url';
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const req = { body: {} } as any;
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
+            mockSongService.patchSong.mockRejectedValueOnce(new Error('Error'));
 
-      const result = await songController.getSongOpenUrl(id, user, src);
-
-      expect(result).toEqual(url);
-
-      expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
-        id,
-        user,
-        'open',
-        true
-      );
+            await expect(songController.patchSong(id, req, user)).rejects.toThrow(
+                'Error'
+            );
+        });
     });
 
-    it('should throw UnauthorizedException if src is invalid', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const src = 'invalid-src';
+    describe('getSongFile', () => {
+        it('should get song .nbs file', async () => {
+            const id = 'test-id';
+            const src = 'test-src';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      await expect(
-        songController.getSongOpenUrl(id, user, src)
-      ).rejects.toThrow(UnauthorizedException);
+            const res = {
+                set     : jest.fn(),
+                redirect: jest.fn()
+            } as unknown as Response;
+
+            const url = 'test-url';
+
+            mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
+
+            await songController.getSongFile(id, src, user, res);
+
+            expect(res.set).toHaveBeenCalledWith({
+                'Content-Disposition'          : 'attachment; filename="song.nbs"',
+                'Access-Control-Expose-Headers': 'Content-Disposition'
+            });
+
+            expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, url);
+
+            expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
+                id,
+                user,
+                src,
+                false
+            );
+        });
+
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const src = 'test-src';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+
+            const res = {
+                set     : jest.fn(),
+                redirect: jest.fn()
+            } as unknown as Response;
+
+            mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
+                new Error('Error')
+            );
+
+            await expect(
+                songController.getSongFile(id, src, user, res)
+            ).rejects.toThrow('Error');
+        });
     });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const src = 'downloadButton';
+    describe('getSongOpenUrl', () => {
+        it('should get song .nbs file open URL', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const src = 'downloadButton';
+            const url = 'test-url';
 
-      mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
-        new Error('Error')
-      );
+            mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
 
-      await expect(
-        songController.getSongOpenUrl(id, user, src)
-      ).rejects.toThrow('Error');
-    });
-  });
+            const result = await songController.getSongOpenUrl(id, user, src);
 
-  describe('deleteSong', () => {
-    it('should delete a song', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            expect(result).toEqual(url);
 
-      mockSongService.deleteSong.mockResolvedValueOnce(undefined);
+            expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
+                id,
+                user,
+                'open',
+                true
+            );
+        });
 
-      await songController.deleteSong(id, user);
+        it('should throw UnauthorizedException if src is invalid', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const src = 'invalid-src';
 
-      expect(songService.deleteSong).toHaveBeenCalledWith(id, user);
-    });
+            await expect(
+                songController.getSongOpenUrl(id, user, src)
+            ).rejects.toThrow(UnauthorizedException);
+        });
 
-    it('should handle errors', async () => {
-      const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const src = 'downloadButton';
 
-      mockSongService.deleteSong.mockRejectedValueOnce(new Error('Error'));
+            mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
+                new Error('Error')
+            );
 
-      await expect(songController.deleteSong(id, user)).rejects.toThrow(
-        'Error'
-      );
-    });
-  });
-
-  describe('createSong', () => {
-    it('should upload a song', async () => {
-      const file = { buffer: Buffer.from('test') } as Express.Multer.File;
-
-      const body: UploadSongDto = {
-        title            : 'Test Song',
-        originalAuthor   : 'Test Author',
-        description      : 'Test Description',
-        category         : 'alternative',
-        visibility       : 'public',
-        license          : 'cc_by_sa',
-        customInstruments: [],
-        thumbnailData    : {
-          startTick      : 0,
-          startLayer     : 0,
-          zoomLevel      : 1,
-          backgroundColor: '#000000'
-        },
-        file         : undefined,
-        allowDownload: false
-      };
-
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const response: UploadSongResponseDto = {} as UploadSongResponseDto;
-
-      mockSongService.uploadSong.mockResolvedValueOnce(response);
-
-      const result = await songController.createSong(file, body, user);
-
-      expect(result).toEqual(response);
-      expect(songService.uploadSong).toHaveBeenCalledWith({ body, file, user });
+            await expect(
+                songController.getSongOpenUrl(id, user, src)
+            ).rejects.toThrow('Error');
+        });
     });
 
-    it('should handle errors', async () => {
-      const file = { buffer: Buffer.from('test') } as Express.Multer.File;
+    describe('deleteSong', () => {
+        it('should delete a song', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
-      const body: UploadSongDto = {
-        title            : 'Test Song',
-        originalAuthor   : 'Test Author',
-        description      : 'Test Description',
-        category         : 'alternative',
-        visibility       : 'public',
-        license          : 'cc_by_sa',
-        customInstruments: [],
-        thumbnailData    : {
-          startTick      : 0,
-          startLayer     : 0,
-          zoomLevel      : 1,
-          backgroundColor: '#000000'
-        },
-        file         : undefined,
-        allowDownload: false
-      };
+            mockSongService.deleteSong.mockResolvedValueOnce(undefined);
 
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            await songController.deleteSong(id, user);
 
-      mockSongService.uploadSong.mockRejectedValueOnce(new Error('Error'));
+            expect(songService.deleteSong).toHaveBeenCalledWith(id, user);
+        });
 
-      await expect(songController.createSong(file, body, user)).rejects.toThrow(
-        'Error'
-      );
+        it('should handle errors', async () => {
+            const id = 'test-id';
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+
+            mockSongService.deleteSong.mockRejectedValueOnce(new Error('Error'));
+
+            await expect(songController.deleteSong(id, user)).rejects.toThrow(
+                'Error'
+            );
+        });
     });
-  });
+
+    describe('createSong', () => {
+        it('should upload a song', async () => {
+            const file = { buffer: Buffer.from('test') } as Express.Multer.File;
+
+            const body: UploadSongDto = {
+                title            : 'Test Song',
+                originalAuthor   : 'Test Author',
+                description      : 'Test Description',
+                category         : 'alternative',
+                visibility       : 'public',
+                license          : 'cc_by_sa',
+                customInstruments: [],
+                thumbnailData    : {
+                    startTick      : 0,
+                    startLayer     : 0,
+                    zoomLevel      : 1,
+                    backgroundColor: '#000000'
+                },
+                file         : undefined,
+                allowDownload: false
+            };
+
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+            const response: UploadSongResponseDto = {} as UploadSongResponseDto;
+
+            mockSongService.uploadSong.mockResolvedValueOnce(response);
+
+            const result = await songController.createSong(file, body, user);
+
+            expect(result).toEqual(response);
+            expect(songService.uploadSong).toHaveBeenCalledWith({ body, file, user });
+        });
+
+        it('should handle errors', async () => {
+            const file = { buffer: Buffer.from('test') } as Express.Multer.File;
+
+            const body: UploadSongDto = {
+                title            : 'Test Song',
+                originalAuthor   : 'Test Author',
+                description      : 'Test Description',
+                category         : 'alternative',
+                visibility       : 'public',
+                license          : 'cc_by_sa',
+                customInstruments: [],
+                thumbnailData    : {
+                    startTick      : 0,
+                    startLayer     : 0,
+                    zoomLevel      : 1,
+                    backgroundColor: '#000000'
+                },
+                file         : undefined,
+                allowDownload: false
+            };
+
+            const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+
+            mockSongService.uploadSong.mockRejectedValueOnce(new Error('Error'));
+
+            await expect(songController.createSong(file, body, user)).rejects.toThrow(
+                'Error'
+            );
+        });
+    });
 });

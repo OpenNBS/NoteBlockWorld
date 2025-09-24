@@ -18,79 +18,79 @@ import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal   : true,
-      envFilePath: ['.env.development', '.env.production'],
-      validate
-    }),
-    //DatabaseModule,
-    MongooseModule.forRootAsync({
-      imports   : [ConfigModule],
-      inject    : [ConfigService],
-      useFactory: (
-        configService: ConfigService
-      ): MongooseModuleFactoryOptions => {
-        const url = configService.getOrThrow<string>('MONGO_URL');
-        Logger.debug(`Connecting to ${url}`);
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal   : true,
+            envFilePath: ['.env.development', '.env.production'],
+            validate
+        }),
+        //DatabaseModule,
+        MongooseModule.forRootAsync({
+            imports   : [ConfigModule],
+            inject    : [ConfigService],
+            useFactory: (
+                configService: ConfigService
+            ): MongooseModuleFactoryOptions => {
+                const url = configService.getOrThrow<string>('MONGO_URL');
+                Logger.debug(`Connecting to ${url}`);
 
-        return {
-          uri          : url,
-          retryAttempts: 10,
-          retryDelay   : 3000
-        };
-      }
-    }),
-    // Mailing
-    MailerModule.forRootAsync({
-      imports   : [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const transport = configService.getOrThrow<string>('MAIL_TRANSPORT');
-        const from = configService.getOrThrow<string>('MAIL_FROM');
-        AppModule.logger.debug(`MAIL_TRANSPORT: ${transport}`);
-        AppModule.logger.debug(`MAIL_FROM: ${from}`);
-        return {
-          transport: transport,
-          defaults : {
-            from: from
-          },
-          template: {
-            dir    : __dirname + '/mailing/templates',
-            adapter: new HandlebarsAdapter(),
-            options: {
-              strict: true
+                return {
+                    uri          : url,
+                    retryAttempts: 10,
+                    retryDelay   : 3000
+                };
             }
-          }
-        };
-      },
-      inject: [ConfigService]
-    }),
-    // Throttler
-    ThrottlerModule.forRoot([
-      {
-        ttl  : 60,
-        limit: 256 // 256 requests per minute
-      }
-    ]),
-    SongModule,
-    UserModule,
-    AuthModule.forRootAsync(),
-    FileModule.forRootAsync(),
-    SongBrowserModule,
-    SeedModule.forRoot(),
-    EmailLoginModule,
-    MailingModule
-  ],
-  controllers: [],
-  providers  : [
-    ParseTokenPipe,
-    {
-      provide : APP_GUARD,
-      useClass: ThrottlerGuard
-    }
-  ],
-  exports: [ParseTokenPipe]
+        }),
+        // Mailing
+        MailerModule.forRootAsync({
+            imports   : [ConfigModule],
+            useFactory: (configService: ConfigService) => {
+                const transport = configService.getOrThrow<string>('MAIL_TRANSPORT');
+                const from = configService.getOrThrow<string>('MAIL_FROM');
+                AppModule.logger.debug(`MAIL_TRANSPORT: ${transport}`);
+                AppModule.logger.debug(`MAIL_FROM: ${from}`);
+                return {
+                    transport: transport,
+                    defaults : {
+                        from: from
+                    },
+                    template: {
+                        dir    : __dirname + '/mailing/templates',
+                        adapter: new HandlebarsAdapter(),
+                        options: {
+                            strict: true
+                        }
+                    }
+                };
+            },
+            inject: [ConfigService]
+        }),
+        // Throttler
+        ThrottlerModule.forRoot([
+            {
+                ttl  : 60,
+                limit: 256 // 256 requests per minute
+            }
+        ]),
+        SongModule,
+        UserModule,
+        AuthModule.forRootAsync(),
+        FileModule.forRootAsync(),
+        SongBrowserModule,
+        SeedModule.forRoot(),
+        EmailLoginModule,
+        MailingModule
+    ],
+    controllers: [],
+    providers  : [
+        ParseTokenPipe,
+        {
+            provide : APP_GUARD,
+            useClass: ThrottlerGuard
+        }
+    ],
+    exports: [ParseTokenPipe]
 })
 export class AppModule {
-  static readonly logger = new Logger(AppModule.name);
+    static readonly logger = new Logger(AppModule.name);
 }

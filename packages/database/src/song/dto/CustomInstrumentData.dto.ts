@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CustomInstrumentData {
-  @IsNotEmpty()
-  sound: string[];
+    @IsNotEmpty()
+    sound: string[];
 }

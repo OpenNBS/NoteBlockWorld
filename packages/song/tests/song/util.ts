@@ -4,25 +4,25 @@ import { join, resolve } from 'path';
 import { Song, fromArrayBuffer } from '@encode42/nbs.js';
 
 export function openSongFromPath(path: string): Song {
-  // Specify the relative path to the file
-  const filePath = join(resolve(__dirname), path);
+    // Specify the relative path to the file
+    const filePath = join(resolve(__dirname), path);
 
-  // Read the file and get its array buffer
-  const buffer = asArrayBuffer(readFileSync(filePath));
+    // Read the file and get its array buffer
+    const buffer = asArrayBuffer(readFileSync(filePath));
 
-  const song = fromArrayBuffer(buffer);
+    const song = fromArrayBuffer(buffer);
 
-  return song;
+    return song;
 }
 
 function asArrayBuffer(buffer: Buffer): ArrayBuffer {
-  const arrayBuffer = new ArrayBuffer(buffer.length);
-  const view = new Uint8Array(arrayBuffer);
+    const arrayBuffer = new ArrayBuffer(buffer.length);
+    const view = new Uint8Array(arrayBuffer);
 
-  for (let i = 0; i < buffer.length; ++i) {
+    for (let i = 0; i < buffer.length; ++i) {
     // @ts-ignore //TODO: fix this
-    view[i] = buffer[i];
-  }
+        view[i] = buffer[i];
+    }
 
-  return arrayBuffer;
+    return arrayBuffer;
 }

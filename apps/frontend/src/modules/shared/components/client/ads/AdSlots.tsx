@@ -19,9 +19,9 @@ const HideAdButton = ({
       className='h-6 w-3'
       onClick={() => {
         setIsHidden(true);
-          setTimeout(() => {
-            setIsHidden(false);
-          }, 1000 * 60 * 5); // Reappers after 5 minutes
+        setTimeout(() => {
+          setIsHidden(false);
+        }, 1000 * 60 * 5); // Reappers after 5 minutes
       }}
     >
       <FontAwesomeIcon
@@ -66,10 +66,10 @@ const AdTemplate = ({
 
   const InfoText = !pubId
     ? () => (
-        <p className='text-center my-auto text-xs text-zinc-500 m-4'>
-          AdSense Client ID is not set
-        </p>
-      )
+      <p className='text-center my-auto text-xs text-zinc-500 m-4'>
+        AdSense Client ID is not set
+      </p>
+    )
     : () => null;
 
   return isHidden ? (

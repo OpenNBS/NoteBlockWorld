@@ -6,16 +6,16 @@ import { SeedService } from './seed.service';
 @Controller('seed')
 @ApiTags('seed')
 export class SeedController {
-  constructor(private readonly seedService: SeedService) {}
+    constructor(private readonly seedService: SeedService) {}
 
-  @Get('seed-dev')
-  @ApiOperation({
-    summary: 'Seed the database with development data'
-  })
-  async seed() {
-    this.seedService.seedDev();
-    return {
-      message: 'Seeding in progress'
-    };
-  }
+    @Get('seed-dev')
+    @ApiOperation({
+        summary: 'Seed the database with development data'
+    })
+    async seed() {
+        this.seedService.seedDev();
+        return {
+            message: 'Seeding in progress'
+        };
+    }
 }

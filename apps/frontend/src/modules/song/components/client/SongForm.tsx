@@ -299,8 +299,8 @@ export const SongForm = ({
                   formMethods.watch('license') === 'none'
                     ? ''
                     : UPLOAD_CONSTANTS.licenses[
-                        formMethods.watch('license') as LicenseType
-                      ]?.uploadDescription
+                      formMethods.watch('license') as LicenseType
+                    ]?.uploadDescription
                 }
                 {...register('license')}
               >

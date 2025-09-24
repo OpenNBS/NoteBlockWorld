@@ -12,22 +12,22 @@ import { SongService } from '../song.service';
 @Controller('my-songs')
 @ApiTags('song')
 export class MySongsController {
-  constructor(public readonly songService: SongService) {}
+    constructor(public readonly songService: SongService) {}
 
-  @Get('/')
-  @ApiOperation({
-    summary: 'Get a list of songs uploaded by the current authenticated user'
-  })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt-refresh'))
-  public async getMySongsPage(
-    @Query() query: PageQueryDTO,
-    @GetRequestToken() user: UserDocument | null
-  ): Promise<SongPageDto> {
-    user = validateUser(user);
-    return await this.songService.getMySongsPage({
-      query,
-      user
-    });
-  }
+    @Get('/')
+    @ApiOperation({
+        summary: 'Get a list of songs uploaded by the current authenticated user'
+    })
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt-refresh'))
+    public async getMySongsPage(
+        @Query() query: PageQueryDTO,
+        @GetRequestToken() user: UserDocument | null
+    ): Promise<SongPageDto> {
+        user = validateUser(user);
+        return await this.songService.getMySongsPage({
+            query,
+            user
+        });
+    }
 }

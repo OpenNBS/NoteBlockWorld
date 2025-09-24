@@ -3,18 +3,18 @@
 import { useEffect } from 'react';
 
 export function deleteAuthCookies() {
-  // delete cookie
-  const cookiesToBeDeleted = ['refresh_token', 'token'];
+    // delete cookie
+    const cookiesToBeDeleted = ['refresh_token', 'token'];
 
-  cookiesToBeDeleted.forEach((cookie) => {
-    if (!document) return;
+    cookiesToBeDeleted.forEach((cookie) => {
+        if (!document) return;
 
-    if (process.env.NODE_ENV === 'development') {
-      document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/`;
-    } else {
-      document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
-    }
-  });
+        if (process.env.NODE_ENV === 'development') {
+            document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/`;
+        } else {
+            document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
+        }
+    });
 }
 
 /**
@@ -38,18 +38,18 @@ export function deleteAuthCookies() {
  * @returns {null} This hook does not return anything.
  */
 export function useSignOut() {
-  //const router = useRouter();
-  function signOut() {
-    deleteAuthCookies();
-    /* We have to use window.location.href here,
+    //const router = useRouter();
+    function signOut() {
+        deleteAuthCookies();
+        /* We have to use window.location.href here,
        because next should clear the cached page in the client side
       */
-    window.location.href = '/';
-  }
+        window.location.href = '/';
+    }
 
-  useEffect(() => {
-    signOut();
-  }, []);
+    useEffect(() => {
+        signOut();
+    }, []);
 
-  return null; // we don't need to return anything
+    return null; // we don't need to return anything
 }
