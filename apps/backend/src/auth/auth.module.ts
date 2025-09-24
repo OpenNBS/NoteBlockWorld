@@ -17,14 +17,14 @@ import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 export class AuthModule {
   static forRootAsync(): DynamicModule {
     return {
-      module: AuthModule,
+      module : AuthModule,
       imports: [
         UserModule,
         ConfigModule.forRoot(),
         MailingModule,
         JwtModule.registerAsync({
-          inject: [ConfigService],
-          imports: [ConfigModule],
+          inject    : [ConfigService],
+          imports   : [ConfigModule],
           useFactory: async (config: ConfigService) => {
             const JWT_SECRET = config.get('JWT_SECRET');
             const JWT_EXPIRES_IN = config.get('JWT_EXPIRES_IN');
@@ -39,14 +39,14 @@ export class AuthModule {
             }
 
             return {
-              secret: JWT_SECRET,
-              signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' },
+              secret     : JWT_SECRET,
+              signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' }
             };
-          },
-        }),
+          }
+        })
       ],
       controllers: [AuthController],
-      providers: [
+      providers  : [
         AuthService,
         ConfigService,
         GoogleStrategy,
@@ -55,61 +55,61 @@ export class AuthModule {
         MagicLinkEmailStrategy,
         JwtStrategy,
         {
-          inject: [ConfigService],
-          provide: 'COOKIE_EXPIRES_IN',
+          inject    : [ConfigService],
+          provide   : 'COOKIE_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
+            configService.getOrThrow<string>('COOKIE_EXPIRES_IN')
         },
         {
-          inject: [ConfigService],
-          provide: 'SERVER_URL',
+          inject    : [ConfigService],
+          provide   : 'SERVER_URL',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('SERVER_URL'),
+            configService.getOrThrow<string>('SERVER_URL')
         },
         {
-          inject: [ConfigService],
-          provide: 'FRONTEND_URL',
+          inject    : [ConfigService],
+          provide   : 'FRONTEND_URL',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('FRONTEND_URL'),
+            configService.getOrThrow<string>('FRONTEND_URL')
         },
         {
-          inject: [ConfigService],
-          provide: 'JWT_SECRET',
+          inject    : [ConfigService],
+          provide   : 'JWT_SECRET',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_SECRET'),
+            configService.getOrThrow<string>('JWT_SECRET')
         },
         {
-          inject: [ConfigService],
-          provide: 'JWT_EXPIRES_IN',
+          inject    : [ConfigService],
+          provide   : 'JWT_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_EXPIRES_IN'),
+            configService.getOrThrow<string>('JWT_EXPIRES_IN')
         },
         {
-          inject: [ConfigService],
-          provide: 'JWT_REFRESH_SECRET',
+          inject    : [ConfigService],
+          provide   : 'JWT_REFRESH_SECRET',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+            configService.getOrThrow<string>('JWT_REFRESH_SECRET')
         },
         {
-          inject: [ConfigService],
-          provide: 'JWT_REFRESH_EXPIRES_IN',
+          inject    : [ConfigService],
+          provide   : 'JWT_REFRESH_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN'),
+            configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN')
         },
         {
-          inject: [ConfigService],
-          provide: 'MAGIC_LINK_SECRET',
+          inject    : [ConfigService],
+          provide   : 'MAGIC_LINK_SECRET',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('MAGIC_LINK_SECRET'),
+            configService.getOrThrow<string>('MAGIC_LINK_SECRET')
         },
         {
-          inject: [ConfigService],
-          provide: 'APP_DOMAIN',
+          inject    : [ConfigService],
+          provide   : 'APP_DOMAIN',
           useFactory: (configService: ConfigService) =>
-            configService.get<string>('APP_DOMAIN'),
-        },
+            configService.get<string>('APP_DOMAIN')
+        }
       ],
-      exports: [AuthService],
+      exports: [AuthService]
     };
   }
 }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 function BackButton({
   className,
-  children,
+  children
 }: React.PropsWithChildren<{
   className?: string;
 }>) {

@@ -46,7 +46,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
             <Skeleton />
           ) : (
             `${song.uploader.username} • ${formatTimeAgo(
-              new Date(song.createdAt),
+              new Date(song.createdAt)
             )}`
           )}
         </p>

@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
-  Logger,
+  Logger
 } from '@nestjs/common';
 
 import { AuthService } from '@server/auth/auth.service';
@@ -14,7 +14,7 @@ export class ParseTokenPipe implements CanActivate {
 
   constructor(
     @Inject(AuthService)
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

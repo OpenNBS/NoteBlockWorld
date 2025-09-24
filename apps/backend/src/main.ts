@@ -18,11 +18,11 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
+      transform       : true,
       transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
+        enableImplicitConversion: true
+      }
+    })
   );
 
   app.use(express.json({ limit: '50mb' }));
@@ -36,8 +36,8 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type', 'authorization', 'src'],
     exposedHeaders: ['Content-Disposition'],
-    origin: [process.env.FRONTEND_URL || '', 'https://bentroen.github.io'],
-    credentials: true,
+    origin        : [process.env.FRONTEND_URL || '', 'https://bentroen.github.io'],
+    credentials   : true
   });
 
   app.use('/v1', express.static('public'));

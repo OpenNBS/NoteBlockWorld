@@ -2,7 +2,7 @@ import '@web/app/globals.css';
 import NavbarLayout from '@web/modules/shared/components/layout/NavbarLayout';
 
 export default async function ContentLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

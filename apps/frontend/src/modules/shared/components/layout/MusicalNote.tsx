@@ -5,18 +5,18 @@ import './MusicalNote.css';
 const notesSpritesSheet = '/notes_sprites.png';
 
 const spritesSheetSize = {
-  width: 120,
-  height: 8,
+  width : 120,
+  height: 8
 };
 
 const gridDimensions = {
   x: 24, // 24 columns
-  y: 1, // 1 row
+  y: 1 // 1 row
 };
 
 const singleNoteSize = {
-  width: spritesSheetSize.width / gridDimensions.x,
-  height: spritesSheetSize.height / gridDimensions.y,
+  width : spritesSheetSize.width / gridDimensions.x,
+  height: spritesSheetSize.height / gridDimensions.y
 };
 
 const totalNotes = gridDimensions.x * gridDimensions.y;
@@ -27,14 +27,14 @@ interface MusicalNoteProps {
 
 export const MusicalNote = ({ size = 4 }: MusicalNoteProps) => {
   const [currentNote, setCurrentNote] = useState(
-    Math.floor(Math.random() * totalNotes),
+    Math.floor(Math.random() * totalNotes)
   );
 
   const noteToCell = useCallback(() => {
     const index = Math.abs(currentNote) % totalNotes;
     return {
       x: index % gridDimensions.x,
-      y: Math.floor(index / gridDimensions.x),
+      y: Math.floor(index / gridDimensions.x)
     };
   }, [currentNote]);
 
@@ -70,22 +70,22 @@ export const MusicalNote = ({ size = 4 }: MusicalNoteProps) => {
       className='musical-note animate-note-active'
       ref={ref}
       style={{
-        width: singleNoteSize.width * size, // Scale display size
-        height: singleNoteSize.height * size, // Scale display size
-        backgroundImage: `url(${notesSpritesSheet})`,
+        width             : singleNoteSize.width * size, // Scale display size
+        height            : singleNoteSize.height * size, // Scale display size
+        backgroundImage   : `url(${notesSpritesSheet})`,
         backgroundPosition: `-${cell.x * singleNoteSize.width * size}px -${
           cell.y * singleNoteSize.height * size
         }px`,
         backgroundSize: `${spritesSheetSize.width * size}px ${
           spritesSheetSize.height * size
         }px`, // Scale background
-        zIndex: 999,
+        zIndex        : 999,
         imageRendering: 'pixelated',
-        cursor: 'pointer',
-        position: 'absolute', // Ensure the parent element is positioned relatively
-        opacity: 0,
+        cursor        : 'pointer',
+        position      : 'absolute', // Ensure the parent element is positioned relatively
+        opacity       : 0,
         // disable pointer events to allow the parent element to handle the click event
-        pointerEvents: 'none',
+        pointerEvents : 'none'
       }}
     />
   );

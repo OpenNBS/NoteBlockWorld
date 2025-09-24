@@ -20,9 +20,9 @@ export const RandomSongButton = () => {
         '/song-browser/random',
         {
           params: {
-            count: 1,
-          },
-        },
+            count: 1
+          }
+        }
       );
 
       songId = response.data[0].publicId;

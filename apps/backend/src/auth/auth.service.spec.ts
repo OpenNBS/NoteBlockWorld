@@ -1,7 +1,8 @@
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
+
 import type { UserDocument } from '@nbw/database';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import type { Request, Response } from 'express';
 
 import { UserService } from '@server/user/user.service';
@@ -10,26 +11,26 @@ import { AuthService } from './auth.service';
 import { Profile } from './types/profile';
 
 const mockAxios = {
-  get: jest.fn(),
-  post: jest.fn(),
-  put: jest.fn(),
+  get   : jest.fn(),
+  post  : jest.fn(),
+  put   : jest.fn(),
   delete: jest.fn(),
-  create: jest.fn(),
+  create: jest.fn()
 };
 
 mock.module('axios', () => mockAxios);
 
 const mockUserService = {
   generateUsername: jest.fn(),
-  findByEmail: jest.fn(),
-  findByID: jest.fn(),
-  create: jest.fn(),
+  findByEmail     : jest.fn(),
+  findByID        : jest.fn(),
+  create          : jest.fn()
 };
 
 const mockJwtService = {
-  decode: jest.fn(),
+  decode   : jest.fn(),
   signAsync: jest.fn(),
-  verify: jest.fn(),
+  verify   : jest.fn()
 };
 
 describe('AuthService', () => {
@@ -42,50 +43,50 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         {
-          provide: UserService,
-          useValue: mockUserService,
+          provide : UserService,
+          useValue: mockUserService
         },
         {
-          provide: JwtService,
-          useValue: mockJwtService,
+          provide : JwtService,
+          useValue: mockJwtService
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
-          useValue: '3600',
+          provide : 'COOKIE_EXPIRES_IN',
+          useValue: '3600'
         },
         {
-          provide: 'FRONTEND_URL',
-          useValue: 'http://frontend.test.com',
+          provide : 'FRONTEND_URL',
+          useValue: 'http://frontend.test.com'
         },
         {
-          provide: 'COOKIE_EXPIRES_IN',
-          useValue: '3600',
+          provide : 'COOKIE_EXPIRES_IN',
+          useValue: '3600'
         },
         {
-          provide: 'JWT_SECRET',
-          useValue: 'test-jwt-secret',
+          provide : 'JWT_SECRET',
+          useValue: 'test-jwt-secret'
         },
         {
-          provide: 'JWT_EXPIRES_IN',
-          useValue: '1d',
+          provide : 'JWT_EXPIRES_IN',
+          useValue: '1d'
         },
         {
-          provide: 'JWT_REFRESH_SECRET',
-          useValue: 'test-jwt-refresh-secret',
+          provide : 'JWT_REFRESH_SECRET',
+          useValue: 'test-jwt-refresh-secret'
         },
         {
-          provide: 'JWT_REFRESH_EXPIRES_IN',
-          useValue: '7d',
+          provide : 'JWT_REFRESH_EXPIRES_IN',
+          useValue: '7d'
         },
         {
-          provide: 'WHITELISTED_USERS',
-          useValue: 'tomast1337,bentroen,testuser',
+          provide : 'WHITELISTED_USERS',
+          useValue: 'tomast1337,bentroen,testuser'
         },
         {
-          provide: 'APP_DOMAIN',
-          useValue: '.test.com',
-        },
-      ],
+          provide : 'APP_DOMAIN',
+          useValue: '.test.com'
+        }
+      ]
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
@@ -103,7 +104,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn()
       } as any;
 
       await authService.verifyToken(req, res);
@@ -111,7 +112,7 @@ describe('AuthService', () => {
       expect(res.status).toHaveBeenCalledWith(401);
 
       expect(res.json).toHaveBeenCalledWith({
-        message: 'No authorization header',
+        message: 'No authorization header'
       });
     });
 
@@ -120,7 +121,7 @@ describe('AuthService', () => {
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn()
       } as any;
 
       await authService.verifyToken(req, res);
@@ -131,12 +132,12 @@ describe('AuthService', () => {
 
     it('should throw an error if user is not found', async () => {
       const req = {
-        headers: { authorization: 'Bearer test-token' },
+        headers: { authorization: 'Bearer test-token' }
       } as Request;
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn()
       } as any;
 
       mockJwtService.verify.mockReturnValueOnce({ id: 'test-id' });
@@ -150,12 +151,12 @@ describe('AuthService', () => {
 
     it('should return decoded token if user is found', async () => {
       const req = {
-        headers: { authorization: 'Bearer test-token' },
+        headers: { authorization: 'Bearer test-token' }
       } as Request;
 
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        json  : jest.fn()
       } as any;
 
       const decodedToken = { id: 'test-id' };
@@ -200,24 +201,24 @@ describe('AuthService', () => {
           }
 
           return Promise.reject(new Error('Invalid secret'));
-        },
+        }
       );
 
       const tokens = await (authService as any).createJwtPayload(payload);
 
       expect(tokens).toEqual({
-        access_token: accessToken,
-        refresh_token: refreshToken,
+        access_token : accessToken,
+        refresh_token: refreshToken
       });
 
       expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
-        secret: 'test-jwt-secret',
-        expiresIn: '1d',
+        secret   : 'test-jwt-secret',
+        expiresIn: '1d'
       });
 
       expect(jwtService.signAsync).toHaveBeenCalledWith(payload, {
-        secret: 'test-jwt-refresh-secret',
-        expiresIn: '7d',
+        secret   : 'test-jwt-refresh-secret',
+        expiresIn: '7d'
       });
     });
   });
@@ -225,19 +226,19 @@ describe('AuthService', () => {
   describe('GenTokenRedirect', () => {
     it('should set cookies and redirect to the frontend URL', async () => {
       const user_registered = {
-        _id: 'user-id',
-        email: 'test@example.com',
-        username: 'testuser',
+        _id     : 'user-id',
+        email   : 'test@example.com',
+        username: 'testuser'
       } as unknown as UserDocument;
 
       const res = {
-        cookie: jest.fn(),
-        redirect: jest.fn(),
+        cookie  : jest.fn(),
+        redirect: jest.fn()
       } as unknown as Response;
 
       const tokens = {
-        access_token: 'access-token',
-        refresh_token: 'refresh-token',
+        access_token : 'access-token',
+        refresh_token: 'refresh-token'
       };
 
       spyOn(authService as any, 'createJwtPayload').mockResolvedValue(tokens);
@@ -245,14 +246,14 @@ describe('AuthService', () => {
       await (authService as any).GenTokenRedirect(user_registered, res);
 
       expect((authService as any).createJwtPayload).toHaveBeenCalledWith({
-        id: 'user-id',
-        email: 'test@example.com',
-        username: 'testuser',
+        id      : 'user-id',
+        email   : 'test@example.com',
+        username: 'testuser'
       });
 
       expect(res.cookie).toHaveBeenCalledWith('token', 'access-token', {
         domain: '.test.com',
-        maxAge: 3600000,
+        maxAge: 3600000
       });
 
       expect(res.cookie).toHaveBeenCalledWith(
@@ -260,8 +261,8 @@ describe('AuthService', () => {
         'refresh-token',
         {
           domain: '.test.com',
-          maxAge: 3600000,
-        },
+          maxAge: 3600000
+        }
       );
 
       expect(res.redirect).toHaveBeenCalledWith('http://frontend.test.com/');
@@ -271,9 +272,9 @@ describe('AuthService', () => {
   describe('verifyAndGetUser', () => {
     it('should create a new user if the user is not registered', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
-        profileImage: 'http://example.com/photo.jpg',
+        username    : 'testuser',
+        email       : 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg'
       };
 
       mockUserService.findByEmail.mockResolvedValue(null);
@@ -285,9 +286,9 @@ describe('AuthService', () => {
 
       expect(userService.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          email: 'test@example.com',
-          profileImage: 'http://example.com/photo.jpg',
-        }),
+          email       : 'test@example.com',
+          profileImage: 'http://example.com/photo.jpg'
+        })
       );
 
       expect(result).toEqual({ id: 'new-user-id' });
@@ -295,14 +296,14 @@ describe('AuthService', () => {
 
     it('should return the registered user if the user is already registered', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
-        profileImage: 'http://example.com/photo.jpg',
+        username    : 'testuser',
+        email       : 'test@example.com',
+        profileImage: 'http://example.com/photo.jpg'
       };
 
       const registeredUser = {
-        id: 'registered-user-id',
-        profileImage: 'http://example.com/photo.jpg',
+        id          : 'registered-user-id',
+        profileImage: 'http://example.com/photo.jpg'
       };
 
       mockUserService.findByEmail.mockResolvedValue(registeredUser);
@@ -315,15 +316,15 @@ describe('AuthService', () => {
 
     it('should update the profile image if it has changed', async () => {
       const user: Profile = {
-        username: 'testuser',
-        email: 'test@example.com',
-        profileImage: 'http://example.com/new-photo.jpg',
+        username    : 'testuser',
+        email       : 'test@example.com',
+        profileImage: 'http://example.com/new-photo.jpg'
       };
 
       const registeredUser = {
-        id: 'registered-user-id',
+        id          : 'registered-user-id',
         profileImage: 'http://example.com/old-photo.jpg',
-        save: jest.fn(),
+        save        : jest.fn()
       };
 
       mockUserService.findByEmail.mockResolvedValue(registeredUser);
@@ -333,7 +334,7 @@ describe('AuthService', () => {
       expect(userService.findByEmail).toHaveBeenCalledWith('test@example.com');
 
       expect(registeredUser.profileImage).toEqual(
-        'http://example.com/new-photo.jpg',
+        'http://example.com/new-photo.jpg'
       );
 
       expect(registeredUser.save).toHaveBeenCalled();

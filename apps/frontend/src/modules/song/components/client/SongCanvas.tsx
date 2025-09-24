@@ -28,18 +28,18 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
     const fullscreen_window_height = window.screen.height;
 
     const argumentsData = {
-      font_id: 1,
-      window_width: Math.floor(fullscreen_window_width / 2),
+      font_id      : 1,
+      window_width : Math.floor(fullscreen_window_width / 2),
       window_height: Math.floor(fullscreen_window_height / 2),
-      theme: {
-        background_color: '#18181B',
-        accent_color: '#002FA3',
-        text_color: '#F0F0F0',
-        white_key_color: '#F0F0F0',
-        black_key_color: '#1A1A1A',
+      theme        : {
+        background_color    : '#18181B',
+        accent_color        : '#002FA3',
+        text_color          : '#F0F0F0',
+        white_key_color     : '#F0F0F0',
+        black_key_color     : '#1A1A1A',
         white_text_key_color: '#1A1A1A',
-        black_text_key_color: '#F0F0F0',
-      },
+        black_text_key_color: '#F0F0F0'
+      }
     };
 
     // Create and append script dynamically
@@ -49,13 +49,13 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
 
     window.Module = {
       canvas,
-      arguments: [JSON.stringify(argumentsData)],
+      arguments   : [JSON.stringify(argumentsData)],
       noInitialRun: true,
-      onAbort: () => console.log('WASM Module Aborted'),
-      preInit: async function () {
+      onAbort     : () => console.log('WASM Module Aborted'),
+      preInit     : async function () {
         try {
           const response = await axios.get(`/song/${song.publicId}/open`, {
-            headers: { src: 'downloadButton' },
+            headers: { src: 'downloadButton' }
           });
 
           const song_url = response.data;
@@ -78,7 +78,7 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
         } catch (error) {
           console.error('Error initializing WASM:', error);
         }
-      },
+      }
     };
 
     element.appendChild(scriptTag);

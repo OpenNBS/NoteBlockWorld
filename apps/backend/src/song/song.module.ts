@@ -18,20 +18,20 @@ import { SongService } from './song.service';
     MongooseModule.forFeature([{ name: Song.name, schema: SongSchema }]),
     AuthModule,
     UserModule,
-    FileModule.forRootAsync(),
+    FileModule.forRootAsync()
   ],
   providers: [
     SongService,
     SongUploadService,
     SongWebhookService,
     {
-      inject: [ConfigService],
-      provide: 'DISCORD_WEBHOOK_URL',
+      inject    : [ConfigService],
+      provide   : 'DISCORD_WEBHOOK_URL',
       useFactory: (configService: ConfigService) =>
-        configService.getOrThrow('DISCORD_WEBHOOK_URL'),
-    },
+        configService.getOrThrow('DISCORD_WEBHOOK_URL')
+    }
   ],
   controllers: [SongController, MySongsController],
-  exports: [SongService],
+  exports    : [SongService]
 })
 export class SongModule {}

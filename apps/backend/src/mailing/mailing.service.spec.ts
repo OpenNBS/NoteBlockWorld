@@ -4,7 +4,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { MailingService } from './mailing.service';
 
 const MockedMailerService = {
-  sendMail: jest.fn(),
+  sendMail: jest.fn()
 };
 
 describe('MailingService', () => {
@@ -16,10 +16,10 @@ describe('MailingService', () => {
       providers: [
         MailingService,
         {
-          provide: MailerService,
-          useValue: MockedMailerService,
-        },
-      ],
+          provide : MailerService,
+          useValue: MockedMailerService
+        }
+      ]
     }).compile();
 
     service = module.get<MailingService>(MailingService);
@@ -40,8 +40,8 @@ describe('MailingService', () => {
     const template = 'hello';
 
     const context = {
-      name: 'John Doe',
-      message: 'Hello, this is a test email!',
+      name   : 'John Doe',
+      message: 'Hello, this is a test email!'
     };
 
     await service.sendEmail({ to, subject, template, context });
@@ -54,15 +54,15 @@ describe('MailingService', () => {
       attachments: [
         {
           filename: 'background-image.png',
-          cid: 'background-image',
-          path: `${__dirname}/templates/img/background-image.png`,
+          cid     : 'background-image',
+          path    : `${__dirname}/templates/img/background-image.png`
         },
         {
           filename: 'logo.png',
-          cid: 'logo',
-          path: `${__dirname}/templates/img/logo.png`,
-        },
-      ],
+          cid     : 'logo',
+          path    : `${__dirname}/templates/img/logo.png`
+        }
+      ]
     });
   });
 });

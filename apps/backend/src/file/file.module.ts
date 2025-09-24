@@ -7,49 +7,49 @@ import { FileService } from './file.service';
 export class FileModule {
   static forRootAsync(): DynamicModule {
     return {
-      module: FileModule,
-      imports: [ConfigModule.forRoot()],
+      module   : FileModule,
+      imports  : [ConfigModule.forRoot()],
       providers: [
         {
-          provide: 'S3_BUCKET_SONGS',
+          provide   : 'S3_BUCKET_SONGS',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_SONGS'),
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
         {
-          provide: 'S3_BUCKET_THUMBS',
+          provide   : 'S3_BUCKET_THUMBS',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_BUCKET_THUMBS'),
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
         {
-          provide: 'S3_KEY',
+          provide   : 'S3_KEY',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_KEY'),
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
         {
-          provide: 'S3_SECRET',
+          provide   : 'S3_SECRET',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_SECRET'),
 
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
         {
-          provide: 'S3_ENDPOINT',
+          provide   : 'S3_ENDPOINT',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_ENDPOINT'),
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
         {
-          provide: 'S3_REGION',
+          provide   : 'S3_REGION',
           useFactory: (configService: ConfigService) =>
             configService.getOrThrow<string>('S3_REGION'),
-          inject: [ConfigService],
+          inject: [ConfigService]
         },
-        FileService,
+        FileService
       ],
-      exports: [FileService],
+      exports: [FileService]
     };
   }
 }

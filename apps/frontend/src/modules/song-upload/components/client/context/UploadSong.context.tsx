@@ -2,24 +2,15 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { parseSongFromBuffer } from '@nbw/song';
-import { SongFileType } from '@nbw/song/src/types';
+import { SongFileType, parseSongFromBuffer } from '@nbw/song';
 import { createContext, useContext, useEffect, useState } from 'react';
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormReturn,
-  useForm,
-} from 'react-hook-form';
+import { FieldErrors, UseFormRegister, UseFormReturn, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 
-import {
-  UploadSongForm,
-  uploadSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
+import { UploadSongForm, uploadSongFormSchema } from '../../../../song/components/client/SongForm.zod';
 import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {
@@ -39,11 +30,11 @@ export type useUploadSongProviderType = {
 };
 
 export const UploadSongContext = createContext<useUploadSongProviderType>(
-  null as unknown as useUploadSongProviderType,
+  null as unknown as useUploadSongProviderType
 );
 
 export const UploadSongProvider = ({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) => {
@@ -62,12 +53,12 @@ export const UploadSongProvider = ({
 
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
-    mode: 'onBlur',
+    mode    : 'onBlur'
   });
 
   const {
     register,
-    formState: { errors },
+    formState: { errors }
   } = formMethods;
 
   async function submitSongData(): Promise<void> {
@@ -95,7 +86,7 @@ export const UploadSongProvider = ({
 
     Object.entries(formValues)
       .filter(
-        ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments',
+        ([key, _]) => key !== 'thumbnailData' && key !== 'customInstruments'
       )
       .forEach(([key, value]) => {
         formData.append(key, value.toString());
@@ -105,7 +96,7 @@ export const UploadSongProvider = ({
 
     formData.append(
       'customInstruments',
-      JSON.stringify(formValues.customInstruments),
+      JSON.stringify(formValues.customInstruments)
     );
 
     // Get authorization token from local storage
@@ -115,9 +106,9 @@ export const UploadSongProvider = ({
       // Send request
       const response = await axiosInstance.post(`/song`, formData, {
         headers: {
-          authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
+          authorization : `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
       const data = response.data;
@@ -130,11 +121,11 @@ export const UploadSongProvider = ({
 
         setSendError(
           error.response.data.message ||
-            Object.values(error.response.data.error)[0],
+            Object.values(error.response.data.error)[0]
         );
       } else {
         setSendError(
-          'An unknown error occurred while uploading the song! Please contact us.',
+          'An unknown error occurred while uploading the song! Please contact us.'
         );
       }
     }
@@ -150,11 +141,11 @@ export const UploadSongProvider = ({
 
       if (e instanceof InvalidTokenError) {
         setSendError(
-          'Your session has expired! Please sign in again and try to submit the song.',
+          'Your session has expired! Please sign in again and try to submit the song.'
         );
       } else {
         setSendError(
-          'An unknown error occurred while submitting the song! Please contact us.',
+          'An unknown error occurred while submitting the song! Please contact us.'
         );
       }
     } finally {
@@ -169,7 +160,7 @@ export const UploadSongProvider = ({
 
     try {
       song = (await parseSongFromBuffer(
-        await file.arrayBuffer(),
+        await file.arrayBuffer()
       )) as unknown as SongFileType; // TODO: Investigate this weird type error
     } catch (e) {
       console.error('Error parsing song file', e);
@@ -189,7 +180,7 @@ export const UploadSongProvider = ({
     formMethods.setValue('originalAuthor', originalAuthor);
 
     const instrumentList = song.instruments.map(
-      (instrument) => instrument.file,
+      (instrument) => instrument.file
     );
 
     formMethods.setValue('customInstruments', instrumentList);
@@ -207,17 +198,17 @@ export const UploadSongProvider = ({
     if (song) {
       formMethods.setValue(
         'thumbnailData.zoomLevel',
-        THUMBNAIL_CONSTANTS.zoomLevel.default,
+        THUMBNAIL_CONSTANTS.zoomLevel.default
       );
 
       formMethods.setValue(
         'thumbnailData.startTick',
-        THUMBNAIL_CONSTANTS.startTick.default,
+        THUMBNAIL_CONSTANTS.startTick.default
       );
 
       formMethods.setValue(
         'thumbnailData.startLayer',
-        THUMBNAIL_CONSTANTS.startLayer.default,
+        THUMBNAIL_CONSTANTS.startLayer.default
       );
 
       const colorKeys = Object.keys(BG_COLORS);
@@ -227,7 +218,7 @@ export const UploadSongProvider = ({
         'thumbnailData.backgroundColor',
 
         // @ts-ignore
-        BG_COLORS[colorKeys[randomColor]].dark,
+        BG_COLORS[colorKeys[randomColor]].dark
       );
 
       formMethods.setValue('allowDownload', true);
@@ -268,7 +259,7 @@ export const UploadSongProvider = ({
         setFile: setFileHandler,
         isSubmitting,
         isUploadComplete,
-        uploadedSongId,
+        uploadedSongId
       }}
     >
       {uploadedSongId && (

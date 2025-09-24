@@ -8,8 +8,8 @@ import { UserService } from './user.service';
 
 const mockUserService = {
   getUserByEmailOrId: jest.fn(),
-  getUserPaginated: jest.fn(),
-  getSelfUserData: jest.fn(),
+  getUserPaginated  : jest.fn(),
+  getSelfUserData   : jest.fn()
 };
 
 describe('UserController', () => {
@@ -19,12 +19,12 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [
+      providers  : [
         {
-          provide: UserService,
-          useValue: mockUserService,
-        },
-      ],
+          provide : UserService,
+          useValue: mockUserService
+        }
+      ]
     }).compile();
 
     userController = module.get<UserController>(UserController);
@@ -38,9 +38,9 @@ describe('UserController', () => {
   describe('getUser', () => {
     it('should return user data by email or ID', async () => {
       const query: GetUser = {
-        email: 'test@email.com',
+        email   : 'test@email.com',
         username: 'test-username',
-        id: 'test-id',
+        id      : 'test-id'
       };
 
       const user = { email: 'test@example.com' };

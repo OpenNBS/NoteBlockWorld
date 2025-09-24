@@ -5,7 +5,7 @@ import { checkLogin, getUserData } from '@web/modules/auth/features/auth.utils';
 import { UploadSongPage } from '@web/modules/song-upload/components/client/UploadSongPage';
 
 export const metadata: Metadata = {
-  title: 'Upload song',
+  title: 'Upload song'
 };
 
 async function UploadPage() {

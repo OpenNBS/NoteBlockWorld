@@ -9,7 +9,7 @@ describe('EmailLoginController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EmailLoginController],
-      providers: [EmailLoginService],
+      providers  : [EmailLoginService]
     }).compile();
 
     controller = module.get<EmailLoginController>(EmailLoginController);

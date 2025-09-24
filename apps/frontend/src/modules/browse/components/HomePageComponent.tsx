@@ -3,16 +3,9 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { CategoryButtonGroup } from './client/CategoryButton';
-import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
-import { useRecentSongsProvider } from './client/context/RecentSongs.context';
-import LoadMoreButton from './client/LoadMoreButton';
-import { TimespanButtonGroup } from './client/TimespanButton';
-import SongCard from './SongCard';
-import SongCardGroup from './SongCardGroup';
 import {
   InterSectionAdSlot,
-  SongCardAdSlot,
+  SongCardAdSlot
 } from '../../shared/components/client/ads/AdSlots';
 import {
   Carousel,
@@ -20,9 +13,17 @@ import {
   CarouselDots,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious,
+  CarouselPrevious
 } from '../../shared/components/client/Carousel';
 import { WelcomeBanner } from '../WelcomeBanner';
+
+import { CategoryButtonGroup } from './client/CategoryButton';
+import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
+import { useRecentSongsProvider } from './client/context/RecentSongs.context';
+import LoadMoreButton from './client/LoadMoreButton';
+import { TimespanButtonGroup } from './client/TimespanButton';
+import SongCard from './SongCard';
+import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
@@ -46,9 +47,9 @@ export const HomePageComponent = () => {
           <Carousel
             key={timespan}
             opts={{
-              align: 'start',
-              loop: false,
-              duration: 15,
+              align   : 'start',
+              loop    : false,
+              duration: 15
             }}
           >
             <CarouselContent className='-ml-4'>
@@ -84,7 +85,7 @@ export const HomePageComponent = () => {
             <SongCardAdSlot key={i} />
           ) : (
             <SongCard key={i} song={song} />
-          ),
+          )
         )}
       </SongCardGroup>
       <div className='flex flex-col w-full justify-between items-center mt-4'>

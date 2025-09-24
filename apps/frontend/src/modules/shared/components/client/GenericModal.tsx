@@ -16,7 +16,7 @@ const GenericModal = ({
   isOpen,
   setIsOpen,
   title,
-  children,
+  children
 }: GenericModalProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>

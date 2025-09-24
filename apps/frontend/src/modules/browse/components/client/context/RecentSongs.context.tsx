@@ -6,7 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useState
 } from 'react';
 
 import axiosInstance from '@web/lib/axios';
@@ -23,12 +23,12 @@ type RecentSongsContextType = {
 };
 
 const RecentSongsContext = createContext<RecentSongsContextType>(
-  {} as RecentSongsContextType,
+  {} as RecentSongsContextType
 );
 
 export function RecentSongsProvider({
   children,
-  initialRecentSongs,
+  initialRecentSongs
 }: {
   children: React.ReactNode;
   initialRecentSongs: SongPreviewDtoType[];
@@ -61,9 +61,9 @@ export function RecentSongsProvider({
             params: {
               page,
               limit: fetchCount, // TODO: fix constants
-              order: false,
-            },
-          },
+              order: false
+            }
+          }
         );
 
         const newSongs: Array<SongPreviewDtoType | undefined> = response.data;
@@ -75,7 +75,7 @@ export function RecentSongsProvider({
 
         setRecentSongs((prevSongs) => [
           ...prevSongs.filter((song) => song !== null),
-          ...response.data,
+          ...response.data
         ]);
 
         if (response.data.length < fetchCount) {
@@ -83,7 +83,7 @@ export function RecentSongsProvider({
         }
       } catch (error) {
         setRecentSongs((prevSongs) =>
-          prevSongs.filter((song) => song !== null),
+          prevSongs.filter((song) => song !== null)
         );
 
         setRecentError('Error loading recent songs');
@@ -91,13 +91,13 @@ export function RecentSongsProvider({
         setLoading(false);
       }
     },
-    [page, endpoint],
+    [page, endpoint]
   );
 
   const fetchCategories = useCallback(async function () {
     try {
       const response = await axiosInstance.get<Record<string, number>>(
-        '/song-browser/categories',
+        '/song-browser/categories'
       );
 
       return response.data;
@@ -149,7 +149,7 @@ export function RecentSongsProvider({
         categories,
         selectedCategory,
         setSelectedCategory,
-        increasePageRecent,
+        increasePageRecent
       }}
     >
       {children}
@@ -162,7 +162,7 @@ export function useRecentSongsProvider() {
 
   if (context === undefined || context === null) {
     throw new Error(
-      'useRecentSongsProvider must be used within a RecentSongsProvider',
+      'useRecentSongsProvider must be used within a RecentSongsProvider'
     );
   }
 

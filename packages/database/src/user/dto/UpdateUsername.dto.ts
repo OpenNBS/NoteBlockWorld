@@ -9,7 +9,7 @@ export class UpdateUsernameDto {
   @Matches(USER_CONSTANTS.ALLOWED_REGEXP)
   @ApiProperty({
     description: 'Username of the user',
-    example: 'tomast1137',
+    example    : 'tomast1137'
   })
   username: string;
 }

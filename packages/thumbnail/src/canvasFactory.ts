@@ -15,7 +15,7 @@ if (typeof document === 'undefined') {
     const {
       createCanvas: nodeCreateCanvas,
       loadImage: nodeLoadImage,
-      GlobalFonts,
+      GlobalFonts
     } = canvasModule;
 
     const getPath = (filename: string): string => {
@@ -30,8 +30,8 @@ if (typeof document === 'undefined') {
           workingDir,
           'packages',
           'thumbnail',
-          filename.split('/').join(path.sep),
-        ),
+          filename.split('/').join(path.sep)
+        )
       ];
 
       // Check which path exists
@@ -68,14 +68,14 @@ if (typeof document === 'undefined') {
     }
 
     canvasUtils = {
-      createCanvas: nodeCreateCanvas,
-      loadImage: nodeLoadImage,
+      createCanvas : nodeCreateCanvas,
+      loadImage    : nodeLoadImage,
       getPath,
       useFont,
       saveToImage,
       noteBlockImage,
       DrawingCanvas: canvasModule.Canvas,
-      RenderedImage: canvasModule.Image,
+      RenderedImage: canvasModule.Image
     };
   } catch (error) {
     // Fallback for when @napi-rs/canvas is not available (e.g., in browser build)
@@ -91,7 +91,7 @@ if (typeof document === 'undefined') {
 
     const loadImage = (src: string): Promise<any> => {
       return Promise.reject(
-        new Error('loadImage not available in this environment'),
+        new Error('loadImage not available in this environment')
       );
     };
 
@@ -106,7 +106,7 @@ if (typeof document === 'undefined') {
     };
 
     const noteBlockImage = Promise.reject(
-      new Error('noteBlockImage not available in this environment'),
+      new Error('noteBlockImage not available in this environment')
     );
 
     canvasUtils = {
@@ -117,7 +117,7 @@ if (typeof document === 'undefined') {
       saveToImage,
       noteBlockImage,
       DrawingCanvas: HTMLCanvasElement as any,
-      RenderedImage: HTMLImageElement as any,
+      RenderedImage: HTMLImageElement as any
     };
   }
 } else {
@@ -162,7 +162,7 @@ if (typeof document === 'undefined') {
     saveToImage,
     noteBlockImage,
     DrawingCanvas: HTMLCanvasElement,
-    RenderedImage: HTMLImageElement,
+    RenderedImage: HTMLImageElement
   };
 }
 
@@ -174,5 +174,5 @@ export const {
   saveToImage,
   noteBlockImage,
   DrawingCanvas,
-  RenderedImage,
+  RenderedImage
 } = canvasUtils;

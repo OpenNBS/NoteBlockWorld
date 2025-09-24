@@ -13,12 +13,12 @@ describe('MagicLinkEmailStrategy', () => {
   let _configService: ConfigService;
 
   const mockUserService = {
-    findByEmail: jest.fn(),
-    createWithEmail: jest.fn(),
+    findByEmail    : jest.fn(),
+    createWithEmail: jest.fn()
   };
 
   const mockMailingService = {
-    sendEmail: jest.fn(),
+    sendEmail: jest.fn()
   };
 
   const mockConfigService = {
@@ -26,7 +26,7 @@ describe('MagicLinkEmailStrategy', () => {
       if (key === 'MAGIC_LINK_SECRET') return 'test_secret';
       if (key === 'SERVER_URL') return 'http://localhost:3000';
       return null;
-    }),
+    })
   };
 
   beforeEach(async () => {
@@ -37,14 +37,14 @@ describe('MagicLinkEmailStrategy', () => {
         { provide: MailingService, useValue: mockMailingService },
         { provide: ConfigService, useValue: mockConfigService },
         {
-          provide: 'MAGIC_LINK_SECRET',
-          useValue: 'test_secret',
+          provide : 'MAGIC_LINK_SECRET',
+          useValue: 'test_secret'
         },
         {
-          provide: 'SERVER_URL',
-          useValue: 'http://localhost:3000',
-        },
-      ],
+          provide : 'SERVER_URL',
+          useValue: 'http://localhost:3000'
+        }
+      ]
     }).compile();
 
     strategy = module.get<MagicLinkEmailStrategy>(MagicLinkEmailStrategy);
@@ -71,20 +71,20 @@ describe('MagicLinkEmailStrategy', () => {
       await MagicLinkEmailStrategy.sendMagicLink(
         'http://localhost:3000',
         userService,
-        mailingService,
+        mailingService
       )(email, magicLink);
 
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
 
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
-        to: email,
+        to     : email,
         context: {
           magicLink:
             'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
-          username: 'testuser',
+          username: 'testuser'
         },
-        subject: 'Noteblock Magic Link',
-        template: 'magic-link',
+        subject : 'Noteblock Magic Link',
+        template: 'magic-link'
       });
     });
 
@@ -102,20 +102,20 @@ describe('MagicLinkEmailStrategy', () => {
       await MagicLinkEmailStrategy.sendMagicLink(
         'http://localhost:3000',
         userService,
-        mailingService,
+        mailingService
       )(email, magicLink);
 
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
 
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
-        to: email,
+        to     : email,
         context: {
           magicLink:
             'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
-          username: 'testuser',
+          username: 'testuser'
         },
-        subject: 'Welcome to Noteblock.world',
-        template: 'magic-link-new-account',
+        subject : 'Welcome to Noteblock.world',
+        template: 'magic-link-new-account'
       });
     });
   });
@@ -138,15 +138,15 @@ describe('MagicLinkEmailStrategy', () => {
       mockUserService.findByEmail.mockResolvedValue(null);
 
       mockUserService.createWithEmail.mockResolvedValue({
-        email: 'test@example.com',
-        username: 'test',
+        email   : 'test@example.com',
+        username: 'test'
       });
 
       const result = await strategy.validate(payload);
 
       expect(result).toEqual({
-        email: 'test@example.com',
-        username: 'test',
+        email   : 'test@example.com',
+        username: 'test'
       });
     });
   });

@@ -34,7 +34,7 @@ const helpPostIds = fs
 
 export function getSortedPostsData(
   postsPath: 'help' | 'blog',
-  sortBy: 'id' | 'date',
+  sortBy: 'id' | 'date'
 ) {
   const postsDirectory = path.join(process.cwd(), 'posts', postsPath);
 
@@ -73,7 +73,7 @@ export function getSortedPostsData(
 
 export function getPostData(
   postsPath: 'help' | 'blog',
-  postId: string,
+  postId: string
 ): PostType {
   // Look for the file in the posts directory that contains postId as suffix
   const fileName =
@@ -93,8 +93,8 @@ export function getPostData(
 
   // Combine the data with the id
   return {
-    id: postId,
+    id     : postId,
     ...(matterResult.data as Omit<PostType, 'id'>),
-    content: matterResult.content,
+    content: matterResult.content
   };
 }

@@ -8,23 +8,23 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
   private static logger = new Logger(GithubStrategy.name);
   constructor(
     @Inject(ConfigService)
-    configService: ConfigService,
+    configService: ConfigService
   ) {
     const GITHUB_CLIENT_ID =
       configService.getOrThrow<string>('GITHUB_CLIENT_ID');
 
     const GITHUB_CLIENT_SECRET = configService.getOrThrow<string>(
-      'GITHUB_CLIENT_SECRET',
+      'GITHUB_CLIENT_SECRET'
     );
 
     const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
     super({
-      clientID: GITHUB_CLIENT_ID,
+      clientID    : GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
       redirect_uri: `${SERVER_URL}/api/v1/auth/github/callback`,
-      scope: 'user:read,user:email',
-      state: false,
+      scope       : 'user:read,user:email',
+      state       : false
     });
   }
 

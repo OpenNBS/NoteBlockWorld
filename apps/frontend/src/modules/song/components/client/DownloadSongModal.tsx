@@ -9,7 +9,7 @@ import GenericModal from '@web/modules/shared/components/client/GenericModal';
 export default function DownloadSongModal({
   isOpen,
   setIsOpen,
-  song,
+  song
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;

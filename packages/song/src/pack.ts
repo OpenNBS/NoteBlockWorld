@@ -6,7 +6,7 @@ import { SongObfuscator } from './obfuscate';
 export async function obfuscateAndPackSong(
   nbsSong: Song,
   soundsArray: string[],
-  soundsMapping: Record<string, string>,
+  soundsMapping: Record<string, string>
 ) {
   // Create a ZIP file with the obfuscated song in the root as 'song.nbs'
   // and the sounds in a 'sounds' folder. Return the ZIP file as a buffer.
@@ -37,7 +37,7 @@ export async function obfuscateAndPackSong(
     // Download the sound from Mojang servers
     const soundFileUrl = `https://resources.download.minecraft.net/${hash.slice(
       0,
-      2,
+      2
     )}/${hash}`;
 
     let soundFileBuffer: ArrayBuffer;
@@ -65,9 +65,9 @@ export async function obfuscateAndPackSong(
 
   // Generate the ZIP file as a buffer
   const zipBuffer = await zip.generateAsync({
-    type: 'nodebuffer',
+    type    : 'nodebuffer',
     mimeType: 'application/zip', // default
-    comment: 'Uploaded to Note Block World',
+    comment : 'Uploaded to Note Block World'
     // TODO: explore adding a password to the ZIP file
     // https://github.com/Stuk/jszip/issues/115
     // https://github.com/Stuk/jszip/pull/696

@@ -1,7 +1,6 @@
 const DetectAdBlock = () => {
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
       <script src='/adasync.js' />
       <script
         id='detect-ad-block'
@@ -18,7 +17,7 @@ const DetectAdBlock = () => {
           if(typeof gtag === 'function'){
             gtag('event', 'blocking_ads', { 'event_category': 'Blocking Ads', 'event_label': F4uONjE2hMik, 'non_interaction': true });
           }
-        `,
+        `
         }}
       ></script>
     </>

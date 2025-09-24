@@ -12,7 +12,7 @@ type ThumbnailRendererCanvasProps = {
 
 export const ThumbnailRendererCanvas = ({
   notes,
-  formMethods,
+  formMethods
 }: ThumbnailRendererCanvasProps) => {
   const canvasRef = useRef(null);
   const drawRequest = useRef<number | null>(null);
@@ -23,8 +23,8 @@ export const ThumbnailRendererCanvas = ({
       'thumbnailData.zoomLevel',
       'thumbnailData.startTick',
       'thumbnailData.startLayer',
-      'thumbnailData.backgroundColor',
-    ],
+      'thumbnailData.backgroundColor'
+    ]
   );
 
   useEffect(() => {
@@ -60,10 +60,10 @@ export const ThumbnailRendererCanvas = ({
         startLayer,
         zoomLevel,
         backgroundColor,
-        canvasWidth: canvas.width,
+        canvasWidth : canvas.width,
         canvasHeight: canvas.height,
-        imgWidth: 1280,
-        imgHeight: 768,
+        imgWidth    : 1280,
+        imgHeight   : 768
       });
 
       swap(output, canvas);

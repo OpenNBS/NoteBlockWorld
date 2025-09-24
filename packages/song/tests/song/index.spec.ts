@@ -1,8 +1,9 @@
 // @ts-nocheck // TODO: fix this
 import assert from 'assert';
 
-import { openSongFromPath } from './util';
 import { SongStatsGenerator } from '../../src/stats';
+
+import { openSongFromPath } from './util';
 
 // TO RUN:
 //
@@ -12,26 +13,26 @@ import { SongStatsGenerator } from '../../src/stats';
 // TODO: refactor to use a proper test runner (e.g. jest)
 
 const testSongPaths = {
-  simple: 'files/testSimple.nbs',
-  extraPopulatedLayer: 'files/testExtraPopulatedLayer.nbs',
-  loop: 'files/testLoop.nbs',
-  detune: 'files/testDetune.nbs',
-  outOfRange: 'files/testOutOfRange.nbs',
-  outOfRangeCustomPitch: 'files/testOutOfRangeCustomPitch.nbs',
-  customInstrumentNoUsage: 'files/testCustomInstrumentNoUsage.nbs',
-  customInstrumentUsage: 'files/testCustomInstrumentUsage.nbs',
-  tempoChangerWithStart: 'files/testTempoChangerWithStart.nbs',
-  tempoChangerNoStart: 'files/testTempoChangerNoStart.nbs',
+  simple                    : 'files/testSimple.nbs',
+  extraPopulatedLayer       : 'files/testExtraPopulatedLayer.nbs',
+  loop                      : 'files/testLoop.nbs',
+  detune                    : 'files/testDetune.nbs',
+  outOfRange                : 'files/testOutOfRange.nbs',
+  outOfRangeCustomPitch     : 'files/testOutOfRangeCustomPitch.nbs',
+  customInstrumentNoUsage   : 'files/testCustomInstrumentNoUsage.nbs',
+  customInstrumentUsage     : 'files/testCustomInstrumentUsage.nbs',
+  tempoChangerWithStart     : 'files/testTempoChangerWithStart.nbs',
+  tempoChangerNoStart       : 'files/testTempoChangerNoStart.nbs',
   tempoChangerDifferentStart: 'files/testTempoChangerDifferentStart.nbs',
-  tempoChangerOverlap: 'files/testTempoChangerOverlap.nbs',
+  tempoChangerOverlap       : 'files/testTempoChangerOverlap.nbs',
   tempoChangerMultipleInstruments:
-    'files/testTempoChangerMultipleInstruments.nbs',
+    'files/testTempoChangerMultipleInstruments.nbs'
 };
 
 const testSongStats = Object.fromEntries(
   Object.entries(testSongPaths).map(([name, path]) => {
     return [name, SongStatsGenerator.getSongStats(openSongFromPath(path))];
-  }),
+  })
 );
 
 describe('SongStatsGenerator', () => {
@@ -60,7 +61,7 @@ describe('SongStatsGenerator', () => {
 
     assert(
       stats.instrumentNoteCounts.toString() ===
-        [5, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2].toString(),
+        [5, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2].toString()
     );
   });
 

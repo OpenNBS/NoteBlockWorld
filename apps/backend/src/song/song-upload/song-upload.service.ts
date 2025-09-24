@@ -5,13 +5,13 @@ import {
   SongStats,
   ThumbnailData,
   UploadSongDto,
-  UserDocument,
+  UserDocument
 } from '@nbw/database';
 import {
   NoteQuadTree,
   SongStatsGenerator,
   injectSongFileMetadata,
-  obfuscateAndPackSong,
+  obfuscateAndPackSong
 } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail';
 import {
@@ -19,7 +19,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { Types } from 'mongoose';
 
@@ -41,7 +41,7 @@ export class SongUploadService {
     private fileService: FileService,
 
     @Inject(UserService)
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   private async getSoundsMapping(): Promise<Record<string, string>> {
@@ -49,7 +49,7 @@ export class SongUploadService {
 
     if (!this.soundsMapping) {
       const response = await fetch(
-        process.env.SERVER_URL + '/api/v1/data/soundList.json',
+        process.env.SERVER_URL + '/api/v1/data/soundList.json'
       );
 
       this.soundsMapping = (await response.json()) as Record<string, string>;
@@ -64,7 +64,7 @@ export class SongUploadService {
     if (!this.soundsSubset) {
       try {
         const response = await fetch(
-          process.env.SERVER_URL + '/api/v1/data/soundList.json',
+          process.env.SERVER_URL + '/api/v1/data/soundList.json'
         );
 
         const soundMapping = (await response.json()) as Record<string, string>;
@@ -74,10 +74,10 @@ export class SongUploadService {
         throw new HttpException(
           {
             error: {
-              file: 'An error occurred while retrieving sound list',
-            },
+              file: 'An error occurred while retrieving sound list'
+            }
           },
-          HttpStatus.INTERNAL_SERVER_ERROR,
+          HttpStatus.INTERNAL_SERVER_ERROR
         );
       }
     }
@@ -91,7 +91,7 @@ export class SongUploadService {
     if (!uploader) {
       throw new HttpException(
         'user not found, contact an administrator',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.UNAUTHORIZED
       );
     }
 
@@ -106,7 +106,7 @@ export class SongUploadService {
     fileKey: string,
     packedFileKey: string,
     songStats: SongStats,
-    file: Express.Multer.File,
+    file: Express.Multer.File
   ): Promise<SongEntity> {
     const song = new SongEntity();
     song.uploader = await this.validateUploader(user);
@@ -115,7 +115,7 @@ export class SongUploadService {
     song.originalAuthor = removeExtraSpaces(body.originalAuthor);
     song.description = removeExtraSpaces(body.description);
     song.category = body.category;
-    song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
+    song.allowDownload = true;// || body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
     song.license = body.license;
 
@@ -125,7 +125,7 @@ export class SongUploadService {
       songStats.firstCustomInstrumentIndex;
 
     const paddedInstruments = body.customInstruments.concat(
-      Array(customInstrumentCount - body.customInstruments.length).fill(''),
+      Array(customInstrumentCount - body.customInstruments.length).fill('')
     );
 
     song.customInstruments = paddedInstruments;
@@ -142,7 +142,7 @@ export class SongUploadService {
   public async processUploadedSong({
     file,
     user,
-    body,
+    body
   }: {
     body: UploadSongDto;
     file: Express.Multer.File;
@@ -155,14 +155,14 @@ export class SongUploadService {
     const { nbsSong, songBuffer } = this.prepareSongForUpload(
       file.buffer,
       body,
-      user,
+      user
     );
 
     // Prepare packed song for upload
     // This can generate a client error if the custom instruments are invalid, so it's done before the song is uploaded
     const packedSongBuffer = await this.preparePackedSongForUpload(
       nbsSong,
-      body.customInstruments,
+      body.customInstruments
     );
 
     // Generate song public ID
@@ -174,7 +174,7 @@ export class SongUploadService {
     // Upload packed song file
     const packedFileKey = await this.uploadPackedSongFile(
       packedSongBuffer,
-      publicId,
+      publicId
     );
 
     // PROCESS UPLOADED SONG
@@ -187,7 +187,7 @@ export class SongUploadService {
     const thumbUrl: string = await this.generateAndUploadThumbnail(
       body.thumbnailData,
       nbsSong,
-      publicId,
+      publicId
     );
 
     // Create song document
@@ -199,7 +199,7 @@ export class SongUploadService {
       fileKey,
       packedFileKey, // TODO: should be packedFileUrl
       songStats,
-      file,
+      file
     );
 
     return song;
@@ -208,7 +208,7 @@ export class SongUploadService {
   public async processSongPatch(
     songDocument: SongDocument,
     body: UploadSongDto,
-    user: UserDocument,
+    user: UserDocument
   ): Promise<void> {
     // Compare arrays of custom instruments including order
     const customInstrumentsChanged =
@@ -234,7 +234,7 @@ export class SongUploadService {
       // and/or regenerate and reupload the thumbnail
 
       const songFile = await this.fileService.getSongFile(
-        songDocument.nbsFileUrl,
+        songDocument.nbsFileUrl
       );
 
       const originalSongBuffer = Buffer.from(songFile);
@@ -246,13 +246,13 @@ export class SongUploadService {
         const { nbsSong, songBuffer } = this.prepareSongForUpload(
           originalSongBuffer,
           body,
-          user,
+          user
         );
 
         // Obfuscate and pack song with updated custom instruments
         const packedSongBuffer = await this.preparePackedSongForUpload(
           nbsSong,
-          body.customInstruments,
+          body.customInstruments
         );
 
         // Re-upload song file
@@ -261,7 +261,7 @@ export class SongUploadService {
         // Re-upload packed song file
         await this.uploadPackedSongFile(
           packedSongBuffer,
-          songDocument.publicId,
+          songDocument.publicId
         );
       }
 
@@ -273,7 +273,7 @@ export class SongUploadService {
         await this.generateAndUploadThumbnail(
           body.thumbnailData,
           nbsSong,
-          songDocument.publicId,
+          songDocument.publicId
         );
       }
     }
@@ -282,11 +282,11 @@ export class SongUploadService {
   private prepareSongForUpload(
     songFileBuffer: Buffer,
     body: UploadSongDto,
-    user: UserDocument,
+    user: UserDocument
   ): { nbsSong: Song; songBuffer: Buffer } {
     const songFileArrayBuffer = songFileBuffer.buffer.slice(
       songFileBuffer.byteOffset,
-      songFileBuffer.byteOffset + songFileBuffer.byteLength,
+      songFileBuffer.byteOffset + songFileBuffer.byteLength
     ) as ArrayBuffer;
 
     // Is the uploaded file a valid .nbs file?
@@ -299,7 +299,7 @@ export class SongUploadService {
       removeExtraSpaces(user.username),
       removeExtraSpaces(body.originalAuthor),
       removeExtraSpaces(body.description),
-      body.customInstruments,
+      body.customInstruments
     );
 
     const updatedSongArrayBuffer = toArrayBuffer(nbsSong);
@@ -310,7 +310,7 @@ export class SongUploadService {
 
   private async preparePackedSongForUpload(
     nbsSong: Song,
-    soundsArray: string[],
+    soundsArray: string[]
   ): Promise<Buffer> {
     const soundsMapping = await this.getSoundsMapping();
     const validSoundsSubset = await this.getValidSoundsSubset();
@@ -320,7 +320,7 @@ export class SongUploadService {
     const packedSongBuffer = await obfuscateAndPackSong(
       nbsSong,
       soundsArray,
-      soundsMapping,
+      soundsMapping
     );
 
     return packedSongBuffer;
@@ -328,13 +328,13 @@ export class SongUploadService {
 
   private validateCustomInstruments(
     soundsArray: string[],
-    validSounds: Set<string>,
+    validSounds: Set<string>
   ): void {
     const isInstrumentValid = (sound: string) =>
       sound === '' || validSounds.has(sound);
 
     const areAllInstrumentsValid = soundsArray.every((sound) =>
-      isInstrumentValid(sound),
+      isInstrumentValid(sound)
     );
 
     if (!areAllInstrumentsValid) {
@@ -342,10 +342,10 @@ export class SongUploadService {
         {
           error: {
             customInstruments:
-              'One or more invalid custom instruments have been set',
-          },
+              'One or more invalid custom instruments have been set'
+          }
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
@@ -353,20 +353,20 @@ export class SongUploadService {
   public async generateAndUploadThumbnail(
     thumbnailData: ThumbnailData,
     nbsSong: Song,
-    publicId: string,
+    publicId: string
   ): Promise<string> {
     const { startTick, startLayer, zoomLevel, backgroundColor } = thumbnailData;
 
     const quadTree = new NoteQuadTree(nbsSong);
 
     const thumbBuffer = await drawToImage({
-      notes: quadTree,
-      startTick: startTick,
-      startLayer: startLayer,
-      zoomLevel: zoomLevel,
+      notes          : quadTree,
+      startTick      : startTick,
+      startLayer     : startLayer,
+      zoomLevel      : zoomLevel,
       backgroundColor: backgroundColor,
-      imgWidth: 1280,
-      imgHeight: 768,
+      imgWidth       : 1280,
+      imgHeight      : 768
     });
 
     // Upload thumbnail
@@ -378,10 +378,10 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: "An error occurred while creating the song's thumbnail",
-          },
+            file: "An error occurred while creating the song's thumbnail"
+          }
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -392,7 +392,7 @@ export class SongUploadService {
 
   private async uploadSongFile(
     file: Buffer,
-    publicId: string,
+    publicId: string
   ): Promise<string> {
     let fileKey: string;
 
@@ -402,10 +402,10 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: 'An error occurred while uploading the packed song file',
-          },
+            file: 'An error occurred while uploading the packed song file'
+          }
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -416,7 +416,7 @@ export class SongUploadService {
 
   private async uploadPackedSongFile(
     file: Buffer,
-    publicId: string,
+    publicId: string
   ): Promise<string> {
     let fileKey: string;
 
@@ -426,10 +426,10 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: 'An error occurred while uploading the song file',
-          },
+            file: 'An error occurred while uploading the song file'
+          }
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -446,11 +446,11 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: 'Invalid NBS file',
-            errors: nbsSong.errors,
-          },
+            file  : 'Invalid NBS file',
+            errors: nbsSong.errors
+          }
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -462,10 +462,10 @@ export class SongUploadService {
       throw new HttpException(
         {
           error: {
-            file: 'File not found',
-          },
+            file: 'File not found'
+          }
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }

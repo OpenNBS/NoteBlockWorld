@@ -3,7 +3,7 @@ import {
   GetUser,
   PageQueryDTO,
   User,
-  UserDocument,
+  UserDocument
 } from '@nbw/database';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
@@ -13,14 +13,14 @@ import { Model } from 'mongoose';
 import { UserService } from './user.service';
 
 const mockUserModel = {
-  create: jest.fn(),
-  findOne: jest.fn(),
-  findById: jest.fn(),
-  find: jest.fn(),
-  save: jest.fn(),
-  exec: jest.fn(),
-  select: jest.fn(),
-  countDocuments: jest.fn(),
+  create        : jest.fn(),
+  findOne       : jest.fn(),
+  findById      : jest.fn(),
+  find          : jest.fn(),
+  save          : jest.fn(),
+  exec          : jest.fn(),
+  select        : jest.fn(),
+  countDocuments: jest.fn()
 };
 
 describe('UserService', () => {
@@ -32,10 +32,10 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: getModelToken(User.name),
-          useValue: mockUserModel,
-        },
-      ],
+          provide : getModelToken(User.name),
+          useValue: mockUserModel
+        }
+      ]
     }).compile();
 
     service = module.get<UserService>(UserService);
@@ -49,14 +49,14 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUser = {
-        username: 'testuser',
-        email: 'test@example.com',
-        profileImage: 'testimage.png',
+        username    : 'testuser',
+        email       : 'test@example.com',
+        profileImage: 'testimage.png'
       };
 
       const user = {
         ...createUserDto,
-        save: jest.fn().mockReturnThis(),
+        save: jest.fn().mockReturnThis()
       } as any;
 
       jest.spyOn(userModel, 'create').mockReturnValue(user);
@@ -75,7 +75,7 @@ describe('UserService', () => {
       const user = { email } as UserDocument;
 
       jest.spyOn(userModel, 'findOne').mockReturnValue({
-        exec: jest.fn().mockResolvedValue(user),
+        exec: jest.fn().mockResolvedValue(user)
       } as any);
 
       const result = await service.findByEmail(email);
@@ -91,7 +91,7 @@ describe('UserService', () => {
       const user = { _id: id } as UserDocument;
 
       jest.spyOn(userModel, 'findById').mockReturnValue({
-        exec: jest.fn().mockResolvedValue(user),
+        exec: jest.fn().mockResolvedValue(user)
       } as any);
 
       const result = await service.findByID(id);
@@ -109,14 +109,14 @@ describe('UserService', () => {
       const usersPage = {
         users,
         total: 1,
-        page: 1,
-        limit: 10,
+        page : 1,
+        limit: 10
       };
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockResolvedValue(users),
+        sort : jest.fn().mockReturnThis(),
+        skip : jest.fn().mockReturnThis(),
+        limit: jest.fn().mockResolvedValue(users)
       };
 
       jest.spyOn(userModel, 'find').mockReturnValue(mockFind as any);
@@ -160,8 +160,8 @@ describe('UserService', () => {
       await expect(service.getUserByEmailOrId(query)).rejects.toThrow(
         new HttpException(
           'Username is not supported yet',
-          HttpStatus.BAD_REQUEST,
-        ),
+          HttpStatus.BAD_REQUEST
+        )
       );
     });
 
@@ -171,8 +171,8 @@ describe('UserService', () => {
       await expect(service.getUserByEmailOrId(query)).rejects.toThrow(
         new HttpException(
           'You must provide an email or an id',
-          HttpStatus.BAD_REQUEST,
-        ),
+          HttpStatus.BAD_REQUEST
+        )
       );
     });
   });
@@ -184,7 +184,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findById').mockReturnValue({
         populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(hydratedUser),
+        exec    : jest.fn().mockResolvedValue(hydratedUser)
       } as any);
 
       const result = await service.getHydratedUser(user);
@@ -193,7 +193,7 @@ describe('UserService', () => {
       expect(userModel.findById).toHaveBeenCalledWith(user._id);
 
       expect(userModel.findById(user._id).populate).toHaveBeenCalledWith(
-        'songs',
+        'songs'
       );
     });
   });
@@ -217,7 +217,7 @@ describe('UserService', () => {
       jest.spyOn(service, 'findByID').mockResolvedValue(null);
 
       await expect(service.getSelfUserData(user)).rejects.toThrow(
-        new HttpException('user not found', HttpStatus.NOT_FOUND),
+        new HttpException('user not found', HttpStatus.NOT_FOUND)
       );
     });
 
@@ -229,9 +229,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
+        lastSeen   : yesterday,
         loginStreak: 1,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -250,9 +250,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: today,
+        lastSeen   : today,
         loginStreak: 1,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -272,9 +272,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: twoDaysAgo,
+        lastSeen   : twoDaysAgo,
         loginStreak: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -294,9 +294,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
+        lastSeen  : yesterday,
         loginCount: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save      : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -316,9 +316,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: today,
+        lastSeen  : today,
         loginCount: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save      : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -339,10 +339,10 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
-        loginStreak: 8,
+        lastSeen      : yesterday,
+        loginStreak   : 8,
         maxLoginStreak: 8,
-        save: jest.fn().mockResolvedValue(true),
+        save          : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -362,10 +362,10 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
-        loginStreak: 4,
+        lastSeen      : yesterday,
+        loginStreak   : 4,
         maxLoginStreak: 8,
-        save: jest.fn().mockResolvedValue(true),
+        save          : jest.fn().mockResolvedValue(true)
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -384,7 +384,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findOne').mockReturnValue({
         select: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(user),
+        exec  : jest.fn().mockResolvedValue(user)
       } as any);
 
       const result = await service.usernameExists(username);
@@ -393,7 +393,7 @@ describe('UserService', () => {
       expect(userModel.findOne).toHaveBeenCalledWith({ username });
 
       expect(userModel.findOne({ username }).select).toHaveBeenCalledWith(
-        'username',
+        'username'
       );
     });
 
@@ -402,7 +402,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findOne').mockReturnValue({
         select: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(null),
+        exec  : jest.fn().mockResolvedValue(null)
       } as any);
 
       const result = await service.usernameExists(username);
@@ -411,7 +411,7 @@ describe('UserService', () => {
       expect(userModel.findOne).toHaveBeenCalledWith({ username });
 
       expect(userModel.findOne({ username }).select).toHaveBeenCalledWith(
-        'username',
+        'username'
       );
     });
   });
@@ -488,7 +488,7 @@ describe('UserService', () => {
     it('should update a user username', async () => {
       const user = {
         username: 'testuser',
-        save: jest.fn().mockReturnThis(),
+        save    : jest.fn().mockReturnThis()
       } as unknown as UserDocument;
 
       const body = { username: 'newuser' };
@@ -498,9 +498,9 @@ describe('UserService', () => {
       const result = await service.updateUsername(user, body);
 
       expect(result).toEqual({
-        username: 'newuser',
+        username  : 'newuser',
         publicName: undefined,
-        email: undefined,
+        email     : undefined
       });
 
       expect(user.username).toBe(body.username);
@@ -510,7 +510,7 @@ describe('UserService', () => {
     it('should throw an error if username already exists', async () => {
       const user = {
         username: 'testuser',
-        save: jest.fn().mockReturnThis(),
+        save    : jest.fn().mockReturnThis()
       } as unknown as UserDocument;
 
       const body = { username: 'newuser' };
@@ -518,7 +518,7 @@ describe('UserService', () => {
       jest.spyOn(service, 'usernameExists').mockResolvedValue(true);
 
       await expect(service.updateUsername(user, body)).rejects.toThrow(
-        new HttpException('Username already exists', HttpStatus.BAD_REQUEST),
+        new HttpException('Username already exists', HttpStatus.BAD_REQUEST)
       );
     });
   });

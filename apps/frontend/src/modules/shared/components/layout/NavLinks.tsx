@@ -6,7 +6,7 @@ import { UserMenu } from './UserMenu';
 
 export function NavLinks({
   isUserLoggedIn,
-  userData,
+  userData
 }: {
   isUserLoggedIn: boolean;
   userData?: LoggedUserData;

@@ -55,7 +55,7 @@ export class SongObfuscator {
 
     for (const [
       instrumentId,
-      instrument,
+      instrument
     ] of song.instruments.loaded.entries()) {
       if (instrument.builtIn) {
         instrumentMapping[instrumentId] = instrumentId;
@@ -74,7 +74,7 @@ export class SongObfuscator {
       ) {
         console.log(
           `Skipping instrument '${instrumentName}' with ${noteCountPerInstrument[instrumentId]}`,
-          `notes and sound file '${soundFilePath}' (custom ID: ${customId})`,
+          `notes and sound file '${soundFilePath}' (custom ID: ${customId})`
         );
 
         continue;
@@ -87,14 +87,14 @@ export class SongObfuscator {
       console.log(
         `Keeping instrument '${instrumentName}' with`,
         `${noteCountPerInstrument[instrumentId]} notes and sound file`,
-        `'${this.soundPaths[customId]}' (custom ID: ${customId} -> ${newCustomId})`,
+        `'${this.soundPaths[customId]}' (custom ID: ${customId} -> ${newCustomId})`
       );
 
       const newInstrument = new Instrument(newInstrumentId, {
-        name: instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
+        name     : instrumentName === 'Tempo Changer' ? 'Tempo Changer' : '',
         soundFile: soundFilePath,
-        key: instrument.key,
-        pressKey: false,
+        key      : instrument.key,
+        pressKey : false
       });
 
       output.instruments.loaded.push(newInstrument);
@@ -107,7 +107,7 @@ export class SongObfuscator {
   private resolveNotes(
     song: Song,
     output: Song,
-    instrumentMapping: Record<number, number>,
+    instrumentMapping: Record<number, number>
   ) {
     // ✅ Pile notes at the top
     // ✅ Bake layer volume into note velocity
@@ -172,7 +172,7 @@ export class SongObfuscator {
         key,
         velocity,
         panning,
-        pitch,
+        pitch
       });
 
       return newNote;

@@ -21,7 +21,7 @@ export const thumbnailDataSchema = zod.object({
   backgroundColor: zod
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/)
-    .default(THUMBNAIL_CONSTANTS.backgroundColor.default),
+    .default(THUMBNAIL_CONSTANTS.backgroundColor.default)
 });
 
 const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
@@ -39,43 +39,43 @@ export const SongFormSchema = zod.object({
 
   // @ts-ignore
   visibility: zod.enum(visibility).default('public'),
-  title: zod
+  title     : zod
     .string()
     .max(UPLOAD_CONSTANTS.title.maxLength, {
-      message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
+      message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`
     })
     .min(1, {
-      message: 'Title is required',
+      message: 'Title is required'
     }),
   originalAuthor: zod
     .string()
     .max(UPLOAD_CONSTANTS.originalAuthor.maxLength, {
-      message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
+      message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`
     })
     .min(0),
-  author: zod.string().optional(),
+  author     : zod.string().optional(),
   description: zod.string().max(UPLOAD_CONSTANTS.description.maxLength, {
-    message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
+    message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`
   }),
-  thumbnailData: thumbnailDataSchema,
+  thumbnailData    : thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
-  license: zod
+  license          : zod
 
     // @ts-ignore
     .enum(licenses, {
-      message: 'Please select a license',
+      message: 'Please select a license'
     })
     .refine((value) => Object.keys(UPLOAD_CONSTANTS.licenses).includes(value))
     .default(UPLOAD_CONSTANTS.license.default),
 
   // @ts-ignore
-  category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT),
+  category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT)
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});
 
 export const editSongFormSchema = SongFormSchema.extend({
-  id: zod.string(),
+  id: zod.string()
 });
 
 export type ThumbnailDataForm = zod.infer<typeof thumbnailDataSchema>;

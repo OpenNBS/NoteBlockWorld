@@ -3,7 +3,7 @@
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '@web/modules/shared/components/tooltip';
 
 import { useFeaturedSongsProvider } from './context/FeaturedSongs.context';
@@ -75,7 +75,7 @@ export const TimespanButton = ({
   isDisabled,
   onClick,
   children,
-  id,
+  id
 }: TimespanButtonProps) => {
   return (
     <Tooltip>

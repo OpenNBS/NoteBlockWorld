@@ -8,13 +8,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   private static logger = new Logger(GoogleStrategy.name);
   constructor(
     @Inject(ConfigService)
-    configService: ConfigService,
+    configService: ConfigService
   ) {
     const GOOGLE_CLIENT_ID =
       configService.getOrThrow<string>('GOOGLE_CLIENT_ID');
 
     const GOOGLE_CLIENT_SECRET = configService.getOrThrow<string>(
-      'GOOGLE_CLIENT_SECRET',
+      'GOOGLE_CLIENT_SECRET'
     );
 
     const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
@@ -23,10 +23,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     GoogleStrategy.logger.debug(`Google Login callbackURL ${callbackURL}`);
 
     super({
-      clientID: GOOGLE_CLIENT_ID,
+      clientID    : GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: callbackURL,
-      scope: ['email', 'profile'],
+      callbackURL : callbackURL,
+      scope       : ['email', 'profile']
     });
   }
 
@@ -34,7 +34,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     accessToken: string,
     refreshToken: string,
     profile: any,
-    done: VerifyCallback,
+    done: VerifyCallback
   ): any {
     GoogleStrategy.logger.debug(`Google Login Data ${JSON.stringify(profile)}`);
     done(null, profile);

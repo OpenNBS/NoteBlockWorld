@@ -7,14 +7,14 @@ import {
   SongDocument,
   UploadSongDto,
   UserDocument,
-  VisibilityType,
+  VisibilityType
 } from '@nbw/database';
 import {
   HttpException,
   HttpStatus,
   Inject,
   Injectable,
-  Logger,
+  Logger
 } from '@nestjs/common';
 
 import { SongService } from '@server/song/song.service';
@@ -31,7 +31,7 @@ export class SeedService {
     private readonly userService: UserService,
 
     @Inject(SongService)
-    private readonly songService: SongService,
+    private readonly songService: SongService
   ) {}
 
   public async seedDev() {
@@ -51,13 +51,13 @@ export class SeedService {
 
     for (let i = 0; i < 100; i++) {
       const user = await this.userService.createWithEmail(
-        faker.internet.email(),
+        faker.internet.email()
       );
 
       //change user creation date
       (user as any).createdAt = this.generateRandomDate(
         new Date(2020, 0, 1),
-        new Date(),
+        new Date()
       );
 
       user.loginCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
@@ -65,21 +65,21 @@ export class SeedService {
       user.description = faker.lorem.paragraph();
 
       user.socialLinks = {
-        youtube: faker.internet.url(),
-        x: faker.internet.url(),
-        discord: faker.internet.url(),
-        instagram: faker.internet.url(),
-        twitch: faker.internet.url(),
-        bandcamp: faker.internet.url(),
-        facebook: faker.internet.url(),
-        github: faker.internet.url(),
-        reddit: faker.internet.url(),
-        snapchat: faker.internet.url(),
+        youtube   : faker.internet.url(),
+        x         : faker.internet.url(),
+        discord   : faker.internet.url(),
+        instagram : faker.internet.url(),
+        twitch    : faker.internet.url(),
+        bandcamp  : faker.internet.url(),
+        facebook  : faker.internet.url(),
+        github    : faker.internet.url(),
+        reddit    : faker.internet.url(),
+        snapchat  : faker.internet.url(),
         soundcloud: faker.internet.url(),
-        spotify: faker.internet.url(),
-        steam: faker.internet.url(),
-        telegram: faker.internet.url(),
-        tiktok: faker.internet.url(),
+        spotify   : faker.internet.url(),
+        steam     : faker.internet.url(),
+        telegram  : faker.internet.url(),
+        tiktok    : faker.internet.url()
       };
 
       // remove some social links randomly to simulate users not having all of them or having none
@@ -109,37 +109,37 @@ export class SeedService {
 
         const body: UploadSongDto = {
           file: {
-            buffer: fileData,
-            size: fileBuffer.length,
-            mimetype: 'application/octet-stream',
-            originalname: `${faker.music.songName()}.nbs`,
+            buffer      : fileData,
+            size        : fileBuffer.length,
+            mimetype    : 'application/octet-stream',
+            originalname: `${faker.music.songName()}.nbs`
           },
           allowDownload: faker.datatype.boolean(),
-          visibility: faker.helpers.arrayElement(
-            visibilities,
+          visibility   : faker.helpers.arrayElement(
+            visibilities
           ) as VisibilityType,
-          title: faker.music.songName(),
-          originalAuthor: faker.music.artist(),
-          description: faker.lorem.paragraph(),
-          license: faker.helpers.arrayElement(licenses) as LicenseType,
-          category: faker.helpers.arrayElement(categories) as CategoryType,
+          title            : faker.music.songName(),
+          originalAuthor   : faker.music.artist(),
+          description      : faker.lorem.paragraph(),
+          license          : faker.helpers.arrayElement(licenses) as LicenseType,
+          category         : faker.helpers.arrayElement(categories) as CategoryType,
           customInstruments: [],
-          thumbnailData: {
+          thumbnailData    : {
             backgroundColor: faker.internet.color(),
-            startLayer: faker.helpers.rangeToNumber({ min: 0, max: 4 }),
-            startTick: faker.helpers.rangeToNumber({ min: 0, max: 100 }),
-            zoomLevel: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
-          },
+            startLayer     : faker.helpers.rangeToNumber({ min: 0, max: 4 }),
+            startTick      : faker.helpers.rangeToNumber({ min: 0, max: 100 }),
+            zoomLevel      : faker.helpers.rangeToNumber({ min: 1, max: 5 })
+          }
         };
 
         const uploadSongResponse = await this.songService.uploadSong({
           user,
           body,
-          file: body.file,
+          file: body.file
         });
 
         const song = await this.songService.getSongById(
-          uploadSongResponse.publicId,
+          uploadSongResponse.publicId
         );
 
         if (!song) continue;
@@ -147,7 +147,7 @@ export class SeedService {
         //change song creation date
         (song as any).createdAt = this.generateRandomDate(
           new Date(2020, 0, 1),
-          new Date(),
+          new Date()
         );
 
         song.playCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
@@ -166,7 +166,7 @@ export class SeedService {
     start = 1,
     stepScale = 2,
     stepProbability = 0.5,
-    limit = Number.MAX_SAFE_INTEGER,
+    limit = Number.MAX_SAFE_INTEGER
   ) {
     let max = start;
 
@@ -193,15 +193,15 @@ export class SeedService {
       layer.meta.name = instrument.meta.name;
 
       const notes = Array.from({
-        length: faker.helpers.rangeToNumber({ min: 20, max: 120 }),
+        length: faker.helpers.rangeToNumber({ min: 20, max: 120 })
       }).map(
         () =>
           new Note(instrument, {
-            key: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
+            key     : faker.helpers.rangeToNumber({ min: 0, max: 127 }),
             velocity: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
-            panning: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
-            pitch: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
-          }),
+            panning : faker.helpers.rangeToNumber({ min: -1, max: 1 }),
+            pitch   : faker.helpers.rangeToNumber({ min: -1, max: 1 })
+          })
       );
 
       for (let i = 0; i < notes.length; i++)
@@ -216,8 +216,8 @@ export class SeedService {
     return new Date(
       faker.date.between({
         from: from.getTime(),
-        to: to.getTime(),
-      }),
+        to  : to.getTime()
+      })
     );
   }
 }

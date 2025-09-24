@@ -11,9 +11,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     const JWT_SECRET = config.getOrThrow('JWT_SECRET');
 
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: JWT_SECRET,
-      passReqToCallback: true,
+      jwtFromRequest   : ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey      : JWT_SECRET,
+      passReqToCallback: true
     });
   }
 
@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
 
     return {
       ...payload,
-      refreshToken,
+      refreshToken
     };
   }
 }

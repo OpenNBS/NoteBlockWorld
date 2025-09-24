@@ -5,10 +5,10 @@ import { SongBrowserController } from './song-browser.controller';
 import { SongBrowserService } from './song-browser.service';
 
 const mockSongBrowserService = {
-  getFeaturedSongs: jest.fn(),
-  getRecentSongs: jest.fn(),
-  getCategories: jest.fn(),
-  getSongsByCategory: jest.fn(),
+  getFeaturedSongs  : jest.fn(),
+  getRecentSongs    : jest.fn(),
+  getCategories     : jest.fn(),
+  getSongsByCategory: jest.fn()
 };
 
 describe('SongBrowserController', () => {
@@ -18,12 +18,12 @@ describe('SongBrowserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongBrowserController],
-      providers: [
+      providers  : [
         {
-          provide: SongBrowserService,
-          useValue: mockSongBrowserService,
-        },
-      ],
+          provide : SongBrowserService,
+          useValue: mockSongBrowserService
+        }
+      ]
     }).compile();
 
     controller = module.get<SongBrowserController>(SongBrowserController);
@@ -39,7 +39,7 @@ describe('SongBrowserController', () => {
       const featuredSongs: FeaturedSongsDto = {} as FeaturedSongsDto;
 
       mockSongBrowserService.getFeaturedSongs.mockResolvedValueOnce(
-        featuredSongs,
+        featuredSongs
       );
 
       const result = await controller.getFeaturedSongs();
@@ -67,7 +67,7 @@ describe('SongBrowserController', () => {
     it('should return a list of song categories and song counts', async () => {
       const categories: Record<string, number> = {
         category1: 10,
-        category2: 5,
+        category2: 5
       };
 
       mockSongBrowserService.getCategories.mockResolvedValueOnce(categories);
@@ -93,7 +93,7 @@ describe('SongBrowserController', () => {
 
       expect(songBrowserService.getSongsByCategory).toHaveBeenCalledWith(
         id,
-        query,
+        query
       );
     });
   });

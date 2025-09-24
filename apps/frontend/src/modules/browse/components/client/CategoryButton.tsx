@@ -7,7 +7,7 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNextSmall,
-  CarouselPreviousSmall,
+  CarouselPreviousSmall
 } from '@web/modules/shared/components/client/Carousel';
 
 import { useRecentSongsProvider } from './context/RecentSongs.context';
@@ -28,11 +28,11 @@ export const CategoryButtonGroup = () => {
     <Carousel
       className='w-fit max-w-full'
       opts={{
-        align: 'start',
-        loop: false,
-        duration: 10,
+        align         : 'start',
+        loop          : false,
+        duration      : 10,
         slidesToScroll: 2,
-        dragFree: true,
+        dragFree      : true
       }}
       orientation='horizontal'
     >
@@ -71,7 +71,7 @@ export const CategoryButton = ({
   isDisabled,
   onClick,
   children,
-  id,
+  id
 }: CategoryButtonProps) => {
   return (
     <CarouselItem>

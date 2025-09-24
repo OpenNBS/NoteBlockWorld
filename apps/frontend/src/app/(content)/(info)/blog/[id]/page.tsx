@@ -17,18 +17,18 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
   return {
-    title: post.title,
-    authors: [{ name: post.author }],
+    title    : post.title,
+    authors  : [{ name: post.author }],
     openGraph: {
-      url: publicUrl + '/blog/' + id,
-      title: post.title,
+      url     : publicUrl + '/blog/' + id,
+      title   : post.title,
       siteName: 'Note Block World',
-      images: [
+      images  : [
         {
-          url: publicUrl + post.image,
-        },
-      ],
-    },
+          url: publicUrl + post.image
+        }
+      ]
+    }
   };
 }
 
@@ -80,11 +80,11 @@ const BlogPost = ({ params }: BlogPageProps) => {
             <p>
               {/* Add 12 hours to the date to display at noon UTC */}
               {new Date(
-                new Date(post.date).getTime() + 12 * 60 * 60 * 1000,
+                new Date(post.date).getTime() + 12 * 60 * 60 * 1000
               ).toLocaleDateString('en-UK', {
-                day: 'numeric',
+                day  : 'numeric',
                 month: 'short',
-                year: 'numeric',
+                year : 'numeric'
               })}
             </p>
           </div>

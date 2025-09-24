@@ -4,7 +4,7 @@ import {
   PageQueryDTO,
   SongPreviewDto,
   SongWithUser,
-  TimespanType,
+  TimespanType
 } from '@nbw/database';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
@@ -14,28 +14,28 @@ import { SongService } from '@server/song/song.service';
 export class SongBrowserService {
   constructor(
     @Inject(SongService)
-    private songService: SongService,
+    private songService: SongService
   ) {}
 
   public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
     const now = new Date(Date.now());
 
     const times: Record<TimespanType, number> = {
-      hour: new Date(Date.now()).setHours(now.getHours() - 1),
-      day: new Date(Date.now()).setDate(now.getDate() - 1),
-      week: new Date(Date.now()).setDate(now.getDate() - 7),
+      hour : new Date(Date.now()).setHours(now.getHours() - 1),
+      day  : new Date(Date.now()).setDate(now.getDate() - 1),
+      week : new Date(Date.now()).setDate(now.getDate() - 7),
       month: new Date(Date.now()).setMonth(now.getMonth() - 1),
-      year: new Date(Date.now()).setFullYear(now.getFullYear() - 1),
-      all: new Date(0).getTime(),
+      year : new Date(Date.now()).setFullYear(now.getFullYear() - 1),
+      all  : new Date(0).getTime()
     };
 
     const songs: Record<TimespanType, SongWithUser[]> = {
-      hour: [],
-      day: [],
-      week: [],
+      hour : [],
+      day  : [],
+      week : [],
       month: [],
-      year: [],
-      all: [],
+      year : [],
+      all  : []
     };
 
     for (const [timespan, time] of Object.entries(times)) {
@@ -51,7 +51,7 @@ export class SongBrowserService {
         const missing = BROWSER_SONGS.paddedFeaturedPageSize - songPage.length;
 
         const additionalSongs = await this.songService.getSongsBeforeTimespan(
-          time,
+          time
         );
 
         songPage.push(...additionalSongs.slice(0, missing));
@@ -63,27 +63,27 @@ export class SongBrowserService {
     const featuredSongs = FeaturedSongsDto.create();
 
     featuredSongs.hour = songs.hour.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     featuredSongs.day = songs.day.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     featuredSongs.week = songs.week.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     featuredSongs.month = songs.month.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     featuredSongs.year = songs.year.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     featuredSongs.all = songs.all.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      SongPreviewDto.fromSongDocumentWithUser(song)
     );
 
     return featuredSongs;
@@ -95,7 +95,7 @@ export class SongBrowserService {
     if (!page || !limit) {
       throw new HttpException(
         'Invalid query parameters',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -108,18 +108,18 @@ export class SongBrowserService {
 
   public async getSongsByCategory(
     category: string,
-    query: PageQueryDTO,
+    query: PageQueryDTO
   ): Promise<SongPreviewDto[]> {
     return await this.songService.getSongsByCategory(
       category,
       query.page ?? 1,
-      query.limit ?? 10,
+      query.limit ?? 10
     );
   }
 
   public async getRandomSongs(
     count: number,
-    category: string,
+    category: string
   ): Promise<SongPreviewDto[]> {
     return await this.songService.getRandomSongs(count, category);
   }

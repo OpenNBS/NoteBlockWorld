@@ -2,7 +2,7 @@ import {
   faCirclePlay,
   faEye,
   faEyeSlash,
-  faPlay,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongPreviewDtoType } from '@nbw/database';
@@ -12,12 +12,13 @@ import Skeleton from 'react-loading-skeleton';
 import SongThumbnail from '@web/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/modules/shared/util/format';
 
-import { useMySongsProvider } from './context/MySongs.context';
 import {
   DeleteButton,
   DownloadSongButton,
-  EditButton,
+  EditButton
 } from '../client/MySongsButtons';
+
+import { useMySongsProvider } from './context/MySongs.context';
 
 export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
@@ -123,9 +124,9 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
         ) : (
           <>
             {new Date(song.createdAt).toLocaleDateString('en-US', {
-              day: 'numeric',
+              day  : 'numeric',
               month: 'short',
-              year: 'numeric',
+              year : 'numeric'
             })}
           </>
         )}

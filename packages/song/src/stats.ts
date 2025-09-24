@@ -29,7 +29,7 @@ export class SongStatsGenerator {
       detunedNoteCount,
       customInstrumentNoteCount,
       incompatibleNoteCount,
-      instrumentNoteCounts,
+      instrumentNoteCounts
     } = this.getCounts(tempoChangerInstrumentIds);
 
     const tempoSegments = this.getTempoSegments(tempoChangerInstrumentIds);
@@ -45,7 +45,7 @@ export class SongStatsGenerator {
     const { vanillaInstrumentCount, customInstrumentCount } =
       this.getVanillaAndCustomUsedInstrumentCounts(
         instrumentNoteCounts,
-        tempoChangerInstrumentIds,
+        tempoChangerInstrumentIds
       );
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
@@ -72,7 +72,7 @@ export class SongStatsGenerator {
       outOfRangeNoteCount,
       detunedNoteCount,
       incompatibleNoteCount,
-      compatible,
+      compatible
     };
   }
 
@@ -103,7 +103,7 @@ export class SongStatsGenerator {
     let incompatibleNoteCount = 0;
 
     const instrumentNoteCounts = Array(
-      this.song.instruments.loaded.length,
+      this.song.instruments.loaded.length
     ).fill(0);
 
     for (const [layerId, layer] of this.song.layers.entries()) {
@@ -159,7 +159,7 @@ export class SongStatsGenerator {
         // Don't consider tempo changers as detuned notes or custom instruments
         const isTempoChanger = tempoChangerInstruments.includes(
           // @ts-ignore //TODO: fix this
-          note.instrument,
+          note.instrument
         );
 
         // @ts-ignore //TODO: fix this
@@ -194,7 +194,7 @@ export class SongStatsGenerator {
       detunedNoteCount,
       customInstrumentNoteCount,
       incompatibleNoteCount,
-      instrumentNoteCounts,
+      instrumentNoteCounts
     };
   }
 
@@ -203,7 +203,7 @@ export class SongStatsGenerator {
   }
 
   private getTempoRange(
-    tempoSegments: Record<number, number>,
+    tempoSegments: Record<number, number>
   ): number[] | null {
     const tempoValues = Object.values(tempoSegments);
     // If song has only the tempo set at the beginning, we have no tempo changes (indicated as null)
@@ -216,7 +216,7 @@ export class SongStatsGenerator {
   }
 
   private getTempoSegments(
-    tempoChangerInstruments: number[],
+    tempoChangerInstruments: number[]
   ): Record<number, number> {
     const tempoSegments: Record<number, number> = {};
 
@@ -254,7 +254,7 @@ export class SongStatsGenerator {
 
   private getDuration(tempoSegments: Record<number, number>): number {
     const tempoChangeTicks = Object.keys(tempoSegments).map((tick) =>
-      parseInt(tick),
+      parseInt(tick)
     );
 
     tempoChangeTicks.sort((a, b) => a - b);
@@ -300,7 +300,7 @@ export class SongStatsGenerator {
 
   private getVanillaAndCustomUsedInstrumentCounts(
     noteCountsPerInstrument: number[],
-    tempoChangerInstruments: number[],
+    tempoChangerInstruments: number[]
   ): {
     vanillaInstrumentCount: number;
     customInstrumentCount: number;
@@ -321,7 +321,7 @@ export class SongStatsGenerator {
 
     return {
       vanillaInstrumentCount,
-      customInstrumentCount,
+      customInstrumentCount
     };
   }
 

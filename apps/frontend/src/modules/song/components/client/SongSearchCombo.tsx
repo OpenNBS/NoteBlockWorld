@@ -11,19 +11,19 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
+  CommandList
 } from '../../../shared/components/client/Command';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '../../../shared/components/client/Popover';
 
 export function SongSearchCombo({
   value,
   setValue,
   sounds,
-  locked,
+  locked
 }: {
   value: string;
   setValue: (value: string) => void;
@@ -48,7 +48,7 @@ export function SongSearchCombo({
       return false;
     })
     .sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }),
+      a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true })
     );
 
   return (
@@ -71,7 +71,7 @@ export function SongSearchCombo({
             size='sm'
             className={cn(
               'absolute right-0 top-2.5 mx-1 w-3 shrink-0',
-              locked ? 'text-zinc-600' : 'text-zinc-300',
+              locked ? 'text-zinc-600' : 'text-zinc-300'
             )}
           />
         </button>
@@ -98,7 +98,7 @@ export function SongSearchCombo({
                   size='sm'
                   className={cn(
                     'mr-2 h-4 w-4',
-                    value === '' ? 'opacity-100' : 'opacity-0',
+                    value === '' ? 'opacity-100' : 'opacity-0'
                   )}
                 />
                 No sound
@@ -117,7 +117,7 @@ export function SongSearchCombo({
                     size='sm'
                     className={cn(
                       'mr-2 h-4 w-4',
-                      value === currentSound ? 'opacity-100' : 'opacity-0',
+                      value === currentSound ? 'opacity-100' : 'opacity-0'
                     )}
                   />
                   {currentSound

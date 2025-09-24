@@ -10,12 +10,12 @@ export class SeedController {
 
   @Get('seed-dev')
   @ApiOperation({
-    summary: 'Seed the database with development data',
+    summary: 'Seed the database with development data'
   })
   async seed() {
     this.seedService.seedDev();
     return {
-      message: 'Seeding in progress',
+      message: 'Seeding in progress'
     };
   }
 }

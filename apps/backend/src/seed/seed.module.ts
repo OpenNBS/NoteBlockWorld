@@ -16,24 +16,24 @@ export class SeedModule {
     if (env.NODE_ENV !== 'development') {
       SeedModule.logger.warn('Seeding is only allowed in development mode');
       return {
-        module: SeedModule,
+        module: SeedModule
       };
     } else {
       SeedModule.logger.warn('Seeding is allowed in development mode');
       return {
-        module: SeedModule,
-        imports: [UserModule, SongModule, ConfigModule.forRoot()],
+        module   : SeedModule,
+        imports  : [UserModule, SongModule, ConfigModule.forRoot()],
         providers: [
           ConfigService,
           SeedService,
           {
-            provide: 'NODE_ENV',
+            provide   : 'NODE_ENV',
             useFactory: (configService: ConfigService) =>
               configService.get('NODE_ENV'),
-            inject: [ConfigService],
-          },
+            inject: [ConfigService]
+          }
         ],
-        controllers: [SeedController],
+        controllers: [SeedController]
       };
     }
   }

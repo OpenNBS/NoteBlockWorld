@@ -6,7 +6,7 @@ import { GetRequestToken, validateUser } from './GetRequestUser';
 describe('GetRequestToken', () => {
   it('should be a defined decorator', () => {
     const mockExecutionContext = {
-      switchToHttp: jest.fn().mockReturnThis(),
+      switchToHttp: jest.fn().mockReturnThis()
     } as unknown as ExecutionContext;
 
     const result = GetRequestToken(null, mockExecutionContext);
@@ -18,8 +18,8 @@ describe('GetRequestToken', () => {
 describe('validateUser', () => {
   it('should return the user if the user exists', () => {
     const mockUser = {
-      _id: 'test-id',
-      username: 'testuser',
+      _id     : 'test-id',
+      username: 'testuser'
     } as unknown as UserDocument;
 
     const result = validateUser(mockUser);
@@ -32,11 +32,11 @@ describe('validateUser', () => {
       new HttpException(
         {
           error: {
-            user: 'User not found',
-          },
+            user: 'User not found'
+          }
         },
-        HttpStatus.UNAUTHORIZED,
-      ),
+        HttpStatus.UNAUTHORIZED
+      )
     );
   });
 });

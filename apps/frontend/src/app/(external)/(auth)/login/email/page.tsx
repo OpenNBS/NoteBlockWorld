@@ -5,7 +5,7 @@ import { LoginWithEmailPage } from '@web/modules/auth/components/loginWithEmailP
 import { checkLogin } from '@web/modules/auth/features/auth.utils';
 
 export const metadata: Metadata = {
-  title: 'Sign in',
+  title: 'Sign in'
 };
 
 const Login = async () => {

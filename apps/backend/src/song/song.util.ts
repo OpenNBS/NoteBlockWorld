@@ -40,62 +40,62 @@ export function getUploadDiscordEmbed({
   originalAuthor,
   category,
   license,
-  stats,
+  stats
 }: SongWithUser) {
   let fieldsArray = [];
 
   if (originalAuthor) {
     fieldsArray.push({
-      name: 'Original Author',
-      value: originalAuthor,
-      inline: false,
+      name  : 'Original Author',
+      value : originalAuthor,
+      inline: false
     });
   }
 
   fieldsArray = fieldsArray.concat([
     {
-      name: 'Category',
-      value: UPLOAD_CONSTANTS.categories[category],
-      inline: true,
+      name  : 'Category',
+      value : UPLOAD_CONSTANTS.categories[category],
+      inline: true
     },
     {
-      name: 'Notes',
-      value: stats.noteCount.toLocaleString('en-US'),
-      inline: true,
+      name  : 'Notes',
+      value : stats.noteCount.toLocaleString('en-US'),
+      inline: true
     },
     {
-      name: 'Length',
-      value: formatDuration(stats.duration),
-      inline: true,
-    },
+      name  : 'Length',
+      value : formatDuration(stats.duration),
+      inline: true
+    }
   ]);
 
   return {
     embeds: [
       {
-        title: title,
+        title      : title,
         description: description,
-        color: Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
-        timestamp: createdAt.toISOString(),
-        footer: {
+        color      : Number('0x' + thumbnailData.backgroundColor.replace('#', '')),
+        timestamp  : createdAt.toISOString(),
+        footer     : {
           text: UPLOAD_CONSTANTS.licenses[license]
             ? UPLOAD_CONSTANTS.licenses[license].shortName
-            : 'Unknown License',
+            : 'Unknown License'
         },
         author: {
-          name: uploader.username,
-          icon_url: uploader.profileImage,
+          name    : uploader.username,
+          icon_url: uploader.profileImage
           //url: 'https://noteblock.world/user/${uploaderName}',
         },
         fields: fieldsArray,
-        url: `https://noteblock.world/song/${publicId}`,
-        image: {
-          url: thumbnailUrl,
+        url   : `https://noteblock.world/song/${publicId}`,
+        image : {
+          url: thumbnailUrl
         },
         thumbnail: {
-          url: 'https://noteblock.world/nbw-color.png',
-        },
-      },
-    ],
+          url: 'https://noteblock.world/nbw-color.png'
+        }
+      }
+    ]
   };
 }

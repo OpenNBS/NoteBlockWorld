@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const SongThumbnail = ({
   src,
-  fallbackSrc = '/demo.png',
+  fallbackSrc = '/demo.png'
 }: {
   src: string;
   fallbackSrc?: string;

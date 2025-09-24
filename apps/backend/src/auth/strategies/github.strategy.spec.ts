@@ -12,7 +12,7 @@ describe('GithubStrategy', () => {
       providers: [
         GithubStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
             getOrThrow: jest.fn((key: string) => {
               switch (key) {
@@ -25,10 +25,10 @@ describe('GithubStrategy', () => {
                 default:
                   return null;
               }
-            }),
-          },
-        },
-      ],
+            })
+          }
+        }
+      ]
     }).compile();
 
     githubStrategy = module.get<GithubStrategy>(GithubStrategy);
@@ -44,7 +44,7 @@ describe('GithubStrategy', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new GithubStrategy(configService)).toThrowError(
-        'OAuth2Strategy requires a clientID option',
+        'OAuth2Strategy requires a clientID option'
       );
     });
   });
@@ -58,7 +58,7 @@ describe('GithubStrategy', () => {
       const result = await githubStrategy.validate(
         accessToken,
         refreshToken,
-        profile,
+        profile
       );
 
       expect(result).toEqual({ accessToken, refreshToken, profile });

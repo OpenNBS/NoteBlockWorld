@@ -8,14 +8,14 @@ import {
   SongViewDto,
   SongWithUser,
   UploadSongDto,
-  UploadSongResponseDto,
+  UploadSongResponseDto
 } from '@nbw/database';
 import {
   HttpException,
   HttpStatus,
   Inject,
   Injectable,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -40,19 +40,19 @@ export class SongService {
     private songUploadService: SongUploadService,
 
     @Inject(SongWebhookService)
-    private songWebhookService: SongWebhookService,
+    private songWebhookService: SongWebhookService
   ) {}
 
   public async getSongById(publicId: string) {
     return this.songModel.findOne({
-      publicId,
+      publicId
     });
   }
 
   public async uploadSong({
     file,
     user,
-    body,
+    body
   }: {
     body: UploadSongDto;
     file: Express.Multer.File;
@@ -61,7 +61,7 @@ export class SongService {
     const song = await this.songUploadService.processUploadedSong({
       file,
       user,
-      body,
+      body
     });
 
     // Create song document
@@ -70,11 +70,11 @@ export class SongService {
     // Post Discord webhook
     const populatedSong = (await songDocument.populate(
       'uploader',
-      'username profileImage -_id',
+      'username profileImage -_id'
     )) as unknown as SongWithUser;
 
     const webhookMessageId = await this.songWebhookService.syncSongWebhook(
-      populatedSong,
+      populatedSong
     );
 
     songDocument.webhookMessageId = webhookMessageId;
@@ -87,7 +87,7 @@ export class SongService {
 
   public async deleteSong(
     publicId: string,
-    user: UserDocument,
+    user: UserDocument
   ): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -107,7 +107,7 @@ export class SongService {
 
     const populatedSong = (await foundSong.populate(
       'uploader',
-      'username profileImage -_id',
+      'username profileImage -_id'
     )) as unknown as SongWithUser;
 
     await this.songWebhookService.deleteSongWebhook(populatedSong);
@@ -118,10 +118,10 @@ export class SongService {
   public async patchSong(
     publicId: string,
     body: UploadSongDto,
-    user: UserDocument,
+    user: UserDocument
   ): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel.findOne({
-      publicId: publicId,
+      publicId: publicId
     });
 
     if (!foundSong) {
@@ -168,11 +168,11 @@ export class SongService {
 
     const populatedSong = (await foundSong.populate(
       'uploader',
-      'username profileImage -_id',
+      'username profileImage -_id'
     )) as unknown as SongWithUser;
 
     const webhookMessageId = await this.songWebhookService.syncSongWebhook(
-      populatedSong,
+      populatedSong
     );
 
     foundSong.webhookMessageId = webhookMessageId;
@@ -189,16 +189,16 @@ export class SongService {
     if (!page || !limit || !sort) {
       throw new HttpException(
         'Invalid query parameters',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     const songs = (await this.songModel
       .find({
-        visibility: 'public',
+        visibility: 'public'
       })
       .sort({
-        [sort]: order ? 1 : -1,
+        [sort]: order ? 1 : -1
       })
       .skip(page * limit - limit)
       .limit(limit)
@@ -210,16 +210,16 @@ export class SongService {
 
   public async getRecentSongs(
     page: number,
-    limit: number,
+    limit: number
   ): Promise<SongPreviewDto[]> {
     const queryObject: any = {
-      visibility: 'public',
+      visibility: 'public'
     };
 
     const data = (await this.songModel
       .find(queryObject)
       .sort({
-        createdAt: -1,
+        createdAt: -1
       })
       .skip(page * limit - limit)
       .limit(limit)
@@ -233,9 +233,9 @@ export class SongService {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
-          $gte: timespan,
-        },
+        createdAt : {
+          $gte: timespan
+        }
       })
       .sort({ playCount: -1 })
       .limit(BROWSER_SONGS.featuredPageSize)
@@ -244,14 +244,14 @@ export class SongService {
   }
 
   public async getSongsBeforeTimespan(
-    timespan: number,
+    timespan: number
   ): Promise<SongWithUser[]> {
     return this.songModel
       .find<SongWithUser>({
         visibility: 'public',
-        createdAt: {
-          $lt: timespan,
-        },
+        createdAt : {
+          $lt: timespan
+        }
       })
       .sort({ createdAt: -1 })
       .limit(BROWSER_SONGS.featuredPageSize)
@@ -261,7 +261,7 @@ export class SongService {
 
   public async getSong(
     publicId: string,
-    user: UserDocument | null,
+    user: UserDocument | null
   ): Promise<SongViewDto> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
@@ -285,7 +285,7 @@ export class SongService {
 
     const populatedSong = await foundSong.populate(
       'uploader',
-      'username profileImage -_id',
+      'username profileImage -_id'
     );
 
     return SongViewDto.fromSongDocument(populatedSong);
@@ -296,7 +296,7 @@ export class SongService {
     publicId: string,
     user: UserDocument | null,
     src?: string,
-    packed: boolean = false,
+    packed: boolean = false
   ): Promise<string> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
@@ -308,7 +308,7 @@ export class SongService {
       if (!user || foundSong.uploader.toString() !== user._id.toString()) {
         throw new HttpException(
           'This song is private',
-          HttpStatus.UNAUTHORIZED,
+          HttpStatus.UNAUTHORIZED
         );
       }
     }
@@ -316,7 +316,7 @@ export class SongService {
     if (!packed && !foundSong.allowDownload) {
       throw new HttpException(
         'The uploader has disabled downloads of this song',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.UNAUTHORIZED
       );
     }
 
@@ -337,14 +337,14 @@ export class SongService {
       this.logger.error('Error getting song file', e);
       throw new HttpException(
         'An error occurred while retrieving the song file',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
 
   public async getMySongsPage({
     query,
-    user,
+    user
   }: {
     query: PageQueryDTO;
     user: UserDocument;
@@ -356,31 +356,31 @@ export class SongService {
 
     const songData = (await this.songModel
       .find({
-        uploader: user._id,
+        uploader: user._id
       })
       .sort({
-        [sort]: order ? 1 : -1,
+        [sort]: order ? 1 : -1
       })
       .skip(limit * (page - 1))
       .limit(limit)) as unknown as SongWithUser[];
 
     const total = await this.songModel.countDocuments({
-      uploader: user._id,
+      uploader: user._id
     });
 
     return {
       content: songData.map((song) =>
-        SongPreviewDto.fromSongDocumentWithUser(song),
+        SongPreviewDto.fromSongDocumentWithUser(song)
       ),
-      page: page,
+      page : page,
       limit: limit,
-      total: total,
+      total: total
     };
   }
 
   public async getSongEdit(
     publicId: string,
-    user: UserDocument,
+    user: UserDocument
   ): Promise<UploadSongDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
@@ -403,20 +403,20 @@ export class SongService {
     const categories = (await this.songModel.aggregate([
       {
         $match: {
-          visibility: 'public',
-        },
+          visibility: 'public'
+        }
       },
       {
         $group: {
-          _id: '$category',
-          count: { $sum: 1 },
-        },
+          _id  : '$category',
+          count: { $sum: 1 }
+        }
       },
       {
         $sort: {
-          count: -1,
-        },
-      },
+          count: -1
+        }
+      }
     ])) as unknown as { _id: string; count: number }[];
 
     // Return object with category names as keys and counts as values
@@ -432,12 +432,12 @@ export class SongService {
   public async getSongsByCategory(
     category: string,
     page: number,
-    limit: number,
+    limit: number
   ): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .find({
-        category: category,
-        visibility: 'public',
+        category  : category,
+        visibility: 'public'
       })
       .sort({ createdAt: -1 })
       .skip(page * limit - limit)
@@ -450,26 +450,26 @@ export class SongService {
 
   public async getRandomSongs(
     count: number,
-    category: string,
+    category: string
   ): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .aggregate([
         {
           $match: {
-            visibility: 'public',
-          },
+            visibility: 'public'
+          }
         },
         {
           $sample: {
-            size: count,
-          },
-        },
+            size: count
+          }
+        }
       ])
       .exec()) as unknown as SongWithUser[];
 
     await this.songModel.populate(songs, {
-      path: 'uploader',
-      select: 'username profileImage -_id',
+      path  : 'uploader',
+      select: 'username profileImage -_id'
     });
 
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));

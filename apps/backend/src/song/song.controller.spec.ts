@@ -4,7 +4,7 @@ import {
   SongPreviewDto,
   SongViewDto,
   UploadSongDto,
-  UploadSongResponseDto,
+  UploadSongResponseDto
 } from '@nbw/database';
 import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -17,13 +17,13 @@ import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 const mockSongService = {
-  getSongByPage: jest.fn(),
-  getSong: jest.fn(),
-  getSongEdit: jest.fn(),
-  patchSong: jest.fn(),
+  getSongByPage     : jest.fn(),
+  getSong           : jest.fn(),
+  getSongEdit       : jest.fn(),
+  patchSong         : jest.fn(),
   getSongDownloadUrl: jest.fn(),
-  deleteSong: jest.fn(),
-  uploadSong: jest.fn(),
+  deleteSong        : jest.fn(),
+  uploadSong        : jest.fn()
 };
 
 const mockFileService = {};
@@ -35,16 +35,16 @@ describe('SongController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongController],
-      providers: [
+      providers  : [
         {
-          provide: SongService,
-          useValue: mockSongService,
+          provide : SongService,
+          useValue: mockSongService
         },
         {
-          provide: FileService,
-          useValue: mockFileService,
-        },
-      ],
+          provide : FileService,
+          useValue: mockFileService
+        }
+      ]
     })
       .overrideGuard(AuthGuard('jwt-refresh'))
       .useValue({ canActivate: jest.fn(() => true) })
@@ -125,7 +125,7 @@ describe('SongController', () => {
       mockSongService.getSongEdit.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.getEditSong(id, user)).rejects.toThrow(
-        'Error',
+        'Error'
       );
     });
   });
@@ -153,7 +153,7 @@ describe('SongController', () => {
       mockSongService.patchSong.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.patchSong(id, req, user)).rejects.toThrow(
-        'Error',
+        'Error'
       );
     });
   });
@@ -165,8 +165,8 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
-        redirect: jest.fn(),
+        set     : jest.fn(),
+        redirect: jest.fn()
       } as unknown as Response;
 
       const url = 'test-url';
@@ -176,8 +176,8 @@ describe('SongController', () => {
       await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
-        'Content-Disposition': 'attachment; filename="song.nbs"',
-        'Access-Control-Expose-Headers': 'Content-Disposition',
+        'Content-Disposition'          : 'attachment; filename="song.nbs"',
+        'Access-Control-Expose-Headers': 'Content-Disposition'
       });
 
       expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, url);
@@ -186,7 +186,7 @@ describe('SongController', () => {
         id,
         user,
         src,
-        false,
+        false
       );
     });
 
@@ -196,16 +196,16 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
-        redirect: jest.fn(),
+        set     : jest.fn(),
+        redirect: jest.fn()
       } as unknown as Response;
 
       mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
-        new Error('Error'),
+        new Error('Error')
       );
 
       await expect(
-        songController.getSongFile(id, src, user, res),
+        songController.getSongFile(id, src, user, res)
       ).rejects.toThrow('Error');
     });
   });
@@ -227,7 +227,7 @@ describe('SongController', () => {
         id,
         user,
         'open',
-        true,
+        true
       );
     });
 
@@ -237,7 +237,7 @@ describe('SongController', () => {
       const src = 'invalid-src';
 
       await expect(
-        songController.getSongOpenUrl(id, user, src),
+        songController.getSongOpenUrl(id, user, src)
       ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -247,11 +247,11 @@ describe('SongController', () => {
       const src = 'downloadButton';
 
       mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
-        new Error('Error'),
+        new Error('Error')
       );
 
       await expect(
-        songController.getSongOpenUrl(id, user, src),
+        songController.getSongOpenUrl(id, user, src)
       ).rejects.toThrow('Error');
     });
   });
@@ -275,7 +275,7 @@ describe('SongController', () => {
       mockSongService.deleteSong.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.deleteSong(id, user)).rejects.toThrow(
-        'Error',
+        'Error'
       );
     });
   });
@@ -285,21 +285,21 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
-          backgroundColor: '#000000',
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
+          backgroundColor: '#000000'
         },
-        file: undefined,
-        allowDownload: false,
+        file         : undefined,
+        allowDownload: false
       };
 
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
@@ -317,21 +317,21 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
-          backgroundColor: '#000000',
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
+          backgroundColor: '#000000'
         },
-        file: undefined,
-        allowDownload: false,
+        file         : undefined,
+        allowDownload: false
       };
 
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
@@ -339,7 +339,7 @@ describe('SongController', () => {
       mockSongService.uploadSong.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.createSong(file, body, user)).rejects.toThrow(
-        'Error',
+        'Error'
       );
     });
   });

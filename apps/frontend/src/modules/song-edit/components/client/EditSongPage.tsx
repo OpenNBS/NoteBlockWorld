@@ -3,13 +3,13 @@ import { UploadSongDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import {
   getTokenServer,
-  getUserData,
+  getUserData
 } from '@web/modules/auth/features/auth.utils';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import { SongProvider } from '@web/modules/song/components/client/context/Song.context';
 import {
   DownloadFileButton,
-  FileDisplay,
+  FileDisplay
 } from '@web/modules/song/components/client/FileDisplay';
 
 import { SongEditForm } from './SongEditForm';
@@ -23,11 +23,11 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
 
   try {
     const response = await axiosInstance.get(`/song/${id}/edit`, {
-      method: 'GET',
+      method : 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${token.value}`,
-      },
+        authorization : `Bearer ${token.value}`
+      }
     });
 
     const data = await response.data;

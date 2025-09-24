@@ -14,13 +14,13 @@ export const downloadSongFile = async (song: {
   axios
     .get(`/song/${song.publicId}/download`, {
       params: {
-        src: 'downloadButton',
+        src: 'downloadButton'
       },
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`
       },
-      responseType: 'blob',
-      withCredentials: true,
+      responseType   : 'blob',
+      withCredentials: true
     })
     .then((res) => {
       const url = window.URL.createObjectURL(res.data);
@@ -41,8 +41,8 @@ export const openSongInNBS = async (song: { publicId: string }) => {
   axios
     .get(`/song/${song.publicId}/open`, {
       headers: {
-        src: 'downloadButton',
-      },
+        src: 'downloadButton'
+      }
     })
     .then((response) => {
       const responseUrl = response.data;

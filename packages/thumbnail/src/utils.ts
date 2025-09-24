@@ -17,7 +17,7 @@ export const instrumentColors = [
   '#be5728',
   '#19be19',
   '#be1957',
-  '#575757',
+  '#575757'
 ];
 
 const tintedImages: Record<string, Canvas> = {};
@@ -69,7 +69,7 @@ export const getKeyText = (key: number): string => {
     'G#',
     'A',
     'A#',
-    'B',
+    'B'
   ];
 
   const note = notes[(key + 9) % 12];

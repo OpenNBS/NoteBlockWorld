@@ -3,7 +3,7 @@ import {
   faDiscord,
   faGithub,
   faTwitter,
-  faYoutube,
+  faYoutube
 } from '@fortawesome/free-brands-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

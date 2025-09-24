@@ -4,7 +4,7 @@ export default function DeleteConfirmDialog({
   isOpen,
   setIsOpen,
   songTitle,
-  onConfirm,
+  onConfirm
 }: {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;

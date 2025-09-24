@@ -5,7 +5,7 @@ import {
   faClose,
   faMusic,
   faPencil,
-  faSignOutAlt,
+  faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { USER_CONSTANTS } from '@nbw/config';
@@ -18,14 +18,15 @@ import toast from 'react-hot-toast';
 import ClientAxios from '@web/lib/axios/ClientAxios';
 import { LoggedUserData } from '@web/modules/auth/types/User';
 
+import { UserMenuButton } from '../client/UserMenuButton';
+
 import {
   Popover,
   PopoverArrow,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from './popover';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
-import { UserMenuButton } from '../client/UserMenuButton';
 
 interface FormValues {
   username: string;
@@ -40,7 +41,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
     handleSubmit,
     formState: { isSubmitting, errors },
     register,
-    reset,
+    reset
   } = useForm<FormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -53,7 +54,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
       }
 
       await ClientAxios.patch('/user/username', {
-        username: data.username,
+        username: data.username
       });
 
       toast.success('Username updated successfully!');
@@ -146,19 +147,19 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                         defaultValue={currentUsername}
                         {...register('username', {
                           required: 'Username is required',
-                          pattern: {
+                          pattern : {
                             value: USER_CONSTANTS.ALLOWED_REGEXP,
                             message:
-                              'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
+                              'Your username may only contain these characters: A-Z a-z 0-9 - _ .'
                           },
                           maxLength: {
-                            value: USER_CONSTANTS.USERNAME_MAX_LENGTH,
-                            message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`,
+                            value  : USER_CONSTANTS.USERNAME_MAX_LENGTH,
+                            message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`
                           },
                           minLength: {
-                            value: USER_CONSTANTS.USERNAME_MIN_LENGTH,
-                            message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`,
-                          },
+                            value  : USER_CONSTANTS.USERNAME_MIN_LENGTH,
+                            message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`
+                          }
                         })}
                       />
                       <button

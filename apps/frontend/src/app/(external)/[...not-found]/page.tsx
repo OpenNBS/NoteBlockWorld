@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 // See: https://github.com/vercel/next.js/discussions/50034
 
 export const metadata: Metadata = {
-  title: 'Page not found',
+  title: 'Page not found'
 };
 
 export default function NotFound() {

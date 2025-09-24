@@ -1,29 +1,30 @@
+import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
+
 import { S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { FileService } from './file.service';
 
 mock.module('@aws-sdk/client-s3', () => {
   const mS3Client = {
-    send: jest.fn(),
+    send: jest.fn()
   };
 
   return {
-    S3Client: jest.fn(() => mS3Client),
-    GetObjectCommand: jest.fn(),
-    PutObjectCommand: jest.fn(),
+    S3Client         : jest.fn(() => mS3Client),
+    GetObjectCommand : jest.fn(),
+    PutObjectCommand : jest.fn(),
     HeadBucketCommand: jest.fn(),
-    ObjectCannedACL: {
-      private: 'private',
-      public_read: 'public-read',
-    },
+    ObjectCannedACL  : {
+      private    : 'private',
+      public_read: 'public-read'
+    }
   };
 });
 
 mock.module('@aws-sdk/s3-request-presigner', () => ({
-  getSignedUrl: jest.fn(),
+  getSignedUrl: jest.fn()
 }));
 
 describe('FileService', () => {
@@ -35,30 +36,30 @@ describe('FileService', () => {
       providers: [
         FileService,
         {
-          provide: 'S3_BUCKET_THUMBS',
-          useValue: 'test-bucket-thumbs',
+          provide : 'S3_BUCKET_THUMBS',
+          useValue: 'test-bucket-thumbs'
         },
         {
-          provide: 'S3_BUCKET_SONGS',
-          useValue: 'test-bucket-songs',
+          provide : 'S3_BUCKET_SONGS',
+          useValue: 'test-bucket-songs'
         },
         {
-          provide: 'S3_KEY',
-          useValue: 'test-key',
+          provide : 'S3_KEY',
+          useValue: 'test-key'
         },
         {
-          provide: 'S3_SECRET',
-          useValue: 'test-secret',
+          provide : 'S3_SECRET',
+          useValue: 'test-secret'
         },
         {
-          provide: 'S3_ENDPOINT',
-          useValue: 'test-endpoint',
+          provide : 'S3_ENDPOINT',
+          useValue: 'test-endpoint'
         },
         {
-          provide: 'S3_REGION',
-          useValue: 'test-region',
-        },
-      ],
+          provide : 'S3_REGION',
+          useValue: 'test-region'
+        }
+      ]
     }).compile();
 
     fileService = module.get<FileService>(FileService);
@@ -105,11 +106,11 @@ describe('FileService', () => {
     const publicId = 'test-id';
 
     (s3Client.send as jest.Mock).mockRejectedValueOnce(
-      new Error('Upload failed'),
+      new Error('Upload failed')
     );
 
     await expect(fileService.uploadSong(buffer, publicId)).rejects.toThrow(
-      'Upload failed',
+      'Upload failed'
     );
   });
 
@@ -128,11 +129,11 @@ describe('FileService', () => {
     const filename = 'test-file.nbs';
 
     (getSignedUrl as jest.Mock).mockRejectedValueOnce(
-      new Error('Signed URL generation failed'),
+      new Error('Signed URL generation failed')
     );
 
     await expect(fileService.getSongDownloadUrl(key, filename)).rejects.toThrow(
-      'Signed URL generation failed',
+      'Signed URL generation failed'
     );
   });
 
@@ -145,7 +146,7 @@ describe('FileService', () => {
     const result = await fileService.uploadThumbnail(buffer, publicId);
 
     expect(result).toBe(
-      'https://test-bucket-thumbs.s3.test-region.backblazeb2.com/thumbs/test-id.png',
+      'https://test-bucket-thumbs.s3.test-region.backblazeb2.com/thumbs/test-id.png'
     );
   });
 
@@ -162,11 +163,11 @@ describe('FileService', () => {
     const nbsFileUrl = 'test-file.nbs';
 
     (s3Client.send as jest.Mock).mockRejectedValueOnce(
-      new Error('Deletion failed'),
+      new Error('Deletion failed')
     );
 
     await expect(fileService.deleteSong(nbsFileUrl)).rejects.toThrow(
-      'Deletion failed',
+      'Deletion failed'
     );
   });
 
@@ -177,8 +178,8 @@ describe('FileService', () => {
       Body: {
         transformToByteArray: jest
           .fn()
-          .mockResolvedValueOnce(new Uint8Array([1, 2, 3])),
-      },
+          .mockResolvedValueOnce(new Uint8Array([1, 2, 3]))
+      }
     };
 
     (s3Client.send as jest.Mock).mockResolvedValueOnce(mockResponse);
@@ -191,7 +192,7 @@ describe('FileService', () => {
     expect(arrayBufferResult).toBeInstanceOf(ArrayBuffer);
 
     expect(new Uint8Array(arrayBufferResult)).toEqual(
-      new Uint8Array([1, 2, 3]),
+      new Uint8Array([1, 2, 3])
     );
   });
 
@@ -199,11 +200,11 @@ describe('FileService', () => {
     const nbsFileUrl = 'test-file.nbs';
 
     (s3Client.send as jest.Mock).mockRejectedValueOnce(
-      new Error('Retrieval failed'),
+      new Error('Retrieval failed')
     );
 
     await expect(fileService.getSongFile(nbsFileUrl)).rejects.toThrow(
-      'Retrieval failed',
+      'Retrieval failed'
     );
   });
 
@@ -212,14 +213,14 @@ describe('FileService', () => {
 
     const mockResponse = {
       Body: {
-        transformToByteArray: jest.fn().mockResolvedValueOnce(null),
-      },
+        transformToByteArray: jest.fn().mockResolvedValueOnce(null)
+      }
     };
 
     (s3Client.send as jest.Mock).mockResolvedValueOnce(mockResponse);
 
     await expect(fileService.getSongFile(nbsFileUrl)).rejects.toThrow(
-      'Error getting file',
+      'Error getting file'
     );
   });
 

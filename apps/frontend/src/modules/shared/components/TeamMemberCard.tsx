@@ -7,7 +7,7 @@ export const TeamMemberCard = ({
   name,
   github,
   img,
-  children,
+  children
 }: {
   name: string;
   github: string;

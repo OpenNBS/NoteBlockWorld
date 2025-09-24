@@ -1,14 +1,15 @@
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
+
 import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 import type { UserDocument } from '@nbw/database';
 import {
   SongDocument,
   Song as SongEntity,
   ThumbnailData,
-  UploadSongDto,
+  UploadSongDto
 } from '@nbw/database';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';
@@ -18,18 +19,18 @@ import { SongUploadService } from './song-upload.service';
 
 // mock drawToImage function
 mock.module('@nbw/thumbnail', () => ({
-  drawToImage: jest.fn().mockResolvedValue(Buffer.from('test-image-buffer')),
+  drawToImage: jest.fn().mockResolvedValue(Buffer.from('test-image-buffer'))
 }));
 
 const mockFileService = {
-  uploadSong: jest.fn(),
+  uploadSong      : jest.fn(),
   uploadPackedSong: jest.fn(),
-  uploadThumbnail: jest.fn(),
-  getSongFile: jest.fn(),
+  uploadThumbnail : jest.fn(),
+  getSongFile     : jest.fn()
 };
 
 const mockUserService = {
-  findByID: jest.fn(),
+  findByID: jest.fn()
 };
 
 describe('SongUploadService', () => {
@@ -42,14 +43,14 @@ describe('SongUploadService', () => {
       providers: [
         SongUploadService,
         {
-          provide: FileService,
-          useValue: mockFileService,
+          provide : FileService,
+          useValue: mockFileService
         },
         {
-          provide: UserService,
-          useValue: mockUserService,
-        },
-      ],
+          provide : UserService,
+          useValue: mockUserService
+        }
+      ]
     }).compile();
 
     songUploadService = module.get<SongUploadService>(SongUploadService);
@@ -66,94 +67,94 @@ describe('SongUploadService', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const user: UserDocument = {
-        _id: new Types.ObjectId(),
-        username: 'testuser',
+        _id     : new Types.ObjectId(),
+        username: 'testuser'
       } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
-          backgroundColor: '#000000',
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
+          backgroundColor: '#000000'
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes'
       };
 
       const songEntity = new SongEntity();
       songEntity.uploader = user._id;
 
       spyOn(songUploadService as any, 'checkIsFileValid').mockImplementation(
-        (_file: Express.Multer.File) => undefined,
+        (_file: Express.Multer.File) => undefined
       );
 
       spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
-        nbsSong: new Song(),
-        songBuffer: Buffer.from('test'),
+        nbsSong   : new Song(),
+        songBuffer: Buffer.from('test')
       });
 
       spyOn(
         songUploadService as any,
-        'preparePackedSongForUpload',
+        'preparePackedSongForUpload'
       ).mockResolvedValue(Buffer.from('test'));
 
       spyOn(songUploadService as any, 'generateSongDocument').mockResolvedValue(
-        songEntity,
+        songEntity
       );
 
       spyOn(songUploadService, 'generateAndUploadThumbnail').mockResolvedValue(
-        'http://test.com/thumbnail.png',
+        'http://test.com/thumbnail.png'
       );
 
       spyOn(songUploadService as any, 'uploadSongFile').mockResolvedValue(
-        'http://test.com/file.nbs',
+        'http://test.com/file.nbs'
       );
 
       spyOn(songUploadService as any, 'uploadPackedSongFile').mockResolvedValue(
-        'http://test.com/packed-file.nbs',
+        'http://test.com/packed-file.nbs'
       );
 
       const result = await songUploadService.processUploadedSong({
         file,
         user,
-        body,
+        body
       });
 
       expect(result).toEqual(songEntity);
 
       expect((songUploadService as any).checkIsFileValid).toHaveBeenCalledWith(
-        file,
+        file
       );
 
       expect(
-        (songUploadService as any).prepareSongForUpload,
+        (songUploadService as any).prepareSongForUpload
       ).toHaveBeenCalledWith(file.buffer, body, user);
 
       expect(
-        (songUploadService as any).preparePackedSongForUpload,
+        (songUploadService as any).preparePackedSongForUpload
       ).toHaveBeenCalledWith(expect.any(Song), body.customInstruments);
 
       expect(songUploadService.generateAndUploadThumbnail).toHaveBeenCalledWith(
         body.thumbnailData,
         expect.any(Song),
-        expect.any(String),
+        expect.any(String)
       );
 
       expect((songUploadService as any).uploadSongFile).toHaveBeenCalledWith(
         expect.any(Buffer),
-        expect.any(String),
+        expect.any(String)
       );
 
       expect(
-        (songUploadService as any).uploadPackedSongFile,
+        (songUploadService as any).uploadPackedSongFile
       ).toHaveBeenCalledWith(expect.any(Buffer), expect.any(String));
     });
   });
@@ -161,60 +162,60 @@ describe('SongUploadService', () => {
   describe('processSongPatch', () => {
     it('should process and patch a song', async () => {
       const user: UserDocument = {
-        _id: new Types.ObjectId(),
-        username: 'testuser',
+        _id     : new Types.ObjectId(),
+        username: 'testuser'
       } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
-          backgroundColor: '#000000',
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
+          backgroundColor: '#000000'
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes'
       };
 
       const songDocument: SongDocument = {
         ...body,
-        publicId: 'test-id',
-        uploader: user._id,
+        publicId         : 'test-id',
+        uploader         : user._id,
         customInstruments: [],
-        thumbnailData: body.thumbnailData,
-        nbsFileUrl: 'http://test.com/file.nbs',
-        save: jest.fn().mockResolvedValue({}),
+        thumbnailData    : body.thumbnailData,
+        nbsFileUrl       : 'http://test.com/file.nbs',
+        save             : jest.fn().mockResolvedValue({})
       } as any;
 
       spyOn(fileService, 'getSongFile').mockResolvedValue(new ArrayBuffer(0));
 
       spyOn(songUploadService as any, 'prepareSongForUpload').mockReturnValue({
-        nbsSong: new Song(),
-        songBuffer: Buffer.from('test'),
+        nbsSong   : new Song(),
+        songBuffer: Buffer.from('test')
       });
 
       spyOn(
         songUploadService as any,
-        'preparePackedSongForUpload',
+        'preparePackedSongForUpload'
       ).mockResolvedValue(Buffer.from('test'));
 
       spyOn(songUploadService, 'generateAndUploadThumbnail').mockResolvedValue(
-        'http://test.com/thumbnail.png',
+        'http://test.com/thumbnail.png'
       );
 
       spyOn(songUploadService as any, 'uploadSongFile').mockResolvedValue(
-        'http://test.com/file.nbs',
+        'http://test.com/file.nbs'
       );
 
       spyOn(songUploadService as any, 'uploadPackedSongFile').mockResolvedValue(
-        'http://test.com/packed-file.nbs',
+        'http://test.com/packed-file.nbs'
       );
 
       await songUploadService.processSongPatch(songDocument, body, user);
@@ -224,10 +225,10 @@ describe('SongUploadService', () => {
   describe('generateAndUploadThumbnail', () => {
     it('should generate and upload a thumbnail', async () => {
       const thumbnailData: ThumbnailData = {
-        startTick: 0,
-        startLayer: 0,
-        zoomLevel: 1,
-        backgroundColor: '#000000',
+        startTick      : 0,
+        startLayer     : 0,
+        zoomLevel      : 1,
+        backgroundColor: '#000000'
       };
 
       const nbsSong = new Song();
@@ -236,29 +237,29 @@ describe('SongUploadService', () => {
       const publicId = 'test-id';
 
       spyOn(fileService, 'uploadThumbnail').mockResolvedValue(
-        'http://test.com/thumbnail.png',
+        'http://test.com/thumbnail.png'
       );
 
       const result = await songUploadService.generateAndUploadThumbnail(
         thumbnailData,
         nbsSong,
-        publicId,
+        publicId
       );
 
       expect(result).toBe('http://test.com/thumbnail.png');
 
       expect(fileService.uploadThumbnail).toHaveBeenCalledWith(
         expect.any(Buffer),
-        publicId,
+        publicId
       );
     });
 
     it('should throw an error if the thumbnail is invalid', async () => {
       const thumbnailData: ThumbnailData = {
-        startTick: 0,
-        startLayer: 0,
-        zoomLevel: 1,
-        backgroundColor: '#000000',
+        startTick      : 0,
+        startLayer     : 0,
+        zoomLevel      : 1,
+        backgroundColor: '#000000'
       };
 
       const nbsSong = new Song();
@@ -272,7 +273,7 @@ describe('SongUploadService', () => {
         await songUploadService.generateAndUploadThumbnail(
           thumbnailData,
           nbsSong,
-          publicId,
+          publicId
         );
       } catch (error) {
         expect(error).toBeInstanceOf(HttpException);
@@ -286,12 +287,12 @@ describe('SongUploadService', () => {
       const publicId = 'test-id';
 
       spyOn(fileService, 'uploadSong').mockResolvedValue(
-        'http://test.com/file.nbs',
+        'http://test.com/file.nbs'
       );
 
       const result = await (songUploadService as any).uploadSongFile(
         file,
-        publicId,
+        publicId
       );
 
       expect(result).toBe('http://test.com/file.nbs');
@@ -303,7 +304,7 @@ describe('SongUploadService', () => {
       const publicId = 'test-id';
 
       spyOn(fileService, 'uploadSong').mockRejectedValue(
-        new Error('test error'),
+        new Error('test error')
       );
 
       try {
@@ -320,12 +321,12 @@ describe('SongUploadService', () => {
       const publicId = 'test-id';
 
       spyOn(fileService, 'uploadPackedSong').mockResolvedValue(
-        'http://test.com/packed-file.nbs',
+        'http://test.com/packed-file.nbs'
       );
 
       const result = await (songUploadService as any).uploadPackedSongFile(
         file,
-        publicId,
+        publicId
       );
 
       expect(result).toBe('http://test.com/packed-file.nbs');
@@ -337,7 +338,7 @@ describe('SongUploadService', () => {
       const publicId = 'test-id';
 
       spyOn(fileService, 'uploadPackedSong').mockRejectedValue(
-        new Error('test error'),
+        new Error('test error')
       );
 
       try {
@@ -353,11 +354,11 @@ describe('SongUploadService', () => {
       const songTest = new Song();
 
       songTest.meta = {
-        author: 'Nicolas Vycas',
-        description: 'super cool song',
-        importName: 'test',
-        name: 'Cool Test Song',
-        originalAuthor: 'Nicolas Vycas',
+        author        : 'Nicolas Vycas',
+        description   : 'super cool song',
+        importName    : 'test',
+        name          : 'Cool Test Song',
+        originalAuthor: 'Nicolas Vycas'
       };
 
       songTest.tempo = 20;
@@ -375,7 +376,7 @@ describe('SongUploadService', () => {
           new Note(instrument, { key: 45 }),
           new Note(instrument, { key: 50 }),
           new Note(instrument, { key: 45 }),
-          new Note(instrument, { key: 57 }),
+          new Note(instrument, { key: 57 })
         ];
 
         // Place the notes
@@ -395,7 +396,7 @@ describe('SongUploadService', () => {
       const buffer = new ArrayBuffer(0);
 
       expect(() => songUploadService.getSongObject(buffer)).toThrow(
-        HttpException,
+        HttpException
       );
     });
   });
@@ -403,7 +404,7 @@ describe('SongUploadService', () => {
   describe('checkIsFileValid', () => {
     it('should throw an error if the file is not provided', () => {
       expect(() => (songUploadService as any).checkIsFileValid(null)).toThrow(
-        HttpException,
+        HttpException
       );
     });
 
@@ -411,7 +412,7 @@ describe('SongUploadService', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       expect(() =>
-        (songUploadService as any).checkIsFileValid(file),
+        (songUploadService as any).checkIsFileValid(file)
       ).not.toThrow();
     });
   });

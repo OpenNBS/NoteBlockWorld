@@ -6,15 +6,15 @@ import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
 
 const mockAuthService = {
-  githubLogin: jest.fn(),
-  googleLogin: jest.fn(),
-  discordLogin: jest.fn(),
-  verifyToken: jest.fn(),
-  loginWithEmail: jest.fn(),
+  githubLogin   : jest.fn(),
+  googleLogin   : jest.fn(),
+  discordLogin  : jest.fn(),
+  verifyToken   : jest.fn(),
+  loginWithEmail: jest.fn()
 };
 
 const mockMagicLinkEmailStrategy = {
-  send: jest.fn(),
+  send: jest.fn()
 };
 
 describe('AuthController', () => {
@@ -24,16 +24,16 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
+      providers  : [
         {
-          provide: AuthService,
-          useValue: mockAuthService,
+          provide : AuthService,
+          useValue: mockAuthService
         },
         {
-          provide: MagicLinkEmailStrategy,
-          useValue: mockMagicLinkEmailStrategy,
-        },
-      ],
+          provide : MagicLinkEmailStrategy,
+          useValue: mockMagicLinkEmailStrategy
+        }
+      ]
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -61,7 +61,7 @@ describe('AuthController', () => {
       (authService.githubLogin as jest.Mock).mockRejectedValueOnce(error);
 
       await expect(controller.githubRedirect(req, res)).rejects.toThrow(
-        'Test error',
+        'Test error'
       );
     });
   });
@@ -90,7 +90,7 @@ describe('AuthController', () => {
       (authService.googleLogin as jest.Mock).mockRejectedValueOnce(error);
 
       await expect(controller.googleRedirect(req, res)).rejects.toThrow(
-        'Test error',
+        'Test error'
       );
     });
   });
@@ -119,7 +119,7 @@ describe('AuthController', () => {
       (authService.discordLogin as jest.Mock).mockRejectedValueOnce(error);
 
       await expect(controller.discordRedirect(req, res)).rejects.toThrow(
-        'Test error',
+        'Test error'
       );
     });
   });
@@ -148,7 +148,7 @@ describe('AuthController', () => {
       (authService.loginWithEmail as jest.Mock).mockRejectedValueOnce(error);
 
       await expect(controller.magicLinkRedirect(req, res)).rejects.toThrow(
-        'Test error',
+        'Test error'
       );
     });
   });

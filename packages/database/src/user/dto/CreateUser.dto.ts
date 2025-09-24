@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   IsString,
   IsUrl,
-  MaxLength,
+  MaxLength
 } from 'class-validator';
 
 export class CreateUser {
@@ -14,7 +14,7 @@ export class CreateUser {
   @IsEmail()
   @ApiProperty({
     description: 'Email of the user',
-    example: 'vycasnicolas@gmailcom',
+    example    : 'vycasnicolas@gmailcom'
   })
   email: string;
 
@@ -23,7 +23,7 @@ export class CreateUser {
   @MaxLength(64)
   @ApiProperty({
     description: 'Username of the user',
-    example: 'tomast1137',
+    example    : 'tomast1137'
   })
   username: string;
 
@@ -31,7 +31,7 @@ export class CreateUser {
   @IsUrl()
   @ApiProperty({
     description: 'Profile image of the user',
-    example: 'https://example.com/image.png',
+    example    : 'https://example.com/image.png'
   })
   profileImage: string;
 

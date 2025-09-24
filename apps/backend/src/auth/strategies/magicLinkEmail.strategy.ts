@@ -14,7 +14,7 @@ type magicLinkCallback = (error: any, user: any) => void;
 @Injectable()
 export class MagicLinkEmailStrategy extends PassportStrategy(
   strategy,
-  'magic-link',
+  'magic-link'
 ) {
   static logger = new Logger(MagicLinkEmailStrategy.name);
 
@@ -26,23 +26,23 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
     @Inject(UserService)
     private readonly userService: UserService,
     @Inject(MailingService)
-    private readonly mailingService: MailingService,
+    private readonly mailingService: MailingService
   ) {
     super({
-      secret: MAGIC_LINK_SECRET,
-      confirmUrl: `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
-      callbackUrl: `${SERVER_URL}/api/v1/auth/magic-link/callback`,
+      secret       : MAGIC_LINK_SECRET,
+      confirmUrl   : `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
+      callbackUrl  : `${SERVER_URL}/api/v1/auth/magic-link/callback`,
       sendMagicLink: MagicLinkEmailStrategy.sendMagicLink(
         SERVER_URL,
         userService,
-        mailingService,
+        mailingService
       ),
       verify: (
         payload: authenticationLinkPayload,
-        callback: magicLinkCallback,
+        callback: magicLinkCallback
       ) => {
         callback(null, this.validate(payload));
-      },
+      }
     });
   }
 
@@ -50,37 +50,37 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
     (
       SERVER_URL: string,
       userService: UserService,
-      mailingService: MailingService,
+      mailingService: MailingService
     ) =>
     async (email: string, magicLink: string) => {
       const user = await userService.findByEmail(email);
 
       if (!user) {
         mailingService.sendEmail({
-          to: email,
+          to     : email,
           context: {
             magicLink: magicLink,
-            username: email.split('@')[0],
+            username : email.split('@')[0]
           },
-          subject: 'Welcome to Noteblock.world',
-          template: 'magic-link-new-account',
+          subject : 'Welcome to Noteblock.world',
+          template: 'magic-link-new-account'
         });
       } else {
         mailingService.sendEmail({
-          to: email,
+          to     : email,
           context: {
             magicLink: magicLink,
-            username: user.username,
+            username : user.username
           },
-          subject: 'Noteblock Magic Link',
-          template: 'magic-link',
+          subject : 'Noteblock Magic Link',
+          template: 'magic-link'
         });
       }
     };
 
   async validate(payload: authenticationLinkPayload) {
     MagicLinkEmailStrategy.logger.debug(
-      `Validating payload: ${JSON.stringify(payload)}`,
+      `Validating payload: ${JSON.stringify(payload)}`
     );
 
     const user = await this.userService.findByEmail(payload.destination);

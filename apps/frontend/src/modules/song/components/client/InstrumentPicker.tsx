@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@web/lib/axios';
 import { cn } from '@web/lib/tailwind.utils';
 
+import { Area } from '../../../shared/components/client/FormElements';
+
 import { useSongProvider } from './context/Song.context';
 import { SongSearchCombo } from './SongSearchCombo';
-import { Area } from '../../../shared/components/client/FormElements';
 
 const InstrumentTableHeader = ({
   className,
-  children,
+  children
 }: {
   className?: string;
   children: React.ReactNode;
@@ -19,7 +20,7 @@ const InstrumentTableHeader = ({
     <div
       className={cn(
         'bg-zinc-800 border-zinc-600 border-2 px-2 py-1 text-zinc-400 font-semibold first:rounded-tl-lg last:rounded-tr-lg',
-        className,
+        className
       )}
     >
       {children}
@@ -30,7 +31,7 @@ const InstrumentTableHeader = ({
 const InstrumentTableCell = ({
   className,
   children,
-  locked,
+  locked
 }: {
   className?: string;
   children: React.ReactNode;
@@ -41,7 +42,7 @@ const InstrumentTableCell = ({
       className={cn(
         'bg-zinc-900 border-zinc-700 border-2 px-2 py-1',
         locked ? 'text-zinc-600' : 'text-zinc-100',
-        className,
+        className
       )}
     >
       {children}
@@ -52,7 +53,7 @@ const InstrumentTableCell = ({
 const InstrumentTableRow = ({
   children,
   instrument,
-  locked,
+  locked
 }: {
   children: React.ReactNode;
   instrument: Instrument;
@@ -82,8 +83,8 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
       const response = await axiosInstance.get<Map<string, string>>(
         '/data/soundList.json',
         {
-          withCredentials: true,
-        },
+          withCredentials: true
+        }
       );
 
       const data = response.data;

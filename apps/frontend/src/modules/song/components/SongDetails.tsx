@@ -5,7 +5,7 @@ import type { SongViewDtoType } from '@nbw/database';
 
 import {
   formatDuration,
-  formatTimeSpent,
+  formatTimeSpent
 } from '@web/modules/shared/util/format';
 
 type SongDetailsProps = {

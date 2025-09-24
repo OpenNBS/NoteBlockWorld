@@ -16,18 +16,18 @@ export class MySongsController {
 
   @Get('/')
   @ApiOperation({
-    summary: 'Get a list of songs uploaded by the current authenticated user',
+    summary: 'Get a list of songs uploaded by the current authenticated user'
   })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt-refresh'))
   public async getMySongsPage(
     @Query() query: PageQueryDTO,
-    @GetRequestToken() user: UserDocument | null,
+    @GetRequestToken() user: UserDocument | null
   ): Promise<SongPageDto> {
     user = validateUser(user);
     return await this.songService.getMySongsPage({
       query,
-      user,
+      user
     });
   }
 }

@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  FeaturedSongsDtoType,
-  SongPreviewDtoType,
-  TimespanType,
-} from '@nbw/database';
+import {  FeaturedSongsDtoType,  SongPreviewDtoType,  TimespanType } from '@nbw/database';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type FeaturedSongsContextType = {
@@ -15,16 +11,10 @@ type FeaturedSongsContextType = {
 };
 
 const FeaturedSongsContext = createContext<FeaturedSongsContextType>(
-  {} as FeaturedSongsContextType,
+  {} as FeaturedSongsContextType
 );
 
-export function FeaturedSongsProvider({
-  children,
-  initialFeaturedSongs,
-}: {
-  children: React.ReactNode;
-  initialFeaturedSongs: FeaturedSongsDtoType;
-}) {
+export function FeaturedSongsProvider({  children,  initialFeaturedSongs }: {  children: React.ReactNode;  initialFeaturedSongs: FeaturedSongsDtoType;}) {
   // Featured songs
   const [featuredSongs] = useState<FeaturedSongsDtoType>(initialFeaturedSongs);
 
@@ -39,11 +29,10 @@ export function FeaturedSongsProvider({
       result[timespan] = featuredSongs[timespan as TimespanType].length === 0;
       return result;
     },
-    {} as Record<string, boolean>,
+    {} as Record<string, boolean>
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setFeaturedSongsPage(featuredSongs[timespan]);
   }, [featuredSongs, timespan]);
 
@@ -53,7 +42,7 @@ export function FeaturedSongsProvider({
         featuredSongsPage,
         timespan,
         setTimespan,
-        timespanEmpty,
+        timespanEmpty
       }}
     >
       {children}
@@ -66,7 +55,7 @@ export function useFeaturedSongsProvider() {
 
   if (context === undefined || context === null) {
     throw new Error(
-      'useFeaturedSongsProvider must be used within a FeaturedSongsProvider',
+      'useFeaturedSongsProvider must be used within a FeaturedSongsProvider'
     );
   }
 

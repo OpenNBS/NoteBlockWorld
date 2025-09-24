@@ -2,18 +2,19 @@
 
 import {
   ChangeFileButton,
-  FileDisplay,
+  FileDisplay
 } from '@web/modules/song/components/client/FileDisplay';
 
-import { SongUploadForm } from './SongUploadForm';
 import {
   SongProvider,
-  useSongProvider,
+  useSongProvider
 } from '../../../song/components/client/context/Song.context';
 import { SongSelector } from '../../../song/components/client/SongSelector';
 
+import { SongUploadForm } from './SongUploadForm';
+
 const UploadSongPageComponent = ({
-  defaultAuthorName,
+  defaultAuthorName
 }: {
   defaultAuthorName: string;
 }) => {
@@ -47,7 +48,7 @@ const UploadSongPageComponent = ({
 };
 
 export const UploadSongPage = ({
-  defaultAuthorName,
+  defaultAuthorName
 }: {
   defaultAuthorName: string;
 }) => {

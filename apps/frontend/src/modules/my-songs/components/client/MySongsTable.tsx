@@ -1,7 +1,7 @@
 'use client';
 import {
   faChevronLeft,
-  faChevronRight,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MY_SONGS } from '@nbw/config';
@@ -40,7 +40,7 @@ const NoSongs = () => (
 
 const SongRows = ({
   page,
-  pageSize,
+  pageSize
 }: {
   page: SongPageDtoType | null;
   pageSize: number;
@@ -139,7 +139,7 @@ export const MySongsPageComponent = () => {
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
     songToDelete,
-    deleteSong,
+    deleteSong
   } = useMySongsProvider();
 
   return (

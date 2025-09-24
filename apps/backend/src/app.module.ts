@@ -20,30 +20,30 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal   : true,
       envFilePath: ['.env.development', '.env.production'],
-      validate,
+      validate
     }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+      imports   : [ConfigModule],
+      inject    : [ConfigService],
       useFactory: (
-        configService: ConfigService,
+        configService: ConfigService
       ): MongooseModuleFactoryOptions => {
         const url = configService.getOrThrow<string>('MONGO_URL');
         Logger.debug(`Connecting to ${url}`);
 
         return {
-          uri: url,
+          uri          : url,
           retryAttempts: 10,
-          retryDelay: 3000,
+          retryDelay   : 3000
         };
-      },
+      }
     }),
     // Mailing
     MailerModule.forRootAsync({
-      imports: [ConfigModule],
+      imports   : [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const transport = configService.getOrThrow<string>('MAIL_TRANSPORT');
         const from = configService.getOrThrow<string>('MAIL_FROM');
@@ -51,26 +51,26 @@ import { UserModule } from './user/user.module';
         AppModule.logger.debug(`MAIL_FROM: ${from}`);
         return {
           transport: transport,
-          defaults: {
-            from: from,
+          defaults : {
+            from: from
           },
           template: {
-            dir: __dirname + '/mailing/templates',
+            dir    : __dirname + '/mailing/templates',
             adapter: new HandlebarsAdapter(),
             options: {
-              strict: true,
-            },
-          },
+              strict: true
+            }
+          }
         };
       },
-      inject: [ConfigService],
+      inject: [ConfigService]
     }),
     // Throttler
     ThrottlerModule.forRoot([
       {
-        ttl: 60,
-        limit: 256, // 256 requests per minute
-      },
+        ttl  : 60,
+        limit: 256 // 256 requests per minute
+      }
     ]),
     SongModule,
     UserModule,
@@ -79,17 +79,17 @@ import { UserModule } from './user/user.module';
     SongBrowserModule,
     SeedModule.forRoot(),
     EmailLoginModule,
-    MailingModule,
+    MailingModule
   ],
   controllers: [],
-  providers: [
+  providers  : [
     ParseTokenPipe,
     {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+      provide : APP_GUARD,
+      useClass: ThrottlerGuard
+    }
   ],
-  exports: [ParseTokenPipe],
+  exports: [ParseTokenPipe]
 })
 export class AppModule {
   static readonly logger = new Logger(AppModule.name);

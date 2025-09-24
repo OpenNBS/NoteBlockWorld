@@ -3,26 +3,27 @@ import type { SongPageDtoType, SongsFolder } from '@nbw/database';
 
 import axiosInstance from '@web/lib/axios';
 
+import { getTokenServer } from '../../auth/features/auth.utils';
+
 import { MySongProvider } from './client/context/MySongs.context';
 import { MySongsPageComponent } from './client/MySongsTable';
-import { getTokenServer } from '../../auth/features/auth.utils';
 
 async function fetchSongsPage(
   page: number,
   pageSize: number,
-  token: string,
+  token: string
 ): Promise<SongPageDtoType> {
   const response = await axiosInstance
     .get('/my-songs', {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`
       },
       params: {
-        page: page + 1,
+        page : page + 1,
         limit: pageSize,
-        sort: 'createdAt',
-        order: false,
-      },
+        sort : 'createdAt',
+        order: false
+      }
     })
     .then((res) => {
       return res.data;
@@ -52,7 +53,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     const firstPage = await fetchSongsPage(currentPage, pageSize, token.value);
 
     const data: SongsFolder = {
-      [currentPage]: firstPage,
+      [currentPage]: firstPage
     };
 
     return data;
@@ -62,10 +63,10 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
     return {
       0: {
         content: [],
-        total: 0,
-        page: 0,
-        limit: 0,
-      },
+        total  : 0,
+        page   : 0,
+        limit  : 0
+      }
     };
   }
 }

@@ -24,13 +24,13 @@ class SocialLinks {
 
 @Schema({
   timestamps: true,
-  toJSON: {
-    virtuals: true,
+  toJSON    : {
+    virtuals : true,
     transform: (doc, ret) => {
       delete ret._id;
       delete ret.__v;
-    },
-  },
+    }
+  }
 })
 export class User {
   @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
@@ -73,9 +73,9 @@ export class User {
   description: string;
 
   @Prop({
-    type: String,
+    type    : String,
     required: true,
-    default: '/img/note-block-pfp.jpg',
+    default : '/img/note-block-pfp.jpg'
   })
   profileImage: string;
 

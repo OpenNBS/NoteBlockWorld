@@ -1,6 +1,6 @@
 import {
   faExclamationCircle,
-  faExternalLink,
+  faExternalLink
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UPLOAD_CONSTANTS } from '@nbw/config';
@@ -11,8 +11,6 @@ import { useRouter } from 'next/navigation';
 import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
-import InstrumentPicker from './InstrumentPicker';
-import { SongThumbnailInput } from './SongThumbnailInput';
 import {
   Area,
   Checkbox,
@@ -21,9 +19,12 @@ import {
   Option,
   Select,
   TextArea,
-  UploadButton,
+  UploadButton
 } from '../../../shared/components/client/FormElements';
 import { useSongProvider } from '../../../song/components/client/context/Song.context';
+
+import InstrumentPicker from './InstrumentPicker';
+import { SongThumbnailInput } from './SongThumbnailInput';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -34,7 +35,7 @@ type SongFormProps = {
 export const SongForm = ({
   type,
   isLoading = false,
-  isLocked = false,
+  isLocked = false
 }: SongFormProps) => {
   const useSongProviderData = useSongProvider(type);
 
@@ -210,7 +211,7 @@ export const SongForm = ({
                     <Option key={key} value={key}>
                       {value}
                     </Option>
-                  ),
+                  )
                 )}
               </Select>
             </div>
@@ -263,7 +264,7 @@ export const SongForm = ({
                     <Option key={key} value={key}>
                       {value}
                     </Option>
-                  ),
+                  )
                 )}
               </Select>
             </div>
@@ -312,7 +313,7 @@ export const SongForm = ({
                     <Option key={key} value={key}>
                       {name}
                     </Option>
-                  ),
+                  )
                 )}
               </Select>
             </div>

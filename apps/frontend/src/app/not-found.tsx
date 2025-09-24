@@ -33,7 +33,7 @@ const lines = [
   "Note blocks don't make good smelting fuel.",
   'You played a birthday song but it was last month.',
   'That anvil made you A♭ blob.',
-  'You got hit with A♯ sword.',
+  'You got hit with A♯ sword.'
 ];
 
 export default function NotFound() {
@@ -42,7 +42,7 @@ export default function NotFound() {
       <div
         className="fixed w-full h-full bg-center bg-repeat grayscale brightness-50 opacity-30 before:content-[''] before:absolute before:w-full before:h-full before:bg-gradient-to-b before:from-black/20 before:to-black/80"
         style={{
-          backgroundImage: "url('/background-tile-flat.png')",
+          backgroundImage: "url('/background-tile-flat.png')"
         }}
       ></div>
 

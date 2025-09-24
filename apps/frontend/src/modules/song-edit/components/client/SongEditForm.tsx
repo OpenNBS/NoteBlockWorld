@@ -17,12 +17,12 @@ type SongEditFormProps = {
 export const SongEditForm = ({
   songData,
   songId,
-  username,
+  username
 }: SongEditFormProps) => {
   const type = 'edit';
 
   const { loadSong, setSongId, song, isSubmitting } = useSongProvider(
-    type,
+    type
   ) as useEditSongProviderType;
 
   useEffect(() => {

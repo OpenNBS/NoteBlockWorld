@@ -9,12 +9,12 @@ describe('MailingController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MailingController],
-      providers: [
+      providers  : [
         {
-          provide: MailingService,
-          useValue: {},
-        },
-      ],
+          provide : MailingService,
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<MailingController>(MailingController);

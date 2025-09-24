@@ -16,30 +16,30 @@ export const SongSelector = () => {
       const file = acceptedFiles[0];
       setFile(file);
     },
-    [setFile],
+    [setFile]
   );
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    onDrop: handleFileDrop,
+    onDrop        : handleFileDrop,
     onDropRejected: (fileRejections) => {
       const error = fileRejections[0].errors[0].code;
 
       if (error === 'file-invalid-type') {
         toast.error("Oops! This doesn't look like a valid NBS file.", {
-          position: 'bottom-center',
+          position: 'bottom-center'
         });
       } else if (error === 'file-too-large') {
         toast.error('This file is too large! (Max size: 3 MB)', {
-          position: 'bottom-center',
+          position: 'bottom-center'
         });
       }
     },
     accept: {
-      'application/nbs': ['.nbs'],
+      'application/nbs': ['.nbs']
     },
-    maxSize: UPLOAD_CONSTANTS.file.maxSize,
+    maxSize : UPLOAD_CONSTANTS.file.maxSize,
     multiple: false,
-    noClick: true,
+    noClick : true
   });
 
   return (

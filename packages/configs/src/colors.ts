@@ -26,113 +26,113 @@ import colors from 'tailwindcss/colors';
 
 export const BG_COLORS = {
   red: {
-    key: 'red',
-    name: 'Red',
+    key  : 'red',
+    name : 'Red',
     light: colors.red[400],
-    dark: colors.red[900],
+    dark : colors.red[900]
   },
   orange: {
-    key: 'orange',
-    name: 'Orange',
+    key  : 'orange',
+    name : 'Orange',
     light: colors.orange[400],
-    dark: colors.orange[900],
+    dark : colors.orange[900]
   },
   amber: {
-    key: 'amber',
-    name: 'Amber',
+    key  : 'amber',
+    name : 'Amber',
     light: colors.amber[400],
-    dark: colors.amber[900],
+    dark : colors.amber[900]
   },
   yellow: {
-    key: 'yellow',
-    name: 'Yellow',
+    key  : 'yellow',
+    name : 'Yellow',
     light: colors.yellow[400],
-    dark: colors.yellow[900],
+    dark : colors.yellow[900]
   },
   lime: {
-    key: 'lime',
-    name: 'Lime',
+    key  : 'lime',
+    name : 'Lime',
     light: colors.lime[400],
-    dark: colors.lime[900],
+    dark : colors.lime[900]
   },
   green: {
-    key: 'green',
-    name: 'Green',
+    key  : 'green',
+    name : 'Green',
     light: colors.green[400],
-    dark: colors.green[900],
+    dark : colors.green[900]
   },
   emerald: {
-    key: 'emerald',
-    name: 'Emerald',
+    key  : 'emerald',
+    name : 'Emerald',
     light: colors.emerald[400],
-    dark: colors.emerald[900],
+    dark : colors.emerald[900]
   },
   teal: {
-    key: 'teal',
-    name: 'Teal',
+    key  : 'teal',
+    name : 'Teal',
     light: colors.teal[400],
-    dark: colors.teal[900],
+    dark : colors.teal[900]
   },
   cyan: {
-    key: 'cyan',
-    name: 'Cyan',
+    key  : 'cyan',
+    name : 'Cyan',
     light: colors.cyan[400],
-    dark: colors.cyan[900],
+    dark : colors.cyan[900]
   },
   sky: {
-    key: 'sky',
-    name: 'Sky',
+    key  : 'sky',
+    name : 'Sky',
     light: colors.sky[400],
-    dark: colors.sky[900],
+    dark : colors.sky[900]
   },
   blue: {
-    key: 'blue',
-    name: 'Blue',
+    key  : 'blue',
+    name : 'Blue',
     light: colors.blue[400],
-    dark: colors.blue[900],
+    dark : colors.blue[900]
   },
   indigo: {
-    key: 'indigo',
-    name: 'Indigo',
+    key  : 'indigo',
+    name : 'Indigo',
     light: colors.indigo[400],
-    dark: colors.indigo[900],
+    dark : colors.indigo[900]
   },
   violet: {
-    key: 'violet',
-    name: 'Violet',
+    key  : 'violet',
+    name : 'Violet',
     light: colors.violet[400],
-    dark: colors.violet[900],
+    dark : colors.violet[900]
   },
   purple: {
-    key: 'purple',
-    name: 'Purple',
+    key  : 'purple',
+    name : 'Purple',
     light: colors.purple[400],
-    dark: colors.purple[900],
+    dark : colors.purple[900]
   },
   fuchsia: {
-    key: 'fuchsia',
-    name: 'Fuchsia',
+    key  : 'fuchsia',
+    name : 'Fuchsia',
     light: colors.fuchsia[400],
-    dark: colors.fuchsia[900],
+    dark : colors.fuchsia[900]
   },
   pink: {
-    key: 'pink',
-    name: 'Pink',
+    key  : 'pink',
+    name : 'Pink',
     light: colors.pink[400],
-    dark: colors.pink[900],
+    dark : colors.pink[900]
   },
   rose: {
-    key: 'rose',
-    name: 'Rose',
+    key  : 'rose',
+    name : 'Rose',
     light: colors.rose[400],
-    dark: colors.rose[900],
+    dark : colors.rose[900]
   },
   gray: {
-    key: 'gray',
-    name: 'Gray',
+    key  : 'gray',
+    name : 'Gray',
     light: colors.zinc[200],
-    dark: colors.zinc[800],
-  },
+    dark : colors.zinc[800]
+  }
 } as const;
 
 export const bgColorsArray = Object.values(BG_COLORS);

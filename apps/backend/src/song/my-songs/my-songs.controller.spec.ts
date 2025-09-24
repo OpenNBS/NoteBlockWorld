@@ -5,10 +5,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SongService } from '../song.service';
+
 import { MySongsController } from './my-songs.controller';
 
 const mockSongService = {
-  getMySongsPage: jest.fn(),
+  getMySongsPage: jest.fn()
 };
 
 describe('MySongsController', () => {
@@ -18,12 +19,12 @@ describe('MySongsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MySongsController],
-      providers: [
+      providers  : [
         {
-          provide: SongService,
-          useValue: mockSongService,
-        },
-      ],
+          provide : SongService,
+          useValue: mockSongService
+        }
+      ]
     })
       .overrideGuard(AuthGuard('jwt-refresh'))
       .useValue({ canActivate: jest.fn(() => true) })
@@ -44,9 +45,9 @@ describe('MySongsController', () => {
 
       const songPageDto: SongPageDto = {
         content: [],
-        page: 0,
-        limit: 0,
-        total: 0,
+        page   : 0,
+        limit  : 0,
+        total  : 0
       };
 
       mockSongService.getMySongsPage.mockResolvedValueOnce(songPageDto);
@@ -62,7 +63,7 @@ describe('MySongsController', () => {
       const user = null;
 
       await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
-        HttpException,
+        HttpException
       );
     });
 
@@ -74,7 +75,7 @@ describe('MySongsController', () => {
       mockSongService.getMySongsPage.mockRejectedValueOnce(error);
 
       await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
-        'Test error',
+        'Test error'
       );
     });
   });

@@ -8,7 +8,7 @@ import { getSortedPostsData } from '@web/lib/posts';
 import type { PostType } from '@web/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Blog',
+  title: 'Blog'
 };
 
 async function BlogPage() {

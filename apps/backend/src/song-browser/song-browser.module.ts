@@ -6,8 +6,8 @@ import { SongBrowserController } from './song-browser.controller';
 import { SongBrowserService } from './song-browser.service';
 
 @Module({
-  providers: [SongBrowserService],
+  providers  : [SongBrowserService],
   controllers: [SongBrowserController],
-  imports: [SongModule],
+  imports    : [SongModule]
 })
 export class SongBrowserModule {}

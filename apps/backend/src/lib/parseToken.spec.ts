@@ -14,12 +14,12 @@ describe('ParseTokenPipe', () => {
       providers: [
         ParseTokenPipe,
         {
-          provide: AuthService,
+          provide : AuthService,
           useValue: {
-            getUserFromToken: jest.fn(),
-          },
-        },
-      ],
+            getUserFromToken: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     parseTokenPipe = module.get<ParseTokenPipe>(ParseTokenPipe);
@@ -34,7 +34,7 @@ describe('ParseTokenPipe', () => {
     it('should return true if no authorization header is present', async () => {
       const mockExecutionContext = {
         switchToHttp: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockReturnValue({ headers: {} }),
+        getRequest  : jest.fn().mockReturnValue({ headers: {} })
       } as unknown as ExecutionContext;
 
       const result = await parseTokenPipe.canActivate(mockExecutionContext);
@@ -45,9 +45,9 @@ describe('ParseTokenPipe', () => {
     it('should return true if user is not found from token', async () => {
       const mockExecutionContext = {
         switchToHttp: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockReturnValue({
-          headers: { authorization: 'Bearer test-token' },
-        }),
+        getRequest  : jest.fn().mockReturnValue({
+          headers: { authorization: 'Bearer test-token' }
+        })
       } as unknown as ExecutionContext;
 
       jest.spyOn(authService, 'getUserFromToken').mockResolvedValue(null);
@@ -63,10 +63,10 @@ describe('ParseTokenPipe', () => {
 
       const mockExecutionContext = {
         switchToHttp: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockReturnValue({
-          headers: { authorization: 'Bearer test-token' },
-          existingUser: null,
-        }),
+        getRequest  : jest.fn().mockReturnValue({
+          headers     : { authorization: 'Bearer test-token' },
+          existingUser: null
+        })
       } as unknown as ExecutionContext;
 
       jest.spyOn(authService, 'getUserFromToken').mockResolvedValue(mockUser);
@@ -77,7 +77,7 @@ describe('ParseTokenPipe', () => {
       expect(authService.getUserFromToken).toHaveBeenCalledWith('test-token');
 
       expect(
-        mockExecutionContext.switchToHttp().getRequest().existingUser,
+        mockExecutionContext.switchToHttp().getRequest().existingUser
       ).toEqual(mockUser);
     });
   });

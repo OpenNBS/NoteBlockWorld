@@ -4,7 +4,7 @@ import {
   Controller,
   Get,
   Param,
-  Query,
+  Query
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -24,10 +24,10 @@ export class SongBrowserController {
 
   @Get('/recent')
   @ApiOperation({
-    summary: 'Get a filtered/sorted list of recent songs with pagination',
+    summary: 'Get a filtered/sorted list of recent songs with pagination'
   })
   public async getSongList(
-    @Query() query: PageQueryDTO,
+    @Query() query: PageQueryDTO
   ): Promise<SongPreviewDto[]> {
     return await this.songBrowserService.getRecentSongs(query);
   }
@@ -42,7 +42,7 @@ export class SongBrowserController {
   @ApiOperation({ summary: 'Get a list of song categories and song counts' })
   public async getSongsByCategory(
     @Param('id') id: string,
-    @Query() query: PageQueryDTO,
+    @Query() query: PageQueryDTO
   ): Promise<SongPreviewDto[]> {
     return await this.songBrowserService.getSongsByCategory(id, query);
   }
@@ -51,7 +51,7 @@ export class SongBrowserController {
   @ApiOperation({ summary: 'Get a list of songs at random' })
   public async getRandomSongs(
     @Query('count') count: string,
-    @Query('category') category: string,
+    @Query('category') category: string
   ): Promise<SongPreviewDto[]> {
     const countInt = parseInt(count);
 

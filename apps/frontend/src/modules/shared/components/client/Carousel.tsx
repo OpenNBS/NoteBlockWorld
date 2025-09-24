@@ -2,11 +2,11 @@
 
 import {
   faChevronLeft,
-  faChevronRight,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useEmblaCarousel, {
-  type UseEmblaCarouselType,
+  type UseEmblaCarouselType
 } from 'embla-carousel-react';
 import {
   ButtonHTMLAttributes,
@@ -17,7 +17,7 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useState
 } from 'react';
 
 import { cn } from '../../../../lib/tailwind.utils';
@@ -69,14 +69,14 @@ export const Carousel = forwardRef<
       children,
       ...props
     },
-    ref,
+    ref
   ) => {
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,
-        axis: orientation === 'horizontal' ? 'x' : 'y',
+        axis: orientation === 'horizontal' ? 'x' : 'y'
       },
-      plugins,
+      plugins
     );
 
     const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -117,7 +117,7 @@ export const Carousel = forwardRef<
           scrollNext();
         }
       },
-      [scrollPrev, scrollNext],
+      [scrollPrev, scrollNext]
     );
 
     useEffect(() => {
@@ -155,7 +155,7 @@ export const Carousel = forwardRef<
           scrollPrev,
           scrollNext,
           canScrollPrev,
-          canScrollNext,
+          canScrollNext
         }}
       >
         <div
@@ -170,7 +170,7 @@ export const Carousel = forwardRef<
         </div>
       </CarouselContext.Provider>
     );
-  },
+  }
 );
 Carousel.displayName = 'Carousel';
 
@@ -213,7 +213,7 @@ const CarouselButton = forwardRef<
       ref={ref}
       className={cn(
         'absolute h-12 w-12 rounded-full bg-zinc-800 hover:bg-zinc-700 hover:scale-110 transition-all duration-200 ease-in-out cursor-pointer',
-        className,
+        className
       )}
       {...props}
     />
@@ -235,7 +235,7 @@ export const CarouselPrevious = forwardRef<
         orientation === 'horizontal'
           ? '-left-6 top-1/2 -translate-y-1/2'
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
-        className,
+        className
       )}
       onClick={scrollPrev}
       {...props}
@@ -260,7 +260,7 @@ export const CarouselNext = forwardRef<
         orientation === 'horizontal'
           ? '-right-6 top-1/2 -translate-y-1/2'
           : 'bottom-12 left-1/2 -translate-x-1/2 rotate-90',
-        className,
+        className
       )}
       onClick={scrollNext}
       {...props}
@@ -281,7 +281,7 @@ const CarouselButtonSmall = forwardRef<
       ref={ref}
       className={cn(
         'absolute h-10 w-10 rounded-full bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 ease-in-out cursor-pointer',
-        className,
+        className
       )}
       {...props}
     />
@@ -308,7 +308,7 @@ export const CarouselPreviousSmall = forwardRef<
           ? '-left-5 top-1/2 -translate-y-1/2'
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
         'shadow-[15px_0_20px_20px_rgb(24,24,27)]',
-        className,
+        className
       )}
       onClick={scrollPrev}
       {...props}
@@ -338,7 +338,7 @@ export const CarouselNextSmall = forwardRef<
           ? '-right-5 top-1/2 -translate-y-1/2'
           : 'bottom-12 left-1/2 -translate-x-1/2 rotate-90',
         'shadow-[-15px_0_20px_20px_rgb(24,24,27)]',
-        className,
+        className
       )}
       onClick={scrollNext}
       {...props}
@@ -366,7 +366,7 @@ export const useDotButton = (): UseDotButtonType => {
       if (!api) return;
       api.scrollTo(index);
     },
-    [api],
+    [api]
   );
 
   const onInit = useCallback(() => {
@@ -389,7 +389,7 @@ export const useDotButton = (): UseDotButtonType => {
   return {
     selectedIndex,
     scrollSnaps,
-    onDotButtonClick,
+    onDotButtonClick
   };
 };
 
@@ -404,7 +404,7 @@ export const CarouselDots = () => {
           onClick={() => onDotButtonClick(index)}
           className={cn(
             'h-2.5 w-2.5 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 ease-in-out',
-            index === selectedIndex && 'bg-zinc-700',
+            index === selectedIndex && 'bg-zinc-700'
           )}
         />
       ))}

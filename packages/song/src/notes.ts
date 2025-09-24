@@ -25,11 +25,11 @@ export class NoteQuadTree {
         const tick = parseInt(tickStr);
 
         const treeItem = new Rectangle({
-          x: tick,
-          y: layerId,
-          width: 1,
+          x     : tick,
+          y     : layerId,
+          width : 1,
           height: 1,
-          data: { ...note, tick: tick, layer: layerId },
+          data  : { ...note, tick: tick, layer: layerId }
         });
 
         // @ts-ignore //TODO: fix this
@@ -45,7 +45,7 @@ export class NoteQuadTree {
     x1,
     y1,
     x2,
-    y2,
+    y2
   }: {
     x1: number;
     y1: number;
@@ -53,10 +53,10 @@ export class NoteQuadTree {
     y2: number;
   }): Note[] {
     const rect = new Rectangle({
-      x: Math.min(x1, x2),
-      y: Math.min(y1, y2),
-      width: Math.abs(x2 - x1),
-      height: Math.abs(y2 - y1),
+      x     : Math.min(x1, x2),
+      y     : Math.min(y1, y2),
+      width : Math.abs(x2 - x1),
+      height: Math.abs(y2 - y1)
     });
 
     return this.quadtree
@@ -69,7 +69,7 @@ export class NoteQuadTree {
           note.tick >= x1 &&
           note.tick <= x2 &&
           note.layer >= y1 &&
-          note.layer <= y2,
+          note.layer <= y2
       );
   }
 }

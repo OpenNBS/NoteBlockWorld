@@ -4,14 +4,14 @@ import { MY_SONGS } from '@nbw/config';
 import type {
   SongPageDtoType,
   SongPreviewDtoType,
-  SongsFolder,
+  SongsFolder
 } from '@nbw/database';
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -37,7 +37,7 @@ type MySongsContextType = {
 };
 
 const MySongsContext = createContext<MySongsContextType>(
-  {} as MySongsContextType,
+  {} as MySongsContextType
 );
 
 type MySongProviderProps = {
@@ -53,7 +53,7 @@ export const MySongProvider = ({
   children,
   totalPagesInit = 0,
   currentPageInit = 0,
-  pageSizeInit = MY_SONGS.PAGE_SIZE,
+  pageSizeInit = MY_SONGS.PAGE_SIZE
 }: MySongProviderProps) => {
   const [loadedSongs, setLoadedSongs] =
     useState<SongsFolder>(InitialsongsFolder);
@@ -69,14 +69,14 @@ export const MySongProvider = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
   const [songToDelete, setSongToDelete] = useState<SongPreviewDtoType | null>(
-    null,
+    null
   );
 
   const putPage = useCallback(
     async ({ key, page }: { key: number; page: SongPageDtoType }) => {
       setLoadedSongs({ ...loadedSongs, [key]: page });
     },
-    [loadedSongs],
+    [loadedSongs]
   );
 
   const fetchSongsPage = useCallback(async (): Promise<void> => {
@@ -86,22 +86,22 @@ export const MySongProvider = ({
     try {
       const response = await axiosInstance.get('/my-songs', {
         params: {
-          page: currentPage,
+          page : currentPage,
           limit: pageSize,
-          sort: 'createdAt',
-          order: 'false',
+          sort : 'createdAt',
+          order: 'false'
         },
         headers: {
-          authorization: `Bearer ${token}`,
-        },
+          authorization: `Bearer ${token}`
+        }
       });
 
       const data = response.data as SongPageDtoType;
 
       // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       putPage({
-        key: currentPage,
-        page: data,
+        key : currentPage,
+        page: data
       });
 
       setTotalSongs(data.total);
@@ -144,7 +144,7 @@ export const MySongProvider = ({
         setCurrentPage(page);
       }
     },
-    [totalPages],
+    [totalPages]
   );
 
   const nextpage = useCallback(() => {
@@ -169,8 +169,8 @@ export const MySongProvider = ({
     try {
       await axiosInstance.delete(`/song/${songToDelete.publicId}`, {
         headers: {
-          authorization: `Bearer ${token}`,
-        },
+          authorization: `Bearer ${token}`
+        }
       });
 
       setIsDeleteDialogOpen(false);
@@ -208,7 +208,7 @@ export const MySongProvider = ({
         setIsDeleteDialogOpen,
         songToDelete,
         setSongToDelete,
-        deleteSong,
+        deleteSong
       }}
     >
       {children}

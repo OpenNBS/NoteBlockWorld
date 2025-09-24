@@ -35,7 +35,7 @@ export class AuthService {
     @Inject('JWT_REFRESH_EXPIRES_IN')
     private readonly JWT_REFRESH_EXPIRES_IN: string,
     @Inject('APP_DOMAIN')
-    private readonly APP_DOMAIN?: string,
+    private readonly APP_DOMAIN?: string
   ) {}
 
   public async verifyToken(req: Request, res: Response) {
@@ -54,7 +54,7 @@ export class AuthService {
 
     try {
       const decoded = this.jwtService.verify(token, {
-        secret: this.JWT_SECRET,
+        secret: this.JWT_SECRET
       });
 
       // verify if user exists
@@ -76,9 +76,9 @@ export class AuthService {
 
     const profile = {
       // Generate username from display name
-      username: email.split('@')[0],
-      email: email,
-      profileImage: user.photos[0].value,
+      username    : email.split('@')[0],
+      email       : email,
+      profileImage: user.photos[0].value
     };
 
     // verify if user exists
@@ -93,9 +93,9 @@ export class AuthService {
     const newUsername = await this.userService.generateUsername(baseUsername);
 
     const newUser = new CreateUser({
-      username: newUsername,
-      email: email,
-      profileImage: profileImage,
+      username    : newUsername,
+      email       : email,
+      profileImage: profileImage
     });
 
     return await this.userService.create(newUser);
@@ -126,17 +126,17 @@ export class AuthService {
       'https://api.github.com/user/emails',
       {
         headers: {
-          Authorization: `token ${user.accessToken}`,
-        },
-      },
+          Authorization: `token ${user.accessToken}`
+        }
+      }
     );
 
     const email = response.data.filter((email) => email.primary)[0].email;
 
     const user_registered = await this.verifyAndGetUser({
-      username: profile.username,
-      email: email,
-      profileImage: profile.photos[0].value,
+      username    : profile.username,
+      email       : email,
+      profileImage: profile.photos[0].value
     });
 
     return this.GenTokenRedirect(user_registered, res);
@@ -148,9 +148,9 @@ export class AuthService {
 
     const profile = {
       // Generate username from display name
-      username: user.username,
-      email: user.email,
-      profileImage: profilePictureUrl,
+      username    : user.username,
+      email       : user.email,
+      profileImage: profilePictureUrl
     };
 
     // verify if user exists
@@ -172,29 +172,29 @@ export class AuthService {
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.JWT_SECRET,
-        expiresIn: this.JWT_EXPIRES_IN,
+        secret   : this.JWT_SECRET,
+        expiresIn: this.JWT_EXPIRES_IN
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.JWT_REFRESH_SECRET,
-        expiresIn: this.JWT_REFRESH_EXPIRES_IN,
-      }),
+        secret   : this.JWT_REFRESH_SECRET,
+        expiresIn: this.JWT_REFRESH_EXPIRES_IN
+      })
     ]);
 
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      access_token : accessToken,
+      refresh_token: refreshToken
     };
   }
 
   private async GenTokenRedirect(
     user_registered: UserDocument,
-    res: Response<any, Record<string, any>>,
+    res: Response<any, Record<string, any>>
   ): Promise<void> {
     const token = await this.createJwtPayload({
-      id: user_registered._id.toString(),
-      email: user_registered.email,
-      username: user_registered.username,
+      id      : user_registered._id.toString(),
+      email   : user_registered.email,
+      username: user_registered.username
     });
 
     const frontEndURL = this.FRONTEND_URL;
@@ -203,12 +203,12 @@ export class AuthService {
 
     res.cookie('token', token.access_token, {
       domain: domain,
-      maxAge: maxAge,
+      maxAge: maxAge
     });
 
     res.cookie('refresh_token', token.refresh_token, {
       domain: domain,
-      maxAge: maxAge,
+      maxAge: maxAge
     });
 
     res.redirect(frontEndURL + '/');

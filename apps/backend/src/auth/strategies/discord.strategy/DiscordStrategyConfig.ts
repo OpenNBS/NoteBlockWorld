@@ -4,11 +4,11 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
-  IsString,
+  IsString
 } from 'class-validator';
 import {
   StrategyOptions as OAuth2StrategyOptions,
-  StrategyOptionsWithRequest as OAuth2StrategyOptionsWithRequest,
+  StrategyOptionsWithRequest as OAuth2StrategyOptionsWithRequest
 } from 'passport-oauth2';
 
 import type { ScopeType } from './types';

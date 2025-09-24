@@ -7,7 +7,7 @@ import {
   createCanvas,
   noteBlockImage,
   saveToImage,
-  useFont,
+  useFont
 } from './canvasFactory';
 import type { Canvas, DrawParams } from './types';
 import { getKeyText, instrumentColors, isDarkColor, tintImage } from './utils';
@@ -43,7 +43,7 @@ export const drawNotesOffscreen = async ({
   canvasWidth,
   //canvasHeight,
   imgWidth = 1280,
-  imgHeight = 768,
+  imgHeight = 768
 }: DrawParams) => {
   // Create new offscreen canvas
   const canvas = createCanvas(imgWidth, imgHeight);
@@ -98,7 +98,7 @@ export const drawNotesOffscreen = async ({
     x1: startTick,
     y1: startLayer,
     x2: endTick,
-    y2: endLayer,
+    y2: endLayer
   });
 
   visibleNotes.forEach(async (note: Note) => {
@@ -117,7 +117,7 @@ export const drawNotesOffscreen = async ({
       x,
       y,
       8 * zoomFactor,
-      8 * zoomFactor,
+      8 * zoomFactor
     );
 
     // Draw the key text

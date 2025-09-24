@@ -7,11 +7,11 @@ import { SongService } from '@server/song/song.service';
 import { SongBrowserService } from './song-browser.service';
 
 const mockSongService = {
-  getSongsForTimespan: jest.fn(),
+  getSongsForTimespan   : jest.fn(),
   getSongsBeforeTimespan: jest.fn(),
-  getRecentSongs: jest.fn(),
-  getCategories: jest.fn(),
-  getSongsByCategory: jest.fn(),
+  getRecentSongs        : jest.fn(),
+  getCategories         : jest.fn(),
+  getSongsByCategory    : jest.fn()
 };
 
 describe('SongBrowserService', () => {
@@ -23,10 +23,10 @@ describe('SongBrowserService', () => {
       providers: [
         SongBrowserService,
         {
-          provide: SongService,
-          useValue: mockSongService,
-        },
-      ],
+          provide : SongService,
+          useValue: mockSongService
+        }
+      ]
     }).compile();
 
     service = module.get<SongBrowserService>(SongBrowserService);
@@ -40,12 +40,12 @@ describe('SongBrowserService', () => {
   describe('getFeaturedSongs', () => {
     it('should return featured songs', async () => {
       const songWithUser: SongWithUser = {
-        title: 'Test Song',
+        title   : 'Test Song',
         uploader: { username: 'testuser', profileImage: 'testimage' },
-        stats: {
-          duration: 100,
-          noteCount: 100,
-        },
+        stats   : {
+          duration : 100,
+          noteCount: 100
+        }
       } as any;
 
       jest
@@ -68,8 +68,8 @@ describe('SongBrowserService', () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
 
       const songPreviewDto: SongPreviewDto = {
-        title: 'Test Song',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        title   : 'Test Song',
+        uploader: { username: 'testuser', profileImage: 'testimage' }
       } as any;
 
       jest
@@ -82,7 +82,7 @@ describe('SongBrowserService', () => {
 
       expect(songService.getRecentSongs).toHaveBeenCalledWith(
         query.page,
-        query.limit,
+        query.limit
       );
     });
 
@@ -90,7 +90,7 @@ describe('SongBrowserService', () => {
       const query: PageQueryDTO = { page: undefined, limit: undefined };
 
       await expect(service.getRecentSongs(query)).rejects.toThrow(
-        HttpException,
+        HttpException
       );
     });
   });
@@ -114,8 +114,8 @@ describe('SongBrowserService', () => {
       const query: PageQueryDTO = { page: 1, limit: 10 };
 
       const songPreviewDto: SongPreviewDto = {
-        title: 'Test Song',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        title   : 'Test Song',
+        uploader: { username: 'testuser', profileImage: 'testimage' }
       } as any;
 
       jest
@@ -129,7 +129,7 @@ describe('SongBrowserService', () => {
       expect(songService.getSongsByCategory).toHaveBeenCalledWith(
         category,
         query.page,
-        query.limit,
+        query.limit
       );
     });
   });

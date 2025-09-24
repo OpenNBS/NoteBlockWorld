@@ -10,7 +10,7 @@ import ClientAxios from '@web/lib/axios/ClientAxios';
 
 import {
   Input,
-  SubmitButton,
+  SubmitButton
 } from '../../../shared/components/client/FormElements';
 
 type LoginFormData = {
@@ -27,7 +27,7 @@ export const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<LoginFormData>();
 
   const onSubmit = async ({ email }: LoginFormData) => {
@@ -36,19 +36,19 @@ export const LoginForm: FC = () => {
       const url = `${backendURL}/auth/login/magic-link`;
 
       const response = await ClientAxios.post(url, {
-        destination: email,
+        destination: email
       });
 
       console.log(response.data);
 
       toast.success(`A magic link has been sent to ${email}!`, {
         position: 'top-center',
-        duration: 20_000, // 20 seconds
+        duration: 20_000 // 20 seconds
       });
 
       toast.success('It will stay valid for one hour!', {
         position: 'top-center',
-        duration: 20_000, // 20 seconds
+        duration: 20_000 // 20 seconds
       });
     } catch (error) {
       if ((error as any).isAxiosError) {
@@ -60,19 +60,19 @@ export const LoginForm: FC = () => {
           if (status === 429) {
             toast.error('Too many requests. Please try again later.', {
               position: 'top-center',
-              duration: 20_000, // 20 seconds
+              duration: 20_000 // 20 seconds
             });
           } else {
             toast.error('An unexpected error occurred', {
               position: 'top-center',
-              duration: 20_000, // 20 seconds
+              duration: 20_000 // 20 seconds
             });
           }
         }
       } else {
         toast.error('An unexpected error occurred', {
           position: 'top-center',
-          duration: 20_000, // 20 seconds
+          duration: 20_000 // 20 seconds
         });
       }
     } finally {

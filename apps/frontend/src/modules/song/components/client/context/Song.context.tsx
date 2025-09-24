@@ -5,12 +5,12 @@ import { useContext } from 'react';
 import {
   EditSongContext,
   EditSongProvider,
-  useEditSongProviderType,
+  useEditSongProviderType
 } from '@web/modules/song-edit/components/client/context/EditSong.context';
 import {
   UploadSongContext,
   UploadSongProvider,
-  useUploadSongProviderType,
+  useUploadSongProviderType
 } from '@web/modules/song-upload/components/client/context/UploadSong.context';
 
 export const SongProvider = ({ children }: { children: React.ReactNode }) => {
@@ -24,7 +24,7 @@ export const SongProvider = ({ children }: { children: React.ReactNode }) => {
 type ContextType = 'upload' | 'edit';
 
 export const useSongProvider = (
-  type: ContextType,
+  type: ContextType
 ): useUploadSongProviderType & useEditSongProviderType => {
   const uploadContext = useContext(UploadSongContext);
   const editContext = useContext(EditSongContext);

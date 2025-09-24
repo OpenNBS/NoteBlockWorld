@@ -12,7 +12,7 @@ describe('DiscordStrategy', () => {
       providers: [
         DiscordStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
             getOrThrow: jest.fn((key: string) => {
               switch (key) {
@@ -25,10 +25,10 @@ describe('DiscordStrategy', () => {
                 default:
                   return null;
               }
-            }),
-          },
-        },
-      ],
+            })
+          }
+        }
+      ]
     }).compile();
 
     discordStrategy = module.get<DiscordStrategy>(DiscordStrategy);
@@ -44,7 +44,7 @@ describe('DiscordStrategy', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new DiscordStrategy(configService)).toThrowError(
-        'OAuth2Strategy requires a clientID option',
+        'OAuth2Strategy requires a clientID option'
       );
     });
   });
@@ -58,7 +58,7 @@ describe('DiscordStrategy', () => {
       const result = await discordStrategy.validate(
         accessToken,
         refreshToken,
-        profile,
+        profile
       );
 
       expect(result).toEqual({ accessToken, refreshToken, profile });

@@ -3,7 +3,7 @@ import {
   IsInt,
   IsNumber,
   IsString,
-  ValidateIf,
+  ValidateIf
 } from 'class-validator';
 
 export class SongStats {

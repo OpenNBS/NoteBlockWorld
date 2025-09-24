@@ -3,7 +3,7 @@
 import {
   faDownload,
   faPencil,
-  faTrash,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -11,12 +11,12 @@ import Link from 'next/link';
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '@web/modules/shared/components/tooltip';
 import { downloadSongFile } from '@web/modules/song/util/downloadSong';
 
 export const DownloadSongButton = ({
-  song,
+  song
 }: {
   song: {
     publicId: string;
@@ -33,7 +33,7 @@ export const DownloadSongButton = ({
 };
 
 const DownloadButton = ({
-  handleClick,
+  handleClick
 }: {
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => {

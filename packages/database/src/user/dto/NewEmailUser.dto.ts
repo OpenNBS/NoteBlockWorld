@@ -4,13 +4,13 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
-  MinLength,
+  MinLength
 } from 'class-validator';
 
 export class NewEmailUserDto {
   @ApiProperty({
     description: 'User name',
-    example: 'Tomast1337',
+    example    : 'Tomast1337'
   })
   @IsString()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class NewEmailUserDto {
 
   @ApiProperty({
     description: 'User email',
-    example: 'vycasnicolas@gmail.com',
+    example    : 'vycasnicolas@gmail.com'
   })
   @IsString()
   @IsNotEmpty()

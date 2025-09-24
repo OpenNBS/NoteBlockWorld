@@ -13,12 +13,12 @@ describe('JwtStrategy', () => {
       providers: [
         JwtStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
-            getOrThrow: jest.fn().mockReturnValue('test-secret'),
-          },
-        },
-      ],
+            getOrThrow: jest.fn().mockReturnValue('test-secret')
+          }
+        }
+      ]
     }).compile();
 
     jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
@@ -34,7 +34,7 @@ describe('JwtStrategy', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValue(null);
 
       expect(() => new JwtStrategy(configService)).toThrowError(
-        'JwtStrategy requires a secret or key',
+        'JwtStrategy requires a secret or key'
       );
     });
   });
@@ -43,9 +43,9 @@ describe('JwtStrategy', () => {
     it('should return payload with refreshToken from header', () => {
       const req = {
         headers: {
-          authorization: 'Bearer test-refresh-token',
+          authorization: 'Bearer test-refresh-token'
         },
-        cookies: {},
+        cookies: {}
       } as unknown as Request;
 
       const payload = { userId: 'test-user-id' };
@@ -54,7 +54,7 @@ describe('JwtStrategy', () => {
 
       expect(result).toEqual({
         ...payload,
-        refreshToken: 'test-refresh-token',
+        refreshToken: 'test-refresh-token'
       });
     });
 
@@ -62,8 +62,8 @@ describe('JwtStrategy', () => {
       const req = {
         headers: {},
         cookies: {
-          refresh_token: 'test-refresh-token',
-        },
+          refresh_token: 'test-refresh-token'
+        }
       } as unknown as Request;
 
       const payload = { userId: 'test-user-id' };
@@ -72,20 +72,20 @@ describe('JwtStrategy', () => {
 
       expect(result).toEqual({
         ...payload,
-        refreshToken: 'test-refresh-token',
+        refreshToken: 'test-refresh-token'
       });
     });
 
     it('should throw an error if no refresh token is provided', () => {
       const req = {
         headers: {},
-        cookies: {},
+        cookies: {}
       } as unknown as Request;
 
       const payload = { userId: 'test-user-id' };
 
       expect(() => jwtStrategy.validate(req, payload)).toThrowError(
-        'No refresh token',
+        'No refresh token'
       );
     });
   });

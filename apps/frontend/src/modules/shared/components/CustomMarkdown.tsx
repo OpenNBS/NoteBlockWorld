@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Markdown, { ExtraProps } from 'react-markdown';
 
 export const CustomMarkdown = ({
-  MarkdownContent,
+  MarkdownContent
 }: {
   MarkdownContent: string;
 }) => {
@@ -23,7 +23,7 @@ export const CustomMarkdown = ({
         blockquote,
         pre,
         code,
-        a,
+        a
       }}
     >
       {MarkdownContent}

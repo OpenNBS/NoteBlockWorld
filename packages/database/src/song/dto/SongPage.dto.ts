@@ -10,25 +10,25 @@ export class SongPageDto {
 
   @IsNotEmpty()
   @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
-    maxDecimalPlaces: 0,
+    allowNaN        : false,
+    allowInfinity   : false,
+    maxDecimalPlaces: 0
   })
   page: number;
 
   @IsNotEmpty()
   @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
-    maxDecimalPlaces: 0,
+    allowNaN        : false,
+    allowInfinity   : false,
+    maxDecimalPlaces: 0
   })
   limit: number;
 
   @IsNotEmpty()
   @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
-    maxDecimalPlaces: 0,
+    allowNaN        : false,
+    allowInfinity   : false,
+    maxDecimalPlaces: 0
   })
   total: number;
 }

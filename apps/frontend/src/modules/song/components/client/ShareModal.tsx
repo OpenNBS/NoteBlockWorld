@@ -21,7 +21,7 @@ const getTwitterIntentUrl = (songId: string) => {
 export default function ShareModal({
   isOpen,
   setIsOpen,
-  songId,
+  songId
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -31,7 +31,7 @@ export default function ShareModal({
 
   const handleCopy = () => () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_URL}/song/${songId}`,
+      `${process.env.NEXT_PUBLIC_URL}/song/${songId}`
     );
 
     setIsCopied(true);

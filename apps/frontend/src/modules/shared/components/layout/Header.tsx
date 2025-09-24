@@ -2,7 +2,7 @@ import {
   faMusic,
   faNewspaper,
   faQuestionCircle,
-  faUser,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ export async function Header() {
               alt='NoteBlockWorld logo'
               className='h-10 mx-auto my-2 aspect-square drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)] hover:animate-[nbw-glow_3s_ease-in-out_infinite]'
               style={{
-                filter: 'drop-shadow(0px 0px 4px rgba(50, 149, 255, 1))',
+                filter: 'drop-shadow(0px 0px 4px rgba(50, 149, 255, 1))'
               }}
               width={40}
               height={40}

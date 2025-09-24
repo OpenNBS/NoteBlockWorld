@@ -8,7 +8,7 @@ async function getVanillaSoundList() {
   // Object that maps sound paths to their respective hashes
 
   const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/data/soundList.json',
+    process.env.NEXT_PUBLIC_API_URL + '/data/soundList.json'
   );
 
   const soundsMapping = (await response.json()) as Record<string, string>;
@@ -18,7 +18,7 @@ async function getVanillaSoundList() {
 }
 
 export async function parseSongFromBuffer(
-  buffer: ArrayBuffer,
+  buffer: ArrayBuffer
 ): Promise<SongFileType> {
   const song = fromArrayBuffer(buffer);
 
@@ -31,28 +31,28 @@ export async function parseSongFromBuffer(
   const vanillaSoundList = await getVanillaSoundList();
 
   return {
-    title: song.meta.name,
-    author: song.meta.author,
+    title         : song.meta.name,
+    author        : song.meta.author,
     originalAuthor: song.meta.originalAuthor,
-    description: song.meta.description,
-    length: quadTree.width,
-    height: quadTree.height,
-    arrayBuffer: buffer,
-    notes: quadTree,
-    instruments: getInstruments(song, vanillaSoundList),
+    description   : song.meta.description,
+    length        : quadTree.width,
+    height        : quadTree.height,
+    arrayBuffer   : buffer,
+    notes         : quadTree,
+    instruments   : getInstruments(song, vanillaSoundList)
   };
 }
 
 const getInstruments = (
   song: Song,
-  vanillaSoundList: string[],
+  vanillaSoundList: string[]
 ): InstrumentArray => {
   const blockCounts = getInstrumentNoteCounts(song);
 
   const firstCustomIndex = song.instruments.firstCustomIndex;
 
   const customInstruments = song.instruments.loaded.filter(
-    (instrument) => instrument.builtIn === false,
+    (instrument) => instrument.builtIn === false
   );
 
   return customInstruments.map((instrument, id) => {
@@ -60,7 +60,7 @@ const getInstruments = (
 
     const fullSoundPath = instrument.meta.soundFile.replace(
       'minecraft/',
-      'minecraft/sounds/',
+      'minecraft/sounds/'
     );
 
     if (vanillaSoundList.includes(fullSoundPath)) {
@@ -68,10 +68,10 @@ const getInstruments = (
     }
 
     return {
-      id: id,
-      name: instrument.meta.name || '',
-      file: soundFile,
-      count: blockCounts[id + firstCustomIndex] || 0,
+      id   : id,
+      name : instrument.meta.name || '',
+      file : soundFile,
+      count: blockCounts[id + firstCustomIndex] || 0
     };
   });
 };

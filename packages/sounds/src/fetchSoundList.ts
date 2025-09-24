@@ -57,7 +57,7 @@ async function getAssetIndexSounds(version: string) {
 
   // Get a new record with only keys that end with '.ogg'
   const sounds = Object.entries(objects).filter(([key]) =>
-    key.endsWith('.ogg'),
+    key.endsWith('.ogg')
   );
 
   return sounds;
@@ -68,7 +68,7 @@ async function getSoundList(version: string) {
 
   // Return an object with sound names as keys and hashes as values
   const soundList = Object.fromEntries(
-    sounds.map(([key, { hash }]) => [key, hash]),
+    sounds.map(([key, { hash }]) => [key, hash])
   );
 
   return soundList;

@@ -101,7 +101,7 @@ describe('getKeyText', () => {
       { key: 84, expected: 'A7' },
       { key: 85, expected: 'A#7' },
       { key: 86, expected: 'B7' },
-      { key: 87, expected: 'C8' },
+      { key: 87, expected: 'C8' }
     ];
 
     testCases.forEach(({ key, expected }) => {

@@ -11,12 +11,12 @@ async function fetchRecentSongs() {
       '/song-browser/recent',
       {
         params: {
-          page: 1, // TODO: fiz constants
+          page : 1, // TODO: fiz constants
           limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
-          sort: 'recent',
-          order: false,
-        },
-      },
+          sort : 'recent',
+          order: false
+        }
+      }
     );
 
     return response.data;
@@ -28,24 +28,24 @@ async function fetchRecentSongs() {
 async function fetchFeaturedSongs(): Promise<FeaturedSongsDtoType> {
   try {
     const response = await axiosInstance.get<FeaturedSongsDtoType>(
-      '/song-browser/featured',
+      '/song-browser/featured'
     );
 
     return response.data;
   } catch (error) {
     return {
-      hour: [],
-      day: [],
-      week: [],
+      hour : [],
+      day  : [],
+      week : [],
       month: [],
-      year: [],
-      all: [],
+      year : [],
+      all  : []
     };
   }
 }
 
 export const metadata: Metadata = {
-  title: 'Songs',
+  title: 'Songs'
 };
 
 async function Home() {

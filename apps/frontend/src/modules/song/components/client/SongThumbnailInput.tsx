@@ -7,7 +7,7 @@ import { cn } from '@web/lib/tailwind.utils';
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '@web/modules/shared/components/tooltip';
 
 import { useSongProvider } from './context/Song.context';
@@ -23,7 +23,7 @@ function ThumbnailSliders({
   formMethods,
   isLocked,
   maxTick,
-  maxLayer,
+  maxLayer
 }: {
   formMethods: UseFormReturn<UploadSongForm> & UseFormReturn<EditSongForm>;
   isLocked: boolean;
@@ -35,7 +35,7 @@ function ThumbnailSliders({
   const [zoomLevel, startTick, startLayer] = formMethods.watch([
     'thumbnailData.zoomLevel',
     'thumbnailData.startTick',
-    'thumbnailData.startLayer',
+    'thumbnailData.startLayer'
   ]);
 
   return (
@@ -49,7 +49,7 @@ function ThumbnailSliders({
           id='zoom-level'
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.zoomLevel', {
-            valueAsNumber: true,
+            valueAsNumber: true
           })}
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.zoomLevel.min}
@@ -67,7 +67,7 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.startTick', {
             valueAsNumber: true,
-            max: maxTick,
+            max          : maxTick
           })}
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startTick.default}
@@ -85,7 +85,7 @@ function ThumbnailSliders({
           className='w-full disabled:cursor-not-allowed'
           {...register('thumbnailData.startLayer', {
             valueAsNumber: true,
-            max: maxLayer,
+            max          : maxLayer
           })}
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startLayer.default}
@@ -102,7 +102,7 @@ const ColorButton = ({
   tooltip,
   active,
   onClick,
-  disabled,
+  disabled
 }: {
   color: string;
   tooltip: string;
@@ -117,7 +117,7 @@ const ColorButton = ({
         type='button'
         className={cn(
           'w-6 h-6 rounded-full flex-none border-2 border-zinc-200 border-opacity-30 disabled:opacity-30',
-          active && 'outline outline-2 outline-zinc-200',
+          active && 'outline outline-2 outline-zinc-200'
         )}
         style={{ backgroundColor: color }}
         disabled={disabled}
@@ -130,7 +130,7 @@ const ColorButton = ({
 
 export const SongThumbnailInput = ({
   type,
-  isLocked,
+  isLocked
 }: {
   type: 'upload' | 'edit';
   isLocked: boolean;

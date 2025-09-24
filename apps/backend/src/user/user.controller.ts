@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(
     @Inject(UserService)
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   @Get()
@@ -43,7 +43,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update the username' })
   async updateUsername(
     @GetRequestToken() user: UserDocument | null,
-    @Body() body: UpdateUsernameDto,
+    @Body() body: UpdateUsernameDto
   ) {
     user = validateUser(user);
     return await this.userService.updateUsername(user, body);

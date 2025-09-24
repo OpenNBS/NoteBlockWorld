@@ -13,7 +13,7 @@ describe('GoogleStrategy', () => {
       providers: [
         GoogleStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
             getOrThrow: jest.fn((key: string) => {
               switch (key) {
@@ -26,10 +26,10 @@ describe('GoogleStrategy', () => {
                 default:
                   return null;
               }
-            }),
-          },
-        },
-      ],
+            })
+          }
+        }
+      ]
     }).compile();
 
     googleStrategy = module.get<GoogleStrategy>(GoogleStrategy);
@@ -45,7 +45,7 @@ describe('GoogleStrategy', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
       expect(() => new GoogleStrategy(configService)).toThrowError(
-        'OAuth2Strategy requires a clientID option',
+        'OAuth2Strategy requires a clientID option'
       );
     });
   });

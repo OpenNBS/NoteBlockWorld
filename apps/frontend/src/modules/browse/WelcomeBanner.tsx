@@ -7,9 +7,9 @@ export const WelcomeBanner = () => {
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-20 brightness-50 hue-rotate-90'
         style={{
-          backgroundImage: "url('/background-tile-flat.png')",
-          backgroundSize: '12em',
-          backgroundAttachment: 'fixed',
+          backgroundImage     : "url('/background-tile-flat.png')",
+          backgroundSize      : '12em',
+          backgroundAttachment: 'fixed'
         }}
       ></div>
       <Image src='/nbw-color.png' alt='' width={100} height={100} />

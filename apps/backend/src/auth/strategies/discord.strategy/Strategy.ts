@@ -6,7 +6,7 @@ import {
   Strategy as OAuth2Strategy,
   StrategyOptions as OAuth2StrategyOptions,
   VerifyCallback,
-  VerifyFunction,
+  VerifyFunction
 } from 'passport-oauth2';
 
 import { DiscordStrategyConfig } from './DiscordStrategyConfig';
@@ -15,7 +15,7 @@ import {
   ProfileConnection,
   ProfileGuild,
   ScopeType,
-  SingleScopeType,
+  SingleScopeType
 } from './types';
 
 interface AuthorizationParams {
@@ -38,12 +38,12 @@ export default class Strategy extends OAuth2Strategy {
   public constructor(options: DiscordStrategyConfig, verify: VerifyFunction) {
     super(
       {
-        scopeSeparator: ' ',
+        scopeSeparator  : ' ',
         ...options,
         authorizationURL: 'https://discord.com/api/oauth2/authorize',
-        tokenURL: 'https://discord.com/api/oauth2/token',
+        tokenURL        : 'https://discord.com/api/oauth2/token'
       } as OAuth2StrategyOptions,
-      verify,
+      verify
     );
 
     this.validateConfig(options);
@@ -66,7 +66,7 @@ export default class Strategy extends OAuth2Strategy {
 
   private async makeApiRequest<T>(
     url: string,
-    accessToken: string,
+    accessToken: string
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       this._oauth2.get(url, accessToken, (err, body) => {
@@ -87,7 +87,7 @@ export default class Strategy extends OAuth2Strategy {
   private async fetchUserData(accessToken: string): Promise<Profile> {
     return this.makeApiRequest<Profile>(
       `${Strategy.DISCORD_API_BASE}/users/@me`,
-      accessToken,
+      accessToken
     );
   }
 
@@ -109,15 +109,15 @@ export default class Strategy extends OAuth2Strategy {
 
   private async enrichProfileWithScopes(
     profile: Profile,
-    accessToken: string,
+    accessToken: string
   ): Promise<void> {
     await Promise.all([
       this.fetchScopeData('connections', accessToken).then(
-        (data) => (profile.connections = data as ProfileConnection[]),
+        (data) => (profile.connections = data as ProfileConnection[])
       ),
       this.fetchScopeData('guilds', accessToken).then(
-        (data) => (profile.guilds = data as ProfileGuild[]),
-      ),
+        (data) => (profile.guilds = data as ProfileGuild[])
+      )
     ]);
 
     profile.fetchedAt = new Date();
@@ -125,7 +125,7 @@ export default class Strategy extends OAuth2Strategy {
 
   private async fetchScopeData(
     scope: SingleScopeType,
-    accessToken: string,
+    accessToken: string
   ): Promise<unknown[] | null> {
     if (!this.scope.includes(scope)) {
       return null;
@@ -137,7 +137,7 @@ export default class Strategy extends OAuth2Strategy {
 
     return this.makeApiRequest<unknown[]>(
       `${Strategy.DISCORD_API_BASE}/users/@me/${scope}`,
-      accessToken,
+      accessToken
     );
   }
 
@@ -148,34 +148,34 @@ export default class Strategy extends OAuth2Strategy {
   private buildProfile(data: Profile, accessToken: string): Profile {
     const { id } = data;
     return {
-      provider: 'discord',
-      id: id,
-      username: data.username,
-      displayName: data.displayName,
-      avatar: data.avatar,
-      banner: data.banner,
-      email: data.email,
-      verified: data.verified,
-      mfa_enabled: data.mfa_enabled,
+      provider    : 'discord',
+      id          : id,
+      username    : data.username,
+      displayName : data.displayName,
+      avatar      : data.avatar,
+      banner      : data.banner,
+      email       : data.email,
+      verified    : data.verified,
+      mfa_enabled : data.mfa_enabled,
       public_flags: data.public_flags,
-      flags: data.flags,
-      locale: data.locale,
-      global_name: data.global_name,
+      flags       : data.flags,
+      locale      : data.locale,
+      global_name : data.global_name,
       premium_type: data.premium_type,
-      connections: data.connections,
-      guilds: data.guilds,
+      connections : data.connections,
+      guilds      : data.guilds,
       access_token: accessToken,
-      fetchedAt: new Date(),
-      createdAt: this.calculateCreationDate(id),
-      _raw: JSON.stringify(data),
-      _json: data as unknown as Record<string, unknown>,
+      fetchedAt   : new Date(),
+      createdAt   : this.calculateCreationDate(id),
+      _raw        : JSON.stringify(data),
+      _json       : data as unknown as Record<string, unknown>
     };
   }
 
   public fetchScope(
     scope: SingleScopeType,
     accessToken: string,
-    callback: (err: Error | null, data: Record<string, unknown> | null) => void,
+    callback: (err: Error | null, data: Record<string, unknown> | null) => void
   ): void {
     // Early return if scope is not included
     if (!this.scope.includes(scope)) {
@@ -185,7 +185,7 @@ export default class Strategy extends OAuth2Strategy {
 
     // Handle scope delay
     const delayPromise = new Promise<void>((resolve) =>
-      setTimeout(resolve, this.scopeDelay ?? 0),
+      setTimeout(resolve, this.scopeDelay ?? 0)
     );
 
     delayPromise
@@ -199,7 +199,7 @@ export default class Strategy extends OAuth2Strategy {
 
               callback(
                 new InternalOAuthError(`Failed to fetch scope: ${scope}`, err),
-                null,
+                null
               );
 
               return;
@@ -208,7 +208,7 @@ export default class Strategy extends OAuth2Strategy {
             try {
               if (typeof body !== 'string') {
                 const error = new Error(
-                  `Invalid response type for scope: ${scope}`,
+                  `Invalid response type for scope: ${scope}`
                 );
 
                 this.logger.error(error.message);
@@ -227,7 +227,7 @@ export default class Strategy extends OAuth2Strategy {
               this.logger.error('Parse error:', error);
               callback(error, null);
             }
-          },
+          }
         );
       })
       .catch((error) => {
@@ -237,7 +237,7 @@ export default class Strategy extends OAuth2Strategy {
   }
 
   public override authorizationParams(
-    options: AuthorizationParams,
+    options: AuthorizationParams
   ): AuthorizationParams & Record<string, unknown> {
     const params: AuthorizationParams & Record<string, unknown> =
       super.authorizationParams(options) as Record<string, unknown>;

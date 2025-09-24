@@ -14,7 +14,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
     publicName,
     description,
     profileImage,
-    socialLinks,
+    socialLinks
   } = userData;
 
   return (

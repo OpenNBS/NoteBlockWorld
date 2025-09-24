@@ -10,7 +10,7 @@ import { downloadSongFile } from '../../util/downloadSong';
 export const FileDisplay = ({
   fileName,
   children,
-  className,
+  className
 }: {
   fileName: string;
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export const FileDisplay = ({
   <div
     className={cn(
       'flex flex-row gap-4 items-center text-zinc-500 truncate',
-      className,
+      className
     )}
   >
     <div className='flex-shrink min-w-0 max-w-96 flex flex-row gap-2 items-center'>
@@ -33,7 +33,7 @@ export const FileDisplay = ({
 );
 
 export const ChangeFileButton = ({
-  handleClick,
+  handleClick
 }: {
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }) => (
@@ -46,7 +46,7 @@ export const ChangeFileButton = ({
 );
 
 export const DownloadFileButton = ({
-  song,
+  song
 }: {
   song: {
     publicId: string;

@@ -9,13 +9,13 @@ import { RecentSongsProvider } from './RecentSongs.context';
 type HomePageContextType = null;
 
 const HomePageContext = createContext<HomePageContextType>(
-  null as HomePageContextType,
+  null as HomePageContextType
 );
 
 export function HomePageProvider({
   children,
   initialRecentSongs,
-  initialFeaturedSongs,
+  initialFeaturedSongs
 }: {
   children: React.ReactNode;
   initialRecentSongs: SongPreviewDtoType[];
@@ -37,7 +37,7 @@ export function useHomePageProvider() {
 
   if (context === undefined || context === null) {
     throw new Error(
-      'useHomePageProvider must be used within a HomepageProvider',
+      'useHomePageProvider must be used within a HomepageProvider'
     );
   }
 

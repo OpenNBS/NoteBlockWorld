@@ -8,7 +8,7 @@ const writeSoundList = async () => {
   function writeJSONFile(
     dir: string,
     fileName: string,
-    data: Record<string, any> | string[],
+    data: Record<string, any> | string[]
   ) {
     const path = resolve(dir, fileName);
     const jsonString = JSON.stringify(data, null, 0);
@@ -56,16 +56,16 @@ const build = async () => {
     'class-validator',
     '@nestjs/microservices',
     '@nestjs/websockets',
-    '@fastify/static',
+    '@fastify/static'
   ];
 
   const result = await Bun.build({
     entrypoints: ['./src/main.ts'],
-    outdir: './dist',
-    target: 'bun',
-    minify: false,
-    sourcemap: 'linked',
-    external: optionalRequirePackages.filter((pkg) => {
+    outdir     : './dist',
+    target     : 'bun',
+    minify     : false,
+    sourcemap  : 'linked',
+    external   : optionalRequirePackages.filter((pkg) => {
       try {
         require(pkg);
         return false;
@@ -73,7 +73,7 @@ const build = async () => {
         return true;
       }
     }),
-    splitting: true,
+    splitting: true
   });
 
   if (!result.success) {

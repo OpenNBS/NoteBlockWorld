@@ -8,7 +8,7 @@ import {
   faLock,
   faPlay,
   faPlus,
-  faShare,
+  faShare
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SongViewDtoType } from '@nbw/database';
@@ -19,14 +19,15 @@ import { toast } from 'react-hot-toast';
 
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
-import DownloadSongModal from './client/DownloadSongModal';
-import ShareModal from './client/ShareModal';
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '../../shared/components/tooltip';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
+
+import DownloadSongModal from './client/DownloadSongModal';
+import ShareModal from './client/ShareModal';
 
 const VisibilityBadge = () => {
   return (
@@ -126,7 +127,7 @@ const ShareButton = ({ songId }: { songId: string }) => {
 };
 
 const OpenSongInNBSButton = ({
-  song,
+  song
 }: {
   song: {
     publicId: string;
@@ -158,7 +159,7 @@ const OpenSongInNBSButton = ({
 
 const OpenInNBSButton = ({
   isLoading,
-  handleClick,
+  handleClick
 }: {
   isLoading: boolean;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -210,10 +211,10 @@ const showOpenFailedToast = () => {
     ),
     {
       duration: 5000,
-      style: {
-        width: '100%',
-      },
-    },
+      style   : {
+        width: '100%'
+      }
+    }
   );
 };
 
@@ -243,7 +244,7 @@ const DownloadSongButton = ({ song }: { song: SongViewDtoType }) => {
 
 const DownloadButton = ({
   downloadCount,
-  handleClick,
+  handleClick
 }: {
   downloadCount: number;
   handleClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -292,5 +293,5 @@ export {
   LikeButton,
   ShareButton,
   OpenSongInNBSButton,
-  DownloadSongButton,
+  DownloadSongButton
 };

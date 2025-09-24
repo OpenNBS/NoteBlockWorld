@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
-  SwaggerModule,
+  SwaggerModule
 } from '@nestjs/swagger';
 
 export function initializeSwagger(app: INestApplication<any>) {
@@ -17,8 +17,8 @@ export function initializeSwagger(app: INestApplication<any>) {
 
   const swaggerOptions: SwaggerCustomOptions = {
     swaggerOptions: {
-      persistAuthorization: true,
-    },
+      persistAuthorization: true
+    }
   };
 
   SwaggerModule.setup('docs', app, document, swaggerOptions);

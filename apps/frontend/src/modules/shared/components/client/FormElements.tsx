@@ -32,7 +32,7 @@ export const Area = ({
   tooltip,
   isLoading,
   className,
-  children,
+  children
 }: {
   label?: string;
   tooltip?: React.ReactNode;
@@ -50,7 +50,7 @@ export const Area = ({
         <div
           className={cn(
             'flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4',
-            className,
+            className
           )}
         >
           {children}
@@ -181,7 +181,7 @@ export const Select = forwardRef<
                 ? 'border-red-500 focus:outline-red-500'
                 : 'border-zinc-500'
             }  disabled:border-zinc-700 disabled:cursor-not-allowed disabled:text-zinc-500 p-2`,
-            props.className,
+            props.className
           )}
         />
       )}
@@ -238,7 +238,7 @@ export const Slider = forwardRef<
     ref={ref}
     className={cn(
       'relative flex w-full touch-none select-none items-center',
-      className,
+      className
     )}
     {...props}
   >
@@ -257,7 +257,7 @@ export const UploadButton = ({ isDisabled }: { isDisabled: boolean }) => {
         'transform motion-reduce:transform-none transition duration-150 ease-in-back',
         isDisabled
           ? ''
-          : 'hover:scale-[115%] hover:rotate-6 active:scale-[85%] active:rotate-6',
+          : 'hover:scale-[115%] hover:rotate-6 active:scale-[85%] active:rotate-6'
       )}
     >
       <button

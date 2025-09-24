@@ -6,7 +6,7 @@ import { NoteBlockWorldLogo } from '@web/modules/shared/components/NoteBlockWorl
 import About from './about.mdx';
 
 export const metadata: Metadata = {
-  title: 'About',
+  title: 'About'
 };
 
 const AboutPage = () => {

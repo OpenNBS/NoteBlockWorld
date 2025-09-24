@@ -6,7 +6,7 @@ import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
 export default function UploadCompleteModal({
   isOpen,
-  songId,
+  songId
 }: {
   isOpen: boolean;
   songId: string;
@@ -29,14 +29,14 @@ export default function UploadCompleteModal({
         '#009688',
         '#8bc34a',
         '#ffeb3b',
-        '#ff9800',
-      ],
+        '#ff9800'
+      ]
     });
   }, []);
 
   const handleCopy = () => () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_URL}/song/${songId}`,
+      `${process.env.NEXT_PUBLIC_URL}/song/${songId}`
     );
 
     setIsCopied(true);

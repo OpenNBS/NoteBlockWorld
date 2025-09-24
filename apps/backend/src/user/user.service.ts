@@ -5,7 +5,7 @@ import {
   UpdateUsernameDto,
   User,
   UserDocument,
-  UserDto,
+  UserDto
 } from '@nbw/database';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -29,7 +29,7 @@ export class UserService {
   public async update(user: UserDocument): Promise<UserDocument> {
     try {
       return (await this.userModel.findByIdAndUpdate(user._id, user, {
-        new: true, // return the updated document
+        new: true // return the updated document
       })) as UserDocument;
     } catch (error) {
       if (error instanceof Error) {
@@ -47,18 +47,18 @@ export class UserService {
     if (userByEmail) {
       throw new HttpException(
         'Email already registered',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     const emailPrefixUsername = await this.generateUsername(
-      email.split('@')[0],
+      email.split('@')[0]
     );
 
     const user = await this.userModel.create({
-      email: email,
-      username: emailPrefixUsername,
-      publicName: emailPrefixUsername,
+      email     : email,
+      username  : emailPrefixUsername,
+      publicName: emailPrefixUsername
     });
 
     return user;
@@ -77,7 +77,7 @@ export class UserService {
   }
 
   public async findByPublicName(
-    publicName: string,
+    publicName: string
   ): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ publicName });
 
@@ -108,7 +108,7 @@ export class UserService {
       users,
       total,
       page,
-      limit,
+      limit
     };
   }
 
@@ -126,13 +126,13 @@ export class UserService {
     if (username) {
       throw new HttpException(
         'Username is not supported yet',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     throw new HttpException(
       'You must provide an email or an id',
-      HttpStatus.BAD_REQUEST,
+      HttpStatus.BAD_REQUEST
     );
   }
 
@@ -217,7 +217,7 @@ export class UserService {
     if (await this.usernameExists(username)) {
       throw new HttpException(
         'Username already exists',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 

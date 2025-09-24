@@ -10,7 +10,7 @@ import { cn } from '@web/lib/tailwind.utils';
 import useAdSenseClient from './useAdSenseClient';
 
 const HideAdButton = ({
-  setIsHidden,
+  setIsHidden
 }: {
   setIsHidden: (hidden: boolean) => void;
 }) => (
@@ -18,7 +18,7 @@ const HideAdButton = ({
     <button
       className='h-6 w-3'
       onClick={() => {
-        setIsHidden(true),
+        setIsHidden(true);
           setTimeout(() => {
             setIsHidden(false);
           }, 1000 * 60 * 5); // Reappers after 5 minutes
@@ -40,7 +40,7 @@ const AdTemplate = ({
   adLayoutKey,
   fullWidthResponsive,
   hiddenClassName = 'hidden',
-  showCloseButton = true,
+  showCloseButton = true
 }: {
   className: string;
   adSlot: string;
@@ -87,7 +87,7 @@ const AdTemplate = ({
           <ins
             className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
             style={{
-              display: 'block',
+              display: 'block'
             }}
             data-ad-client={pubId}
             data-ad-slot={adSlot}
@@ -107,7 +107,7 @@ export const InterSectionAdSlot = ({ className }: { className?: string }) => {
     <AdTemplate
       className={cn(
         'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400',
-        className,
+        className
       )}
       adSlot='4046918224'
       adFormat='auto'
@@ -127,7 +127,7 @@ export const SideRailAdSlot = ({ className }: { className?: string }) => {
         // the ad content height, always occupying the full viewport height instead. So we use 'max-w-fit'
         // to cap the max height to that of the ad.
         'flex-0 sticky mb-8 top-24 max-h-fit hidden xl:block w-36 min-w-36 bg-zinc-800/50 rounded-xl',
-        className,
+        className
       )}
       adSlot='4995642586'
       adFormat='auto'
@@ -142,7 +142,7 @@ export const DownloadPopupAdSlot = ({ className }: { className?: string }) => {
     <AdTemplate
       className={cn(
         'relative rounded-xl bg-zinc-800/50 p-2 my-8 h-32 max-h-32 w-full min-w-64 text-sm text-zinc-400',
-        className,
+        className
       )}
       adSlot='3239923384'
       adFormat='auto'
@@ -157,7 +157,7 @@ export const MultiplexAdSlot = ({ className }: { className?: string }) => {
     <AdTemplate
       className={cn(
         'relative rounded-xl bg-zinc-800/50 my-8 h-auto min-h-32 w-full min-w-64 text-sm text-zinc-400',
-        className,
+        className
       )}
       adSlot='6673081563'
       adFormat='autorelaxed'
@@ -171,7 +171,7 @@ export const SongCardAdSlot = ({ className }: { className?: string }) => {
     <AdTemplate
       className={cn(
         'relative rounded-xl bg-zinc-800 p-2 h-full w-full min-w-64 text-sm text-zinc-400',
-        className,
+        className
       )}
       adSlot='1737918264'
       adFormat='fluid'

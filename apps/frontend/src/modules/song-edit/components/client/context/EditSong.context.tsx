@@ -2,26 +2,16 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { UploadSongDtoType } from '@nbw/database';
-import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song/src/types';
+import { SongFileType, parseSongFromBuffer } from '@nbw/song';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormReturn,
-  useForm,
-} from 'react-hook-form';
+import { FieldErrors, UseFormRegister, UseFormReturn, useForm } from 'react-hook-form';
 import toaster from 'react-hot-toast';
-import { undefined } from 'zod';
 
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
-import {
-  EditSongForm,
-  editSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
+import { EditSongForm, editSongFormSchema } from '../../../../song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
@@ -38,17 +28,17 @@ export type useEditSongProviderType = {
 };
 
 export const EditSongContext = createContext<useEditSongProviderType>(
-  null as unknown as useEditSongProviderType,
+  null as unknown as useEditSongProviderType
 );
 
 export const EditSongProvider = ({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) => {
   const formMethods = useForm<EditSongForm>({
     resolver: zodResolver(editSongFormSchema),
-    mode: 'onBlur',
+    mode    : 'onBlur'
   });
 
   const [song, setSong] = useState<SongFileType | null>(null);
@@ -57,12 +47,12 @@ export const EditSongProvider = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [originalData, setOriginalData] = useState<UploadSongDtoType | null>(
-    null,
+    null
   );
 
   const {
     register,
-    formState: { errors },
+    formState: { errors }
   } = formMethods;
 
   const router = useRouter();
@@ -74,22 +64,22 @@ export const EditSongProvider = ({
       }
 
       const formValues = {
-        allowDownload: formMethods.getValues().allowDownload,
-        visibility: formMethods.getValues().visibility,
-        title: formMethods.getValues().title,
+        allowDownload : formMethods.getValues().allowDownload,
+        visibility    : formMethods.getValues().visibility,
+        title         : formMethods.getValues().title,
         originalAuthor: formMethods.getValues().originalAuthor,
-        description: formMethods.getValues().description,
-        thumbnailData: {
-          zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-          startTick: formMethods.getValues().thumbnailData.startTick,
+        description   : formMethods.getValues().description,
+        thumbnailData : {
+          zoomLevel : formMethods.getValues().thumbnailData.zoomLevel,
+          startTick : formMethods.getValues().thumbnailData.startTick,
           startLayer: formMethods.getValues().thumbnailData.startLayer,
           backgroundColor:
-            formMethods.getValues().thumbnailData.backgroundColor,
+            formMethods.getValues().thumbnailData.backgroundColor
         },
-        artist: formMethods.getValues().author,
+        artist           : formMethods.getValues().author,
         customInstruments: formMethods.getValues().customInstruments,
-        license: formMethods.getValues().license,
-        category: formMethods.getValues().category,
+        license          : formMethods.getValues().license,
+        category         : formMethods.getValues().category
       };
 
       const comparisons = [
@@ -110,44 +100,44 @@ export const EditSongProvider = ({
           originalData.customInstruments.length &&
           formValues.customInstruments.every(
             (instrument, index) =>
-              instrument === originalData.customInstruments[index],
+              instrument === originalData.customInstruments[index]
           ),
         formValues.license === originalData.license,
-        formValues.category === originalData.category,
+        formValues.category === originalData.category
       ];
 
       console.log(
         comparisons.every((value) => value),
-        comparisons,
+        comparisons
       );
 
       console.log(formValues.customInstruments, originalData.customInstruments);
 
       return comparisons.every((value) => value);
     },
-    [formMethods, originalData],
+    [formMethods, originalData]
   );
 
   const submitSong = async (): Promise<void> => {
     // Build form data
     const formValues: UploadSongDtoType = {
       allowDownload: formMethods.getValues().allowDownload,
-      visibility: formMethods.getValues()
+      visibility   : formMethods.getValues()
         .visibility as UploadSongDtoType['visibility'],
-      title: formMethods.getValues().title,
+      title         : formMethods.getValues().title,
       originalAuthor: formMethods.getValues().originalAuthor,
-      description: formMethods.getValues().description,
-      thumbnailData: {
-        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-        startTick: formMethods.getValues().thumbnailData.startTick,
-        startLayer: formMethods.getValues().thumbnailData.startLayer,
-        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
+      description   : formMethods.getValues().description,
+      thumbnailData : {
+        zoomLevel      : formMethods.getValues().thumbnailData.zoomLevel,
+        startTick      : formMethods.getValues().thumbnailData.startTick,
+        startLayer     : formMethods.getValues().thumbnailData.startLayer,
+        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor
       },
       customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license as UploadSongDtoType['license'],
-      category: formMethods.getValues()
+      license          : formMethods.getValues().license as UploadSongDtoType['license'],
+      category         : formMethods.getValues()
         .category as UploadSongDtoType['category'],
-      file: undefined,
+      file: undefined
     };
 
     // TODO: this comparison is not needed. Use isDirty field from react-hook-form
@@ -169,9 +159,9 @@ export const EditSongProvider = ({
       // Send request
       await axiosInstance.patch(`/song/${songId}/edit`, formValues, {
         headers: {
-          authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          authorization : `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
     } catch (error: any) {
       console.error('Error submitting song', error);
@@ -179,7 +169,7 @@ export const EditSongProvider = ({
       if (error.response) {
         setSendError(
           error.response.data.message ||
-            Object.values(error.response.data.error)[0],
+            Object.values(error.response.data.error)[0]
         );
       } else {
         console.log(error);
@@ -200,14 +190,14 @@ export const EditSongProvider = ({
 
       formMethods.setValue('allowDownload', true, {
         shouldValidate: false,
-        shouldDirty: true,
-        shouldTouch: true,
+        shouldDirty   : true,
+        shouldTouch   : true
       });
 
       formMethods.setValue('author', username, {
-        shouldDirty: true,
+        shouldDirty   : true,
         shouldValidate: false,
-        shouldTouch: true,
+        shouldTouch   : true
       });
 
       formMethods.setValue('visibility', songData.visibility);
@@ -217,22 +207,22 @@ export const EditSongProvider = ({
 
       formMethods.setValue(
         'thumbnailData.zoomLevel',
-        songData.thumbnailData.zoomLevel,
+        songData.thumbnailData.zoomLevel
       );
 
       formMethods.setValue(
         'thumbnailData.startTick',
-        songData.thumbnailData.startTick,
+        songData.thumbnailData.startTick
       );
 
       formMethods.setValue(
         'thumbnailData.startLayer',
-        songData.thumbnailData.startLayer,
+        songData.thumbnailData.startLayer
       );
 
       formMethods.setValue(
         'thumbnailData.backgroundColor',
-        songData.thumbnailData.backgroundColor,
+        songData.thumbnailData.backgroundColor
       );
 
       formMethods.setValue('license', songData.license);
@@ -244,10 +234,10 @@ export const EditSongProvider = ({
       const songFile = (
         await axiosInstance.get(`/song/${id}/download`, {
           params: {
-            src: 'edit',
+            src: 'edit'
           },
           responseType: 'arraybuffer',
-          headers: { authorization: `Bearer ${token}` },
+          headers     : { authorization: `Bearer ${token}` }
         })
       ).data as ArrayBuffer;
 
@@ -261,7 +251,7 @@ export const EditSongProvider = ({
 
       setSong(song as unknown as SongFileType); // TODO: Investigate this weird type error
     },
-    [formMethods, setSong],
+    [formMethods, setSong]
   );
 
   const setInstrumentSound = useCallback(
@@ -271,12 +261,12 @@ export const EditSongProvider = ({
       setInstrumentSounds(newValues);
       formMethods.setValue('customInstruments', newValues);
     },
-    [formMethods, instrumentSounds],
+    [formMethods, instrumentSounds]
   );
 
   const setSongId = useCallback(
     (id: string) => formMethods.setValue('id', id),
-    [formMethods],
+    [formMethods]
   );
 
   useEffect(() => {
@@ -309,7 +299,7 @@ export const EditSongProvider = ({
         sendError,
         isSubmitting,
         loadSong,
-        setSongId,
+        setSongId
       }}
     >
       {children}

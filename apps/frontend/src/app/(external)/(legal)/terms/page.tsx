@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service',
+  title: 'Terms of Service'
 };
 
 async function TermsOfServicePage() {

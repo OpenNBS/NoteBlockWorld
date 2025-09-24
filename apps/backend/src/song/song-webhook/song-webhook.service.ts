@@ -13,7 +13,7 @@ export class SongWebhookService implements OnModuleInit {
     @InjectModel(SongEntity.name)
     private songModel: Model<SongEntity>,
     @Inject('DISCORD_WEBHOOK_URL')
-    private readonly discordWebhookUrl: string | undefined,
+    private readonly discordWebhookUrl: string | undefined
   ) {}
 
   async onModuleInit() {
@@ -41,11 +41,11 @@ export class SongWebhookService implements OnModuleInit {
 
     try {
       const response = await fetch(`${webhookUrl}?wait=true`, {
-        method: 'POST',
+        method : 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(webhookData),
+        body: JSON.stringify(webhookData)
       });
 
       const data = (await response.json()) as { id: string };
@@ -84,11 +84,11 @@ export class SongWebhookService implements OnModuleInit {
 
     try {
       await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
-        method: 'PATCH',
+        method : 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(webhookData),
+        body: JSON.stringify(webhookData)
       });
 
       this.logger.log(`Updated webhook message for song ${song.publicId}`);
@@ -121,7 +121,7 @@ export class SongWebhookService implements OnModuleInit {
 
     try {
       await fetch(`${webhookUrl}/messages/${song.webhookMessageId}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       });
 
       this.logger.log(`Deleted webhook message for song ${song.publicId}`);
@@ -179,7 +179,7 @@ export class SongWebhookService implements OnModuleInit {
 
     for (const songDocument of await songQuery) {
       const webhookMessageId = await this.syncSongWebhook(
-        songDocument as unknown as SongWithUser,
+        songDocument as unknown as SongWithUser
       );
 
       songDocument.webhookMessageId = webhookMessageId;

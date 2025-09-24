@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
-  MinLength,
+  MinLength
 } from 'class-validator';
 
 export class GetUser {
@@ -15,7 +15,7 @@ export class GetUser {
   @IsEmail()
   @ApiProperty({
     description: 'Email of the user',
-    example: 'vycasnicolas@gmailcom',
+    example    : 'vycasnicolas@gmailcom'
   })
   email?: string;
 
@@ -24,7 +24,7 @@ export class GetUser {
   @MaxLength(64)
   @ApiProperty({
     description: 'Username of the user',
-    example: 'tomast1137',
+    example    : 'tomast1137'
   })
   username?: string;
 
@@ -35,7 +35,7 @@ export class GetUser {
   @IsMongoId()
   @ApiProperty({
     description: 'ID of the user',
-    example: 'replace0me6b5f0a8c1a6d8c',
+    example    : 'replace0me6b5f0a8c1a6d8c'
   })
   id?: string;
 

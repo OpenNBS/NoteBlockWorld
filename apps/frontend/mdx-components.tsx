@@ -15,7 +15,7 @@ import {
   ol,
   p,
   pre,
-  ul,
+  ul
 } from '@web/modules/shared/components/CustomMarkdown';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -35,6 +35,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre,
     code,
     a,
-    ...components,
+    ...components
   };
 }

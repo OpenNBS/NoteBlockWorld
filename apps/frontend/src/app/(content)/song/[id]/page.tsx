@@ -12,7 +12,7 @@ interface SongPage {
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: SongPage): Promise<Metadata> {
   let song;
   const publicUrl = process.env.NEXT_PUBLIC_URL;
@@ -28,30 +28,30 @@ export async function generateMetadata({
 
   try {
     const response = await axios.get<SongViewDtoType>(`/song/${params.id}`, {
-      headers,
+      headers
     });
 
     song = await response.data;
   } catch {
     return {
-      title: 'Song not found',
+      title: 'Song not found'
     };
   }
 
   return {
-    title: song.title,
+    title      : song.title,
     description: song.description,
-    authors: [{ name: song.uploader.username }],
-    openGraph: {
-      url: publicUrl + '/song/' + song.publicId,
-      title: song.title,
+    authors    : [{ name: song.uploader.username }],
+    openGraph  : {
+      url        : publicUrl + '/song/' + song.publicId,
+      title      : song.title,
       description: song.description,
-      siteName: 'Note Block World',
-      images: [song.thumbnailUrl],
+      siteName   : 'Note Block World',
+      images     : [song.thumbnailUrl]
     },
     twitter: {
-      card: 'summary_large_image',
-    },
+      card: 'summary_large_image'
+    }
   };
 }
 

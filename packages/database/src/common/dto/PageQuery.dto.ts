@@ -9,7 +9,7 @@ import {
   IsOptional,
   IsString,
   Max,
-  Min,
+  Min
 } from 'class-validator';
 
 import type { TimespanType } from '@database/song/dto/types';
@@ -17,31 +17,31 @@ import type { TimespanType } from '@database/song/dto/types';
 export class PageQueryDTO {
   @Min(1)
   @ApiProperty({
-    example: 1,
-    description: 'page',
+    example    : 1,
+    description: 'page'
   })
   page?: number = 1;
 
   @IsNotEmpty()
   @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
-    maxDecimalPlaces: 0,
+    allowNaN        : false,
+    allowInfinity   : false,
+    maxDecimalPlaces: 0
   })
   @Min(1)
   @Max(100)
   @ApiProperty({
-    example: 20,
-    description: 'limit',
+    example    : 20,
+    description: 'limit'
   })
   limit?: number;
 
   @IsString()
   @IsOptional()
   @ApiProperty({
-    example: 'field',
+    example    : 'field',
     description: 'Sorts the results by the specified field.',
-    required: false,
+    required   : false
   })
   sort?: string = 'createdAt';
 
@@ -51,16 +51,16 @@ export class PageQueryDTO {
     example: false,
     description:
       'Sorts the results in ascending order if true; in descending order if false.',
-    required: false,
+    required: false
   })
   order?: boolean = false;
 
   @IsEnum(TIMESPANS)
   @IsOptional()
   @ApiProperty({
-    example: 'hour',
+    example    : 'hour',
     description: 'Filters the results by the specified timespan.',
-    required: false,
+    required   : false
   })
   timespan?: TimespanType;
 

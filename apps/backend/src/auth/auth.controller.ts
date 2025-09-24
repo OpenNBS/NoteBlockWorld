@@ -8,7 +8,7 @@ import {
   Post,
   Req,
   Res,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -26,15 +26,15 @@ export class AuthController {
     @Inject(AuthService)
     private readonly authService: AuthService,
     @Inject(MagicLinkEmailStrategy)
-    private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy,
+    private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy
   ) {}
 
   @Throttle({
     default: {
       // one every 1 hour
-      ttl: 60 * 60 * 1000,
-      limit: 1,
-    },
+      ttl  : 60 * 60 * 1000,
+      limit: 1
+    }
   })
   @Post('login/magic-link')
   @ApiOperation({
@@ -44,21 +44,21 @@ export class AuthController {
       content: {
         'application/json': {
           schema: {
-            type: 'object',
+            type      : 'object',
             properties: {
               destination: {
-                type: 'string',
-                example: 'vycasnicolas@gmail.com',
-                description: 'Email address to send the magic link to',
-              },
+                type       : 'string',
+                example    : 'vycasnicolas@gmail.com',
+                description: 'Email address to send the magic link to'
+              }
             },
-            required: ['destination'],
-          },
-        },
-      },
-    },
+            required: ['destination']
+          }
+        }
+      }
+    }
   })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public async magicLinkLogin(@Req() req: Request, @Res() res: Response) {
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
     // TODO: uncomment this line to enable magic link login
@@ -67,7 +67,7 @@ export class AuthController {
 
   @Get('magic-link/callback')
   @ApiOperation({
-    summary: 'Will send the user a email with a single use login link',
+    summary: 'Will send the user a email with a single use login link'
   })
   @UseGuards(AuthGuard('magic-link'))
   public async magicLinkRedirect(@Req() req: Request, @Res() res: Response) {
@@ -127,9 +127,9 @@ export class AuthController {
   public verify(
     @Req() req: Request,
     @Res({
-      passthrough: true,
+      passthrough: true
     })
-    res: Response,
+    res: Response
   ) {
     this.authService.verifyToken(req, res);
   }

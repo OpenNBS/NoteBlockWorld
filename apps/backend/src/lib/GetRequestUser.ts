@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
-  createParamDecorator,
+  createParamDecorator
 } from '@nestjs/common';
 import type { Request } from 'express';
 
@@ -16,7 +16,7 @@ export const GetRequestToken = createParamDecorator(
     const user = req.existingUser;
 
     return user;
-  },
+  }
 );
 
 export const validateUser = (user: UserDocument | null) => {
@@ -24,10 +24,10 @@ export const validateUser = (user: UserDocument | null) => {
     throw new HttpException(
       {
         error: {
-          user: 'User not found',
-        },
+          user: 'User not found'
+        }
       },
-      HttpStatus.UNAUTHORIZED,
+      HttpStatus.UNAUTHORIZED
     );
   }
 

@@ -7,7 +7,7 @@ export function injectSongFileMetadata(
   author: string,
   originalAuthor: string,
   description: string,
-  soundPaths: string[],
+  soundPaths: string[]
 ) {
   if (description != '') description += '\n\n';
   description += 'Uploaded to Note Block World';

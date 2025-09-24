@@ -8,7 +8,7 @@ import Markdown from 'react-markdown';
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '@web/modules/shared/components/tooltip';
 
 export const LicenseTooltip = ({ description }: { description: string }) => {

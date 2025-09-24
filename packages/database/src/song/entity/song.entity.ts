@@ -12,12 +12,12 @@ import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
 @Schema({
   timestamps: true,
   versionKey: false,
-  toJSON: {
-    virtuals: true,
+  toJSON    : {
+    virtuals : true,
     transform: (doc, ret) => {
       delete ret._id;
-    },
-  },
+    }
+  }
 })
 export class Song {
   @Prop({ type: String, required: true, unique: true })

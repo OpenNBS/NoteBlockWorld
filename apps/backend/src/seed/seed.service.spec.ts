@@ -13,23 +13,23 @@ describe('SeedService', () => {
       providers: [
         SeedService,
         {
-          provide: 'NODE_ENV',
-          useValue: 'development',
+          provide : 'NODE_ENV',
+          useValue: 'development'
         },
         {
-          provide: UserService,
+          provide : UserService,
           useValue: {
-            createWithPassword: jest.fn(),
-          },
+            createWithPassword: jest.fn()
+          }
         },
         {
-          provide: SongService,
+          provide : SongService,
           useValue: {
-            uploadSong: jest.fn(),
-            getSongById: jest.fn(),
-          },
-        },
-      ],
+            uploadSong : jest.fn(),
+            getSongById: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     service = module.get<SeedService>(SeedService);
