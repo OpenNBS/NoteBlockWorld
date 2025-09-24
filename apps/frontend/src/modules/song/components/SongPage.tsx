@@ -12,7 +12,7 @@ import { formatTimeAgo } from '../../shared/util/format';
 
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
-import {  DownloadSongButton,  OpenSongInNBSButton,  ShareButton,  UploaderBadge,  VisibilityBadge,} from './SongPageButtons';
+import {  DownloadSongButton,  OpenSongInNBSButton,  ShareButton,  UploaderBadge,  VisibilityBadge, } from './SongPageButtons';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;

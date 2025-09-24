@@ -1,8 +1,8 @@
+import * as Bun from 'bun';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { getLatestVersionSoundList } from '@nbw/sounds';
-import * as Bun from 'bun';
 
 const writeSoundList = async () => {
   function writeJSONFile(

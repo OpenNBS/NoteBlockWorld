@@ -13,7 +13,7 @@ describe('MagicLinkEmailStrategy', () => {
   let _configService: ConfigService;
 
   const mockUserService = {
-    findByEmail: jest.fn(),
+    findByEmail    : jest.fn(),
     createWithEmail: jest.fn(),
   };
 
@@ -37,11 +37,11 @@ describe('MagicLinkEmailStrategy', () => {
         { provide: MailingService, useValue: mockMailingService },
         { provide: ConfigService, useValue: mockConfigService },
         {
-          provide: 'MAGIC_LINK_SECRET',
+          provide : 'MAGIC_LINK_SECRET',
           useValue: 'test_secret',
         },
         {
-          provide: 'SERVER_URL',
+          provide : 'SERVER_URL',
           useValue: 'http://localhost:3000',
         },
       ],
@@ -77,13 +77,13 @@ describe('MagicLinkEmailStrategy', () => {
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
 
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
-        to: email,
+        to     : email,
         context: {
           magicLink:
             'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
           username: 'testuser',
         },
-        subject: 'Noteblock Magic Link',
+        subject : 'Noteblock Magic Link',
         template: 'magic-link',
       });
     });
@@ -108,13 +108,13 @@ describe('MagicLinkEmailStrategy', () => {
       expect(mockUserService.findByEmail).toHaveBeenCalledWith(email);
 
       expect(mockMailingService.sendEmail).toHaveBeenCalledWith({
-        to: email,
+        to     : email,
         context: {
           magicLink:
             'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
           username: 'testuser',
         },
-        subject: 'Welcome to Noteblock.world',
+        subject : 'Welcome to Noteblock.world',
         template: 'magic-link-new-account',
       });
     });
@@ -138,14 +138,14 @@ describe('MagicLinkEmailStrategy', () => {
       mockUserService.findByEmail.mockResolvedValue(null);
 
       mockUserService.createWithEmail.mockResolvedValue({
-        email: 'test@example.com',
+        email   : 'test@example.com',
         username: 'test',
       });
 
       const result = await strategy.validate(payload);
 
       expect(result).toEqual({
-        email: 'test@example.com',
+        email   : 'test@example.com',
         username: 'test',
       });
     });

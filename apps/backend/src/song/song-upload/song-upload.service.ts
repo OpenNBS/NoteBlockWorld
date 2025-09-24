@@ -1,8 +1,8 @@
 import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
-import {  SongDocument,  Song as SongEntity,  SongStats,  ThumbnailData,  UploadSongDto,  UserDocument,} from '@nbw/database';
-import {  NoteQuadTree,  SongStatsGenerator,  injectSongFileMetadata,  obfuscateAndPackSong,} from '@nbw/song';
+import {  SongDocument,  Song as SongEntity,  SongStats,  ThumbnailData,  UploadSongDto,  UserDocument, } from '@nbw/database';
+import {  NoteQuadTree,  SongStatsGenerator,  injectSongFileMetadata,  obfuscateAndPackSong, } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail';
-import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger,} from '@nestjs/common';
+import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger, } from '@nestjs/common';
 import { Types } from 'mongoose';
 
 import { FileService } from '@server/file/file.service';

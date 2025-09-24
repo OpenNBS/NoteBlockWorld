@@ -1,5 +1,5 @@
 import type { UserDocument } from '@nbw/database';
-import {  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto,} from '@nbw/database';
+import {  PageQueryDTO,  SongPreviewDto,  SongViewDto,  UploadSongDto,  UploadSongResponseDto, } from '@nbw/database';
 import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,14 +11,14 @@ import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 const mockSongService = {
-  getSongByPage: jest.fn(),
-  searchSongs: jest.fn(),
-  getSong: jest.fn(),
-  getSongEdit: jest.fn(),
-  patchSong: jest.fn(),
+  getSongByPage     : jest.fn(),
+  searchSongs       : jest.fn(),
+  getSong           : jest.fn(),
+  getSongEdit       : jest.fn(),
+  patchSong         : jest.fn(),
   getSongDownloadUrl: jest.fn(),
-  deleteSong: jest.fn(),
-  uploadSong: jest.fn(),
+  deleteSong        : jest.fn(),
+  uploadSong        : jest.fn(),
 };
 
 const mockFileService = {};
@@ -30,13 +30,13 @@ describe('SongController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongController],
-      providers: [
+      providers  : [
         {
-          provide: SongService,
+          provide : SongService,
           useValue: mockSongService,
         },
         {
-          provide: FileService,
+          provide : FileService,
           useValue: mockFileService,
         },
       ],
@@ -240,7 +240,7 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
+        set     : jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
@@ -251,7 +251,7 @@ describe('SongController', () => {
       await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
-        'Content-Disposition': 'attachment; filename="song.nbs"',
+        'Content-Disposition'          : 'attachment; filename="song.nbs"',
         'Access-Control-Expose-Headers': 'Content-Disposition',
       });
 
@@ -271,7 +271,7 @@ describe('SongController', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const res = {
-        set: jest.fn(),
+        set     : jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
@@ -360,20 +360,20 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: undefined,
+        file         : undefined,
         allowDownload: false,
       };
 
@@ -392,20 +392,20 @@ describe('SongController', () => {
       const file = { buffer: Buffer.from('test') } as Express.Multer.File;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'cc_by_sa',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'cc_by_sa',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: undefined,
+        file         : undefined,
         allowDownload: false,
       };
 

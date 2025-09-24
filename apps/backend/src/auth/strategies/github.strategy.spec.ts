@@ -12,7 +12,7 @@ describe('GithubStrategy', () => {
       providers: [
         GithubStrategy,
         {
-          provide: ConfigService,
+          provide : ConfigService,
           useValue: {
             getOrThrow: jest.fn((key: string) => {
               switch (key) {

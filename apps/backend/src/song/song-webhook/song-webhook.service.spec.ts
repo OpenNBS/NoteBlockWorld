@@ -1,11 +1,13 @@
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
+
 import { Song as SongEntity, SongWithUser } from '@nbw/database';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
 import { Model } from 'mongoose';
 
 import { getUploadDiscordEmbed } from '../song.util';
+
 import { SongWebhookService } from './song-webhook.service';
 
 mock.module('../song.util', () => ({
@@ -13,10 +15,10 @@ mock.module('../song.util', () => ({
 }));
 
 const mockSongModel = {
-  find: jest.fn().mockReturnThis(),
-  sort: jest.fn().mockReturnThis(),
+  find    : jest.fn().mockReturnThis(),
+  sort    : jest.fn().mockReturnThis(),
   populate: jest.fn().mockReturnThis(),
-  save: jest.fn(),
+  save    : jest.fn(),
 };
 
 describe('SongWebhookService', () => {
@@ -26,15 +28,15 @@ describe('SongWebhookService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot()],
+      imports  : [ConfigModule.forRoot()],
       providers: [
         SongWebhookService,
         {
-          provide: getModelToken(SongEntity.name),
+          provide : getModelToken(SongEntity.name),
           useValue: mockSongModel,
         },
         {
-          provide: 'DISCORD_WEBHOOK_URL',
+          provide : 'DISCORD_WEBHOOK_URL',
           useValue: 'http://localhost/webhook',
         },
       ],
@@ -67,7 +69,7 @@ describe('SongWebhookService', () => {
       expect(result).toBe('message-id');
 
       expect(fetch).toHaveBeenCalledWith('http://localhost/webhook?wait=true', {
-        method: 'POST',
+        method : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -94,9 +96,9 @@ describe('SongWebhookService', () => {
   describe('updateSongWebhook', () => {
     it('should update the webhook message for a song', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
@@ -108,7 +110,7 @@ describe('SongWebhookService', () => {
       expect(fetch).toHaveBeenCalledWith(
         'http://localhost/webhook/messages/message-id',
         {
-          method: 'PATCH',
+          method : 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -119,9 +121,9 @@ describe('SongWebhookService', () => {
 
     it('should log an error if there is an error', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       (getUploadDiscordEmbed as jest.Mock).mockReturnValue({});
@@ -142,9 +144,9 @@ describe('SongWebhookService', () => {
   describe('deleteSongWebhook', () => {
     it('should delete the webhook message for a song', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       (global as any).fetch = jest.fn().mockResolvedValue({});
@@ -161,9 +163,9 @@ describe('SongWebhookService', () => {
 
     it('should log an error if there is an error', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       (global as any).fetch = jest.fn().mockRejectedValue(new Error('Error'));
@@ -182,10 +184,10 @@ describe('SongWebhookService', () => {
   describe('syncSongWebhook', () => {
     it('should update the webhook message if the song is public', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        visibility: 'public',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        visibility      : 'public',
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       const updateSpy = spyOn(service, 'updateSongWebhook');
@@ -197,10 +199,10 @@ describe('SongWebhookService', () => {
 
     it('should delete the webhook message if the song is not public', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId        : '123',
         webhookMessageId: 'message-id',
-        visibility: 'private',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        visibility      : 'private',
+        uploader        : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       const deleteSpy = spyOn(service, 'deleteSongWebhook');
@@ -212,9 +214,9 @@ describe('SongWebhookService', () => {
 
     it('should post a new webhook message if the song is public and does not have a message', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId  : '123',
         visibility: 'public',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader  : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       const postSpy = spyOn(service, 'postSongWebhook');
@@ -226,9 +228,9 @@ describe('SongWebhookService', () => {
 
     it('should return null if the song is not public and does not have a message', async () => {
       const song: SongWithUser = {
-        publicId: '123',
+        publicId  : '123',
         visibility: 'private',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
+        uploader  : { username: 'testuser', profileImage: 'testimage' },
       } as SongWithUser;
 
       const result = await service.syncSongWebhook(song);
@@ -243,12 +245,12 @@ describe('SongWebhookService', () => {
         {
           publicId: '123',
           uploader: { username: 'testuser', profileImage: 'testimage' },
-          save: jest.fn(),
+          save    : jest.fn(),
         } as unknown as SongWithUser,
       ];
 
       mockSongModel.find.mockReturnValue({
-        sort: jest.fn().mockReturnThis(),
+        sort    : jest.fn().mockReturnThis(),
         populate: jest.fn().mockResolvedValue(songs),
       });
 

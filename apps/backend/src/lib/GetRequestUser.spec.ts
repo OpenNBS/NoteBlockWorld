@@ -18,7 +18,7 @@ describe('GetRequestToken', () => {
 describe('validateUser', () => {
   it('should return the user if the user exists', () => {
     const mockUser = {
-      _id: 'test-id',
+      _id     : 'test-id',
       username: 'testuser',
     } as unknown as UserDocument;
 

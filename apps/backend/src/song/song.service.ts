@@ -1,6 +1,6 @@
 import { BROWSER_SONGS } from '@nbw/config';
-import { FeaturedSongsDto, TimespanType, UserDocument ,  PageQueryDTO,  Song as SongEntity,  SongPageDto,  SongPreviewDto,  SongViewDto,  SongWithUser,  UploadSongDto,  UploadSongResponseDto,} from '@nbw/database';
-import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger,} from '@nestjs/common';
+import { FeaturedSongsDto, TimespanType, UserDocument,  PageQueryDTO,  Song as SongEntity,  SongPageDto,  SongPreviewDto,  SongViewDto,  SongWithUser,  UploadSongDto,  UploadSongResponseDto, } from '@nbw/database';
+import {  HttpException,  HttpStatus,  Inject,  Injectable,  Logger, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -33,7 +33,7 @@ export class SongService {
     });
   }
 
-  public async uploadSong({  file,  user,  body,}: {  body: UploadSongDto;  file: Express.Multer.File;  user: UserDocument;}): Promise<UploadSongResponseDto> {
+  public async uploadSong({  file,  user,  body, }: {  body: UploadSongDto;  file: Express.Multer.File;  user: UserDocument;}): Promise<UploadSongResponseDto> {
     const song = await this.songUploadService.processUploadedSong({
       file,
       user,
@@ -61,7 +61,7 @@ export class SongService {
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async deleteSong(  publicId: string,  user: UserDocument,): Promise<UploadSongResponseDto> {
+  public async deleteSong(publicId: string,  user: UserDocument,): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
@@ -88,7 +88,7 @@ export class SongService {
     return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
   }
 
-  public async patchSong(  publicId: string,  body: UploadSongDto,  user: UserDocument,): Promise<UploadSongResponseDto> {
+  public async patchSong(publicId: string,  body: UploadSongDto,  user: UserDocument,): Promise<UploadSongResponseDto> {
     const foundSong = await this.songModel.findOne({
       publicId: publicId,
     });
@@ -177,7 +177,7 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async searchSongs(  query: PageQueryDTO,  q: string,): Promise<SongPreviewDto[]> {
+  public async searchSongs(query: PageQueryDTO,  q: string,): Promise<SongPreviewDto[]> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const order = query.order ? query.order : false;
@@ -216,7 +216,7 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getRecentSongs(  page: number,  limit: number,): Promise<SongPreviewDto[]> {
+  public async getRecentSongs(page: number,  limit: number,): Promise<SongPreviewDto[]> {
     const queryObject: any = {
       visibility: 'public',
     };
@@ -262,7 +262,7 @@ export class SongService {
       .exec();
   }
 
-  public async getSong(  publicId: string,  user: UserDocument | null,): Promise<SongViewDto> {
+  public async getSong(publicId: string,  user: UserDocument | null,): Promise<SongViewDto> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
@@ -292,7 +292,7 @@ export class SongService {
   }
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
-  public async getSongDownloadUrl(  publicId: string,  user: UserDocument | null,  src?: string,  packed: boolean = false,): Promise<string> {
+  public async getSongDownloadUrl(publicId: string,  user: UserDocument | null,  src?: string,  packed: boolean = false,): Promise<string> {
     const foundSong = await this.songModel.findOne({ publicId: publicId });
 
     if (!foundSong) {
@@ -337,7 +337,7 @@ export class SongService {
     }
   }
 
-  public async getMySongsPage({  query,  user,}: {  query: PageQueryDTO;  user: UserDocument;}): Promise<SongPageDto> {
+  public async getMySongsPage({  query,  user, }: {  query: PageQueryDTO;  user: UserDocument;}): Promise<SongPageDto> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const order = query.order ? query.order : false;
@@ -367,7 +367,7 @@ export class SongService {
     };
   }
 
-  public async getSongEdit(  publicId: string,  user: UserDocument,): Promise<UploadSongDto> {
+  public async getSongEdit(publicId: string,  user: UserDocument,): Promise<UploadSongDto> {
     const foundSong = await this.songModel
       .findOne({ publicId: publicId })
       .exec();
@@ -415,7 +415,7 @@ export class SongService {
     }, {} as Record<string, number>);
   }
 
-  public async getSongsByCategory(  category: string,  page: number,  limit: number,): Promise<SongPreviewDto[]> {
+  public async getSongsByCategory(category: string,  page: number,  limit: number,): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .find({
         category  : category,
@@ -430,7 +430,7 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getRandomSongs(  count: number,  category: string,): Promise<SongPreviewDto[]> {
+  public async getRandomSongs(count: number,  category: string,): Promise<SongPreviewDto[]> {
     const songs = (await this.songModel
       .aggregate([
         {
@@ -467,7 +467,7 @@ export class SongService {
       all  : new Date(0).getTime(),
     };
     
-    const songs: Record<TimespanType, SongWithUser[]> = {  hour: [],  day: [],  week: [],  month: [],  year: [],  all: [],};
+    const songs: Record<TimespanType, SongWithUser[]> = {  hour: [],  day: [],  week: [],  month: [],  year: [],  all: [], };
 
     for (const [timespan, time] of Object.entries(times)) {
       const songPage = await this.getSongsForTimespan(time);
@@ -494,7 +494,7 @@ export class SongService {
     const featuredSongs = FeaturedSongsDto.create();
 
     featuredSongs.hour = songs.hour.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
-    featuredSongs.day = songs.day.map((song) =>   SongPreviewDto.fromSongDocumentWithUser(song), );
+    featuredSongs.day = songs.day.map((song) =>   SongPreviewDto.fromSongDocumentWithUser(song),);
     featuredSongs.week = songs.week.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
     featuredSongs.month = songs.month.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);
     featuredSongs.year = songs.year.map((song) =>  SongPreviewDto.fromSongDocumentWithUser(song),);

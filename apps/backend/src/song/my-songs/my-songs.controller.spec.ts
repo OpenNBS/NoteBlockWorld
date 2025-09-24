@@ -5,6 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SongService } from '../song.service';
+
 import { MySongsController } from './my-songs.controller';
 
 const mockSongService = {
@@ -18,9 +19,9 @@ describe('MySongsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MySongsController],
-      providers: [
+      providers  : [
         {
-          provide: SongService,
+          provide : SongService,
           useValue: mockSongService,
         },
       ],
@@ -44,9 +45,9 @@ describe('MySongsController', () => {
 
       const songPageDto: SongPageDto = {
         content: [],
-        page: 0,
-        limit: 0,
-        total: 0,
+        page   : 0,
+        limit  : 0,
+        total  : 0,
       };
 
       mockSongService.getMySongsPage.mockResolvedValueOnce(songPageDto);

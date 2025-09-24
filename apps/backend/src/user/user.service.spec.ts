@@ -13,13 +13,13 @@ import { Model } from 'mongoose';
 import { UserService } from './user.service';
 
 const mockUserModel = {
-  create: jest.fn(),
-  findOne: jest.fn(),
-  findById: jest.fn(),
-  find: jest.fn(),
-  save: jest.fn(),
-  exec: jest.fn(),
-  select: jest.fn(),
+  create        : jest.fn(),
+  findOne       : jest.fn(),
+  findById      : jest.fn(),
+  find          : jest.fn(),
+  save          : jest.fn(),
+  exec          : jest.fn(),
+  select        : jest.fn(),
   countDocuments: jest.fn(),
 };
 
@@ -32,7 +32,7 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: getModelToken(User.name),
+          provide : getModelToken(User.name),
           useValue: mockUserModel,
         },
       ],
@@ -49,8 +49,8 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUser = {
-        username: 'testuser',
-        email: 'test@example.com',
+        username    : 'testuser',
+        email       : 'test@example.com',
         profileImage: 'testimage.png',
       };
 
@@ -109,13 +109,13 @@ describe('UserService', () => {
       const usersPage = {
         users,
         total: 1,
-        page: 1,
+        page : 1,
         limit: 10,
       };
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
+        sort : jest.fn().mockReturnThis(),
+        skip : jest.fn().mockReturnThis(),
         limit: jest.fn().mockResolvedValue(users),
       };
 
@@ -184,7 +184,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findById').mockReturnValue({
         populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(hydratedUser),
+        exec    : jest.fn().mockResolvedValue(hydratedUser),
       } as any);
 
       const result = await service.getHydratedUser(user);
@@ -229,9 +229,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
+        lastSeen   : yesterday,
         loginStreak: 1,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -250,9 +250,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: today,
+        lastSeen   : today,
         loginStreak: 1,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -272,9 +272,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: twoDaysAgo,
+        lastSeen   : twoDaysAgo,
         loginStreak: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save       : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -294,9 +294,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
+        lastSeen  : yesterday,
         loginCount: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save      : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -316,9 +316,9 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: today,
+        lastSeen  : today,
         loginCount: 5,
-        save: jest.fn().mockResolvedValue(true),
+        save      : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -339,10 +339,10 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
-        loginStreak: 8,
+        lastSeen      : yesterday,
+        loginStreak   : 8,
         maxLoginStreak: 8,
-        save: jest.fn().mockResolvedValue(true),
+        save          : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -362,10 +362,10 @@ describe('UserService', () => {
 
       const userData = {
         ...user,
-        lastSeen: yesterday,
-        loginStreak: 4,
+        lastSeen      : yesterday,
+        loginStreak   : 4,
         maxLoginStreak: 8,
-        save: jest.fn().mockResolvedValue(true),
+        save          : jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
 
       jest.spyOn(service, 'findByID').mockResolvedValue(userData);
@@ -384,7 +384,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findOne').mockReturnValue({
         select: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(user),
+        exec  : jest.fn().mockResolvedValue(user),
       } as any);
 
       const result = await service.usernameExists(username);
@@ -402,7 +402,7 @@ describe('UserService', () => {
 
       jest.spyOn(userModel, 'findOne').mockReturnValue({
         select: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(null),
+        exec  : jest.fn().mockResolvedValue(null),
       } as any);
 
       const result = await service.usernameExists(username);
@@ -488,7 +488,7 @@ describe('UserService', () => {
     it('should update a user username', async () => {
       const user = {
         username: 'testuser',
-        save: jest.fn().mockReturnThis(),
+        save    : jest.fn().mockReturnThis(),
       } as unknown as UserDocument;
 
       const body = { username: 'newuser' };
@@ -498,9 +498,9 @@ describe('UserService', () => {
       const result = await service.updateUsername(user, body);
 
       expect(result).toEqual({
-        username: 'newuser',
+        username  : 'newuser',
         publicName: undefined,
-        email: undefined,
+        email     : undefined,
       });
 
       expect(user.username).toBe(body.username);
@@ -510,7 +510,7 @@ describe('UserService', () => {
     it('should throw an error if username already exists', async () => {
       const user = {
         username: 'testuser',
-        save: jest.fn().mockReturnThis(),
+        save    : jest.fn().mockReturnThis(),
       } as unknown as UserDocument;
 
       const body = { username: 'newuser' };

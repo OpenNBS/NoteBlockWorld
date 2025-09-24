@@ -9,9 +9,9 @@ describe('SeedController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SeedController],
-      providers: [
+      providers  : [
         {
-          provide: SeedService,
+          provide : SeedService,
           useValue: {},
         },
       ],

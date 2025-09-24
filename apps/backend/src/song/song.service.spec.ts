@@ -1,6 +1,5 @@
 import type { UserDocument } from '@nbw/database';
 import {
-  FeaturedSongsDto,
   SongDocument,
   Song as SongEntity,
   SongPreviewDto,
@@ -23,21 +22,21 @@ import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { SongService } from './song.service';
 
 const mockFileService = {
-  deleteSong: jest.fn(),
+  deleteSong        : jest.fn(),
   getSongDownloadUrl: jest.fn(),
 };
 
 const mockSongUploadService = {
   processUploadedSong: jest.fn(),
-  processSongPatch: jest.fn(),
+  processSongPatch   : jest.fn(),
 };
 
 const mockSongWebhookService = {
   syncAllSongsWebhook: jest.fn(),
-  postSongWebhook: jest.fn(),
-  updateSongWebhook: jest.fn(),
-  deleteSongWebhook: jest.fn(),
-  syncSongWebhook: jest.fn(),
+  postSongWebhook    : jest.fn(),
+  updateSongWebhook  : jest.fn(),
+  deleteSongWebhook  : jest.fn(),
+  syncSongWebhook    : jest.fn(),
 };
 
 describe('SongService', () => {
@@ -51,19 +50,19 @@ describe('SongService', () => {
       providers: [
         SongService,
         {
-          provide: SongWebhookService,
+          provide : SongWebhookService,
           useValue: mockSongWebhookService,
         },
         {
-          provide: getModelToken(SongEntity.name),
+          provide : getModelToken(SongEntity.name),
           useValue: mongoose.model(SongEntity.name, SongSchema),
         },
         {
-          provide: FileService,
+          provide : FileService,
           useValue: mockFileService,
         },
         {
-          provide: SongUploadService,
+          provide : SongUploadService,
           useValue: mockSongUploadService,
         },
       ],
@@ -85,53 +84,53 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes',
       };
 
       const commonData = {
-        publicId: 'public-song-id',
+        publicId : 'public-song-id',
         createdAt: new Date(),
-        stats: {
-          midiFileName: 'test.mid',
-          noteCount: 100,
-          tickCount: 1000,
-          layerCount: 10,
-          tempo: 120,
-          tempoRange: [100, 150],
-          timeSignature: 4,
-          duration: 60,
-          loop: true,
-          loopStartTick: 0,
-          minutesSpent: 10,
-          vanillaInstrumentCount: 10,
-          customInstrumentCount: 0,
+        stats    : {
+          midiFileName              : 'test.mid',
+          noteCount                 : 100,
+          tickCount                 : 1000,
+          layerCount                : 10,
+          tempo                     : 120,
+          tempoRange                : [100, 150],
+          timeSignature             : 4,
+          duration                  : 60,
+          loop                      : true,
+          loopStartTick             : 0,
+          minutesSpent              : 10,
+          vanillaInstrumentCount    : 10,
+          customInstrumentCount     : 0,
           firstCustomInstrumentIndex: 0,
-          outOfRangeNoteCount: 0,
-          detunedNoteCount: 0,
-          customInstrumentNoteCount: 0,
-          incompatibleNoteCount: 0,
-          compatible: true,
-          instrumentNoteCounts: [10],
+          outOfRangeNoteCount       : 0,
+          detunedNoteCount          : 0,
+          customInstrumentNoteCount : 0,
+          incompatibleNoteCount     : 0,
+          compatible                : true,
+          instrumentNoteCounts      : [10],
         },
-        fileSize: 424242,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        uploader: user._id,
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        uploader     : user._id,
       };
 
       const songEntity = new SongEntity();
@@ -190,29 +189,29 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        file: 'somebytes',
-        publicId: 'public-song-id',
-        createdAt: new Date(),
-        stats: {} as SongStats,
-        fileSize: 424242,
+        file         : 'somebytes',
+        publicId     : 'public-song-id',
+        createdAt    : new Date(),
+        stats        : {} as SongStats,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        uploader: user._id,
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        uploader     : user._id,
       } as unknown as SongEntity;
 
       const populatedSong = {
@@ -255,7 +254,7 @@ describe('SongService', () => {
 
       const mockFindOne = {
         findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(null),
+        exec   : jest.fn().mockResolvedValue(null),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
@@ -306,53 +305,53 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        file: 'somebytes',
+        file         : 'somebytes',
       };
 
       const missingData = {
-        publicId: 'public-song-id',
+        publicId : 'public-song-id',
         createdAt: new Date(),
-        stats: {
-          midiFileName: 'test.mid',
-          noteCount: 100,
-          tickCount: 1000,
-          layerCount: 10,
-          tempo: 120,
-          tempoRange: [100, 150],
-          timeSignature: 4,
-          duration: 60,
-          loop: true,
-          loopStartTick: 0,
-          minutesSpent: 10,
-          vanillaInstrumentCount: 10,
-          customInstrumentCount: 0,
+        stats    : {
+          midiFileName              : 'test.mid',
+          noteCount                 : 100,
+          tickCount                 : 1000,
+          layerCount                : 10,
+          tempo                     : 120,
+          tempoRange                : [100, 150],
+          timeSignature             : 4,
+          duration                  : 60,
+          loop                      : true,
+          loopStartTick             : 0,
+          minutesSpent              : 10,
+          vanillaInstrumentCount    : 10,
+          customInstrumentCount     : 0,
           firstCustomInstrumentIndex: 0,
-          outOfRangeNoteCount: 0,
-          detunedNoteCount: 0,
-          customInstrumentNoteCount: 0,
-          incompatibleNoteCount: 0,
-          compatible: true,
-          instrumentNoteCounts: [10],
+          outOfRangeNoteCount       : 0,
+          detunedNoteCount          : 0,
+          customInstrumentNoteCount : 0,
+          incompatibleNoteCount     : 0,
+          compatible                : true,
+          instrumentNoteCounts      : [10],
         },
-        fileSize: 424242,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        uploader: user._id,
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        uploader     : user._id,
       };
 
       const songDocument: SongDocument = {
@@ -404,20 +403,20 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: 'somebytes',
+        file         : 'somebytes',
         allowDownload: false,
       };
 
@@ -433,20 +432,20 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: 'somebytes',
+        file         : 'somebytes',
         allowDownload: false,
       };
 
@@ -466,20 +465,20 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: 'somebytes',
+        file         : 'somebytes',
         allowDownload: false,
       };
 
@@ -499,39 +498,39 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const body: UploadSongDto = {
-        file: undefined,
-        allowDownload: false,
-        visibility: 'public',
-        title: '',
+        file          : undefined,
+        allowDownload : false,
+        visibility    : 'public',
+        title         : '',
         originalAuthor: '',
-        description: '',
-        category: 'pop',
-        thumbnailData: {
+        description   : '',
+        category      : 'pop',
+        thumbnailData : {
           backgroundColor: '#000000',
-          startLayer: 0,
-          startTick: 0,
-          zoomLevel: 1,
+          startLayer     : 0,
+          startTick      : 0,
+          zoomLevel      : 1,
         },
-        license: 'standard',
+        license          : 'standard',
         customInstruments: [],
       };
 
       const songEntity = {
-        uploader: user._id,
-        file: undefined,
-        allowDownload: false,
-        visibility: 'public',
-        title: '',
+        uploader      : user._id,
+        file          : undefined,
+        allowDownload : false,
+        visibility    : 'public',
+        title         : '',
         originalAuthor: '',
-        description: '',
-        category: 'pop',
-        thumbnailData: {
+        description   : '',
+        category      : 'pop',
+        thumbnailData : {
           backgroundColor: '#000000',
-          startLayer: 0,
-          startTick: 0,
-          zoomLevel: 1,
+          startLayer     : 0,
+          startTick      : 0,
+          zoomLevel      : 1,
         },
-        license: 'standard',
+        license          : 'standard',
         customInstruments: [],
       } as any;
 
@@ -546,20 +545,20 @@ describe('SongService', () => {
   describe('getSongByPage', () => {
     it('should return a list of songs by page', async () => {
       const query = {
-        page: 1,
+        page : 1,
         limit: 10,
-        sort: 'createdAt',
+        sort : 'createdAt',
         order: true,
       };
 
       const songList: SongWithUser[] = [];
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
+        sort    : jest.fn().mockReturnThis(),
+        skip    : jest.fn().mockReturnThis(),
+        limit   : jest.fn().mockReturnThis(),
         populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songList),
+        exec    : jest.fn().mockResolvedValue(songList),
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
@@ -583,20 +582,20 @@ describe('SongService', () => {
 
     it('should throw an error if the query is invalid', async () => {
       const query = {
-        page: undefined,
+        page : undefined,
         limit: undefined,
-        sort: undefined,
+        sort : undefined,
         order: true,
       };
 
       const songList: SongWithUser[] = [];
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
+        sort    : jest.fn().mockReturnThis(),
+        skip    : jest.fn().mockReturnThis(),
+        limit   : jest.fn().mockReturnThis(),
         populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songList),
+        exec    : jest.fn().mockResolvedValue(songList),
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
@@ -611,23 +610,23 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songDocument = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
-        file: 'somebytes',
+        file         : 'somebytes',
         allowDownload: false,
-        uploader: {},
-        save: jest.fn(),
+        uploader     : {},
+        save         : jest.fn(),
       } as any;
 
       songDocument.save = jest.fn().mockResolvedValue(songDocument);
@@ -666,9 +665,9 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        publicId: 'test-public-id',
+        publicId  : 'test-public-id',
         visibility: 'private',
-        uploader: 'different-user-id',
+        uploader  : 'different-user-id',
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
@@ -681,9 +680,9 @@ describe('SongService', () => {
       const user: UserDocument = null as any;
 
       const songEntity = {
-        publicId: 'test-public-id',
+        publicId  : 'test-public-id',
         visibility: 'private',
-        uploader: 'different-user-id',
+        uploader  : 'different-user-id',
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
@@ -697,29 +696,29 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        visibility: 'public',
-        uploader: 'test-user-id',
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        license: 'standard',
+        visibility       : 'public',
+        uploader         : 'test-user-id',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        publicId: 'public-song-id',
-        createdAt: new Date(),
-        stats: {} as SongStats,
-        fileSize: 424242,
+        publicId     : 'public-song-id',
+        createdAt    : new Date(),
+        stats        : {} as SongStats,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        save: jest.fn(),
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        save         : jest.fn(),
       };
 
       const url = 'http://test.com/song.nbs';
@@ -755,7 +754,7 @@ describe('SongService', () => {
 
       const songEntity = {
         visibility: 'private',
-        uploader: 'different-user-id',
+        uploader  : 'different-user-id',
       };
 
       jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
@@ -770,29 +769,29 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        visibility: 'public',
-        uploader: 'test-user-id',
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        license: 'standard',
+        visibility       : 'public',
+        uploader         : 'test-user-id',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: false,
-        publicId: 'public-song-id',
-        createdAt: new Date(),
-        stats: {} as SongStats,
-        fileSize: 424242,
+        publicId     : 'public-song-id',
+        createdAt    : new Date(),
+        stats        : {} as SongStats,
+        fileSize     : 424242,
         packedSongUrl: undefined,
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        save: jest.fn(),
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        save         : jest.fn(),
       };
 
       jest.spyOn(songModel, 'findOne').mockResolvedValue(songEntity);
@@ -822,29 +821,29 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        visibility: 'public',
-        uploader: 'test-user-id',
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        license: 'standard',
+        visibility       : 'public',
+        uploader         : 'test-user-id',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        publicId: 'public-song-id',
-        createdAt: new Date(),
-        stats: {} as SongStats,
-        fileSize: 424242,
+        publicId     : 'public-song-id',
+        createdAt    : new Date(),
+        stats        : {} as SongStats,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
-        save: jest.fn().mockImplementationOnce(() => {
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
+        save         : jest.fn().mockImplementationOnce(() => {
           throw new Error('Error saving song');
         }),
       };
@@ -864,9 +863,9 @@ describe('SongService', () => {
   describe('getMySongsPage', () => {
     it('should return a list of songs uploaded by the user', async () => {
       const query = {
-        page: 1,
+        page : 1,
         limit: 10,
-        sort: 'createdAt',
+        sort : 'createdAt',
         order: true,
       };
 
@@ -874,8 +873,8 @@ describe('SongService', () => {
       const songList: SongWithUser[] = [];
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
+        sort : jest.fn().mockReturnThis(),
+        skip : jest.fn().mockReturnThis(),
         limit: jest.fn().mockResolvedValue(songList),
       };
 
@@ -888,7 +887,7 @@ describe('SongService', () => {
         content: songList.map((song) =>
           SongPreviewDto.fromSongDocumentWithUser(song),
         ),
-        page: 1,
+        page : 1,
         limit: 10,
         total: 0,
       });
@@ -916,7 +915,7 @@ describe('SongService', () => {
       songEntity.uploader = user._id; // Ensure uploader is set
 
       const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(songEntity),
+        exec    : jest.fn().mockResolvedValue(songEntity),
         populate: jest.fn().mockReturnThis(),
       };
 
@@ -935,7 +934,7 @@ describe('SongService', () => {
 
       const findOneMock = {
         findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(null),
+        exec   : jest.fn().mockResolvedValue(null),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(findOneMock as any);
@@ -950,33 +949,33 @@ describe('SongService', () => {
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songEntity = {
-        uploader: 'different-user-id',
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
+        uploader         : 'different-user-id',
+        title            : 'Test Song',
+        originalAuthor   : 'Test Author',
+        description      : 'Test Description',
+        category         : 'alternative',
+        visibility       : 'public',
+        license          : 'standard',
         customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
+        thumbnailData    : {
+          startTick      : 0,
+          startLayer     : 0,
+          zoomLevel      : 1,
           backgroundColor: '#000000',
         },
         allowDownload: true,
-        publicId: 'public-song-id',
-        createdAt: new Date(),
-        stats: {} as SongStats,
-        fileSize: 424242,
+        publicId     : 'public-song-id',
+        createdAt    : new Date(),
+        stats        : {} as SongStats,
+        fileSize     : 424242,
         packedSongUrl: 'http://test.com/packed-file.nbs',
-        nbsFileUrl: 'http://test.com/file.nbs',
-        thumbnailUrl: 'http://test.com/thumbnail.nbs',
+        nbsFileUrl   : 'http://test.com/file.nbs',
+        thumbnailUrl : 'http://test.com/thumbnail.nbs',
       } as unknown as SongEntity;
 
       const findOneMock = {
         findOne: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songEntity),
+        exec   : jest.fn().mockResolvedValue(songEntity),
       };
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(findOneMock as any);
@@ -1016,11 +1015,11 @@ describe('SongService', () => {
       const songList: SongWithUser[] = [];
 
       const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
+        sort    : jest.fn().mockReturnThis(),
+        skip    : jest.fn().mockReturnThis(),
+        limit   : jest.fn().mockReturnThis(),
         populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songList),
+        exec    : jest.fn().mockResolvedValue(songList),
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
@@ -1052,20 +1051,20 @@ describe('SongService', () => {
   describe('getFeaturedSongs', () => {
     it('should return featured songs', async () => {
       const songWithUser: SongWithUser = {
-        title: 'Test Song',
-        publicId: 'test-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
-        description: 'Test Description',
+        title         : 'Test Song',
+        publicId      : 'test-id',
+        uploader      : { username: 'testuser', profileImage: 'testimage' },
+        description   : 'Test Description',
         originalAuthor: 'Test Author',
-        stats: {
-          duration: 100,
+        stats         : {
+          duration : 100,
           noteCount: 100,
         },
         thumbnailUrl: 'test-thumbnail-url',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        playCount: 0,
-        visibility: 'public',
+        createdAt   : new Date(),
+        updatedAt   : new Date(),
+        playCount   : 0,
+        visibility  : 'public',
       } as any;
 
       jest

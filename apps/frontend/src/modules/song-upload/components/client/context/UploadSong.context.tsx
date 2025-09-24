@@ -4,12 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { type SongFileType, parseSongFromBuffer } from '@nbw/song';
 import { createContext, useContext, useEffect, useState } from 'react';
-import {  FieldErrors,  UseFormRegister,  UseFormReturn,  useForm,} from 'react-hook-form';
+import {  FieldErrors,  UseFormRegister,  UseFormReturn,  useForm, } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
-import {  UploadSongForm,  uploadSongFormSchema,} from '@web/modules/song/components/client/SongForm.zod';
+import {  UploadSongForm,  uploadSongFormSchema, } from '@web/modules/song/components/client/SongForm.zod';
 
 import UploadCompleteModal from '../UploadCompleteModal';
 

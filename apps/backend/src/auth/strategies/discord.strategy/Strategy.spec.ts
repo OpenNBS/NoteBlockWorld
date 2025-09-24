@@ -10,10 +10,10 @@ describe('DiscordStrategy', () => {
 
   beforeEach(() => {
     const config: DiscordStrategyConfig = {
-      clientID: 'test-client-id',
+      clientID    : 'test-client-id',
       clientSecret: 'test-client-secret',
-      callbackUrl: 'http://localhost:3000/callback',
-      scope: [
+      callbackUrl : 'http://localhost:3000/callback',
+      scope       : [
         DiscordPermissionScope.Email,
         DiscordPermissionScope.Identify,
         DiscordPermissionScope.Connections,
@@ -35,11 +35,11 @@ describe('DiscordStrategy', () => {
 
   it('should validate config', async () => {
     const config: DiscordStrategyConfig = {
-      clientID: 'test-client-id',
+      clientID    : 'test-client-id',
       clientSecret: 'test-client-secret',
-      callbackUrl: 'http://localhost:3000/callback',
-      scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
-      prompt: 'consent',
+      callbackUrl : 'http://localhost:3000/callback',
+      scope       : [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
+      prompt      : 'consent',
     };
 
     await expect(strategy['validateConfig'](config)).resolves.toBeUndefined();
@@ -71,47 +71,47 @@ describe('DiscordStrategy', () => {
 
   it('should build profile', () => {
     const profileData = {
-      id: '123',
-      username: 'testuser',
-      displayName: 'Test User',
-      avatar: 'avatar.png',
-      banner: 'banner.png',
-      email: 'test@example.com',
-      verified: true,
-      mfa_enabled: true,
+      id          : '123',
+      username    : 'testuser',
+      displayName : 'Test User',
+      avatar      : 'avatar.png',
+      banner      : 'banner.png',
+      email       : 'test@example.com',
+      verified    : true,
+      mfa_enabled : true,
       public_flags: 1,
-      flags: 1,
-      locale: 'en-US',
-      global_name: 'testuser#1234',
+      flags       : 1,
+      locale      : 'en-US',
+      global_name : 'testuser#1234',
       premium_type: 1,
-      connections: [],
-      guilds: [],
+      connections : [],
+      guilds      : [],
     } as unknown as Profile;
 
     const profile = strategy['buildProfile'](profileData, 'test-access-token');
 
     expect(profile).toMatchObject({
-      provider: 'discord',
-      id: '123',
-      username: 'testuser',
-      displayName: 'Test User',
-      avatar: 'avatar.png',
-      banner: 'banner.png',
-      email: 'test@example.com',
-      verified: true,
-      mfa_enabled: true,
+      provider    : 'discord',
+      id          : '123',
+      username    : 'testuser',
+      displayName : 'Test User',
+      avatar      : 'avatar.png',
+      banner      : 'banner.png',
+      email       : 'test@example.com',
+      verified    : true,
+      mfa_enabled : true,
       public_flags: 1,
-      flags: 1,
-      locale: 'en-US',
-      global_name: 'testuser#1234',
+      flags       : 1,
+      locale      : 'en-US',
+      global_name : 'testuser#1234',
       premium_type: 1,
-      connections: [],
-      guilds: [],
+      connections : [],
+      guilds      : [],
       access_token: 'test-access-token',
-      fetchedAt: expect.any(Date),
-      createdAt: expect.any(Date),
-      _raw: JSON.stringify(profileData),
-      _json: profileData,
+      fetchedAt   : expect.any(Date),
+      createdAt   : expect.any(Date),
+      _raw        : JSON.stringify(profileData),
+      _json       : profileData,
     });
   });
 
@@ -141,9 +141,9 @@ describe('DiscordStrategy', () => {
 
   it('should enrich profile with scopes', async () => {
     const profile = {
-      id: '123',
+      id         : '123',
       connections: [],
-      guilds: [],
+      guilds     : [],
     } as unknown as Profile;
 
     const mockFetchScopeData = jest

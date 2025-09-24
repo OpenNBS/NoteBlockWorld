@@ -16,7 +16,7 @@ describe('MailingService', () => {
       providers: [
         MailingService,
         {
-          provide: MailerService,
+          provide : MailerService,
           useValue: MockedMailerService,
         },
       ],
@@ -40,7 +40,7 @@ describe('MailingService', () => {
     const template = 'hello';
 
     const context = {
-      name: 'John Doe',
+      name   : 'John Doe',
       message: 'Hello, this is a test email!',
     };
 
@@ -54,13 +54,13 @@ describe('MailingService', () => {
       attachments: [
         {
           filename: 'background-image.png',
-          cid: 'background-image',
-          path: `${__dirname}/templates/img/background-image.png`,
+          cid     : 'background-image',
+          path    : `${__dirname}/templates/img/background-image.png`,
         },
         {
           filename: 'logo.png',
-          cid: 'logo',
-          path: `${__dirname}/templates/img/logo.png`,
+          cid     : 'logo',
+          path    : `${__dirname}/templates/img/logo.png`,
         },
       ],
     });

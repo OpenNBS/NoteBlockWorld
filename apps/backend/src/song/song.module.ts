@@ -8,7 +8,6 @@ import { FileModule } from '@server/file/file.module';
 import { UserModule } from '@server/user/user.module';
 
 import { MySongsController } from './my-songs/my-songs.controller';
-import { SongBrowserService } from './song-browser/song-browser.service';
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import { SongController } from './song.controller';
@@ -25,7 +24,6 @@ import { SongService } from './song.service';
     SongService,
     SongUploadService,
     SongWebhookService,
-    SongBrowserService,
     {
       inject    : [ConfigService],
       provide   : 'DISCORD_WEBHOOK_URL',
