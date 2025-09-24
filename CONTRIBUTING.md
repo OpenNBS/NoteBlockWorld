@@ -117,6 +117,8 @@ To install all dependencies, run in the root of the project:
 bun install
 ```
 
+> **Note**: This will automatically build all workspace packages (database, song, thumbnail, sounds) via the `postinstall` hook to ensure proper workspace dependency linking.
+
 ---
 
 ## Running the Project

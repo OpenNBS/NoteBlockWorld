@@ -36,6 +36,9 @@
     }
   },
   "scripts": {
+    "postinstall": "bun run build:packages && bun run link:packages",
+    "build:packages": "cd packages/database && bun run build && cd ../song && bun run build && cd ../thumbnail && bun run build && cd ../sounds && bun run build",
+    "link:packages": "mkdir -p apps/backend/node_modules/@nbw && cd apps/backend/node_modules/@nbw && ln -sf ../../../../packages/database database && ln -sf ../../../../packages/song song && ln -sf ../../../../packages/thumbnail thumbnail && ln -sf ../../../../packages/sounds sounds",
     "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
     "build:server": "bun run build:data && cd apps/backend && bun run build",
     "build:web": "cd ./apps/frontend && bun run build",
@@ -46,7 +49,7 @@
     "dev:server": "cd ./apps/backend && bun run start:dev",
     "dev:web": "cd ./apps/frontend && bun run start",
     "lint": "eslint \"**/*.{ts,tsx}\" --fix",
-    "test": "cd ./apps/backend && bun test",
+    "test": "bun run build:packages && cd ./apps/backend && bun test",
     "cy:open": "bun run test:cy",
     "test:cy": "cd ./tests && bun run cy:open",
     "prettier": "prettier --write ."
