@@ -1,5 +1,6 @@
 import type { UserDocument } from '@nbw/database';
 import {
+  FeaturedSongsDto,
   SongDocument,
   Song as SongEntity,
   SongPreviewDto,
@@ -1052,25 +1053,65 @@ describe('SongService', () => {
     it('should return featured songs', async () => {
       const songWithUser: SongWithUser = {
         title: 'Test Song',
+        publicId: 'test-id',
         uploader: { username: 'testuser', profileImage: 'testimage' },
+        description: 'Test Description',
+        originalAuthor: 'Test Author',
         stats: {
           duration: 100,
           noteCount: 100,
         },
+        thumbnailUrl: 'test-thumbnail-url',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        playCount: 0,
+        visibility: 'public',
       } as any;
 
       jest
-        .spyOn(songService, 'getSongsForTimespan')
+        .spyOn(service, 'getSongsForTimespan')
         .mockResolvedValue([songWithUser]);
 
       jest
-        .spyOn(songService, 'getSongsBeforeTimespan')
-        .mockResolvedValue([songWithUser]);
+        .spyOn(service, 'getSongsBeforeTimespan')
+        .mockResolvedValue([]);
 
-      await service.getFeaturedSongs();
+      const result = await service.getFeaturedSongs();
 
-      expect(songService.getSongsForTimespan).toHaveBeenCalled();
-      expect(songService.getSongsBeforeTimespan).toHaveBeenCalled();
+      expect(service.getSongsForTimespan).toHaveBeenCalledTimes(6); // Called for each timespan
+      expect(result).toBeInstanceOf(Object);
+      expect(result).toHaveProperty('hour');
+      expect(result).toHaveProperty('day');
+      expect(result).toHaveProperty('week');
+      expect(result).toHaveProperty('month');
+      expect(result).toHaveProperty('year');
+      expect(result).toHaveProperty('all');
+      expect(Array.isArray(result.hour)).toBe(true);
+      expect(Array.isArray(result.day)).toBe(true);
+      expect(Array.isArray(result.week)).toBe(true);
+      expect(Array.isArray(result.month)).toBe(true);
+      expect(Array.isArray(result.year)).toBe(true);
+      expect(Array.isArray(result.all)).toBe(true);
+    });
+
+    it('should handle empty results gracefully', async () => {
+      jest
+        .spyOn(service, 'getSongsForTimespan')
+        .mockResolvedValue([]);
+
+      jest
+        .spyOn(service, 'getSongsBeforeTimespan')
+        .mockResolvedValue([]);
+
+      const result = await service.getFeaturedSongs();
+
+      expect(result).toBeInstanceOf(Object);
+      expect(result.hour).toEqual([]);
+      expect(result.day).toEqual([]);
+      expect(result.week).toEqual([]);
+      expect(result.month).toEqual([]);
+      expect(result.year).toEqual([]);
+      expect(result.all).toEqual([]);
     });
   });
 });
