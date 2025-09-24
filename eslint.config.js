@@ -1,15 +1,11 @@
 import js from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsparser from '@typescript-eslint/parser';
-import prettierConfig from 'eslint-config-prettier';
-import prettierPlugin from 'eslint-plugin-prettier';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
+import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 
-export default [
-  // Base JavaScript configuration
-  js.configs.recommended,
-
-  // Global ignore patterns
+export default tseslint.config(
+  // Global ignores.
   {
     ignores: [
       '**/node_modules/**',
@@ -21,91 +17,109 @@ export default [
       '**/*.config.ts',
       '**/generated/**',
       '.eslintrc.js',
-      '**/*.spec.ts',
-      '**/*.test.ts',
     ],
   },
+  
+  // Apply base recommended configurations.
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
 
-  // Universal TypeScript configuration for the entire monorepo
+  // A single, unified object for all custom rules and plugin configurations.
   {
-    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      parser: tsparser,
-      parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: 'module',
-        // Don't use project-based parsing to avoid config issues
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
-        // Universal globals that work everywhere
         ...globals.node,
-        ...globals.browser,
-        ...globals.es2021,
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        global: 'readonly',
-        React: 'readonly',
-        JSX: 'readonly',
+        ...globals.es2021, // A modern equivalent of the 'es6' env
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
-      prettier: prettierPlugin,
-    },
-    rules: {
-      // Turn off rules that conflict with TypeScript
-      'no-undef': 'off', // TypeScript handles this
-      'no-unused-vars': 'off', // Use TypeScript version instead
-      'no-redeclare': 'off', // TypeScript handles this better
-
-      // Turn off rules that don't exist or cause issues
-      'react-hooks/exhaustive-deps': 'off',
-      '@next/next/no-sync-scripts': 'off',
-      'no-shadow-restricted-names': 'off',
-
-      // TypeScript specific rules - simplified and lenient
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-inferrable-types': 'off',
-
-      // Prettier integration
-      'prettier/prettier': [
-        'warn',
-        {
-          endOfLine: 'auto',
-          trailingComma: 'all',
-        },
-      ],
-
-      // Relaxed rules for monorepo compatibility
-      'no-console': 'off',
-      'prefer-const': 'warn',
-      'no-constant-condition': 'warn',
-      'no-constant-binary-expression': 'warn',
+      'import': importPlugin,
+      'unused-imports': unusedImportsPlugin,
     },
     settings: {
-      react: {
-        version: 'detect',
-      },
+        'import/resolver': {
+            typescript: {
+                // Point to all tsconfig.json files in your workspaces
+                project: [
+                    'apps/*/tsconfig.json',
+                    'packages/*/tsconfig.json',
+                    './tsconfig.json', // Also include the root tsconfig as a fallback
+                ],
+            },
+            node: true,
+        },
+        // Allow Bun built-in modules
+        'import/core-modules': ['bun:test', 'bun:sqlite', 'bun'],
+    },
+    rules: {
+      // Manually include rules from the import plugin's recommended configs.
+      ...importPlugin.configs.recommended.rules,
+      ...importPlugin.configs.typescript.rules,
+      
+      // Your custom rules from the original file.
+      'no-console': 'warn',
+      'max-len': ['error', {
+        code: 1024,
+        ignoreComments: true,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+      }],
+      'key-spacing': ['error', {
+        align: {
+          beforeColon: false,
+          afterColon: true,
+          on: 'colon',
+        },
+      }],
+      '@typescript-eslint/no-unused-vars': 'off', // Disabled to allow unused-imports plugin to handle it.
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
+      'import/order': ['error', {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'unknown',
+        ],
+        'pathGroups': [{
+          pattern: '@/**',
+          group: 'internal',
+        }],
+        pathGroupsExcludedImportTypes: ['builtin'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      }],
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error',
+
+      // Spacing rules for consistency
+      'space-infix-ops': 'error', // Enforces spaces around operators like +, =, etc.
+      'keyword-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around keywords like if, else.
+      'arrow-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around arrow in arrow functions.
+      'space-before-blocks': 'error', // Enforces a space before opening curly braces.
+      'object-curly-spacing': ['error', 'always'], // Enforces spaces inside curly braces: { foo } not {foo}.
+      'comma-spacing': ['error', { 'before': false, 'after': true }], // Enforces space after a comma, not before.
+      'space-before-function-paren': ['error', { 'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always' }], // Controls space before function parentheses.
+      'comma-dangle': ['error', 'never'], // Disallows trailing commas
     },
   },
-
-  // Prettier config (must be last to override conflicting rules)
-  prettierConfig,
-];
+);
