@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
-import unusedImportsPlugin from 'eslint-plugin-unused-imports';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default tseslint.config(
   // Global ignores.
@@ -34,7 +34,7 @@ export default tseslint.config(
     },
     plugins: {
       'import': importPlugin,
-      'unused-imports': unusedImportsPlugin,
+      '@stylistic': stylistic,
     },
     settings: {
         'import/resolver': {
@@ -65,19 +65,10 @@ export default tseslint.config(
         ignoreStrings: true,
         ignoreTemplateLiterals: true,
       }],
-      'key-spacing': ['error', {
-        align: {
-          beforeColon: false,
-          afterColon: true,
-          on: 'colon',
-        },
-      }],
-      '@typescript-eslint/no-unused-vars': 'off', // Disabled to allow unused-imports plugin to handle it.
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
+      '@typescript-eslint/no-unused-vars': [
         'warn',
         {
           vars: 'all',
@@ -112,14 +103,22 @@ export default tseslint.config(
       'import/no-duplicates': 'error',
 
       // Spacing rules for consistency
-      'space-infix-ops': 'error', // Enforces spaces around operators like +, =, etc.
-      'keyword-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around keywords like if, else.
-      'arrow-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around arrow in arrow functions.
-      'space-before-blocks': 'error', // Enforces a space before opening curly braces.
-      'object-curly-spacing': ['error', 'always'], // Enforces spaces inside curly braces: { foo } not {foo}.
-      'comma-spacing': ['error', { 'before': false, 'after': true }], // Enforces space after a comma, not before.
-      'space-before-function-paren': ['error', { 'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always' }], // Controls space before function parentheses.
-      'comma-dangle': ['error', 'never'], // Disallows trailing commas
+      '@stylistic/space-infix-ops': 'error', // Enforces spaces around operators like +, =, etc.
+      '@stylistic/keyword-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around keywords like if, else.
+      '@stylistic/arrow-spacing': ['error', { 'before': true, 'after': true }], // Enforces spaces around arrow in arrow functions.
+      '@stylistic/space-before-blocks': 'error', // Enforces a space before opening curly braces.
+      '@stylistic/object-curly-spacing': ['error', 'always'], // Enforces spaces inside curly braces: { foo } not {foo}.
+      '@stylistic/comma-spacing': ['error', { 'before': false, 'after': true }], // Enforces space after a comma, not before.
+      '@stylistic/space-before-function-paren': ['error', { 'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always' }], // Controls space before function parentheses.
+      '@stylistic/comma-dangle': ['error', 'never'], // Disallows trailing commas
+      '@stylistic/key-spacing': ['error', {
+        align: {
+          beforeColon: false,
+          afterColon: true,
+          on: 'colon',
+        },
+      }],
     },
   },
 );
+
