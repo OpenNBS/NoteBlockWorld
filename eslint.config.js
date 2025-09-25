@@ -3,6 +3,7 @@ import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
 import stylistic from '@stylistic/eslint-plugin';
+import react from 'eslint-plugin-react';
 
 export default tseslint.config(
   // Global ignores.
@@ -119,6 +120,24 @@ export default tseslint.config(
           on: 'colon',
         },
       }],
+    },
+  },
+
+  // React specific configuration
+  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    plugins: {
+      react,
+    },
+    rules: {
+      ...react.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off', // Not needed with modern React
+      'react/no-unknown-property': ['error', { ignore: ['custom-prop', 'cmdk-input-wrapper', 'cmdk-group-heading'] }]
+    },
+    settings: {
+      react: {
+        version: 'detect', // Automatically detect the React version
+      },
     },
   },
   // Override for JSX files

@@ -78,6 +78,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-mdx": "^3.6.2",
     "eslint-plugin-prettier": "^4.2.5",
+    "eslint-plugin-react": "^7.37.5",
     "globals": "^16.4.0",
     "prettier": "^2.8.8",
     "typescript-eslint": "^8.44.1"
