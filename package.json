@@ -52,7 +52,6 @@
     "dev:server": "bun run --filter '@nbw/backend' start:dev",
     "dev:web": "bun run --filter '@nbw/frontend' start",
     "lint": "eslint \"**/*.{ts,tsx}\" --fix",
-    "test": "bun run build:packages && bun run --filter '@nbw/backend' test",
     "cy:open": "bun run test:cy",
     "test:cy": "bun run --filter 'tests' cy:open",
     "prettier": "prettier --write ."
