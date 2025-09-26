@@ -1,6 +1,6 @@
 import { spawn } from 'bun';
 
-// This is a list on how the packages can be built in order
+// This is a list of how the packages can be built in order
 // the sub array is for packages that can be built in parallel
 const packages: (string | string[])[] = [
   ['@nbw/config', '@nbw/sounds', '@nbw/database'],
