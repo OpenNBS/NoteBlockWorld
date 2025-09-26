@@ -1,15 +1,12 @@
 import js from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
-import prettierConfig from 'eslint-config-prettier';
-import prettierPlugin from 'eslint-plugin-prettier';
+import tseslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
+import react from 'eslint-plugin-react';
 
-export default [
-  // Base JavaScript configuration
-  js.configs.recommended,
-
-  // Global ignore patterns
+export default tseslint.config(
+  // Global ignores (no changes here)
   {
     ignores: [
       '**/node_modules/**',
@@ -26,86 +23,98 @@ export default [
     ],
   },
 
-  // Universal TypeScript configuration for the entire monorepo
+  // Base recommended configurations
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+
+  // Main configuration object
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsparser,
-      parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: 'module',
-        // Don't use project-based parsing to avoid config issues
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        // Universal globals that work everywhere
-        ...globals.node,
-        ...globals.browser,
-        ...globals.es2021,
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        global: 'readonly',
-        React: 'readonly',
-        JSX: 'readonly',
-      },
+      globals: { ...globals.node, ...globals.es2021, ...globals.bun },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
-      prettier: prettierPlugin,
+      import: importPlugin,
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: [
+            'apps/*/tsconfig.json',
+            'packages/*/tsconfig.json',
+            './tsconfig.json',
+          ],
+        },
+        node: true,
+      },
+      'import/core-modules': ['bun:test', 'bun:sqlite', 'bun'],
     },
     rules: {
-      // Turn off rules that conflict with TypeScript
-      'no-undef': 'off', // TypeScript handles this
-      'no-unused-vars': 'off', // Use TypeScript version instead
-      'no-redeclare': 'off', // TypeScript handles this better
+      ...importPlugin.configs.recommended.rules,
+      ...importPlugin.configs.typescript.rules,
 
-      // Turn off rules that don't exist or cause issues
-      'react-hooks/exhaustive-deps': 'off',
-      '@next/next/no-sync-scripts': 'off',
-      'no-shadow-restricted-names': 'off',
-
-      // TypeScript specific rules - simplified and lenient
+      // Core and TypeScript rules
+      'no-console': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
-          argsIgnorePattern: '^_',
+          vars: 'all',
           varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
+          args: 'after-used',
+          argsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-inferrable-types': 'off',
-
-      // Prettier integration
-      'prettier/prettier': [
+      'lines-between-class-members': [
         'warn',
-        {
-          endOfLine: 'auto',
-          trailingComma: 'all',
-        },
+        'always',
+        { exceptAfterSingleLine: true },
       ],
 
-      // Relaxed rules for monorepo compatibility
-      'no-console': 'off',
-      'prefer-const': 'warn',
-      'no-constant-condition': 'warn',
-      'no-constant-binary-expression': 'warn',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      // Import rules
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'unknown',
+          ],
+          pathGroups: [{ pattern: '@/**', group: 'internal' }],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error',
     },
   },
 
-  // Prettier config (must be last to override conflicting rules)
-  prettierConfig,
-];
+  // React specific configuration
+  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    plugins: {
+      react,
+    },
+    rules: {
+      ...react.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
+      'react/no-unknown-property': [
+        'error',
+        { ignore: ['custom-prop', 'cmdk-input-wrapper', 'cmdk-group-heading'] },
+      ],
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
+  },
+);
