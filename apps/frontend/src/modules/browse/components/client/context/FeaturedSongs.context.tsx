@@ -1,14 +1,12 @@
 'use client';
 
-import {
-  FeaturedSongsDtoType,
-  SongPreviewDtoType,
-  TimespanType,
-} from '@nbw/database';
+import { TIMESPANS } from '@nbw/config';
+import { type FeaturedSongsDto, type SongPreviewDto } from '@nbw/database';
 import { createContext, useContext, useEffect, useState } from 'react';
+type TimespanType = (typeof TIMESPANS)[number];
 
 type FeaturedSongsContextType = {
-  featuredSongsPage: SongPreviewDtoType[];
+  featuredSongsPage: SongPreviewDto[];
   timespan: TimespanType;
   setTimespan: (timespan: TimespanType) => void;
   timespanEmpty: Record<string, boolean>;
@@ -23,14 +21,14 @@ export function FeaturedSongsProvider({
   initialFeaturedSongs,
 }: {
   children: React.ReactNode;
-  initialFeaturedSongs: FeaturedSongsDtoType;
+  initialFeaturedSongs: FeaturedSongsDto;
 }) {
   // Featured songs
-  const [featuredSongs] = useState<FeaturedSongsDtoType>(initialFeaturedSongs);
+  const [featuredSongs] = useState<FeaturedSongsDto>(initialFeaturedSongs);
 
-  const [featuredSongsPage, setFeaturedSongsPage] = useState<
-    SongPreviewDtoType[]
-  >(initialFeaturedSongs.week);
+  const [featuredSongsPage, setFeaturedSongsPage] = useState<SongPreviewDto[]>(
+    initialFeaturedSongs.week,
+  );
 
   const [timespan, setTimespan] = useState<TimespanType>('week');
 
@@ -43,7 +41,6 @@ export function FeaturedSongsProvider({
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setFeaturedSongsPage(featuredSongs[timespan]);
   }, [featuredSongs, timespan]);
 
