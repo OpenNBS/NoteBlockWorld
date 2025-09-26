@@ -18,7 +18,7 @@
       "import": "./apps/frontend/dist/index.js",
       "types": "./apps/frontend/dist/index.d.ts"
     },
-    "./config": {
+    "./configs": {
       "import": "./packages/configs/dist/index.js",
       "types": "./packages/configs/dist/index.d.ts"
     },
