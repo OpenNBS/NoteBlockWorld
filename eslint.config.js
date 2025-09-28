@@ -7,8 +7,8 @@ import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 
-  // Global ignores (no changes here)
 export default defineConfig(
+  // Global ignores
   {
     ignores: [
       '**/node_modules/**',
@@ -16,10 +16,7 @@ export default defineConfig(
       '**/build/**',
       '**/.next/**',
       '**/coverage/**',
-      '**/*.config.js',
-      '**/*.config.ts',
       '**/generated/**',
-      '.eslintrc.js',
       '**/*.spec.ts',
       '**/*.test.ts',
     ],
@@ -31,7 +28,7 @@ export default defineConfig(
 
   // Main configuration object
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     languageOptions: {
       globals: { ...globals.node, ...globals.es2021, ...globals.bun },
     },
