@@ -52,10 +52,10 @@
     
     "start:apps": "bun run --filter './apps/*' start",
     "start:server": "bun run --filter '@nbw/backend start",
-    "start:web": "bun run --filter '@nbs/frontend' start",
+    "start:web": "bun run --filter '@nbw/frontend' start",
     
     "dev:server": "bun run --filter '@nbw/backend' start:dev", 
-    "dev:web": "bun run --filter '@nbs/frontend' dev",
+    "dev:web": "bun run --filter '@nbw/frontend' dev",
     "dev:apps": "bun run --filter './apps/*' dev",
     
     "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
