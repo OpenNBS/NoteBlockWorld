@@ -1,14 +1,15 @@
-import { BROWSER_SONGS } from '@nbw/config';
-import type { UserDocument } from '@nbw/database';
+import { BROWSER_SONGS, TIMESPANS } from '@nbw/config';
 import {
+  FeaturedSongsDto,
+  type User as UserDocument,
   PageQueryDTO,
-  Song as SongEntity,
+  type Song as SongEntity,
   SongPageDto,
   SongPreviewDto,
   SongViewDto,
-  SongWithUser,
   UploadSongDto,
   UploadSongResponseDto,
+  type SongWithUser,
 } from '@nbw/database';
 import {
   HttpException,
@@ -201,6 +202,48 @@ export class SongService {
         [sort]: order ? 1 : -1,
       })
       .skip(page * limit - limit)
+      .limit(limit)
+      .populate('uploader', 'username publicName profileImage -_id')
+      .exec()) as unknown as SongWithUser[];
+
+    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+  }
+
+  public async searchSongs(
+    query: PageQueryDTO,
+    q: string,
+  ): Promise<SongPreviewDto[]> {
+    const page = parseInt(query.page?.toString() ?? '1');
+    const limit = parseInt(query.limit?.toString() ?? '10');
+    const order = query.order ? query.order : false;
+    const allowedSorts = new Set(['likeCount', 'createdAt', 'playCount']);
+    const sortField = allowedSorts.has(query.sort ?? '')
+      ? (query.sort as string)
+      : 'createdAt';
+
+    const terms = (q || '')
+      .split(/\s+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    // Build Google-like search: all words must appear across any of the fields
+    const andClauses = terms.map((word) => ({
+      $or: [
+        { title: { $regex: word, $options: 'i' } },
+        { originalAuthor: { $regex: word, $options: 'i' } },
+        { description: { $regex: word, $options: 'i' } },
+      ],
+    }));
+
+    const mongoQuery: any = {
+      visibility: 'public',
+      ...(andClauses.length > 0 ? { $and: andClauses } : {}),
+    };
+
+    const songs = (await this.songModel
+      .find(mongoQuery)
+      .sort({ [sortField]: order ? 1 : -1 })
+      .skip(limit * (page - 1))
       .limit(limit)
       .populate('uploader', 'username profileImage -_id')
       .exec()) as unknown as SongWithUser[];
@@ -457,6 +500,7 @@ export class SongService {
         {
           $match: {
             visibility: 'public',
+            category: category,
           },
         },
         {
@@ -475,7 +519,68 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async getAllSongs() {
-    return this.songModel.find({});
+  public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
+    const now = new Date(Date.now());
+
+    const times: Record<(typeof TIMESPANS)[number], number> = {
+      hour: new Date(Date.now()).setHours(now.getHours() - 1),
+      day: new Date(Date.now()).setDate(now.getDate() - 1),
+      week: new Date(Date.now()).setDate(now.getDate() - 7),
+      month: new Date(Date.now()).setMonth(now.getMonth() - 1),
+      year: new Date(Date.now()).setFullYear(now.getFullYear() - 1),
+      all: new Date(0).getTime(),
+    };
+
+    const songs: Record<(typeof TIMESPANS)[number], SongWithUser[]> = {
+      hour: [],
+      day: [],
+      week: [],
+      month: [],
+      year: [],
+      all: [],
+    };
+
+    for (const [timespan, time] of Object.entries(times)) {
+      const songPage = await this.getSongsForTimespan(time);
+
+      // If the length is 0, send an empty array (no songs available in that timespan)
+      // If the length is less than the page size, pad it with songs "borrowed"
+      // from the nearest timestamp, regardless of view count
+      if (
+        songPage.length > 0 &&
+        songPage.length < BROWSER_SONGS.paddedFeaturedPageSize
+      ) {
+        const missing = BROWSER_SONGS.paddedFeaturedPageSize - songPage.length;
+
+        const additionalSongs = await this.getSongsBeforeTimespan(time);
+
+        songPage.push(...additionalSongs.slice(0, missing));
+      }
+
+      songs[timespan as TimespanType] = songPage;
+    }
+
+    const featuredSongs = FeaturedSongsDto.create();
+
+    featuredSongs.hour = songs.hour.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+    featuredSongs.day = songs.day.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+    featuredSongs.week = songs.week.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+    featuredSongs.month = songs.month.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+    featuredSongs.year = songs.year.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+    featuredSongs.all = songs.all.map((song) =>
+      SongPreviewDto.fromSongDocumentWithUser(song),
+    );
+
+    return featuredSongs;
   }
 }
