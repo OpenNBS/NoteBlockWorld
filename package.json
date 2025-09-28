@@ -55,7 +55,7 @@
     "dev:apps": "bun run --filter './apps/*' dev",
     "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
     "lint": "eslint --fix",
-    "prettier": "prettier --write .",
+    "format": "prettier --write .",
     "cy:open": "bun run test:cy",
     "test:cy": "bun run --filter 'tests' cy:open",
     "prepare": "husky",
