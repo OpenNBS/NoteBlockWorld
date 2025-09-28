@@ -1,12 +1,14 @@
-import js from '@eslint/js';
-import tsparser from '@typescript-eslint/parser';
-import tseslint from '@typescript-eslint/eslint-plugin';
+// @ts-check
+
+import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 
-export default tseslint.config(
   // Global ignores (no changes here)
+export default defineConfig(
   {
     ignores: [
       '**/node_modules/**',
@@ -24,14 +26,13 @@ export default tseslint.config(
   },
 
   // Base recommended configurations
-  js.configs.recommended,
+  eslint.configs.recommended,
   ...tseslint.configs.recommended,
 
   // Main configuration object
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      parser: tsparser,
       globals: { ...globals.node, ...globals.es2021, ...globals.bun },
     },
     plugins: {
