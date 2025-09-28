@@ -60,7 +60,7 @@
     
     "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
  
-    "lint": "eslint \"**/*.{ts,tsx}\" --fix",
+    "lint": "eslint --fix",
     "prettier": "prettier --write .",
     
     "cy:open": "bun run test:cy",
