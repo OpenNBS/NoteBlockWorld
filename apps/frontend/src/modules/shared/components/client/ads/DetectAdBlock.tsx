@@ -1,7 +1,6 @@
 const DetectAdBlock = () => {
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
       <script src='/adasync.js' />
       <script
         id='detect-ad-block'

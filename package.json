@@ -18,6 +18,10 @@
       "import": "./apps/frontend/dist/index.js",
       "types": "./apps/frontend/dist/index.d.ts"
     },
+    "./configs": {
+      "import": "./packages/configs/dist/index.js",
+      "types": "./packages/configs/dist/index.d.ts"
+    },
     "./database": {
       "import": "./packages/database/dist/index.js",
       "types": "./packages/database/dist/index.d.ts"
@@ -36,28 +40,31 @@
     }
   },
   "scripts": {
-    "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    "build:server": "bun run build:data && cd apps/backend && bun run build",
-    "build:web": "cd ./apps/frontend && bun run build",
-    "start:server": "cd ./apps/backend && bun run start",
-    "start:server:prod": "cd ./apps/backend && bun run start",
-    "start:web:prod": "cd ./apps/frontend && bun run start",
-    "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"cd ./apps/backend && bun run start:dev\" \"cd ./apps/frontend && bun run start\"",
-    "dev:server": "cd ./apps/backend && bun run start:dev",
-    "dev:web": "cd ./apps/frontend && bun run start",
-    "lint": "eslint \"**/*.{ts,tsx}\" --fix --max-warnings 20",
-    "lint:server": "cd ./apps/backend && eslint \"src/**/*.ts\" --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*.test.ts\" --fix --max-warnings 10",
-    "lint:web": "cd ./apps/frontend && eslint \"src/**/*.{ts,tsx}\" --fix --max-warnings 10",
-    "lint:packages": "cd ./packages/configs && eslint \"src/**/*.ts\" --fix && cd ../database && eslint \"src/**/*.ts\" --fix && cd ../song && eslint \"src/**/*.ts\" --fix && cd ../sounds && eslint \"src/**/*.ts\" --fix && cd ../thumbnail && eslint \"src/**/*.ts\" --fix",
-    "lint:database": "cd ./packages/database && bun run lint",
-    "lint:song": "cd ./packages/song && bun run lint",
-    "lint:sounds": "cd ./packages/sounds && bun run lint",
-    "lint:thumbnail": "cd ./packages/thumbnail && bun run lint",
-    "lint:components": "cd ./packages/components && bun run lint",
-    "test": "cd ./apps/backend && bun test",
+    "postinstall": "bun run build:packages",
+    "build:packages": "bun run ./scripts/build.ts",
+    
+    "build:apps": "bun run --filter './apps/*' build",
+    "build:server": "bun run build:packages && bun run --filter '@nbw/backend' build",
+    "build:web": "bun run --filter '@nbs/frontend' build",
+    "build:all": "bun run build:packages && bun run build:apps",
+    
+    "docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
+    
+    "start:apps": "bun run --filter './apps/*' start",
+    "start:server": "bun run --filter '@nbw/backend start",
+    "start:web": "bun run --filter '@nbs/frontend' start",
+    
+    "dev:server": "bun run --filter '@nbw/backend' start:dev", 
+    "dev:web": "bun run --filter '@nbs/frontend' dev",
+    "dev:apps": "bun run --filter './apps/*' dev",
+    
+    "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
+ 
+    "lint": "eslint \"**/*.{ts,tsx}\" --fix",
+    "prettier": "prettier --write .",
+    
     "cy:open": "bun run test:cy",
-    "test:cy": "cd ./tests && bun run cy:open",
-    "prettier": "prettier --write ."
+    "test:cy": "bun run --filter 'tests' cy:open"
   },
   "keywords": [],
   "author": "",
