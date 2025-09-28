@@ -92,5 +92,6 @@
   },
   "dependencies": {
     "@nbw/sounds": "workspace:*",
+    "@types/jest": "^30.0.0"
   }
 }
