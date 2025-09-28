@@ -8,6 +8,7 @@ import globals from 'globals';
 export default [
   // Base JavaScript configuration
   js.configs.recommended,
+  ...tseslint.configs.recommended,
 
   // Global ignore patterns
   {
@@ -21,8 +22,6 @@ export default [
       '**/*.config.ts',
       '**/generated/**',
       '.eslintrc.js',
-      '**/*.spec.ts',
-      '**/*.test.ts',
     ],
   },
 
@@ -42,6 +41,8 @@ export default [
       globals: {
         // Universal globals that work everywhere
         ...globals.node,
+        ...globals.jest,
+        ...globals.bun,
         ...globals.browser,
         ...globals.es2021,
         console: 'readonly',
@@ -55,8 +56,19 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
-      prettier: prettierPlugin,
+      'import/resolver': {
+        typescript: {
+          // Point to all tsconfig.json files in your workspaces
+          project: [
+            'apps/*/tsconfig.json',
+            'packages/*/tsconfig.json',
+            './tsconfig.json', // Also include the root tsconfig as a fallback
+          ],
+        },
+        node: true,
+      },
+      // Allow Bun built-in modules
+      'import/core-modules': ['bun:test', 'bun'],
     },
     rules: {
       // Turn off rules that conflict with TypeScript

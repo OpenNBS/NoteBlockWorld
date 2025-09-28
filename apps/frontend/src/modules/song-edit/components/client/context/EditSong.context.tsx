@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { UploadSongDtoType } from '@nbw/database';
 import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song/src/types';
+import type { SongFileType } from '@nbw/song';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {

@@ -1,4 +1,4 @@
-import { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
+import type { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 import { Metadata } from 'next';
 
 import axiosInstance from '@web/lib/axios';

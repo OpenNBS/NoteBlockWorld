@@ -1,10 +1,18 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
+        "module": "nodenext",
         // Root project specific overrides
         "strictNullChecks": true,
         "noImplicitAny": true,
         "strictBindCallApply": true,
         "strictPropertyInitialization": false
-    }
+    },
+    "exclude": [
+        "node_modules",
+        "**/dist/**/*",
+        "**/dist/**/*",
+        "**/*.js",
+        "**/*.mjs",
+    ]
 }

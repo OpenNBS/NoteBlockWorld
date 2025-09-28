@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer } from '@nbw/song';
-import { SongFileType } from '@nbw/song/src/types';
+import type { SongFileType } from '@nbw/song';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,

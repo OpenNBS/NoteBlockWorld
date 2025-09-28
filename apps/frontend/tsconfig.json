@@ -9,7 +9,7 @@
             "esnext"
         ],
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "jsx": "preserve",
         "downlevelIteration": true,
         "allowJs": true,

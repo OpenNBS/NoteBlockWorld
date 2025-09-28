@@ -6,7 +6,8 @@
         "outDir": "dist",
         "allowImportingTsExtensions": false,
         "verbatimModuleSyntax": false,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "module": "ESNext"
     },
     "include": [
         "src/**/*"
