@@ -1,10 +1,10 @@
 {
-    "extends": "./tsconfig.base.json",
-    "compilerOptions": {
-        // Root project specific overrides
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "strictBindCallApply": true,
-        "strictPropertyInitialization": false
-    }
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    // Root project specific overrides
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false
+  }
 }

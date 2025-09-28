@@ -2,9 +2,9 @@
 
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongPreviewDto } from '@nbw/database';
 import { useRouter } from 'next/navigation';
 
+import { SongPreviewDto } from '@nbw/database';
 import axios from '@web/lib/axios';
 
 import { MusicalNote } from './MusicalNote';

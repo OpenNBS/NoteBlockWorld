@@ -1,6 +1,7 @@
-import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsHexColor, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
+
+import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 
 export class ThumbnailData {
   @IsNotEmpty()

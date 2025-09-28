@@ -18,10 +18,13 @@ const HideAdButton = ({
     <button
       className='h-6 w-3'
       onClick={() => {
-        setIsHidden(true),
-          setTimeout(() => {
-            setIsHidden(false);
-          }, 1000 * 60 * 5); // Reappers after 5 minutes
+        (setIsHidden(true),
+          setTimeout(
+            () => {
+              setIsHidden(false);
+            },
+            1000 * 60 * 5,
+          )); // Reappers after 5 minutes
       }}
     >
       <FontAwesomeIcon

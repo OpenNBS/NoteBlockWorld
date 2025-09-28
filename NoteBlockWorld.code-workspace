@@ -1,74 +1,72 @@
 {
-    "folders": [
-        {
-            "path": ".",
-            "name": "Root"
-        },
-        {
-            "path": "./apps/backend",
-            "name": "Backend"
-        },
-        {
-            "path": "./apps/frontend",
-            "name": "Frontend"
-        },
-        {
-            "path": "./packages/configs",
-            "name": "configs"
-        },
-        {
-            "path": "./packages/database",
-            "name": "database"
-        },
-        {
-            "path": "./packages/song",
-            "name": "song"
-        },
-        {
-            "path": "./packages/sounds",
-            "name": "sounds"
-        },
-        {
-            "path": "./packages/thumbnail",
-            "name": "thumbnail"
-        },
-    ],
-    "settings": {
-        "window.title": "${dirty}${rootName}${separator}${profileName}${separator}${appName}",
-        "editor.formatOnSave": true,
-        "eslint.validate": [
-            "typescript"
-        ],
-        "eslint.run": "onType",
-        "eslint.format.enable": true,
-        "mdx.server.enable": true,
-        "editor.codeActionsOnSave": {
-            "source.fixAll": "explicit"
-        },
-        "search.exclude": {
-            "**/.git": true,
-            "**/node_modules": true,
-            "**/dist": true,
-        },
-        "workbench.colorCustomizations": {
-            "activityBar.activeBackground": "#fac977",
-            "activityBar.background": "#fac977",
-            "activityBar.foreground": "#15202b",
-            "activityBar.inactiveForeground": "#15202b99",
-            "activityBarBadge.background": "#069a62",
-            "activityBarBadge.foreground": "#e7e7e7",
-            "commandCenter.border": "#15202b99",
-            "sash.hoverBorder": "#fac977",
-            "statusBar.background": "#f8b646",
-            "statusBar.foreground": "#15202b",
-            "statusBarItem.hoverBackground": "#f6a315",
-            "statusBarItem.remoteBackground": "#f8b646",
-            "statusBarItem.remoteForeground": "#15202b",
-            "titleBar.activeBackground": "#f8b646",
-            "titleBar.activeForeground": "#15202b",
-            "titleBar.inactiveBackground": "#f8b64699",
-            "titleBar.inactiveForeground": "#15202b99"
-        },
-        "peacock.color": "#f8b646"
-    }
+  "folders": [
+    {
+      "path": ".",
+      "name": "Root",
+    },
+    {
+      "path": "./apps/backend",
+      "name": "Backend",
+    },
+    {
+      "path": "./apps/frontend",
+      "name": "Frontend",
+    },
+    {
+      "path": "./packages/configs",
+      "name": "configs",
+    },
+    {
+      "path": "./packages/database",
+      "name": "database",
+    },
+    {
+      "path": "./packages/song",
+      "name": "song",
+    },
+    {
+      "path": "./packages/sounds",
+      "name": "sounds",
+    },
+    {
+      "path": "./packages/thumbnail",
+      "name": "thumbnail",
+    },
+  ],
+  "settings": {
+    "window.title": "${dirty}${rootName}${separator}${profileName}${separator}${appName}",
+    "editor.formatOnSave": true,
+    "eslint.validate": ["typescript"],
+    "eslint.run": "onType",
+    "eslint.format.enable": true,
+    "mdx.server.enable": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+    },
+    "search.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/dist": true,
+    },
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#fac977",
+      "activityBar.background": "#fac977",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#069a62",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "commandCenter.border": "#15202b99",
+      "sash.hoverBorder": "#fac977",
+      "statusBar.background": "#f8b646",
+      "statusBar.foreground": "#15202b",
+      "statusBarItem.hoverBackground": "#f6a315",
+      "statusBarItem.remoteBackground": "#f8b646",
+      "statusBarItem.remoteForeground": "#15202b",
+      "titleBar.activeBackground": "#f8b646",
+      "titleBar.activeForeground": "#15202b",
+      "titleBar.inactiveBackground": "#f8b64699",
+      "titleBar.inactiveForeground": "#15202b99",
+    },
+    "peacock.color": "#f8b646",
+  },
 }

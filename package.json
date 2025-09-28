@@ -42,27 +42,20 @@
   "scripts": {
     "postinstall": "bun run build:packages",
     "build:packages": "bun run ./scripts/build.ts",
-    
     "build:apps": "bun run --filter './apps/*' build",
     "build:server": "bun run build:packages && bun run --filter '@nbw/backend' build",
     "build:web": "bun run --filter '@nbs/frontend' build",
     "build:all": "bun run build:packages && bun run build:apps",
-    
     "docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    
     "start:apps": "bun run --filter './apps/*' start",
     "start:server": "bun run --filter '@nbw/backend start",
     "start:web": "bun run --filter '@nbw/frontend' start",
-    
-    "dev:server": "bun run --filter '@nbw/backend' start:dev", 
+    "dev:server": "bun run --filter '@nbw/backend' start:dev",
     "dev:web": "bun run --filter '@nbw/frontend' dev",
     "dev:apps": "bun run --filter './apps/*' dev",
-    
     "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
- 
     "lint": "eslint --fix",
     "prettier": "prettier --write .",
-    
     "cy:open": "bun run test:cy",
     "test:cy": "bun run --filter 'tests' cy:open"
   },
@@ -86,7 +79,7 @@
     "prettier": "^2.8.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1",
+    "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
     "@nbw/sounds": "workspace:*",

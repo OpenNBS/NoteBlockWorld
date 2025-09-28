@@ -1,8 +1,10 @@
 'use client';
 
+import { createContext, useContext, useEffect, useState } from 'react';
+
 import { TIMESPANS } from '@nbw/config';
 import { type FeaturedSongsDto, type SongPreviewDto } from '@nbw/database';
-import { createContext, useContext, useEffect, useState } from 'react';
+
 type TimespanType = (typeof TIMESPANS)[number];
 
 type FeaturedSongsContextType = {

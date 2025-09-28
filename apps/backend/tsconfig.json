@@ -1,37 +1,33 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        // NestJS specific settings
-        "module": "commonjs",
-        "target": "ES2021",
-        "declaration": true,
-        "removeComments": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "outDir": "./dist",
-        "baseUrl": "./",
-        // Relaxed strict settings for backend
-        "strictNullChecks": false,
-        "noImplicitAny": false,
-        "strictBindCallApply": false,
-        "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false,
-        // Path mapping
-        "paths": {
-            "@server/*": [
-                "src/*"
-            ]
-        }
-    },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "**/*.spec.ts",
-        "**/*.test.ts",
-        "e2e/**/*",
-        "test/**/*"
-    ]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // NestJS specific settings
+    "module": "commonjs",
+    "target": "ES2021",
+    "declaration": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    // Relaxed strict settings for backend
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    // Path mapping
+    "paths": {
+      "@server/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "e2e/**/*",
+    "test/**/*"
+  ]
 }

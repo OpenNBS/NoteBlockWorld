@@ -38,7 +38,6 @@ You've added a custom instrument to your song! You can now use it just like any 
 There are a few limitations to keep in mind when working with custom instruments in Note Block Studio:
 
 - **Custom instruments are not saved with the song file**: Song files only store the custom instrument settings, not the sound files themselves. This means that if you share your song with someone else, they won't have access to your custom instruments unless you also share the sound files you used. There are two ways to work around this limitation:
-
   - **Share the sound files** along with the song file, so others can use the custom instruments in your song. You can save the song in a ZIP file that includes the sound files you used by going to _File_ > _Save song with custom sounds..._. Alternatively, you can save only the instruments to a ZIP file by going to _Settings_ > _Instrument settings..._ and clicking _Export sounds_.
   - **Use the same sound files** for custom instruments in all your songs, so you don't have to share them every time you share a song. In the section _Downloading songs that use custom instruments_ further down this article, you'll learn how to obtain Minecraft sound files that you can use to standardize the reference to your custom sound files.
 

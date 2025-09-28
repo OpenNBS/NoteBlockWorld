@@ -5,19 +5,20 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongPreviewDtoType } from '@nbw/database';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
+import { SongPreviewDtoType } from '@nbw/database';
 import SongThumbnail from '@web/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/modules/shared/util/format';
 
-import { useMySongsProvider } from './context/MySongs.context';
 import {
   DeleteButton,
   DownloadSongButton,
   EditButton,
 } from '../client/MySongsButtons';
+
+import { useMySongsProvider } from './context/MySongs.context';
 
 export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();

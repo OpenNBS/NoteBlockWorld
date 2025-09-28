@@ -2,10 +2,10 @@
 
 import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
-import tseslint from 'typescript-eslint';
-import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   // Global ignores

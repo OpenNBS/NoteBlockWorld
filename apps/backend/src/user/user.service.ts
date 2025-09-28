@@ -1,3 +1,8 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { validate } from 'class-validator';
+import { Model } from 'mongoose';
+
 import {
   CreateUser,
   GetUser,
@@ -7,10 +12,6 @@ import {
   UserDocument,
   UserDto,
 } from '@nbw/database';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { validate } from 'class-validator';
-import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {

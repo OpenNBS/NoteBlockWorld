@@ -1,7 +1,7 @@
-import { SongViewDtoType } from '@nbw/database';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
+import { SongViewDtoType } from '@nbw/database';
 import axios from '@web/lib/axios';
 import { SongPage } from '@web/modules/song/components/SongPage';
 

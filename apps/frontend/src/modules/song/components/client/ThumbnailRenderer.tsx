@@ -1,7 +1,8 @@
-import { NoteQuadTree } from '@nbw/song';
-import { drawNotesOffscreen, swap } from '@nbw/thumbnail';
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+
+import { NoteQuadTree } from '@nbw/song';
+import { drawNotesOffscreen, swap } from '@nbw/thumbnail';
 
 import { UploadSongForm } from './SongForm.zod';
 

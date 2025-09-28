@@ -1,8 +1,8 @@
 'use client';
 
-import { SongViewDtoType } from '@nbw/database';
 import { useState } from 'react';
 
+import { SongViewDtoType } from '@nbw/database';
 import { DownloadPopupAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
 import GenericModal from '@web/modules/shared/components/client/GenericModal';
 

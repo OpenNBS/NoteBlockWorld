@@ -16,21 +16,27 @@ export type PostType = {
 
 const blogPostIds = fs
   .readdirSync(path.join(process.cwd(), 'posts', 'blog'))
-  .reduce((acc, fileName) => {
-    // Remove ".md" and date prefix to get post ID
-    const postId = fileName.replace(/\.md$/, '').split('_')[1];
-    acc[postId] = fileName;
-    return acc;
-  }, {} as Record<string, string>);
+  .reduce(
+    (acc, fileName) => {
+      // Remove ".md" and date prefix to get post ID
+      const postId = fileName.replace(/\.md$/, '').split('_')[1];
+      acc[postId] = fileName;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
 const helpPostIds = fs
   .readdirSync(path.join(process.cwd(), 'posts', 'help'))
-  .reduce((acc, fileName) => {
-    // Remove ".md" and number prefix to get help article ID
-    const helpId = fileName.replace(/\.md$/, '').split('_')[1];
-    acc[helpId] = fileName;
-    return acc;
-  }, {} as Record<string, string>);
+  .reduce(
+    (acc, fileName) => {
+      // Remove ".md" and number prefix to get help article ID
+      const helpId = fileName.replace(/\.md$/, '').split('_')[1];
+      acc[helpId] = fileName;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
 export function getSortedPostsData(
   postsPath: 'help' | 'blog',
