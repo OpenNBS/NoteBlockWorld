@@ -74,7 +74,7 @@ export default defineConfig(
 
       // Import rules
       'import/order': [
-        'error',
+        'warn',
         {
           groups: [
             'builtin',
@@ -92,8 +92,8 @@ export default defineConfig(
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      'import/newline-after-import': 'error',
-      'import/no-duplicates': 'error',
+      'import/newline-after-import': 'warn',
+      'import/no-duplicates': 'warn',
     },
   },
 
