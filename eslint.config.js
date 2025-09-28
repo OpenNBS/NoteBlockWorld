@@ -86,7 +86,10 @@ export default defineConfig(
             'object',
             'unknown',
           ],
-          pathGroups: [{ pattern: '@/**', group: 'internal' }],
+          pathGroups: [
+            { pattern: '@/**', group: 'internal' },
+            { pattern: '@nbw/**', group: 'internal' },
+          ],
           pathGroupsExcludedImportTypes: ['builtin'],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
