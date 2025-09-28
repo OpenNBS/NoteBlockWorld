@@ -49,7 +49,7 @@ export class SongUploadService {
 
     if (!this.soundsMapping) {
       const response = await fetch(
-        process.env.SERVER_URL + '/api/v1/data/soundList.json',
+        process.env.SERVER_URL + '/v1/data/soundList.json',
       );
 
       this.soundsMapping = (await response.json()) as Record<string, string>;
@@ -64,7 +64,7 @@ export class SongUploadService {
     if (!this.soundsSubset) {
       try {
         const response = await fetch(
-          process.env.SERVER_URL + '/api/v1/data/soundList.json',
+          process.env.SERVER_URL + '/v1/data/soundList.json',
         );
 
         const soundMapping = (await response.json()) as Record<string, string>;

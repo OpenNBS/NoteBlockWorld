@@ -62,7 +62,7 @@ describe('MagicLinkEmailStrategy', () => {
       const email = 'test@example.com';
 
       const magicLink =
-        'http://localhost/api/v1/auth/magic-link/callback?token=test_token';
+        'http://localhost/v1/auth/magic-link/callback?token=test_token';
 
       const user = { username: 'testuser', email };
 
@@ -80,7 +80,7 @@ describe('MagicLinkEmailStrategy', () => {
         to: email,
         context: {
           magicLink:
-            'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
+            'http://localhost/v1/auth/magic-link/callback?token=test_token',
           username: 'testuser',
         },
         subject: 'Noteblock Magic Link',
@@ -92,7 +92,7 @@ describe('MagicLinkEmailStrategy', () => {
       const email = 'testuser@test.com';
 
       const magicLink =
-        'http://localhost/api/v1/auth/magic-link/callback?token=test_token';
+        'http://localhost/v1/auth/magic-link/callback?token=test_token';
 
       const user = { username: 'testuser', email };
 
@@ -111,7 +111,7 @@ describe('MagicLinkEmailStrategy', () => {
         to: email,
         context: {
           magicLink:
-            'http://localhost/api/v1/auth/magic-link/callback?token=test_token',
+            'http://localhost/v1/auth/magic-link/callback?token=test_token',
           username: 'testuser',
         },
         subject: 'Welcome to Noteblock.world',
