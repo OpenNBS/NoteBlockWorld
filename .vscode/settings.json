@@ -1,9 +1,11 @@
 {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "eslint.validate": [
         "typescript"
     ],
     "eslint.run": "onType",
+    "eslint.useFlatConfig": true,
     "eslint.format.enable": true,
     "mdx.server.enable": true,
     "editor.codeActionsOnSave": {
