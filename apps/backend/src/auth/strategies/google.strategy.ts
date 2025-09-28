@@ -19,7 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
     const SERVER_URL = configService.getOrThrow<string>('SERVER_URL');
 
-    const callbackURL = `${SERVER_URL}/api/v1/auth/google/callback`;
+    const callbackURL = `${SERVER_URL}/v1/auth/google/callback`;
     GoogleStrategy.logger.debug(`Google Login callbackURL ${callbackURL}`);
 
     super({

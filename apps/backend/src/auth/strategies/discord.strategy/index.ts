@@ -24,7 +24,7 @@ export class DiscordStrategy extends PassportStrategy(strategy, 'discord') {
     const config = {
       clientID: DISCORD_CLIENT_ID,
       clientSecret: DISCORD_CLIENT_SECRET,
-      callbackUrl: `${SERVER_URL}/api/v1/auth/discord/callback`,
+      callbackUrl: `${SERVER_URL}/v1/auth/discord/callback`,
       scope: [DiscordPermissionScope.Email, DiscordPermissionScope.Identify],
       fetchScope: true,
       prompt: 'none',

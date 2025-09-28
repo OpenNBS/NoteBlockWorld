@@ -104,7 +104,7 @@ On the frontend, you can set the environment variables in a `.env.local` file or
 THUMBNAIL_URL=localhost:9000
 NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
 NEXT_PUBLIC_URL=http://localhost:3000
-NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
+NEXT_PUBLIC_API_URL=http://localhost:4000/v1
 ```
 
 ---
@@ -152,7 +152,7 @@ You can populate the development database with test data using:
 
 ```bash
 curl -X 'GET' \
-  'http://localhost:4000/api/v1/seed/seed-dev' \
+  'http://localhost:4000/v1/seed/seed-dev' \
   -H 'accept: */*'
 ```
 

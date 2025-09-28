@@ -30,8 +30,8 @@ export class MagicLinkEmailStrategy extends PassportStrategy(
   ) {
     super({
       secret: MAGIC_LINK_SECRET,
-      confirmUrl: `${SERVER_URL}/api/v1/auth/magic-link/confirm`,
-      callbackUrl: `${SERVER_URL}/api/v1/auth/magic-link/callback`,
+      confirmUrl: `${SERVER_URL}/v1/auth/magic-link/confirm`,
+      callbackUrl: `${SERVER_URL}/v1/auth/magic-link/callback`,
       sendMagicLink: MagicLinkEmailStrategy.sendMagicLink(
         SERVER_URL,
         userService,
