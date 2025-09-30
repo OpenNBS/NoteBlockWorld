@@ -15,35 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       THUMBNAIL_URL: ${{ vars.THUMBNAIL_URL }}
-      # Test environment variables
-      NODE_ENV: test
-      GITHUB_CLIENT_ID: test_client_id
-      GITHUB_CLIENT_SECRET: test_client_secret
-      GOOGLE_CLIENT_ID: test_client_id
-      GOOGLE_CLIENT_SECRET: test_client_secret
-      DISCORD_CLIENT_ID: test_client_id
-      DISCORD_CLIENT_SECRET: test_client_secret
-      MAGIC_LINK_SECRET: test_magic_link_secret
-      COOKIE_EXPIRES_IN: 604800
-      JWT_SECRET: test_jwt_secret
-      JWT_EXPIRES_IN: 1h
-      JWT_REFRESH_SECRET: test_jwt_refresh_secret
-      JWT_REFRESH_EXPIRES_IN: 7d
-      MONGO_URL: mongodb://localhost:27017/test
-      SERVER_URL: http://localhost:4000
-      FRONTEND_URL: http://localhost:3000
-      APP_DOMAIN: localhost
-      RECAPTCHA_KEY: disabled
-      S3_ENDPOINT: http://localhost:9000
-      S3_BUCKET_SONGS: test-songs
-      S3_BUCKET_THUMBS: test-thumbs
-      S3_KEY: test_key
-      S3_SECRET: test_secret
-      S3_REGION: us-east-1
-      WHITELISTED_USERS: ''
-      DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/test
-      MAIL_TRANSPORT: smtp://test:test@localhost:1025
-      MAIL_FROM: 'Test <test@example.com>'
 
     steps:
       - name: Checkout
@@ -51,49 +22,11 @@ jobs:
 
       - name: Install bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install dependencies
         run: bun install
-
-      - name: Create test environment file
-        run: |
-          cat > apps/backend/.env.test << EOF
-          NODE_ENV=test
-          GITHUB_CLIENT_ID=test_client_id
-          GITHUB_CLIENT_SECRET=test_client_secret
-          GOOGLE_CLIENT_ID=test_client_id
-          GOOGLE_CLIENT_SECRET=test_client_secret
-          DISCORD_CLIENT_ID=test_client_id
-          DISCORD_CLIENT_SECRET=test_client_secret
-          MAGIC_LINK_SECRET=test_magic_link_secret
-          COOKIE_EXPIRES_IN=604800
-          JWT_SECRET=test_jwt_secret
-          JWT_EXPIRES_IN=1h
-          JWT_REFRESH_SECRET=test_jwt_refresh_secret
-          JWT_REFRESH_EXPIRES_IN=7d
-          MONGO_URL=mongodb://localhost:27017/test
-          SERVER_URL=http://localhost:4000
-          FRONTEND_URL=http://localhost:3000
-          APP_DOMAIN=localhost
-          RECAPTCHA_KEY=disabled
-          S3_ENDPOINT=http://localhost:9000
-          S3_BUCKET_SONGS=test-songs
-          S3_BUCKET_THUMBS=test-thumbs
-          S3_KEY=test_key
-          S3_SECRET=test_secret
-          S3_REGION=us-east-1
-          WHITELISTED_USERS=
-          DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/test
-          MAIL_TRANSPORT=smtp://test:test@localhost:1025
-          MAIL_FROM=Test <test@example.com>
-          EOF
-
-      - name: Debug environment
-        run: |
-          echo "Environment variables:"
-          env | grep -E "(NODE_ENV|JWT|MONGO|S3|MAIL)" | sort
-          echo "Files in apps/backend:"
-          ls -la apps/backend/.env* || echo "No .env files found"
 
       - name: Run tests
         run: bun test
