@@ -115,7 +115,7 @@ export class SongUploadService {
     song.originalAuthor = removeExtraSpaces(body.originalAuthor);
     song.description = removeExtraSpaces(body.description);
     song.category = body.category;
-    song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
+    song.allowDownload = true; //|| body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
     song.license = body.license;
 
