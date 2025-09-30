@@ -13,6 +13,9 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     env:
       THUMBNAIL_URL: ${{ vars.THUMBNAIL_URL }}
 
@@ -48,8 +51,8 @@ jobs:
           git config --local user.name "GitHub Action"
           # Ensure we're on the correct branch
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BRANCH_NAME="pr-${{ github.event.number }}"
-            git checkout -b $BRANCH_NAME
+            BRANCH_NAME="${{ github.head_ref }}"
+            git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
           else
             BRANCH_NAME="${{ github.ref_name }}"
             git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
