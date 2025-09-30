@@ -101,6 +101,14 @@ export default defineConfig(
     },
   },
 
+  // Browser-specific configuration for public files
+  {
+    files: ['**/public/**/*.{js,jsx,mjs,cjs}'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.es2021 },
+    },
+  },
+
   // React specific configuration
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
