@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer } from '@nbw/song';
-import { SongFileType } from '@nbw/song/src/types';
+import { SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 
