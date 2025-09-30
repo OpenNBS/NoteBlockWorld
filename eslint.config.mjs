@@ -64,6 +64,7 @@ export default defineConfig(
           varsIgnorePattern: '^_',
           args: 'after-used',
           argsIgnorePattern: '^_',
+          caughtErrors: 'none', // Allow unused error variables in catch blocks
         },
       ],
       'lines-between-class-members': [
@@ -116,6 +117,23 @@ export default defineConfig(
     },
     settings: {
       react: { version: 'detect' },
+    },
+  },
+
+  // Frontend specific configuration
+  {
+    files: ['apps/frontend/**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_|^fetch.*', // Allow unused vars starting with _ or fetch
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'none',
+        },
+      ],
     },
   },
 );
