@@ -119,21 +119,4 @@ export default defineConfig(
       react: { version: 'detect' },
     },
   },
-
-  // Frontend specific configuration
-  {
-    files: ['apps/frontend/**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_|^fetch.*', // Allow unused vars starting with _ or fetch
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'none',
-        },
-      ],
-    },
-  },
 );
