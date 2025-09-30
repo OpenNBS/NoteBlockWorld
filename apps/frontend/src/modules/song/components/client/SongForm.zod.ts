@@ -1,5 +1,6 @@
-import { THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 import { z as zod } from 'zod';
+
+import { THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 
 export const thumbnailDataSchema = zod.object({
   zoomLevel: zod

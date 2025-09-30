@@ -4,12 +4,12 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MY_SONGS } from '@nbw/config';
-import type { SongPageDtoType, SongPreviewDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
+import { MY_SONGS } from '@nbw/config';
+import type { SongPageDtoType, SongPreviewDtoType } from '@nbw/database';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
 import { useMySongsProvider } from './context/MySongs.context';

@@ -1,11 +1,7 @@
 {
-    "extends": "../../tsconfig.package.json",
-    "compilerOptions": {
-        // DOM support for canvas operations
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ]
-    }
+  "extends": "../../tsconfig.package.json",
+  "compilerOptions": {
+    // DOM support for canvas operations
+    "lib": ["dom", "dom.iterable", "esnext"]
+  }
 }

@@ -1,13 +1,12 @@
-import type { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
+import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/database';
 import { Metadata } from 'next';
-
 import axiosInstance from '@web/lib/axios';
 import { HomePageProvider } from '@web/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/modules/browse/components/HomePageComponent';
 
 async function fetchRecentSongs() {
   try {
-    const response = await axiosInstance.get<SongPreviewDtoType[]>(
+    const response = await axiosInstance.get<SongPreviewDto[]>(
       '/song-browser/recent',
       {
         params: {
@@ -25,9 +24,9 @@ async function fetchRecentSongs() {
   }
 }
 
-async function fetchFeaturedSongs(): Promise<FeaturedSongsDtoType> {
+async function fetchFeaturedSongs(): Promise<FeaturedSongsDto> {
   try {
-    const response = await axiosInstance.get<FeaturedSongsDtoType>(
+    const response = await axiosInstance.get<FeaturedSongsDto>(
       '/song-browser/featured',
     );
 

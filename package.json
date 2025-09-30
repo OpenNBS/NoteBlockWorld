@@ -42,29 +42,27 @@
   "scripts": {
     "postinstall": "bun run build:packages",
     "build:packages": "bun run ./scripts/build.ts",
-    
     "build:apps": "bun run --filter './apps/*' build",
     "build:server": "bun run build:packages && bun run --filter '@nbw/backend' build",
     "build:web": "bun run --filter '@nbs/frontend' build",
     "build:all": "bun run build:packages && bun run build:apps",
-    
     "docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    
     "start:apps": "bun run --filter './apps/*' start",
     "start:server": "bun run --filter '@nbw/backend start",
-    "start:web": "bun run --filter '@nbs/frontend' start",
-    
-    "dev:server": "bun run --filter '@nbw/backend' start:dev", 
-    "dev:web": "bun run --filter '@nbs/frontend' dev",
+    "start:web": "bun run --filter '@nbw/frontend' start",
+    "dev:server": "bun run --filter '@nbw/backend' start:dev",
+    "dev:web": "bun run --filter '@nbw/frontend' dev",
     "dev:apps": "bun run --filter './apps/*' dev",
-    
     "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
- 
-    "lint": "eslint \"**/*.{ts,tsx}\" --fix",
-    "prettier": "prettier --write .",
-    
+    "lint": "eslint --fix",
+    "format": "prettier --write .",
     "cy:open": "bun run test:cy",
-    "test:cy": "bun run --filter 'tests' cy:open"
+    "test:cy": "bun run --filter 'tests' cy:open",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
   },
   "keywords": [],
   "author": "",
@@ -74,23 +72,24 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.35.0",
+    "@eslint/js": "^9.36.0",
     "@types/bun": "^1.2.10",
     "@types/node": "^20.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.43.0",
-    "@typescript-eslint/parser": "^8.43.0",
     "concurrently": "^9.1.2",
-    "eslint": "^9.35.0",
-    "eslint-config-prettier": "^8.10.2",
+    "eslint": "^9.36.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-mdx": "^3.6.2",
-    "eslint-plugin-prettier": "^4.2.5",
     "eslint-plugin-unused-imports": "^2.0.0",
     "globals": "^16.4.0",
-    "prettier": "^2.8.8"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
+    "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
     "@nbw/sounds": "workspace:*",
-    "ts-node": "^10.9.1"
+    "@types/jest": "^30.0.0"
   }
 }

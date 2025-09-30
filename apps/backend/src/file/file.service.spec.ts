@@ -5,13 +5,14 @@ import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { FileService } from './file.service';
 
-mock.module('@aws-sdk/client-s3', () => {
-  const mS3Client = {
-    send: jest.fn(),
-  };
+// Create a mock S3Client instance
+const mockS3Client = {
+  send: jest.fn(),
+};
 
+mock.module('@aws-sdk/client-s3', () => {
   return {
-    S3Client: jest.fn(() => mS3Client),
+    S3Client: jest.fn(() => mockS3Client),
     GetObjectCommand: jest.fn(),
     PutObjectCommand: jest.fn(),
     HeadBucketCommand: jest.fn(),
@@ -31,6 +32,10 @@ describe('FileService', () => {
   let s3Client: S3Client;
 
   beforeEach(async () => {
+    // Reset the mock before each test
+    mockS3Client.send.mockClear();
+    mockS3Client.send.mockResolvedValue({});
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FileService,
@@ -62,8 +67,7 @@ describe('FileService', () => {
     }).compile();
 
     fileService = module.get<FileService>(FileService);
-
-    s3Client = new S3Client({});
+    s3Client = mockS3Client as any;
   });
 
   it('should be defined', () => {
@@ -72,13 +76,15 @@ describe('FileService', () => {
 
   describe('verifyBucket', () => {
     it('should verify the buckets successfully', async () => {
+      // The constructor already called verifyBucket, so we expect 2 calls from constructor
+      // When we call verifyBucket again, we expect 2 more calls (total 4)
       (s3Client.send as jest.Mock)
         .mockResolvedValueOnce({}) // Mock for the first bucket
         .mockResolvedValueOnce({}); // Mock for the second bucket
 
       await fileService['verifyBucket']();
 
-      // Ensure the mock was called twice
+      // Ensure the mock was called 4 times total (2 from constructor + 2 from explicit call)
       expect(s3Client.send).toHaveBeenCalledTimes(4);
     });
 

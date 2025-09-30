@@ -1,9 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { UploadSongDtoType } from '@nbw/database';
-import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
@@ -15,6 +12,9 @@ import {
 import toaster from 'react-hot-toast';
 import { undefined } from 'zod';
 
+import type { UploadSongDto } from '@nbw/database';
+import { parseSongFromBuffer } from '@nbw/song';
+import type { SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
@@ -33,7 +33,7 @@ export type useEditSongProviderType = {
   setInstrumentSound: (index: number, value: string) => void;
   sendError: string | null;
   isSubmitting: boolean;
-  loadSong: (id: string, username: string, song: UploadSongDtoType) => void;
+  loadSong: (id: string, username: string, song: UploadSongDto) => void;
   setSongId: (id: string) => void;
 };
 
@@ -56,9 +56,7 @@ export const EditSongProvider = ({
   const [sendError, setSendError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [originalData, setOriginalData] = useState<UploadSongDtoType | null>(
-    null,
-  );
+  const [originalData, setOriginalData] = useState<UploadSongDto | null>(null);
 
   const {
     register,
@@ -130,10 +128,10 @@ export const EditSongProvider = ({
 
   const submitSong = async (): Promise<void> => {
     // Build form data
-    const formValues: UploadSongDtoType = {
+    const formValues: UploadSongDto = {
       allowDownload: formMethods.getValues().allowDownload,
       visibility: formMethods.getValues()
-        .visibility as UploadSongDtoType['visibility'],
+        .visibility as UploadSongDto['visibility'],
       title: formMethods.getValues().title,
       originalAuthor: formMethods.getValues().originalAuthor,
       description: formMethods.getValues().description,
@@ -144,9 +142,8 @@ export const EditSongProvider = ({
         backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
       },
       customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license as UploadSongDtoType['license'],
-      category: formMethods.getValues()
-        .category as UploadSongDtoType['category'],
+      license: formMethods.getValues().license as UploadSongDto['license'],
+      category: formMethods.getValues().category as UploadSongDto['category'],
       file: undefined,
     };
 
@@ -195,7 +192,7 @@ export const EditSongProvider = ({
   };
 
   const loadSong = useCallback(
-    async (id: string, username: string, songData: UploadSongDtoType) => {
+    async (id: string, username: string, songData: UploadSongDto) => {
       setOriginalData(songData);
 
       formMethods.setValue('allowDownload', true, {

@@ -1,9 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -13,14 +10,17 @@ import {
 } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
+import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { parseSongFromBuffer } from '@nbw/song';
+import { SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 
+import UploadCompleteModal from '../UploadCompleteModal';
 import {
   UploadSongForm,
   uploadSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
-import UploadCompleteModal from '../UploadCompleteModal';
+} from '@web/modules/song/components/client/SongForm.zod';
 
 export type useUploadSongProviderType = {
   song: SongFileType | null;

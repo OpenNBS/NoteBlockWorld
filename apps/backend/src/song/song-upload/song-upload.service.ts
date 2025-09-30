@@ -1,5 +1,14 @@
 import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
 import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+import { Types } from 'mongoose';
+
+import {
   SongDocument,
   Song as SongEntity,
   SongStats,
@@ -14,15 +23,6 @@ import {
   obfuscateAndPackSong,
 } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { Types } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
 import { UserService } from '@server/user/user.service';
 
@@ -115,7 +115,7 @@ export class SongUploadService {
     song.originalAuthor = removeExtraSpaces(body.originalAuthor);
     song.description = removeExtraSpaces(body.description);
     song.category = body.category;
-    song.allowDownload = true || body.allowDownload; //TODO: implement allowDownload;
+    song.allowDownload = true; //|| body.allowDownload; //TODO: implement allowDownload;
     song.visibility = body.visibility;
     song.license = body.license;
 

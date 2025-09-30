@@ -1,4 +1,3 @@
-import { TIMESPANS } from '@nbw/config';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
@@ -13,6 +12,7 @@ import {
 } from 'class-validator';
 
 import type { TimespanType } from '@database/song/dto/types';
+import { TIMESPANS } from '@nbw/config';
 
 export class PageQueryDTO {
   @Min(1)

@@ -165,8 +165,8 @@ export class SongStatsGenerator {
         // @ts-ignore //TODO: fix this
         const hasDetune = note.pitch % 100 !== 0;
 
-        const usesCustomInstrument = // @ts-ignore //TODO: fix this
-          note.instrument >= this.song.instruments.firstCustomIndex;
+        const usesCustomInstrument =
+          note.instrument >= this.song.instruments.firstCustomIndex; // @ts-ignore //TODO: fix this
 
         if (!isTempoChanger) {
           if (isOutOfRange) outOfRangeNoteCount++;
