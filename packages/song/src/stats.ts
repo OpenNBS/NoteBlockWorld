@@ -111,6 +111,9 @@ export class SongStatsGenerator {
         const note = layer.notes[tickStr];
         const tick = parseInt(tickStr);
 
+        // Skip if note is undefined
+        if (!note) continue;
+
         if (tick > tickCount) {
           tickCount = tick;
         }
@@ -120,7 +123,6 @@ export class SongStatsGenerator {
           layerCount = layerId;
         }
 
-        // @ts-ignore //TODO: fix this
         const effectivePitch = note.key + note.pitch / 100;
 
         // Differences between Note Block Studio and this implementation:
@@ -148,8 +150,9 @@ export class SongStatsGenerator {
         // the default Minecraft sounds are enough to play the song (i.e. you can play it using only
         // a custom sounds.json in a resource pack).
 
-        // @ts-ignore //TODO: fix this
-        const instrumentKey = this.song.instruments.loaded[note.instrument].key; // F#4 = 45
+        const instrument = this.song.instruments.loaded[note.instrument]!;
+        if (!instrument) continue;
+        const instrumentKey = instrument.key; // F#4 = 45
         const minRange = 45 - (instrumentKey - 45) - 12; // F#3 = 33
         const maxRange = 45 - (instrumentKey - 45) + 12; // F#5 = 57
 
@@ -158,15 +161,13 @@ export class SongStatsGenerator {
 
         // Don't consider tempo changers as detuned notes or custom instruments
         const isTempoChanger = tempoChangerInstruments.includes(
-          // @ts-ignore //TODO: fix this
           note.instrument,
         );
 
-        // @ts-ignore //TODO: fix this
         const hasDetune = note.pitch % 100 !== 0;
 
         const usesCustomInstrument =
-          note.instrument >= this.song.instruments.firstCustomIndex; // @ts-ignore //TODO: fix this
+          note.instrument >= this.song.instruments.firstCustomIndex;
 
         if (!isTempoChanger) {
           if (isOutOfRange) outOfRangeNoteCount++;
@@ -176,7 +177,6 @@ export class SongStatsGenerator {
             incompatibleNoteCount++;
         }
 
-        // @ts-ignore //TODO: fix this
         instrumentNoteCounts[note.instrument]++;
         noteCount++;
       }
@@ -227,7 +227,10 @@ export class SongStatsGenerator {
           const note = layer.notes[tickStr];
           const tick = parseInt(tickStr);
 
-          // @ts-ignore //TODO: fix this          // Not a tempo changer
+          // Skip if note is undefined
+          if (!note) continue;
+
+          // Not a tempo changer
           if (!tempoChangerInstruments.includes(note.instrument)) continue;
 
           // The tempo change isn't effective if there's another tempo changer in the same tick,
@@ -235,7 +238,6 @@ export class SongStatsGenerator {
           // been found in this tick
           if (tick in tempoSegments) continue;
 
-          // @ts-ignore //TODO: fix this
           const tempo = Math.abs(note.pitch) / 15; // note pitch = BPM = (t/s) * 15
           tempoSegments[tick] = tempo;
         }
@@ -273,10 +275,11 @@ export class SongStatsGenerator {
       const currTick = tempoChangeTicks[i];
       const nextTick = tempoChangeTicks[i + 1];
 
-      // @ts-ignore //TODO: fix this
-      const currTempo = tempoSegments[currTick];
+      if (currTick === undefined || nextTick === undefined) continue;
 
-      // @ts-ignore //TODO: fix this
+      const currTempo = tempoSegments[currTick];
+      if (currTempo === undefined) continue;
+
       const segmentDurationTicks = nextTick - currTick;
       const timePerTick = 1 / currTempo;
 
