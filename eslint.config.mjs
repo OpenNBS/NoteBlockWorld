@@ -64,6 +64,7 @@ export default defineConfig(
           varsIgnorePattern: '^_',
           args: 'after-used',
           argsIgnorePattern: '^_',
+          caughtErrors: 'none', // Allow unused error variables in catch blocks
         },
       ],
       'lines-between-class-members': [
@@ -97,6 +98,14 @@ export default defineConfig(
       ],
       'import/newline-after-import': 'warn',
       'import/no-duplicates': 'warn',
+    },
+  },
+
+  // Browser-specific configuration for public files
+  {
+    files: ['**/public/**/*.{js,jsx,mjs,cjs}'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.es2021 },
     },
   },
 

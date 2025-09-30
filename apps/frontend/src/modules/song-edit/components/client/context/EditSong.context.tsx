@@ -10,7 +10,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import toaster from 'react-hot-toast';
-import { undefined } from 'zod';
+import { undefined as zodUndefined } from 'zod';
 
 import type { UploadSongDto } from '@nbw/database';
 import { parseSongFromBuffer } from '@nbw/song';
@@ -144,7 +144,7 @@ export const EditSongProvider = ({
       customInstruments: formMethods.getValues().customInstruments,
       license: formMethods.getValues().license as UploadSongDto['license'],
       category: formMethods.getValues().category as UploadSongDto['category'],
-      file: undefined,
+      file: zodUndefined,
     };
 
     // TODO: this comparison is not needed. Use isDirty field from react-hook-form
