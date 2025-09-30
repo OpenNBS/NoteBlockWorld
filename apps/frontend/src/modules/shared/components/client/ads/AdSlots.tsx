@@ -18,13 +18,10 @@ const HideAdButton = ({
     <button
       className='h-6 w-3'
       onClick={() => {
-        (setIsHidden(true),
-          setTimeout(
-            () => {
-              setIsHidden(false);
-            },
-            1000 * 60 * 5,
-          )); // Reappers after 5 minutes
+        setIsHidden(true);
+        setTimeout(() => {
+          setIsHidden(false);
+        }, 1000 * 60 * 5); // Reappears after 5 minutes
       }}
     >
       <FontAwesomeIcon
@@ -62,7 +59,7 @@ const AdTemplate = ({
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch (e) {
-        console.error(e);
+        // Silently handle ad loading errors
       }
     }
   }, []);
