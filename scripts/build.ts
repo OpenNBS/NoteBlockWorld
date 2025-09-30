@@ -3,8 +3,9 @@ import { $ } from 'bun';
 // This is a list of how the packages can be built in order
 // the sub array is for packages that can be built in parallel
 const packages: (string | string[])[] = [
+  '@nbw/config',
+  '@nbw/sounds',
   '@nbw/database', // Build database first to ensure types are available
-  ['@nbw/config', '@nbw/sounds'],
   '@nbw/song',
   '@nbw/thumbnail',
 ];
