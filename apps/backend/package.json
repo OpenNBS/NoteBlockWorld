@@ -60,7 +60,8 @@
     "@nbw/database": "workspace:*",
     "@nbw/song": "workspace:*",
     "@nbw/thumbnail": "workspace:*",
-    "@nbw/sounds": "workspace:*"
+    "@nbw/sounds": "workspace:*",
+    "@nbw/config": "workspace:*"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.3.0",
