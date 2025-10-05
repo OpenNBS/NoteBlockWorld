@@ -59,7 +59,7 @@ const AdTemplate = ({
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch (e) {
-        // Silently handle ad loading errors
+        console.error(e);
       }
     }
   }, []);
