@@ -34,29 +34,3 @@ jobs:
 
       - name: Run linter
         run: bun run lint
-
-      - name: Check for changes
-        id: verify-changed-files
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit linter changes
-        if: steps.verify-changed-files.outputs.changed == 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          # Ensure we're on the correct branch
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BRANCH_NAME="${{ github.head_ref }}"
-            git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
-          else
-            BRANCH_NAME="${{ github.ref_name }}"
-            git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
-          fi
-          git add .
-          git commit -m "🔧 Auto-fix: ESLint formatting and fixes"
-          git push origin $BRANCH_NAME
