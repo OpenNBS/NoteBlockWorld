@@ -1,5 +1,6 @@
-import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/database';
 import { Metadata } from 'next';
+
+import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import { HomePageProvider } from '@web/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/modules/browse/components/HomePageComponent';
