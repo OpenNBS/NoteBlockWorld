@@ -1,16 +1,3 @@
-import { BROWSER_SONGS, TIMESPANS } from '@nbw/config';
-import {
-  FeaturedSongsDto,
-  type User as UserDocument,
-  PageQueryDTO,
-  type Song as SongEntity,
-  SongPageDto,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-  type SongWithUser,
-} from '@nbw/database';
 import {
   HttpException,
   HttpStatus,
@@ -21,6 +8,20 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { BROWSER_SONGS, TIMESPANS } from '@nbw/config';
+import {
+  FeaturedSongsDto,
+  UserDocument,
+  PageQueryDTO,
+  Song as SongEntity,
+  SongPageDto,
+  SongPreviewDto,
+  SongViewDto,
+  UploadSongDto,
+  UploadSongResponseDto,
+  type SongWithUser,
+  TimespanType,
+} from '@nbw/database';
 import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';

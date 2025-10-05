@@ -1,9 +1,10 @@
 import { faFile, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
+
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 
 import { useSongProvider } from './context/Song.context';
 

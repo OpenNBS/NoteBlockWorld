@@ -2,9 +2,9 @@
 
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UPLOAD_CONSTANTS } from '@nbw/config';
 import Markdown from 'react-markdown';
 
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import {
   Tooltip,
   TooltipContent,

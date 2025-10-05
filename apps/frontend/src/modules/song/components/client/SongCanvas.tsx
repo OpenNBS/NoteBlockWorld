@@ -1,8 +1,8 @@
 'use client';
 
-import { SongViewDtoType } from '@nbw/database';
 import { useEffect, useRef } from 'react';
 
+import { SongViewDtoType } from '@nbw/database';
 import axios from '@web/lib/axios';
 
 export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {

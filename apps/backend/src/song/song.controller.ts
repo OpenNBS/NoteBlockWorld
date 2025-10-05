@@ -1,14 +1,3 @@
-import { UPLOAD_CONSTANTS } from '@nbw/config';
-import {
-  PageDto,
-  UserDocument,
-  PageQueryDTO,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-  FeaturedSongsDto,
-} from '@nbw/database';
 import type { RawBodyRequest } from '@nestjs/common';
 import {
   BadRequestException,
@@ -44,6 +33,16 @@ import {
 } from '@nestjs/swagger';
 import type { Response } from 'express';
 
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+import {
+  PageQueryDTO,
+  SongPreviewDto,
+  SongViewDto,
+  UploadSongDto,
+  UploadSongResponseDto,
+  PageDto,
+} from '@nbw/database';
+import type { FeaturedSongsDto, UserDocument } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 

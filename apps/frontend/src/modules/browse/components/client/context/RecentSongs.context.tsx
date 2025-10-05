@@ -1,6 +1,5 @@
 'use client';
 
-import { SongPreviewDtoType } from '@nbw/database';
 import {
   createContext,
   useCallback,
@@ -9,6 +8,7 @@ import {
   useState,
 } from 'react';
 
+import { SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 type RecentSongsContextType = {

@@ -1,8 +1,8 @@
-import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { NoteQuadTree } from '@nbw/song';
 import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { NoteQuadTree } from '@nbw/song';
 import { cn } from '@web/lib/tailwind.utils';
 import {
   Tooltip,

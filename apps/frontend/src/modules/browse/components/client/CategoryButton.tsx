@@ -1,7 +1,6 @@
 'use client';
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { CategoryType } from '@nbw/database';
-
 import {
   Carousel,
   CarouselContent,

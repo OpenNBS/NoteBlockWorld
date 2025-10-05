@@ -1,27 +1,21 @@
 {
-    "compilerOptions": {
-        // Base strict settings
-        "strict": true,
-        "skipLibCheck": true,
-        "noFallthroughCasesInSwitch": true,
-        "forceConsistentCasingInFileNames": true,
-        // Modern JavaScript features
-        "target": "ESNext",
-        "lib": [
-            "ESNext"
-        ],
-        "allowJs": true,
-        "moduleDetection": "force",
-        // Build performance
-        "incremental": true,
-        // Decorator support for backend compatibility
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "**/*.spec.ts",
-        "**/*.test.ts"
-    ]
+  "compilerOptions": {
+    "outDir": "./dist",
+    // Base strict settings
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    // Modern JavaScript features
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "allowJs": true,
+    "moduleDetection": "force",
+    // Build performance
+    "incremental": true,
+    // Decorator support for backend compatibility
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
 }
