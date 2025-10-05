@@ -1,3 +1,13 @@
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { BROWSER_SONGS } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
 import {
@@ -10,16 +20,6 @@ import {
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
@@ -73,9 +73,8 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
-      populatedSong,
-    );
+    const webhookMessageId =
+      await this.songWebhookService.syncSongWebhook(populatedSong);
 
     songDocument.webhookMessageId = webhookMessageId;
 
@@ -171,9 +170,8 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
-      populatedSong,
-    );
+    const webhookMessageId =
+      await this.songWebhookService.syncSongWebhook(populatedSong);
 
     foundSong.webhookMessageId = webhookMessageId;
 
@@ -420,13 +418,16 @@ export class SongService {
     ])) as unknown as { _id: string; count: number }[];
 
     // Return object with category names as keys and counts as values
-    return categories.reduce((acc, category) => {
-      if (category._id) {
-        acc[category._id] = category.count;
-      }
+    return categories.reduce(
+      (acc, category) => {
+        if (category._id) {
+          acc[category._id] = category.count;
+        }
 
-      return acc;
-    }, {} as Record<string, number>);
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 
   public async getSongsByCategory(

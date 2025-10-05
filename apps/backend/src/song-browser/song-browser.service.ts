@@ -1,3 +1,5 @@
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+
 import { BROWSER_SONGS } from '@nbw/config';
 import {
   FeaturedSongsDto,
@@ -6,8 +8,6 @@ import {
   SongWithUser,
   TimespanType,
 } from '@nbw/database';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-
 import { SongService } from '@server/song/song.service';
 
 @Injectable()
@@ -50,9 +50,8 @@ export class SongBrowserService {
       ) {
         const missing = BROWSER_SONGS.paddedFeaturedPageSize - songPage.length;
 
-        const additionalSongs = await this.songService.getSongsBeforeTimespan(
-          time,
-        );
+        const additionalSongs =
+          await this.songService.getSongsBeforeTimespan(time);
 
         songPage.push(...additionalSongs.slice(0, missing));
       }

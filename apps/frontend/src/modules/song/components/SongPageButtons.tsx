@@ -11,22 +11,23 @@ import {
   faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SongViewDtoType } from '@nbw/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
+import { SongViewDtoType } from '@nbw/database';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
-import DownloadSongModal from './client/DownloadSongModal';
-import ShareModal from './client/ShareModal';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '../../shared/components/tooltip';
 import { downloadSongFile, openSongInNBS } from '../util/downloadSong';
+
+import DownloadSongModal from './client/DownloadSongModal';
+import ShareModal from './client/ShareModal';
 
 const VisibilityBadge = () => {
   return (

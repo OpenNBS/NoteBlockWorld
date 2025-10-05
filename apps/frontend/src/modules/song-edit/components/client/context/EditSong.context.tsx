@@ -1,9 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { UploadSongDtoType } from '@nbw/database';
-import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song/src/types';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
@@ -13,8 +10,11 @@ import {
   useForm,
 } from 'react-hook-form';
 import toaster from 'react-hot-toast';
-import { undefined } from 'zod';
+import { undefined as zodUndefined } from 'zod';
 
+import type { UploadSongDtoType } from '@nbw/database';
+import { parseSongFromBuffer } from '@nbw/song';
+import type { SongFileType } from '@nbw/song/src/types';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
@@ -147,7 +147,7 @@ export const EditSongProvider = ({
       license: formMethods.getValues().license as UploadSongDtoType['license'],
       category: formMethods.getValues()
         .category as UploadSongDtoType['category'],
-      file: undefined,
+      file: zodUndefined,
     };
 
     // TODO: this comparison is not needed. Use isDirty field from react-hook-form

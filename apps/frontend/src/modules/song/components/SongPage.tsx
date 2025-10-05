@@ -1,8 +1,14 @@
-import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
+import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
 import axios from '@web/lib/axios';
+
+import SongCard from '../../browse/components/SongCard';
+import SongCardGroup from '../../browse/components/SongCardGroup';
+import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
+import { ErrorBox } from '../../shared/components/client/ErrorBox';
+import { formatTimeAgo } from '../../shared/util/format';
 
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
@@ -13,11 +19,6 @@ import {
   UploaderBadge,
   VisibilityBadge,
 } from './SongPageButtons';
-import SongCard from '../../browse/components/SongCard';
-import SongCardGroup from '../../browse/components/SongCardGroup';
-import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
-import { ErrorBox } from '../../shared/components/client/ErrorBox';
-import { formatTimeAgo } from '../../shared/util/format';
 
 export async function SongPage({ id }: { id: string }) {
   let song: SongViewDtoType;

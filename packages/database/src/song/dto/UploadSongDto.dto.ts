@@ -1,4 +1,3 @@
-import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -12,6 +11,7 @@ import {
 } from 'class-validator';
 
 import type { SongDocument } from '@database/song/entity/song.entity';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
