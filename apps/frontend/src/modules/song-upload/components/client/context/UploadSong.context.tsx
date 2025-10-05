@@ -14,11 +14,11 @@ import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer, SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
-
 import {
   UploadSongForm,
   uploadSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
+} from '@web/modules/song/components/client/SongForm.zod';
+
 import UploadCompleteModal from '../UploadCompleteModal';
 
 export type useUploadSongProviderType = {

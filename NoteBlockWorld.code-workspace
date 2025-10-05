@@ -2,36 +2,36 @@
   "folders": [
     {
       "path": ".",
-      "name": "Root",
+      "name": "Root"
     },
     {
       "path": "./apps/backend",
-      "name": "Backend",
+      "name": "Backend"
     },
     {
       "path": "./apps/frontend",
-      "name": "Frontend",
+      "name": "Frontend"
     },
     {
       "path": "./packages/configs",
-      "name": "configs",
+      "name": "configs"
     },
     {
       "path": "./packages/database",
-      "name": "database",
+      "name": "database"
     },
     {
       "path": "./packages/song",
-      "name": "song",
+      "name": "song"
     },
     {
       "path": "./packages/sounds",
-      "name": "sounds",
+      "name": "sounds"
     },
     {
       "path": "./packages/thumbnail",
-      "name": "thumbnail",
-    },
+      "name": "thumbnail"
+    }
   ],
   "settings": {
     "window.title": "${dirty}${rootName}${separator}${profileName}${separator}${appName}",
@@ -41,12 +41,12 @@
     "eslint.format.enable": true,
     "mdx.server.enable": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
+      "source.fixAll": "explicit"
     },
     "search.exclude": {
       "**/.git": true,
       "**/node_modules": true,
-      "**/dist": true,
+      "**/dist": true
     },
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#fac977",
@@ -65,8 +65,8 @@
       "titleBar.activeBackground": "#f8b646",
       "titleBar.activeForeground": "#15202b",
       "titleBar.inactiveBackground": "#f8b64699",
-      "titleBar.inactiveForeground": "#15202b99",
+      "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#f8b646",
-  },
+    "peacock.color": "#f8b646"
+  }
 }

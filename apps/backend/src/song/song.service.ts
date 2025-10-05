@@ -73,8 +73,9 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId =
-      await this.songWebhookService.syncSongWebhook(populatedSong);
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+      populatedSong,
+    );
 
     songDocument.webhookMessageId = webhookMessageId;
 
@@ -170,8 +171,9 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId =
-      await this.songWebhookService.syncSongWebhook(populatedSong);
+    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+      populatedSong,
+    );
 
     foundSong.webhookMessageId = webhookMessageId;
 
@@ -418,16 +420,13 @@ export class SongService {
     ])) as unknown as { _id: string; count: number }[];
 
     // Return object with category names as keys and counts as values
-    return categories.reduce(
-      (acc, category) => {
-        if (category._id) {
-          acc[category._id] = category.count;
-        }
+    return categories.reduce((acc, category) => {
+      if (category._id) {
+        acc[category._id] = category.count;
+      }
 
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+      return acc;
+    }, {} as Record<string, number>);
   }
 
   public async getSongsByCategory(

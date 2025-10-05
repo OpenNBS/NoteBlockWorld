@@ -21,6 +21,7 @@ Here's what we've been up to since the last update:
   - The idea is to host guest writers from the community once in a while, so stay tuned!
 - Added the _About_ page! We're proud of our history and want to share it with you. We also want to acknowledge all the great people that have made this website possible, and everyone who's helped us along the way. Make sure to drop by and read about how Note Block World came to be!
 - The navigation bar at the top has been redesigned:
+
   - Now features _Songs_, _Help_, _Blog_, and _About_ tabs.
   - The _Upload_ icon is no longer shown on mobile devices.
   - The external links (_GitHub_, _Changelog_, and _Donate_) have been moved from inside your user menu into a 'Settings' menu, so they're now accessible even if you aren't logged in.
@@ -31,6 +32,7 @@ Here's what we've been up to since the last update:
 ### Bugfixes and improvements
 
 - Added more mob sounds to the available custom instruments:
+
   - Polar Bear
   - Phantom
   - Evoker

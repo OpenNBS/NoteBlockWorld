@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
+    "@nbw/database": "workspace:*",
     "@next/mdx": "^14.2.6",
     "@next/third-parties": "^14.2.5",
     "@radix-ui/react-dialog": "^1.0.5",

@@ -64,6 +64,7 @@ Once you've made a selection, you can:
 Selecting notes also lets you change them in other ways, all of which are available in the context menu that appears when you right-click the workspace, or by using the keyboard shortcuts below:
 
 - **Transpose**: You can transpose the selected notes up or down by a certain number of semitones. This is useful for changing the key of a section of the song, or for creating harmonies.
+
   - **Transpose up** (`Ctrl+R`): Transpose the selected notes up by one semitone.
   - **Transpose down** (`Ctrl+F`): Transpose the selected notes down by one semitone.
   - **Transpose one octave up**: Transpose the selected notes up by one octave (12 semitones).

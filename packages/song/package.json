@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/unidecode": "^1.0.0",
     "typescript": "^5"
   },
   "dependencies": {
