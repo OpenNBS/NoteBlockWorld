@@ -494,15 +494,21 @@ export class SongService {
 
   public async getRandomSongs(
     count: number,
-    category: string,
+    category?: string,
   ): Promise<SongPreviewDto[]> {
+    const matchStage: Record<string, string> = {
+      visibility: 'public',
+    };
+
+    // Only add category filter if category is provided and not empty
+    if (category && category.trim() !== '') {
+      matchStage.category = category;
+    }
+
     const songs = (await this.songModel
       .aggregate([
         {
-          $match: {
-            visibility: 'public',
-            category: category,
-          },
+          $match: matchStage,
         },
         {
           $sample: {

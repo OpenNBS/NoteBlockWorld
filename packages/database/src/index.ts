@@ -4,6 +4,7 @@ export * from './common/dto/types';
 
 export * from './song/dto/CustomInstrumentData.dto';
 export * from './song/dto/FeaturedSongsDto.dto';
+export * from './song/dto/SongListQuery.dto';
 export * from './song/dto/SongPage.dto';
 export * from './song/dto/SongPreview.dto';
 export * from './song/dto/SongStats';

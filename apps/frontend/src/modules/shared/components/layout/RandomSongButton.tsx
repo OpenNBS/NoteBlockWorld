@@ -4,7 +4,7 @@ import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
 
-import { SongPreviewDto } from '@nbw/database';
+import { PageDto, SongPreviewDto } from '@nbw/database';
 import axios from '@web/lib/axios';
 
 import { MusicalNote } from './MusicalNote';
@@ -16,16 +16,13 @@ export const RandomSongButton = () => {
     let songId;
 
     try {
-      const response = await axios.get<SongPreviewDto[]>(
-        '/song-browser/random',
-        {
-          params: {
-            count: 1,
-          },
+      const response = await axios.get<PageDto<SongPreviewDto>>('/song', {
+        params: {
+          sort: 'random',
+          limit: 1,
         },
-      );
-
-      songId = response.data[0].publicId;
+      });
+      songId = response.data.content[0].publicId;
     } catch {
       console.error('Failed to retrieve a random song');
       return;

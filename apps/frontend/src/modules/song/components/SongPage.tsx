@@ -1,15 +1,20 @@
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
-import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
+import type {
+  PageDto,
+  SongPreviewDtoType,
+  SongViewDtoType,
+} from '@nbw/database';
 import axios from '@web/lib/axios';
 
-import SongCard from '../../browse/components/SongCard';
-import SongCardGroup from '../../browse/components/SongCardGroup';
-import { MultiplexAdSlot } from '../../shared/components/client/ads/AdSlots';
-import { ErrorBox } from '../../shared/components/client/ErrorBox';
-import { formatTimeAgo } from '../../shared/util/format';
+import SongCard from '@web/modules/browse/components/SongCard';
+import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
+import { MultiplexAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
 
+import { formatTimeAgo } from '@web/modules/shared/util/format';
+
+import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
 import {
@@ -46,17 +51,15 @@ export async function SongPage({ id }: { id: string }) {
   let suggestions: SongPreviewDtoType[] = [];
 
   try {
-    const response = await axios.get<SongPreviewDtoType[]>(
-      `/song-browser/random`,
-      {
-        params: {
-          count: 4,
-          category: song.category,
-        },
+    const response = await axios.get<PageDto<SongPreviewDtoType>>(`/song`, {
+      params: {
+        sort: 'random',
+        limit: 4,
+        category: song.category,
       },
-    );
+    });
 
-    suggestions = await response.data;
+    suggestions = await response.data.content;
   } catch {
     console.error('Failed to retrieve suggested songs');
   }

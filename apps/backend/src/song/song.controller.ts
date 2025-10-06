@@ -7,6 +7,7 @@ import {
   Get,
   Headers,
   HttpStatus,
+  Logger,
   Param,
   Patch,
   Post,
@@ -26,8 +27,6 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
-  ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -41,8 +40,11 @@ import {
   UploadSongDto,
   UploadSongResponseDto,
   PageDto,
+  SongListQueryDTO,
+  SongSortType,
+  FeaturedSongsDto,
 } from '@nbw/database';
-import type { FeaturedSongsDto, UserDocument } from '@nbw/database';
+import type { UserDocument } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
@@ -51,6 +53,7 @@ import { SongService } from './song.service';
 @Controller('song')
 @ApiTags('song')
 export class SongController {
+  private logger = new Logger(SongController.name);
   static multerConfig: MulterOptions = {
     limits: { fileSize: UPLOAD_CONSTANTS.file.maxSize },
     fileFilter: (req, file, cb) => {
@@ -67,153 +70,170 @@ export class SongController {
 
   @Get('/')
   @ApiOperation({
-    summary: 'Get songs with various filtering and browsing options',
+    summary: 'Get songs with filtering and sorting options',
     description: `
-      Retrieves songs based on the provided query parameters. Supports multiple modes:
-      
-      **Default mode** (no 'q' parameter): Returns paginated songs with sorting/filtering
-      
-      **Special query modes** (using 'q' parameter):
-      - \`featured\`: Get recent popular songs with pagination
-      - \`recent\`: Get recently uploaded songs with pagination  
-      - \`categories\`: 
-        - Without 'id': Returns a record of available categories and their song counts
-        - With 'id': Returns songs from the specified category with pagination
-      - \`random\`: Returns random songs (requires 'count' parameter, 1-10 songs, optionally filtered by 'category')
+      Retrieves songs based on the provided query parameters.
       
       **Query Parameters:**
-      - Standard pagination/sorting via PageQueryDTO (page, limit, sort, order, timespan)
-      - \`q\`: Special query mode ('featured', 'recent', 'categories', 'random')
-      - \`id\`: Category ID (used with q=categories to get songs from specific category)
-      - \`count\`: Number of random songs to return (1-10, used with q=random)
-      - \`category\`: Category filter for random songs (used with q=random)
+      - \`q\`: Search string to filter songs by title or description (optional)
+      - \`sort\`: Sort songs by criteria (recent, random, play-count, title, duration, note-count)
+      - \`order\`: Sort order (asc, desc) - only applies if sort is not random
+      - \`category\`: Filter by category - if left empty, returns songs in any category
+      - \`uploader\`: Filter by uploader username - if provided, will only return songs uploaded by that user
+      - \`page\`: Page number (default: 1)
+      - \`limit\`: Number of items to return per page (default: 10)
       
-      **Return Types:**
-      - SongPreviewDto[]: Array of song previews (most cases)
-      - Record<string, number>: Category name to count mapping (when q=categories without id)
+      **Return Type:**
+      - PageDto<SongPreviewDto>: Paginated list of song previews
     `,
-  })
-  @ApiQuery({
-    name: 'q',
-    required: false,
-    enum: ['featured', 'recent', 'categories', 'random'],
-    description:
-      'Special query mode. If not provided, returns standard paginated song list.',
-    example: 'recent',
-  })
-  @ApiParam({
-    name: 'id',
-    required: false,
-    type: 'string',
-    description:
-      'Category ID. Only used when q=categories to get songs from a specific category.',
-    example: 'pop',
-  })
-  @ApiQuery({
-    name: 'count',
-    required: false,
-    type: 'string',
-    description:
-      'Number of random songs to return (1-10). Only used when q=random.',
-    example: '5',
-  })
-  @ApiQuery({
-    name: 'category',
-    required: false,
-    type: 'string',
-    description: 'Category filter for random songs. Only used when q=random.',
-    example: 'electronic',
   })
   @ApiResponse({
     status: 200,
-    description:
-      'Success. Returns either an array of song previews or category counts.',
-    schema: {
-      oneOf: [
-        {
-          type: 'array',
-          items: { $ref: '#/components/schemas/SongPreviewDto' },
-          description:
-            'Array of song previews (default behavior and most query modes)',
-        },
-        {
-          type: 'object',
-          additionalProperties: { type: 'number' },
-          description:
-            'Category name to song count mapping (only when q=categories without id)',
-          example: { pop: 42, rock: 38, electronic: 15 },
-        },
-      ],
-    },
+    description: 'Success. Returns paginated list of song previews.',
+    type: PageDto<SongPreviewDto>,
   })
   @ApiResponse({
     status: 400,
-    description:
-      'Bad Request. Invalid query parameters (e.g., invalid count for random query).',
+    description: 'Bad Request. Invalid query parameters.',
   })
   public async getSongList(
-    @Query() query: PageQueryDTO,
-    @Query('q') q?: 'featured' | 'recent' | 'categories' | 'random',
-    @Param('id') id?: string,
-    @Query('category') category?: string,
-  ): Promise<
-    PageDto<SongPreviewDto> | Record<string, number> | FeaturedSongsDto
-  > {
-    if (q) {
-      switch (q) {
-        case 'featured':
-          return await this.songService.getFeaturedSongs();
-        case 'recent':
-          return new PageDto<SongPreviewDto>({
-            content: await this.songService.getRecentSongs(
-              query.page,
-              query.limit,
-            ),
-            page: query.page,
-            limit: query.limit,
-            total: 0,
-          });
-        case 'categories':
-          if (id) {
-            return new PageDto<SongPreviewDto>({
-              content: await this.songService.getSongsByCategory(
-                category,
-                query.page,
-                query.limit,
-              ),
-              page: query.page,
-              limit: query.limit,
-              total: 0,
-            });
-          }
-          return await this.songService.getCategories();
-        case 'random': {
-          if (query.limit && (query.limit < 1 || query.limit > 10)) {
-            throw new BadRequestException('Invalid query parameters');
-          }
-          const data = await this.songService.getRandomSongs(
-            query.limit ?? 1,
-            category,
-          );
-          return new PageDto<SongPreviewDto>({
-            content: data,
-            page: query.page,
-            limit: query.limit,
-            total: data.length,
-          });
-        }
-        default:
-          throw new BadRequestException('Invalid query parameters');
-      }
+    @Query() query: SongListQueryDTO,
+  ): Promise<PageDto<SongPreviewDto>> {
+    // Handle search query
+    if (query.q) {
+      const sortFieldMap = new Map([
+        [SongSortType.RECENT, 'createdAt'],
+        [SongSortType.PLAY_COUNT, 'playCount'],
+        [SongSortType.TITLE, 'title'],
+        [SongSortType.DURATION, 'duration'],
+        [SongSortType.NOTE_COUNT, 'noteCount'],
+      ]);
+
+      const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+
+      const pageQuery = new PageQueryDTO({
+        page: query.page,
+        limit: query.limit,
+        sort: sortField,
+        order: query.order === 'desc' ? false : true,
+      });
+      const data = await this.songService.searchSongs(pageQuery, query.q);
+      return new PageDto<SongPreviewDto>({
+        content: data,
+        page: query.page,
+        limit: query.limit,
+        total: data.length,
+      });
     }
 
-    const data = await this.songService.getSongByPage(query);
+    // Handle random sort
+    if (query.sort === SongSortType.RANDOM) {
+      if (query.limit && (query.limit < 1 || query.limit > 10)) {
+        throw new BadRequestException(
+          'Limit must be between 1 and 10 for random sort',
+        );
+      }
+      const data = await this.songService.getRandomSongs(
+        query.limit ?? 1,
+        query.category,
+      );
+
+      return new PageDto<SongPreviewDto>({
+        content: data,
+        page: query.page,
+        limit: query.limit,
+        total: data.length,
+      });
+    }
+
+    // Handle recent sort
+    if (query.sort === SongSortType.RECENT) {
+      const data = await this.songService.getRecentSongs(
+        query.page,
+        query.limit,
+      );
+      return new PageDto<SongPreviewDto>({
+        content: data,
+        page: query.page,
+        limit: query.limit,
+        total: data.length,
+      });
+    }
+
+    // Handle category filter
+    if (query.category) {
+      const data = await this.songService.getSongsByCategory(
+        query.category,
+        query.page,
+        query.limit,
+      );
+      return new PageDto<SongPreviewDto>({
+        content: data,
+        page: query.page,
+        limit: query.limit,
+        total: data.length,
+      });
+    }
+
+    // Default: get songs with standard pagination
+    const sortFieldMap = new Map([
+      [SongSortType.PLAY_COUNT, 'playCount'],
+      [SongSortType.TITLE, 'title'],
+      [SongSortType.DURATION, 'duration'],
+      [SongSortType.NOTE_COUNT, 'noteCount'],
+    ]);
+
+    const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+
+    const pageQuery = new PageQueryDTO({
+      page: query.page,
+      limit: query.limit,
+      sort: sortField,
+      order: query.order === 'desc' ? false : true,
+    });
+    const data = await this.songService.getSongByPage(pageQuery);
     return new PageDto<SongPreviewDto>({
       content: data,
       page: query.page,
       limit: query.limit,
       total: data.length,
     });
+  }
+
+  @Get('/featured')
+  @ApiOperation({
+    summary: 'Get featured songs',
+    description: `
+      Returns featured songs with specific logic for showcasing popular/recent content.
+      This endpoint has very specific business logic and is separate from the general song listing.
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Success. Returns featured songs data.',
+    type: FeaturedSongsDto,
+  })
+  public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
+    return await this.songService.getFeaturedSongs();
+  }
+
+  @Get('/categories')
+  @ApiOperation({
+    summary: 'Get available categories with song counts',
+    description:
+      'Returns a record of available categories and their song counts.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Success. Returns category name to count mapping.',
+    schema: {
+      type: 'object',
+      additionalProperties: { type: 'number' },
+      example: { pop: 42, rock: 38, electronic: 15 },
+    },
+  })
+  public async getCategories(): Promise<Record<string, number>> {
+    return await this.songService.getCategories();
   }
 
   @Get('/search')

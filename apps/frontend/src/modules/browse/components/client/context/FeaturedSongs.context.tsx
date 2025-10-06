@@ -27,7 +27,6 @@ export function FeaturedSongsProvider({
 }) {
   // Featured songs
   const [featuredSongs] = useState<FeaturedSongsDto>(initialFeaturedSongs);
-
   const [featuredSongsPage, setFeaturedSongsPage] = useState<SongPreviewDto[]>(
     initialFeaturedSongs.week,
   );

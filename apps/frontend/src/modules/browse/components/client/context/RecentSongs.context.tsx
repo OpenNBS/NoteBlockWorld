@@ -55,15 +55,20 @@ export function RecentSongsProvider({
       try {
         const fetchCount = pageSize - adCount;
 
+        const params: Record<string, any> = {
+          page,
+          limit: fetchCount, // TODO: fix constants
+          sort: 'recent',
+          order: 'desc',
+        };
+
+        if (selectedCategory) {
+          params.category = selectedCategory;
+        }
+
         const response = await axiosInstance.get<SongPreviewDtoType[]>(
           endpoint,
-          {
-            params: {
-              page,
-              limit: fetchCount, // TODO: fix constants
-              order: false,
-            },
-          },
+          { params },
         );
 
         const newSongs: Array<SongPreviewDtoType | undefined> = response.data;
@@ -91,13 +96,13 @@ export function RecentSongsProvider({
         setLoading(false);
       }
     },
-    [page, endpoint],
+    [page, endpoint, selectedCategory],
   );
 
   const fetchCategories = useCallback(async function () {
     try {
       const response = await axiosInstance.get<Record<string, number>>(
-        '/song-browser/categories',
+        '/song/categories',
       );
 
       return response.data;
@@ -117,10 +122,7 @@ export function RecentSongsProvider({
     setRecentSongs(Array(12).fill(null));
     setHasMore(true);
 
-    const newEndpoint =
-      selectedCategory === ''
-        ? '/song-browser/recent'
-        : `/song-browser/categories/${selectedCategory}`;
+    const newEndpoint = selectedCategory === '' ? '/song' : '/song';
 
     setEndpoint(newEndpoint);
   }, [selectedCategory]);
