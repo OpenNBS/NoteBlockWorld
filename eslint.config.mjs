@@ -4,6 +4,7 @@ import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
+import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -34,6 +35,7 @@ export default defineConfig(
     },
     plugins: {
       import: importPlugin,
+      'unused-imports': unusedImports,
     },
     settings: {
       'import/resolver': {
@@ -57,16 +59,7 @@ export default defineConfig(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'none', // Allow unused error variables in catch blocks
-        },
-      ],
+      '@typescript-eslint/no-unused-vars': 'off', // Handled by unused-imports plugin
       'lines-between-class-members': [
         'warn',
         'always',
@@ -98,6 +91,17 @@ export default defineConfig(
       ],
       'import/newline-after-import': 'warn',
       'import/no-duplicates': 'warn',
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'none', // Allow unused error variables in catch blocks
+        },
+      ],
     },
   },
 
