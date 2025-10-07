@@ -13,7 +13,7 @@ import { checkLogin, getUserData } from '@web/modules/auth/features/auth.utils';
 import { BlockTab } from './BlockTab';
 import { NavLinks } from './NavLinks';
 import { RandomSongButton } from './RandomSongButton';
-import { SearchButton } from './SearchButton';
+import { SearchBar } from './SearchBar';
 
 export async function Header() {
   let isLogged;
@@ -48,6 +48,11 @@ export async function Header() {
               />
             </Link>
           </picture>
+        </div>
+
+        {/* Search bar */}
+        <div className='flex-1 max-w-lg'>
+          <SearchBar />
         </div>
 
         {/* Icon */}
@@ -94,7 +99,6 @@ export async function Header() {
             label='About'
             className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
           />
-          <SearchButton />
           <RandomSongButton />
         </div>
 

@@ -13,7 +13,7 @@ import {
 import { cn } from '@web/lib/tailwind.utils';
 import { MusicalNote } from './MusicalNote';
 
-export function SearchButton() {
+export function SearchBar() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
