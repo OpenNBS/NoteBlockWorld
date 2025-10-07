@@ -11,7 +11,7 @@ export function SearchBar() {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push(`/search-song?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
