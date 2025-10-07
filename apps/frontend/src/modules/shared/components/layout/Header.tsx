@@ -34,27 +34,6 @@ export async function Header() {
     <header className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
       {/* Navbar */}
       <nav className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-screen-xl px-6 sm:px-10'>
-        {/* Logo */}
-        <div className='hidden lg:block flex-0 text-lg text-nowrap'>
-          <picture className='w-full h-auto'>
-            <Link href='/'>
-              <Image
-                unoptimized
-                src='/nbw-logo-flat.png'
-                alt='Note Block World logo'
-                className=''
-                width={300}
-                height={64}
-              />
-            </Link>
-          </picture>
-        </div>
-
-        {/* Search bar */}
-        <div className='flex-1 max-w-lg'>
-          <SearchBar />
-        </div>
-
         {/* Icon */}
         <div className='flex-0 flex justify-start lg:justify-center min-w-fit'>
           <Link href='/'>
@@ -71,6 +50,11 @@ export async function Header() {
               height={40}
             />
           </Link>
+        </div>
+
+        {/* Search bar */}
+        <div className='flex-1 max-w-sm'>
+          <SearchBar />
         </div>
 
         {/* Info pages */}
