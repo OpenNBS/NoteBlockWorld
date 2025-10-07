@@ -31,7 +31,6 @@ export function SearchBar() {
         onKeyDown={handleKeyDown}
         placeholder='Search songs...'
         className='flex-1 px-3 py-2 bg-transparent border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 focus:border-transparent'
-        autoFocus
       />
       <button
         onClick={handleSearch}
