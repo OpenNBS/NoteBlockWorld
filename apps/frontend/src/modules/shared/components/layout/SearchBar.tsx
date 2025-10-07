@@ -23,20 +23,20 @@ export function SearchBar() {
   };
 
   return (
-    <div className='flex gap-2'>
+    <div className='flex'>
       <input
         type='text'
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder='Type your search...'
-        className='flex-1 px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent'
+        placeholder='Search songs...'
+        className='flex-1 px-3 py-2 bg-transparent border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 focus:border-transparent'
         autoFocus
       />
       <button
         onClick={handleSearch}
         disabled={!searchQuery.trim()}
-        className='px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed text-white rounded transition-colors duration-200 flex items-center gap-2'
+        className='px-4 py-2 pl-3 bg-zinc-700 hover:bg-zinc-600 text-white rounded-r-full transition-colors duration-200 flex items-center gap-2'
         aria-label='Search'
       >
         <FontAwesomeIcon icon={faMagnifyingGlass} />
