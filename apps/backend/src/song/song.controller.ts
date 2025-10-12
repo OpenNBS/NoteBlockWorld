@@ -30,6 +30,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FileService } from '@server/file/file.service';
+import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+import { TypesenseService } from '@server/typesense/typesense.service';
 import type { Response } from 'express';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
@@ -45,8 +48,6 @@ import {
   FeaturedSongsDto,
 } from '@nbw/database';
 import type { UserDocument } from '@nbw/database';
-import { FileService } from '@server/file/file.service';
-import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
 import { SongService } from './song.service';
 
@@ -66,6 +67,7 @@ export class SongController {
   constructor(
     public readonly songService: SongService,
     public readonly fileService: FileService,
+    public readonly typesenseService: TypesenseService,
   ) {}
 
   @Get('/')
@@ -99,25 +101,32 @@ export class SongController {
   public async getSongList(
     @Query() query: SongListQueryDTO,
   ): Promise<PageDto<SongPreviewDto>> {
-    // Handle search query
+    // Handle search query with Typesense
     if (query.q) {
       const sortFieldMap = new Map([
-        [SongSortType.RECENT, 'createdAt'],
-        [SongSortType.PLAY_COUNT, 'playCount'],
-        [SongSortType.TITLE, 'title'],
-        [SongSortType.DURATION, 'duration'],
-        [SongSortType.NOTE_COUNT, 'noteCount'],
+        [SongSortType.RECENT, 'createdAt:desc'],
+        [SongSortType.PLAY_COUNT, 'playCount:desc'],
+        [SongSortType.TITLE, 'title:asc'],
+        [SongSortType.DURATION, 'duration:desc'],
+        [SongSortType.NOTE_COUNT, 'noteCount:desc'],
       ]);
 
-      const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+      let sortBy = sortFieldMap.get(query.sort) ?? 'createdAt:desc';
 
-      const pageQuery = new PageQueryDTO({
+      // Override sort order if specified
+      if (query.order && query.sort !== SongSortType.RANDOM) {
+        const field =
+          sortFieldMap.get(query.sort)?.split(':')[0] ?? 'createdAt';
+        sortBy = `${field}:${query.order}`;
+      }
+
+      const data = await this.typesenseService.searchSongs(query.q, {
         page: query.page,
         limit: query.limit,
-        sort: sortField,
-        order: query.order === 'desc' ? false : true,
+        sortBy,
+        category: query.category,
       });
-      const data = await this.songService.searchSongs(pageQuery, query.q);
+
       return new PageDto<SongPreviewDto>({
         content: data,
         page: query.page,

@@ -20,6 +20,9 @@
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "bun test **/*.spec.ts"
   },
+  "dependencies": {
+    "tailwindcss": "^3.4.1"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "typescript": "^5"

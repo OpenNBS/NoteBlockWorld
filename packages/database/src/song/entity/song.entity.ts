@@ -1,8 +1,7 @@
+import { User } from '@database/user/entity/user.entity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import type { HydratedDocument } from 'mongoose';
 import { Schema as MongooseSchema, Types } from 'mongoose';
-
-import { User } from '@database/user/entity/user.entity';
 
 import { SongStats } from '../dto/SongStats';
 import type { SongViewUploader } from '../dto/SongView.dto';
@@ -93,6 +92,11 @@ export class Song {
 
   @Prop({ type: String, required: false })
   webhookMessageId?: string | null;
+
+  // SEARCH INDEXING
+
+  @Prop({ type: Boolean, required: false, default: false })
+  searchIndexed?: boolean;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);

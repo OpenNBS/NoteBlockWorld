@@ -93,6 +93,19 @@ export class EnvironmentVariables {
 
   @IsString()
   COOKIE_EXPIRES_IN: string;
+
+  // typesense
+  @IsString()
+  TYPESENSE_HOST: string;
+
+  @IsString()
+  TYPESENSE_PORT: string;
+
+  @IsString()
+  TYPESENSE_PROTOCOL: string;
+
+  @IsString()
+  TYPESENSE_API_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {
