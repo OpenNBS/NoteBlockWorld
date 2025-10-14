@@ -47,7 +47,7 @@ export const EventBanner = () => {
             mooncatcher
           </Link>
           , <Link href='https://www.youtube.com/@vladde'>vladde</Link> and{' '}
-          <Link href='https://www.youtube.com/@Xoliks97'>Xolixs</Link>! Read our{' '}
+          <Link href='https://www.youtube.com/@Xoliks97'>Xoliks</Link>! Read our{' '}
           <Link
             href='/blog/maestro'
             className='text-blue-300 hover:text-blue-200'
