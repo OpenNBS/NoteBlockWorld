@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",
-    "@nestjs/mongoose": "^10.1.0",
     "@nestjs/swagger": "^11.1.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",

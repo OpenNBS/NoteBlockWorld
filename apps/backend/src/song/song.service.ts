@@ -6,7 +6,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FileService } from '@server/file/file.service';
 import { Model } from 'mongoose';
 
 import { BROWSER_SONGS, TIMESPANS } from '@nbw/config';
@@ -23,6 +22,7 @@ import {
   type SongWithUser,
   TimespanType,
 } from '@nbw/database';
+import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
@@ -154,12 +154,6 @@ export class SongService {
     // if so, update and reupload them
     await this.songUploadService.processSongPatch(foundSong, body, user);
 
-    // Check if fields that affect search indexing have changed
-    const needsReindexing =
-      foundSong.title !== body.title ||
-      foundSong.originalAuthor !== body.originalAuthor ||
-      foundSong.visibility !== body.visibility;
-
     // Update song document
     foundSong.title = removeExtraSpaces(body.title);
     foundSong.originalAuthor = removeExtraSpaces(body.originalAuthor);
@@ -170,11 +164,6 @@ export class SongService {
     foundSong.license = body.license;
     foundSong.thumbnailData = body.thumbnailData;
     foundSong.customInstruments = body.customInstruments;
-
-    // Mark as needing reindexing if relevant fields changed
-    if (needsReindexing) {
-      foundSong.searchIndexed = false;
-    }
 
     // Update document's last update time
     foundSong.updatedAt = new Date();

@@ -59,34 +59,6 @@ services:
       mc policy set public minio/noteblockworld-thumbs
       '
 
-  typesense:
-    container_name: noteblockworld-typesense-dev
-    image: typesense/typesense:27.1
-    ports:
-      - '8108:8108'
-    environment:
-      - TYPESENSE_API_KEY=noteblockworld-typesense-api-key
-      - TYPESENSE_DATA_DIR=/data
-    volumes:
-      - typesense_data:/data
-    command: '--enable-cors'
-    # You can access Typesense at http://localhost:8108
-    # API Key: noteblockworld-typesense-api-key
-
-  typesense-dashboard:
-    container_name: noteblockworld-typesense-dashboard-dev
-    image: ghcr.io/bfritscher/typesense-dashboard:latest
-    ports:
-      - '8109:80'
-    environment:
-      - TYPESENSE_URL=http://typesense:8108
-      - TYPESENSE_API_KEY=noteblockworld-typesense-api-key
-    depends_on:
-      - typesense
-    # Access the Typesense Dashboard at http://localhost:8109
-    # This provides a web UI to browse collections, documents, and run searches
-
 volumes:
   mongodb_data:
   minio_data:
-  typesense_data:
