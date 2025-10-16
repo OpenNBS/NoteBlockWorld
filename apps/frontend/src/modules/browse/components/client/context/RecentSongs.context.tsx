@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { SongPreviewDtoType } from '@nbw/database';
+import { PageDto, SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 type RecentSongsContextType = {
@@ -43,7 +43,7 @@ export function RecentSongsProvider({
   const [hasMore, setHasMore] = useState(true);
   const [categories, setCategories] = useState<Record<string, number>>({});
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [endpoint, setEndpoint] = useState<string>('/song-browser/recent');
+  const [endpoint, setEndpoint] = useState<string>('/song');
 
   const adCount = 1;
   const pageSize = 12;
@@ -66,12 +66,13 @@ export function RecentSongsProvider({
           params.category = selectedCategory;
         }
 
-        const response = await axiosInstance.get<SongPreviewDtoType[]>(
+        const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
           endpoint,
           { params },
         );
 
-        const newSongs: Array<SongPreviewDtoType | undefined> = response.data;
+        const newSongs: Array<SongPreviewDtoType | undefined> =
+          response.data.content;
 
         for (let i = 0; i < adCount; i++) {
           const adPosition = Math.floor(Math.random() * newSongs.length) + 1;
@@ -80,10 +81,10 @@ export function RecentSongsProvider({
 
         setRecentSongs((prevSongs) => [
           ...prevSongs.filter((song) => song !== null),
-          ...response.data,
+          ...response.data.content,
         ]);
 
-        if (response.data.length < fetchCount) {
+        if (response.data.content.length < fetchCount) {
           setHasMore(false);
         }
       } catch (error) {

@@ -148,6 +148,21 @@ export class SongController {
 
     // Handle recent sort
     if (query.sort === SongSortType.RECENT) {
+      // If category is provided, use getSongsByCategory (which also sorts by recent)
+      if (query.category) {
+        const data = await this.songService.getSongsByCategory(
+          query.category,
+          query.page,
+          query.limit,
+        );
+        return new PageDto<SongPreviewDto>({
+          content: data,
+          page: query.page,
+          limit: query.limit,
+          total: data.length,
+        });
+      }
+
       const data = await this.songService.getRecentSongs(
         query.page,
         query.limit,
