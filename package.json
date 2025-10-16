@@ -53,7 +53,7 @@
     "dev:server": "bun run --filter '@nbw/backend' start:dev",
     "dev:web": "bun run --filter '@nbw/frontend' dev",
     "dev:apps": "bun run --filter './apps/*' dev",
-    "dev": "(cd apps/backend && bun run start:dev) & (cd apps/frontend && bun run dev)",
+    "dev": "concurrently -n backend,frontend -c blue,green \"cd apps/backend && bun run start:dev\" \"cd apps/frontend && bun run dev\"",
     "lint": "eslint --fix",
     "format": "prettier --write .",
     "cy:open": "bun run test:cy",
