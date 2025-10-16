@@ -25,13 +25,38 @@ export function FeaturedSongsProvider({
   children: React.ReactNode;
   initialFeaturedSongs: FeaturedSongsDto;
 }) {
+  // Helper function to find the first non-empty timespan or default to 'week'
+  const getInitialTimespan = (): TimespanType => {
+    // Check if all timespans have songs
+    const allHaveSongs = TIMESPANS.every(
+      (ts) => initialFeaturedSongs[ts]?.length > 0,
+    );
+
+    // If all have songs, default to 'week'
+    if (allHaveSongs) {
+      return 'week';
+    }
+
+    // Otherwise, find the first timespan that has songs
+    for (const ts of TIMESPANS) {
+      if (initialFeaturedSongs[ts]?.length > 0) {
+        return ts;
+      }
+    }
+
+    // If none have songs, default to 'week'
+    return 'week';
+  };
+
+  const initialTimespan = getInitialTimespan();
+
   // Featured songs
   const [featuredSongs] = useState<FeaturedSongsDto>(initialFeaturedSongs);
   const [featuredSongsPage, setFeaturedSongsPage] = useState<SongPreviewDto[]>(
-    initialFeaturedSongs.week,
+    initialFeaturedSongs[initialTimespan],
   );
 
-  const [timespan, setTimespan] = useState<TimespanType>('week');
+  const [timespan, setTimespan] = useState<TimespanType>(initialTimespan);
 
   const timespanEmpty = Object.keys(featuredSongs).reduce(
     (result, timespan) => {
