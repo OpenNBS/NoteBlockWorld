@@ -104,6 +104,261 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
   }),
 );
 
+const SearchPageSkeleton = () => (
+  <div className='container mx-auto px-4 py-8'>
+    <div className='flex items-center gap-4 mb-6'>
+      <FontAwesomeIcon
+        icon={faMagnifyingGlass}
+        className='text-2xl text-zinc-400'
+      />
+      <h1 className='text-2xl font-bold'>Searching...</h1>
+    </div>
+
+    {/* Filter skeletons */}
+    <div className='flex flex-wrap gap-4 mb-6'>
+      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
+      <div className='h-12 w-32 bg-zinc-800 animate-pulse rounded-lg' />
+      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
+    </div>
+
+    <SongCardGroup>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <SongCard key={i} song={null} />
+      ))}
+    </SongCardGroup>
+  </div>
+);
+
+/**
+ * A full-screen overlay with a spinner, shown during filter changes.
+ */
+const LoadingOverlay = () => (
+  <div className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center'>
+    <div className='bg-zinc-800 rounded-lg p-6 flex flex-col items-center gap-4 shadow-2xl'>
+      <div className='animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full' />
+      <p className='text-lg font-semibold'>Updating results...</p>
+    </div>
+  </div>
+);
+
+interface SearchHeaderProps {
+  query: string;
+  songsCount: number;
+  totalResults: number;
+}
+
+/**
+ * Displays the main header for the search page, including the title
+ * and a summary of the results found.
+ */
+const SearchHeader = ({
+  query,
+  songsCount,
+  totalResults,
+}: SearchHeaderProps) => (
+  <div className='flex items-center gap-4 mb-6'>
+    <FontAwesomeIcon
+      icon={faMagnifyingGlass}
+      className='text-2xl text-zinc-400'
+    />
+    <div className='flex-1'>
+      <h1 className='text-2xl font-bold'>
+        {query ? 'Search Results' : 'Browse Songs'}
+      </h1>
+      {query && (
+        <p className='text-zinc-400'>
+          {songsCount > 0
+            ? `Found ${totalResults} song${
+                totalResults !== 1 ? 's' : ''
+              } for "${query}"`
+            : `No songs found for "${query}"`}
+        </p>
+      )}
+      {!query && songsCount > 0 && (
+        <p className='text-zinc-400'>
+          Showing {songsCount} of {totalResults} songs
+        </p>
+      )}
+    </div>
+  </div>
+);
+
+interface SearchFiltersProps {
+  filters: {
+    category: string;
+    sort: string;
+    order: string;
+    limit: number;
+    uploader: string;
+  };
+  onFilterChange: (params: Record<string, string | number>) => void;
+}
+
+const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
+  const { category, sort, order, limit, uploader } = filters;
+
+  return (
+    <div className='bg-zinc-800/50 rounded-lg p-4 mb-6'>
+      <div className='flex items-center gap-2 mb-4'>
+        <FontAwesomeIcon icon={faFilter} className='text-zinc-400' />
+        <h2 className='text-lg font-semibold'>Filters</h2>
+      </div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+        {/* Category Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Category
+          </label>
+          <select
+            value={category}
+            onChange={(e) => onFilterChange({ category: e.target.value })}
+            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          >
+            <option value=''>All Categories</option>
+            {Object.entries(UPLOAD_CONSTANTS.categories).map(
+              ([key, value]: [string, string]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ),
+            )}
+          </select>
+        </div>
+
+        {/* Sort Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Sort By
+          </label>
+          <select
+            value={sort}
+            onChange={(e) => onFilterChange({ sort: e.target.value })}
+            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          >
+            <option value='recent'>Most Recent</option>
+            <option value='popular'>Most Popular</option>
+            <option value='plays'>Most Plays</option>
+            <option value='title'>Title</option>
+            <option value='uploader'>Uploader</option>
+          </select>
+        </div>
+
+        {/* Order Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Order
+          </label>
+          <select
+            value={order}
+            onChange={(e) => onFilterChange({ order: e.target.value })}
+            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          >
+            <option value='desc'>Descending</option>
+            <option value='asc'>Ascending</option>
+          </select>
+        </div>
+
+        {/* Limit Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Results per page
+          </label>
+          <select
+            value={limit}
+            onChange={(e) => onFilterChange({ limit: e.target.value })}
+            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          >
+            <option value='12'>12</option>
+            <option value='20'>20</option>
+            <option value='40'>40</option>
+            <option value='60'>60</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Active filters display */}
+      {(category || uploader) && (
+        <div className='flex flex-wrap gap-2 mt-4 pt-4 border-t border-zinc-700'>
+          {category && (
+            <button
+              onClick={() => onFilterChange({ category: '' })}
+              className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
+            >
+              Category:{' '}
+              {
+                UPLOAD_CONSTANTS.categories[
+                  category as keyof typeof UPLOAD_CONSTANTS.categories
+                ]
+              }
+              <span className='text-xs'>✕</span>
+            </button>
+          )}
+          {uploader && (
+            <button
+              onClick={() => onFilterChange({ uploader: '' })}
+              className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
+            >
+              By: {uploader}
+              <span className='text-xs'>✕</span>
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const NoResults = () => (
+  <div className='text-center py-12 text-zinc-400'>
+    <FontAwesomeIcon icon={faMagnifyingGlass} className='text-4xl mb-4' />
+    <h2 className='text-xl mb-2'>No songs found</h2>
+    <p>
+      Try adjusting your search terms or filters, or browse our featured songs
+      instead.
+    </p>
+  </div>
+);
+
+interface SearchResultsProps {
+  songs: SongPreviewDtoType[];
+  loading: boolean;
+  hasMore: boolean;
+  onLoadMore: () => void;
+}
+
+const SearchResults = ({
+  songs,
+  loading,
+  hasMore,
+  onLoadMore,
+}: SearchResultsProps) => (
+  <>
+    <SongCardGroup>
+      {songs.map((song, i) => (
+        <SongCard key={`${song.publicId}-${i}`} song={song} />
+      ))}
+    </SongCardGroup>
+
+    {/* Load more / End indicator */}
+    <div className='flex flex-col w-full justify-between items-center mt-8'>
+      {loading ? (
+        <div className='flex items-center gap-2 text-zinc-400'>
+          <div className='animate-spin h-5 w-5 border-2 border-zinc-400 border-t-transparent rounded-full' />
+          Loading more songs...
+        </div>
+      ) : hasMore ? (
+        <LoadMoreButton onClick={onLoadMore} />
+      ) : (
+        <div className='flex flex-col items-center gap-2 text-zinc-500'>
+          <FontAwesomeIcon icon={faEllipsis} className='text-2xl' />
+          <p className='text-sm'>You've reached the end</p>
+        </div>
+      )}
+    </div>
+  </>
+);
+
 const SearchSongPage = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -154,218 +409,39 @@ const SearchSongPage = () => {
   };
 
   if (loading && songs.length === 0) {
-    return (
-      <div className='container mx-auto px-4 py-8'>
-        <div className='flex items-center gap-4 mb-6'>
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            className='text-2xl text-zinc-400'
-          />
-          <h1 className='text-2xl font-bold'>Searching...</h1>
-        </div>
-
-        {/* Filter skeletons */}
-        <div className='flex flex-wrap gap-4 mb-6'>
-          <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-          <div className='h-12 w-32 bg-zinc-800 animate-pulse rounded-lg' />
-          <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-        </div>
-
-        <SongCardGroup>
-          {Array.from({ length: 12 }).map((_, i) => (
-            <SongCard key={i} song={null} />
-          ))}
-        </SongCardGroup>
-      </div>
-    );
+    return <SearchPageSkeleton />;
   }
 
   return (
     <div className='container mx-auto px-4 py-8 relative'>
       {/* Loading overlay for filter changes */}
-      {isFilterChange && (
-        <div className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center'>
-          <div className='bg-zinc-800 rounded-lg p-6 flex flex-col items-center gap-4 shadow-2xl'>
-            <div className='animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full' />
-            <p className='text-lg font-semibold'>Updating results...</p>
-          </div>
-        </div>
-      )}
+      {isFilterChange && <LoadingOverlay />}
 
       {/* Search header */}
-      <div className='flex items-center gap-4 mb-6'>
-        <FontAwesomeIcon
-          icon={faMagnifyingGlass}
-          className='text-2xl text-zinc-400'
-        />
-        <div className='flex-1'>
-          <h1 className='text-2xl font-bold'>
-            {query ? 'Search Results' : 'Browse Songs'}
-          </h1>
-          {query && (
-            <p className='text-zinc-400'>
-              {songs.length > 0
-                ? `Found ${totalResults} song${
-                    totalResults !== 1 ? 's' : ''
-                  } for "${query}"`
-                : `No songs found for "${query}"`}
-            </p>
-          )}
-          {!query && songs.length > 0 && (
-            <p className='text-zinc-400'>
-              Showing {songs.length} of {totalResults} songs
-            </p>
-          )}
-        </div>
-      </div>
+      <SearchHeader
+        query={query}
+        songsCount={songs.length}
+        totalResults={totalResults}
+      />
 
       {/* Filters */}
-      <div className='bg-zinc-800/50 rounded-lg p-4 mb-6'>
-        <div className='flex items-center gap-2 mb-4'>
-          <FontAwesomeIcon icon={faFilter} className='text-zinc-400' />
-          <h2 className='text-lg font-semibold'>Filters</h2>
-        </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-          {/* Category Filter */}
-          <div>
-            <label className='block text-sm font-medium mb-2 text-zinc-300'>
-              Category
-            </label>
-            <select
-              value={category}
-              onChange={(e) => updateURL({ category: e.target.value })}
-              className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-            >
-              <option value=''>All Categories</option>
-              {Object.entries(UPLOAD_CONSTANTS.categories).map(
-                ([key, value]: [string, string]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ),
-              )}
-            </select>
-          </div>
-
-          {/* Sort Filter */}
-          <div>
-            <label className='block text-sm font-medium mb-2 text-zinc-300'>
-              Sort By
-            </label>
-            <select
-              value={sort}
-              onChange={(e) => updateURL({ sort: e.target.value })}
-              className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-            >
-              <option value='recent'>Most Recent</option>
-              <option value='popular'>Most Popular</option>
-              <option value='plays'>Most Plays</option>
-              <option value='title'>Title</option>
-              <option value='uploader'>Uploader</option>
-            </select>
-          </div>
-
-          {/* Order Filter */}
-          <div>
-            <label className='block text-sm font-medium mb-2 text-zinc-300'>
-              Order
-            </label>
-            <select
-              value={order}
-              onChange={(e) => updateURL({ order: e.target.value })}
-              className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-            >
-              <option value='desc'>Descending</option>
-              <option value='asc'>Ascending</option>
-            </select>
-          </div>
-
-          {/* Limit Filter */}
-          <div>
-            <label className='block text-sm font-medium mb-2 text-zinc-300'>
-              Results per page
-            </label>
-            <select
-              value={limit}
-              onChange={(e) => updateURL({ limit: e.target.value })}
-              className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-            >
-              <option value='12'>12</option>
-              <option value='20'>20</option>
-              <option value='40'>40</option>
-              <option value='60'>60</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Active filters display */}
-        {(category || uploader) && (
-          <div className='flex flex-wrap gap-2 mt-4 pt-4 border-t border-zinc-700'>
-            {category && (
-              <button
-                onClick={() => updateURL({ category: '' })}
-                className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
-              >
-                Category:{' '}
-                {
-                  UPLOAD_CONSTANTS.categories[
-                    category as keyof typeof UPLOAD_CONSTANTS.categories
-                  ]
-                }
-                <span className='text-xs'>✕</span>
-              </button>
-            )}
-            {uploader && (
-              <button
-                onClick={() => updateURL({ uploader: '' })}
-                className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
-              >
-                By: {uploader}
-                <span className='text-xs'>✕</span>
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+      <SearchFilters
+        filters={{ category, sort, order, limit, uploader }}
+        onFilterChange={(params) => updateURL(params as Record<string, string>)}
+      />
 
       {/* Results */}
       {songs.length > 0 && (
-        <>
-          <SongCardGroup>
-            {songs.map((song, i) => (
-              <SongCard key={`${song.publicId}-${i}`} song={song} />
-            ))}
-          </SongCardGroup>
+        <SearchResults
+          songs={songs}
+          loading={loading}
+          hasMore={hasMore}
+          onLoadMore={handleLoadMore}
+        />
+      )}
 
-          {/* Load more / End indicator */}
-          <div className='flex flex-col w-full justify-between items-center mt-8'>
-            {loading ? (
-              <div className='flex items-center gap-2 text-zinc-400'>
-                <div className='animate-spin h-5 w-5 border-2 border-zinc-400 border-t-transparent rounded-full' />
-                Loading more songs...
-              </div>
-            ) : hasMore ? (
-              <LoadMoreButton onClick={handleLoadMore} />
-            ) : (
-              <div className='flex flex-col items-center gap-2 text-zinc-500'>
-                <FontAwesomeIcon icon={faEllipsis} className='text-2xl' />
-                <p className='text-sm'>You've reached the end</p>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-      {!loading && songs.length === 0 && (
-        <div className='text-center py-12 text-zinc-400'>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className='text-4xl mb-4' />
-          <h2 className='text-xl mb-2'>No songs found</h2>
-          <p>
-            Try adjusting your search terms or filters, or browse our featured
-            songs instead.
-          </p>
-        </div>
-      )}
+      {/* No results */}
+      {!loading && songs.length === 0 && <NoResults />}
     </div>
   );
 };
