@@ -7,17 +7,14 @@ import { HomePageComponent } from '@web/modules/browse/components/HomePageCompon
 
 async function fetchRecentSongs() {
   try {
-    const response = await axiosInstance.get<SongPreviewDto[]>(
-      '/song-browser/recent',
-      {
-        params: {
-          page: 1, // TODO: fiz constants
-          limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
-          sort: 'recent',
-          order: false,
-        },
+    const response = await axiosInstance.get<SongPreviewDto[]>('/song', {
+      params: {
+        page: 1, // TODO: fix constants
+        limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
+        sort: 'recent',
+        order: 'desc',
       },
-    );
+    });
 
     return response.data;
   } catch (error) {
@@ -28,9 +25,8 @@ async function fetchRecentSongs() {
 async function fetchFeaturedSongs(): Promise<FeaturedSongsDto> {
   try {
     const response = await axiosInstance.get<FeaturedSongsDto>(
-      '/song-browser/featured',
+      '/song/featured',
     );
-
     return response.data;
   } catch (error) {
     return {
