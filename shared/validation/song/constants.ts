@@ -32,7 +32,7 @@ export const UploadConst = deepFreeze({
   },
 
   description: {
-    maxLength: 1000,
+    maxLength: 1500,
   },
 
   originalAuthor: {
