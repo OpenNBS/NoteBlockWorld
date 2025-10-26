@@ -23,7 +23,6 @@ import {
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
 import { WelcomeBanner } from '../WelcomeBanner';
-import { EventBanner } from '../EventBanner';
 
 export const HomePageComponent = () => {
   const { featuredSongsPage } = useFeaturedSongsProvider();
@@ -34,7 +33,7 @@ export const HomePageComponent = () => {
     <>
       {/* Welcome banner/Hero */}
       <WelcomeBanner />
-      <EventBanner />
+      {/* <EventBanner /> */}
 
       {/* FEATURED SONGS */}
       {featuredSongsPage.length > 0 && (
