@@ -60,8 +60,9 @@ export const EventBanner = () => {
           >
             M.A.E.S.T.R.O. machine
           </Link>{' '}
-          on <span className='font-bold'>Maestro's Musical Masterpieces</span>,
-          a public performance featuring the machine's creators! Live on{' '}
+          on{' '}
+          <span className='font-bold'>Maestro&apos;s Musical Masterpieces</span>
+          , a public performance featuring the machine&apos;s creators! Live on{' '}
           <Link
             href='https://youtube.com/live/d0_A3GMuGJ8'
             className='text-blue-300 hover:text-blue-200'
