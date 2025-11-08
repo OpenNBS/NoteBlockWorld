@@ -37,7 +37,7 @@ const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
 };
 
 const h1 = ({ node, ...props }: JSX.IntrinsicElements['h1'] & ExtraProps) => {
-  return <h1 {...props} className='text-4xl font-black mb-24 text-center' />;
+  return <h1 {...props} className='text-4xl font-black my-12 text-center' />;
 };
 
 const h2 = ({ node, ...props }: JSX.IntrinsicElements['h2'] & ExtraProps) => {
