@@ -24,6 +24,7 @@ export const CustomMarkdown = ({
         pre,
         code,
         a,
+        img,
       }}
     >
       {MarkdownContent}
@@ -36,7 +37,7 @@ const p = ({ node, ...props }: JSX.IntrinsicElements['p'] & ExtraProps) => {
 };
 
 const h1 = ({ node, ...props }: JSX.IntrinsicElements['h1'] & ExtraProps) => {
-  return <h1 {...props} className='text-4xl font-black mb-24 text-center' />;
+  return <h1 {...props} className='text-4xl font-black my-12 text-center' />;
 };
 
 const h2 = ({ node, ...props }: JSX.IntrinsicElements['h2'] & ExtraProps) => {
@@ -82,7 +83,7 @@ const blockquote = ({
   return (
     <blockquote
       {...props}
-      className='border-l-4 border-zinc-600 bg-zinc-800/50 rounded-md [&>p]:text-zinc-400 pl-4 [&>p]:py-2'
+      className='border-l-4 border-zinc-600 bg-zinc-800/50 rounded-md [&>p]:text-zinc-400 pl-4 [&>p]:py-2 my-6'
     />
   );
 };
@@ -103,7 +104,7 @@ const code = ({
   return (
     <code
       {...props}
-      className='bg-zinc-950/50 text-green-400 rounded-md outline outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5'
+      className='bg-zinc-950/50 text-green-400 rounded-md outline outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5 mx-0.5'
     />
   );
 };
@@ -122,4 +123,32 @@ const a = ({
   );
 };
 
-export { p, h1, h2, h3, h4, h5, h6, hr, ul, ol, li, blockquote, pre, code, a };
+const img = ({
+  node,
+  alt,
+  src = '',
+  ...props
+}: JSX.IntrinsicElements['img'] & ExtraProps) => {
+  return (
+    <img {...props} alt={alt} src={src} className='my-8 mx-auto rounded-lg' />
+  );
+};
+
+export {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hr,
+  ul,
+  ol,
+  li,
+  blockquote,
+  pre,
+  code,
+  a,
+  img,
+};
