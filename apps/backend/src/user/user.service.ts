@@ -1,16 +1,9 @@
-import {
-  CreateUser,
-  GetUser,
-  PageQueryDTO,
-  UpdateUsernameDto,
-  User,
-  UserDocument,
-  UserDto,
-} from '@nbw/database';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { validate } from 'class-validator';
 import { Model } from 'mongoose';
+
+import { CreateUser, PageQueryDTO, User, UserDocument } from '@nbw/database';
 
 @Injectable()
 export class UserService {
@@ -112,30 +105,6 @@ export class UserService {
     };
   }
 
-  public async getUserByEmailOrId(query: GetUser) {
-    const { email, id, username } = query;
-
-    if (email) {
-      return await this.findByEmail(email);
-    }
-
-    if (id) {
-      return await this.findByID(id);
-    }
-
-    if (username) {
-      throw new HttpException(
-        'Username is not supported yet',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    throw new HttpException(
-      'You must provide an email or an id',
-      HttpStatus.BAD_REQUEST,
-    );
-  }
-
   public async getHydratedUser(user: UserDocument) {
     const hydratedUser = await this.userModel
       .findById(user._id)
@@ -143,39 +112,6 @@ export class UserService {
       .exec();
 
     return hydratedUser;
-  }
-
-  public async getSelfUserData(user: UserDocument) {
-    const userData = await this.findByID(user._id.toString());
-    if (!userData)
-      throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set the time to the start of the day
-
-    const lastSeenDate = new Date(userData.lastSeen);
-    lastSeenDate.setHours(0, 0, 0, 0); // Set the time to the start of the day
-
-    if (lastSeenDate < today) {
-      userData.lastSeen = new Date();
-
-      // if the last seen date is not yesterday, reset the login streak
-      const yesterday = new Date(today);
-      yesterday.setDate(today.getDate() - 1);
-
-      if (lastSeenDate < yesterday) userData.loginStreak = 1;
-      else {
-        userData.loginStreak += 1;
-        if (userData.loginStreak > userData.maxLoginStreak)
-          userData.maxLoginStreak = userData.loginStreak;
-      }
-
-      userData.loginCount++;
-
-      userData.save(); // no need to await this, we already have the data to send back
-    } // if equal or greater, do nothing about the login streak
-
-    return userData;
   }
 
   public async usernameExists(username: string) {
@@ -187,7 +123,7 @@ export class UserService {
     return !!user;
   }
 
-  private normalizeUsername = (inputUsername: string) =>
+  public normalizeUsername = (inputUsername: string) =>
     inputUsername
       .replace(' ', '_')
       .normalize('NFKD')
@@ -208,28 +144,5 @@ export class UserService {
     }
 
     return newUsername;
-  }
-
-  public async updateUsername(user: UserDocument, body: UpdateUsernameDto) {
-    let { username } = body;
-    username = this.normalizeUsername(username);
-
-    if (await this.usernameExists(username)) {
-      throw new HttpException(
-        'Username already exists',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (user.username === username) {
-      throw new HttpException('Username is the same', HttpStatus.BAD_REQUEST);
-    }
-
-    user.username = username;
-    user.lastEdited = new Date();
-
-    await user.save();
-
-    return UserDto.fromEntity(user);
   }
 }
