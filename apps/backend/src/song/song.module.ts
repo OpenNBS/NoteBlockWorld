@@ -1,8 +1,8 @@
-import { Song, SongSchema } from '@nbw/database';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { Song, SongSchema } from '@nbw/database';
 import { AuthModule } from '@server/auth/auth.module';
 import { FileModule } from '@server/file/file.module';
 import { UserModule } from '@server/user/user.module';

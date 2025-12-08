@@ -1,4 +1,3 @@
-import type { UserDocument } from '@nbw/database';
 import {
   ExecutionContext,
   HttpException,
@@ -6,6 +5,8 @@ import {
   createParamDecorator,
 } from '@nestjs/common';
 import type { Request } from 'express';
+
+import type { UserDocument } from '@nbw/database';
 
 export const GetRequestToken = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {

@@ -1,9 +1,10 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { CopyrightFooter } from './CopyrightFooter';
 import BackButton from '../client/BackButton';
 import { NoteBlockWorldLogo } from '../NoteBlockWorldLogo';
+
+import { CopyrightFooter } from './CopyrightFooter';
 
 const DocumentLayout = ({ children }: { children: React.ReactNode }) => {
   return (

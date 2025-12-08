@@ -1,0 +1,4 @@
+**/.next/*
+**/dist/*
+*.hbs
+node_modules/*

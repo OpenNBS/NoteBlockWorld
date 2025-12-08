@@ -1,3 +1,13 @@
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { BROWSER_SONGS } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
 import {
@@ -10,16 +20,6 @@ import {
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-
 import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';

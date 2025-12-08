@@ -8,8 +8,11 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts",
-      "development": "./src/index.ts"
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/song/dto/types.js",
+      "types": "./dist/song/dto/types.d.ts"
     }
   },
   "scripts": {

@@ -8,15 +8,17 @@ import {
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { USER_CONSTANTS } from '@nbw/config';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { USER_CONSTANTS } from '@nbw/config';
 import ClientAxios from '@web/lib/axios/ClientAxios';
 import { LoggedUserData } from '@web/modules/auth/types/User';
+
+import { UserMenuButton } from '../client/UserMenuButton';
 
 import {
   Popover,
@@ -25,7 +27,6 @@ import {
   PopoverTrigger,
 } from './popover';
 import { UserMenuLink, UserMenuSplitLine } from './UserMenuLink';
-import { UserMenuButton } from '../client/UserMenuButton';
 
 interface FormValues {
   username: string;

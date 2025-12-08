@@ -1,5 +1,13 @@
 import { Instrument, Note, Song } from '@encode42/nbs.js';
 import { faker } from '@faker-js/faker';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import {
   CategoryType,
@@ -9,14 +17,6 @@ import {
   UserDocument,
   VisibilityType,
 } from '@nbw/database';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
 

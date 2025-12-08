@@ -1,10 +1,10 @@
-import type { UserDocument } from '@nbw/database';
-import { CreateUser } from '@nbw/database';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import type { Request, Response } from 'express';
 
+import { CreateUser } from '@nbw/database';
+import type { UserDocument } from '@nbw/database';
 import { UserService } from '@server/user/user.service';
 
 import { DiscordUser } from './types/discordProfile';

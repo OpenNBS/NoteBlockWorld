@@ -1,4 +1,5 @@
 import type NapiRs from '@napi-rs/canvas';
+
 import type { NoteQuadTree } from '@nbw/song';
 
 import { DrawingCanvas, RenderedImage } from './canvasFactory';
