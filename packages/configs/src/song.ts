@@ -30,7 +30,7 @@ export const UPLOAD_CONSTANTS = {
   },
 
   description: {
-    maxLength: 1000,
+    maxLength: 1500,
   },
 
   originalAuthor: {
