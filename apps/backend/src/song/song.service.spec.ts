@@ -1047,4 +1047,64 @@ describe('SongService', () => {
       expect(mockFind.exec).toHaveBeenCalled();
     });
   });
+
+  describe('getFeaturedSongs', () => {
+    it('should return featured songs', async () => {
+      const songWithUser: SongWithUser = {
+        title: 'Test Song',
+        publicId: 'test-id',
+        uploader: { username: 'testuser', profileImage: 'testimage' },
+        description: 'Test Description',
+        originalAuthor: 'Test Author',
+        stats: {
+          duration: 100,
+          noteCount: 100,
+        },
+        thumbnailUrl: 'test-thumbnail-url',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        playCount: 0,
+        visibility: 'public',
+      } as any;
+
+      jest
+        .spyOn(service, 'getSongsForTimespan')
+        .mockResolvedValue([songWithUser]);
+
+      jest.spyOn(service, 'getSongsBeforeTimespan').mockResolvedValue([]);
+
+      const result = await service.getFeaturedSongs();
+
+      expect(service.getSongsForTimespan).toHaveBeenCalledTimes(6); // Called for each timespan
+      expect(result).toBeInstanceOf(Object);
+      expect(result).toHaveProperty('hour');
+      expect(result).toHaveProperty('day');
+      expect(result).toHaveProperty('week');
+      expect(result).toHaveProperty('month');
+      expect(result).toHaveProperty('year');
+      expect(result).toHaveProperty('all');
+      expect(Array.isArray(result.hour)).toBe(true);
+      expect(Array.isArray(result.day)).toBe(true);
+      expect(Array.isArray(result.week)).toBe(true);
+      expect(Array.isArray(result.month)).toBe(true);
+      expect(Array.isArray(result.year)).toBe(true);
+      expect(Array.isArray(result.all)).toBe(true);
+    });
+
+    it('should handle empty results gracefully', async () => {
+      jest.spyOn(service, 'getSongsForTimespan').mockResolvedValue([]);
+
+      jest.spyOn(service, 'getSongsBeforeTimespan').mockResolvedValue([]);
+
+      const result = await service.getFeaturedSongs();
+
+      expect(result).toBeInstanceOf(Object);
+      expect(result.hour).toEqual([]);
+      expect(result.day).toEqual([]);
+      expect(result.week).toEqual([]);
+      expect(result.month).toEqual([]);
+      expect(result.year).toEqual([]);
+      expect(result.all).toEqual([]);
+    });
+  });
 });

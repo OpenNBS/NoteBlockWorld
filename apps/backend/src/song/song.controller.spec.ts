@@ -11,13 +11,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 
-import { FileService } from '@server/file/file.service';
+import { FileService } from '../file/file.service';
 
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
 
 const mockSongService = {
   getSongByPage: jest.fn(),
+  searchSongs: jest.fn(),
   getSong: jest.fn(),
   getSongEdit: jest.fn(),
   patchSong: jest.fn(),
@@ -52,6 +53,9 @@ describe('SongController', () => {
 
     songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
+
+    // Clear all mocks
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -69,6 +73,87 @@ describe('SongController', () => {
 
       expect(result).toEqual(songList);
       expect(songService.getSongByPage).toHaveBeenCalledWith(query);
+    });
+
+    it('should handle featured songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+
+      const result = await songController.getSongList(query, 'featured');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should handle recent songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+
+      const result = await songController.getSongList(query, 'recent');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should return categories when q=categories without id', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const categories = { pop: 42, rock: 38 };
+
+      const result = await songController.getSongList(query, 'categories');
+
+      expect(result).toEqual(categories);
+    });
+
+    it('should return songs by category when q=categories with id', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const songList: SongPreviewDto[] = [];
+      const categoryId = 'pop';
+
+      const result = await songController.getSongList(
+        query,
+        'categories',
+        categoryId,
+      );
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should return random songs', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 5 };
+      const songList: SongPreviewDto[] = [];
+      const category = 'electronic';
+
+      const result = await songController.getSongList(
+        query,
+        'random',
+        undefined,
+        category,
+      );
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should throw error for invalid random count', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 15 }; // Invalid limit > 10
+
+      await expect(songController.getSongList(query, 'random')).rejects.toThrow(
+        'Invalid query parameters',
+      );
+    });
+
+    it('should handle zero limit for random (uses default)', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 0 }; // limit 0 is falsy, so uses default
+      const songList: SongPreviewDto[] = [];
+
+      const result = await songController.getSongList(query, 'random');
+
+      expect(result).toEqual(songList);
+    });
+
+    it('should throw error for invalid query mode', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+
+      await expect(
+        songController.getSongList(query, 'invalid' as any),
+      ).rejects.toThrow('Invalid query parameters');
     });
 
     it('should handle errors', async () => {

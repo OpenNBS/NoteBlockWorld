@@ -14,7 +14,6 @@ import { ParseTokenPipe } from './lib/parseToken';
 import { MailingModule } from './mailing/mailing.module';
 import { SeedModule } from './seed/seed.module';
 import { SongModule } from './song/song.module';
-import { SongBrowserModule } from './song-browser/song-browser.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -76,7 +75,6 @@ import { UserModule } from './user/user.module';
     UserModule,
     AuthModule.forRootAsync(),
     FileModule.forRootAsync(),
-    SongBrowserModule,
     SeedModule.forRoot(),
     EmailLoginModule,
     MailingModule,

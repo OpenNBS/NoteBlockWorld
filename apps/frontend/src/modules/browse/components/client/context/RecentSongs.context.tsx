@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { SongPreviewDtoType } from '@nbw/database';
+import { PageDto, SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 type RecentSongsContextType = {
@@ -43,7 +43,7 @@ export function RecentSongsProvider({
   const [hasMore, setHasMore] = useState(true);
   const [categories, setCategories] = useState<Record<string, number>>({});
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [endpoint, setEndpoint] = useState<string>('/song-browser/recent');
+  const [endpoint, setEndpoint] = useState<string>('/song');
 
   const adCount = 1;
   const pageSize = 12;
@@ -55,18 +55,24 @@ export function RecentSongsProvider({
       try {
         const fetchCount = pageSize - adCount;
 
-        const response = await axiosInstance.get<SongPreviewDtoType[]>(
+        const params: Record<string, any> = {
+          page,
+          limit: fetchCount, // TODO: fix constants
+          sort: 'recent',
+          order: 'desc',
+        };
+
+        if (selectedCategory) {
+          params.category = selectedCategory;
+        }
+
+        const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
           endpoint,
-          {
-            params: {
-              page,
-              limit: fetchCount, // TODO: fix constants
-              order: false,
-            },
-          },
+          { params },
         );
 
-        const newSongs: Array<SongPreviewDtoType | undefined> = response.data;
+        const newSongs: Array<SongPreviewDtoType | undefined> =
+          response.data.content;
 
         for (let i = 0; i < adCount; i++) {
           const adPosition = Math.floor(Math.random() * newSongs.length) + 1;
@@ -75,10 +81,10 @@ export function RecentSongsProvider({
 
         setRecentSongs((prevSongs) => [
           ...prevSongs.filter((song) => song !== null),
-          ...response.data,
+          ...response.data.content,
         ]);
 
-        if (response.data.length < fetchCount) {
+        if (response.data.content.length < fetchCount) {
           setHasMore(false);
         }
       } catch (error) {
@@ -91,13 +97,13 @@ export function RecentSongsProvider({
         setLoading(false);
       }
     },
-    [page, endpoint],
+    [page, endpoint, selectedCategory],
   );
 
   const fetchCategories = useCallback(async function () {
     try {
       const response = await axiosInstance.get<Record<string, number>>(
-        '/song-browser/categories',
+        '/song/categories',
       );
 
       return response.data;
@@ -117,10 +123,7 @@ export function RecentSongsProvider({
     setRecentSongs(Array(12).fill(null));
     setHasMore(true);
 
-    const newEndpoint =
-      selectedCategory === ''
-        ? '/song-browser/recent'
-        : `/song-browser/categories/${selectedCategory}`;
+    const newEndpoint = selectedCategory === '' ? '/song' : '/song';
 
     setEndpoint(newEndpoint);
   }, [selectedCategory]);
