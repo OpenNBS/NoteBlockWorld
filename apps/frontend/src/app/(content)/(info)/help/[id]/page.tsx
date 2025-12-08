@@ -46,7 +46,7 @@ const HelpPost = ({ params }: HelpPageProps) => {
     <>
       <article className='max-w-screen-md mx-auto mb-36'>
         <Link
-          href='/blog'
+          href='/help'
           className='text-zinc-500 hover:text-zinc-400 text-sm'
         >
           {'< Back to Help'}
