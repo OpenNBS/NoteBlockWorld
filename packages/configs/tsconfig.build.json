@@ -6,7 +6,8 @@
     "outDir": "dist",
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": false,
-    "moduleResolution": "node"
+    "module": "esnext",
+    "moduleResolution": "bundler"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]

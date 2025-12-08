@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.package.json",
   "compilerOptions": {
     // Package-specific overrides (if any)
-    "module": "Preserve"
+    "module": "esnext",
+    "moduleResolution": "bundler"
   }
 }

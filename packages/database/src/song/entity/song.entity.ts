@@ -1,8 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import type { HydratedDocument } from 'mongoose';
-import { Schema as MongooseSchema, Types } from 'mongoose';
-
-import { User } from '@database/user/entity/user.entity';
+import { Document, SchemaTypes, Types } from 'mongoose';
 
 import { SongStats } from '../dto/SongStats';
 import type { SongViewUploader } from '../dto/SongView.dto';
@@ -23,14 +20,14 @@ export class Song {
   @Prop({ type: String, required: true, unique: true })
   publicId: string;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  createdAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  createdAt: Date;
 
-  @Prop({ type: MongooseSchema.Types.Date, required: true, default: Date.now })
-  updatedAt: Date; // Added automatically by Mongoose: https://mongoosejs.com/docs/timestamps.html
+  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  updatedAt: Date;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'User' })
-  uploader: Types.ObjectId | User; // Populated with the uploader's user document
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  uploader: Types.ObjectId;
 
   @Prop({ type: String, required: true })
   thumbnailUrl: string;
@@ -54,7 +51,7 @@ export class Song {
 
   // SONG FILE ATTRIBUTES (Populated from upload form - updatable)
 
-  @Prop({ type: ThumbnailData, required: true })
+  @Prop({ type: Object, required: true })
   thumbnailData: ThumbnailData;
 
   @Prop({ type: String, required: true })
@@ -86,7 +83,7 @@ export class Song {
   @Prop({ type: Number, required: true })
   fileSize: number;
 
-  @Prop({ type: SongStats, required: true })
+  @Prop({ type: Object, required: true })
   stats: SongStats;
 
   // EXTERNAL ATTRIBUTES
@@ -97,7 +94,7 @@ export class Song {
 
 export const SongSchema = SchemaFactory.createForClass(Song);
 
-export type SongDocument = Song & HydratedDocument<Song>;
+export type SongDocument = Song & Document;
 
 export type SongWithUser = Omit<Song, 'uploader'> & {
   uploader: SongViewUploader;
