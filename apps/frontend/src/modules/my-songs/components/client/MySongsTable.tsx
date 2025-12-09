@@ -12,7 +12,10 @@ import { MY_SONGS } from '@nbw/config';
 import type { SongPageDtoType, SongPreviewDtoType } from '@nbw/database';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
-import { useMySongsProvider } from './context/MySongs.context';
+import {
+  useMySongsProvider,
+  useMySongsPageLoader,
+} from './context/MySongs.context';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { SongRow } from './SongRow';
 
@@ -134,6 +137,9 @@ export const MySongsTable = () => {
 };
 
 export const MySongsPageComponent = () => {
+  // Load page when currentPage changes
+  useMySongsPageLoader();
+
   const {
     error,
     isDeleteDialogOpen,
