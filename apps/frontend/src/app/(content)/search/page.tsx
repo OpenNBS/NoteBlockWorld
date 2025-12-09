@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 import { SongPreviewDtoType } from '@nbw/database';
 
@@ -155,33 +155,47 @@ const SearchHeader = ({
   query,
   songsCount,
   totalResults,
-}: SearchHeaderProps) => (
-  <div className='flex items-center gap-4 mb-6'>
-    <FontAwesomeIcon
-      icon={faMagnifyingGlass}
-      className='text-2xl text-zinc-400'
-    />
-    <div className='flex-1'>
-      <h1 className='text-2xl font-bold'>
-        {query ? 'Search Results' : 'Browse Songs'}
-      </h1>
-      {query && (
-        <p className='text-zinc-400'>
-          {songsCount > 0
-            ? `Found ${totalResults} song${
-                totalResults !== 1 ? 's' : ''
-              } for "${query}"`
-            : `No songs found for "${query}"`}
-        </p>
-      )}
-      {!query && songsCount > 0 && (
-        <p className='text-zinc-400'>
-          Showing {songsCount} of {totalResults} songs
-        </p>
-      )}
+}: SearchHeaderProps) => {
+  const isSearch = useMemo(() => query !== '', [query]);
+
+  const title = useMemo(
+    () => (isSearch ? 'Search Results' : 'Browse Songs'),
+    [isSearch],
+  );
+  const description = useMemo(() => {
+    if (isSearch) {
+      if (totalResults !== 1) {
+        const template = '{totalResults} result{plural} for "{query}"';
+        return template
+          .replace('{totalResults}', totalResults.toString())
+          .replace('{plural}', totalResults !== 1 ? 's' : '')
+          .replace('{query}', query);
+      }
+      const template = '1 result for "{query}"';
+      return template.replace('{query}', query);
+    }
+    if (songsCount !== 1) {
+      const template = 'Showing {songsCount} of {totalResults} songs';
+      return template
+        .replace('{songsCount}', songsCount.toString())
+        .replace('{totalResults}', totalResults.toString());
+    }
+    const template = 'Showing 1 song of {totalResults} songs';
+    return template.replace('{totalResults}', totalResults.toString());
+  }, [isSearch, query, songsCount, totalResults]);
+  return (
+    <div className='flex items-center gap-4'>
+      <FontAwesomeIcon
+        icon={faMagnifyingGlass}
+        className='text-2xl text-zinc-400'
+      />
+      <div className='flex-1'>
+        <h1 className='text-2xl font-bold'>{title}</h1>
+        {query && <p className='text-zinc-400'>{description}</p>}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface SearchFiltersProps {
   filters: {
@@ -198,13 +212,13 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
   const { category, sort, order, limit, uploader } = filters;
 
   return (
-    <div className='bg-zinc-800/50 rounded-lg p-4 mb-6'>
+    <aside className='bg-zinc-800/50 rounded-lg p-4 sticky top-4 h-fit'>
       <div className='flex items-center gap-2 mb-4'>
         <FontAwesomeIcon icon={faFilter} className='text-zinc-400' />
         <h2 className='text-lg font-semibold'>Filters</h2>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+      <div className='flex flex-col gap-4'>
         {/* Category Filter */}
         <div>
           <label className='block text-sm font-medium mb-2 text-zinc-300'>
@@ -223,24 +237,6 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
                 </option>
               ),
             )}
-          </select>
-        </div>
-
-        {/* Sort Filter */}
-        <div>
-          <label className='block text-sm font-medium mb-2 text-zinc-300'>
-            Sort By
-          </label>
-          <select
-            value={sort}
-            onChange={(e) => onFilterChange({ sort: e.target.value })}
-            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-          >
-            <option value='recent'>Most Recent</option>
-            <option value='popular'>Most Popular</option>
-            <option value='plays'>Most Plays</option>
-            <option value='title'>Title</option>
-            <option value='uploader'>Uploader</option>
           </select>
         </div>
 
@@ -305,7 +301,7 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
           )}
         </div>
       )}
-    </div>
+    </aside>
   );
 };
 
@@ -381,6 +377,7 @@ const SearchSongPage = () => {
     searchSongs,
     loadMore,
   } = useSongSearchStore();
+  const [showFilters, setShowFilters] = useState(true);
 
   useEffect(() => {
     const params = { q: query, sort, order, category, uploader, limit };
@@ -408,6 +405,10 @@ const SearchSongPage = () => {
     loadMore(params);
   };
 
+  const handleSortChange = (value: string) => {
+    updateURL({ sort: value });
+  };
+
   if (loading && songs.length === 0) {
     return <SearchPageSkeleton />;
   }
@@ -417,31 +418,69 @@ const SearchSongPage = () => {
       {/* Loading overlay for filter changes */}
       {isFilterChange && <LoadingOverlay />}
 
-      {/* Search header */}
-      <SearchHeader
-        query={query}
-        songsCount={songs.length}
-        totalResults={totalResults}
-      />
+      <div className='flex flex-col lg:flex-row gap-6'>
+        {/* Filters Sidebar */}
+        {showFilters && (
+          <div className='w-full lg:w-72 flex-shrink-0'>
+            <SearchFilters
+              filters={{ category, sort, order, limit, uploader }}
+              onFilterChange={(params) =>
+                updateURL(params as Record<string, string>)
+              }
+            />
+          </div>
+        )}
 
-      {/* Filters */}
-      <SearchFilters
-        filters={{ category, sort, order, limit, uploader }}
-        onFilterChange={(params) => updateURL(params as Record<string, string>)}
-      />
+        {/* Main Content */}
+        <div className='flex-1 min-w-0'>
+          <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
+            <div className='flex-1 min-w-[260px]'>
+              <SearchHeader
+                query={query}
+                songsCount={songs.length}
+                totalResults={totalResults}
+              />
+            </div>
+            <div className='flex items-center gap-3'>
+              <button
+                type='button'
+                onClick={() => setShowFilters((prev) => !prev)}
+                className='inline-flex items-center gap-2 px-3 py-2 rounded-md border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 transition-colors text-sm'
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilters ? 'Hide filters' : 'Show filters'}
+              </button>
+              <div className='flex items-center gap-2'>
+                <span className='text-sm text-zinc-400'>Sort by:</span>
+                <select
+                  value={sort}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className='h-10 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none px-3 text-sm transition-colors'
+                >
+                  <option value='recent'>Most recent</option>
+                  <option value='popular'>Most popular</option>
+                  <option value='plays'>Most plays</option>
+                  <option value='title'>Title</option>
+                  <option value='uploader'>Uploader</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-      {/* Results */}
-      {songs.length > 0 && (
-        <SearchResults
-          songs={songs}
-          loading={loading}
-          hasMore={hasMore}
-          onLoadMore={handleLoadMore}
-        />
-      )}
+          {/* Results */}
+          {songs.length > 0 && (
+            <SearchResults
+              songs={songs}
+              loading={loading}
+              hasMore={hasMore}
+              onLoadMore={handleLoadMore}
+            />
+          )}
 
-      {/* No results */}
-      {!loading && songs.length === 0 && <NoResults />}
+          {/* No results */}
+          {!loading && songs.length === 0 && <NoResults />}
+        </div>
+      </div>
     </div>
   );
 };
