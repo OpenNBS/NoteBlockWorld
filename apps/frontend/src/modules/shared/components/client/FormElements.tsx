@@ -186,9 +186,9 @@ export const Select = forwardRef<
         />
       )}
       {description && (
-        <p className='block text-sm text-zinc-500 leading-tight pt-1 [&_a]:text-blue-400 [&_a:hover]:text-blue-300'>
+        <div className='block text-sm text-zinc-500 leading-tight pt-1 [&_a]:text-blue-400 [&_a:hover]:text-blue-300'>
           <Markdown>{description}</Markdown>
-        </p>
+        </div>
       )}
       <ErrorBalloon message={errorMessage} />
     </>

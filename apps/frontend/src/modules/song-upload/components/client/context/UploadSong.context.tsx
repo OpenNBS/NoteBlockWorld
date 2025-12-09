@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect } from 'react';
+import { create } from 'zustand';
 import {
   FieldErrors,
   UseFormRegister,
@@ -11,7 +12,7 @@ import {
 import { toast } from 'react-hot-toast';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { parseSongFromBuffer, SongFileType } from '@nbw/song';
+import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 import {
@@ -20,6 +21,72 @@ import {
 } from '@web/modules/song/components/client/SongForm.zod';
 
 import UploadCompleteModal from '../UploadCompleteModal';
+
+interface UploadSongState {
+  song: SongFileType | null;
+  filename: string | null;
+  instrumentSounds: string[];
+  isSubmitting: boolean;
+  sendError: string | null;
+  isUploadComplete: boolean;
+  uploadedSongId: string | null;
+}
+
+interface UploadSongActions {
+  setSong: (song: SongFileType | null) => void;
+  setFilename: (filename: string | null) => void;
+  setInstrumentSounds: (sounds: string[]) => void;
+  setInstrumentSound: (index: number, value: string) => void;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+  setSendError: (error: string | null) => void;
+  setIsUploadComplete: (isComplete: boolean) => void;
+  setUploadedSongId: (id: string | null) => void;
+  reset: () => void;
+}
+
+type UploadSongStore = UploadSongState & UploadSongActions;
+
+const initialState: UploadSongState = {
+  song: null,
+  filename: null,
+  instrumentSounds: [],
+  isSubmitting: false,
+  sendError: null,
+  isUploadComplete: false,
+  uploadedSongId: null,
+};
+
+export const useUploadSongStore = create<UploadSongStore>((set, get) => ({
+  ...initialState,
+
+  setSong: (song) => set({ song }),
+  setFilename: (filename) => set({ filename }),
+  setInstrumentSounds: (sounds) => set({ instrumentSounds: sounds }),
+  setInstrumentSound: (index, value) => {
+    const newValues = [...get().instrumentSounds];
+    newValues[index] = value;
+    set({ instrumentSounds: newValues });
+  },
+  setIsSubmitting: (isSubmitting) => set({ isSubmitting }),
+  setSendError: (error) => set({ sendError: error }),
+  setIsUploadComplete: (isComplete) => set({ isUploadComplete: isComplete }),
+  setUploadedSongId: (id) => set({ uploadedSongId: id }),
+  reset: () => set(initialState),
+}));
+
+// Context for form methods (React Hook Form needs to be initialized in a component)
+interface UploadSongFormContextType {
+  formMethods: UseFormReturn<UploadSongForm>;
+  register: UseFormRegister<UploadSongForm>;
+  errors: FieldErrors<UploadSongForm>;
+  setFile: (file: File | null) => Promise<void>;
+  setInstrumentSound: (index: number, value: string) => void;
+  submitSong: () => Promise<void>;
+}
+
+const UploadSongFormContext = createContext<UploadSongFormContextType | null>(
+  null,
+);
 
 export type useUploadSongProviderType = {
   song: SongFileType | null;
@@ -37,27 +104,29 @@ export type useUploadSongProviderType = {
   uploadedSongId: string | null;
 };
 
-export const UploadSongContext = createContext<useUploadSongProviderType>(
-  null as unknown as useUploadSongProviderType,
-);
-
 export const UploadSongProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [song, setSong] = useState<SongFileType | null>(null);
-  const [filename, setFilename] = useState<string | null>(null);
-  const [instrumentSounds, setInstrumentSounds] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  {
-    /* TODO: React Hook Form has an isSubmitting attribute. Can we leverage it? https://react-hook-form.com/docs/useformstate */
-  }
-
-  const [sendError, setSendError] = useState<string | null>(null);
-  const [isUploadComplete, setIsUploadComplete] = useState(false);
-  const [uploadedSongId, setUploadedSongId] = useState<string | null>(null);
+  const store = useUploadSongStore();
+  const {
+    song,
+    filename,
+    instrumentSounds,
+    isSubmitting,
+    sendError,
+    isUploadComplete,
+    uploadedSongId,
+    setSong,
+    setFilename,
+    setInstrumentSounds,
+    setInstrumentSound: setInstrumentSoundStore,
+    setIsSubmitting,
+    setSendError,
+    setIsUploadComplete,
+    setUploadedSongId,
+  } = store;
 
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
@@ -164,30 +233,29 @@ export const UploadSongProvider = ({
   const setFileHandler = async (file: File | null) => {
     if (!file) return;
 
-    let song: SongFileType;
+    let parsedSong: SongFileType;
 
     try {
-      song = (await parseSongFromBuffer(
+      parsedSong = (await parseSongFromBuffer(
         await file.arrayBuffer(),
       )) as unknown as SongFileType; // TODO: Investigate this weird type error
     } catch (e) {
       console.error('Error parsing song file', e);
       toast.error('Invalid song file! Please try again with a different song.');
       setSong(null);
-
       return;
     }
 
-    setSong(song);
+    setSong(parsedSong);
     setFilename(file.name);
 
-    const { title, description, originalAuthor } = song;
+    const { title, description, originalAuthor } = parsedSong;
     const formTitle = title || file.name.replace('.nbs', '');
     formMethods.setValue('title', formTitle);
     formMethods.setValue('description', description);
     formMethods.setValue('originalAuthor', originalAuthor);
 
-    const instrumentList = song.instruments.map(
+    const instrumentList = parsedSong.instruments.map(
       (instrument) => instrument.file,
     );
 
@@ -196,9 +264,9 @@ export const UploadSongProvider = ({
   };
 
   const setInstrumentSound = (index: number, value: string) => {
+    setInstrumentSoundStore(index, value);
     const newValues = [...instrumentSounds];
     newValues[index] = value;
-    setInstrumentSounds(newValues);
     formMethods.setValue('customInstruments', newValues);
   };
 
@@ -252,24 +320,17 @@ export const UploadSongProvider = ({
     };
   }, [formMethods.formState.isDirty, isUploadComplete]);
 
+  const formContextValue: UploadSongFormContextType = {
+    formMethods,
+    register,
+    errors,
+    setFile: setFileHandler,
+    setInstrumentSound,
+    submitSong,
+  };
+
   return (
-    <UploadSongContext.Provider
-      value={{
-        sendError,
-        formMethods,
-        register,
-        errors,
-        submitSong,
-        song,
-        filename,
-        instrumentSounds,
-        setInstrumentSound,
-        setFile: setFileHandler,
-        isSubmitting,
-        isUploadComplete,
-        uploadedSongId,
-      }}
-    >
+    <UploadSongFormContext.Provider value={formContextValue}>
       {uploadedSongId && (
         <UploadCompleteModal
           isOpen={isUploadComplete}
@@ -277,10 +338,24 @@ export const UploadSongProvider = ({
         />
       )}
       {children}
-    </UploadSongContext.Provider>
+    </UploadSongFormContext.Provider>
   );
 };
 
+// Hook that combines Zustand store with React Hook Form from context
+// This maintains backward compatibility with the old Context API
 export const useUploadSongProvider = (): useUploadSongProviderType => {
-  return useContext(UploadSongContext);
+  const store = useUploadSongStore();
+  const formContext = useContext(UploadSongFormContext);
+
+  if (!formContext) {
+    throw new Error(
+      'useUploadSongProvider must be used within UploadSongProvider',
+    );
+  }
+
+  return {
+    ...store,
+    ...formContext,
+  };
 };

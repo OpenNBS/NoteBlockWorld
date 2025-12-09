@@ -8,8 +8,8 @@ import {
   useEditSongProviderType,
 } from '@web/modules/song-edit/components/client/context/EditSong.context';
 import {
-  UploadSongContext,
   UploadSongProvider,
+  useUploadSongProvider,
   useUploadSongProviderType,
 } from '@web/modules/song-upload/components/client/context/UploadSong.context';
 
@@ -26,7 +26,7 @@ type ContextType = 'upload' | 'edit';
 export const useSongProvider = (
   type: ContextType,
 ): useUploadSongProviderType & useEditSongProviderType => {
-  const uploadContext = useContext(UploadSongContext);
+  const uploadContext = useUploadSongProvider();
   const editContext = useContext(EditSongContext);
   const currentContext = type === 'upload' ? uploadContext : editContext;
 

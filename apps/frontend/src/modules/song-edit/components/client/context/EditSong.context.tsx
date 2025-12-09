@@ -13,15 +13,13 @@ import toaster from 'react-hot-toast';
 import { undefined as zodUndefined } from 'zod';
 
 import type { UploadSongDto } from '@nbw/database';
-import { parseSongFromBuffer } from '@nbw/song';
-import type { SongFileType } from '@nbw/song';
+import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
-
 import {
   EditSongForm,
   editSongFormSchema,
-} from '../../../../song/components/client/SongForm.zod';
+} from '@web/modules/song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
