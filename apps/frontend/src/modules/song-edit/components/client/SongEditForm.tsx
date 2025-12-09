@@ -26,8 +26,17 @@ export const SongEditForm = ({
   ) as useEditSongProviderType;
 
   useEffect(() => {
-    loadSong(songId, username, songData);
-    setSongId(songId);
+    const loadSongData = async () => {
+      try {
+        await loadSong(songId, username, songData);
+        setSongId(songId);
+      } catch (error) {
+        // Error is already handled in loadSong with setSendError and toaster
+        console.error('Failed to load song:', error);
+      }
+    };
+
+    loadSongData();
   }, [loadSong, setSongId, songData, songId, username]);
   // TODO: The username is injected into the form differently in SongUploadForm (defaultAuthorName) and SongEditForm (username). This should be consistent
 

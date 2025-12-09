@@ -236,25 +236,51 @@ export const EditSongProvider = ({
       // fetch song
       const token = getTokenLocal();
 
-      const songFile = (
-        await axiosInstance.get(`/song/${id}/download`, {
-          params: {
-            src: 'edit',
-          },
-          responseType: 'arraybuffer',
-          headers: { authorization: `Bearer ${token}` },
-        })
-      ).data as ArrayBuffer;
+      try {
+        const songFile = (
+          await axiosInstance.get(`/song/${id}/download`, {
+            params: {
+              src: 'edit',
+            },
+            responseType: 'arraybuffer',
+            headers: { authorization: `Bearer ${token}` },
+          })
+        ).data as ArrayBuffer;
 
-      // convert to song
-      const song = await parseSongFromBuffer(songFile);
+        // convert to song
+        const song = await parseSongFromBuffer(songFile);
 
-      // set instruments array
-      const songInstruments = songData.customInstruments;
-      setInstrumentSounds(songInstruments);
-      formMethods.setValue('customInstruments', songInstruments);
+        // set instruments array
+        const songInstruments = songData.customInstruments;
+        setInstrumentSounds(songInstruments);
+        formMethods.setValue('customInstruments', songInstruments);
 
-      setSong(song as unknown as SongFileType); // TODO: Investigate this weird type error
+        setSong(song as unknown as SongFileType); // TODO: Investigate this weird type error
+      } catch (error: any) {
+        console.error('Error loading song', error);
+
+        let errorMessage = 'An unknown error occurred while loading the song!';
+
+        if (error.response) {
+          // Server responded with an error status
+          errorMessage =
+            error.response.data.message ||
+            Object.values(error.response.data.error || {})[0] ||
+            `Failed to load song: ${error.response.status}`;
+        } else if (error.request) {
+          console.error('Error loading song', error);
+          // Request was made but no response received (network error)
+          errorMessage =
+            'Network error: Unable to connect to the server. Please check your internet connection and try again.';
+        } else {
+          // Something else happened
+          errorMessage = error.message || errorMessage;
+        }
+
+        setSendError(errorMessage);
+        toaster.error(errorMessage);
+        throw error; // Re-throw to allow caller to handle if needed
+      }
     },
     [formMethods, setSong],
   );
