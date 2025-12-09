@@ -160,6 +160,9 @@ describe('SongService', () => {
         .mockResolvedValue(songEntity);
 
       jest.spyOn(songModel, 'create').mockResolvedValue(songDocument as any);
+      jest
+        .spyOn(mockSongWebhookService, 'syncSongWebhook')
+        .mockResolvedValue('webhook-message-id');
 
       const result = await service.uploadSong({ file, user, body });
 
@@ -179,6 +182,10 @@ describe('SongService', () => {
       expect(songDocument.populate).toHaveBeenCalledWith(
         'uploader',
         'username profileImage -_id',
+      );
+
+      expect(mockSongWebhookService.syncSongWebhook).toHaveBeenCalledWith(
+        populatedSong,
       );
     });
   });
@@ -233,6 +240,9 @@ describe('SongService', () => {
       } as any);
 
       jest.spyOn(fileService, 'deleteSong').mockResolvedValue(undefined);
+      jest
+        .spyOn(mockSongWebhookService, 'deleteSongWebhook')
+        .mockResolvedValue(undefined);
 
       const result = await service.deleteSong(publicId, user);
 
@@ -245,6 +255,10 @@ describe('SongService', () => {
 
       expect(fileService.deleteSong).toHaveBeenCalledWith(
         songEntity.nbsFileUrl,
+      );
+
+      expect(mockSongWebhookService.deleteSongWebhook).toHaveBeenCalledWith(
+        populatedSong,
       );
     });
 
@@ -375,6 +389,9 @@ describe('SongService', () => {
       jest
         .spyOn(songUploadService, 'processSongPatch')
         .mockResolvedValue(undefined);
+      jest
+        .spyOn(mockSongWebhookService, 'syncSongWebhook')
+        .mockResolvedValue('webhook-message-id');
 
       const result = await service.patchSong(publicId, body, user);
 
@@ -395,6 +412,10 @@ describe('SongService', () => {
       expect(songDocument.populate).toHaveBeenCalledWith(
         'uploader',
         'username profileImage -_id',
+      );
+
+      expect(mockSongWebhookService.syncSongWebhook).toHaveBeenCalledWith(
+        populatedSong,
       );
     }, 10000); // Increase the timeout to 10000 ms
 
@@ -1048,63 +1069,131 @@ describe('SongService', () => {
     });
   });
 
-  describe('getFeaturedSongs', () => {
-    it('should return featured songs', async () => {
-      const songWithUser: SongWithUser = {
-        title: 'Test Song',
-        publicId: 'test-id',
-        uploader: { username: 'testuser', profileImage: 'testimage' },
-        description: 'Test Description',
-        originalAuthor: 'Test Author',
-        stats: {
-          duration: 100,
-          noteCount: 100,
-        },
-        thumbnailUrl: 'test-thumbnail-url',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        playCount: 0,
+  describe('getRecentSongs', () => {
+    it('should return recent songs', async () => {
+      const page = 1;
+      const limit = 10;
+      const songList: SongWithUser[] = [];
+
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+
+      const result = await service.getRecentSongs(page, limit);
+
+      expect(result).toEqual(
+        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
+      );
+
+      expect(songModel.find).toHaveBeenCalledWith({ visibility: 'public' });
+      expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
+      expect(mockFind.skip).toHaveBeenCalledWith(page * limit - limit);
+      expect(mockFind.limit).toHaveBeenCalledWith(limit);
+    });
+  });
+
+  describe('getSongsForTimespan', () => {
+    it('should return songs for a timespan', async () => {
+      const timespan = Date.now() - 1000 * 60 * 60; // 1 hour ago
+      const songList: SongWithUser[] = [];
+
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+
+      const result = await service.getSongsForTimespan(timespan);
+
+      expect(result).toEqual(songList);
+      expect(songModel.find).toHaveBeenCalledWith({
         visibility: 'public',
-      } as any;
+        createdAt: { $gte: timespan },
+      });
+      expect(mockFind.sort).toHaveBeenCalledWith({ playCount: -1 });
+    });
+  });
 
-      jest
-        .spyOn(service, 'getSongsForTimespan')
-        .mockResolvedValue([songWithUser]);
+  describe('getSongsBeforeTimespan', () => {
+    it('should return songs before a timespan', async () => {
+      const timespan = Date.now() - 1000 * 60 * 60; // 1 hour ago
+      const songList: SongWithUser[] = [];
 
-      jest.spyOn(service, 'getSongsBeforeTimespan').mockResolvedValue([]);
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
 
-      const result = await service.getFeaturedSongs();
+      jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
 
-      expect(service.getSongsForTimespan).toHaveBeenCalledTimes(6); // Called for each timespan
-      expect(result).toBeInstanceOf(Object);
-      expect(result).toHaveProperty('hour');
-      expect(result).toHaveProperty('day');
-      expect(result).toHaveProperty('week');
-      expect(result).toHaveProperty('month');
-      expect(result).toHaveProperty('year');
-      expect(result).toHaveProperty('all');
-      expect(Array.isArray(result.hour)).toBe(true);
-      expect(Array.isArray(result.day)).toBe(true);
-      expect(Array.isArray(result.week)).toBe(true);
-      expect(Array.isArray(result.month)).toBe(true);
-      expect(Array.isArray(result.year)).toBe(true);
-      expect(Array.isArray(result.all)).toBe(true);
+      const result = await service.getSongsBeforeTimespan(timespan);
+
+      expect(result).toEqual(songList);
+      expect(songModel.find).toHaveBeenCalledWith({
+        visibility: 'public',
+        createdAt: { $lt: timespan },
+      });
+      expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
+    });
+  });
+
+  describe('getRandomSongs', () => {
+    it('should return random songs', async () => {
+      const count = 5;
+      const songList: SongWithUser[] = [];
+
+      const mockAggregate = {
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'aggregate').mockReturnValue(mockAggregate as any);
+      jest.spyOn(songModel, 'populate').mockResolvedValue(songList);
+
+      const result = await service.getRandomSongs(count);
+
+      expect(result).toEqual(
+        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
+      );
+
+      expect(songModel.aggregate).toHaveBeenCalledWith([
+        { $match: { visibility: 'public' } },
+        { $sample: { size: count } },
+      ]);
     });
 
-    it('should handle empty results gracefully', async () => {
-      jest.spyOn(service, 'getSongsForTimespan').mockResolvedValue([]);
+    it('should return random songs with category filter', async () => {
+      const count = 5;
+      const category = 'pop';
+      const songList: SongWithUser[] = [];
 
-      jest.spyOn(service, 'getSongsBeforeTimespan').mockResolvedValue([]);
+      const mockAggregate = {
+        exec: jest.fn().mockResolvedValue(songList),
+      };
 
-      const result = await service.getFeaturedSongs();
+      jest.spyOn(songModel, 'aggregate').mockReturnValue(mockAggregate as any);
+      jest.spyOn(songModel, 'populate').mockResolvedValue(songList);
 
-      expect(result).toBeInstanceOf(Object);
-      expect(result.hour).toEqual([]);
-      expect(result.day).toEqual([]);
-      expect(result.week).toEqual([]);
-      expect(result.month).toEqual([]);
-      expect(result.year).toEqual([]);
-      expect(result.all).toEqual([]);
+      const result = await service.getRandomSongs(count, category);
+
+      expect(result).toEqual(
+        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
+      );
+
+      expect(songModel.aggregate).toHaveBeenCalledWith([
+        { $match: { visibility: 'public', category: 'pop' } },
+        { $sample: { size: count } },
+      ]);
     });
   });
 });

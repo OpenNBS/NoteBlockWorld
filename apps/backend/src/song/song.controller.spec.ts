@@ -5,8 +5,16 @@ import {
   SongViewDto,
   UploadSongDto,
   UploadSongResponseDto,
+  PageDto,
+  SongListQueryDTO,
+  SongSortType,
+  FeaturedSongsDto,
 } from '@nbw/database';
-import { HttpStatus, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
@@ -25,6 +33,12 @@ const mockSongService = {
   getSongDownloadUrl: jest.fn(),
   deleteSong: jest.fn(),
   uploadSong: jest.fn(),
+  getRandomSongs: jest.fn(),
+  getRecentSongs: jest.fn(),
+  getSongsByCategory: jest.fn(),
+  getSongsForTimespan: jest.fn(),
+  getSongsBeforeTimespan: jest.fn(),
+  getCategories: jest.fn(),
 };
 
 const mockFileService = {};
@@ -63,101 +77,140 @@ describe('SongController', () => {
   });
 
   describe('getSongList', () => {
-    it('should return a list of songs', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+    it('should return a paginated list of songs (default)', async () => {
+      const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = [];
 
       mockSongService.getSongByPage.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query);
 
-      expect(result).toEqual(songList);
-      expect(songService.getSongByPage).toHaveBeenCalledWith(query);
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(result.page).toBe(1);
+      expect(result.limit).toBe(10);
+      expect(result.total).toBe(0);
+      expect(songService.getSongByPage).toHaveBeenCalled();
     });
 
-    it('should handle featured songs', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+    it('should handle search query', async () => {
+      const query: SongListQueryDTO = { page: 1, limit: 10, q: 'test search' };
       const songList: SongPreviewDto[] = [];
 
-      const result = await songController.getSongList(query, 'featured');
+      mockSongService.searchSongs.mockResolvedValueOnce(songList);
 
-      expect(result).toEqual(songList);
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.searchSongs).toHaveBeenCalled();
     });
 
-    it('should handle recent songs', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+    it('should handle random sort', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 5,
+        sort: SongSortType.RANDOM,
+      };
       const songList: SongPreviewDto[] = [];
 
-      const result = await songController.getSongList(query, 'recent');
+      mockSongService.getRandomSongs.mockResolvedValueOnce(songList);
 
-      expect(result).toEqual(songList);
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.getRandomSongs).toHaveBeenCalledWith(5, undefined);
     });
 
-    it('should return categories when q=categories without id', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
-      const categories = { pop: 42, rock: 38 };
-
-      const result = await songController.getSongList(query, 'categories');
-
-      expect(result).toEqual(categories);
-    });
-
-    it('should return songs by category when q=categories with id', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+    it('should handle random sort with category', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 5,
+        sort: SongSortType.RANDOM,
+        category: 'electronic',
+      };
       const songList: SongPreviewDto[] = [];
-      const categoryId = 'pop';
 
-      const result = await songController.getSongList(
-        query,
-        'categories',
-        categoryId,
+      mockSongService.getRandomSongs.mockResolvedValueOnce(songList);
+
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.getRandomSongs).toHaveBeenCalledWith(5, 'electronic');
+    });
+
+    it('should throw error for invalid random limit', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 15,
+        sort: SongSortType.RANDOM,
+      };
+
+      await expect(songController.getSongList(query)).rejects.toThrow(
+        BadRequestException,
       );
-
-      expect(result).toEqual(songList);
     });
 
-    it('should return random songs', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 5 };
-      const songList: SongPreviewDto[] = [];
-      const category = 'electronic';
-
-      const result = await songController.getSongList(
-        query,
-        'random',
-        undefined,
-        category,
-      );
-
-      expect(result).toEqual(songList);
-    });
-
-    it('should throw error for invalid random count', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 15 }; // Invalid limit > 10
-
-      await expect(songController.getSongList(query, 'random')).rejects.toThrow(
-        'Invalid query parameters',
-      );
-    });
-
-    it('should handle zero limit for random (uses default)', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 0 }; // limit 0 is falsy, so uses default
+    it('should handle recent sort', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 10,
+        sort: SongSortType.RECENT,
+      };
       const songList: SongPreviewDto[] = [];
 
-      const result = await songController.getSongList(query, 'random');
+      mockSongService.getRecentSongs.mockResolvedValueOnce(songList);
 
-      expect(result).toEqual(songList);
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.getRecentSongs).toHaveBeenCalledWith(1, 10);
     });
 
-    it('should throw error for invalid query mode', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+    it('should handle recent sort with category', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 10,
+        sort: SongSortType.RECENT,
+        category: 'pop',
+      };
+      const songList: SongPreviewDto[] = [];
 
-      await expect(
-        songController.getSongList(query, 'invalid' as any),
-      ).rejects.toThrow('Invalid query parameters');
+      mockSongService.getSongsByCategory.mockResolvedValueOnce(songList);
+
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.getSongsByCategory).toHaveBeenCalledWith('pop', 1, 10);
+    });
+
+    it('should handle category filter', async () => {
+      const query: SongListQueryDTO = {
+        page: 1,
+        limit: 10,
+        category: 'rock',
+      };
+      const songList: SongPreviewDto[] = [];
+
+      mockSongService.getSongsByCategory.mockResolvedValueOnce(songList);
+
+      const result = await songController.getSongList(query);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.getSongsByCategory).toHaveBeenCalledWith(
+        'rock',
+        1,
+        10,
+      );
     });
 
     it('should handle errors', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: SongListQueryDTO = { page: 1, limit: 10 };
 
       mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
 
@@ -165,10 +218,91 @@ describe('SongController', () => {
     });
   });
 
+  describe('getFeaturedSongs', () => {
+    it('should return featured songs', async () => {
+      const songList: SongPreviewDto[] = [];
+
+      mockSongService.getSongsForTimespan.mockResolvedValue(songList);
+      mockSongService.getSongsBeforeTimespan.mockResolvedValue([]);
+
+      const result = await songController.getFeaturedSongs();
+
+      expect(result).toHaveProperty('hour');
+      expect(result).toHaveProperty('day');
+      expect(result).toHaveProperty('week');
+      expect(result).toHaveProperty('month');
+      expect(result).toHaveProperty('year');
+      expect(result).toHaveProperty('all');
+      expect(result.hour).toEqual([]);
+      expect(result.day).toEqual([]);
+      expect(result.week).toEqual([]);
+      expect(result.month).toEqual([]);
+      expect(result.year).toEqual([]);
+      expect(result.all).toEqual([]);
+      expect(songService.getSongsForTimespan).toHaveBeenCalledTimes(6);
+    });
+
+    it('should handle errors', async () => {
+      mockSongService.getSongsForTimespan.mockRejectedValueOnce(
+        new Error('Error'),
+      );
+
+      await expect(songController.getFeaturedSongs()).rejects.toThrow('Error');
+    });
+  });
+
+  describe('getCategories', () => {
+    it('should return categories with counts', async () => {
+      const categories = { pop: 42, rock: 38 };
+
+      mockSongService.getCategories.mockResolvedValueOnce(categories);
+
+      const result = await songController.getCategories();
+
+      expect(result).toEqual(categories);
+      expect(songService.getCategories).toHaveBeenCalled();
+    });
+
+    it('should handle errors', async () => {
+      mockSongService.getCategories.mockRejectedValueOnce(new Error('Error'));
+
+      await expect(songController.getCategories()).rejects.toThrow('Error');
+    });
+  });
+
+  describe('searchSongs', () => {
+    it('should return paginated search results', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const q = 'test query';
+      const songList: SongPreviewDto[] = [];
+
+      mockSongService.searchSongs.mockResolvedValueOnce(songList);
+
+      const result = await songController.searchSongs(query, q);
+
+      expect(result).toBeInstanceOf(PageDto);
+      expect(result.content).toEqual(songList);
+      expect(songService.searchSongs).toHaveBeenCalledWith(query, q);
+    });
+
+    it('should handle errors', async () => {
+      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const q = 'test query';
+
+      mockSongService.searchSongs.mockRejectedValueOnce(new Error('Error'));
+
+      await expect(songController.searchSongs(query, q)).rejects.toThrow(
+        'Error',
+      );
+    });
+  });
+
   describe('getSong', () => {
     it('should return song info by ID', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const song: SongViewDto = {} as SongViewDto;
 
       mockSongService.getSong.mockResolvedValueOnce(song);
@@ -181,7 +315,9 @@ describe('SongController', () => {
 
     it('should handle errors', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.getSong.mockRejectedValueOnce(new Error('Error'));
 
@@ -192,7 +328,9 @@ describe('SongController', () => {
   describe('getEditSong', () => {
     it('should return song info for editing by ID', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const song: UploadSongDto = {} as UploadSongDto;
 
       mockSongService.getSongEdit.mockResolvedValueOnce(song);
@@ -205,7 +343,9 @@ describe('SongController', () => {
 
     it('should handle errors', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.getSongEdit.mockRejectedValueOnce(new Error('Error'));
 
@@ -219,7 +359,9 @@ describe('SongController', () => {
     it('should edit song info by ID', async () => {
       const id = 'test-id';
       const req = { body: {} } as any;
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const response: UploadSongResponseDto = {} as UploadSongResponseDto;
 
       mockSongService.patchSong.mockResolvedValueOnce(response);
@@ -233,7 +375,9 @@ describe('SongController', () => {
     it('should handle errors', async () => {
       const id = 'test-id';
       const req = { body: {} } as any;
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.patchSong.mockRejectedValueOnce(new Error('Error'));
 
@@ -247,7 +391,9 @@ describe('SongController', () => {
     it('should get song .nbs file', async () => {
       const id = 'test-id';
       const src = 'test-src';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       const res = {
         set: jest.fn(),
@@ -278,7 +424,9 @@ describe('SongController', () => {
     it('should handle errors', async () => {
       const id = 'test-id';
       const src = 'test-src';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       const res = {
         set: jest.fn(),
@@ -298,7 +446,9 @@ describe('SongController', () => {
   describe('getSongOpenUrl', () => {
     it('should get song .nbs file open URL', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const src = 'downloadButton';
       const url = 'test-url';
 
@@ -318,7 +468,9 @@ describe('SongController', () => {
 
     it('should throw UnauthorizedException if src is invalid', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const src = 'invalid-src';
 
       await expect(
@@ -328,7 +480,9 @@ describe('SongController', () => {
 
     it('should handle errors', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const src = 'downloadButton';
 
       mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
@@ -344,7 +498,9 @@ describe('SongController', () => {
   describe('deleteSong', () => {
     it('should delete a song', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.deleteSong.mockResolvedValueOnce(undefined);
 
@@ -355,7 +511,9 @@ describe('SongController', () => {
 
     it('should handle errors', async () => {
       const id = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.deleteSong.mockRejectedValueOnce(new Error('Error'));
 
@@ -387,7 +545,9 @@ describe('SongController', () => {
         allowDownload: false,
       };
 
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
       const response: UploadSongResponseDto = {} as UploadSongResponseDto;
 
       mockSongService.uploadSong.mockResolvedValueOnce(response);
@@ -419,7 +579,9 @@ describe('SongController', () => {
         allowDownload: false,
       };
 
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
+      const user: UserDocument = {
+        _id: 'test-user-id',
+      } as unknown as UserDocument;
 
       mockSongService.uploadSong.mockRejectedValueOnce(new Error('Error'));
 
