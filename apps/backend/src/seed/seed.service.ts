@@ -184,29 +184,141 @@ export class SeedService {
     songTest.meta.name = faker.music.songName();
     songTest.meta.originalAuthor = faker.music.artist();
 
-    songTest.tempo = faker.helpers.rangeToNumber({ min: 20 * 1, max: 20 * 4 });
-    const layerCount = faker.helpers.rangeToNumber({ min: 1, max: 5 });
+    // Tempo: 60-120 BPM (20 * 3 to 20 * 6)
+    songTest.tempo = faker.helpers.rangeToNumber({ min: 20 * 3, max: 20 * 6 });
 
-    for (let layerIndex = 0; layerIndex < layerCount; layerIndex++) {
-      const instrument = Instrument.builtIn[layerCount];
-      const layer = songTest.createLayer();
-      layer.meta.name = instrument.meta.name;
+    // Choose scale type (blues or phrygian)
+    const useBluesScale = faker.datatype.boolean();
+    const scaleType = useBluesScale ? 'blues' : 'phrygian';
 
-      const notes = Array.from({
-        length: faker.helpers.rangeToNumber({ min: 20, max: 120 }),
-      }).map(
-        () =>
-          new Note(instrument, {
-            key: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
-            velocity: faker.helpers.rangeToNumber({ min: 0, max: 127 }),
-            panning: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
-            pitch: faker.helpers.rangeToNumber({ min: -1, max: 1 }),
-          }),
-      );
+    // Choose root note (C to B, octave 3-5)
+    const rootOctave = faker.helpers.rangeToNumber({ min: 3, max: 5 });
+    const rootNote = faker.helpers.rangeToNumber({ min: 0, max: 11 }); // 0=C, 1=C#, etc.
+    const rootKey = rootNote + rootOctave * 12;
 
-      for (let i = 0; i < notes.length; i++)
-        songTest.setNote(i * 4, layer, notes[i]);
-      // "i * 4" is placeholder - this is the tick to place on
+    // Define scales (in semitones from root)
+    const bluesScale = [0, 3, 5, 6, 7, 10]; // 1, b3, 4, b5, 5, b7
+    const phrygianScale = [0, 1, 3, 5, 7, 8, 10]; // 1, b2, b3, 4, 5, b6, b7
+    const scale = useBluesScale ? bluesScale : phrygianScale;
+
+    // Song length in ticks (4 ticks per beat, 8-16 bars)
+    const bars = faker.helpers.rangeToNumber({ min: 8, max: 16 });
+    const beatsPerBar = 4;
+    const ticksPerBeat = 4;
+    const totalTicks = bars * beatsPerBar * ticksPerBeat;
+
+    // Get instruments for bass and melody
+    const bassInstrument = Instrument.builtIn[0]; // Lower instrument
+    const melodyInstrument =
+      Instrument.builtIn[faker.helpers.rangeToNumber({ min: 1, max: 4 })];
+
+    // Create bass layer
+    const bassLayer = songTest.createLayer();
+    bassLayer.meta.name = 'Bass';
+
+    // Create melody layer
+    const melodyLayer = songTest.createLayer();
+    melodyLayer.meta.name = 'Melody';
+
+    // Generate bass line (root notes and fifths, simpler rhythm)
+    const bassNotes: Array<{ tick: number; key: number }> = [];
+    const bassTickInterval = ticksPerBeat * 2; // Every 2 beats
+
+    for (let tick = 0; tick < totalTicks; tick += bassTickInterval) {
+      // Sometimes skip a beat for variation
+      if (faker.datatype.boolean({ probability: 0.2 })) continue;
+
+      // Choose between root, fifth, or octave
+      const bassChoice = faker.helpers.arrayElement([0, 7, 12]); // root, fifth, octave
+      const bassKey = rootKey + bassChoice;
+
+      // Keep in valid range (24-60 is a good bass range)
+      if (bassKey >= 24 && bassKey <= 60) {
+        bassNotes.push({ tick, key: bassKey });
+      }
+    }
+
+    // Add some passing notes for more interest
+    for (let i = 0; i < bassNotes.length - 1; i++) {
+      if (faker.datatype.boolean({ probability: 0.3 })) {
+        const currentTick = bassNotes[i].tick;
+        const nextTick = bassNotes[i + 1].tick;
+        const midTick = currentTick + (nextTick - currentTick) / 2;
+        const passingNote = rootKey + faker.helpers.arrayElement([2, 4, 5]); // Minor third, fourth, or tritone
+        if (passingNote >= 24 && passingNote <= 60) {
+          bassNotes.push({ tick: midTick, key: passingNote });
+        }
+      }
+    }
+
+    // Sort bass notes by tick
+    bassNotes.sort((a, b) => a.tick - b.tick);
+
+    // Generate melody (scale notes, more varied rhythm)
+    const melodyNotes: Array<{ tick: number; key: number }> = [];
+    const melodyOctave = rootOctave + 1; // One octave higher than root
+    const melodyRootKey = rootNote + melodyOctave * 12;
+
+    // Create melodic phrases
+    const phraseLength = beatsPerBar * ticksPerBeat * 2; // 2 bars per phrase
+    for (
+      let phraseStart = 0;
+      phraseStart < totalTicks;
+      phraseStart += phraseLength
+    ) {
+      const phraseEnd = Math.min(phraseStart + phraseLength, totalTicks);
+
+      // Generate notes in this phrase
+      let currentTick = phraseStart;
+      while (currentTick < phraseEnd) {
+        // Vary note lengths (quarter, eighth, dotted quarter)
+        const noteLengths = [
+          ticksPerBeat,
+          ticksPerBeat / 2,
+          ticksPerBeat * 1.5,
+        ];
+        const noteLength = faker.helpers.arrayElement(noteLengths);
+
+        if (currentTick + noteLength > phraseEnd) break;
+
+        // Choose scale note
+        const scaleDegree = faker.helpers.arrayElement(scale);
+        const melodyKey = melodyRootKey + scaleDegree;
+
+        // Keep in valid range (48-84 is a good melody range)
+        if (melodyKey >= 48 && melodyKey <= 84) {
+          melodyNotes.push({ tick: currentTick, key: melodyKey });
+        }
+
+        // Sometimes add a rest
+        if (faker.datatype.boolean({ probability: 0.2 })) {
+          currentTick += noteLength * 0.5;
+        } else {
+          currentTick += noteLength;
+        }
+      }
+    }
+
+    // Add bass notes to song
+    for (const { tick, key } of bassNotes) {
+      const note = new Note(bassInstrument, {
+        key,
+        velocity: faker.helpers.rangeToNumber({ min: 80, max: 100 }), // Strong bass
+        panning: 0,
+        pitch: 0,
+      });
+      songTest.setNote(tick, bassLayer, note);
+    }
+
+    // Add melody notes to song
+    for (const { tick, key } of melodyNotes) {
+      const note = new Note(melodyInstrument, {
+        key,
+        velocity: faker.helpers.rangeToNumber({ min: 70, max: 100 }),
+        panning: faker.helpers.rangeToNumber({ min: -0.3, max: 0.3 }), // Slight panning variation
+        pitch: 0,
+      });
+      songTest.setNote(tick, melodyLayer, note);
     }
 
     return songTest;
