@@ -3,7 +3,7 @@
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@web/lib/utils';
 
@@ -53,16 +53,111 @@ const AdTemplate = ({
   const pubId = useAdSenseClient();
 
   const [isHidden, setIsHidden] = useState(false);
+  const adRef = useRef<HTMLModElement>(null);
+  const [isAdInitialized, setIsAdInitialized] = useState(false);
+
+  // Reset initialization state when ad is hidden/shown
+  useEffect(() => {
+    if (isHidden) {
+      setIsAdInitialized(false);
+    }
+  }, [isHidden]);
 
   useEffect(() => {
-    if (window) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.error(e);
-      }
+    if (!pubId || isHidden || isAdInitialized || !adRef.current) {
+      return;
     }
-  }, []);
+
+    let isInitializing = false;
+    let retryCount = 0;
+    const maxRetries = 50; // 5 seconds max (50 * 100ms)
+
+    const initializeAd = () => {
+      const adElement = adRef.current;
+      if (!adElement || isInitializing || isAdInitialized) {
+        return;
+      }
+
+      // Check if ad is already initialized by AdSense
+      const adStatus = adElement.getAttribute('data-adsbygoogle-status');
+      if (
+        adStatus === 'done' ||
+        adStatus === 'filled' ||
+        adStatus === 'unfilled'
+      ) {
+        setIsAdInitialized(true);
+        return;
+      }
+
+      // Check if the element has dimensions
+      const rect = adElement.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          // Retry after a short delay if element has no dimensions
+          setTimeout(initializeAd, 100);
+        }
+        return;
+      }
+
+      // Check if adsbygoogle script is loaded
+      if (typeof window !== 'undefined' && window.adsbygoogle) {
+        isInitializing = true;
+        try {
+          // Double-check the element hasn't been initialized by another call
+          const currentStatus = adElement.getAttribute(
+            'data-adsbygoogle-status',
+          );
+          if (!currentStatus || currentStatus === '') {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            setIsAdInitialized(true);
+          } else {
+            setIsAdInitialized(true);
+          }
+        } catch (e) {
+          console.error('AdSense initialization error:', e);
+          isInitializing = false;
+        }
+      } else {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          // Wait for script to load
+          setTimeout(() => {
+            if (typeof window !== 'undefined' && window.adsbygoogle) {
+              initializeAd();
+            }
+          }, 100);
+        }
+      }
+    };
+
+    // Use ResizeObserver to wait for element to have dimensions
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+          initializeAd();
+          resizeObserver.disconnect();
+          break;
+        }
+      }
+    });
+
+    if (adRef.current) {
+      resizeObserver.observe(adRef.current);
+    }
+
+    // Fallback: try after a delay even if ResizeObserver doesn't fire
+    const timeoutId = setTimeout(() => {
+      initializeAd();
+      resizeObserver.disconnect();
+    }, 500);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(timeoutId);
+      isInitializing = false;
+    };
+  }, [pubId, isHidden, isAdInitialized]);
 
   const InfoText = !pubId
     ? () => (
@@ -85,6 +180,7 @@ const AdTemplate = ({
       {!isHidden && (
         <>
           <ins
+            ref={adRef}
             className={cn('adsbygoogle', isHidden ? 'hidden' : '')}
             style={{
               display: 'block',
