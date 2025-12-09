@@ -3,7 +3,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { NoteQuadTree } from '@nbw/song';
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 import {
   Tooltip,
   TooltipContent,

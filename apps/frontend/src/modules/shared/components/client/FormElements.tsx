@@ -5,7 +5,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import Markdown from 'react-markdown';
 
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';

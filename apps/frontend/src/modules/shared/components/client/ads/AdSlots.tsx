@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 import useAdSenseClient from './useAdSenseClient';
 

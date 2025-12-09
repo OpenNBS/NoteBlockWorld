@@ -3,7 +3,7 @@
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { ReactNode, forwardRef } from 'react';
 
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 const Tooltip = TooltipPrimitive.Root;
 

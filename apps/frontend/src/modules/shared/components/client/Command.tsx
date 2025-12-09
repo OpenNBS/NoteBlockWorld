@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Command as CommandPrimitive } from 'cmdk';
 import * as React from 'react';
 
-import { cn } from '../../../../lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,

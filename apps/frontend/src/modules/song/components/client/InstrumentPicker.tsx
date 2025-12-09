@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Instrument } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 import { Area } from '../../../shared/components/client/FormElements';
 

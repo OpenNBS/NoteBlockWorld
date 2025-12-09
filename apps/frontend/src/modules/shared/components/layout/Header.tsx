@@ -39,7 +39,7 @@ export async function Header() {
           <Link href='/'>
             <Image
               unoptimized
-              quality={100}
+              quality={75}
               src='/nbw-color.png'
               alt='NoteBlockWorld logo'
               className='h-10 mx-auto my-2 aspect-square drop-shadow-[0_35px_35px_rgba(0.2,0.58,1,0.25)] hover:animate-[nbw-glow_3s_ease-in-out_infinite]'

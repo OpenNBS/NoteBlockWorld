@@ -2,7 +2,7 @@ import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 import { MusicalNote } from './MusicalNote';
 

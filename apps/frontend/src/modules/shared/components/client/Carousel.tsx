@@ -20,7 +20,7 @@ import {
   useState,
 } from 'react';
 
-import { cn } from '../../../../lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 export type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;

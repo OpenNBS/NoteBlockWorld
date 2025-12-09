@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { cn } from '@web/lib/tailwind.utils';
+import { cn } from '@web/lib/utils';
 
 export const NoteBlockWorldLogo = ({
   size,
@@ -37,6 +37,7 @@ export const NoteBlockWorldLogo = ({
     >
       <Image
         src='/nbw-color.png'
+        quality={75}
         alt='Note Block World logo'
         width={size}
         height={size}
