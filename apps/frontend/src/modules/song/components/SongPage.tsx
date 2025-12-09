@@ -64,6 +64,22 @@ export async function SongPage({ id }: { id: string }) {
     console.error('Failed to retrieve suggested songs');
   }
 
+  // Check if the image is from localhost to avoid Next.js 15 private IP errors
+  // Next.js 15 blocks images from private IPs (localhost, 127.0.0.1, ::1) for security reasons.
+  // This is related to CVE-2025-55173 security vulnerability.
+  // Sources:
+  // - https://nextjs.org/blog/next-15 (Next.js 15 release notes)
+  // - https://advisories.gitlab.com/pkg/npm/next/CVE-2025-55173/ (Security advisory)
+  // - https://github.com/vercel/next.js/discussions/50617 (GitHub discussion)
+  // - https://learnspace.blog/blog/the-right-way-to-handle-images-in-next-js-15
+  // Workaround: Use unoptimized={true} for localhost images to bypass the optimization API
+  // which triggers the private IP check. This only affects development; production images
+  // from external sources will still be optimized.
+  const isLocalhost =
+    song.thumbnailUrl.startsWith('http://localhost') ||
+    song.thumbnailUrl.startsWith('http://127.0.0.1') ||
+    song.thumbnailUrl.startsWith('http://[::1]');
+
   return (
     <>
       <div className='grid grid-cols-8 gap-12'>
@@ -72,9 +88,10 @@ export async function SongPage({ id }: { id: string }) {
           {/* TODO: implement loading https://github.com/vercel/next.js/discussions/50617 */}
           <picture className='bg-zinc-800 aspect-[5/3] rounded-xl'>
             <Image
+              unoptimized={isLocalhost}
+              alt='Song thumbnail'
               width={1280}
               height={720}
-              alt='Song thumbnail'
               src={song.thumbnailUrl}
               className='w-full h-full rounded-xl'
             />
