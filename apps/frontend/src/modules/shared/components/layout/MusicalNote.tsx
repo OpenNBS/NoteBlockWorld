@@ -26,9 +26,16 @@ interface MusicalNoteProps {
 }
 
 export const MusicalNote = ({ size = 4 }: MusicalNoteProps) => {
-  const [currentNote, setCurrentNote] = useState(
-    Math.floor(Math.random() * totalNotes),
-  );
+  // Initialize with a fixed value to avoid hydration mismatch
+  // Then set a random value on the client side
+  const [currentNote, setCurrentNote] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  // Set random note on client side only to avoid hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+    setCurrentNote(Math.floor(Math.random() * totalNotes));
+  }, []);
 
   const noteToCell = useCallback(() => {
     const index = Math.abs(currentNote) % totalNotes;
