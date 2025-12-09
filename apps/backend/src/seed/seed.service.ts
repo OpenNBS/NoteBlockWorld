@@ -109,7 +109,7 @@ export class SeedService {
 
         const body: UploadSongDto = {
           file: {
-            buffer: fileData,
+            buffer: fileBuffer,
             size: fileBuffer.length,
             mimetype: 'application/octet-stream',
             originalname: `${faker.music.songName()}.nbs`,
@@ -125,7 +125,7 @@ export class SeedService {
           category: faker.helpers.arrayElement(categories) as CategoryType,
           customInstruments: [],
           thumbnailData: {
-            backgroundColor: faker.internet.color(),
+            backgroundColor: faker.color.rgb({ format: 'hex' }),
             startLayer: faker.helpers.rangeToNumber({ min: 0, max: 4 }),
             startTick: faker.helpers.rangeToNumber({ min: 0, max: 100 }),
             zoomLevel: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
