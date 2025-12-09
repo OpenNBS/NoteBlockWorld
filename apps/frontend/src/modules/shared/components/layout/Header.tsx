@@ -59,30 +59,20 @@ export async function Header() {
 
         {/* Info pages */}
         <div className='flex flex-1 justify-center gap-1 h-8 text-center'>
-          <BlockTab
-            href='/'
-            icon={faMusic}
-            label='Songs'
-            className='bg-purple-700 after:bg-purple-900 before:bg-purple-950'
-          />
+          <BlockTab href='/' icon={faMusic} label='Songs' color='purple' />
           <BlockTab
             href='/help'
             icon={faQuestionCircle}
             label='Help'
-            className='bg-blue-700 after:bg-blue-900 before:bg-blue-950'
+            color='blue'
           />
           <BlockTab
             href='/blog'
             icon={faNewspaper}
             label='Blog'
-            className='bg-green-700 after:bg-green-900 before:bg-green-950'
+            color='green'
           />
-          <BlockTab
-            href='/about'
-            icon={faUser}
-            label='About'
-            className='bg-cyan-700 after:bg-cyan-900 before:bg-cyan-950'
-          />
+          <BlockTab href='/about' icon={faUser} label='About' color='cyan' />
           <RandomSongButton />
         </div>
 

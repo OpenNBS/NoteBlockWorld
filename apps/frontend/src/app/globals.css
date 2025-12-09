@@ -153,11 +153,12 @@ body {
 
 .bevel {
   position: relative;
+  --bevel-after-bg: rgb(63 63 70); /* zinc-800 default */
+  --bevel-before-bg: rgb(24 24 27); /* zinc-900 default */
 }
 .bevel:after,
 .bevel:before {
   content: '';
-  background: grey;
   position: absolute;
 }
 .bevel:after {
@@ -166,6 +167,7 @@ body {
   left: 4px;
   top: 0;
   transform: translatey(-100%) skewx(-45deg);
+  background: var(--bevel-after-bg);
 }
 .bevel:before {
   width: 8px;
@@ -173,6 +175,7 @@ body {
   right: 0;
   transform: translatex(100%) skewy(-45deg);
   top: -4px;
+  background: var(--bevel-before-bg);
 }
 
 /************** Google AdSense **************/
