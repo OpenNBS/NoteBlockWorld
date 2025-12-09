@@ -19,17 +19,23 @@ import { WelcomeBanner } from '../WelcomeBanner';
 
 import { CategoryButtonGroup } from './client/CategoryButton';
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
-import { useRecentSongsProvider } from './client/context/RecentSongs.context';
+import {
+  useRecentSongsProvider,
+  useRecentSongsPageLoader,
+  useRecentSongsCategoriesLoader,
+} from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
-  const { featuredSongsPage } = useFeaturedSongsProvider();
+  // Initialize sync hooks for proper effect handling
+  useRecentSongsPageLoader();
+  useRecentSongsCategoriesLoader();
 
+  const { featuredSongsPage, timespan } = useFeaturedSongsProvider();
   const { recentSongs, increasePageRecent, hasMore } = useRecentSongsProvider();
-  const { timespan } = useFeaturedSongsProvider();
   return (
     <>
       {/* Welcome banner/Hero */}
@@ -81,8 +87,8 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
-        {recentSongs.map((song, i) =>
-          song === undefined ? (
+        {(recentSongs || []).map((song, i) =>
+          song === undefined || song === null ? (
             <SongCardAdSlot key={i} />
           ) : (
             <SongCard key={i} song={song} />

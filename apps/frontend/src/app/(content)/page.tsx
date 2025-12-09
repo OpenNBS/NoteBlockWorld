@@ -1,13 +1,13 @@
 import { Metadata } from 'next';
 
-import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/database';
+import type { FeaturedSongsDto, PageDto, SongPreviewDto } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import { HomePageProvider } from '@web/modules/browse/components/client/context/HomePage.context';
 import { HomePageComponent } from '@web/modules/browse/components/HomePageComponent';
 
 async function fetchRecentSongs() {
   try {
-    const response = await axiosInstance.get<SongPreviewDto[]>('/song', {
+    const response = await axiosInstance.get<PageDto<SongPreviewDto>>('/song', {
       params: {
         page: 1, // TODO: fix constants
         limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
@@ -16,7 +16,7 @@ async function fetchRecentSongs() {
       },
     });
 
-    return response.data;
+    return response.data.content;
   } catch (error) {
     return [];
   }
@@ -45,12 +45,12 @@ export const metadata: Metadata = {
 };
 
 async function Home() {
-  //const recentSongs = await fetchRecentSongs();
+  const recentSongs = await fetchRecentSongs();
   const featuredSongs = await fetchFeaturedSongs();
 
   return (
     <HomePageProvider
-      initialRecentSongs={[]}
+      initialRecentSongs={recentSongs}
       initialFeaturedSongs={featuredSongs}
     >
       <HomePageComponent />

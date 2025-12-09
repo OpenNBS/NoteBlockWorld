@@ -1,17 +1,24 @@
 'use client';
 
-import { createContext, useContext } from 'react';
-
 import { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 
 import { FeaturedSongsProvider } from './FeaturedSongs.context';
 import { RecentSongsProvider } from './RecentSongs.context';
+import { useFeaturedSongsStore } from './FeaturedSongs.context';
+import { useRecentSongsStore } from './RecentSongs.context';
 
-type HomePageContextType = null;
+/**
+ * Composed hook that provides access to both FeaturedSongs and RecentSongs stores
+ */
+export function useHomePageStore() {
+  const featuredSongs = useFeaturedSongsStore();
+  const recentSongs = useRecentSongsStore();
 
-const HomePageContext = createContext<HomePageContextType>(
-  null as HomePageContextType,
-);
+  return {
+    featuredSongs,
+    recentSongs,
+  };
+}
 
 export function HomePageProvider({
   children,
@@ -23,24 +30,15 @@ export function HomePageProvider({
   initialFeaturedSongs: FeaturedSongsDtoType;
 }) {
   return (
-    <HomePageContext.Provider value={null}>
-      <RecentSongsProvider initialRecentSongs={initialRecentSongs}>
-        <FeaturedSongsProvider initialFeaturedSongs={initialFeaturedSongs}>
-          {children}
-        </FeaturedSongsProvider>
-      </RecentSongsProvider>
-    </HomePageContext.Provider>
+    <RecentSongsProvider initialRecentSongs={initialRecentSongs}>
+      <FeaturedSongsProvider initialFeaturedSongs={initialFeaturedSongs}>
+        {children}
+      </FeaturedSongsProvider>
+    </RecentSongsProvider>
   );
 }
 
+// Legacy hook name for backward compatibility
 export function useHomePageProvider() {
-  const context = useContext(HomePageContext);
-
-  if (context === undefined || context === null) {
-    throw new Error(
-      'useHomePageProvider must be used within a HomepageProvider',
-    );
-  }
-
-  return context;
+  return useHomePageStore();
 }
