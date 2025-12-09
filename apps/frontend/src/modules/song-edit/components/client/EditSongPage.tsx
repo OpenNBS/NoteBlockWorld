@@ -15,7 +15,7 @@ import { SongEditForm } from './SongEditForm';
 
 async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
   // get token from cookies
-  const token = getTokenServer();
+  const token = await getTokenServer();
   // if token is not null, redirect to home page
   if (!token) throw new Error('Failed to fetch song data');
   if (!token.value) throw new Error('Failed to fetch song data');

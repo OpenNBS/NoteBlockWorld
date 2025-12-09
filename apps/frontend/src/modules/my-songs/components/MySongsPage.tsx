@@ -41,7 +41,7 @@ async function fetchSongsFolder(): Promise<SongsFolder> {
   const pageSize = MY_SONGS.PAGE_SIZE;
 
   // get token from cookies
-  const token = getTokenServer();
+  const token = await getTokenServer();
 
   // if token is null, redirect to home page
   if (!token) return {};

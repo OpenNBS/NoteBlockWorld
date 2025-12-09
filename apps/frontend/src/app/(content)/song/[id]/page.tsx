@@ -6,9 +6,9 @@ import axios from '@web/lib/axios';
 import { SongPage } from '@web/modules/song/components/SongPage';
 
 interface SongPage {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
@@ -17,6 +17,7 @@ export async function generateMetadata({
   let song;
   const publicUrl = process.env.NEXT_PUBLIC_URL;
 
+  const { id } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value || null;
 
@@ -27,7 +28,7 @@ export async function generateMetadata({
   }
 
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${params.id}`, {
+    const response = await axios.get<SongViewDtoType>(`/song/${id}`, {
       headers,
     });
 
@@ -55,8 +56,8 @@ export async function generateMetadata({
   };
 }
 
-function Page({ params }: SongPage) {
-  const { id } = params;
+async function Page({ params }: SongPage) {
+  const { id } = await params;
 
   return <SongPage id={id} />;
 }

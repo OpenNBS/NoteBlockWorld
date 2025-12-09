@@ -12,7 +12,13 @@ export const WelcomeBanner = () => {
           backgroundAttachment: 'fixed',
         }}
       ></div>
-      <Image src='/nbw-color.png' alt='' width={100} height={100} />
+      <Image
+        src='/nbw-color.png'
+        quality={75}
+        alt='Note Block World logo'
+        width={100}
+        height={100}
+      />
       <div className='flex-1 leading-tight max-w-screen-md'>
         <h1 className='text-lg font-bold mb-1 text-green-400'>
           Welcome to <strong className='text-teal-300'>Note Block World</strong>

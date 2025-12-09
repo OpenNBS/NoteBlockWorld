@@ -34,10 +34,15 @@ const nextConfig = {
         hostname: 'cdn.discordapp.com',
         port: '',
       },
-      // localhost
+      // localhost - allow all localhost variants
       {
         protocol: 'http',
         hostname: 'localhost',
+        port: '9000',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
         port: '9000',
       },
     ],
