@@ -20,11 +20,12 @@ import {
   Select,
   TextArea,
   UploadButton,
-} from '../../../shared/components/client/FormElements';
-import { useSongProvider } from '../../../song/components/client/context/Song.context';
+} from '@web/modules/shared/components/client/FormElements';
+import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
+import React from 'react';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
@@ -32,11 +33,11 @@ type SongFormProps = {
   isLocked?: boolean;
 };
 
-export const SongForm = ({
+export const SongForm: React.FC<SongFormProps> = ({
   type,
   isLoading = false,
   isLocked = false,
-}: SongFormProps) => {
+}) => {
   const useSongProviderData = useSongProvider(type);
 
   const { sendError, errors, submitSong, isSubmitting, formMethods, register } =

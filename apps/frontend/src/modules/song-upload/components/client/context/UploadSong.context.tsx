@@ -236,9 +236,7 @@ export const UploadSongProvider = ({
     let parsedSong: SongFileType;
 
     try {
-      parsedSong = (await parseSongFromBuffer(
-        await file.arrayBuffer(),
-      )) as unknown as SongFileType; // TODO: Investigate this weird type error
+      parsedSong = await parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
       console.error('Error parsing song file', e);
       toast.error('Invalid song file! Please try again with a different song.');
@@ -298,8 +296,6 @@ export const UploadSongProvider = ({
       );
 
       formMethods.setValue('allowDownload', true);
-
-      // disable allowDownload
     }
   }, [song, formMethods]);
 
@@ -342,8 +338,6 @@ export const UploadSongProvider = ({
   );
 };
 
-// Hook that combines Zustand store with React Hook Form from context
-// This maintains backward compatibility with the old Context API
 export const useUploadSongProvider = (): useUploadSongProviderType => {
   const store = useUploadSongStore();
   const formContext = useContext(UploadSongFormContext);

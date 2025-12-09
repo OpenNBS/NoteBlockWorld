@@ -1,4 +1,5 @@
-import dynamic from 'next/dynamic';
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -24,9 +25,10 @@ export const ThumbnailRendererCanvas = ({
   notes,
   formMethods,
 }: ThumbnailRendererCanvasProps) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawRequest = useRef<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [functionsLoaded, setFunctionsLoaded] = useState(false);
   const thumbnailFunctionsRef = useRef<{
     drawNotesOffscreen: typeof import('@nbw/thumbnail').drawNotesOffscreen;
     swap: typeof import('@nbw/thumbnail').swap;
@@ -50,6 +52,7 @@ export const ThumbnailRendererCanvas = ({
       .then((funcs) => {
         thumbnailFunctionsRef.current = funcs;
         // Trigger a re-render to use the loaded functions
+        setFunctionsLoaded(true);
         setLoading(false);
       })
       .catch((error) => {
@@ -58,7 +61,7 @@ export const ThumbnailRendererCanvas = ({
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current as HTMLCanvasElement | null;
+    const canvas = canvasRef.current;
     if (!canvas) return;
 
     // Set canvas size to match the container size
@@ -74,7 +77,7 @@ export const ThumbnailRendererCanvas = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!thumbnailFunctionsRef.current) {
+    if (!thumbnailFunctionsRef.current || !functionsLoaded) {
       setLoading(true);
       return;
     }
@@ -111,7 +114,14 @@ export const ThumbnailRendererCanvas = ({
         setLoading(false);
       }
     });
-  }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
+  }, [
+    notes,
+    startTick,
+    startLayer,
+    zoomLevel,
+    backgroundColor,
+    functionsLoaded,
+  ]);
 
   return (
     <div className='relative w-full'>

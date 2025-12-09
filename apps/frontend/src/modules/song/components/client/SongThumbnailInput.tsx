@@ -2,8 +2,7 @@ import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { NoteQuadTree } from '@nbw/song';
-import { cn } from '@web/lib/utils';
+import { cn, oklchToRgb } from '@web/lib/utils';
 import {
   Tooltip,
   TooltipContent,
@@ -13,24 +12,27 @@ import {
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
+import { Slider } from '@web/modules/shared/components/ui/slider';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);
   return `${percentage}%`;
 };
 
-function ThumbnailSliders({
-  formMethods,
-  isLocked,
-  maxTick,
-  maxLayer,
-}: {
+type ThumbnailSlidersProps = {
   formMethods: UseFormReturn<UploadSongForm> & UseFormReturn<EditSongForm>;
   isLocked: boolean;
   maxTick: number;
   maxLayer: number;
-}) {
-  const { register } = formMethods;
+};
+
+const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
+  formMethods,
+  isLocked,
+  maxTick,
+  maxLayer,
+}) => {
+  const { setValue } = formMethods;
 
   const [zoomLevel, startTick, startLayer] = formMethods.watch([
     'thumbnailData.zoomLevel',
@@ -44,13 +46,15 @@ function ThumbnailSliders({
         <label htmlFor='zoom-level'>Zoom Level</label>
       </div>
       <div>
-        <input
-          type='range'
+        <Slider
           id='zoom-level'
-          className='w-full disabled:cursor-not-allowed'
-          {...register('thumbnailData.zoomLevel', {
-            valueAsNumber: true,
-          })}
+          value={[zoomLevel]}
+          onValueChange={(value) => {
+            setValue('thumbnailData.zoomLevel', value[0], {
+              shouldValidate: true,
+            });
+          }}
+          className='w-full'
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.zoomLevel.min}
           max={THUMBNAIL_CONSTANTS.zoomLevel.max}
@@ -61,14 +65,15 @@ function ThumbnailSliders({
         <label htmlFor='start-tick'>Start Tick</label>
       </div>
       <div className='w-full'>
-        <input
-          type='range'
+        <Slider
           id='start-tick'
-          className='w-full disabled:cursor-not-allowed'
-          {...register('thumbnailData.startTick', {
-            valueAsNumber: true,
-            max: maxTick,
-          })}
+          value={[startTick]}
+          onValueChange={(value) => {
+            setValue('thumbnailData.startTick', value[0], {
+              shouldValidate: true,
+            });
+          }}
+          className='w-full'
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startTick.default}
           max={maxTick}
@@ -79,14 +84,15 @@ function ThumbnailSliders({
         <label htmlFor='start-layer'>Start Layer</label>
       </div>
       <div className='w-full'>
-        <input
-          type='range'
+        <Slider
           id='start-layer'
-          className='w-full disabled:cursor-not-allowed'
-          {...register('thumbnailData.startLayer', {
-            valueAsNumber: true,
-            max: maxLayer,
-          })}
+          value={[startLayer]}
+          onValueChange={(value) => {
+            setValue('thumbnailData.startLayer', value[0], {
+              shouldValidate: true,
+            });
+          }}
+          className='w-full'
           disabled={isLocked}
           min={THUMBNAIL_CONSTANTS.startLayer.default}
           max={maxLayer}
@@ -95,21 +101,22 @@ function ThumbnailSliders({
       <div>{startLayer}</div>
     </div>
   );
-}
+};
 
-const ColorButton = ({
+type ColorButtonProps = {
+  color: string;
+  tooltip: string;
+  active: boolean;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled: boolean;
+};
+
+const ColorButton: React.FC<ColorButtonProps> = ({
   color,
   tooltip,
   active,
   onClick,
   disabled,
-}: {
-  color: string;
-  tooltip: string;
-  active: boolean;
-
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  disabled: boolean;
 }) => (
   <Tooltip>
     <TooltipTrigger asChild>
@@ -128,12 +135,14 @@ const ColorButton = ({
   </Tooltip>
 );
 
-export const SongThumbnailInput = ({
-  type,
-  isLocked,
-}: {
+type SongThumbnailInputProps = {
   type: 'upload' | 'edit';
   isLocked: boolean;
+};
+
+export const SongThumbnailInput: React.FC<SongThumbnailInputProps> = ({
+  type,
+  isLocked,
 }) => {
   const { song, formMethods } = useSongProvider(type);
 
@@ -156,10 +165,7 @@ export const SongThumbnailInput = ({
       />
 
       {song && notes && (
-        <ThumbnailRendererCanvas
-          notes={notes as unknown as NoteQuadTree} //TODO: fix this bizarre type cast
-          formMethods={formMethods}
-        />
+        <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
       )}
 
       {/* Background Color */}
@@ -177,8 +183,10 @@ export const SongThumbnailInput = ({
               }
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
-
-                formMethods.setValue('thumbnailData.backgroundColor', dark);
+                formMethods.setValue(
+                  'thumbnailData.backgroundColor',
+                  oklchToRgb(dark),
+                );
               }}
             />
           ))}
