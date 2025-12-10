@@ -386,6 +386,57 @@ export class SongService {
     }
   }
 
+  public async getSongFileBuffer(
+    publicId: string,
+    user: UserDocument | null,
+    src?: string,
+    packed: boolean = false,
+  ): Promise<{ buffer: ArrayBuffer; filename: string }> {
+    const foundSong = await this.songModel.findOne({ publicId: publicId });
+
+    if (!foundSong) {
+      throw new HttpException('Song not found with ID', HttpStatus.NOT_FOUND);
+    }
+
+    if (foundSong.visibility !== 'public') {
+      if (!user || foundSong.uploader.toString() !== user._id.toString()) {
+        throw new HttpException(
+          'This song is private',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    }
+
+    if (!packed && !foundSong.allowDownload) {
+      throw new HttpException(
+        'The uploader has disabled downloads of this song',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const fileKey = packed ? foundSong.packedSongUrl : foundSong.nbsFileUrl;
+    const fileExt = packed ? '.zip' : '.nbs';
+    const fileName = `${foundSong.title}${fileExt}`;
+
+    try {
+      const fileBuffer = await this.fileService.getSongFile(fileKey);
+
+      // increment download count
+      if (!packed && src === 'downloadButton') {
+        foundSong.downloadCount++;
+        await foundSong.save();
+      }
+
+      return { buffer: fileBuffer, filename: fileName };
+    } catch (e) {
+      this.logger.error('Error getting song file', e);
+      throw new HttpException(
+        'An error occurred while retrieving the song file',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   public async getMySongsPage({
     query,
     user,

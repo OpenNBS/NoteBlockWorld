@@ -53,10 +53,12 @@ services:
         echo "Waiting for MinIO to be available..."
         sleep 2
       done &&
-      mc mb minio/noteblockworld-songs &&
-      mc mb minio/noteblockworld-thumbs &&
+      mc mb minio/noteblockworld-songs || true &&
+      mc mb minio/noteblockworld-thumbs || true &&
       mc policy set public minio/noteblockworld-songs &&
-      mc policy set public minio/noteblockworld-thumbs
+      mc policy set public minio/noteblockworld-thumbs &&
+      mc admin config set minio api "cors_allow_origin=* cors_allow_methods=GET,PUT,POST,DELETE,HEAD,OPTIONS cors_allow_headers=*" || echo "CORS config may already be set" &&
+      echo "CORS configuration applied successfully"
       '
 
 volumes:

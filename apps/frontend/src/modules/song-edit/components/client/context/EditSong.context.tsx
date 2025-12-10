@@ -21,6 +21,8 @@ import {
   editSongFormSchema,
 } from '@web/modules/song/components/client/SongForm.zod';
 
+// TODO: THIS FORM IS CURRENTLY BROKEN, WE NEED TO FIX IT
+
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
   submitSong: () => void;
@@ -237,51 +239,16 @@ export const EditSongProvider = ({
       const token = getTokenLocal();
 
       try {
-        // The backend redirects (302) to an S3 signed URL
-        // Get the redirect URL first, then fetch from S3 directly
-        let s3Url: string | null = null;
+        // Backend now proxies the file directly, avoiding CORS issues
+        const response = await axiosInstance.get(`/song/${id}/download`, {
+          params: {
+            src: 'edit',
+          },
+          headers: { authorization: `Bearer ${token}` },
+          responseType: 'arraybuffer', // Get as ArrayBuffer for parsing
+        });
 
-        try {
-          // Make request without following redirects to get the S3 URL
-          await axiosInstance.get(`/song/${id}/download`, {
-            params: {
-              src: 'edit',
-            },
-            headers: { authorization: `Bearer ${token}` },
-            maxRedirects: 0, // Don't follow redirects
-            validateStatus: () => false, // Don't throw on any status
-          });
-        } catch (redirectError: any) {
-          // Axios throws an error when maxRedirects is 0 and a redirect occurs
-          // Extract the Location header from the redirect response
-          if (
-            redirectError.response?.status >= 300 &&
-            redirectError.response?.status < 400
-          ) {
-            s3Url = redirectError.response.headers.location;
-            if (!s3Url) {
-              throw new Error('Redirect received but no Location header found');
-            }
-          } else {
-            // Not a redirect error, re-throw it
-            throw redirectError;
-          }
-        }
-
-        if (!s3Url) {
-          throw new Error('Failed to get song download URL from redirect');
-        }
-
-        // Fetch the file directly from S3 using native fetch (handles CORS better)
-        const s3Response = await fetch(s3Url);
-        if (!s3Response.ok) {
-          throw new Error(
-            `Failed to fetch song from storage: ${s3Response.status} ${s3Response.statusText}`,
-          );
-        }
-
-        const arrayBuffer = await s3Response.arrayBuffer();
-        const songFile = arrayBuffer;
+        const songFile = response.data;
 
         // convert to song
         const song = await parseSongFromBuffer(songFile);

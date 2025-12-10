@@ -6,6 +6,7 @@ import {
   Delete,
   Get,
   Headers,
+  HttpException,
   HttpStatus,
   Logger,
   Param,
@@ -378,15 +379,37 @@ export class SongController {
   ): Promise<void> {
     user = validateUser(user);
 
-    // TODO: no longer used
-    res.set({
-      'Content-Disposition': 'attachment; filename="song.nbs"',
-      // Expose the Content-Disposition header to the client
-      'Access-Control-Expose-Headers': 'Content-Disposition',
-    });
+    try {
+      // Get file directly from S3/MinIO and proxy it to avoid CORS issues
+      // This bypasses presigned URLs and CORS entirely
+      const { buffer, filename } = await this.songService.getSongFileBuffer(
+        id,
+        user,
+        src,
+        false,
+      );
 
-    const url = await this.songService.getSongDownloadUrl(id, user, src, false);
-    res.redirect(HttpStatus.FOUND, url);
+      // Set headers and send file
+      res.set({
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${filename.replace(
+          /[/"]/g,
+          '_',
+        )}"`,
+        'Access-Control-Expose-Headers': 'Content-Disposition',
+      });
+
+      res.send(Buffer.from(buffer));
+    } catch (error) {
+      this.logger.error('Error downloading song file:', error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while retrieving the song file',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get('/:id/open')
