@@ -129,3 +129,31 @@ export const BROWSER_SONGS = {
   featuredPageSize: 10,
   paddedFeaturedPageSize: 5,
 } as const;
+
+export const SEARCH_FEATURES: Record<string, string> = {
+  'CC License': 'CCLicense',
+  Downloadable: 'Downloadable',
+  Looped: 'Looped',
+  'Original Composition': 'OriginalComposition',
+  'Midi Imported': 'MidiImported',
+};
+
+export const INSTRUMENTS: Record<string, string> = {
+  'Piano (Air)': 'Piano',
+  'Double Bass (Wood)': 'DoubleBass',
+  'Bass Drum (Stone)': 'BassDrum',
+  'Snare Drum (Sand)': 'SnareDrum',
+  'Click (Glass)': 'Click',
+  'Guitar (Wool)': 'Guitar',
+  'Flute (Clay)': 'Flute',
+  'Bell (Block of Gold)': 'Bell',
+  'Chime (Packed Ice)': 'Chime',
+  'Xylophone (Bone Block)': 'Xylophone',
+  'Iron Xylophone (Iron Block)': 'IronXylophone',
+  'Cow Bell (Soul Sand)': 'CowBell',
+  'Didgeridoo (Pumpkin)': 'Didgeridoo',
+  'Bit (Block of Emerald)': 'Bit',
+  'Banjo (Hay)': 'Banjo',
+  'Pling (Glowstone)': 'Pling',
+  Custom: 'Custom',
+};

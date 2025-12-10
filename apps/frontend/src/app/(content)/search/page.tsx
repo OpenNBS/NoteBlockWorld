@@ -6,7 +6,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UPLOAD_CONSTANTS } from '@nbw/config';
+import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
@@ -16,6 +16,9 @@ import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
+import { DualRangeSlider } from '@web/modules/shared/components/ui/dualRangeSlider';
+import { Select } from '@web/modules/shared/components/client/FormElements';
+import MultipleSelector from '@web/modules/shared/components/ui/multipleSelectorProps';
 
 interface SearchParams {
   q?: string;
@@ -24,6 +27,12 @@ interface SearchParams {
   category?: string;
   uploader?: string;
   limit?: number;
+  noteCountMin?: number;
+  noteCountMax?: number;
+  durationMin?: number;
+  durationMax?: number;
+  features?: string;
+  instruments?: string;
 }
 
 interface PageDto<T> {
@@ -204,12 +213,52 @@ interface SearchFiltersProps {
     order: string;
     limit: number;
     uploader: string;
+    noteCountMin: number;
+    noteCountMax: number;
+    durationMin: number;
+    durationMax: number;
+    features: string;
+    instruments: string;
   };
   onFilterChange: (params: Record<string, string | number>) => void;
 }
 
 const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
-  const { category, sort, order, limit, uploader } = filters;
+  const {
+    category,
+    sort,
+    order,
+    limit,
+    uploader,
+    noteCountMin,
+    noteCountMax,
+    durationMin,
+    durationMax,
+    features,
+    instruments,
+  } = filters;
+
+  // Helper to parse comma-separated string to array of Option objects
+  const parseOptions = (str: string, optionsMap: Record<string, string>) => {
+    if (!str) return [];
+    return str
+      .split(',')
+      .filter((v) => v.trim())
+      .map((value) => {
+        // Find the label by searching in the options map
+        const entry = Object.entries(optionsMap).find(
+          ([, v]) => v === value.trim(),
+        );
+        return {
+          value: value.trim(),
+          label: entry ? entry[0] : value.trim(),
+        };
+      });
+  };
+
+  // Helper to convert array of Option objects to comma-separated string
+  const optionsToString = (options: Array<{ value: string; label: string }>) =>
+    options.map((opt) => opt.value).join(',');
 
   return (
     <aside className='bg-zinc-800/50 rounded-lg p-4 sticky top-4 h-fit'>
@@ -219,88 +268,133 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
       </div>
 
       <div className='flex flex-col gap-4'>
+        {/* Note Count Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Note Count
+          </label>
+          <DualRangeSlider
+            label={(value) => (value ? `${value} notes` : 'All notes')}
+            min={0}
+            max={10000}
+            step={100}
+            value={[noteCountMin, noteCountMax]}
+            onValueChange={(value) => {
+              const [min, max] = value;
+              const params: Record<string, string | number> = {};
+              if (min !== 0) params.noteCountMin = min;
+              if (max !== 10000) params.noteCountMax = max;
+              onFilterChange(params);
+            }}
+          />
+        </div>
+
+        {/* Duration Count Filter */}
+        <div>
+          <label className='block text-sm font-medium mb-2 text-zinc-300'>
+            Duration Count
+          </label>
+          <DualRangeSlider
+            label={(value) => {
+              // convert seconds to HH:MM:SS, use hours only if greater than 1 hour
+              if (value) {
+                const hours = Math.floor(value / 3600);
+                const minutes = Math.floor((value % 3600) / 60);
+                const seconds = value % 60;
+                return `${hours}:${minutes}:${seconds}`;
+              }
+              return 'All duration';
+            }}
+            min={0}
+            max={10000}
+            step={100}
+            value={[durationMin, durationMax]}
+            onValueChange={(value) => {
+              const [min, max] = value;
+              const params: Record<string, string | number> = {};
+              if (min !== 0) params.durationMin = min;
+              if (max !== 10000) params.durationMax = max;
+              onFilterChange(params);
+            }}
+          />
+        </div>
+
         {/* Category Filter */}
         <div>
           <label className='block text-sm font-medium mb-2 text-zinc-300'>
             Category
           </label>
-          <select
-            value={category}
-            onChange={(e) => onFilterChange({ category: e.target.value })}
-            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-          >
-            <option value=''>All Categories</option>
-            {Object.entries(UPLOAD_CONSTANTS.categories).map(
-              ([key, value]: [string, string]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ),
+          <MultipleSelector
+            value={
+              category
+                ? category
+                    .split(',')
+                    .filter((c) => c.trim())
+                    .map((c) => {
+                      const trimmed = c.trim();
+                      const label =
+                        UPLOAD_CONSTANTS.categories[
+                          trimmed as keyof typeof UPLOAD_CONSTANTS.categories
+                        ] || trimmed;
+                      return { value: trimmed, label };
+                    })
+                : []
+            }
+            onChange={(value) => {
+              const categoryValue = optionsToString(value);
+              const params: Record<string, string | number> = {};
+              if (categoryValue) params.category = categoryValue;
+              onFilterChange(params);
+            }}
+            options={Object.entries(UPLOAD_CONSTANTS.categories).map(
+              ([key, value]) => ({ value: key, label: value }),
             )}
-          </select>
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          />
         </div>
 
-        {/* Order Filter */}
+        {/* Feature Filter */}
         <div>
           <label className='block text-sm font-medium mb-2 text-zinc-300'>
-            Order
+            Features
           </label>
-          <select
-            value={order}
-            onChange={(e) => onFilterChange({ order: e.target.value })}
-            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-          >
-            <option value='desc'>Descending</option>
-            <option value='asc'>Ascending</option>
-          </select>
+          <MultipleSelector
+            value={parseOptions(features, SEARCH_FEATURES)}
+            onChange={(value) => {
+              const featuresValue = optionsToString(value);
+              const params: Record<string, string | number> = {};
+              if (featuresValue) params.features = featuresValue;
+              onFilterChange(params);
+            }}
+            options={Object.entries(SEARCH_FEATURES).map(([key, value]) => ({
+              value: value,
+              label: key,
+            }))}
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          />
         </div>
 
-        {/* Limit Filter */}
+        {/* Instrument Filter */}
         <div>
           <label className='block text-sm font-medium mb-2 text-zinc-300'>
-            Results per page
+            Instrument
           </label>
-          <select
-            value={limit}
-            onChange={(e) => onFilterChange({ limit: e.target.value })}
-            className='block w-full h-12 rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
-          >
-            <option value='12'>12</option>
-            <option value='20'>20</option>
-            <option value='40'>40</option>
-            <option value='60'>60</option>
-          </select>
+          <MultipleSelector
+            value={parseOptions(instruments, INSTRUMENTS)}
+            onChange={(value) => {
+              const instrumentsValue = optionsToString(value);
+              const params: Record<string, string | number> = {};
+              if (instrumentsValue) params.instruments = instrumentsValue;
+              onFilterChange(params);
+            }}
+            options={Object.entries(INSTRUMENTS).map(([key, value]) => ({
+              value: value,
+              label: key,
+            }))}
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+          />
         </div>
       </div>
-
-      {/* Active filters display */}
-      {(category || uploader) && (
-        <div className='flex flex-wrap gap-2 mt-4 pt-4 border-t border-zinc-700'>
-          {category && (
-            <button
-              onClick={() => onFilterChange({ category: '' })}
-              className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
-            >
-              Category:{' '}
-              {
-                UPLOAD_CONSTANTS.categories[
-                  category as keyof typeof UPLOAD_CONSTANTS.categories
-                ]
-              }
-              <span className='text-xs'>✕</span>
-            </button>
-          )}
-          {uploader && (
-            <button
-              onClick={() => onFilterChange({ uploader: '' })}
-              className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors'
-            >
-              By: {uploader}
-              <span className='text-xs'>✕</span>
-            </button>
-          )}
-        </div>
-      )}
     </aside>
   );
 };
@@ -367,6 +461,15 @@ const SearchSongPage = () => {
   const uploader = searchParams.get('uploader') || '';
   const initialPage = parseInt(searchParams.get('page') || '1', 10);
   const limit = parseInt(searchParams.get('limit') || '20', 10);
+  const noteCountMin = parseInt(searchParams.get('noteCountMin') || '0', 10);
+  const noteCountMax = parseInt(
+    searchParams.get('noteCountMax') || '10000',
+    10,
+  );
+  const durationMin = parseInt(searchParams.get('durationMin') || '0', 10);
+  const durationMax = parseInt(searchParams.get('durationMax') || '10000', 10);
+  const features = searchParams.get('features') || '';
+  const instruments = searchParams.get('instruments') || '';
 
   const {
     songs,
@@ -380,15 +483,43 @@ const SearchSongPage = () => {
   const [showFilters, setShowFilters] = useState(true);
 
   useEffect(() => {
-    const params = { q: query, sort, order, category, uploader, limit };
+    const params: SearchParams = {
+      q: query,
+      sort,
+      order,
+      category,
+      uploader,
+      limit,
+      noteCountMin: noteCountMin > 0 ? noteCountMin : undefined,
+      noteCountMax: noteCountMax < 10000 ? noteCountMax : undefined,
+      durationMin: durationMin > 0 ? durationMin : undefined,
+      durationMax: durationMax < 10000 ? durationMax : undefined,
+      features: features || undefined,
+      instruments: instruments || undefined,
+    };
     searchSongs(params, initialPage);
-  }, [query, sort, order, category, uploader, initialPage, limit, searchSongs]);
+  }, [
+    query,
+    sort,
+    order,
+    category,
+    uploader,
+    initialPage,
+    limit,
+    noteCountMin,
+    noteCountMax,
+    durationMin,
+    durationMax,
+    features,
+    instruments,
+    searchSongs,
+  ]);
 
-  const updateURL = (params: Record<string, string>) => {
+  const updateURL = (params: Record<string, string | number | undefined>) => {
     const newParams = new URLSearchParams(searchParams.toString());
     Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        newParams.set(key, value);
+      if (value !== undefined && value !== null && value !== '') {
+        newParams.set(key, String(value));
       } else {
         newParams.delete(key);
       }
@@ -401,7 +532,20 @@ const SearchSongPage = () => {
   };
 
   const handleLoadMore = () => {
-    const params = { q: query, sort, order, category, uploader, limit };
+    const params: SearchParams = {
+      q: query,
+      sort,
+      order,
+      category,
+      uploader,
+      limit,
+      noteCountMin: noteCountMin > 0 ? noteCountMin : undefined,
+      noteCountMax: noteCountMax < 10000 ? noteCountMax : undefined,
+      durationMin: durationMin > 0 ? durationMin : undefined,
+      durationMax: durationMax < 10000 ? durationMax : undefined,
+      features: features || undefined,
+      instruments: instruments || undefined,
+    };
     loadMore(params);
   };
 
@@ -423,10 +567,20 @@ const SearchSongPage = () => {
         {showFilters && (
           <div className='w-full lg:w-72 flex-shrink-0'>
             <SearchFilters
-              filters={{ category, sort, order, limit, uploader }}
-              onFilterChange={(params) =>
-                updateURL(params as Record<string, string>)
-              }
+              filters={{
+                category,
+                sort,
+                order,
+                limit,
+                uploader,
+                noteCountMin,
+                noteCountMax,
+                durationMin,
+                durationMax,
+                features,
+                instruments,
+              }}
+              onFilterChange={(params) => updateURL(params)}
             />
           </div>
         )}
