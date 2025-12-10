@@ -20,8 +20,7 @@ import {
   EditSongForm,
   editSongFormSchema,
 } from '@web/modules/song/components/client/SongForm.zod';
-
-// TODO: THIS FORM IS CURRENTLY BROKEN, WE NEED TO FIX IT
+import { AxiosError } from 'axios';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongForm>;
@@ -38,7 +37,7 @@ export type useEditSongProviderType = {
 };
 
 export const EditSongContext = createContext<useEditSongProviderType>(
-  null as unknown as useEditSongProviderType,
+  {} as useEditSongProviderType,
 );
 
 export const EditSongProvider = ({
@@ -258,32 +257,35 @@ export const EditSongProvider = ({
         setInstrumentSounds(songInstruments);
         formMethods.setValue('customInstruments', songInstruments);
 
-        setSong(song as unknown as SongFileType); // TODO: Investigate this weird type error
-      } catch (error: any) {
-        console.error('Error loading song', error);
-
+        setSong(song);
+      } catch (error: unknown) {
         let errorMessage = 'An unknown error occurred while loading the song!';
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            // Server responded with an error status
+            errorMessage =
+              error.response.data?.message ||
+              (error.response.data?.error
+                ? Object.values(error.response.data.error)[0]
+                : null) ||
+              `Failed to load song: ${error.response.status}`;
+          } else if (error.request) {
+            // Request was made but no response received (network error)
+            errorMessage =
+              'Network error: Unable to connect to the server. Please check your internet connection and try again.';
+          } else {
+            // Something else happened (including fetch errors)
+            errorMessage = error.message || errorMessage;
+          }
 
-        if (error.response) {
-          // Server responded with an error status
-          errorMessage =
-            error.response.data?.message ||
-            (error.response.data?.error
-              ? Object.values(error.response.data.error)[0]
-              : null) ||
-            `Failed to load song: ${error.response.status}`;
-        } else if (error.request) {
-          // Request was made but no response received (network error)
-          errorMessage =
-            'Network error: Unable to connect to the server. Please check your internet connection and try again.';
+          setSendError(errorMessage);
+          toaster.error(errorMessage);
+          throw error; // Re-throw to allow caller to handle if needed
         } else {
-          // Something else happened (including fetch errors)
-          errorMessage = error.message || errorMessage;
+          setSendError(errorMessage);
+          toaster.error(errorMessage);
+          throw error;
         }
-
-        setSendError(errorMessage);
-        toaster.error(errorMessage);
-        throw error; // Re-throw to allow caller to handle if needed
       }
     },
     [formMethods, setSong],
