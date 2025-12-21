@@ -64,7 +64,7 @@ export async function SongPage({ id }: { id: string }) {
     console.error('Failed to retrieve suggested songs');
   }
 
-  // Check if the image is from localhost to avoid Next.js 15 private IP errors
+  // TODO: Check if the image is from localhost to avoid Next.js 15 private IP errors
   // Next.js 15 blocks images from private IPs (localhost, 127.0.0.1, ::1) for security reasons.
   // This is related to CVE-2025-55173 security vulnerability.
   // Sources:
@@ -86,7 +86,7 @@ export async function SongPage({ id }: { id: string }) {
         <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
           {/* Song thumbnail */}
           {/* TODO: implement loading https://github.com/vercel/next.js/discussions/50617 */}
-          <picture className='bg-zinc-800 aspect-[5/3] rounded-xl'>
+          <picture className='bg-zinc-800 aspect-5/3 rounded-xl'>
             <Image
               unoptimized={isLocalhost}
               alt='Song thumbnail'

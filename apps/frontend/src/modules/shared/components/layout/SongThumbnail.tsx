@@ -9,7 +9,7 @@ const SongThumbnail = ({
   src: string;
   fallbackSrc?: string;
 }) => {
-  // Check if the image is from localhost to avoid Next.js 15 private IP errors
+  // TODO:Check if the image is from localhost to avoid Next.js 15 private IP errors
   // Next.js 15 blocks images from private IPs (localhost, 127.0.0.1, ::1) for security reasons.
   // This is related to CVE-2025-55173 security vulnerability.
   // Sources:
