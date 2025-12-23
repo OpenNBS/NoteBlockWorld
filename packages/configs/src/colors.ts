@@ -5,7 +5,7 @@ and creates a dictionary with the light and dark shades of each color.
 Full list of colors is available at:
 https://tailwindcss.com/docs/customizing-colors
 */
-import colors from './tailwindColors.ts';
+import colors from './tailwindColors';
 
 export const BG_COLORS = {
   red: {
