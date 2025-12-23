@@ -172,9 +172,6 @@
     },
     "packages/configs": {
       "name": "@nbw/config",
-      "dependencies": {
-        "tailwindcss": "^4.1.17",
-      },
       "devDependencies": {
         "@types/bun": "latest",
         "typescript": "^5",
