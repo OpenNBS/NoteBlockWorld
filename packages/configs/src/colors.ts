@@ -1,28 +1,11 @@
 /* 
-
 Obtains the background colors from the Tailwind CSS color palette
 and creates a dictionary with the light and dark shades of each color.
 
-Importing from 'tailwindcss/colors' returns undefined in the backend,
-somehow due to commonjs/esm?
-So we have to import directly the public colors file instead, which
-there are no types for.
-
-It's also possible to reference the default theme from JavaScript,
-as shown in the link below:
-https://tailwindcss.com/docs/configuration#referencing-in-java-script
-Similar idea at:
-https://github.com/tailwindlabs/tailwindcss/discussions/11127#discussioncomment-9162723
-However, again in the backend, we also have a problem with 'resolveConfig
-is not a function'.
-This may come down to Tailwind being a browser-only library, and not meant
-to be used in the backend.
-
 Full list of colors is available at:
 https://tailwindcss.com/docs/customizing-colors
-
 */
-import colors from 'tailwindcss/colors';
+import colors from './tailwindColors.ts';
 
 export const BG_COLORS = {
   red: {
