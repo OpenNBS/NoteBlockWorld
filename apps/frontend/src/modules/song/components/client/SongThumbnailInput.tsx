@@ -183,10 +183,7 @@ export const SongThumbnailInput: React.FC<SongThumbnailInputProps> = ({
               }
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
-                formMethods.setValue(
-                  'thumbnailData.backgroundColor',
-                  oklchToRgb(dark),
-                );
+                formMethods.setValue('thumbnailData.backgroundColor', dark);
               }}
             />
           ))}
