@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { cn, oklchToRgb } from '@web/lib/utils';
+import { cn } from '@web/lib/utils';
 import {
   Tooltip,
   TooltipContent,
