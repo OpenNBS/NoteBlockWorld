@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes, Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema({})
 class SocialLinks {
@@ -32,13 +32,13 @@ class SocialLinks {
   },
 })
 export class User {
-  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now })
   creationDate: Date;
 
-  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now })
   lastEdited: Date;
 
-  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now })
   lastSeen: Date;
 
   @Prop({ type: Number, required: true, default: 0 })

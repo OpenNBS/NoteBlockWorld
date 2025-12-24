@@ -10,6 +10,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "emitDecoratorMetadata": true,
     // Relaxed strict settings for backend
     "strictNullChecks": false,
     "noImplicitAny": false,

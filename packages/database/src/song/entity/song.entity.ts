@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes, Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 import { SongStats } from '../dto/SongStats';
 import type { SongViewUploader } from '../dto/SongView.dto';
@@ -20,13 +20,13 @@ export class Song {
   @Prop({ type: String, required: true, unique: true })
   publicId: string;
 
-  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now })
   createdAt: Date;
 
-  @Prop({ type: SchemaTypes.Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now })
   updatedAt: Date;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  @Prop({ type: 'ObjectId', ref: 'User' })
   uploader: Types.ObjectId;
 
   @Prop({ type: String, required: true })
