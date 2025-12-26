@@ -35,7 +35,7 @@ export function SearchBar() {
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder='Search songs'
         enterKeyHint='search'
-        className='flex-1 px-3 py-2 bg-transparent border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500'
+        className='flex-1 px-3 py-2 pr-1 bg-transparent border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500'
       />
       <button
         type='submit'
@@ -45,6 +45,19 @@ export function SearchBar() {
         <FontAwesomeIcon icon={faMagnifyingGlass} aria-hidden='true' />
         <span className='sr-only'>Search</span>
       </button>
+      {/* eslint-disable-next-line react/no-unknown-property */}
+      <style jsx>{`
+        /* Make the native WebKit clear (x) button white */
+        :global(#song-search::-webkit-search-cancel-button) {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 1rem;
+          width: 1rem;
+          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>")
+            no-repeat center center;
+          cursor: pointer;
+        }
+      `}</style>
     </form>
   );
 }
