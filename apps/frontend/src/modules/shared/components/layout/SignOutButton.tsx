@@ -49,7 +49,7 @@ export function SettingsButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className='group h-8 w-8 p-1'>
+        <div className='group h-8 w-8 p-1 cursor-pointer'>
           <FontAwesomeIcon
             icon={faCog}
             className='h-full! w-full! text-white group-hover:text-zinc-400 transition-all duration-150 group-hover:rotate-45'
