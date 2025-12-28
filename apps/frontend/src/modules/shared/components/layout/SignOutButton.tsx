@@ -33,7 +33,7 @@ export function UploadButton() {
           <div className='group h-9 w-9 p-1'>
             <FontAwesomeIcon
               icon={faCloudUpload}
-              className='h-full! w-full! text-white group-hover:text-zinc-400 transition-colors duration-150'
+              className='h-full! w-full! text-white group-hover:text-zinc-400 transition-all duration-150 group-hover:-translate-y-0.5'
             />
           </div>
         </Link>
