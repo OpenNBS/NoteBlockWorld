@@ -153,8 +153,8 @@ body {
 
 .bevel {
   position: relative;
-  --bevel-after-bg: rgb(63 63 70); /* zinc-800 default */
-  --bevel-before-bg: rgb(24 24 27); /* zinc-900 default */
+  --bevel-after-bg: var(--color-zinc-700);
+  --bevel-before-bg: var(--color-zinc-800);
 }
 .bevel:after,
 .bevel:before {
