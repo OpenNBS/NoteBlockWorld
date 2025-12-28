@@ -15,7 +15,7 @@ export function SignInButton() {
     <Link href='/login'>
       <div className='text-nowrap flex justify-between items-center gap-2 md:px-1 md:border border-blue-500 text-white md:text-blue-500 h-8 rounded-full hover:border-blue-400 hover:text-blue-400 transition-colors duration-150'>
         <div className='h-8 p-1 md:h-6 md:p-0'>
-          <FontAwesomeIcon icon={faUserCircle} className='h-full' />
+          <FontAwesomeIcon icon={faUserCircle} className='h-full!' />
         </div>
         <span className='text-sm mr-2 font-semibold hidden md:block'>
           Sign in
@@ -30,10 +30,10 @@ export function UploadButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Link href='/upload'>
-          <div className='h-0 md:h-8 p-1 w-fit'>
+          <div className='h-9 w-9 p-1'>
             <FontAwesomeIcon
               icon={faCloudUpload}
-              className='!h-full text-white hover:text-zinc-400 transition-colors duration-150'
+              className='h-full! w-full! text-white hover:text-zinc-400 transition-colors duration-150'
             />
           </div>
         </Link>
@@ -52,7 +52,7 @@ export function SettingsButton() {
         <div className='h-8 w-8 p-1'>
           <FontAwesomeIcon
             icon={faCog}
-            className='!h-full text-white hover:text-zinc-400 transition-all duration-150 hover:rotate-[45deg]'
+            className='h-full! w-full! text-white hover:text-zinc-400 transition-all duration-150 hover:rotate-45'
           />
         </div>
       </TooltipTrigger>
