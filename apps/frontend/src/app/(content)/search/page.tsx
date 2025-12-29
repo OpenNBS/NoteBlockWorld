@@ -109,43 +109,6 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
   }),
 );
 
-const SearchPageSkeleton = () => (
-  <div className='container mx-auto px-4 py-8'>
-    <div className='flex items-center gap-4 mb-6'>
-      <FontAwesomeIcon
-        icon={faMagnifyingGlass}
-        className='text-2xl text-zinc-400'
-      />
-      <h1 className='text-2xl font-bold'>Searching...</h1>
-    </div>
-
-    {/* Filter skeletons */}
-    <div className='flex flex-wrap gap-4 mb-6'>
-      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-      <div className='h-12 w-32 bg-zinc-800 animate-pulse rounded-lg' />
-      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-    </div>
-
-    <SongCardGroup>
-      {Array.from({ length: 12 }).map((_, i) => (
-        <SongCard key={i} song={null} />
-      ))}
-    </SongCardGroup>
-  </div>
-);
-
-/**
- * A full-screen overlay with a spinner, shown during filter changes.
- */
-const LoadingOverlay = () => (
-  <div className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center'>
-    <div className='bg-zinc-800 rounded-lg p-6 flex flex-col items-center gap-4 shadow-2xl'>
-      <div className='animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full' />
-      <p className='text-lg font-semibold'>Updating results...</p>
-    </div>
-  </div>
-);
-
 interface SearchHeaderProps {
   query: string;
   songsCount: number;
@@ -527,10 +490,6 @@ const SearchSongPage = () => {
   const handleSortChange = (value: string) => {
     updateURL({ sort: value });
   };
-
-  if (loading && songs.length === 0) {
-    return <SearchPageSkeleton />;
-  }
 
   return (
     <div className='container mx-auto px-4 py-8 relative'>
