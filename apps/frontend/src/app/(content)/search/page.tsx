@@ -394,7 +394,6 @@ const SearchResults = ({
       ) : (
         <div className='flex flex-col items-center gap-2 text-zinc-500'>
           <FontAwesomeIcon icon={faEllipsis} className='text-2xl' />
-          <p className='text-sm'>You've reached the end</p>
         </div>
       )}
     </div>
