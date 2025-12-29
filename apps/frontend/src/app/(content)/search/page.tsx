@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  faEllipsis,
-  faFilter,
-  faMagnifyingGlass,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -167,41 +163,20 @@ const SearchHeader = ({
 }: SearchHeaderProps) => {
   const isSearch = useMemo(() => query !== '', [query]);
 
-  const title = useMemo(
-    () => (isSearch ? 'Search Results' : 'Browse Songs'),
-    [isSearch],
-  );
-  const description = useMemo(() => {
+  const title = useMemo(() => {
     if (isSearch) {
-      if (totalResults !== 1) {
-        const template = '{totalResults} result{plural} for "{query}"';
-        return template
-          .replace('{totalResults}', totalResults.toString())
-          .replace('{plural}', totalResults !== 1 ? 's' : '')
-          .replace('{query}', query);
+      // TODO: implement this with proper variable substitution for translations
+      if (totalResults > 1) {
+        return `${totalResults} results for "${query}"`;
       }
-      const template = '1 result for "{query}"';
-      return template.replace('{query}', query);
+      return `1 result for "${query}"`;
     }
-    if (songsCount !== 1) {
-      const template = 'Showing {songsCount} of {totalResults} songs';
-      return template
-        .replace('{songsCount}', songsCount.toString())
-        .replace('{totalResults}', totalResults.toString());
-    }
-    const template = 'Showing 1 song of {totalResults} songs';
-    return template.replace('{totalResults}', totalResults.toString());
+    return 'Browse songs';
   }, [isSearch, query, songsCount, totalResults]);
+
   return (
     <div className='flex items-center gap-4'>
-      <FontAwesomeIcon
-        icon={faMagnifyingGlass}
-        className='text-2xl text-zinc-400'
-      />
-      <div className='flex-1'>
-        <h1 className='text-2xl font-bold'>{title}</h1>
-        {query && <p className='text-zinc-400'>{description}</p>}
-      </div>
+      <h2 className='text-2xl font-light text-zinc-400'>{title}</h2>
     </div>
   );
 };
