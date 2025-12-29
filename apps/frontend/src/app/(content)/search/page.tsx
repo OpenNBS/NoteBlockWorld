@@ -569,11 +569,11 @@ const SearchSongPage = () => {
                   onChange={(e) => handleSortChange(e.target.value)}
                   className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
                 >
-                  <option value='recent'>Most recent</option>
-                  <option value='popular'>Most popular</option>
-                  <option value='plays'>Most plays</option>
+                  <option value='recent'>Recent</option>
+                  <option value='popular'>Popular</option>
                   <option value='title'>Title</option>
-                  <option value='uploader'>Uploader</option>
+                  <option value='duration'>Duration</option>
+                  <option value='noteCount'>Note count</option>
                 </select>
               </div>
             </div>
