@@ -9,18 +9,17 @@ import {
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
-import { SongPreviewDtoType } from '@nbw/database';
 
+import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
+import { SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
 import { DualRangeSlider } from '@web/modules/shared/components/ui/dualRangeSlider';
-import { Select } from '@web/modules/shared/components/client/FormElements';
 import MultipleSelector from '@web/modules/shared/components/ui/multipleSelectorProps';
 
 interface SearchParams {
