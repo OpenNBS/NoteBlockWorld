@@ -9,6 +9,8 @@ import {
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
@@ -344,11 +346,17 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
 };
 
 const NoResults = () => (
-  <div className='text-center py-12 text-zinc-400'>
-    <FontAwesomeIcon icon={faMagnifyingGlass} className='text-4xl mb-4' />
-    <h2 className='text-xl mb-2'>No songs found</h2>
-    <p>
-      Try adjusting your search terms or filters, or browse our featured songs
+  <div className='flex flex-col items-center justify-center gap-4 max-w-52 mx-auto'>
+    <Image src='/empty-chest.png' alt='' width={150} height={200} aria-hidden />
+    <h3 className='text-2xl w-full'>No songs found</h3>
+    <p className='text-zinc-400 text-sm text-wrap'>
+      Try adjusting your search terms, or browse our{' '}
+      <Link
+        href='/'
+        className='text-blue-400 hover:underline hover:text-blue-300'
+      >
+        featured songs
+      </Link>{' '}
       instead.
     </p>
   </div>
