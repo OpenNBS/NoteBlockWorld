@@ -1,6 +1,13 @@
 'use client';
 
-import { faEllipsis, faFilter } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowUp19,
+  faArrowUp91,
+  faArrowUpAZ,
+  faArrowUpZA,
+  faEllipsis,
+  faFilter,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -491,6 +498,19 @@ const SearchSongPage = () => {
     updateURL({ sort: value });
   };
 
+  const handleOrderChange = () => {
+    const newOrder = order === 'asc' ? 'desc' : 'asc';
+    updateURL({ order: newOrder });
+  };
+
+  /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
+  const orderIcon = useMemo(() => {
+    if (sort === 'title') {
+      return order === 'asc' ? faArrowUpZA : faArrowUpAZ;
+    } else {
+      return order === 'asc' ? faArrowUp19 : faArrowUp91;
+    }
+  }, [sort, order]);
   return (
     <div className='container mx-auto px-4 py-8 relative'>
       {/* Loading overlay for filter changes */}
@@ -556,6 +576,15 @@ const SearchSongPage = () => {
           </div>
 
           {/* Results */}
+          {/* Order button */}
+          <button
+            className='bg-zinc-700 hover:bg-zinc-600 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
+            onClick={handleOrderChange}
+            aria-label={order === 'asc' ? 'Sort ascending' : 'Sort descending'}
+          >
+            <FontAwesomeIcon icon={orderIcon} size='1x' />
+          </button>
+
           {songs.length > 0 && (
             <SearchResults
               songs={songs}
