@@ -2,6 +2,7 @@
 
 import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 import unusedImports from 'eslint-plugin-unused-imports';
@@ -32,10 +33,12 @@ export default defineConfig(
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     languageOptions: {
       globals: { ...globals.node, ...globals.es2021, ...globals.bun },
+      parserOptions: { ecmaFeatures: { jsx: true } },
     },
     plugins: {
       import: importPlugin,
       'unused-imports': unusedImports,
+      'better-tailwindcss': betterTailwindcss,
     },
     settings: {
       'import/resolver': {
@@ -49,10 +52,14 @@ export default defineConfig(
         node: true,
       },
       'import/core-modules': ['bun:test', 'bun:sqlite', 'bun'],
+      'better-tailwindcss': {
+        tailwindConfig: './apps/frontend/tailwind.config.js',
+      },
     },
     rules: {
       ...importPlugin.configs.recommended.rules,
       ...importPlugin.configs.typescript.rules,
+      ...betterTailwindcss.configs.recommended.rules,
 
       // Core and TypeScript rules
       'no-console': 'warn',
