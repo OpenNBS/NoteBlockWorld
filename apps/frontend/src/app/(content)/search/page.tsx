@@ -432,7 +432,8 @@ const SearchSongPage = () => {
     searchSongs,
     loadMore,
   } = useSongSearchStore();
-  const [showFilters, setShowFilters] = useState(true);
+
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const params: SearchParams = {
@@ -520,13 +521,10 @@ const SearchSongPage = () => {
   }, [sort, order]);
   return (
     <div className='container mx-auto px-4 py-8 relative'>
-      {/* Loading overlay for filter changes */}
-      {isFilterChange && <LoadingOverlay />}
-
       <div className='flex flex-col lg:flex-row gap-6'>
         {/* Filters Sidebar */}
-        {showFilters && (
-          <div className='w-full lg:w-72 flex-shrink-0'>
+        {/* {showFilters && (
+          <div className='w-full lg:w-72 shrink-0'>
             <SearchFilters
               filters={{
                 category,
@@ -544,7 +542,7 @@ const SearchSongPage = () => {
               onFilterChange={(params) => updateURL(params)}
             />
           </div>
-        )}
+        )} */}
 
         {/* Main Content */}
         <div className='flex-1 min-w-0'>
@@ -557,14 +555,14 @@ const SearchSongPage = () => {
               />
             </div>
             <div className='flex items-center gap-3'>
-              <button
+              {/* <button
                 type='button'
                 onClick={() => setShowFilters((prev) => !prev)}
                 className='inline-flex items-center gap-2 px-3 py-2 rounded-md border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 transition-colors text-sm'
               >
                 <FontAwesomeIcon icon={faFilter} />
                 {showFilters ? 'Hide filters' : 'Show filters'}
-              </button>
+              </button> */}
               <div className='flex items-center gap-2'>
                 <span className='text-sm text-zinc-400'>Sort by:</span>
                 <select
