@@ -214,7 +214,7 @@ export class SongService {
     query: PageQueryDTO,
     q?: string,
     category?: string,
-  ): Promise<SongPreviewDto[]> {
+  ): Promise<SongPageDto> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
     const descending = query.order ?? true;
@@ -261,15 +261,25 @@ export class SongService {
 
     const sortOrder = descending ? -1 : 1;
 
-    const songs = (await this.songModel
-      .find(mongoQuery)
-      .sort({ [sortField]: sortOrder })
-      .skip(limit * (page - 1))
-      .limit(limit)
-      .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
+    const [songs, total] = await Promise.all([
+      this.songModel
+        .find(mongoQuery)
+        .sort({ [sortField]: sortOrder })
+        .skip(limit * (page - 1))
+        .limit(limit)
+        .populate('uploader', 'username profileImage -_id')
+        .exec() as unknown as Promise<SongWithUser[]>,
+      this.songModel.countDocuments(mongoQuery),
+    ]);
 
-    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+    return {
+      content: songs.map((song) =>
+        SongPreviewDto.fromSongDocumentWithUser(song),
+      ),
+      page,
+      limit,
+      total,
+    };
   }
 
   public async getSongsForTimespan(timespan: number): Promise<SongWithUser[]> {

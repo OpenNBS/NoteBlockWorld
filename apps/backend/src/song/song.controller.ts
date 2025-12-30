@@ -141,17 +141,17 @@ export class SongController {
     });
 
     // Query songs with optional search and category filters
-    const data = await this.songService.querySongs(
+    const result = await this.songService.querySongs(
       pageQuery,
       query.q,
       query.category,
     );
 
     return new PageDto<SongPreviewDto>({
-      content: data,
+      content: result.content,
       page: query.page,
       limit: query.limit,
-      total: data.length,
+      total: result.total,
     });
   }
 
@@ -262,12 +262,12 @@ export class SongController {
     @Query() query: PageQueryDTO,
     @Query('q') q: string,
   ): Promise<PageDto<SongPreviewDto>> {
-    const data = await this.songService.querySongs(query, q ?? '');
+    const result = await this.songService.querySongs(query, q ?? '');
     return new PageDto<SongPreviewDto>({
-      content: data,
+      content: result.content,
       page: query.page,
       limit: query.limit,
-      total: data.length,
+      total: result.total,
     });
   }
 
