@@ -46,6 +46,7 @@ interface PageDto<T> {
   total: number;
 }
 
+// TODO: refactor with PAGE_SIZE constant
 const PLACEHOLDER_COUNT = 12;
 
 const makePlaceholders = () =>
@@ -100,7 +101,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
         );
 
         const { content, total } = response.data;
-        const limit = params.limit || 20;
+        const limit = params.limit || 12;
 
         set((state) => ({
           // Remove placeholders and add the new results
@@ -424,7 +425,7 @@ const SearchSongPage = () => {
   const category = searchParams.get('category') || '';
   const uploader = searchParams.get('uploader') || '';
   const initialPage = parseInt(searchParams.get('page') || '1', 10);
-  const limit = parseInt(searchParams.get('limit') || '20', 10);
+  const limit = parseInt(searchParams.get('limit') || '12', 10);
   const noteCountMin = parseInt(searchParams.get('noteCountMin') || '0', 10);
   const noteCountMax = parseInt(
     searchParams.get('noteCountMax') || '10000',
