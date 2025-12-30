@@ -49,7 +49,6 @@ interface PageDto<T> {
 interface SongSearchState {
   songs: SongPreviewDtoType[];
   loading: boolean;
-  isFilterChange: boolean;
   hasMore: boolean;
   currentPage: number;
   totalResults: number;
@@ -63,7 +62,6 @@ interface SongSearchActions {
 const initialState: SongSearchState = {
   songs: [],
   loading: true,
-  isFilterChange: false,
   hasMore: true,
   currentPage: 1,
   totalResults: 0,
@@ -76,10 +74,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
     // The core data fetching action
     searchSongs: async (params, pageNum) => {
       // Set loading states. If it's the first page, it's a filter change.
-      set({
-        loading: true,
-        isFilterChange: pageNum === 1 && get().songs.length > 0,
-      });
+      set({ loading: true });
 
       try {
         const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
@@ -102,7 +97,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
         console.error('Error searching songs:', error);
         set({ songs: [], hasMore: false, totalResults: 0 }); // Reset on error
       } finally {
-        set({ loading: false, isFilterChange: false });
+        set({ loading: false });
       }
     },
 
@@ -422,15 +417,8 @@ const SearchSongPage = () => {
   const features = searchParams.get('features') || '';
   const instruments = searchParams.get('instruments') || '';
 
-  const {
-    songs,
-    loading,
-    hasMore,
-    totalResults,
-    isFilterChange,
-    searchSongs,
-    loadMore,
-  } = useSongSearchStore();
+  const { songs, loading, hasMore, totalResults, searchSongs, loadMore } =
+    useSongSearchStore();
 
   const [showFilters, setShowFilters] = useState(false);
 
