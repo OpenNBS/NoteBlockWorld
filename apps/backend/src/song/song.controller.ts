@@ -77,7 +77,7 @@ export class SongController {
       
       **Query Parameters:**
       - \`q\`: Search string to filter songs by title or description (optional)
-      - \`sort\`: Sort songs by criteria (recent, random, play-count, title, duration, note-count)
+      - \`sort\`: Sort songs by criteria (recent, random, playCount, title, duration, noteCount)
       - \`order\`: Sort order (asc, desc) - only applies if sort is not random
       - \`category\`: Filter by category - if left empty, returns songs in any category
       - \`uploader\`: Filter by uploader username - if provided, will only return songs uploaded by that user
