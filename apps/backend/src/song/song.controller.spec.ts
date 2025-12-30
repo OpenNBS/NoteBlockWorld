@@ -26,7 +26,7 @@ import { SongService } from './song.service';
 
 const mockSongService = {
   getSongByPage: jest.fn(),
-  searchSongs: jest.fn(),
+  querySongs: jest.fn(),
   getSong: jest.fn(),
   getSongEdit: jest.fn(),
   patchSong: jest.fn(),
@@ -34,8 +34,6 @@ const mockSongService = {
   deleteSong: jest.fn(),
   uploadSong: jest.fn(),
   getRandomSongs: jest.fn(),
-  getRecentSongs: jest.fn(),
-  getSongsByCategory: jest.fn(),
   getSongsForTimespan: jest.fn(),
   getSongsBeforeTimespan: jest.fn(),
   getCategories: jest.fn(),
@@ -97,13 +95,13 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10, q: 'test search' };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.searchSongs.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query);
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.searchSongs).toHaveBeenCalled();
+      expect(songService.querySongs).toHaveBeenCalled();
     });
 
     it('should handle random sort', async () => {
@@ -161,13 +159,22 @@ describe('SongController', () => {
       };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.getRecentSongs.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query);
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.getRecentSongs).toHaveBeenCalledWith(1, 10);
+      expect(songService.querySongs).toHaveBeenCalledWith(
+        expect.objectContaining({
+          page: 1,
+          limit: 10,
+          sort: 'createdAt',
+          order: true,
+        }),
+        undefined,
+        undefined,
+      );
     });
 
     it('should handle recent sort with category', async () => {
@@ -179,13 +186,22 @@ describe('SongController', () => {
       };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.getSongsByCategory.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query);
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.getSongsByCategory).toHaveBeenCalledWith('pop', 1, 10);
+      expect(songService.querySongs).toHaveBeenCalledWith(
+        expect.objectContaining({
+          page: 1,
+          limit: 10,
+          sort: 'createdAt',
+          order: true,
+        }),
+        undefined,
+        'pop',
+      );
     });
 
     it('should handle category filter', async () => {
@@ -196,16 +212,18 @@ describe('SongController', () => {
       };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.getSongsByCategory.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce(songList);
 
       const result = await songController.getSongList(query);
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.getSongsByCategory).toHaveBeenCalledWith(
-        'rock',
+      expect(songService.getSongsBySortAndCategory).toHaveBeenCalledWith(
+        'createdAt',
+        true,
         1,
         10,
+        'rock',
       );
     });
 
