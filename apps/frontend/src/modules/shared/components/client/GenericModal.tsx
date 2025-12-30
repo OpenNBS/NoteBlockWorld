@@ -54,7 +54,7 @@ const GenericModal = ({
               leaveFrom='opacity-100 scale-100'
               leaveTo='opacity-0 scale-90'
             >
-              <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all'>
+              <Dialog.Panel className='relative w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all'>
                 <Dialog.Title
                   as='h3'
                   className='text-2xl font-semibold leading-6 text-white mb-5'
@@ -67,7 +67,7 @@ const GenericModal = ({
                   <button
                     type='button'
                     aria-label='Close'
-                    className='absolute top-3 right-4  w-4 h-4 text-white text-xl'
+                    className='absolute top-3 right-4 w-4 h-4 text-white text-xl'
                     onClick={() => setIsOpen(false)}
                   >
                     <FontAwesomeIcon icon={faClose} />
