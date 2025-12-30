@@ -599,7 +599,11 @@ const SearchSongPage = () => {
                     : 'Sort descending'
                 }
               >
-                <FontAwesomeIcon icon={orderIcon} size='1x' />
+                <FontAwesomeIcon
+                  icon={orderIcon}
+                  size='1x'
+                  className='size-4.5'
+                />
               </button>
             </div>
           </div>
