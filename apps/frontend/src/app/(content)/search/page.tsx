@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useEffect, useMemo, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
@@ -151,6 +152,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
 
 interface SearchHeaderProps {
   query: string;
+  loading: boolean;
   songsCount: number;
   totalResults: number;
 }
@@ -161,12 +163,14 @@ interface SearchHeaderProps {
  */
 const SearchHeader = ({
   query,
+  loading,
   songsCount,
   totalResults,
 }: SearchHeaderProps) => {
   const isSearch = useMemo(() => query !== '', [query]);
 
   const title = useMemo(() => {
+    if (loading) return '';
     if (isSearch) {
       // TODO: implement this with proper variable substitution for translations
       if (totalResults > 1) {
@@ -175,11 +179,13 @@ const SearchHeader = ({
       return `1 result for "${query}"`;
     }
     return 'Browse songs';
-  }, [isSearch, query, songsCount, totalResults]);
+  }, [loading, isSearch, query, songsCount, totalResults]);
 
   return (
     <div className='flex items-center gap-4'>
-      <h2 className='text-2xl font-light text-zinc-400'>{title}</h2>
+      <h2 className='text-2xl font-light text-zinc-400 min-w-48 h-8'>
+        {title || <Skeleton />}
+      </h2>
     </div>
   );
 };
@@ -552,6 +558,7 @@ const SearchSongPage = () => {
             <div className='flex-1 min-w-[260px]'>
               <SearchHeader
                 query={query}
+                loading={loading}
                 songsCount={songs.length}
                 totalResults={totalResults}
               />
