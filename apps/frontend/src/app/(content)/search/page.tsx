@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 
@@ -410,28 +410,41 @@ const SearchResults = ({ songs, hasMore, onLoadMore }: SearchResultsProps) => (
 );
 
 const SearchSongPage = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [queryState, setQueryState] = useQueryStates({
+    q: parseAsString.withDefault(''),
+    sort: parseAsString.withDefault('recent'),
+    order: parseAsString.withDefault('desc'),
+    category: parseAsString.withDefault(''),
+    uploader: parseAsString.withDefault(''),
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(12),
+    noteCountMin: parseAsInteger,
+    noteCountMax: parseAsInteger,
+    durationMin: parseAsInteger,
+    durationMax: parseAsInteger,
+    features: parseAsString,
+    instruments: parseAsString,
+  });
 
-  const query = searchParams.get('q') || '';
-  const sort = searchParams.get('sort') || 'recent';
-  const order = searchParams.get('order') || 'desc';
-  const category = searchParams.get('category') || '';
-  const uploader = searchParams.get('uploader') || '';
-  const initialPage = parseInt(searchParams.get('page') || '1', 10);
-  const limit = parseInt(searchParams.get('limit') || '12', 10);
-  const noteCountMin = parseInt(searchParams.get('noteCountMin') || '0', 10);
-  const noteCountMax = parseInt(
-    searchParams.get('noteCountMax') || '10000',
-    10,
-  );
-  const durationMin = parseInt(searchParams.get('durationMin') || '0', 10);
-  const durationMax = parseInt(searchParams.get('durationMax') || '10000', 10);
-  const features = searchParams.get('features') || '';
-  const instruments = searchParams.get('instruments') || '';
+  const {
+    q: query,
+    sort,
+    order,
+    category,
+    uploader,
+    page: currentPageParam,
+    limit,
+    noteCountMin,
+    noteCountMax,
+    durationMin,
+    durationMax,
+    features,
+    instruments,
+  } = queryState;
 
-  const { songs, loading, hasMore, totalResults, searchSongs, loadMore } =
+  const initialPage = currentPageParam ?? 1;
+
+  const { songs, loading, hasMore, totalResults, searchSongs } =
     useSongSearchStore();
 
   const [showFilters, setShowFilters] = useState(false);
@@ -469,47 +482,17 @@ const SearchSongPage = () => {
     searchSongs,
   ]);
 
-  const updateURL = (params: Record<string, string | number | undefined>) => {
-    const newParams = new URLSearchParams(searchParams.toString());
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        newParams.set(key, String(value));
-      } else {
-        newParams.delete(key);
-      }
-    });
-    // Reset to page 1 on any filter change
-    if (!params.page) {
-      newParams.set('page', '1');
-    }
-    router.push(`${pathname}?${newParams.toString()}`);
-  };
-
   const handleLoadMore = () => {
-    const params: SearchParams = {
-      q: query,
-      sort,
-      order,
-      category,
-      uploader,
-      limit,
-      noteCountMin: noteCountMin > 0 ? noteCountMin : undefined,
-      noteCountMax: noteCountMax < 10000 ? noteCountMax : undefined,
-      durationMin: durationMin > 0 ? durationMin : undefined,
-      durationMax: durationMax < 10000 ? durationMax : undefined,
-      features: features || undefined,
-      instruments: instruments || undefined,
-    };
-    loadMore(params);
+    setQueryState({ page: (currentPageParam ?? 1) + 1 });
   };
 
   const handleSortChange = (value: string) => {
-    updateURL({ sort: value });
+    setQueryState({ sort: value, page: 1 });
   };
 
   const handleOrderChange = () => {
     const newOrder = order === 'asc' ? 'desc' : 'asc';
-    updateURL({ order: newOrder });
+    setQueryState({ order: newOrder, page: 1 });
   };
 
   /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
