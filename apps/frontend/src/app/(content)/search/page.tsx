@@ -170,7 +170,7 @@ const SearchHeader = ({
     if (isSearch) {
       // TODO: implement this with proper variable substitution for translations
       if (totalResults > 1) {
-        return `${totalResults} results for "${query}"`;
+        return `${totalResults.toLocaleString('en-UK')} results for "${query}"`;
       }
       return `1 result for "${query}"`;
     }
