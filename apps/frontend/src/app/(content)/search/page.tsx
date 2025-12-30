@@ -525,6 +525,7 @@ const SearchSongPage = () => {
       return order === 'asc' ? faArrowUp19 : faArrowUp91;
     }
   }, [sort, order]);
+
   return (
     <div className='container mx-auto px-4 py-8 relative'>
       <div className='flex flex-col lg:flex-row gap-6'>
