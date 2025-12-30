@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Index, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 import { SongStats } from '../dto/SongStats';
@@ -16,11 +16,15 @@ import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
     },
   },
 })
+@Index({ 'stats.duration': 1 })
+@Index({ 'stats.noteCount': 1 })
+@Index({ visibility: 1, createdAt: -1 })
+@Index({ category: 1, createdAt: -1 })
 export class Song {
   @Prop({ type: String, required: true, unique: true })
   publicId: string;
 
-  @Prop({ type: Date, required: true, default: Date.now })
+  @Prop({ type: Date, required: true, default: Date.now, index: true })
   createdAt: Date;
 
   @Prop({ type: Date, required: true, default: Date.now })
