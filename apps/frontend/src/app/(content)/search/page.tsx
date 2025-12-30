@@ -16,7 +16,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongPreviewDtoType } from '@nbw/database';
+import { SongOrderType, SongPreviewDtoType, SongSortType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
@@ -412,8 +412,8 @@ const SearchResults = ({ songs, hasMore, onLoadMore }: SearchResultsProps) => (
 const SearchSongPage = () => {
   const [queryState, setQueryState] = useQueryStates({
     q: parseAsString.withDefault(''),
-    sort: parseAsString.withDefault('recent'),
-    order: parseAsString.withDefault('desc'),
+    sort: parseAsString.withDefault(SongSortType.RECENT),
+    order: parseAsString.withDefault(SongOrderType.DESC),
     category: parseAsString.withDefault(''),
     uploader: parseAsString.withDefault(''),
     page: parseAsInteger.withDefault(1),
@@ -491,16 +491,17 @@ const SearchSongPage = () => {
   };
 
   const handleOrderChange = () => {
-    const newOrder = order === 'asc' ? 'desc' : 'asc';
+    const newOrder =
+      order === SongOrderType.ASC ? SongOrderType.DESC : SongOrderType.ASC;
     setQueryState({ order: newOrder, page: 1 });
   };
 
   /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
   const orderIcon = useMemo(() => {
-    if (sort === 'title') {
-      return order === 'asc' ? faArrowUpZA : faArrowUpAZ;
+    if (sort === SongSortType.TITLE) {
+      return order === SongOrderType.ASC ? faArrowUpZA : faArrowUpAZ;
     } else {
-      return order === 'asc' ? faArrowUp19 : faArrowUp91;
+      return order === SongOrderType.ASC ? faArrowUp19 : faArrowUp91;
     }
   }, [sort, order]);
 
@@ -555,11 +556,11 @@ const SearchSongPage = () => {
                   onChange={(e) => handleSortChange(e.target.value)}
                   className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
                 >
-                  <option value='recent'>Recent</option>
-                  <option value='popular'>Popular</option>
-                  <option value='title'>Title</option>
-                  <option value='duration'>Duration</option>
-                  <option value='noteCount'>Note count</option>
+                  <option value={SongSortType.RECENT}>Recent</option>
+                  <option value={SongSortType.PLAY_COUNT}>Popular</option>
+                  <option value={SongSortType.TITLE}>Title</option>
+                  <option value={SongSortType.DURATION}>Duration</option>
+                  <option value={SongSortType.NOTE_COUNT}>Note count</option>
                 </select>
               </div>
 
@@ -568,7 +569,9 @@ const SearchSongPage = () => {
                 className='bg-zinc-700 hover:bg-zinc-600 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
                 onClick={handleOrderChange}
                 aria-label={
-                  order === 'asc' ? 'Sort ascending' : 'Sort descending'
+                  order === SongOrderType.ASC
+                    ? 'Sort ascending'
+                    : 'Sort descending'
                 }
               >
                 <FontAwesomeIcon icon={orderIcon} size='1x' />
