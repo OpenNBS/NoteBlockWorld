@@ -46,8 +46,13 @@ interface PageDto<T> {
   total: number;
 }
 
+const PLACEHOLDER_COUNT = 12;
+
+const makePlaceholders = () =>
+  Array.from({ length: PLACEHOLDER_COUNT }, () => null);
+
 interface SongSearchState {
-  songs: SongPreviewDtoType[];
+  songs: Array<SongPreviewDtoType | null>;
   loading: boolean;
   hasMore: boolean;
   currentPage: number;
@@ -73,8 +78,20 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
 
     // The core data fetching action
     searchSongs: async (params, pageNum) => {
-      // Set loading states. If it's the first page, it's a filter change.
-      set({ loading: true });
+      // New search/sort (page 1): reset to placeholders. Load more: append placeholders.
+      if (pageNum === 1) {
+        set({
+          loading: true,
+          songs: makePlaceholders(),
+          currentPage: 1,
+          hasMore: true,
+        });
+      } else {
+        set((state) => ({
+          loading: true,
+          songs: [...state.songs, ...makePlaceholders()],
+        }));
+      }
 
       try {
         const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
@@ -86,8 +103,11 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
         const limit = params.limit || 20;
 
         set((state) => ({
-          // If it's the first page, replace songs. Otherwise, append them.
-          songs: pageNum === 1 ? content : [...state.songs, ...content],
+          // Remove placeholders and add the new results
+          songs:
+            pageNum === 1
+              ? content
+              : [...state.songs.filter((s) => s !== null), ...content],
           totalResults: total,
           currentPage: pageNum,
           // Check if there are more pages to load
@@ -358,7 +378,7 @@ const NoResults = () => (
 );
 
 interface SearchResultsProps {
-  songs: SongPreviewDtoType[];
+  songs: Array<SongPreviewDtoType | null>;
   loading: boolean;
   hasMore: boolean;
   onLoadMore: () => void;
@@ -373,18 +393,16 @@ const SearchResults = ({
   <>
     <SongCardGroup>
       {songs.map((song, i) => (
-        <SongCard key={`${song.publicId}-${i}`} song={song} />
+        <SongCard
+          key={song ? `${song.publicId}-${i}` : `placeholder-${i}`}
+          song={song}
+        />
       ))}
     </SongCardGroup>
 
     {/* Load more / End indicator */}
     <div className='flex flex-col w-full justify-between items-center mt-8'>
-      {loading ? (
-        <div className='flex items-center gap-2 text-zinc-400'>
-          <div className='animate-spin h-5 w-5 border-2 border-zinc-400 border-t-transparent rounded-full' />
-          Loading more songs...
-        </div>
-      ) : hasMore ? (
+      {hasMore ? (
         <LoadMoreButton onClick={onLoadMore} />
       ) : (
         <div className='flex flex-col items-center gap-2 text-zinc-500'>
