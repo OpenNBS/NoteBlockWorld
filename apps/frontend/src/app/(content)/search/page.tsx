@@ -576,19 +576,21 @@ const SearchSongPage = () => {
                   <option value='noteCount'>Note count</option>
                 </select>
               </div>
+
+              {/* Order button */}
+              <button
+                className='bg-zinc-700 hover:bg-zinc-600 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
+                onClick={handleOrderChange}
+                aria-label={
+                  order === 'asc' ? 'Sort ascending' : 'Sort descending'
+                }
+              >
+                <FontAwesomeIcon icon={orderIcon} size='1x' />
+              </button>
             </div>
           </div>
 
           {/* Results */}
-          {/* Order button */}
-          <button
-            className='bg-zinc-700 hover:bg-zinc-600 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
-            onClick={handleOrderChange}
-            aria-label={order === 'asc' ? 'Sort ascending' : 'Sort descending'}
-          >
-            <FontAwesomeIcon icon={orderIcon} size='1x' />
-          </button>
-
           {songs.length > 0 && (
             <SearchResults
               songs={songs}
