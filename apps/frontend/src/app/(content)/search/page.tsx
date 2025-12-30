@@ -385,12 +385,7 @@ interface SearchResultsProps {
   onLoadMore: () => void;
 }
 
-const SearchResults = ({
-  songs,
-  loading,
-  hasMore,
-  onLoadMore,
-}: SearchResultsProps) => (
+const SearchResults = ({ songs, hasMore, onLoadMore }: SearchResultsProps) => (
   <>
     <SongCardGroup>
       {songs.map((song, i) => (
