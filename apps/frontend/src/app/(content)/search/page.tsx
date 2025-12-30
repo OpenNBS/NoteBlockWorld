@@ -16,7 +16,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongOrderType, SongPreviewDtoType, SongSortType } from '@nbw/database';
+import { SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
@@ -44,6 +44,22 @@ interface PageDto<T> {
   page: number;
   limit: number;
   total: number;
+}
+
+// TODO: importing these enums from '@nbw/database' is causing issues.
+// They shouldn't be redefined here.
+enum SongSortType {
+  RECENT = 'recent',
+  RANDOM = 'random',
+  PLAY_COUNT = 'playCount',
+  TITLE = 'title',
+  DURATION = 'duration',
+  NOTE_COUNT = 'noteCount',
+}
+
+enum SongOrderType {
+  ASC = 'asc',
+  DESC = 'desc',
 }
 
 // TODO: refactor with PAGE_SIZE constant
