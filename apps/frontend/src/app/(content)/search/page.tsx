@@ -183,7 +183,7 @@ const SearchHeader = ({
 
   return (
     <div className='flex items-center gap-4'>
-      <h2 className='text-2xl font-light text-zinc-400 min-w-48 h-8'>
+      <h2 className='text-2xl font-light text-zinc-400 min-w-64 h-8'>
         {title || <Skeleton />}
       </h2>
     </div>

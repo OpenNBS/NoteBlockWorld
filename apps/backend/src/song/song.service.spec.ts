@@ -1048,12 +1048,16 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
       const result = await service.querySongs(query, undefined, category);
 
-      expect(result).toEqual(
+      expect(result.content).toEqual(
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
+      expect(result.page).toBe(1);
+      expect(result.limit).toBe(10);
+      expect(result.total).toBe(0);
 
       expect(songModel.find).toHaveBeenCalledWith({
         visibility: 'public',
@@ -1072,6 +1076,10 @@ describe('SongService', () => {
       );
 
       expect(mockFind.exec).toHaveBeenCalled();
+      expect(songModel.countDocuments).toHaveBeenCalledWith({
+        visibility: 'public',
+        category,
+      });
     });
 
     it('should work without category filter', async () => {
@@ -1092,14 +1100,16 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
       const result = await service.querySongs(query);
 
       expect(songModel.find).toHaveBeenCalledWith({ visibility: 'public' });
       expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
-      expect(result).toEqual(
+      expect(result.content).toEqual(
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
+      expect(result.total).toBe(0);
     });
 
     it('should search with text query and filters', async () => {
@@ -1122,12 +1132,14 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
       const result = await service.querySongs(query, searchTerm, category);
 
-      expect(result).toEqual(
+      expect(result.content).toEqual(
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
+      expect(result.total).toBe(0);
 
       expect(songModel.find).toHaveBeenCalledWith(
         expect.objectContaining({
