@@ -402,7 +402,7 @@ const SearchResults = ({
     </SongCardGroup>
 
     {/* Load more / End indicator */}
-    <div className='flex flex-col w-full justify-between items-center mt-8'>
+    <div className='flex flex-col w-full justify-between items-center mt-4'>
       {hasMore ? (
         <LoadMoreButton onClick={onLoadMore} />
       ) : (
