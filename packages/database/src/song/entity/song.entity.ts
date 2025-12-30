@@ -1,4 +1,4 @@
-import { Index, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 import { SongStats } from '../dto/SongStats';
@@ -16,15 +16,11 @@ import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
     },
   },
 })
-@Index({ 'stats.duration': 1 })
-@Index({ 'stats.noteCount': 1 })
-@Index({ visibility: 1, createdAt: -1 })
-@Index({ category: 1, createdAt: -1 })
 export class Song {
   @Prop({ type: String, required: true, unique: true })
   publicId: string;
 
-  @Prop({ type: Date, required: true, default: Date.now, index: true })
+  @Prop({ type: Date, required: true, default: Date.now })
   createdAt: Date;
 
   @Prop({ type: Date, required: true, default: Date.now })
@@ -97,6 +93,12 @@ export class Song {
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
+
+// Add indexes for commonly queried fields
+SongSchema.index({ 'stats.duration': 1 });
+SongSchema.index({ 'stats.noteCount': 1 });
+SongSchema.index({ visibility: 1, createdAt: -1 });
+SongSchema.index({ category: 1, createdAt: -1 });
 
 export type SongDocument = Song & Document;
 
