@@ -1,10 +1,10 @@
 'use client';
 
 import {
-  faArrowUp19,
-  faArrowUp91,
-  faArrowUpAZ,
-  faArrowUpZA,
+  faArrowDown19,
+  faArrowDown91,
+  faArrowDownAZ,
+  faArrowDownZA,
   faEllipsis,
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
@@ -521,9 +521,9 @@ const SearchSongPage = () => {
   /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
   const orderIcon = useMemo(() => {
     if (sort === SongSortType.TITLE) {
-      return order === SongOrderType.ASC ? faArrowUpZA : faArrowUpAZ;
+      return order === SongOrderType.ASC ? faArrowDownAZ : faArrowDownZA;
     } else {
-      return order === SongOrderType.ASC ? faArrowUp19 : faArrowUp91;
+      return order === SongOrderType.ASC ? faArrowDown19 : faArrowDown91;
     }
   }, [sort, order]);
 
