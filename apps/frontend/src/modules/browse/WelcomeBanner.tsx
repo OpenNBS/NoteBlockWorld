@@ -29,7 +29,7 @@ export const WelcomeBanner = () => {
           blocks, where you can discover, share and listen to note block music
           from all around the world.
         </p>
-        <p className='mb-2'>
+        <p className='mb-2 text-green-100'>
           Start by browsing some of the songs uploaded by the community, or
           check out some of our useful resources below!
         </p>
