@@ -577,7 +577,8 @@ const SearchSongPage = () => {
                 <select
                   value={sort}
                   onChange={(e) => handleSortChange(e.target.value)}
-                  className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
+                  disabled={loading}
+                  className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:enabled:border-zinc-500 disabled:opacity-50 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
                 >
                   <option value={SongSortType.RECENT}>Recent</option>
                   <option value={SongSortType.PLAY_COUNT}>Popular</option>
@@ -589,8 +590,9 @@ const SearchSongPage = () => {
 
               {/* Order button */}
               <button
-                className='bg-zinc-700 hover:bg-zinc-600 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
+                className='bg-zinc-700 hover:enabled:bg-zinc-600 disabled:opacity-50 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
                 onClick={handleOrderChange}
+                disabled={loading}
                 aria-label={
                   order === SongOrderType.ASC
                     ? 'Sort ascending'
