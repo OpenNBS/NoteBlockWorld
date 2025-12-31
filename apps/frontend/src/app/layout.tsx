@@ -4,6 +4,7 @@ import { Lato } from 'next/font/google';
 import './globals.css';
 import { ReCaptchaProvider } from 'next-recaptcha-v3';
 import NextTopLoader from 'nextjs-toploader';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'react-hot-toast';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
@@ -88,7 +89,9 @@ export default function RootLayout({
           />
           <meta name='theme-color' content='#3295ff' />
         </head>
-        <body className={lato.className + 'dark bg-zinc-900 text-white h-full'}>
+        <body
+          className={`${lato.className} dark bg-zinc-900 text-white h-full`}
+        >
           <NextTopLoader
             showSpinner={false}
             crawlSpeed={700}
@@ -109,7 +112,7 @@ export default function RootLayout({
             highlightColor='rgb(63 63 70)'
           >
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
-              {children}
+              <NuqsAdapter>{children}</NuqsAdapter>
             </TooltipProvider>
           </SkeletonTheme>
           <DetectAdBlock />

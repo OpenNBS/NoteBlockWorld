@@ -1,23 +1,28 @@
 'use client';
 
 import {
+  faArrowDown19,
+  faArrowDown91,
+  faArrowDownAZ,
+  faArrowDownZA,
   faEllipsis,
   faFilter,
-  faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useEffect, useMemo, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
-import { SongPreviewDtoType } from '@nbw/database';
 
+import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
+import { SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
 import { DualRangeSlider } from '@web/modules/shared/components/ui/dualRangeSlider';
-import { Select } from '@web/modules/shared/components/client/FormElements';
 import MultipleSelector from '@web/modules/shared/components/ui/multipleSelectorProps';
 
 interface SearchParams {
@@ -42,10 +47,31 @@ interface PageDto<T> {
   total: number;
 }
 
+// TODO: importing these enums from '@nbw/database' is causing issues.
+// They shouldn't be redefined here.
+enum SongSortType {
+  RECENT = 'recent',
+  RANDOM = 'random',
+  PLAY_COUNT = 'playCount',
+  TITLE = 'title',
+  DURATION = 'duration',
+  NOTE_COUNT = 'noteCount',
+}
+
+enum SongOrderType {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+// TODO: refactor with PAGE_SIZE constant
+const PLACEHOLDER_COUNT = 12;
+
+const makePlaceholders = () =>
+  Array.from({ length: PLACEHOLDER_COUNT }, () => null);
+
 interface SongSearchState {
-  songs: SongPreviewDtoType[];
+  songs: Array<SongPreviewDtoType | null>;
   loading: boolean;
-  isFilterChange: boolean;
   hasMore: boolean;
   currentPage: number;
   totalResults: number;
@@ -59,7 +85,6 @@ interface SongSearchActions {
 const initialState: SongSearchState = {
   songs: [],
   loading: true,
-  isFilterChange: false,
   hasMore: true,
   currentPage: 1,
   totalResults: 0,
@@ -71,11 +96,20 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
 
     // The core data fetching action
     searchSongs: async (params, pageNum) => {
-      // Set loading states. If it's the first page, it's a filter change.
-      set({
-        loading: true,
-        isFilterChange: pageNum === 1 && get().songs.length > 0,
-      });
+      // New search/sort (page 1): reset to placeholders. Load more: append placeholders.
+      if (pageNum === 1) {
+        set({
+          loading: true,
+          songs: makePlaceholders(),
+          currentPage: 1,
+          hasMore: true,
+        });
+      } else {
+        set((state) => ({
+          loading: true,
+          songs: [...state.songs, ...makePlaceholders()],
+        }));
+      }
 
       try {
         const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
@@ -84,11 +118,14 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
         );
 
         const { content, total } = response.data;
-        const limit = params.limit || 20;
+        const limit = params.limit || 12;
 
         set((state) => ({
-          // If it's the first page, replace songs. Otherwise, append them.
-          songs: pageNum === 1 ? content : [...state.songs, ...content],
+          // Remove placeholders and add the new results
+          songs:
+            pageNum === 1
+              ? content
+              : [...state.songs.filter((s) => s !== null), ...content],
           totalResults: total,
           currentPage: pageNum,
           // Check if there are more pages to load
@@ -98,7 +135,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
         console.error('Error searching songs:', error);
         set({ songs: [], hasMore: false, totalResults: 0 }); // Reset on error
       } finally {
-        set({ loading: false, isFilterChange: false });
+        set({ loading: false });
       }
     },
 
@@ -113,45 +150,9 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
   }),
 );
 
-const SearchPageSkeleton = () => (
-  <div className='container mx-auto px-4 py-8'>
-    <div className='flex items-center gap-4 mb-6'>
-      <FontAwesomeIcon
-        icon={faMagnifyingGlass}
-        className='text-2xl text-zinc-400'
-      />
-      <h1 className='text-2xl font-bold'>Searching...</h1>
-    </div>
-
-    {/* Filter skeletons */}
-    <div className='flex flex-wrap gap-4 mb-6'>
-      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-      <div className='h-12 w-32 bg-zinc-800 animate-pulse rounded-lg' />
-      <div className='h-12 w-48 bg-zinc-800 animate-pulse rounded-lg' />
-    </div>
-
-    <SongCardGroup>
-      {Array.from({ length: 12 }).map((_, i) => (
-        <SongCard key={i} song={null} />
-      ))}
-    </SongCardGroup>
-  </div>
-);
-
-/**
- * A full-screen overlay with a spinner, shown during filter changes.
- */
-const LoadingOverlay = () => (
-  <div className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center'>
-    <div className='bg-zinc-800 rounded-lg p-6 flex flex-col items-center gap-4 shadow-2xl'>
-      <div className='animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full' />
-      <p className='text-lg font-semibold'>Updating results...</p>
-    </div>
-  </div>
-);
-
 interface SearchHeaderProps {
   query: string;
+  loading: boolean;
   songsCount: number;
   totalResults: number;
 }
@@ -162,46 +163,29 @@ interface SearchHeaderProps {
  */
 const SearchHeader = ({
   query,
+  loading,
   songsCount,
   totalResults,
 }: SearchHeaderProps) => {
   const isSearch = useMemo(() => query !== '', [query]);
 
-  const title = useMemo(
-    () => (isSearch ? 'Search Results' : 'Browse Songs'),
-    [isSearch],
-  );
-  const description = useMemo(() => {
+  const title = useMemo(() => {
+    if (loading) return '';
     if (isSearch) {
-      if (totalResults !== 1) {
-        const template = '{totalResults} result{plural} for "{query}"';
-        return template
-          .replace('{totalResults}', totalResults.toString())
-          .replace('{plural}', totalResults !== 1 ? 's' : '')
-          .replace('{query}', query);
+      // TODO: implement this with proper variable substitution for translations
+      if (totalResults != 1) {
+        return `${totalResults.toLocaleString('en-UK')} results for "${query}"`;
       }
-      const template = '1 result for "{query}"';
-      return template.replace('{query}', query);
+      return `1 result for "${query}"`;
     }
-    if (songsCount !== 1) {
-      const template = 'Showing {songsCount} of {totalResults} songs';
-      return template
-        .replace('{songsCount}', songsCount.toString())
-        .replace('{totalResults}', totalResults.toString());
-    }
-    const template = 'Showing 1 song of {totalResults} songs';
-    return template.replace('{totalResults}', totalResults.toString());
-  }, [isSearch, query, songsCount, totalResults]);
+    return 'Browse songs';
+  }, [loading, isSearch, query, songsCount, totalResults]);
+
   return (
     <div className='flex items-center gap-4'>
-      <FontAwesomeIcon
-        icon={faMagnifyingGlass}
-        className='text-2xl text-zinc-400'
-      />
-      <div className='flex-1'>
-        <h1 className='text-2xl font-bold'>{title}</h1>
-        {query && <p className='text-zinc-400'>{description}</p>}
-      </div>
+      <h2 className='text-2xl font-light text-zinc-400 min-w-64 h-8'>
+        {title || <Skeleton />}
+      </h2>
     </div>
   );
 };
@@ -400,49 +384,47 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
 };
 
 const NoResults = () => (
-  <div className='text-center py-12 text-zinc-400'>
-    <FontAwesomeIcon icon={faMagnifyingGlass} className='text-4xl mb-4' />
-    <h2 className='text-xl mb-2'>No songs found</h2>
-    <p>
-      Try adjusting your search terms or filters, or browse our featured songs
+  <div className='flex flex-col items-center justify-center gap-4 max-w-52 mx-auto'>
+    <Image src='/empty-chest.png' alt='' width={150} height={200} aria-hidden />
+    <h3 className='text-2xl w-full'>No songs found</h3>
+    <p className='text-zinc-400 text-sm text-wrap'>
+      Try adjusting your search terms, or browse our{' '}
+      <Link
+        href='/'
+        className='text-blue-400 hover:underline hover:text-blue-300'
+      >
+        featured songs
+      </Link>{' '}
       instead.
     </p>
   </div>
 );
 
 interface SearchResultsProps {
-  songs: SongPreviewDtoType[];
+  songs: Array<SongPreviewDtoType | null>;
   loading: boolean;
   hasMore: boolean;
   onLoadMore: () => void;
 }
 
-const SearchResults = ({
-  songs,
-  loading,
-  hasMore,
-  onLoadMore,
-}: SearchResultsProps) => (
+const SearchResults = ({ songs, hasMore, onLoadMore }: SearchResultsProps) => (
   <>
     <SongCardGroup>
       {songs.map((song, i) => (
-        <SongCard key={`${song.publicId}-${i}`} song={song} />
+        <SongCard
+          key={song ? `${song.publicId}-${i}` : `placeholder-${i}`}
+          song={song}
+        />
       ))}
     </SongCardGroup>
 
     {/* Load more / End indicator */}
-    <div className='flex flex-col w-full justify-between items-center mt-8'>
-      {loading ? (
-        <div className='flex items-center gap-2 text-zinc-400'>
-          <div className='animate-spin h-5 w-5 border-2 border-zinc-400 border-t-transparent rounded-full' />
-          Loading more songs...
-        </div>
-      ) : hasMore ? (
+    <div className='flex flex-col w-full justify-between items-center mt-4'>
+      {hasMore ? (
         <LoadMoreButton onClick={onLoadMore} />
       ) : (
         <div className='flex flex-col items-center gap-2 text-zinc-500'>
           <FontAwesomeIcon icon={faEllipsis} className='text-2xl' />
-          <p className='text-sm'>You've reached the end</p>
         </div>
       )}
     </div>
@@ -450,37 +432,44 @@ const SearchResults = ({
 );
 
 const SearchSongPage = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const query = searchParams.get('q') || '';
-  const sort = searchParams.get('sort') || 'recent';
-  const order = searchParams.get('order') || 'desc';
-  const category = searchParams.get('category') || '';
-  const uploader = searchParams.get('uploader') || '';
-  const initialPage = parseInt(searchParams.get('page') || '1', 10);
-  const limit = parseInt(searchParams.get('limit') || '20', 10);
-  const noteCountMin = parseInt(searchParams.get('noteCountMin') || '0', 10);
-  const noteCountMax = parseInt(
-    searchParams.get('noteCountMax') || '10000',
-    10,
-  );
-  const durationMin = parseInt(searchParams.get('durationMin') || '0', 10);
-  const durationMax = parseInt(searchParams.get('durationMax') || '10000', 10);
-  const features = searchParams.get('features') || '';
-  const instruments = searchParams.get('instruments') || '';
+  const [queryState, setQueryState] = useQueryStates({
+    q: parseAsString.withDefault(''),
+    sort: parseAsString.withDefault(SongSortType.RECENT),
+    order: parseAsString.withDefault(SongOrderType.DESC),
+    category: parseAsString.withDefault(''),
+    uploader: parseAsString.withDefault(''),
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(12),
+    noteCountMin: parseAsInteger,
+    noteCountMax: parseAsInteger,
+    durationMin: parseAsInteger,
+    durationMax: parseAsInteger,
+    features: parseAsString,
+    instruments: parseAsString,
+  });
 
   const {
-    songs,
-    loading,
-    hasMore,
-    totalResults,
-    isFilterChange,
-    searchSongs,
-    loadMore,
-  } = useSongSearchStore();
-  const [showFilters, setShowFilters] = useState(true);
+    q: query,
+    sort,
+    order,
+    category,
+    uploader,
+    page: currentPageParam,
+    limit,
+    noteCountMin,
+    noteCountMax,
+    durationMin,
+    durationMax,
+    features,
+    instruments,
+  } = queryState;
+
+  const initialPage = currentPageParam ?? 1;
+
+  const { songs, loading, hasMore, totalResults, searchSongs } =
+    useSongSearchStore();
+
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const params: SearchParams = {
@@ -515,57 +504,35 @@ const SearchSongPage = () => {
     searchSongs,
   ]);
 
-  const updateURL = (params: Record<string, string | number | undefined>) => {
-    const newParams = new URLSearchParams(searchParams.toString());
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        newParams.set(key, String(value));
-      } else {
-        newParams.delete(key);
-      }
-    });
-    // Reset to page 1 on any filter change
-    if (!params.page) {
-      newParams.set('page', '1');
-    }
-    router.push(`${pathname}?${newParams.toString()}`);
-  };
-
   const handleLoadMore = () => {
-    const params: SearchParams = {
-      q: query,
-      sort,
-      order,
-      category,
-      uploader,
-      limit,
-      noteCountMin: noteCountMin > 0 ? noteCountMin : undefined,
-      noteCountMax: noteCountMax < 10000 ? noteCountMax : undefined,
-      durationMin: durationMin > 0 ? durationMin : undefined,
-      durationMax: durationMax < 10000 ? durationMax : undefined,
-      features: features || undefined,
-      instruments: instruments || undefined,
-    };
-    loadMore(params);
+    setQueryState({ page: (currentPageParam ?? 1) + 1 });
   };
 
   const handleSortChange = (value: string) => {
-    updateURL({ sort: value });
+    setQueryState({ sort: value, page: 1 });
   };
 
-  if (loading && songs.length === 0) {
-    return <SearchPageSkeleton />;
-  }
+  const handleOrderChange = () => {
+    const newOrder =
+      order === SongOrderType.ASC ? SongOrderType.DESC : SongOrderType.ASC;
+    setQueryState({ order: newOrder, page: 1 });
+  };
+
+  /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
+  const orderIcon = useMemo(() => {
+    if (sort === SongSortType.TITLE) {
+      return order === SongOrderType.ASC ? faArrowDownAZ : faArrowDownZA;
+    } else {
+      return order === SongOrderType.ASC ? faArrowDown19 : faArrowDown91;
+    }
+  }, [sort, order]);
 
   return (
-    <div className='container mx-auto px-4 py-8 relative'>
-      {/* Loading overlay for filter changes */}
-      {isFilterChange && <LoadingOverlay />}
-
+    <div className='container mx-auto py-8 relative'>
       <div className='flex flex-col lg:flex-row gap-6'>
         {/* Filters Sidebar */}
-        {showFilters && (
-          <div className='w-full lg:w-72 flex-shrink-0'>
+        {/* {showFilters && (
+          <div className='w-full lg:w-72 shrink-0'>
             <SearchFilters
               filters={{
                 category,
@@ -583,7 +550,7 @@ const SearchSongPage = () => {
               onFilterChange={(params) => updateURL(params)}
             />
           </div>
-        )}
+        )} */}
 
         {/* Main Content */}
         <div className='flex-1 min-w-0'>
@@ -591,33 +558,53 @@ const SearchSongPage = () => {
             <div className='flex-1 min-w-[260px]'>
               <SearchHeader
                 query={query}
+                loading={loading}
                 songsCount={songs.length}
                 totalResults={totalResults}
               />
             </div>
             <div className='flex items-center gap-3'>
-              <button
+              {/* <button
                 type='button'
                 onClick={() => setShowFilters((prev) => !prev)}
                 className='inline-flex items-center gap-2 px-3 py-2 rounded-md border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 transition-colors text-sm'
               >
                 <FontAwesomeIcon icon={faFilter} />
                 {showFilters ? 'Hide filters' : 'Show filters'}
-              </button>
+              </button> */}
               <div className='flex items-center gap-2'>
                 <span className='text-sm text-zinc-400'>Sort by:</span>
                 <select
                   value={sort}
                   onChange={(e) => handleSortChange(e.target.value)}
-                  className='h-10 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none px-3 text-sm transition-colors'
+                  disabled={loading}
+                  className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:enabled:border-zinc-500 disabled:opacity-50 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
                 >
-                  <option value='recent'>Most recent</option>
-                  <option value='popular'>Most popular</option>
-                  <option value='plays'>Most plays</option>
-                  <option value='title'>Title</option>
-                  <option value='uploader'>Uploader</option>
+                  <option value={SongSortType.RECENT}>Recent</option>
+                  <option value={SongSortType.PLAY_COUNT}>Popular</option>
+                  <option value={SongSortType.TITLE}>Title</option>
+                  <option value={SongSortType.DURATION}>Duration</option>
+                  <option value={SongSortType.NOTE_COUNT}>Note count</option>
                 </select>
               </div>
+
+              {/* Order button */}
+              <button
+                className='bg-zinc-700 hover:enabled:bg-zinc-600 disabled:opacity-50 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
+                onClick={handleOrderChange}
+                disabled={loading}
+                aria-label={
+                  order === SongOrderType.ASC
+                    ? 'Sort ascending'
+                    : 'Sort descending'
+                }
+              >
+                <FontAwesomeIcon
+                  icon={orderIcon}
+                  size='1x'
+                  className='size-4.5'
+                />
+              </button>
             </div>
           </div>
 
