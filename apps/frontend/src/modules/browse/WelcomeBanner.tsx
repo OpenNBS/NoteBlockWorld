@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const WelcomeBanner = () => {
   return (
-    <div className='flex flex-col md:flex-row mx-auto w-fit justify-between items-center text-center text-balance gap-1 py-4 px-2 sm:px-8 text-sm rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-opacity-50 bg-gradient-to-br from-15% from-green-700 via-cyan-800 to-85% to-blue-900 border-2 border-white border-opacity-20'>
+    <div className='flex flex-col md:flex-row mx-auto w-fit justify-between items-center text-center text-balance gap-1 py-4 px-2 sm:px-8 text-sm rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-opacity-50 bg-gradient-to-br from-15% from-green-700 via-cyan-800 to-85% to-blue-900 border-2 border-white/20'>
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-20 brightness-50 hue-rotate-90'
         style={{
@@ -29,7 +29,7 @@ export const WelcomeBanner = () => {
           blocks, where you can discover, share and listen to note block music
           from all around the world.
         </p>
-        <p className='mb-2'>
+        <p className='mb-2 text-green-100'>
           Start by browsing some of the songs uploaded by the community, or
           check out some of our useful resources below!
         </p>

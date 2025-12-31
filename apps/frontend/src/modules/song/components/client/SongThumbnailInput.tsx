@@ -31,7 +31,7 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
   isLocked,
   maxTick,
   maxLayer,
-}) => {
+}: ThumbnailSlidersProps) => {
   const { setValue } = formMethods;
 
   const [zoomLevel, startTick, startLayer] = formMethods.watch([
@@ -117,7 +117,7 @@ const ColorButton: React.FC<ColorButtonProps> = ({
   active,
   onClick,
   disabled,
-}) => (
+}: ColorButtonProps) => (
   <Tooltip>
     <TooltipTrigger asChild>
       <button
@@ -143,7 +143,7 @@ type SongThumbnailInputProps = {
 export const SongThumbnailInput: React.FC<SongThumbnailInputProps> = ({
   type,
   isLocked,
-}) => {
+}: SongThumbnailInputProps) => {
   const { song, formMethods } = useSongProvider(type);
 
   const [notes, maxTick, maxLayer] = useMemo(() => {
