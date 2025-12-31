@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createContext, useContext, useEffect } from 'react';
-import { create } from 'zustand';
 import {
   FieldErrors,
   UseFormRegister,
@@ -10,6 +9,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { create } from 'zustand';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer, type SongFileType } from '@nbw/song';

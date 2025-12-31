@@ -8,9 +8,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { BROWSER_SONGS, TIMESPANS } from '@nbw/config';
+import { BROWSER_SONGS } from '@nbw/config';
 import {
-  FeaturedSongsDto,
   UserDocument,
   PageQueryDTO,
   Song as SongEntity,
@@ -20,7 +19,6 @@ import {
   UploadSongDto,
   UploadSongResponseDto,
   type SongWithUser,
-  TimespanType,
 } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
 

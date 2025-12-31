@@ -8,11 +8,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
+import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongForm, UploadSongForm } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
-import { Slider } from '@web/modules/shared/components/ui/slider';
 
 const formatZoomLevel = (zoomLevel: number) => {
   const percentage = 100 * Math.pow(2, zoomLevel - 3);

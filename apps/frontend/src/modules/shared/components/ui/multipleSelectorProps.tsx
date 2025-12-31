@@ -5,14 +5,14 @@ import { X, ChevronDownIcon } from 'lucide-react';
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
 
-import { Badge } from '@web/modules/shared/components/ui/badge';
+import { cn } from '@web/lib/utils';
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
 } from '@web/modules/shared/components/client/Command';
-import { cn } from '@web/lib/utils';
+import { Badge } from '@web/modules/shared/components/ui/badge';
 
 export interface Option {
   value: string;

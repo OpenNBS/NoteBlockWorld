@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { create } from 'zustand';
 import { toast } from 'react-hot-toast';
+import { create } from 'zustand';
 
 import { MY_SONGS } from '@nbw/config';
 import type {

@@ -58,7 +58,7 @@ export class AuthController {
       },
     },
   })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line unused-imports/no-unused-vars
   public async magicLinkLogin(@Req() req: Request, @Res() res: Response) {
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
     // TODO: uncomment this line to enable magic link login

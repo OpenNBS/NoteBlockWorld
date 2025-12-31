@@ -7,14 +7,12 @@ import type {
   SongViewDtoType,
 } from '@nbw/database';
 import axios from '@web/lib/axios';
-
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
 import { MultiplexAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
-
+import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import { formatTimeAgo } from '@web/modules/shared/util/format';
 
-import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import { LicenseInfo } from './client/LicenseInfo';
 import { SongDetails } from './SongDetails';
 import {

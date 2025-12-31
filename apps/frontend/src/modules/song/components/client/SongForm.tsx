@@ -5,12 +5,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { LicenseType } from '@nbw/database';
 import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
-
 import {
   Area,
   Checkbox,
@@ -25,7 +25,6 @@ import { useSongProvider } from '@web/modules/song/components/client/context/Son
 
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
-import React from 'react';
 
 type SongFormProps = {
   type: 'upload' | 'edit';
