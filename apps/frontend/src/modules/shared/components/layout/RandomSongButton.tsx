@@ -36,7 +36,7 @@ export const RandomSongButton = () => {
 
   return (
     <button
-      className='bevel p-2 flex-0 w-min flex items-center justify-center gap-2 bg-zinc-500 after:bg-zinc-700 before:bg-zinc-800 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
+      className='bevel flex-0 min-w-8 flex items-center justify-center gap-2 bg-zinc-500 after:bg-zinc-700 before:bg-zinc-800 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125'
       onClick={randomSong}
     >
       <FontAwesomeIcon icon={faDice} />

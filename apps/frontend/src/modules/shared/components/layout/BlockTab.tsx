@@ -56,7 +56,7 @@ export const BlockTab = ({
     <Link
       href={href}
       className={cn(
-        'bevel p-2 flex-1 w-8 md:min-w-20 max-w-28 flex items-center justify-center gap-2 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125',
+        'bevel p-2 flex-1 w-8 lg:w-20 max-w-28 flex items-center justify-center gap-2 translate-y-[11px] hover:translate-y-1.5 transition-all duration-150 hover:brightness-125',
         colors.bg,
       )}
       style={
@@ -67,7 +67,7 @@ export const BlockTab = ({
       }
     >
       <FontAwesomeIcon icon={icon} />
-      <span className='hidden sm:block'>{label}</span>
+      <span className='hidden lg:block'>{label}</span>
       <MusicalNote />
     </Link>
   );

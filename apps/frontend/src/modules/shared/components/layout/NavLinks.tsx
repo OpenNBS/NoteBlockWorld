@@ -12,7 +12,7 @@ export function NavLinks({
   userData?: LoggedUserData;
 }) {
   return (
-    <div className='flex items-center justify-center w-fit gap-1 md:gap-6'>
+    <div className='flex items-center justify-center w-fit gap-1 md:gap-3 xl:gap-6'>
       <SettingsMenu />
       <UploadButton />
       {isUserLoggedIn && userData ? (
