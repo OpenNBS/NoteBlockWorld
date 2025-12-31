@@ -14,7 +14,7 @@ type SongDetailsProps = {
 
 const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {
   return (
-    <tr className='odd:bg-zinc-800/50 even:bg-zinc-800 first:[&_td]:first:rounded-tl-xl last:[&_td]:first:rounded-tr-xl first:[&_td]:last:rounded-bl-xl last:[&_td]:last:rounded-br-xl'>
+    <tr className='odd:bg-zinc-800/50 even:bg-zinc-800 first:[&_td]:first:rounded-tl-xl last:[&_td]:first:rounded-bl-xl first:[&_td]:last:rounded-tr-xl last:[&_td]:last:rounded-br-xl'>
       {children}
     </tr>
   );
