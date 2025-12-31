@@ -12,5 +12,9 @@
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
+  },
+  "files.associations": {
+    ".css": "tailwindcss",
+    "*.scss": "tailwindcss"
   }
 }

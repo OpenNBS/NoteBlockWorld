@@ -11,10 +11,10 @@ import {
 export enum SongSortType {
   RECENT = 'recent',
   RANDOM = 'random',
-  PLAY_COUNT = 'play-count',
+  PLAY_COUNT = 'playCount',
   TITLE = 'title',
   DURATION = 'duration',
-  NOTE_COUNT = 'note-count',
+  NOTE_COUNT = 'noteCount',
 }
 
 export enum SongOrderType {

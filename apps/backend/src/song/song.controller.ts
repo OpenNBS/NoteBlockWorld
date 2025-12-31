@@ -77,7 +77,7 @@ export class SongController {
       
       **Query Parameters:**
       - \`q\`: Search string to filter songs by title or description (optional)
-      - \`sort\`: Sort songs by criteria (recent, random, play-count, title, duration, note-count)
+      - \`sort\`: Sort songs by criteria (recent, random, playCount, title, duration, noteCount)
       - \`order\`: Sort order (asc, desc) - only applies if sort is not random
       - \`category\`: Filter by category - if left empty, returns songs in any category
       - \`uploader\`: Filter by uploader username - if provided, will only return songs uploaded by that user
@@ -100,33 +100,6 @@ export class SongController {
   public async getSongList(
     @Query() query: SongListQueryDTO,
   ): Promise<PageDto<SongPreviewDto>> {
-    // Handle search query
-    if (query.q) {
-      const sortFieldMap = new Map([
-        [SongSortType.RECENT, 'createdAt'],
-        [SongSortType.PLAY_COUNT, 'playCount'],
-        [SongSortType.TITLE, 'title'],
-        [SongSortType.DURATION, 'duration'],
-        [SongSortType.NOTE_COUNT, 'noteCount'],
-      ]);
-
-      const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
-
-      const pageQuery = new PageQueryDTO({
-        page: query.page,
-        limit: query.limit,
-        sort: sortField,
-        order: query.order === 'desc' ? false : true,
-      });
-      const data = await this.songService.searchSongs(pageQuery, query.q);
-      return new PageDto<SongPreviewDto>({
-        content: data,
-        page: query.page,
-        limit: query.limit,
-        total: data.length,
-      });
-    }
-
     // Handle random sort
     if (query.sort === SongSortType.RANDOM) {
       if (query.limit && (query.limit < 1 || query.limit > 10)) {
@@ -147,72 +120,38 @@ export class SongController {
       });
     }
 
-    // Handle recent sort
-    if (query.sort === SongSortType.RECENT) {
-      // If category is provided, use getSongsByCategory (which also sorts by recent)
-      if (query.category) {
-        const data = await this.songService.getSongsByCategory(
-          query.category,
-          query.page,
-          query.limit,
-        );
-        return new PageDto<SongPreviewDto>({
-          content: data,
-          page: query.page,
-          limit: query.limit,
-          total: data.length,
-        });
-      }
-
-      const data = await this.songService.getRecentSongs(
-        query.page,
-        query.limit,
-      );
-      return new PageDto<SongPreviewDto>({
-        content: data,
-        page: query.page,
-        limit: query.limit,
-        total: data.length,
-      });
-    }
-
-    // Handle category filter
-    if (query.category) {
-      const data = await this.songService.getSongsByCategory(
-        query.category,
-        query.page,
-        query.limit,
-      );
-      return new PageDto<SongPreviewDto>({
-        content: data,
-        page: query.page,
-        limit: query.limit,
-        total: data.length,
-      });
-    }
-
-    // Default: get songs with standard pagination
-    const sortFieldMap = new Map([
+    // Map sort types to MongoDB field paths
+    const sortFieldMap = new Map<SongSortType, string>([
+      [SongSortType.RECENT, 'createdAt'],
       [SongSortType.PLAY_COUNT, 'playCount'],
       [SongSortType.TITLE, 'title'],
-      [SongSortType.DURATION, 'duration'],
-      [SongSortType.NOTE_COUNT, 'noteCount'],
+      [SongSortType.DURATION, 'stats.duration'],
+      [SongSortType.NOTE_COUNT, 'stats.noteCount'],
     ]);
 
     const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+    const isDescending = query.order ? query.order === 'desc' : true;
 
+    // Build PageQueryDTO with the sort field
     const pageQuery = new PageQueryDTO({
       page: query.page,
       limit: query.limit,
       sort: sortField,
-      order: query.order === 'desc' ? false : true,
+      order: isDescending,
     });
-    const data = await this.songService.getSongByPage(pageQuery);
+
+    // Query songs with optional search and category filters
+    const result = await this.songService.querySongs(
+      pageQuery,
+      query.q,
+      query.category,
+    );
+
     return new PageDto<SongPreviewDto>({
-      content: data,
+      content: result.content,
       page: query.page,
       limit: query.limit,
-      total: data.length,
+      total: result.total,
     });
   }
 
@@ -323,12 +262,12 @@ export class SongController {
     @Query() query: PageQueryDTO,
     @Query('q') q: string,
   ): Promise<PageDto<SongPreviewDto>> {
-    const data = await this.songService.searchSongs(query, q ?? '');
+    const result = await this.songService.querySongs(query, q ?? '');
     return new PageDto<SongPreviewDto>({
-      content: data,
+      content: result.content,
       page: query.page,
       limit: query.limit,
-      total: data.length,
+      total: result.total,
     });
   }
 

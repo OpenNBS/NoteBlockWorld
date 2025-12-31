@@ -210,67 +210,76 @@ export class SongService {
     return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
-  public async searchSongs(
+  public async querySongs(
     query: PageQueryDTO,
-    q: string,
-  ): Promise<SongPreviewDto[]> {
+    q?: string,
+    category?: string,
+  ): Promise<SongPageDto> {
     const page = parseInt(query.page?.toString() ?? '1');
     const limit = parseInt(query.limit?.toString() ?? '10');
-    const order = query.order ? query.order : false;
-    const allowedSorts = new Set(['likeCount', 'createdAt', 'playCount']);
+    const descending = query.order ?? true;
+
+    const allowedSorts = new Set([
+      'createdAt',
+      'playCount',
+      'title',
+      'stats.duration',
+      'stats.noteCount',
+    ]);
     const sortField = allowedSorts.has(query.sort ?? '')
       ? (query.sort as string)
       : 'createdAt';
 
-    const terms = (q || '')
-      .split(/\s+/)
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
-
-    // Build Google-like search: all words must appear across any of the fields
-    const andClauses = terms.map((word) => ({
-      $or: [
-        { title: { $regex: word, $options: 'i' } },
-        { originalAuthor: { $regex: word, $options: 'i' } },
-        { description: { $regex: word, $options: 'i' } },
-      ],
-    }));
-
     const mongoQuery: any = {
       visibility: 'public',
-      ...(andClauses.length > 0 ? { $and: andClauses } : {}),
     };
 
-    const songs = (await this.songModel
-      .find(mongoQuery)
-      .sort({ [sortField]: order ? 1 : -1 })
-      .skip(limit * (page - 1))
-      .limit(limit)
-      .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
+    // Add category filter if provided
+    if (category) {
+      mongoQuery.category = category;
+    }
 
-    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
-  }
+    // Add search filter if search query is provided
+    if (q) {
+      const terms = q
+        .split(/\s+/)
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
 
-  public async getRecentSongs(
-    page: number,
-    limit: number,
-  ): Promise<SongPreviewDto[]> {
-    const queryObject: any = {
-      visibility: 'public',
+      // Build Google-like search: all words must appear across any of the fields
+      if (terms.length > 0) {
+        const andClauses = terms.map((word) => ({
+          $or: [
+            { title: { $regex: word, $options: 'i' } },
+            { originalAuthor: { $regex: word, $options: 'i' } },
+            { description: { $regex: word, $options: 'i' } },
+          ],
+        }));
+        mongoQuery.$and = andClauses;
+      }
+    }
+
+    const sortOrder = descending ? -1 : 1;
+
+    const [songs, total] = await Promise.all([
+      this.songModel
+        .find(mongoQuery)
+        .sort({ [sortField]: sortOrder })
+        .skip(limit * (page - 1))
+        .limit(limit)
+        .populate('uploader', 'username profileImage -_id')
+        .exec() as unknown as Promise<SongWithUser[]>,
+      this.songModel.countDocuments(mongoQuery),
+    ]);
+
+    return {
+      content: songs.map((song) =>
+        SongPreviewDto.fromSongDocumentWithUser(song),
+      ),
+      page,
+      limit,
+      total,
     };
-
-    const data = (await this.songModel
-      .find(queryObject)
-      .sort({
-        createdAt: -1,
-      })
-      .skip(page * limit - limit)
-      .limit(limit)
-      .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
-
-    return data.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
   public async getSongsForTimespan(timespan: number): Promise<SongWithUser[]> {
@@ -522,25 +531,6 @@ export class SongService {
 
       return acc;
     }, {} as Record<string, number>);
-  }
-
-  public async getSongsByCategory(
-    category: string,
-    page: number,
-    limit: number,
-  ): Promise<SongPreviewDto[]> {
-    const songs = (await this.songModel
-      .find({
-        category: category,
-        visibility: 'public',
-      })
-      .sort({ createdAt: -1 })
-      .skip(page * limit - limit)
-      .limit(limit)
-      .populate('uploader', 'username profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
-
-    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
   }
 
   public async getRandomSongs(

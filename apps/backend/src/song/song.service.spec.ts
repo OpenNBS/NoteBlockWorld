@@ -1028,11 +1028,15 @@ describe('SongService', () => {
     });
   });
 
-  describe('getSongsByCategory', () => {
-    it('should return a list of songs by category', async () => {
-      const category = 'test-category';
-      const page = 1;
-      const limit = 10;
+  describe('querySongs', () => {
+    it('should return songs sorted by field with optional category filter', async () => {
+      const query = {
+        page: 1,
+        limit: 10,
+        sort: 'stats.duration',
+        order: false,
+      };
+      const category = 'pop';
       const songList: SongWithUser[] = [];
 
       const mockFind = {
@@ -1044,21 +1048,27 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
-      const result = await service.getSongsByCategory(category, page, limit);
+      const result = await service.querySongs(query, undefined, category);
 
-      expect(result).toEqual(
+      expect(result.content).toEqual(
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
+      expect(result.page).toBe(1);
+      expect(result.limit).toBe(10);
+      expect(result.total).toBe(0);
 
       expect(songModel.find).toHaveBeenCalledWith({
-        category,
         visibility: 'public',
+        category,
       });
 
-      expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
-      expect(mockFind.skip).toHaveBeenCalledWith(page * limit - limit);
-      expect(mockFind.limit).toHaveBeenCalledWith(limit);
+      expect(mockFind.sort).toHaveBeenCalledWith({ 'stats.duration': 1 });
+      expect(mockFind.skip).toHaveBeenCalledWith(
+        (query.limit as number) * ((query.page as number) - 1),
+      );
+      expect(mockFind.limit).toHaveBeenCalledWith(query.limit);
 
       expect(mockFind.populate).toHaveBeenCalledWith(
         'uploader',
@@ -1066,13 +1076,19 @@ describe('SongService', () => {
       );
 
       expect(mockFind.exec).toHaveBeenCalled();
+      expect(songModel.countDocuments).toHaveBeenCalledWith({
+        visibility: 'public',
+        category,
+      });
     });
-  });
 
-  describe('getRecentSongs', () => {
-    it('should return recent songs', async () => {
-      const page = 1;
-      const limit = 10;
+    it('should work without category filter', async () => {
+      const query = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: true,
+      };
       const songList: SongWithUser[] = [];
 
       const mockFind = {
@@ -1084,17 +1100,55 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
-      const result = await service.getRecentSongs(page, limit);
-
-      expect(result).toEqual(
-        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
-      );
+      const result = await service.querySongs(query);
 
       expect(songModel.find).toHaveBeenCalledWith({ visibility: 'public' });
       expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
-      expect(mockFind.skip).toHaveBeenCalledWith(page * limit - limit);
-      expect(mockFind.limit).toHaveBeenCalledWith(limit);
+      expect(result.content).toEqual(
+        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
+      );
+      expect(result.total).toBe(0);
+    });
+
+    it('should search with text query and filters', async () => {
+      const query = {
+        page: 1,
+        limit: 10,
+        sort: 'playCount',
+        order: false,
+      };
+      const searchTerm = 'test song';
+      const category = 'rock';
+      const songList: SongWithUser[] = [];
+
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(songList),
+      };
+
+      jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
+
+      const result = await service.querySongs(query, searchTerm, category);
+
+      expect(result.content).toEqual(
+        songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
+      );
+      expect(result.total).toBe(0);
+
+      expect(songModel.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          visibility: 'public',
+          category,
+        }),
+      );
+
+      expect(mockFind.sort).toHaveBeenCalledWith({ playCount: 1 });
     });
   });
 

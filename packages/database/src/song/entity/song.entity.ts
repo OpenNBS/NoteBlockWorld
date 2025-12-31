@@ -94,6 +94,12 @@ export class Song {
 
 export const SongSchema = SchemaFactory.createForClass(Song);
 
+// Add indexes for commonly queried fields
+SongSchema.index({ 'stats.duration': 1 });
+SongSchema.index({ 'stats.noteCount': 1 });
+SongSchema.index({ visibility: 1, createdAt: -1 });
+SongSchema.index({ category: 1, createdAt: -1 });
+
 export type SongDocument = Song & Document;
 
 export type SongWithUser = Omit<Song, 'uploader'> & {
