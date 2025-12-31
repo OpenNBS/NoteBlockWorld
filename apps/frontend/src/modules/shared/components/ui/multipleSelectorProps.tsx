@@ -166,6 +166,7 @@ const CommandEmpty = forwardRef<
     <div
       ref={forwardedRef}
       className={cn('py-6 text-center text-sm', className)}
+      // eslint-disable-next-line react/no-unknown-property
       cmdk-empty=''
       role='presentation'
       {...props}
@@ -327,7 +328,7 @@ const MultipleSelector = React.forwardRef<
       };
 
       void exec();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // TODO: eslint-disable-next-line react-hooks/exhaustive-deps -> definition for rule not found
     }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus]);
 
     useEffect(() => {
@@ -353,7 +354,7 @@ const MultipleSelector = React.forwardRef<
       };
 
       void exec();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // TODO: eslint-disable-next-line react-hooks/exhaustive-deps -> definition for rule not found
     }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus]);
 
     const CreatableItem = () => {
