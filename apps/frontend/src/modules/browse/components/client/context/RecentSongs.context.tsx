@@ -14,7 +14,6 @@ interface RecentSongsState {
   selectedCategory: string;
   categories: Record<string, number>;
   page: number;
-  endpoint: string;
 }
 
 interface RecentSongsActions {
@@ -39,7 +38,6 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
   selectedCategory: '',
   categories: {},
   page: 0,
-  endpoint: '/song',
 
   // Actions
   initialize: (initialRecentSongs) => {
@@ -66,7 +64,7 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
   },
 
   fetchRecentSongs: async () => {
-    const { page, endpoint, selectedCategory } = get();
+    const { page, selectedCategory } = get();
     set({ isLoading: true });
 
     try {
@@ -84,7 +82,7 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
       }
 
       const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
-        endpoint,
+        '/song',
         { params },
       );
 
@@ -120,7 +118,6 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
       page: 1,
       recentSongs: Array(12).fill(null),
       hasMore: true,
-      endpoint: '/song', // Always '/song' regardless of category
     });
   },
 
