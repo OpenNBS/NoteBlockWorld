@@ -138,6 +138,9 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
 // Hook to sync page changes with fetchRecentSongs
 export const useRecentSongsPageLoader = () => {
   const page = useRecentSongsStore((state) => state.page);
+  const selectedCategory = useRecentSongsStore(
+    (state) => state.selectedCategory,
+  );
   const fetchRecentSongs = useRecentSongsStore(
     (state) => state.fetchRecentSongs,
   );
@@ -145,7 +148,7 @@ export const useRecentSongsPageLoader = () => {
   useEffect(() => {
     if (page === 0) return;
     fetchRecentSongs();
-  }, [page, fetchRecentSongs]);
+  }, [page, selectedCategory, fetchRecentSongs]);
 };
 
 // Hook to fetch categories on mount
