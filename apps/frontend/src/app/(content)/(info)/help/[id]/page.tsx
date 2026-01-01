@@ -10,8 +10,10 @@ type HelpPageProps = {
   params: { id: string };
 };
 
-export function generateMetadata({ params }: HelpPageProps): Metadata {
-  const id = params.id;
+export async function generateMetadata({
+  params,
+}: HelpPageProps): Promise<Metadata> {
+  const id = (await params).id;
   const post = getPostData('help', id);
 
   const publicUrl = process.env.NEXT_PUBLIC_URL;

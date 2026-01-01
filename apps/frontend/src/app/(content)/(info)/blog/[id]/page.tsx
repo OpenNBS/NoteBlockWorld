@@ -10,8 +10,10 @@ type BlogPageProps = {
   params: { id: string };
 };
 
-export function generateMetadata({ params }: BlogPageProps): Metadata {
-  const id = params.id;
+export async function generateMetadata({
+  params,
+}: BlogPageProps): Promise<Metadata> {
+  const id = (await params).id;
   const post = getPostData('blog', id);
 
   const publicUrl = process.env.NEXT_PUBLIC_URL;
@@ -32,8 +34,8 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   };
 }
 
-const BlogPost = ({ params }: BlogPageProps) => {
-  const { id } = params;
+const BlogPost = async ({ params }: BlogPageProps) => {
+  const { id } = await params;
   let post: PostType;
 
   try {
