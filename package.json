@@ -1,53 +1,99 @@
 {
-  "name": "note-block-world",
+  "name": "@nbw/root",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    },
+    "./backend": {
+      "import": "./apps/backend/dist/index.js",
+      "types": "./apps/backend/dist/index.d.ts"
+    },
+    "./frontend": {
+      "import": "./apps/frontend/dist/index.js",
+      "types": "./apps/frontend/dist/index.d.ts"
+    },
+    "./configs": {
+      "import": "./packages/configs/dist/index.js",
+      "types": "./packages/configs/dist/index.d.ts"
+    },
+    "./database": {
+      "import": "./packages/database/dist/index.js",
+      "types": "./packages/database/dist/index.d.ts"
+    },
+    "./thumbnail": {
+      "import": "./packages/thumbnail/dist/index.js",
+      "types": "./packages/thumbnail/dist/index.d.ts"
+    },
+    "./song": {
+      "import": "./packages/song/dist/index.js",
+      "types": "./packages/song/dist/index.d.ts"
+    },
+    "./sounds": {
+      "import": "./packages/sounds/dist/index.js",
+      "types": "./packages/sounds/dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "dev:docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
-    "build:server": "bun run build:data && cd server && bun run build",
-    "build:web": "cd ./web && bun run build",
-    "start:server": "cd ./server && bun run start",
-    "start:server:prod": "cd ./server && bun run start",
-    "start:web:prod": "cd ./web && bun run start",
-    "dev": "concurrently --success first -n \"server,web\" --prefix-colors \"cyan,magenta\" --prefix \"{name} {time}\" \"bun run dev:server\" \"bun run dev:web\"",
-    "dev:web": "cd ./web && bun run dev",
-    "dev:server": "cd ./server && bun run start:dev",
-    "lint": "bun run lint:server && bun run lint:web && bun run lint:shared",
-    "lint:server": "cd ./server && bun run lint",
-    "lint:web": "cd ./web && bun run lint",
-    "lint:shared": "cd ./shared && bun run lint",
-    "test": "bun run test:server && bun run test:shared",
-    "test:server": "cd ./server && bun run test",
-    "test:shared": "cd ./shared && bun run test",
+    "postinstall": "bun run build:packages",
+    "build:packages": "bun run ./scripts/build.ts",
+    "build:apps": "bun run --filter './apps/*' build",
+    "build:server": "bun run build:packages && bun run --filter '@nbw/backend' build",
+    "build:web": "bun run --filter '@nbs/frontend' build",
+    "build:all": "bun run build:packages && bun run build:apps",
+    "docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
+    "start:apps": "bun run --filter './apps/*' start",
+    "start:server": "bun run --filter '@nbw/backend start",
+    "start:web": "bun run --filter '@nbw/frontend' start",
+    "dev:server": "bun run --filter '@nbw/backend' start:dev",
+    "dev:web": "bun run --filter '@nbw/frontend' dev",
+    "dev:apps": "bun run --filter './apps/*' dev",
+    "dev": "concurrently --names 'backend,frontend' --prefix-colors 'cyan,magenta' 'cd apps/backend && bun run start:dev' 'cd apps/frontend && bun run dev'",
+    "lint": "eslint \"**/*.{ts,tsx}\" --fix",
+    "lint:check": "eslint \"**/*.{ts,tsx}\"",
+    "format": "prettier --write .",
     "cy:open": "bun run test:cy",
-    "test:cy": "cd ./tests && bun run cy:open",
-    "prettier": "prettier --write .",
-    "build:data": "ts-node ./build.ts"
+    "test:cy": "bun run --filter 'tests' cy:open",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "server",
-    "web",
-    "shared",
-    "tests"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
     "@types/bun": "^1.3.3",
     "@types/node": "^20.19.25",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "concurrently": "^9.2.1",
-    "eslint": "^8.57.1",
+    "eslint": "^9.36.0",
     "eslint-config-prettier": "^8.10.2",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^4.2.5",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "prettier": "^2.8.8"
+    "eslint-plugin-mdx": "^3.6.2",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
+    "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
-    "ts-node": "^10.9.2"
+    "@nbw/sounds": "workspace:*",
+    "@types/jest": "^30.0.0"
   }
 }

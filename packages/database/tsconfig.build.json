@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "dist",
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false,
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}

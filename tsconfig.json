@@ -1,20 +1,18 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "incremental": true,
-    "skipLibCheck": true,
+    "module": "nodenext",
+    // Root project specific overrides
     "strictNullChecks": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "strictPropertyInitialization": false,
-    "paths": {
-      "@server/*": ["./server/src/*"],
-      "@web/*": ["./web/*"],
-      "@shared/*": ["./shared/*"]
-    }
-  }
+    "strictPropertyInitialization": false
+  },
+  "exclude": [
+    "node_modules",
+    "**/dist/**/*",
+    "**/dist/**/*",
+    "**/*.js",
+    "**/*.mjs"
+  ]
 }

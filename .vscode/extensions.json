@@ -3,6 +3,9 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "unifiedjs.vscode-mdx",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "bradlc.vscode-tailwindcss",
+    "fill-labs.dependi",
+    "gruntfuggly.todo-tree"
   ]
 }

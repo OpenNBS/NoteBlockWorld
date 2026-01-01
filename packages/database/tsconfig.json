@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.package.json",
+  "compilerOptions": {
+    // Database-specific settings
+    "declaration": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "emitDecoratorMetadata": true,
+    // Relaxed strict settings for database entities
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    // Path mapping
+    "paths": {
+      "@database/*": ["src/*"]
+    }
+  }
+}

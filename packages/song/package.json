@@ -1,0 +1,42 @@
+{
+  "name": "@nbw/song",
+  "main": "dist/index.node.js",
+  "module": "dist/index.node.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "browser": "./dist/index.browser.js",
+      "node": "./dist/index.node.js",
+      "import": "./dist/index.node.js",
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun run clean && bun run build:node && bun run build:browser && bun run build:types",
+    "build:node": "bun build src/index.ts --outdir dist --target node && mv dist/index.js dist/index.node.js",
+    "build:browser": "bun build src/index.ts --outdir dist --target browser && mv dist/index.js dist/index.browser.js",
+    "build:types": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "dev": "bun build src/index.ts --outdir dist --target node --watch",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "bun test **/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/unidecode": "^1.0.0",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@encode42/nbs.js": "^5.0.2",
+    "@nbw/database": "workspace:*",
+    "@timohausmann/quadtree-ts": "^2.2.2",
+    "jszip": "^3.10.1",
+    "unidecode": "^1.1.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
