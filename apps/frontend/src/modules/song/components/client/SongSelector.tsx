@@ -55,7 +55,7 @@ export const SongSelector = () => {
           icon={faFile}
           className={`${
             isDragActive ? 'text-blue-400 scale-105' : 'text-zinc-600'
-          } transition-all duration-250 ease-in-out !h-20`}
+          } transition-all duration-250 ease-in-out !h-20 text-7xl`}
         />
 
         <FontAwesomeIcon
