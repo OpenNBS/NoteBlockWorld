@@ -57,10 +57,7 @@ export const EditSongProvider = ({
 
   const [originalData, setOriginalData] = useState<UploadSongDto | null>(null);
 
-  const {
-    register,
-    formState: { errors },
-  } = formMethods;
+  const { register } = formMethods;
 
   const router = useRouter();
 
@@ -331,7 +328,7 @@ export const EditSongProvider = ({
         instrumentSounds,
         setInstrumentSound,
         register,
-        errors,
+        errors: formMethods.formState.errors,
         song,
         sendError,
         isSubmitting,

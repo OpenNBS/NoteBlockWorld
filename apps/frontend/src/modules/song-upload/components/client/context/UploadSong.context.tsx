@@ -141,10 +141,7 @@ export const UploadSongProvider = ({
     },
   });
 
-  const {
-    register,
-    formState: { errors },
-  } = formMethods;
+  const { register } = formMethods;
 
   async function submitSongData(): Promise<void> {
     // Get song file from state
@@ -327,7 +324,7 @@ export const UploadSongProvider = ({
   const formContextValue: UploadSongFormContextType = {
     formMethods,
     register,
-    errors,
+    errors: formMethods.formState.errors,
     setFile: setFileHandler,
     setInstrumentSound,
     submitSong,
