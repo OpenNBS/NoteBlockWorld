@@ -38,39 +38,35 @@ const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
 
-  // @ts-ignore
   visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
     .max(UPLOAD_CONSTANTS.title.maxLength, {
-      message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
+      error: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
     })
     .min(1, {
-      message: 'Title is required',
+      error: 'Title is required',
     }),
   originalAuthor: zod
     .string()
     .max(UPLOAD_CONSTANTS.originalAuthor.maxLength, {
-      message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
+      error: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
     })
     .min(0),
   author: zod.string().optional(),
   description: zod.string().max(UPLOAD_CONSTANTS.description.maxLength, {
-    message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
+    error: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
   customInstruments: zod.array(zod.string()),
   license: zod
-
-    // @ts-ignore
-    .enum(licenses, {
+    .enum(['none', ...licenses] as const)
+    .refine((v) => v !== 'none', {
       message: 'Please select a license',
     })
-    .refine((value) => Object.keys(UPLOAD_CONSTANTS.licenses).includes(value))
     .default(UPLOAD_CONSTANTS.license.default),
 
-  // @ts-ignore
-  category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT),
+  category: zod.enum(categories).default(UPLOAD_CONSTANTS.category.default),
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});
