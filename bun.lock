@@ -232,7 +232,6 @@
     "packages/thumbnail": {
       "name": "@nbw/thumbnail",
       "dependencies": {
-        "@napi-rs/canvas": "^0.1.74",
         "@nbw/song": "workspace:*",
       },
       "devDependencies": {
@@ -240,6 +239,9 @@
         "jest": "^29.7.0",
         "ts-jest": "^29.2.5",
         "typescript": "^5",
+      },
+      "optionalDependencies": {
+        "@napi-rs/canvas": "^0.1.74",
       },
       "peerDependencies": {
         "typescript": "^5",
