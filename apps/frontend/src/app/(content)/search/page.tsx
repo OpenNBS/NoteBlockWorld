@@ -479,10 +479,11 @@ const SearchSongPage = () => {
       category,
       uploader,
       limit,
-      noteCountMin: noteCountMin > 0 ? noteCountMin : undefined,
-      noteCountMax: noteCountMax < 10000 ? noteCountMax : undefined,
-      durationMin: durationMin > 0 ? durationMin : undefined,
-      durationMax: durationMax < 10000 ? durationMax : undefined,
+      noteCountMin: noteCountMin && noteCountMin > 0 ? noteCountMin : undefined,
+      noteCountMax:
+        noteCountMax && noteCountMax < 10000 ? noteCountMax : undefined,
+      durationMin: durationMin && durationMin > 0 ? durationMin : undefined,
+      durationMax: durationMax && durationMax < 10000 ? durationMax : undefined,
       features: features || undefined,
       instruments: instruments || undefined,
     };
