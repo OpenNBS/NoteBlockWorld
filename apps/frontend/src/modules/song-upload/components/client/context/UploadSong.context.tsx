@@ -321,6 +321,14 @@ export const UploadSongProvider = ({
     };
   }, [formMethods.formState.isDirty, isUploadComplete]);
 
+  // Reset form and store state when component unmounts
+  useEffect(() => {
+    return () => {
+      formMethods.reset();
+      store.reset();
+    };
+  }, []);
+
   const formContextValue: UploadSongFormContextType = {
     formMethods,
     register,
