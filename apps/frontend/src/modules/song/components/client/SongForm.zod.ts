@@ -58,7 +58,7 @@ export const SongFormSchema = zod.object({
     error: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
-  customInstruments: zod.array(zod.string()),
+  customInstruments: zod.array(zod.string()).default([]),
   license: zod
     .enum(['none', ...licenses] as const)
     .refine((v) => v !== 'none', {
