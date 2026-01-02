@@ -4,17 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { NoteQuadTree } from '@nbw/song';
+import { drawNotesOffscreen, swap } from '@nbw/thumbnail/browser';
 
 import { UploadSongForm } from './SongForm.zod';
-
-// Dynamically import thumbnail functions to avoid SSR issues with HTMLCanvasElement
-const loadThumbnailFunctions = async () => {
-  const thumbnail = await import('@nbw/thumbnail');
-  return {
-    drawNotesOffscreen: thumbnail.drawNotesOffscreen,
-    swap: thumbnail.swap,
-  };
-};
 
 type ThumbnailRendererCanvasProps = {
   notes: NoteQuadTree;
@@ -28,11 +20,6 @@ export const ThumbnailRendererCanvas = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawRequest = useRef<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [functionsLoaded, setFunctionsLoaded] = useState(false);
-  const thumbnailFunctionsRef = useRef<{
-    drawNotesOffscreen: typeof import('@nbw/thumbnail').drawNotesOffscreen;
-    swap: typeof import('@nbw/thumbnail').swap;
-  } | null>(null);
 
   const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
     [
@@ -42,23 +29,6 @@ export const ThumbnailRendererCanvas = ({
       'thumbnailData.backgroundColor',
     ],
   );
-
-  // Load thumbnail functions on client side only
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (thumbnailFunctionsRef.current) return;
-
-    loadThumbnailFunctions()
-      .then((funcs) => {
-        thumbnailFunctionsRef.current = funcs;
-        // Trigger a re-render to use the loaded functions
-        setFunctionsLoaded(true);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Failed to load thumbnail functions:', error);
-      });
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -76,12 +46,6 @@ export const ThumbnailRendererCanvas = ({
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!thumbnailFunctionsRef.current || !functionsLoaded) {
-      setLoading(true);
-      return;
-    }
-
     setLoading(true);
 
     const canvas = canvasRef.current as HTMLCanvasElement | null;
@@ -92,11 +56,9 @@ export const ThumbnailRendererCanvas = ({
       cancelAnimationFrame(drawRequest.current);
     }
 
-    const { drawNotesOffscreen, swap } = thumbnailFunctionsRef.current;
-
     drawRequest.current = requestAnimationFrame(async () => {
       try {
-        const output = await drawNotesOffscreen({
+        const output = (await drawNotesOffscreen({
           notes,
           startTick,
           startLayer,
@@ -105,7 +67,7 @@ export const ThumbnailRendererCanvas = ({
           canvasWidth: canvas.width,
           imgWidth: 1280,
           imgHeight: 768,
-        });
+        })) as OffscreenCanvas;
 
         swap(output, canvas);
         setLoading(false);
@@ -114,14 +76,7 @@ export const ThumbnailRendererCanvas = ({
         setLoading(false);
       }
     });
-  }, [
-    notes,
-    startTick,
-    startLayer,
-    zoomLevel,
-    backgroundColor,
-    functionsLoaded,
-  ]);
+  }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return (
     <div className='relative w-full'>

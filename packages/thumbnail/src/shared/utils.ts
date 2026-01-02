@@ -1,5 +1,9 @@
-import { createCanvas } from './canvasFactory';
-import type { Canvas, Image } from './types';
+import type { DrawingCanvas, DrawContext2D } from './drawTypes';
+
+export interface ImageLike {
+  width: number;
+  height: number;
+}
 
 export const instrumentColors = [
   '#1964ac',
@@ -20,36 +24,38 @@ export const instrumentColors = [
   '#575757',
 ];
 
-const tintedImages: Record<string, Canvas> = {};
+const tintedImages: Record<string, DrawingCanvas> = {};
 
-// Function to apply tint to an image
-export const tintImage = (image: Image, color: string): Canvas => {
-  if (tintedImages[color]) {
-    return tintedImages[color];
+// Function to apply a tint to an image
+export const tintImage = (
+  image: ImageLike,
+  color: string,
+  createCanvas: (w: number, h: number) => DrawingCanvas,
+): DrawingCanvas => {
+  const key = `${color}`;
+
+  if (tintedImages[key]) {
+    return tintedImages[key];
   }
 
   const canvas = createCanvas(image.width, image.height);
-  const ctx = canvas.getContext('2d');
+  const ctx: DrawContext2D = canvas.getContext('2d');
 
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
 
-  // Fill background with the color
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Apply the note block texture to the color
   ctx.globalCompositeOperation = 'hard-light';
   ctx.globalAlpha = 0.67;
-  ctx.drawImage(image, 0, 0);
+  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-  // Reset canvas settings
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1;
 
-  tintedImages[color] = canvas;
-
+  tintedImages[key] = canvas;
   return canvas;
 };
 
