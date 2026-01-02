@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
@@ -627,4 +627,12 @@ const SearchSongPage = () => {
   );
 };
 
-export default SearchSongPage;
+const SearchPageWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchSongPage />
+    </Suspense>
+  );
+};
+
+export default SearchPageWrapper;
