@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { JSX } from 'react';
 import Markdown, { ExtraProps } from 'react-markdown';
 
 export const CustomMarkdown = ({
