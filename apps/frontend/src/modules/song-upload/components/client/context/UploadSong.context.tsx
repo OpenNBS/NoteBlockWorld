@@ -11,7 +11,7 @@ import {
 import { toast } from 'react-hot-toast';
 import { create } from 'zustand';
 
-import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { BG_COLORS, THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
@@ -131,6 +131,14 @@ export const UploadSongProvider = ({
   const formMethods = useForm<UploadSongForm>({
     resolver: zodResolver(uploadSongFormSchema),
     mode: 'onBlur',
+    // Prevents values from appearing empty on first render
+    defaultValues: {
+      category: UPLOAD_CONSTANTS.category.default,
+      license: UPLOAD_CONSTANTS.license.default,
+      visibility: 'public',
+      allowDownload: true,
+      customInstruments: [],
+    },
   });
 
   const {
