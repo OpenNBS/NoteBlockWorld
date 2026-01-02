@@ -25,6 +25,11 @@
     "@aws-sdk/client-s3": "3.946.0",
     "@aws-sdk/s3-request-presigner": "3.946.0",
     "@encode42/nbs.js": "^5.0.2",
+    "@nbw/config": "workspace:*",
+    "@nbw/database": "workspace:*",
+    "@nbw/song": "workspace:*",
+    "@nbw/sounds": "workspace:*",
+    "@nbw/thumbnail": "workspace:*",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^11.1.9",
     "@nestjs/config": "^4.0.2",
@@ -56,12 +61,7 @@
     "rxjs": "^7.8.2",
     "uuid": "^13.0.0",
     "zod": "^4.1.13",
-    "zod-validation-error": "^5.0.0",
-    "@nbw/database": "workspace:*",
-    "@nbw/song": "workspace:*",
-    "@nbw/thumbnail": "workspace:*",
-    "@nbw/sounds": "workspace:*",
-    "@nbw/config": "workspace:*"
+    "zod-validation-error": "^5.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
