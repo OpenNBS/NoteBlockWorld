@@ -75,8 +75,12 @@ export const editSongFormSchema = SongFormSchema.extend({
   id: zod.string(),
 });
 
-export type ThumbnailDataForm = zod.infer<typeof thumbnailDataSchema>;
+// forms
+export type ThumbnailDataFormInput = zod.input<typeof thumbnailDataSchema>;
+export type UploadSongFormInput = zod.input<typeof uploadSongFormSchema>;
+export type EditSongFormInput = zod.input<typeof editSongFormSchema>;
 
-export type UploadSongForm = zod.infer<typeof uploadSongFormSchema>;
-
-export type EditSongForm = zod.infer<typeof editSongFormSchema>;
+// parsed data
+export type ThumbnailDataFormOutput = zod.infer<typeof thumbnailDataSchema>;
+export type UploadSongFormOutput = zod.output<typeof uploadSongFormSchema>;
+export type EditSongFormOutput = zod.output<typeof editSongFormSchema>;

@@ -16,7 +16,8 @@ import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 import {
-  UploadSongForm,
+  UploadSongFormInput,
+  UploadSongFormOutput,
   uploadSongFormSchema,
 } from '@web/modules/song/components/client/SongForm.zod';
 
@@ -76,9 +77,9 @@ export const useUploadSongStore = create<UploadSongStore>((set, get) => ({
 
 // Context for form methods (React Hook Form needs to be initialized in a component)
 interface UploadSongFormContextType {
-  formMethods: UseFormReturn<UploadSongForm>;
-  register: UseFormRegister<UploadSongForm>;
-  errors: FieldErrors<UploadSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput>;
+  register: UseFormRegister<UploadSongFormInput>;
+  errors: FieldErrors<UploadSongFormInput>;
   setFile: (file: File | null) => Promise<void>;
   setInstrumentSound: (index: number, value: string) => void;
   submitSong: () => Promise<void>;
@@ -94,10 +95,10 @@ export type useUploadSongProviderType = {
   setFile: (file: File | null) => void;
   instrumentSounds: string[];
   setInstrumentSound: (index: number, value: string) => void;
-  formMethods: UseFormReturn<UploadSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput>;
   submitSong: () => void;
-  register: UseFormRegister<UploadSongForm>;
-  errors: FieldErrors<UploadSongForm>;
+  register: UseFormRegister<UploadSongFormInput>;
+  errors: FieldErrors<UploadSongFormInput>;
   sendError: string | null;
   isSubmitting: boolean;
   isUploadComplete: boolean;
@@ -128,7 +129,7 @@ export const UploadSongProvider = ({
     setUploadedSongId,
   } = store;
 
-  const formMethods = useForm<UploadSongForm>({
+  const formMethods = useForm<UploadSongFormInput>({
     resolver: zodResolver(uploadSongFormSchema),
     mode: 'onBlur',
     // Prevents values from appearing empty on first render
@@ -164,7 +165,12 @@ export const UploadSongProvider = ({
     // Build form data
     const formData = new FormData();
     formData.append('file', blob, filename || 'song.nbs');
-    const formValues = formMethods.getValues();
+
+    // Parse and normalize values
+    const rawValues = formMethods.getValues();
+
+    const formValues: UploadSongFormOutput =
+      uploadSongFormSchema.parse(rawValues);
 
     Object.entries(formValues)
       .filter(

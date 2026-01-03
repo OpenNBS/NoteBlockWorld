@@ -18,15 +18,16 @@ import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 import {
-  EditSongForm,
+  EditSongFormInput,
+  EditSongFormOutput,
   editSongFormSchema,
 } from '@web/modules/song/components/client/SongForm.zod';
 
 export type useEditSongProviderType = {
-  formMethods: UseFormReturn<EditSongForm>;
+  formMethods: UseFormReturn<EditSongFormInput>;
   submitSong: () => void;
-  register: UseFormRegister<EditSongForm>;
-  errors: FieldErrors<EditSongForm>;
+  register: UseFormRegister<EditSongFormInput>;
+  errors: FieldErrors<EditSongFormInput>;
   song: SongFileType | null;
   instrumentSounds: string[];
   setInstrumentSound: (index: number, value: string) => void;
@@ -45,7 +46,7 @@ export const EditSongProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const formMethods = useForm<EditSongForm>({
+  const formMethods = useForm<EditSongFormInput>({
     resolver: zodResolver(editSongFormSchema),
     mode: 'onBlur',
   });
@@ -67,23 +68,26 @@ export const EditSongProvider = ({
         return false;
       }
 
+      const rawValues = formMethods.getValues();
+      const parsedValues: EditSongFormOutput =
+        editSongFormSchema.parse(rawValues);
+
       const formValues = {
-        allowDownload: formMethods.getValues().allowDownload,
-        visibility: formMethods.getValues().visibility,
-        title: formMethods.getValues().title,
-        originalAuthor: formMethods.getValues().originalAuthor,
-        description: formMethods.getValues().description,
+        allowDownload: parsedValues.allowDownload,
+        visibility: parsedValues.visibility,
+        title: parsedValues.title,
+        originalAuthor: parsedValues.originalAuthor,
+        description: parsedValues.description,
         thumbnailData: {
-          zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-          startTick: formMethods.getValues().thumbnailData.startTick,
-          startLayer: formMethods.getValues().thumbnailData.startLayer,
-          backgroundColor:
-            formMethods.getValues().thumbnailData.backgroundColor,
+          zoomLevel: parsedValues.thumbnailData.zoomLevel,
+          startTick: parsedValues.thumbnailData.startTick,
+          startLayer: parsedValues.thumbnailData.startLayer,
+          backgroundColor: parsedValues.thumbnailData.backgroundColor,
         },
-        artist: formMethods.getValues().author,
-        customInstruments: formMethods.getValues().customInstruments,
-        license: formMethods.getValues().license,
-        category: formMethods.getValues().category,
+        artist: parsedValues.author,
+        customInstruments: parsedValues.customInstruments,
+        license: parsedValues.license,
+        category: parsedValues.category,
       };
 
       const comparisons = [
@@ -123,23 +127,26 @@ export const EditSongProvider = ({
   );
 
   const submitSong = async (): Promise<void> => {
+    const rawValues = formMethods.getValues();
+    const parsedValues: EditSongFormOutput =
+      editSongFormSchema.parse(rawValues);
+
     // Build form data
     const formValues: UploadSongDto = {
-      allowDownload: formMethods.getValues().allowDownload,
-      visibility: formMethods.getValues()
-        .visibility as UploadSongDto['visibility'],
-      title: formMethods.getValues().title,
-      originalAuthor: formMethods.getValues().originalAuthor,
-      description: formMethods.getValues().description,
+      allowDownload: parsedValues.allowDownload,
+      visibility: parsedValues.visibility as UploadSongDto['visibility'],
+      title: parsedValues.title,
+      originalAuthor: parsedValues.originalAuthor,
+      description: parsedValues.description,
       thumbnailData: {
-        zoomLevel: formMethods.getValues().thumbnailData.zoomLevel,
-        startTick: formMethods.getValues().thumbnailData.startTick,
-        startLayer: formMethods.getValues().thumbnailData.startLayer,
-        backgroundColor: formMethods.getValues().thumbnailData.backgroundColor,
+        zoomLevel: parsedValues.thumbnailData.zoomLevel,
+        startTick: parsedValues.thumbnailData.startTick,
+        startLayer: parsedValues.thumbnailData.startLayer,
+        backgroundColor: parsedValues.thumbnailData.backgroundColor,
       },
-      customInstruments: formMethods.getValues().customInstruments,
-      license: formMethods.getValues().license as UploadSongDto['license'],
-      category: formMethods.getValues().category as UploadSongDto['category'],
+      customInstruments: parsedValues.customInstruments,
+      license: parsedValues.license as UploadSongDto['license'],
+      category: parsedValues.category as UploadSongDto['category'],
       file: zodUndefined,
     };
 
