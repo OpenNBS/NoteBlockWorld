@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    // This is a referenced package
     "composite": true,
+
     // NestJS specific settings
     "module": "commonjs",
     "target": "ES2021",
@@ -10,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
+
     // Path mapping
     "paths": {
       "@server/*": ["./src/*"]

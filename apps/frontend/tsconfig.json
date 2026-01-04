@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    // This is a referenced package
     "composite": true,
+
     // Next.js specific settings
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -14,9 +16,11 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+
     // Override base strict settings for Next.js compatibility
     "strict": true,
     "strictPropertyInitialization": false,
+
     // Next.js plugins and types
     "plugins": [
       {
@@ -24,6 +28,7 @@
       }
     ],
     "types": ["mdx"],
+
     // Path mapping
     "paths": {
       "@web/*": ["./src/*"]
