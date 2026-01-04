@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUrl, MaxLength } from 'class-validator';
 
-import type { SongWithUser } from '@database/song/entity/song.entity';
+import type { SongWithUser } from '../../song/entity/song.entity';
 
 type SongPreviewUploader = {
   username: string;
