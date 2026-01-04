@@ -54,6 +54,7 @@
     "dev:web": "bun run --filter '@nbw/frontend' dev",
     "dev:apps": "bun run --filter './apps/*' dev",
     "dev": "concurrently --names 'backend,frontend' --prefix-colors 'cyan,magenta' 'cd apps/backend && bun run start:dev' 'cd apps/frontend && bun run dev'",
+    "typecheck": "tsc -b --noEmit",
     "lint": "eslint \"**/*.{ts,tsx}\" --fix",
     "lint:check": "eslint \"**/*.{ts,tsx}\"",
     "format": "prettier --write .",
