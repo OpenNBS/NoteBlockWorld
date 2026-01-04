@@ -17,7 +17,6 @@
     "build": "bun run clean && bun run build:browser && bun run build:node && bun run build:types",
     "build:browser": "bun build src/browser/index.ts --outdir dist/browser --target browser --external @napi-rs/canvas",
     "build:node": "bun build src/node/index.ts --outdir dist/node --target node",
-    "build:types": "tsc --project tsconfig.build.json",
     "clean": "rm -rf dist",
     "dev:browser": "bun build src/browser/index.ts --outdir dist/browser --target node --watch",
     "dev:node": "bun build src/node/index.ts --outdir dist/node --target node --watch",

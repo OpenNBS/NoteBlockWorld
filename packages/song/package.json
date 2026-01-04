@@ -15,10 +15,9 @@
     }
   },
   "scripts": {
-    "build": "bun run clean && bun run build:node && bun run build:browser && bun run build:types",
+    "build": "bun run clean && bun run build:node && bun run build:browser && tsc -b",
     "build:node": "bun build src/index.ts --outdir dist --target node && mv dist/index.js dist/index.node.js",
     "build:browser": "bun build src/index.ts --outdir dist --target browser && mv dist/index.js dist/index.browser.js",
-    "build:types": "tsc --project tsconfig.build.json",
     "clean": "rm -rf dist",
     "dev": "bun build src/index.ts --outdir dist --target node --watch",
     "lint": "eslint \"src/**/*.ts\" --fix",
