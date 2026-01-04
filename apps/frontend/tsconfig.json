@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     // Next.js specific settings
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
