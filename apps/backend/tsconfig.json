@@ -9,20 +9,11 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
     "emitDecoratorMetadata": true,
-    // Relaxed strict settings for backend
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
     // Path mapping
     "paths": {
-      "@server/*": ["src/*"]
+      "@server/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": ["node_modules", "dist", "e2e/**/*", "test/**/*"]
+  "include": ["src", "scripts"]
 }
