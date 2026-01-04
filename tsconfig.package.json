@@ -10,9 +10,7 @@
     // Modern bundler mode
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "jsx": "react-jsx",
     // Additional strict checks for packages
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
