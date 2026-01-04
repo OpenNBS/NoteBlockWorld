@@ -1,0 +1,18 @@
+{
+  // Root build orchestrator.
+  // This file does NOT compile code - only defines project references for `tsc -b`.
+  // Real projects live in /apps and /packages and extend tsconfig.base.json.
+
+  // This config does not type-check files directly.
+  // Use `tsc -b` or `tsc -b --noEmit`.
+  "files": [],
+  "references": [
+    { "path": "apps/frontend" },
+    { "path": "apps/backend" },
+    { "path": "packages/configs" },
+    { "path": "packages/database" },
+    { "path": "packages/song" },
+    { "path": "packages/sounds" },
+    { "path": "packages/thumbnail" }
+  ]
+}
