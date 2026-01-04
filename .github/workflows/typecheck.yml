@@ -1,0 +1,32 @@
+name: Type Check
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    env:
+      THUMBNAIL_URL: ${{ vars.THUMBNAIL_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Type check (project references)
+        run: bun run typecheck
