@@ -16,9 +16,6 @@
     "isolatedModules": true,
     // Override base strict settings for Next.js compatibility
     "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strictBindCallApply": true,
     "strictPropertyInitialization": false,
     // Next.js plugins and types
     "plugins": [
@@ -38,10 +35,5 @@
     "**/*.tsx",
     "**/*.mdx",
     ".next/types/**/*.ts"
-  ],
-  "types": ["mdx"],
-  // Path mapping
-  "paths": {
-    "@web/*": ["./src/*"]
-  }
+  ]
 }
