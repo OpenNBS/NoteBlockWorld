@@ -1,8 +1,4 @@
 {
   "extends": "../../tsconfig.package.json",
-  "compilerOptions": {
-    // Package-specific overrides (if any)
-    "module": "esnext",
-    "moduleResolution": "bundler"
-  }
+  "include": ["src"]
 }
