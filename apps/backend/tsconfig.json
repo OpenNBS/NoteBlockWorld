@@ -14,8 +14,9 @@
     "emitDecoratorMetadata": true,
 
     // Path mapping
+    "baseUrl": ".",
     "paths": {
-      "@server/*": ["./src/*"]
+      "@server/*": ["src/*"]
     }
   },
   "include": ["src", "scripts"]

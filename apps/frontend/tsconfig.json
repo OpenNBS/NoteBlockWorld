@@ -30,8 +30,9 @@
     "types": ["mdx"],
 
     // Path mapping
+    "baseUrl": ".",
     "paths": {
-      "@web/*": ["./src/*"]
+      "@web/*": ["src/*"]
     }
   },
   "include": [
