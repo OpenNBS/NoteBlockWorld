@@ -4,6 +4,14 @@
     // Actual emitting is controlled by extending configs (packages/apps).
     "outDir": "./dist",
 
+    // Project root for module resolution.
+    "baseUrl": ".",
+
+    // Path mapping for monorepo packages.
+    "paths": {
+      "@nbw/*": ["packages/*"]
+    },
+
     // ==============================
     // Global type-safety invariant
     // ==============================
