@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.package.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
     // DOM support for canvas operations
     "lib": ["dom", "dom.iterable", "esnext"]
-  }
+  },
+  "include": ["src/**/*.ts"]
 }
