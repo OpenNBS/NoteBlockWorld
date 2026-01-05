@@ -1,4 +1,11 @@
 {
   "extends": "../../tsconfig.package.json",
-  "include": ["src"]
+  "compilerOptions": {
+    // Explicit rootDir ensures that TypeScript emits declaration files.
+    // Required for small or reference-only packages where TS cannot
+    // infer a stable project root (the case for this 'config' package).
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
 }
