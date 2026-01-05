@@ -5,6 +5,9 @@
 
   // This config does not type-check files directly.
   // Use `tsc -b` or `tsc -b --noEmit`.
+  "compilerOptions": {
+    "noEmit": true
+  },
   "files": [],
   "references": [
     { "path": "apps/frontend" },
