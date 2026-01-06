@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // This is a referenced package
-    "composite": true,
     // NestJS specific settings
     "module": "commonjs",
     "target": "ES2021",

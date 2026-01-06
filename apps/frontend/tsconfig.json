@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // This is a referenced package
-    "composite": true,
     // Next.js specific settings
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
