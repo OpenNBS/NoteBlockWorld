@@ -5,7 +5,8 @@
     // Required for small or reference-only packages where TS cannot
     // infer a stable project root (the case for this 'config' package).
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src/**/*.ts"]
 }
