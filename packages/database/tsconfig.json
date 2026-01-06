@@ -4,8 +4,8 @@
     "rootDir": "src",
     "outDir": "dist",
 
-    // Database-specific settings
-    "emitDecoratorMetadata": true // Necessary for class-validator
+    // Database runtime requirements
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*.ts"]
 }
