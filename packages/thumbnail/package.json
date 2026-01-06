@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "build": "bun run clean && bun run build:browser && bun run build:node && bun run build:types",
+    "build": "bun run clean && bun run build:browser && bun run build:node && tsc -b",
     "build:browser": "bun build src/browser/index.ts --outdir dist/browser --target browser --external @napi-rs/canvas",
     "build:node": "bun build src/node/index.ts --outdir dist/node --target node",
     "clean": "rm -rf dist",
