@@ -12,7 +12,6 @@
     "noEmit": false,
     "emitDeclarationOnly": true,
     "declaration": true,
-    "outDir": "dist",
 
     // ==============================
     // Module system (bundler-friendly)

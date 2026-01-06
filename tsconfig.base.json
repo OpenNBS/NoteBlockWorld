@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    // Default output directory.
-    // Actual emitting is controlled by extending configs (packages/apps).
-    "outDir": "./dist",
-
     // Project root for module resolution.
     "baseUrl": ".",
 
