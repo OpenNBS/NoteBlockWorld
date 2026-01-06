@@ -3,9 +3,6 @@
   "compilerOptions": {
     // This is a referenced package
     "composite": true,
-    // Store build cache files in a non-source location
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
-
     // Next.js specific settings
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
