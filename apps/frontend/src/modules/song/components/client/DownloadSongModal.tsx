@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { SongViewDtoType } from '@nbw/database';
+import type { SongViewDtoType } from '@nbw/database';
 import { DownloadPopupAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
 import GenericModal from '@web/modules/shared/components/client/GenericModal';
 

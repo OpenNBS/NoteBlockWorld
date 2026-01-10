@@ -1,6 +1,6 @@
 'use client';
 
-import { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
+import type { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 
 import {
   FeaturedSongsProvider,

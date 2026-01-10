@@ -17,7 +17,7 @@ import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongPreviewDtoType } from '@nbw/database';
+import type { SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
