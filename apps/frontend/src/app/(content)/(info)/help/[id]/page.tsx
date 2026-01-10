@@ -34,8 +34,8 @@ export async function generateMetadata({
   };
 }
 
-const HelpPost = ({ params }: HelpPageProps) => {
-  const { id } = params;
+const HelpPost = async ({ params }: HelpPageProps) => {
+  const { id } = await params;
   let post: PostType;
 
   try {
