@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "build": "bun run clean && bun build src/index.ts --outdir dist --target node && tsc -b",
+    "build": "bun run scripts/build.ts",
     "clean": "rm -rf dist",
     "dev": "bun build src/index.ts --outdir dist --target node --watch",
     "lint": "eslint \"src/**/*.ts\" --fix",

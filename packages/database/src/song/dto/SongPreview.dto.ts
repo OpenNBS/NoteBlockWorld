@@ -2,6 +2,8 @@ import { IsNotEmpty, IsString, IsUrl, MaxLength } from 'class-validator';
 
 import type { SongWithUser } from '../../song/entity/song.entity';
 
+import type { VisibilityType } from './types';
+
 type SongPreviewUploader = {
   username: string;
   profileImage: string;
@@ -50,7 +52,7 @@ export class SongPreviewDto {
 
   @IsNotEmpty()
   @IsString()
-  visibility: string;
+  visibility: VisibilityType;
 
   constructor(partial: Partial<SongPreviewDto>) {
     Object.assign(this, partial);
