@@ -22,6 +22,9 @@ describe('AuthController', () => {
   let authService: AuthService;
 
   beforeEach(async () => {
+    // Clear all mocks before each test to ensure test isolation
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
@@ -68,8 +71,13 @@ describe('AuthController', () => {
 
   describe('githubLogin', () => {
     it('should call AuthService.githubLogin', async () => {
-      await controller.githubLogin();
-      expect(authService.githubLogin).toHaveBeenCalled();
+      // githubLogin is just a Passport guard entry point - it doesn't call authService
+      // The actual login is handled by the callback endpoint (githubRedirect)
+      controller.githubLogin();
+      // Verify the method exists and can be called without errors
+      expect(controller.githubLogin).toBeDefined();
+      // Verify authService was NOT called (since this is just a guard entry point)
+      expect(authService.githubLogin).not.toHaveBeenCalled();
     });
   });
 
@@ -97,8 +105,13 @@ describe('AuthController', () => {
 
   describe('googleLogin', () => {
     it('should call AuthService.googleLogin', async () => {
-      await controller.googleLogin();
-      expect(authService.googleLogin).toHaveBeenCalled();
+      // googleLogin is just a Passport guard entry point - it doesn't call authService
+      // The actual login is handled by the callback endpoint (googleRedirect)
+      controller.googleLogin();
+      // Verify the method exists and can be called without errors
+      expect(controller.googleLogin).toBeDefined();
+      // Verify authService was NOT called (since this is just a guard entry point)
+      expect(authService.googleLogin).not.toHaveBeenCalled();
     });
   });
 
@@ -126,8 +139,13 @@ describe('AuthController', () => {
 
   describe('discordLogin', () => {
     it('should call AuthService.discordLogin', async () => {
-      await controller.discordLogin();
-      expect(authService.discordLogin).toHaveBeenCalled();
+      // discordLogin is just a Passport guard entry point - it doesn't call authService
+      // The actual login is handled by the callback endpoint (discordRedirect)
+      controller.discordLogin();
+      // Verify the method exists and can be called without errors
+      expect(controller.discordLogin).toBeDefined();
+      // Verify authService was NOT called (since this is just a guard entry point)
+      expect(authService.discordLogin).not.toHaveBeenCalled();
     });
   });
 

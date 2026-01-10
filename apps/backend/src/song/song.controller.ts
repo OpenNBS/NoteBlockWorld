@@ -8,6 +8,7 @@ import {
   Headers,
   HttpException,
   HttpStatus,
+  Inject,
   Logger,
   Param,
   Patch,
@@ -65,7 +66,9 @@ export class SongController {
   };
 
   constructor(
+    @Inject(SongService)
     public readonly songService: SongService,
+    @Inject(FileService)
     public readonly fileService: FileService,
   ) {}
 
