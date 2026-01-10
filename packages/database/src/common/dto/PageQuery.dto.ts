@@ -11,8 +11,9 @@ import {
   Min,
 } from 'class-validator';
 
-import type { TimespanType } from '@database/song/dto/types';
 import { TIMESPANS } from '@nbw/config';
+
+import type { TimespanType } from '../../song/dto/types';
 
 export class PageQueryDTO {
   @Min(1)

@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { NoteQuadTree } from '@nbw/song';
 import { drawNotesOffscreen, swap } from '@nbw/thumbnail/browser';
 
-import { UploadSongForm } from './SongForm.zod';
+import { UploadSongFormInput } from './SongForm.zod';
 
 type ThumbnailRendererCanvasProps = {
   notes: NoteQuadTree;
-  formMethods: UseFormReturn<UploadSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput>;
 };
 
 export const ThumbnailRendererCanvas = ({
@@ -60,10 +61,11 @@ export const ThumbnailRendererCanvas = ({
       try {
         const output = (await drawNotesOffscreen({
           notes,
-          startTick,
-          startLayer,
-          zoomLevel,
-          backgroundColor,
+          startTick: startTick ?? THUMBNAIL_CONSTANTS.startTick.default,
+          startLayer: startLayer ?? THUMBNAIL_CONSTANTS.startLayer.default,
+          zoomLevel: zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default,
+          backgroundColor:
+            backgroundColor ?? THUMBNAIL_CONSTANTS.backgroundColor.default,
           canvasWidth: canvas.width,
           imgWidth: 1280,
           imgHeight: 768,

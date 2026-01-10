@@ -17,8 +17,8 @@
   },
   "scripts": {
     "build": "bun run clean && bun run build:js && bun run build:types",
-    "build:js": "tsc --project tsconfig.build.json --declaration false --emitDeclarationOnly false",
-    "build:types": "tsc --project tsconfig.build.json --emitDeclarationOnly",
+    "build:js": "tsc --project tsconfig.build.json",
+    "build:types": "tsc --project tsconfig.types.json",
     "clean": "rm -rf dist",
     "dev": "tsc --project tsconfig.build.json --watch",
     "lint": "eslint \"src/**/*.ts\" --fix",

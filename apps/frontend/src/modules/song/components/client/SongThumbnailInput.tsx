@@ -11,7 +11,7 @@ import {
 import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongProvider } from './context/Song.context';
-import { EditSongForm, UploadSongForm } from './SongForm.zod';
+import { EditSongFormInput, UploadSongFormInput } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 
 const formatZoomLevel = (zoomLevel: number) => {
@@ -20,7 +20,8 @@ const formatZoomLevel = (zoomLevel: number) => {
 };
 
 type ThumbnailSlidersProps = {
-  formMethods: UseFormReturn<UploadSongForm> & UseFormReturn<EditSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput> &
+    UseFormReturn<EditSongFormInput>;
   isLocked: boolean;
   maxTick: number;
   maxLayer: number;
@@ -48,7 +49,7 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
       <div>
         <Slider
           id='zoom-level'
-          value={[zoomLevel]}
+          value={[zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.zoomLevel', value[0], {
               shouldValidate: true,
@@ -60,14 +61,16 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
           max={THUMBNAIL_CONSTANTS.zoomLevel.max}
         />
       </div>
-      <div>{formatZoomLevel(zoomLevel)}</div>
+      <div>
+        {formatZoomLevel(zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default)}
+      </div>
       <div>
         <label htmlFor='start-tick'>Start Tick</label>
       </div>
       <div className='w-full'>
         <Slider
           id='start-tick'
-          value={[startTick]}
+          value={[startTick ?? THUMBNAIL_CONSTANTS.startTick.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.startTick', value[0], {
               shouldValidate: true,
@@ -86,7 +89,7 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
       <div className='w-full'>
         <Slider
           id='start-layer'
-          value={[startLayer]}
+          value={[startLayer ?? THUMBNAIL_CONSTANTS.startLayer.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.startLayer', value[0], {
               shouldValidate: true,

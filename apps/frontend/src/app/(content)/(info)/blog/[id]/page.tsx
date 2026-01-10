@@ -7,7 +7,7 @@ import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 type BlogPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({

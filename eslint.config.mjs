@@ -31,6 +31,13 @@ export default defineConfig(
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     languageOptions: {
+      parserOptions: {
+        project: [
+          './tsconfig.base.json',
+          './packages/*/tsconfig.json',
+          './apps/*/tsconfig.json',
+        ],
+      },
       globals: { ...globals.node, ...globals.es2021, ...globals.bun },
     },
     plugins: {
@@ -40,11 +47,7 @@ export default defineConfig(
     settings: {
       'import/resolver': {
         typescript: {
-          project: [
-            'apps/*/tsconfig.json',
-            'packages/*/tsconfig.json',
-            './tsconfig.json',
-          ],
+          project: './tsconfig.eslint.json',
         },
         node: true,
       },

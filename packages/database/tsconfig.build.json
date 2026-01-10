@@ -1,16 +1,21 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "emitDecoratorMetadata": true,
-    "noEmit": false,
-    "declaration": true,
-    "outDir": "dist",
-    "allowImportingTsExtensions": false,
-    "verbatimModuleSyntax": false,
+    // Unlike other packages where we use a bundler to output JS,
+    // this package uses tsc for its build step.
+    // We must disable the default 'composite' config to output JS.
+    "composite": false,
+    "declaration": false,
+    "emitDeclarationOnly": false,
+
+    // Module target for Node runtime
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "module": "ESNext",
-    "typeRoots": ["./node_modules/@types"]
+    "target": "ES2021",
+
+    // Allow ES imports
+    "verbatimModuleSyntax": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

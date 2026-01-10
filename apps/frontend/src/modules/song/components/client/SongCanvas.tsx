@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { SongViewDtoType } from '@nbw/database';
+import type { SongViewDtoType } from '@nbw/database';
 import axios from '@web/lib/axios';
 
 export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {

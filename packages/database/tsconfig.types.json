@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Emit-only configuration for building types.
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}

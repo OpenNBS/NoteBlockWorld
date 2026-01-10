@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import type { SongWithUser } from '@database/song/entity/song.entity';
+import type { SongWithUser } from '../../song/entity/song.entity';
 
 import * as SongViewDto from './SongView.dto';
 import { ThumbnailData } from './ThumbnailData.dto';

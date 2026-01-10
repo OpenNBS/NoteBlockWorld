@@ -1,21 +1,54 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    // Base strict settings
+    // Project root for module resolution.
+    "baseUrl": ".",
+
+    // Path mapping for monorepo packages.
+    "paths": {
+      "@nbw/*": ["packages/*"]
+    },
+
+    // ==============================
+    // Global type-safety invariant
+    // ==============================
+
+    // These rules define the minimum safety bar for the entire repo.
+    // Disabling any of its sub-rules should be rare and explicitly justified.
     "strict": true,
-    "skipLibCheck": true,
+
+    // Disabled to allow compatibility with frameworks and libraries that
+    // initialize fields outside constructors (e.g. ORMs, DI containers).
+    "strictPropertyInitialization": false,
+
+    // Prevents subtle runtime bugs caused by switch fallthrough.
     "noFallthroughCasesInSwitch": true,
+
+    // Enforces consistent file casing across platforms (Windows/macOS/Linux).
     "forceConsistentCasingInFileNames": true,
-    // Modern JavaScript features
+
+    // Improves build performance by skipping type-checking of .d.ts files.
+    // Safe as long as dependencies are trusted.
+    "skipLibCheck": true,
+
+    // ==============================
+    // Language & runtime model
+    // ==============================
+
+    // Target modern runtimes; downleveling is handled by bundlers if needed.
     "target": "ESNext",
     "lib": ["ESNext"],
-    "allowJs": true,
+
+    // Forces explicit module boundaries.
+    // Prevents accidental global scripts and implicit module inference.
     "moduleDetection": "force",
-    // Build performance
-    "incremental": true,
-    // Decorator support for backend compatibility
+
+    // ==============================
+    // Decorators (backend / ORM support)
+    // ==============================
+
+    // Required for libraries relying on legacy decorators and runtime metadata
+    // (e.g. class-validator).
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  },
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+  }
 }

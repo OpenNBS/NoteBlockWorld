@@ -7,7 +7,7 @@ import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 type HelpPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
@@ -34,8 +34,8 @@ export async function generateMetadata({
   };
 }
 
-const HelpPost = ({ params }: HelpPageProps) => {
-  const { id } = params;
+const HelpPost = async ({ params }: HelpPageProps) => {
+  const { id } = await params;
   let post: PostType;
 
   try {
