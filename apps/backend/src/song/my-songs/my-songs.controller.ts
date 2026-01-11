@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -12,7 +12,10 @@ import { SongService } from '../song.service';
 @Controller('my-songs')
 @ApiTags('song')
 export class MySongsController {
-  constructor(public readonly songService: SongService) {}
+  constructor(
+    @Inject(SongService)
+    public readonly songService: SongService,
+  ) {}
 
   @Get('/')
   @ApiOperation({

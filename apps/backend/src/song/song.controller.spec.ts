@@ -31,6 +31,7 @@ const mockSongService = {
   getSongEdit: jest.fn(),
   patchSong: jest.fn(),
   getSongDownloadUrl: jest.fn(),
+  getSongFileBuffer: jest.fn(),
   deleteSong: jest.fn(),
   uploadSong: jest.fn(),
   getRandomSongs: jest.fn(),
@@ -46,6 +47,9 @@ describe('SongController', () => {
   let songService: SongService;
 
   beforeEach(async () => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongController],
       providers: [
@@ -66,8 +70,8 @@ describe('SongController', () => {
     songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
 
-    // Clear all mocks
-    jest.clearAllMocks();
+    // Verify the service is injected
+    expect(songController.songService).toBeDefined();
   });
 
   it('should be defined', () => {
@@ -79,7 +83,12 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.getSongByPage.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce({
+        content: songList,
+        page: 1,
+        limit: 10,
+        total: 0,
+      });
 
       const result = await songController.getSongList(query);
 
@@ -88,7 +97,7 @@ describe('SongController', () => {
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
       expect(result.total).toBe(0);
-      expect(songService.getSongByPage).toHaveBeenCalled();
+      expect(songService.querySongs).toHaveBeenCalled();
     });
 
     it('should handle search query', async () => {
@@ -357,7 +366,7 @@ describe('SongController', () => {
     it('should handle errors', async () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
 
-      mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
+      mockSongService.querySongs.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.getSongList(query)).rejects.toThrow('Error');
     });
@@ -437,7 +446,7 @@ describe('SongController', () => {
       expect(result.total).toBe(5);
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with empty query string', async () => {
@@ -457,7 +466,7 @@ describe('SongController', () => {
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
       expect(result.total).toBe(0);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, '', undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, '');
     });
 
     it('should handle search with null query string', async () => {
@@ -476,7 +485,7 @@ describe('SongController', () => {
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, '', undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, '');
     });
 
     it('should handle search with multiple pages', async () => {
@@ -499,7 +508,7 @@ describe('SongController', () => {
       expect(result.content).toHaveLength(10);
       expect(result.total).toBe(25);
       expect(result.page).toBe(2);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with large result set', async () => {
@@ -521,7 +530,7 @@ describe('SongController', () => {
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toHaveLength(50);
       expect(result.total).toBe(500);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search on last page with partial results', async () => {
@@ -561,7 +570,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with very long query string', async () => {
@@ -579,7 +588,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with custom limit', async () => {
@@ -627,7 +636,7 @@ describe('SongController', () => {
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toHaveLength(10);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should return correct pagination info with search results', async () => {
@@ -699,7 +708,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
   });
 
@@ -803,23 +812,31 @@ describe('SongController', () => {
 
       const res = {
         set: jest.fn(),
-        redirect: jest.fn(),
+        send: jest.fn(),
       } as unknown as Response;
 
-      const url = 'test-url';
+      const buffer = Buffer.from('test-song-data');
+      const filename = 'test-song.nbs';
 
-      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
+      mockSongService.getSongFileBuffer.mockResolvedValueOnce({
+        buffer,
+        filename,
+      });
 
       await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
-        'Content-Disposition': 'attachment; filename="song.nbs"',
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${filename.replace(
+          /[/"]/g,
+          '_',
+        )}"`,
         'Access-Control-Expose-Headers': 'Content-Disposition',
       });
 
-      expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, url);
+      expect(res.send).toHaveBeenCalledWith(Buffer.from(buffer));
 
-      expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
+      expect(songService.getSongFileBuffer).toHaveBeenCalledWith(
         id,
         user,
         src,
@@ -836,16 +853,16 @@ describe('SongController', () => {
 
       const res = {
         set: jest.fn(),
-        redirect: jest.fn(),
+        send: jest.fn(),
       } as unknown as Response;
 
-      mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
+      mockSongService.getSongFileBuffer.mockRejectedValueOnce(
         new Error('Error'),
       );
 
       await expect(
         songController.getSongFile(id, src, user, res),
-      ).rejects.toThrow('Error');
+      ).rejects.toThrow('An error occurred while retrieving the song file');
     });
   });
 
