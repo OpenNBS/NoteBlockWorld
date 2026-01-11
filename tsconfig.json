@@ -16,6 +16,7 @@
     { "path": "packages/database" },
     { "path": "packages/song" },
     { "path": "packages/sounds" },
-    { "path": "packages/thumbnail" }
+    { "path": "packages/thumbnail" },
+    { "path": "packages/validation" }
   ]
 }
