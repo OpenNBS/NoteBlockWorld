@@ -4,6 +4,7 @@ import { $ } from 'bun';
 // the sub array is for packages that can be built in parallel
 const packages: (string | string[])[] = [
   '@nbw/config',
+  '@nbw/validation',
   '@nbw/database',
   '@nbw/song',
   '@nbw/sounds',
