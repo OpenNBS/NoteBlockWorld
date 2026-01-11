@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Unlike other packages where we use a bundler to output JS,
+    // this package uses tsc for its build step.
+    // We must disable the default 'composite' config to output JS.
+    "composite": false,
+    "declaration": false,
+    "emitDeclarationOnly": false,
+
+    // Module target for Node runtime
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "target": "ES2021",
+
+    // Allow ES imports
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}
