@@ -1,10 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-import { SongStats } from '../dto/SongStats';
-import type { SongViewUploader } from '../dto/SongView.dto';
-import { ThumbnailData } from '../dto/ThumbnailData.dto';
-import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
+import { SongStats, ThumbnailData } from '@nbw/validation';
+import type {
+  SongViewUploader,
+  CategoryType,
+  LicenseType,
+  VisibilityType,
+} from '@nbw/validation';
 
 @Schema({
   timestamps: true,
