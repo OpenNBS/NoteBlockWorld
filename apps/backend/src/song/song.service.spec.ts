@@ -1212,7 +1212,6 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'aggregate').mockReturnValue(mockAggregate as any);
-      jest.spyOn(songModel, 'populate').mockResolvedValue(songList);
 
       const result = await service.getRandomSongs(count);
 
@@ -1236,7 +1235,6 @@ describe('SongService', () => {
       };
 
       jest.spyOn(songModel, 'aggregate').mockReturnValue(mockAggregate as any);
-      jest.spyOn(songModel, 'populate').mockResolvedValue(songList);
 
       const result = await service.getRandomSongs(count, category);
 

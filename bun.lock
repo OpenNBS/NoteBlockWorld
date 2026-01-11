@@ -206,7 +206,6 @@
       "name": "@nbw/song",
       "dependencies": {
         "@encode42/nbs.js": "^5.0.2",
-        "@nbw/database": "workspace:*",
         "@timohausmann/quadtree-ts": "^2.2.2",
         "jszip": "^3.10.1",
         "unidecode": "^1.1.0",

@@ -9,6 +9,8 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "noEmit": true,
 
     // Path mapping
     "baseUrl": ".",

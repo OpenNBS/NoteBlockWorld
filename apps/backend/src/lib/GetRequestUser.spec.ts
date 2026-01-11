@@ -28,7 +28,7 @@ describe('validateUser', () => {
   });
 
   it('should throw an error if the user does not exist', () => {
-    expect(() => validateUser(null)).toThrowError(
+    expect(() => validateUser(null)).toThrow(
       new HttpException(
         {
           error: {

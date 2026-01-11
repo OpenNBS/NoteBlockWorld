@@ -192,7 +192,7 @@ describe('AuthService', () => {
       const refreshToken = 'refresh-token';
 
       spyOn(jwtService, 'signAsync').mockImplementation(
-        (payload, options: any) => {
+        (payload: any, options: any) => {
           if (options.secret === 'test-jwt-secret') {
             return Promise.resolve(accessToken);
           } else if (options.secret === 'test-jwt-refresh-secret') {

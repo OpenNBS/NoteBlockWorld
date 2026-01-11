@@ -249,7 +249,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -271,7 +271,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = Array(5)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -291,7 +291,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 3, limit: 10 };
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${20 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${20 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -312,7 +312,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10, q: 'test search' };
       const songList: SongPreviewDto[] = Array(8)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -337,7 +337,7 @@ describe('SongController', () => {
       };
       const songList: SongPreviewDto[] = Array(3)
         .fill(null)
-        .map((_, i) => ({ id: `rock-song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `rock-song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -421,7 +421,7 @@ describe('SongController', () => {
       const q = 'test query';
       const songList: SongPreviewDto[] = Array(5)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -484,7 +484,7 @@ describe('SongController', () => {
       const q = 'test search';
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${10 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${10 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -507,7 +507,7 @@ describe('SongController', () => {
       const q = 'popular song';
       const songList: SongPreviewDto[] = Array(50)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -529,7 +529,7 @@ describe('SongController', () => {
       const q = 'search term';
       const songList: SongPreviewDto[] = Array(3)
         .fill(null)
-        .map((_, i) => ({ id: `song-${40 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${40 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -587,7 +587,7 @@ describe('SongController', () => {
       const q = 'test';
       const songList: SongPreviewDto[] = Array(25)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -614,7 +614,7 @@ describe('SongController', () => {
       const q = 'trending';
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -635,7 +635,7 @@ describe('SongController', () => {
       const q = 'search';
       const songList: SongPreviewDto[] = Array(20)
         .fill(null)
-        .map((_, i) => ({ id: `song-${40 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${40 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,

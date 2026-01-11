@@ -129,7 +129,9 @@ export class SongController {
       [SongSortType.NOTE_COUNT, 'stats.noteCount'],
     ]);
 
-    const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+    const sortField = query.sort
+      ? sortFieldMap.get(query.sort) ?? 'createdAt'
+      : 'createdAt';
     const isDescending = query.order ? query.order === 'desc' : true;
 
     // Build PageQueryDTO with the sort field
