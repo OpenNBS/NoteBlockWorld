@@ -42,7 +42,7 @@
     "i": "^0.3.7",
     "js-confetti": "^0.13.1",
     "lucide-react": "^0.556.0",
-    "next": "16.0.8",
+    "next": "16.0.10",
     "next-recaptcha-v3": "^1.5.3",
     "nextjs-toploader": "^3.9.17",
     "npm": "^11.7.0",
