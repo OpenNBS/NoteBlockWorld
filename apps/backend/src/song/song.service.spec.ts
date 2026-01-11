@@ -24,6 +24,7 @@ import { SongService } from './song.service';
 const mockFileService = {
   deleteSong: jest.fn(),
   getSongDownloadUrl: jest.fn(),
+  getSongFile: jest.fn(),
 };
 
 const mockSongUploadService = {
@@ -39,6 +40,16 @@ const mockSongWebhookService = {
   syncSongWebhook: jest.fn(),
 };
 
+const mockSongModel = {
+  create: jest.fn(),
+  findOne: jest.fn(),
+  find: jest.fn(),
+  deleteOne: jest.fn(),
+  countDocuments: jest.fn(),
+  aggregate: jest.fn(),
+  populate: jest.fn(),
+};
+
 describe('SongService', () => {
   let service: SongService;
   let fileService: FileService;
@@ -46,6 +57,9 @@ describe('SongService', () => {
   let songModel: Model<SongEntity>;
 
   beforeEach(async () => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SongService,
@@ -55,7 +69,7 @@ describe('SongService', () => {
         },
         {
           provide: getModelToken(SongEntity.name),
-          useValue: mongoose.model(SongEntity.name, SongSchema),
+          useValue: mockSongModel,
         },
         {
           provide: FileService,
@@ -1014,13 +1028,13 @@ describe('SongService', () => {
         { _id: 'category2', count: 5 },
       ];
 
-      jest.spyOn(songModel, 'aggregate').mockResolvedValue(categories);
+      mockSongModel.aggregate.mockResolvedValue(categories);
 
       const result = await service.getCategories();
 
       expect(result).toEqual({ category1: 10, category2: 5 });
 
-      expect(songModel.aggregate).toHaveBeenCalledWith([
+      expect(mockSongModel.aggregate).toHaveBeenCalledWith([
         { $match: { visibility: 'public' } },
         { $group: { _id: '$category', count: { $sum: 1 } } },
         { $sort: { count: -1 } },
@@ -1219,10 +1233,14 @@ describe('SongService', () => {
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
 
-      expect(songModel.aggregate).toHaveBeenCalledWith([
+      expect(mockSongModel.aggregate).toHaveBeenCalledWith([
         { $match: { visibility: 'public' } },
         { $sample: { size: count } },
       ]);
+      expect(mockSongModel.populate).toHaveBeenCalledWith(songList, {
+        path: 'uploader',
+        select: 'username profileImage -_id',
+      });
     });
 
     it('should return random songs with category filter', async () => {
@@ -1242,10 +1260,14 @@ describe('SongService', () => {
         songList.map((song) => SongPreviewDto.fromSongDocumentWithUser(song)),
       );
 
-      expect(songModel.aggregate).toHaveBeenCalledWith([
+      expect(mockSongModel.aggregate).toHaveBeenCalledWith([
         { $match: { visibility: 'public', category: 'pop' } },
         { $sample: { size: count } },
       ]);
+      expect(mockSongModel.populate).toHaveBeenCalledWith(songList, {
+        path: 'uploader',
+        select: 'username profileImage -_id',
+      });
     });
   });
 });

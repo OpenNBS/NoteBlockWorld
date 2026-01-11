@@ -8,8 +8,8 @@
     "declaration": false,
     "emitDeclarationOnly": false,
 
-    // Module target for Node runtime
-    "module": "CommonJS",
+    // Module target for Node runtime (ESM to match package.json "type": "module")
+    "module": "ES2022",
     "moduleResolution": "node",
     "target": "ES2021",
 

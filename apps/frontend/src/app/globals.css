@@ -180,7 +180,8 @@ body {
 ins.adsbygoogle[data-ad-status='unfilled'] {
   display: none !important;
 }
-/*---break---*/
+
+/*
 @theme inline {
   --transition-timing-function-out-back: cubic-bezier(0.34, 1.56, 0.51, 1.2);
   --radius-sm: calc(var(--radius) - 4px);
@@ -219,7 +220,7 @@ ins.adsbygoogle[data-ad-status='unfilled'] {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
-/*---break---*/
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -254,7 +255,7 @@ ins.adsbygoogle[data-ad-status='unfilled'] {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
-/*---break---*/
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -288,7 +289,7 @@ ins.adsbygoogle[data-ad-status='unfilled'] {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-/*---break---*/
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -300,3 +301,4 @@ ins.adsbygoogle[data-ad-status='unfilled'] {
     color: var(--color-foreground);
   }
 }
+*/
