@@ -1,5 +1,5 @@
 {
-  "name": "@nbw/database",
+  "name": "@nbw/validation",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,12 +25,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.9",
-    "@nestjs/mongoose": "^10.1.0",
-    "@nestjs/swagger": "^11.2.3",
     "mongoose": "^9.0.1",
-    "@nbw/config": "workspace:*",
-    "@nbw/validation": "workspace:*"
+    "zod": "^4.1.13",
+    "zod-validation-error": "^5.0.0",
+    "@nbw/config": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"
