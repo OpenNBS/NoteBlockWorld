@@ -25,7 +25,7 @@ export class GithubStrategy extends PassportStrategy(strategy, 'github') {
       callbackURL: `${SERVER_URL}/v1/auth/github/callback`,
       scope: 'user:read,user:email',
       state: false,
-    } as any);
+    } as any); // TODO: Fix types
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
