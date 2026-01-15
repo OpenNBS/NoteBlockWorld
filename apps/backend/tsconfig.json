@@ -2,14 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // NestJS specific settings
-    "module": "commonjs",
-    "target": "ES2021",
+    "module": "esnext",
+    "target": "esnext",
     "declaration": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
 
     // Path mapping
