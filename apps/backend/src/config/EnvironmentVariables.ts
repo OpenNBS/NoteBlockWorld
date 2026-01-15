@@ -1,5 +1,35 @@
 import { plainToInstance } from 'class-transformer';
-import { IsEnum, IsOptional, IsString, validateSync } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  registerDecorator,
+  validateSync,
+  ValidationArguments,
+  ValidationOptions,
+} from 'class-validator';
+import ms from 'ms';
+
+// Validate if the value is a valid duration string from the 'ms' library
+function IsDuration(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      name: 'isDuration',
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: unknown) {
+          if (typeof value !== 'string') return false;
+          return typeof ms(value as ms.StringValue) === 'number';
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `${args.property} must be a valid duration string (e.g., "1h", "30m", "7d")`;
+        },
+      },
+    });
+  };
+}
 
 enum Environment {
   Development = 'development',
@@ -38,14 +68,14 @@ export class EnvironmentVariables {
   @IsString()
   JWT_SECRET: string;
 
-  @IsString()
-  JWT_EXPIRES_IN: string;
+  @IsDuration()
+  JWT_EXPIRES_IN: ms.StringValue;
 
   @IsString()
   JWT_REFRESH_SECRET: string;
 
-  @IsString()
-  JWT_REFRESH_EXPIRES_IN: string;
+  @IsDuration()
+  JWT_REFRESH_EXPIRES_IN: ms.StringValue;
 
   // database
   @IsString()
@@ -91,8 +121,8 @@ export class EnvironmentVariables {
   @IsString()
   DISCORD_WEBHOOK_URL: string;
 
-  @IsString()
-  COOKIE_EXPIRES_IN: string;
+  @IsDuration()
+  COOKIE_EXPIRES_IN: ms.StringValue;
 }
 
 export function validate(config: Record<string, unknown>) {

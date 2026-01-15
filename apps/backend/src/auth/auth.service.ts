@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import type { Request, Response } from 'express';
+import ms from 'ms';
 
 import { CreateUser } from '@nbw/database';
 import type { UserDocument } from '@nbw/database';
@@ -22,18 +23,18 @@ export class AuthService {
     @Inject(JwtService)
     private readonly jwtService: JwtService,
     @Inject('COOKIE_EXPIRES_IN')
-    private readonly COOKIE_EXPIRES_IN: string,
+    private readonly COOKIE_EXPIRES_IN: ms.StringValue,
     @Inject('FRONTEND_URL')
     private readonly FRONTEND_URL: string,
 
     @Inject('JWT_SECRET')
     private readonly JWT_SECRET: string,
     @Inject('JWT_EXPIRES_IN')
-    private readonly JWT_EXPIRES_IN: string,
+    private readonly JWT_EXPIRES_IN: ms.StringValue,
     @Inject('JWT_REFRESH_SECRET')
     private readonly JWT_REFRESH_SECRET: string,
     @Inject('JWT_REFRESH_EXPIRES_IN')
-    private readonly JWT_REFRESH_EXPIRES_IN: string,
+    private readonly JWT_REFRESH_EXPIRES_IN: ms.StringValue,
     @Inject('APP_DOMAIN')
     private readonly APP_DOMAIN?: string,
   ) {}
@@ -199,7 +200,7 @@ export class AuthService {
 
     const frontEndURL = this.FRONTEND_URL;
     const domain = this.APP_DOMAIN;
-    const maxAge = parseInt(this.COOKIE_EXPIRES_IN) * 1000;
+    const maxAge = ms(this.COOKIE_EXPIRES_IN) * 1000;
 
     res.cookie('token', token.access_token, {
       domain: domain,

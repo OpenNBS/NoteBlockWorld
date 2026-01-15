@@ -1,6 +1,7 @@
 import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import ms from 'ms';
 
 import { MailingModule } from '@server/mailing/mailing.module';
 import { UserModule } from '@server/user/user.module';
@@ -26,8 +27,8 @@ export class AuthModule {
           inject: [ConfigService],
           imports: [ConfigModule],
           useFactory: async (config: ConfigService) => {
-            const JWT_SECRET = config.get('JWT_SECRET');
-            const JWT_EXPIRES_IN = config.get('JWT_EXPIRES_IN');
+            const JWT_SECRET = config.get<ms.StringValue>('JWT_SECRET');
+            const JWT_EXPIRES_IN = config.get<ms.StringValue>('JWT_EXPIRES_IN');
 
             if (!JWT_SECRET) {
               Logger.error('JWT_SECRET is not set');
@@ -58,7 +59,7 @@ export class AuthModule {
           inject: [ConfigService],
           provide: 'COOKIE_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('COOKIE_EXPIRES_IN'),
+            configService.getOrThrow<ms.StringValue>('COOKIE_EXPIRES_IN'),
         },
         {
           inject: [ConfigService],
@@ -82,7 +83,7 @@ export class AuthModule {
           inject: [ConfigService],
           provide: 'JWT_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_EXPIRES_IN'),
+            configService.getOrThrow<ms.StringValue>('JWT_EXPIRES_IN'),
         },
         {
           inject: [ConfigService],
@@ -94,7 +95,7 @@ export class AuthModule {
           inject: [ConfigService],
           provide: 'JWT_REFRESH_EXPIRES_IN',
           useFactory: (configService: ConfigService) =>
-            configService.getOrThrow<string>('JWT_REFRESH_EXPIRES_IN'),
+            configService.getOrThrow<ms.StringValue>('JWT_REFRESH_EXPIRES_IN'),
         },
         {
           inject: [ConfigService],
