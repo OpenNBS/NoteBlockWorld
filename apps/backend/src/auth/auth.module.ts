@@ -1,4 +1,4 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import ms from 'ms';
@@ -27,21 +27,13 @@ export class AuthModule {
           inject: [ConfigService],
           imports: [ConfigModule],
           useFactory: async (config: ConfigService) => {
-            const JWT_SECRET = config.get<ms.StringValue>('JWT_SECRET');
-            const JWT_EXPIRES_IN = config.get<ms.StringValue>('JWT_EXPIRES_IN');
-
-            if (!JWT_SECRET) {
-              Logger.error('JWT_SECRET is not set');
-              throw new Error('JWT_SECRET is not set');
-            }
-
-            if (!JWT_EXPIRES_IN) {
-              Logger.warn('JWT_EXPIRES_IN is not set, using default of 60s');
-            }
+            const JWT_SECRET = config.getOrThrow<ms.StringValue>('JWT_SECRET');
+            const JWT_EXPIRES_IN =
+              config.getOrThrow<ms.StringValue>('JWT_EXPIRES_IN');
 
             return {
               secret: JWT_SECRET,
-              signOptions: { expiresIn: JWT_EXPIRES_IN || '60s' },
+              signOptions: { expiresIn: JWT_EXPIRES_IN },
             };
           },
         }),
