@@ -171,20 +171,14 @@ export class AuthService {
 
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(
-        payload as object,
-        {
-          secret: this.JWT_SECRET,
-          expiresIn: this.JWT_EXPIRES_IN,
-        } as any,
-      ),
-      this.jwtService.signAsync(
-        payload as object,
-        {
-          secret: this.JWT_REFRESH_SECRET,
-          expiresIn: this.JWT_REFRESH_EXPIRES_IN,
-        } as any,
-      ),
+      this.jwtService.signAsync<TokenPayload>(payload, {
+        secret: this.JWT_SECRET,
+        expiresIn: this.JWT_EXPIRES_IN,
+      }),
+      this.jwtService.signAsync<TokenPayload>(payload, {
+        secret: this.JWT_REFRESH_SECRET,
+        expiresIn: this.JWT_REFRESH_EXPIRES_IN,
+      }),
     ]);
 
     return {
