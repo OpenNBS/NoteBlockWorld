@@ -51,9 +51,9 @@ export const LoginPage = () => {
         <NoteBlockWorldLogo glow={true} orientation='adaptive' size={128} />
 
         {/* Vertical divider (mobile) */}
-        <div className='w-[1px] min-h-full hidden sm:block bg-zinc-600'></div>
+        <div className='w-px min-h-full hidden sm:block bg-zinc-600'></div>
         {/* Horizontal divider (desktop) */}
-        <div className='h-[1px] min-w-full block sm:hidden bg-zinc-600'></div>
+        <div className='h-px min-w-full block sm:hidden bg-zinc-600'></div>
 
         {/* Right half */}
         <div className='flex flex-col justify-center items-center gap-5'>

@@ -20,7 +20,7 @@ export const Label = forwardRef<
   const { id, label } = props;
 
   return (
-    <label htmlFor={id} ref={ref} className='text-sm text-zinc-300'>
+    <label htmlFor={id} ref={ref} className='text-zinc-300 text-[14px]'>
       {label}
     </label>
   );
@@ -49,7 +49,7 @@ export const Area = ({
       ) : (
         <div
           className={cn(
-            'flex justify-center w-full rounded-lg outline-none border-2 border-zinc-500 p-8 mb-4',
+            'flex justify-center w-full rounded-lg outline-hidden border-2 border-zinc-500 p-8 mb-4',
             className,
           )}
         >
@@ -245,7 +245,7 @@ export const Slider = forwardRef<
     <SliderPrimitive.Track className='relative h-2 w-full grow overflow-hidden rounded-full bg-secondary'>
       <SliderPrimitive.Range className='absolute h-full bg-primary' />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className='block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50' />
+    <SliderPrimitive.Thumb className='block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50' />
   </SliderPrimitive.Root>
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;

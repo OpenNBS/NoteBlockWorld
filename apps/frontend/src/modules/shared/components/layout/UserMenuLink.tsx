@@ -35,7 +35,7 @@ const UserMenuLink = ({
         <div className='h-8 w-8 flex items-center justify-center'>
           <FontAwesomeIcon icon={icon} size='lg' className={textColor} />
         </div>
-        <p className={`flex-grow text-left ${textColor}`}>{label}</p>
+        <p className={`grow text-left ${textColor}`}>{label}</p>
         {external && (
           <div className='h-5 w-5 text-zinc-500 flex items-center'>
             <FontAwesomeIcon

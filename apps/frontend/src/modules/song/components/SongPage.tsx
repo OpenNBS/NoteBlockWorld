@@ -109,7 +109,7 @@ export async function SongPage({ id }: { id: string }) {
           <div className='flex flex-row flex-wrap justify-start items-center gap-8 w-full'>
             <UploaderBadge user={song.uploader} />
             {/* <FollowButton /> */}
-            <div className='flex-grow'></div>
+            <div className='grow'></div>
             <div className='flex flex-row gap-4 overflow-x-auto'>
               {/* <LikeButton /> */}
               {song.visibility !== 'private' && (

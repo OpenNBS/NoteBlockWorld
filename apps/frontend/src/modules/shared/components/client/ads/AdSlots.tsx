@@ -14,7 +14,7 @@ const HideAdButton = ({
 }: {
   setIsHidden: (hidden: boolean) => void;
 }) => (
-  <div className='absolute w-0 h-0 top-full right-[0.75rem]'>
+  <div className='absolute w-0 h-0 top-full right-3'>
     <button
       className='h-6 w-3'
       onClick={() => {
@@ -208,7 +208,7 @@ export const InterSectionAdSlot = ({ className }: { className?: string }) => {
       adSlot='4046918224'
       adFormat='auto'
       fullWidthResponsive='true'
-      hiddenClassName='!hidden'
+      hiddenClassName='hidden!'
     />
   );
 };

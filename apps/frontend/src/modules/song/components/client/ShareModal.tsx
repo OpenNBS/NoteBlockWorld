@@ -55,7 +55,7 @@ export default function ShareModal({
         <button
           type='button'
           disabled={isCopied}
-          className='rounded-md h-full px-2 w-[4.25rem] text-nowrap bg-zinc-700 text-white enabled:hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-default disabled:text-xs'
+          className='rounded-md h-full px-2 w-17 text-nowrap bg-zinc-700 text-white enabled:hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-default disabled:text-xs'
           onClick={handleCopy()}
         >
           {isCopied ? 'Copied!' : 'Copy'}

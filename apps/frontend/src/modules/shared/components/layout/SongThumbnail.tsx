@@ -29,7 +29,7 @@ const SongThumbnail = ({
     <Image
       unoptimized={isLocalhost} // Disable optimization for localhost to avoid private IP errors
       src={src}
-      className='w-full h-full rounded-lg aspect-[5/3] object-cover'
+      className='w-full h-full rounded-lg aspect-5/3 object-cover'
       width={640}
       height={384}
       alt=''

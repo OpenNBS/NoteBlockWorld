@@ -33,7 +33,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
         {"See what we've been working on!"}
       </h2>
 
-      <section className='grid grid-auto-fit-xl max-w-screen-md mx-auto justify-center w-full items-center gap-8'>
+      <section className='grid grid-auto-fit-xl max-w-(--breakpoint-md) mx-auto justify-center w-full items-center gap-8'>
         {posts.map((post, i) => (
           <Link
             key={i}
@@ -46,10 +46,10 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
                 width={480}
                 height={360}
                 alt=''
-                className='rounded-md aspect-[16/9] w-full object-cover transition-all duration-300 mb-2'
+                className='rounded-md aspect-video w-full object-cover transition-all duration-300 mb-2'
               />
 
-              <h3 className='text-lg font-bold text-opacity-50 mb-2 leading-6 flex-grow'>
+              <h3 className='text-lg font-bold mb-2 leading-6 grow'>
                 {post.title}
               </h3>
               <p className='text-zinc-300 tracking-wide text-sm mb-2'>

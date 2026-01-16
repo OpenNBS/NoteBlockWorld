@@ -102,7 +102,7 @@ export default function RootLayout({
           <Toaster
             position='bottom-center'
             toastOptions={{
-              className: '!bg-zinc-700 !text-white !max-w-fit',
+              className: 'bg-zinc-700! text-white! max-w-fit!',
               duration: 4000,
             }}
           />

@@ -127,7 +127,7 @@ const ColorButton: React.FC<ColorButtonProps> = ({
         type='button'
         className={cn(
           'w-6 h-6 rounded-full flex-none border-2 border-zinc-200/30 disabled:opacity-30',
-          active && 'outline outline-2 outline-zinc-200',
+          active && 'outline-2 outline-zinc-200',
         )}
         style={{ backgroundColor: color }}
         disabled={disabled}

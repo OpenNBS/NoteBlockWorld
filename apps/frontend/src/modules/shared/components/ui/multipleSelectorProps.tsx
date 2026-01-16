@@ -486,7 +486,7 @@ const MultipleSelector = React.forwardRef<
                   <button
                     type='button'
                     className={cn(
-                      'ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                      'ml-1 rounded-full outline-hidden ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2',
                       (disabled || option.fixed) && 'hidden',
                     )}
                     onKeyDown={(e) => {
@@ -531,7 +531,7 @@ const MultipleSelector = React.forwardRef<
                   : placeholder
               }
               className={cn(
-                'flex-1 self-baseline bg-transparent outline-none placeholder:text-muted-foreground',
+                'flex-1 self-baseline bg-transparent outline-hidden placeholder:text-muted-foreground',
                 {
                   'w-full': hidePlaceholderWhenSelected,
                   'ml-1': selected.length !== 0,
@@ -571,7 +571,7 @@ const MultipleSelector = React.forwardRef<
         <div className='relative'>
           {open && (
             <CommandList
-              className='absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in'
+              className='absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-hidden animate-in'
               onMouseLeave={() => {
                 setOnScrollbar(false);
               }}
