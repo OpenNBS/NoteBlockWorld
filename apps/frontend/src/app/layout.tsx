@@ -25,6 +25,7 @@ config.autoAddCss = false;
 const lato = Lato({
   subsets: ['latin'],
   weight: ['100', '300', '400', '700', '900'],
+  variable: '--font-lato',
 });
 
 export const metadata: Metadata = {
