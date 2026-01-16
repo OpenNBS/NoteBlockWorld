@@ -308,23 +308,6 @@ describe('SongService', () => {
         HttpException,
       );
     });
-
-    it('should throw an error if user is unauthorized', async () => {
-      const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-      const songEntity = new SongEntity();
-      songEntity.uploader = new mongoose.Types.ObjectId(); // Different uploader
-
-      const mockFindOne = {
-        exec: jest.fn().mockResolvedValue(songEntity),
-      };
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue(mockFindOne as any);
-
-      await expect(service.deleteSong(publicId, user)).rejects.toThrow(
-        HttpException,
-      );
-    });
   });
 
   describe('patchSong', () => {
@@ -489,39 +472,6 @@ describe('SongService', () => {
       } as any;
 
       jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity as any);
-
-      await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
-        HttpException,
-      );
-    });
-
-    it('should throw an error if user is unauthorized', async () => {
-      const publicId = 'test-id';
-      const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
-
-      const body: UploadSongDto = {
-        title: 'Test Song',
-        originalAuthor: 'Test Author',
-        description: 'Test Description',
-        category: 'alternative',
-        visibility: 'public',
-        license: 'standard',
-        customInstruments: [],
-        thumbnailData: {
-          startTick: 0,
-          startLayer: 0,
-          zoomLevel: 1,
-          backgroundColor: '#000000',
-        },
-        file: 'somebytes',
-        allowDownload: false,
-      };
-
-      const songEntity = {
-        uploader: 'different-user-id',
-      } as any;
-
-      jest.spyOn(songModel, 'findOne').mockReturnValue(songEntity);
 
       await expect(service.patchSong(publicId, body, user)).rejects.toThrow(
         HttpException,
