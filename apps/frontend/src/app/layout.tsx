@@ -1,3 +1,4 @@
+import { config } from '@fortawesome/fontawesome-svg-core';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
@@ -13,6 +14,13 @@ import { WebSite, WithContext } from 'schema-dts';
 import DetectAdBlock from '../modules/shared/components/client/ads/DetectAdBlock';
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
+
+// Pre-import FontAwesome CSS to avoid FOUC
+// See: https://fontawesome.com/docs/web/use-with/react/use-with#nextjs
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+// Prevent FontAwesome from injecting CSS after initial render
+config.autoAddCss = false;
 
 const lato = Lato({
   subsets: ['latin'],
