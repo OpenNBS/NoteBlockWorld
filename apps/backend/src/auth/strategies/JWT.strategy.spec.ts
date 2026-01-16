@@ -33,7 +33,7 @@ describe('JwtStrategy', () => {
     it('should throw an error if JWT_SECRET is not set', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValue(null);
 
-      expect(() => new JwtStrategy(configService)).toThrowError(
+      expect(() => new JwtStrategy(configService)).toThrow(
         'JwtStrategy requires a secret or key',
       );
     });
@@ -84,7 +84,7 @@ describe('JwtStrategy', () => {
 
       const payload = { userId: 'test-user-id' };
 
-      expect(() => jwtStrategy.validate(req, payload)).toThrowError(
+      expect(() => jwtStrategy.validate(req, payload)).toThrow(
         'No refresh token',
       );
     });

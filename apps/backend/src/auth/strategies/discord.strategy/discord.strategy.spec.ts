@@ -43,7 +43,7 @@ describe('DiscordStrategy', () => {
     it('should throw an error if Discord config is missing', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
-      expect(() => new DiscordStrategy(configService)).toThrowError(
+      expect(() => new DiscordStrategy(configService)).toThrow(
         'OAuth2Strategy requires a clientID option',
       );
     });
