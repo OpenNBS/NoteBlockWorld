@@ -4,10 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer theme {
-  :root {
-    --font-sans: var(--font-lato);
-  }
+@theme {
+  --font-sans: var(--font-lato);
 }
 
 /************** Scrollbar **************/
