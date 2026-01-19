@@ -6,6 +6,7 @@
 
 @theme {
   --font-sans: var(--font-lato);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.51, 1.2);
 }
 
 /************** Scrollbar **************/
