@@ -7,7 +7,6 @@
       "dependencies": {
         "@nbw/sounds": "workspace:*",
         "@types/jest": "^30.0.0",
-        "tailwindcss": "^4.1.18",
       },
       "devDependencies": {
         "@eslint/js": "^9.36.0",
@@ -166,7 +165,6 @@
         "zustand": "^5.0.9",
       },
       "devDependencies": {
-        "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
         "@tailwindcss/postcss": "^4.1.18",
         "@types/mdx": "^2.0.13",
         "@types/react-modal": "^3.16.3",
@@ -844,8 +842,6 @@
     "@scarf/scarf": ["@scarf/scarf@1.4.0", "", {}, "sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ=="],
 
     "@selderee/plugin-htmlparser2": ["@selderee/plugin-htmlparser2@0.11.0", "", { "dependencies": { "domhandler": "^5.0.3", "selderee": "^0.11.0" } }, "sha512-P33hHGdldxGabLFjPPpaTxVolMrzrcegejx+0GxjrIb9Zv48D8yAIA/QTDR2dFl7Uz7urX8aX6+5bCZslr+gWQ=="],
-
-    "@shrutibalasa/tailwind-grid-auto-fit": ["@shrutibalasa/tailwind-grid-auto-fit@1.1.0", "", {}, "sha512-sh/Vmdz/xTVziUF9ZYDb5YpECApdK85KXSRIJY58GzmdUuum5QBE3jqDeNMjICEVaVOSrOnp+gqUWx8A9dmZjA=="],
 
     "@sinclair/typebox": ["@sinclair/typebox@0.34.41", "", {}, "sha512-6gS8pZzSXdyRHTIqoqSVknxolr1kzfy4/CeDnrzsVz8TTIWUbOBr6gnzOmTYJ3eXQNh4IYHIGi5aIL7sOZ2G/g=="],
 

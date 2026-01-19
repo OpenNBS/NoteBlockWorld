@@ -67,7 +67,6 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@shrutibalasa/tailwind-grid-auto-fit": "^1.1.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/mdx": "^2.0.13",
     "@types/react-modal": "^3.16.3",
