@@ -1,7 +1,7 @@
 @import 'tailwindcss';
-/*---break---*/
+
 @plugin "tailwindcss-animate";
-/*---break---*/
+
 @custom-variant dark (&:is(.dark *));
 
 @layer theme {
@@ -308,3 +308,12 @@ ins.adsbygoogle[data-ad-status='unfilled'] {
   }
 }
 */
+
+/* Make buttons use pointer cursor */
+/* See: https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
