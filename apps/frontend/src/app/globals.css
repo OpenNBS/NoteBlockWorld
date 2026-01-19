@@ -9,6 +9,32 @@
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.51, 1.2);
 }
 
+/************** Grid utilities **************/
+
+@utility grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+@utility grid-auto-fit-xs {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+@utility grid-auto-fit-sm {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+@utility grid-auto-fit-md {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+@utility grid-auto-fit-lg {
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+@utility grid-auto-fit-xl {
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
 /************** Scrollbar **************/
 
 html {
