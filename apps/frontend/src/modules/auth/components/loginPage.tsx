@@ -87,6 +87,7 @@ export const LoginPage = () => {
               <FontAwesomeIcon
                 icon={faGoogle}
                 className='align-middle mr-2 h-5'
+                size='lg'
               />
               <span className='flex-1 text-nowrap'>Log in with Google</span>
             </Link>
@@ -99,6 +100,7 @@ export const LoginPage = () => {
               <FontAwesomeIcon
                 icon={faGithub}
                 className='align-middle mr-2 h-5'
+                size='lg'
               />
               <span className='flex-1'>Log in with GitHub</span>
             </Link>
@@ -111,6 +113,7 @@ export const LoginPage = () => {
               <FontAwesomeIcon
                 icon={faDiscord}
                 className='align-middle mr-2 h-5'
+                size='lg'
               />
               <span className='flex-1 text-nowrap'>Log in with Discord</span>
             </Link>
