@@ -13,6 +13,11 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
+  // Enable suggestions inside strings for Tailwind CSS class names
+  // https://github.com/tailwindlabs/tailwindcss-intellisense#editorquicksuggestions
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
   "files.associations": {
     ".css": "tailwindcss",
     "*.scss": "tailwindcss"
