@@ -59,7 +59,7 @@ export default function RootLayout({
 }) {
   return (
     <ReCaptchaProvider useEnterprise>
-      <html lang='en'>
+      <html lang='en' className={lato.variable}>
         <head>
           <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
           {/* https://nextjs.org/docs/app/building-your-application/optimizing/metadata#json-ld */}
