@@ -3,12 +3,12 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { cn } from '@web/lib/utils';
+import { Slider } from '@web/modules/shared/components/client/FormElements';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
-import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongFormInput, UploadSongFormInput } from './SongForm.zod';
