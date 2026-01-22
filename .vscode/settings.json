@@ -21,6 +21,7 @@
   "tailwindCSS.experimental.configFile": {
     "apps/frontend/src/app/globals.css": "apps/frontend/src/**"
   },
+  "tailwindCSS.classFunctions": ["tw", "clsx", "cn"],
   "files.associations": {
     ".css": "tailwindcss",
     "*.scss": "tailwindcss"
