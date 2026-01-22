@@ -18,6 +18,9 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
+  "tailwindCSS.experimental.configFile": {
+    "apps/frontend/src/app/globals.css": "apps/frontend/src/**"
+  },
   "files.associations": {
     ".css": "tailwindcss",
     "*.scss": "tailwindcss"
