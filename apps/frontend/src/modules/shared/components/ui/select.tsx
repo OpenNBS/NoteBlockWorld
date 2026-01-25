@@ -1,3 +1,5 @@
+// TODO: use FontAwesome icons instead of lucide-react
+
 'use client';
 
 import * as SelectPrimitive from '@radix-ui/react-select';

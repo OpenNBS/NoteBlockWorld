@@ -1,3 +1,5 @@
+// TODO: use FontAwesome icons instead of lucide-react
+
 'use client';
 
 import { type DialogProps } from '@radix-ui/react-dialog';

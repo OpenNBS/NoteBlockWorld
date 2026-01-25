@@ -1,3 +1,6 @@
+// TODO: this component uses bg-primary etc. instead of bg-blue-500 as the rest of the project.
+// We must either standardize the color scheme (preferably) or make this component use the same color scheme.
+
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
