@@ -12,7 +12,7 @@
     "rsc": true,
     "tsx": true
   },
-  "iconLibrary": "lucide",
+  "iconLibrary": "fontawesome",
   "aliases": {
     "components": "@web/modules/shared/components",
     "utils": "@web/lib/utils",

@@ -1,3 +1,6 @@
+// TODO: this component uses bg-primary etc. instead of bg-blue-500 as the rest of the project.
+// We must either standardize the color scheme (preferably) or make this component use the same color scheme.
+
 'use client';
 
 import * as SliderPrimitive from '@radix-ui/react-slider';
@@ -33,7 +36,7 @@ const DualRangeSlider = React.forwardRef<
       </SliderPrimitive.Track>
       {initialValue.map((value, index) => (
         <React.Fragment key={index}>
-          <SliderPrimitive.Thumb className='relative block h-4 w-4 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'>
+          <SliderPrimitive.Thumb className='relative block h-4 w-4 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'>
             {label && (
               <span
                 className={cn(

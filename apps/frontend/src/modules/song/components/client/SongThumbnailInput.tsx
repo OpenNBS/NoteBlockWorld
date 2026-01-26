@@ -3,12 +3,12 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { cn } from '@web/lib/utils';
+import { Slider } from '@web/modules/shared/components/client/FormElements';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
-import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongProvider } from './context/Song.context';
 import { EditSongFormInput, UploadSongFormInput } from './SongForm.zod';
@@ -127,7 +127,7 @@ const ColorButton: React.FC<ColorButtonProps> = ({
         type='button'
         className={cn(
           'w-6 h-6 rounded-full flex-none border-2 border-zinc-200/30 disabled:opacity-30',
-          active && 'outline outline-2 outline-zinc-200',
+          active && 'outline-2 outline-zinc-200',
         )}
         style={{ backgroundColor: color }}
         disabled={disabled}

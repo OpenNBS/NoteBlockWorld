@@ -31,9 +31,9 @@ export async function Header() {
   }
 
   return (
-    <header className='fixed w-[calc(100vw_-_16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
+    <header className='fixed w-[calc(100vw-16px)] h-14 flex flex-row justify-center items-center bg-zinc-900 border-b border-zinc-700 py-2 z-10'>
       {/* Navbar */}
-      <nav className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-screen-xl px-6 sm:px-10 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'>
+      <nav className='w-full flex flex-row justify-between items-center gap-8 md:gap-12 max-w-(--breakpoint-xl) px-6 sm:px-10 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'>
         {/* Icon */}
         <div className='flex-0 flex justify-start lg:justify-center min-w-fit'>
           <Link href='/'>

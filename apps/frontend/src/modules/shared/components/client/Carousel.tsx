@@ -181,7 +181,7 @@ export const CarouselContent = forwardRef<
   const { carouselRef } = useCarousel();
 
   return (
-    <div ref={carouselRef} className='overflow-hidden p-4 m-[-1rem]'>
+    <div ref={carouselRef} className='overflow-hidden p-4 -m-4'>
       <div ref={ref} className={cn('flex', className)} {...props} />
     </div>
   );

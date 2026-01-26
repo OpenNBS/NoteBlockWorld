@@ -41,7 +41,7 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
     >
       {/* Thumbnail */}
       <div className='col-span-1'>
-        <div className='aspect-[5/3] w-full object-cover rounded-lg relative block leading-none'>
+        <div className='aspect-5/3 w-full object-cover rounded-lg relative block leading-none'>
           {!song ? (
             <Skeleton className='w-full h-full' />
           ) : (

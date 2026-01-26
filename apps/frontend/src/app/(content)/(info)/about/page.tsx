@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const AboutPage = () => {
   return (
     <>
-      <article className='max-w-screen-md mx-auto mb-36'>
+      <article className='max-w-(--breakpoint-md) mx-auto mb-36'>
         <NoteBlockWorldLogo
           size={112}
           orientation='horizontal'
