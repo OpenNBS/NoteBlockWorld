@@ -59,7 +59,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
                   .replace(/\//g, '.')}
               </p>
               <p className='self-end line-clamp-3 text-sm text-zinc-400 leading-[1.3]'>
-                {removeMarkdown(post.content).slice(0, 200)}
+                {removeMarkdown(post.content).slice(0, 250)}
               </p>
             </article>
           </Link>
