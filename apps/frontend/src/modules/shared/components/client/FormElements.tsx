@@ -20,7 +20,7 @@ export const Label = forwardRef<
   const { id, label } = props;
 
   return (
-    <label htmlFor={id} ref={ref} className='text-zinc-300 text-[14px]'>
+    <label htmlFor={id} ref={ref} className='text-zinc-300 text-sm'>
       {label}
     </label>
   );
