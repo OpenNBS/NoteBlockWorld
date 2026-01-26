@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import removeMarkdown from 'remove-markdown';
 
 import { getSortedPostsData } from '@web/lib/posts';
 import type { PostType } from '@web/lib/posts';
@@ -58,7 +59,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
                   .replace(/\//g, '.')}
               </p>
               <p className='self-end line-clamp-3 text-sm text-zinc-400 leading-[1.3]'>
-                {post.content.slice(0, 200)}
+                {removeMarkdown(post.content).slice(0, 200)}
               </p>
             </article>
           </Link>
