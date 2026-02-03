@@ -40,7 +40,7 @@ export function SearchBar() {
         autoCorrect='off'
         autoCapitalize='none'
         spellCheck={false}
-        className='flex-1 px-3 py-2 pr-1 bg-transparent border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-blue-500'
+        className='flex-1 px-3 py-2 pr-1 bg-zinc-900/40 backdrop-blur-xs border border-zinc-700 rounded-l-full text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-blue-500'
       />
       <button
         type='submit'
