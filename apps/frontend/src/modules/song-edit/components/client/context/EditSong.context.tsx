@@ -241,56 +241,25 @@ export const EditSongProvider = ({
       // fetch song
       const token = getTokenLocal();
 
-      try {
-        // Backend now proxies the file directly, avoiding CORS issues
-        const response = await axiosInstance.get(`/song/${id}/download`, {
+      const songFile = (
+        await axiosInstance.get(`/song/${id}/download`, {
           params: {
             src: 'edit',
           },
+          responseType: 'arraybuffer',
           headers: { authorization: `Bearer ${token}` },
-          responseType: 'arraybuffer', // Get as ArrayBuffer for parsing
-        });
+        })
+      ).data as ArrayBuffer;
 
-        const songFile = response.data;
+      // convert to song
+      const song = await parseSongFromBuffer(songFile);
 
-        // convert to song
-        const song = await parseSongFromBuffer(songFile);
+      // set instruments array
+      const songInstruments = songData.customInstruments;
+      setInstrumentSounds(songInstruments);
+      formMethods.setValue('customInstruments', songInstruments);
 
-        // set instruments array
-        const songInstruments = songData.customInstruments;
-        setInstrumentSounds(songInstruments);
-        formMethods.setValue('customInstruments', songInstruments);
-
-        setSong(song);
-      } catch (error: unknown) {
-        let errorMessage = 'An unknown error occurred while loading the song!';
-        if (error instanceof AxiosError) {
-          if (error.response) {
-            // Server responded with an error status
-            errorMessage =
-              error.response.data?.message ||
-              (error.response.data?.error
-                ? Object.values(error.response.data.error)[0]
-                : null) ||
-              `Failed to load song: ${error.response.status}`;
-          } else if (error.request) {
-            // Request was made but no response received (network error)
-            errorMessage =
-              'Network error: Unable to connect to the server. Please check your internet connection and try again.';
-          } else {
-            // Something else happened (including fetch errors)
-            errorMessage = error.message || errorMessage;
-          }
-
-          setSendError(errorMessage);
-          toaster.error(errorMessage);
-          throw error; // Re-throw to allow caller to handle if needed
-        } else {
-          setSendError(errorMessage);
-          toaster.error(errorMessage);
-          throw error;
-        }
-      }
+      setSong(song);
     },
     [formMethods, setSong],
   );
