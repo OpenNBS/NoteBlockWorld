@@ -105,7 +105,7 @@ const code = ({
   return (
     <code
       {...props}
-      className='bg-zinc-950/50 text-green-400 rounded-md outline outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5 mx-0.5'
+      className='bg-zinc-950/50 text-green-400 rounded-md outline-1 outline-zinc-600 text-sm font-mono px-1 py-0.5 mx-0.5'
     />
   );
 };

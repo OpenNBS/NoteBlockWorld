@@ -45,11 +45,11 @@ const HelpPageComponent = ({ posts }: { posts: PostType[] }) => {
                 width={480}
                 height={360}
                 alt={post.title}
-                className='rounded-2xl aspect-[3/2] object-cover brightness-150 transition-all duration-300'
+                className='rounded-2xl aspect-3/2 object-cover brightness-150 transition-all duration-300'
               />
 
               {/* Gradient over the image */}
-              <div className='absolute top-0 left-0 w-full h-full hover:bg-white/20 transition-all duration-300 bg-gradient-to-b from-transparent to-black/80 rounded-2xl'>
+              <div className='absolute top-0 left-0 w-full h-full hover:bg-white/20 transition-all duration-300 bg-linear-to-b from-transparent to-black/80 rounded-2xl'>
                 <h3 className='relative w-full h-full p-3 sm:p-6 flex justify-center items-end text-xl text-opacity-50'>
                   {post.shortTitle || post.title}
                 </h3>

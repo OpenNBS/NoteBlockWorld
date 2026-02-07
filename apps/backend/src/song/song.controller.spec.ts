@@ -31,7 +31,6 @@ const mockSongService = {
   getSongEdit: jest.fn(),
   patchSong: jest.fn(),
   getSongDownloadUrl: jest.fn(),
-  getSongFileBuffer: jest.fn(),
   deleteSong: jest.fn(),
   uploadSong: jest.fn(),
   getRandomSongs: jest.fn(),
@@ -803,40 +802,31 @@ describe('SongController', () => {
   });
 
   describe('getSongFile', () => {
-    it('should get song .nbs file', async () => {
+    it('should redirect to download URL', async () => {
       const id = 'test-id';
       const src = 'test-src';
       const user: UserDocument = {
         _id: 'test-user-id',
       } as unknown as UserDocument;
+      const downloadUrl = 'https://example.com/download/song.nbs';
 
       const res = {
         set: jest.fn(),
-        send: jest.fn(),
+        redirect: jest.fn(),
       } as unknown as Response;
 
-      const buffer = Buffer.from('test-song-data');
-      const filename = 'test-song.nbs';
-
-      mockSongService.getSongFileBuffer.mockResolvedValueOnce({
-        buffer,
-        filename,
-      });
+      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(downloadUrl);
 
       await songController.getSongFile(id, src, user, res);
 
       expect(res.set).toHaveBeenCalledWith({
-        'Content-Type': 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${filename.replace(
-          /[/"]/g,
-          '_',
-        )}"`,
+        'Content-Disposition': 'attachment; filename="song.nbs"',
         'Access-Control-Expose-Headers': 'Content-Disposition',
       });
 
-      expect(res.send).toHaveBeenCalledWith(Buffer.from(buffer));
+      expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, downloadUrl);
 
-      expect(songService.getSongFileBuffer).toHaveBeenCalledWith(
+      expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
         id,
         user,
         src,
@@ -853,16 +843,16 @@ describe('SongController', () => {
 
       const res = {
         set: jest.fn(),
-        send: jest.fn(),
+        redirect: jest.fn(),
       } as unknown as Response;
 
-      mockSongService.getSongFileBuffer.mockRejectedValueOnce(
+      mockSongService.getSongDownloadUrl.mockRejectedValueOnce(
         new Error('Error'),
       );
 
       await expect(
         songController.getSongFile(id, src, user, res),
-      ).rejects.toThrow('An error occurred while retrieving the song file');
+      ).rejects.toThrow('Error');
     });
   });
 

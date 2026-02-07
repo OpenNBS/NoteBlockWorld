@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const AboutPage = () => {
   return (
     <>
-      <article className='max-w-screen-md mx-auto mb-36'>
+      <article className='max-w-(--breakpoint-md) mx-auto mb-36'>
         <BackButton className='text-zinc-500 hover:text-zinc-400 text-sm'>
           {'< Back'}
         </BackButton>

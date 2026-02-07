@@ -48,7 +48,7 @@
     "build:all": "bun run build:packages && bun run build:apps",
     "docker": "docker-compose -f docker-compose-dev.yml up -d && bun run dev && docker-compose down",
     "start:apps": "bun run --filter './apps/*' start",
-    "start:server": "bun run --filter '@nbw/backend start",
+    "start:server": "bun run --filter '@nbw/backend' start",
     "start:web": "bun run --filter '@nbw/frontend' start",
     "dev:server": "bun run --filter '@nbw/backend' start:dev",
     "dev:web": "bun run --filter '@nbw/frontend' dev",

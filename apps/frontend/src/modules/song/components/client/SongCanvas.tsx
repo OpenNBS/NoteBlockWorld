@@ -121,7 +121,7 @@ export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
     <div
       ref={canvasContainerRef}
       id='song-renderer-container'
-      className='bg-zinc-800 aspect-[5/3] rounded-xl'
+      className='bg-zinc-800 aspect-5/3 rounded-xl'
     >
       <canvas
         id='song-renderer'

@@ -18,8 +18,6 @@ export default defineConfig(
       '**/.next/**',
       '**/coverage/**',
       '**/generated/**',
-      '**/*.spec.ts',
-      '**/*.test.ts',
     ],
   },
 

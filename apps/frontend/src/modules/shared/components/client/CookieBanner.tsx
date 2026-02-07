@@ -25,11 +25,11 @@ export const CookieBanner = () => {
 
   return (
     <div className='fixed bottom-0 w-full min-h-32 z-10 flex justify-center bg-blue-900/80 border-t-blue-500/80 border-t-4 border-zinc-700 backdrop-blur-md py-4'>
-      <div className='relative w-[1280px] max-w-screen-xl px-6 sm:px-10'>
+      <div className='relative w-(--breakpoint-xl) max-w-(--breakpoint-xl) px-6 sm:px-10'>
         {/* Close button */}
         <button
           onClick={handleAccept}
-          className='absolute top-[-0.5rem] right-12 text-lg text-zinc-400 hover:text-zinc-300'
+          className='absolute -top-2 right-12 text-lg text-zinc-400 hover:text-zinc-300'
         >
           <FontAwesomeIcon icon={faClose} />
         </button>

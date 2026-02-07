@@ -82,7 +82,7 @@ export const HomePageComponent = () => {
 
       {/* RECENT SONGS */}
       <div className='flex flex-row flex-wrap justify-between items-center gap-4 mb-2'>
-        <h2 className='text-xl uppercase z-[2]'>Recent songs</h2>
+        <h2 className='text-xl uppercase z-2'>Recent songs</h2>
         <CategoryButtonGroup />
       </div>
       <div className='h-6' />

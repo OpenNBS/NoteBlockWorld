@@ -40,13 +40,13 @@ export default function NotFound() {
   return (
     <>
       <div
-        className="fixed w-full h-full bg-center bg-repeat grayscale brightness-50 opacity-30 before:content-[''] before:absolute before:w-full before:h-full before:bg-gradient-to-b before:from-black/20 before:to-black/80"
+        className="fixed w-full h-full bg-center bg-repeat grayscale brightness-50 opacity-30 before:content-[''] before:absolute before:w-full before:h-full before:bg-linear-to-b before:from-black/20 before:to-black/80"
         style={{
           backgroundImage: "url('/background-tile-flat.png')",
         }}
       ></div>
 
-      <main className='w-full h-screen text-center [&>*]:z-[2] p-2 bg-zinc-900 flex flex-col items-center justify-center gap-8'>
+      <main className='w-full h-screen text-center *:z-2 p-2 bg-zinc-900 flex flex-col items-center justify-center gap-8'>
         {/* Background image */}
 
         <p className='font-light text-zinc-400 text-5xl'>Oops...</p>
@@ -57,7 +57,7 @@ export default function NotFound() {
             width={400}
             height={400}
             quality={95}
-            className='object-contain relative md:left-8 top-8 w-64 md:w-full z-[2]'
+            className='object-contain relative md:left-8 top-8 w-64 md:w-full z-2'
           />
           <h1 className='leading-none font-black text-[10rem] md:text-[18rem] z-1 text-zinc-600/30 relative bottom-8 md:right-12 md:bottom-16'>
             404

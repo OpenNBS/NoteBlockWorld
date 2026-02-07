@@ -9,7 +9,7 @@ import { CopyrightFooter } from './CopyrightFooter';
 const DocumentLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className='sm:p-4 flex flex-col items-center justify-between'>
-      <div className='md:px-10 lg:px-20 py-8 mx-auto sm:my-[8rem] max-w-screen-lg sm:rounded-3xl bg-zinc-950/50 backdrop-blur-[10px]'>
+      <div className='md:px-10 lg:px-20 py-8 mx-auto sm:my-32 max-w-(--breakpoint-lg) sm:rounded-3xl bg-zinc-950/50 backdrop-blur-[10px]'>
         <BackButton className='px-8 text-zinc-500 hover:text-zinc-400 text-sm'>
           {'< Back'}
         </BackButton>

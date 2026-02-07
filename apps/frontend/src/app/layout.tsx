@@ -1,3 +1,4 @@
+import { config } from '@fortawesome/fontawesome-svg-core';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
@@ -14,9 +15,17 @@ import DetectAdBlock from '../modules/shared/components/client/ads/DetectAdBlock
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
+// Pre-import FontAwesome CSS to avoid FOUC
+// See: https://fontawesome.com/docs/web/use-with/react/use-with#nextjs
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+// Prevent FontAwesome from injecting CSS after initial render
+config.autoAddCss = false;
+
 const lato = Lato({
   subsets: ['latin'],
   weight: ['100', '300', '400', '700', '900'],
+  variable: '--font-lato',
 });
 
 export const metadata: Metadata = {
@@ -50,7 +59,7 @@ export default function RootLayout({
 }) {
   return (
     <ReCaptchaProvider useEnterprise>
-      <html lang='en'>
+      <html lang='en' className={lato.variable}>
         <head>
           <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
           {/* https://nextjs.org/docs/app/building-your-application/optimizing/metadata#json-ld */}
@@ -102,7 +111,7 @@ export default function RootLayout({
           <Toaster
             position='bottom-center'
             toastOptions={{
-              className: '!bg-zinc-700 !text-white !max-w-fit',
+              className: 'bg-zinc-700! text-white! max-w-fit!',
               duration: 4000,
             }}
           />

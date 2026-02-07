@@ -320,7 +320,7 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
             options={Object.entries(UPLOAD_CONSTANTS.categories).map(
               ([key, value]) => ({ value: key, label: value }),
             )}
-            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-hidden p-2 transition-colors'
           />
         </div>
 
@@ -341,7 +341,7 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
               value: value,
               label: key,
             }))}
-            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-hidden p-2 transition-colors'
           />
         </div>
 
@@ -362,7 +362,7 @@ const SearchFilters = ({ filters, onFilterChange }: SearchFiltersProps) => {
               value: value,
               label: key,
             }))}
-            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-none p-2 transition-colors'
+            className='block w-full h-fit rounded-lg bg-zinc-900 border-2 border-zinc-600 hover:border-zinc-500 focus:border-blue-500 focus:outline-hidden p-2 transition-colors'
           />
         </div>
       </div>
@@ -562,7 +562,7 @@ export const SearchSongPage = () => {
                   value={sort}
                   onChange={(e) => handleSortChange(e.target.value)}
                   disabled={loading}
-                  className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:enabled:border-zinc-500 disabled:opacity-50 focus:border-blue-500 focus:outline-none px-1.5 text-sm transition-colors'
+                  className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:enabled:border-zinc-500 disabled:opacity-50 focus:border-blue-500 focus:outline-hidden px-1.5 text-sm transition-colors'
                 >
                   <option value={SongSortType.RECENT}>Recent</option>
                   <option value={SongSortType.PLAY_COUNT}>Popular</option>

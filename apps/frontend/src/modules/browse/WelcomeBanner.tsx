@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const WelcomeBanner = () => {
   return (
-    <div className='flex flex-col md:flex-row mx-auto w-fit justify-between items-center text-center text-balance gap-1 py-4 px-2 sm:px-8 text-sm rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-opacity-50 bg-gradient-to-br from-15% from-green-700 via-cyan-800 to-85% to-blue-900 border-2 border-white/20'>
+    <div className='flex flex-col md:flex-row mx-auto w-fit justify-between items-center text-center text-balance gap-1 py-4 px-2 sm:px-8 text-sm rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-linear-to-br from-15% from-green-700/50 via-cyan-800/50 to-85% to-blue-900/50 border-2 border-white/20'>
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-20 brightness-50 hue-rotate-90'
         style={{
@@ -19,7 +19,7 @@ export const WelcomeBanner = () => {
         width={100}
         height={100}
       />
-      <div className='flex-1 leading-tight max-w-screen-md'>
+      <div className='flex-1 leading-tight max-w-(--breakpoint-md)'>
         <h1 className='text-lg font-bold mb-1 text-green-400'>
           Welcome to <strong className='text-teal-300'>Note Block World</strong>
           !

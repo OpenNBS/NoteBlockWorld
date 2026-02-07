@@ -11,9 +11,8 @@ export const downloadSongFile = async (song: {
 }) => {
   const token = getTokenLocal();
 
-  try {
-    // Backend now proxies the file directly, avoiding CORS issues
-    const response = await axios.get(`/song/${song.publicId}/download`, {
+  axios
+    .get(`/song/${song.publicId}/download`, {
       params: {
         src: 'downloadButton',
       },
@@ -21,22 +20,25 @@ export const downloadSongFile = async (song: {
         authorization: `Bearer ${token}`,
       },
       responseType: 'blob',
+      withCredentials: true,
+    })
+    .then((res) => {
+      const url = window.URL.createObjectURL(res.data);
+      const link = document.createElement('a');
+      link.href = url;
+
+      link.setAttribute('download', `${song.title}.nbs`);
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error('Error downloading song:', error);
+      toast.error('Failed to download song');
     });
-
-    const url = window.URL.createObjectURL(response.data);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${song.title}.nbs`);
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error('Error downloading song:', error);
-    toast.error('Failed to download song');
-  }
 };
 
 export const openSongInNBS = async (song: { publicId: string }) => {

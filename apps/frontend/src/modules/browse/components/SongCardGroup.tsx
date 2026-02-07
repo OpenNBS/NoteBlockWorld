@@ -1,26 +1,17 @@
-const SongCardGroup = ({
-  children,
-  size = 'md',
-}: {
-  children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-}) => {
-  // Define min column widths for each size
-  const minWidths = {
-    sm: '200px',
-    md: '280px',
-    lg: '320px',
-    xl: '400px',
-  };
+const SongCardGroup = ({ children }: { children: React.ReactNode }) => {
+  // Ensure at least 4 items in the grid to prevent single cards from taking up full width
+  const childrenArray = Array.isArray(children) ? children : [children];
+  const itemsToDisplay = Math.max(childrenArray.length, 4);
+  const paddedSongs = [
+    ...childrenArray,
+    ...Array.from({ length: itemsToDisplay - childrenArray.length }, (_, i) => (
+      <div key={`placeholder-${i}`} aria-hidden='true' />
+    )),
+  ];
 
   return (
-    <div
-      className='grid w-full items-center gap-4'
-      style={{
-        gridTemplateColumns: `repeat(auto-fit, minmax(${minWidths[size]}, 1fr))`,
-      }}
-    >
-      {children}
+    <div className='grid grid-auto-fit-md w-full items-center gap-4'>
+      {paddedSongs}
     </div>
   );
 };
