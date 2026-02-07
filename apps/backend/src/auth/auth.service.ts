@@ -199,18 +199,33 @@ export class AuthService {
     });
 
     const frontEndURL = this.FRONTEND_URL;
-    const domain = this.APP_DOMAIN;
     const maxAge = ms(this.COOKIE_EXPIRES_IN) * 1000;
 
-    res.cookie('token', token.access_token, {
-      domain: domain,
+    // Build cookie options with conditional domain
+    // Only include domain if it's set and not empty (avoids browser blocking invalid domains)
+    const cookieOptions: {
+      maxAge: number;
+      sameSite: 'none' | 'lax' | 'strict';
+      secure: boolean;
+      httpOnly: boolean;
+      path: string;
+      domain?: string;
+    } = {
       maxAge: maxAge,
-    });
+      sameSite: 'none', // Required for cross-site cookies
+      secure: true, // Required when sameSite is 'none'
+      httpOnly: true, // Prevents JavaScript access (security best practice)
+      path: '/', // Make cookies available site-wide
+    };
 
-    res.cookie('refresh_token', token.refresh_token, {
-      domain: domain,
-      maxAge: maxAge,
-    });
+    // Only set domain if APP_DOMAIN is provided and not empty
+    // This prevents browser from blocking cookies with invalid domain attributes
+    if (this.APP_DOMAIN && this.APP_DOMAIN.trim() !== '') {
+      cookieOptions.domain = this.APP_DOMAIN;
+    }
+
+    res.cookie('token', token.access_token, cookieOptions);
+    res.cookie('refresh_token', token.refresh_token, cookieOptions);
 
     res.redirect(frontEndURL + '/');
   }
