@@ -204,7 +204,6 @@ export class AuthService {
     const cookieOptions: CookieOptions = {
       maxAge: maxAge,
       domain: this.APP_DOMAIN,
-      sameSite: 'none',
       path: '/',
     };
 
