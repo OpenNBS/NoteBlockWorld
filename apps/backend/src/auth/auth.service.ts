@@ -214,7 +214,7 @@ export class AuthService {
       maxAge: maxAge,
       sameSite: 'none', // Required for cross-site cookies
       secure: true, // Required when sameSite is 'none'
-      httpOnly: true, // Prevents JavaScript access (security best practice)
+      httpOnly: false, // Prevents JavaScript access (security best practice)
       path: '/', // Make cookies available site-wide
     };
 
