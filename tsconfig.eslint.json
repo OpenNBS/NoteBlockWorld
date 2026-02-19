@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@web/*": ["apps/frontend/src/*"],
+      "@server/*": ["apps/backend/src/*"]
+    }
+  },
+  "references": [
+    { "path": "apps/frontend" },
+    { "path": "apps/backend" },
+    { "path": "packages/configs" },
+    { "path": "packages/database" },
+    { "path": "packages/song" },
+    { "path": "packages/sounds" },
+    { "path": "packages/thumbnail" }
+  ]
+}

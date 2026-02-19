@@ -16,13 +16,13 @@ export const NoteBlockWorldLogo = ({
   let flexConfig, marginConfig;
 
   if (orientation === 'horizontal') {
-    flexConfig = 'flex-row mr-[-2rem]';
+    flexConfig = 'flex-row -mr-8';
     marginConfig = 'right-8';
   } else if (orientation === 'vertical') {
-    flexConfig = 'flex-col mb-[-2.5rem]';
+    flexConfig = 'flex-col -mb-10';
     marginConfig = 'bottom-10';
   } else {
-    flexConfig = 'flex-row sm:flex-col mr-[-2rem] sm:mr-0 sm:mb-[-2.5rem]';
+    flexConfig = 'flex-row sm:flex-col -mr-8 sm:mr-0 sm:-mb-10';
     marginConfig = 'right-8 sm:right-0 sm:bottom-10';
   }
 

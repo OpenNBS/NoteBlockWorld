@@ -65,14 +65,20 @@ const build = async () => {
     target: 'bun',
     minify: false,
     sourcemap: 'linked',
-    external: optionalRequirePackages.filter((pkg) => {
-      try {
-        require(pkg);
-        return false;
-      } catch (_) {
-        return true;
-      }
-    }),
+    external: [
+      ...optionalRequirePackages.filter((pkg) => {
+        try {
+          require(pkg);
+          return false;
+        } catch (_) {
+          return true;
+        }
+      }),
+      '@nbw/config',
+      '@nbw/database',
+      '@nbw/song',
+      '@nbw/sounds',
+    ],
     splitting: true,
   });
 

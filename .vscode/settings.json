@@ -1,4 +1,7 @@
 {
+  /***********************************
+  Linting and formatting settings
+  **********************************/
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "eslint.validate": [
@@ -13,8 +16,27 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
+
+  /***********************************
+  Tailwind CSS IntelliSense settings
+  ***********************************/
+  // Enable suggestions inside strings for Tailwind CSS class names
+  // https://github.com/tailwindlabs/tailwindcss-intellisense#editorquicksuggestions
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.experimental.configFile": {
+    "apps/frontend/src/app/globals.css": "apps/frontend/src/**"
+  },
+  "tailwindCSS.classFunctions": ["tw", "clsx", "cn"],
   "files.associations": {
     ".css": "tailwindcss",
     "*.scss": "tailwindcss"
-  }
+  },
+
+  /***********************************
+  Use the workspace version of TypeScript
+  ***********************************/
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

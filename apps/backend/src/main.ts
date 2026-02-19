@@ -28,6 +28,11 @@ async function bootstrap() {
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+  // Trust proxy for Railway reverse proxy
+  // This ensures Express properly handles X-Forwarded-* headers
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set('trust proxy', 1);
+
   if (process.env.NODE_ENV === 'development') {
     initializeSwagger(app);
   }

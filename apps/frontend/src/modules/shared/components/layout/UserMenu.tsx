@@ -124,7 +124,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                 className='rounded-full'
               />
             </div>
-            <div className='flex-shrink min-w-0 flex flex-col leading-tight'>
+            <div className='shrink min-w-0 flex flex-col leading-tight'>
               <div className='flex justify-start items-center gap-2'>
                 {!isEditingUsername ? (
                   <>

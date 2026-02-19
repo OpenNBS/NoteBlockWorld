@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 
-import { PageDto, SongPreviewDtoType } from '@nbw/database';
+import type { PageDto, SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 interface RecentSongsState {

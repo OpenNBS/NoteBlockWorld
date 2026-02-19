@@ -1,17 +1,47 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    // Modern bundler mode
+    // ==============================
+    // Project reference participation
+    // ==============================
+
+    // Required for tsc --build and incremental compilation.
+    "composite": true,
+
+    // Packages emit types only; JS output is handled by bundlers.
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+
+    // ==============================
+    // Module system (bundler-friendly)
+    // ==============================
+
+    // Preserve native ESM syntax and let the bundler handle resolution.
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+
+    // Do not rewrite imports/exports.
+    // Ensures the emitted .d.ts matches source semantics exactly.
     "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    // Additional strict checks for packages
+
+    // ==============================
+    // Extra safety for library code
+    // ==============================
+
+    // Prevents unsafe indexed access (e.g. obj[key] returning undefined).
     "noUncheckedIndexedAccess": true,
+
+    // Requires `override` keyword when overriding class methods.
+    // Helps prevent accidental API mismatches.
     "noImplicitOverride": true,
-    // Relaxed flags (can be enabled per package)
+
+    // ==============================
+    // Linting rules
+    // ==============================
+
+    // Disabled since they are covered by ESLint rules.
+    // Can be enabled in individual packages if desired.
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false

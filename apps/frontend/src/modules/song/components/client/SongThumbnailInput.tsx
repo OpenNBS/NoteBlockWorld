@@ -3,15 +3,15 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { cn } from '@web/lib/utils';
+import { Slider } from '@web/modules/shared/components/client/FormElements';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@web/modules/shared/components/tooltip';
-import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongProvider } from './context/Song.context';
-import { EditSongForm, UploadSongForm } from './SongForm.zod';
+import { EditSongFormInput, UploadSongFormInput } from './SongForm.zod';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 
 const formatZoomLevel = (zoomLevel: number) => {
@@ -20,7 +20,8 @@ const formatZoomLevel = (zoomLevel: number) => {
 };
 
 type ThumbnailSlidersProps = {
-  formMethods: UseFormReturn<UploadSongForm> & UseFormReturn<EditSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput> &
+    UseFormReturn<EditSongFormInput>;
   isLocked: boolean;
   maxTick: number;
   maxLayer: number;
@@ -48,7 +49,7 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
       <div>
         <Slider
           id='zoom-level'
-          value={[zoomLevel]}
+          value={[zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.zoomLevel', value[0], {
               shouldValidate: true,
@@ -60,14 +61,16 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
           max={THUMBNAIL_CONSTANTS.zoomLevel.max}
         />
       </div>
-      <div>{formatZoomLevel(zoomLevel)}</div>
+      <div>
+        {formatZoomLevel(zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default)}
+      </div>
       <div>
         <label htmlFor='start-tick'>Start Tick</label>
       </div>
       <div className='w-full'>
         <Slider
           id='start-tick'
-          value={[startTick]}
+          value={[startTick ?? THUMBNAIL_CONSTANTS.startTick.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.startTick', value[0], {
               shouldValidate: true,
@@ -86,7 +89,7 @@ const ThumbnailSliders: React.FC<ThumbnailSlidersProps> = ({
       <div className='w-full'>
         <Slider
           id='start-layer'
-          value={[startLayer]}
+          value={[startLayer ?? THUMBNAIL_CONSTANTS.startLayer.default]}
           onValueChange={(value) => {
             setValue('thumbnailData.startLayer', value[0], {
               shouldValidate: true,
@@ -123,8 +126,8 @@ const ColorButton: React.FC<ColorButtonProps> = ({
       <button
         type='button'
         className={cn(
-          'w-6 h-6 rounded-full flex-none border-2 border-zinc-200 border-opacity-30 disabled:opacity-30',
-          active && 'outline outline-2 outline-zinc-200',
+          'w-6 h-6 rounded-full flex-none border-2 border-zinc-200/30 disabled:opacity-30',
+          active && 'outline-2 outline-zinc-200',
         )}
         style={{ backgroundColor: color }}
         disabled={disabled}

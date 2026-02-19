@@ -105,7 +105,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
   return (
     <div className='flex flex-col w-full'>
       {/* Header */}
-      <div className='flex-shrink grid grid-cols-8'>
+      <div className='shrink grid grid-cols-8'>
         <InstrumentTableHeader className='text-right'>#</InstrumentTableHeader>
         <InstrumentTableHeader className='col-span-3'>
           Instrument
@@ -119,7 +119,7 @@ const InstrumentTable = ({ type }: { type: 'upload' | 'edit' }) => {
       </div>
 
       {/* Instruments */}
-      <div className='overflow-y-scroll max-h-72 flex flex-col mr-[-1rem]'>
+      <div className='overflow-y-scroll max-h-72 flex flex-col -mr-4'>
         {song?.instruments.map((instrument, i) => (
           <InstrumentTableRow
             key={i}

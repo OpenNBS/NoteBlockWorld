@@ -7,7 +7,7 @@ import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 type BlogPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
@@ -50,12 +50,12 @@ const BlogPost = async ({ params }: BlogPageProps) => {
         <Image
           src={post.image}
           alt=''
-          className='w-full h-[30vh] md:h-[50vh] object-cover mb-8 mt-[-2.5rem] rounded-xl'
+          className='w-full h-[30vh] md:h-[50vh] object-cover mb-8 -mt-10 rounded-xl'
           width={1920}
           height={1080}
         />
       )}
-      <article className='max-w-screen-md mx-auto mb-36'>
+      <article className='max-w-(--breakpoint-md) mx-auto mb-36'>
         <Link
           href='/blog'
           className='text-zinc-500 hover:text-zinc-400 text-sm'

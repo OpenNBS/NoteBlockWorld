@@ -32,7 +32,7 @@ export const EventBanner = () => {
   };
 
   return (
-    <div className='flex flex-row mx-auto w-fit justify-between items-center text-pretty gap-6 py-4 px-2 sm:px-8 text-md rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-opacity-50 bg-gradient-to-br from-15% from-pink-800 via-rose-900 to-85% to-red-900 relative'>
+    <div className='flex flex-row mx-auto w-fit justify-between items-center text-pretty gap-6 py-4 px-2 sm:px-8 text-md rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-linear-to-br from-15% from-pink-800/50 via-rose-900/50 to-85% to-red-900/50 relative'>
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-50 brightness-[0.3]'
         style={{
@@ -43,7 +43,7 @@ export const EventBanner = () => {
       ></div>
       <Image src='/img/event/maestro-icon.png' alt='' width={64} height={64} />
 
-      <div className='flex-1 leading-tight max-w-screen-md w-fit'>
+      <div className='flex-1 leading-tight max-w-(--breakpoint-md) w-fit'>
         <p className='uppercase text-md font-bold tracking-wider text-yellow-300 mb-1 w-fit'>
           <FontAwesomeIcon icon={faExclamationCircle} />{' '}
           {timeLeft === 0 ? (

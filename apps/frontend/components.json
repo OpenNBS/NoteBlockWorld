@@ -6,11 +6,13 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "src/app/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
+    "baseColor": "zinc",
+    "cssVariables": false,
+    "prefix": "",
+    "rsc": true,
+    "tsx": true
   },
-  "iconLibrary": "lucide",
+  "iconLibrary": "fontawesome",
   "aliases": {
     "components": "@web/modules/shared/components",
     "utils": "@web/lib/utils",

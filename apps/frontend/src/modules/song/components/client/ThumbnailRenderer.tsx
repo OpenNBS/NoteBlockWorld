@@ -3,22 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { NoteQuadTree } from '@nbw/song';
+import { drawNotesOffscreen, swap } from '@nbw/thumbnail/browser';
 
-import { UploadSongForm } from './SongForm.zod';
-
-// Dynamically import thumbnail functions to avoid SSR issues with HTMLCanvasElement
-const loadThumbnailFunctions = async () => {
-  const thumbnail = await import('@nbw/thumbnail');
-  return {
-    drawNotesOffscreen: thumbnail.drawNotesOffscreen,
-    swap: thumbnail.swap,
-  };
-};
+import { UploadSongFormInput } from './SongForm.zod';
 
 type ThumbnailRendererCanvasProps = {
   notes: NoteQuadTree;
-  formMethods: UseFormReturn<UploadSongForm>;
+  formMethods: UseFormReturn<UploadSongFormInput>;
 };
 
 export const ThumbnailRendererCanvas = ({
@@ -28,11 +21,6 @@ export const ThumbnailRendererCanvas = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawRequest = useRef<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [functionsLoaded, setFunctionsLoaded] = useState(false);
-  const thumbnailFunctionsRef = useRef<{
-    drawNotesOffscreen: typeof import('@nbw/thumbnail').drawNotesOffscreen;
-    swap: typeof import('@nbw/thumbnail').swap;
-  } | null>(null);
 
   const [zoomLevel, startTick, startLayer, backgroundColor] = formMethods.watch(
     [
@@ -42,23 +30,6 @@ export const ThumbnailRendererCanvas = ({
       'thumbnailData.backgroundColor',
     ],
   );
-
-  // Load thumbnail functions on client side only
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (thumbnailFunctionsRef.current) return;
-
-    loadThumbnailFunctions()
-      .then((funcs) => {
-        thumbnailFunctionsRef.current = funcs;
-        // Trigger a re-render to use the loaded functions
-        setFunctionsLoaded(true);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Failed to load thumbnail functions:', error);
-      });
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -76,12 +47,6 @@ export const ThumbnailRendererCanvas = ({
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!thumbnailFunctionsRef.current || !functionsLoaded) {
-      setLoading(true);
-      return;
-    }
-
     setLoading(true);
 
     const canvas = canvasRef.current as HTMLCanvasElement | null;
@@ -92,20 +57,19 @@ export const ThumbnailRendererCanvas = ({
       cancelAnimationFrame(drawRequest.current);
     }
 
-    const { drawNotesOffscreen, swap } = thumbnailFunctionsRef.current;
-
     drawRequest.current = requestAnimationFrame(async () => {
       try {
-        const output = await drawNotesOffscreen({
+        const output = (await drawNotesOffscreen({
           notes,
-          startTick,
-          startLayer,
-          zoomLevel,
-          backgroundColor,
+          startTick: startTick ?? THUMBNAIL_CONSTANTS.startTick.default,
+          startLayer: startLayer ?? THUMBNAIL_CONSTANTS.startLayer.default,
+          zoomLevel: zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default,
+          backgroundColor:
+            backgroundColor ?? THUMBNAIL_CONSTANTS.backgroundColor.default,
           canvasWidth: canvas.width,
           imgWidth: 1280,
           imgHeight: 768,
-        });
+        })) as OffscreenCanvas;
 
         swap(output, canvas);
         setLoading(false);
@@ -114,21 +78,11 @@ export const ThumbnailRendererCanvas = ({
         setLoading(false);
       }
     });
-  }, [
-    notes,
-    startTick,
-    startLayer,
-    zoomLevel,
-    backgroundColor,
-    functionsLoaded,
-  ]);
+  }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
 
   return (
     <div className='relative w-full'>
-      <canvas
-        ref={canvasRef}
-        className='w-full h-full aspect-[5/3] rounded-lg'
-      />
+      <canvas ref={canvasRef} className='w-full h-full aspect-5/3 rounded-lg' />
       {loading && (
         <div className='absolute top-0 flex items-center justify-center bg-black w-full h-full rounded-lg opacity-80'>
           Loading...

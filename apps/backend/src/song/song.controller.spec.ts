@@ -46,6 +46,9 @@ describe('SongController', () => {
   let songService: SongService;
 
   beforeEach(async () => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SongController],
       providers: [
@@ -66,8 +69,8 @@ describe('SongController', () => {
     songController = module.get<SongController>(SongController);
     songService = module.get<SongService>(SongService);
 
-    // Clear all mocks
-    jest.clearAllMocks();
+    // Verify the service is injected
+    expect(songController.songService).toBeDefined();
   });
 
   it('should be defined', () => {
@@ -79,7 +82,12 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = [];
 
-      mockSongService.getSongByPage.mockResolvedValueOnce(songList);
+      mockSongService.querySongs.mockResolvedValueOnce({
+        content: songList,
+        page: 1,
+        limit: 10,
+        total: 0,
+      });
 
       const result = await songController.getSongList(query);
 
@@ -88,7 +96,7 @@ describe('SongController', () => {
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
       expect(result.total).toBe(0);
-      expect(songService.getSongByPage).toHaveBeenCalled();
+      expect(songService.querySongs).toHaveBeenCalled();
     });
 
     it('should handle search query', async () => {
@@ -249,7 +257,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -271,7 +279,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
       const songList: SongPreviewDto[] = Array(5)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -291,7 +299,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 3, limit: 10 };
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${20 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${20 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -312,7 +320,7 @@ describe('SongController', () => {
       const query: SongListQueryDTO = { page: 1, limit: 10, q: 'test search' };
       const songList: SongPreviewDto[] = Array(8)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -337,7 +345,7 @@ describe('SongController', () => {
       };
       const songList: SongPreviewDto[] = Array(3)
         .fill(null)
-        .map((_, i) => ({ id: `rock-song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `rock-song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -357,7 +365,7 @@ describe('SongController', () => {
     it('should handle errors', async () => {
       const query: SongListQueryDTO = { page: 1, limit: 10 };
 
-      mockSongService.getSongByPage.mockRejectedValueOnce(new Error('Error'));
+      mockSongService.querySongs.mockRejectedValueOnce(new Error('Error'));
 
       await expect(songController.getSongList(query)).rejects.toThrow('Error');
     });
@@ -421,7 +429,7 @@ describe('SongController', () => {
       const q = 'test query';
       const songList: SongPreviewDto[] = Array(5)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -437,7 +445,7 @@ describe('SongController', () => {
       expect(result.total).toBe(5);
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with empty query string', async () => {
@@ -457,7 +465,7 @@ describe('SongController', () => {
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
       expect(result.total).toBe(0);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, '', undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, '');
     });
 
     it('should handle search with null query string', async () => {
@@ -476,7 +484,7 @@ describe('SongController', () => {
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, '', undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, '');
     });
 
     it('should handle search with multiple pages', async () => {
@@ -484,7 +492,7 @@ describe('SongController', () => {
       const q = 'test search';
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${10 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${10 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -499,7 +507,7 @@ describe('SongController', () => {
       expect(result.content).toHaveLength(10);
       expect(result.total).toBe(25);
       expect(result.page).toBe(2);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with large result set', async () => {
@@ -507,7 +515,7 @@ describe('SongController', () => {
       const q = 'popular song';
       const songList: SongPreviewDto[] = Array(50)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -521,7 +529,7 @@ describe('SongController', () => {
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toHaveLength(50);
       expect(result.total).toBe(500);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search on last page with partial results', async () => {
@@ -529,7 +537,7 @@ describe('SongController', () => {
       const q = 'search term';
       const songList: SongPreviewDto[] = Array(3)
         .fill(null)
-        .map((_, i) => ({ id: `song-${40 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${40 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -561,7 +569,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with very long query string', async () => {
@@ -579,7 +587,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should handle search with custom limit', async () => {
@@ -587,7 +595,7 @@ describe('SongController', () => {
       const q = 'test';
       const songList: SongPreviewDto[] = Array(25)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -614,7 +622,7 @@ describe('SongController', () => {
       const q = 'trending';
       const songList: SongPreviewDto[] = Array(10)
         .fill(null)
-        .map((_, i) => ({ id: `song-${i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -627,7 +635,7 @@ describe('SongController', () => {
 
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toHaveLength(10);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
 
     it('should return correct pagination info with search results', async () => {
@@ -635,7 +643,7 @@ describe('SongController', () => {
       const q = 'search';
       const songList: SongPreviewDto[] = Array(20)
         .fill(null)
-        .map((_, i) => ({ id: `song-${40 + i}` } as SongPreviewDto));
+        .map((_, i) => ({ id: `song-${40 + i}` } as unknown as SongPreviewDto));
 
       mockSongService.querySongs.mockResolvedValueOnce({
         content: songList,
@@ -699,7 +707,7 @@ describe('SongController', () => {
       const result = await songController.searchSongs(query, q);
 
       expect(result).toBeInstanceOf(PageDto);
-      expect(songService.querySongs).toHaveBeenCalledWith(query, q, undefined);
+      expect(songService.querySongs).toHaveBeenCalledWith(query, q ?? '');
     });
   });
 
@@ -794,21 +802,20 @@ describe('SongController', () => {
   });
 
   describe('getSongFile', () => {
-    it('should get song .nbs file', async () => {
+    it('should redirect to download URL', async () => {
       const id = 'test-id';
       const src = 'test-src';
       const user: UserDocument = {
         _id: 'test-user-id',
       } as unknown as UserDocument;
+      const downloadUrl = 'https://example.com/download/song.nbs';
 
       const res = {
         set: jest.fn(),
         redirect: jest.fn(),
       } as unknown as Response;
 
-      const url = 'test-url';
-
-      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(url);
+      mockSongService.getSongDownloadUrl.mockResolvedValueOnce(downloadUrl);
 
       await songController.getSongFile(id, src, user, res);
 
@@ -817,7 +824,7 @@ describe('SongController', () => {
         'Access-Control-Expose-Headers': 'Content-Disposition',
       });
 
-      expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, url);
+      expect(res.redirect).toHaveBeenCalledWith(HttpStatus.FOUND, downloadUrl);
 
       expect(songService.getSongDownloadUrl).toHaveBeenCalledWith(
         id,

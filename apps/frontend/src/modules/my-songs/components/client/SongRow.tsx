@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import { SongPreviewDtoType } from '@nbw/database';
+import type { SongPreviewDtoType } from '@nbw/database';
 import SongThumbnail from '@web/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/modules/shared/util/format';
 
@@ -41,7 +41,7 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
     >
       {/* Thumbnail */}
       <div className='col-span-1'>
-        <div className='aspect-[5/3] w-full object-cover rounded-lg relative block leading-none'>
+        <div className='aspect-5/3 w-full object-cover rounded-lg relative block leading-none'>
           {!song ? (
             <Skeleton className='w-full h-full' />
           ) : (

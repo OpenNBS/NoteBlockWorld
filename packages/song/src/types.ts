@@ -1,5 +1,3 @@
-import { SongStats } from '@nbw/database';
-
 import { NoteQuadTree } from './notes';
 
 export type SongFileType = {
@@ -30,4 +28,27 @@ export type Instrument = {
   count: number;
 };
 
-export type SongStatsType = InstanceType<typeof SongStats>;
+// Type definition matching SongStats from @nbw/database
+// Defined here to avoid pulling in backend dependencies
+export type SongStatsType = {
+  midiFileName: string;
+  noteCount: number;
+  tickCount: number;
+  layerCount: number;
+  tempo: number;
+  tempoRange: number[] | null;
+  timeSignature: number;
+  duration: number;
+  loop: boolean;
+  loopStartTick: number;
+  minutesSpent: number;
+  vanillaInstrumentCount: number;
+  customInstrumentCount: number;
+  firstCustomInstrumentIndex: number;
+  outOfRangeNoteCount: number;
+  detunedNoteCount: number;
+  customInstrumentNoteCount: number;
+  incompatibleNoteCount: number;
+  compatible: boolean;
+  instrumentNoteCounts: number[];
+};

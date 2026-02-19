@@ -1,56 +1,29 @@
-export * from './canvasFactory';
-export * from './types';
-export * from './utils';
-import type { Note } from '@nbw/song';
-
-import {
-  createCanvas,
-  noteBlockImage,
-  saveToImage,
-  useFont,
-} from './canvasFactory';
-import type { Canvas, DrawParams } from './types';
+import type { DrawingCanvas, ImageLike } from './drawTypes';
+import type { DrawParams } from './types';
 import { getKeyText, instrumentColors, isDarkColor, tintImage } from './utils';
 
-useFont();
+export async function drawNotes(
+  params: DrawParams,
+  createCanvas: (w: number, h: number) => DrawingCanvas,
+  noteBlockImage: Promise<ImageLike>,
+) {
+  const {
+    notes,
+    startTick,
+    startLayer,
+    zoomLevel,
+    backgroundColor,
+    canvasWidth,
+    imgWidth = 1280,
+    imgHeight = 768,
+  } = params;
 
-export const swap = async (src: Canvas, dst: Canvas) => {
-  /**
-   * Run a `drawFunction` that returns a canvas and draw it to the passed `canvas`.
-   *
-   * @param drawFunction - Function that draws to a canvas and returns it
-   * @param canvas - Canvas to draw the output of `drawFunction` to
-   *
-   * @returns Nothing
-   */
-  // Get canvas context
-  const ctx = dst.getContext('2d');
-
-  if (!ctx) {
-    throw new Error('Could not get canvas context');
-  }
-
-  // Swap the canvas
-  ctx.drawImage(src, 0, 0);
-};
-
-export const drawNotesOffscreen = async ({
-  notes,
-  startTick,
-  startLayer,
-  zoomLevel,
-  backgroundColor,
-  canvasWidth,
-  //canvasHeight,
-  imgWidth = 1280,
-  imgHeight = 768,
-}: DrawParams) => {
   // Create new offscreen canvas
   const canvas = createCanvas(imgWidth, imgHeight);
   const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    throw new Error('Could not get offscreen canvas context');
+    throw new Error('Could not get canvas context');
   }
 
   // Disable anti-aliasing
@@ -101,7 +74,7 @@ export const drawNotesOffscreen = async ({
     y2: endLayer,
   });
 
-  visibleNotes.forEach(async (note: Note) => {
+  for (const note of visibleNotes) {
     // Calculate position
     const x = (note.tick - startTick) * 8 * zoomFactor;
     const y = (note.layer - startLayer) * 8 * zoomFactor;
@@ -113,7 +86,7 @@ export const drawNotesOffscreen = async ({
 
     // Draw the note block
     ctx.drawImage(
-      tintImage(loadedNoteBlockImage, overlayColor),
+      tintImage(loadedNoteBlockImage, overlayColor, createCanvas),
       x,
       y,
       8 * zoomFactor,
@@ -127,23 +100,7 @@ export const drawNotesOffscreen = async ({
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(keyText, x + 4 * zoomFactor, y + 4 * zoomFactor);
-  });
-
-  return canvas;
-};
-
-export const drawToImage = async (params: DrawParams): Promise<Buffer> => {
-  let canvas;
-  const { imgWidth, imgHeight } = params;
-
-  if (!canvas) {
-    canvas = createCanvas(imgWidth, imgHeight);
   }
 
-  const output = await drawNotesOffscreen(params);
-  const byteArray = await saveToImage(output);
-
-  // Convert to Buffer
-  const buffer = Buffer.from(byteArray);
-  return buffer;
-};
+  return canvas;
+}

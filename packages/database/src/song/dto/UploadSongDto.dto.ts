@@ -10,8 +10,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import type { SongDocument } from '@database/song/entity/song.entity';
 import { UPLOAD_CONSTANTS } from '@nbw/config';
+
+import type { SongDocument } from '../../song/entity/song.entity';
 
 import { ThumbnailData } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';

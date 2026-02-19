@@ -38,39 +38,35 @@ const licenses = Object.keys(UPLOAD_CONSTANTS.licenses) as Readonly<string[]>;
 export const SongFormSchema = zod.object({
   allowDownload: zod.boolean().default(true),
 
-  // @ts-ignore
   visibility: zod.enum(visibility).default('public'),
   title: zod
     .string()
     .max(UPLOAD_CONSTANTS.title.maxLength, {
-      message: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
+      error: `Title must be shorter than ${UPLOAD_CONSTANTS.title.maxLength} characters`,
     })
     .min(1, {
-      message: 'Title is required',
+      error: 'Title is required',
     }),
   originalAuthor: zod
     .string()
     .max(UPLOAD_CONSTANTS.originalAuthor.maxLength, {
-      message: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
+      error: `Original author must be shorter than ${UPLOAD_CONSTANTS.originalAuthor.maxLength} characters`,
     })
     .min(0),
   author: zod.string().optional(),
   description: zod.string().max(UPLOAD_CONSTANTS.description.maxLength, {
-    message: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
+    error: `Description must be less than ${UPLOAD_CONSTANTS.description.maxLength} characters`,
   }),
   thumbnailData: thumbnailDataSchema,
-  customInstruments: zod.array(zod.string()),
+  customInstruments: zod.array(zod.string()).default([]),
   license: zod
-
-    // @ts-ignore
-    .enum(licenses, {
+    .enum(['none', ...licenses] as const)
+    .refine((v) => v !== 'none', {
       message: 'Please select a license',
     })
-    .refine((value) => Object.keys(UPLOAD_CONSTANTS.licenses).includes(value))
     .default(UPLOAD_CONSTANTS.license.default),
 
-  // @ts-ignore
-  category: zod.enum(categories).default(UPLOAD_CONSTANTS.CATEGORY_DEFAULT),
+  category: zod.enum(categories).default(UPLOAD_CONSTANTS.category.default),
 });
 
 export const uploadSongFormSchema = SongFormSchema.extend({});
@@ -79,8 +75,12 @@ export const editSongFormSchema = SongFormSchema.extend({
   id: zod.string(),
 });
 
-export type ThumbnailDataForm = zod.infer<typeof thumbnailDataSchema>;
+// forms
+export type ThumbnailDataFormInput = zod.input<typeof thumbnailDataSchema>;
+export type UploadSongFormInput = zod.input<typeof uploadSongFormSchema>;
+export type EditSongFormInput = zod.input<typeof editSongFormSchema>;
 
-export type UploadSongForm = zod.infer<typeof uploadSongFormSchema>;
-
-export type EditSongForm = zod.infer<typeof editSongFormSchema>;
+// parsed data
+export type ThumbnailDataFormOutput = zod.infer<typeof thumbnailDataSchema>;
+export type UploadSongFormOutput = zod.output<typeof uploadSongFormSchema>;
+export type EditSongFormOutput = zod.output<typeof editSongFormSchema>;

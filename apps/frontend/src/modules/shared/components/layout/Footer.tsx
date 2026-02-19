@@ -21,9 +21,9 @@ const FooterIcon = ({ icon, href }: { href: string; icon: IconDefinition }) => (
 export function Footer() {
   return (
     <footer className='flex items-center justify-center w-full h-fit min-h-12 py-4 z-10 border-t border-zinc-700 text-sm text-zinc-400'>
-      <div className='flex-1 flex flex-col sm:flex-row gap-2 justify-around items-center max-w-screen-xl px-6 sm:px-10'>
+      <div className='flex-1 flex flex-col sm:flex-row gap-2 justify-around items-center max-w-(--breakpoint-xl) px-6 sm:px-10'>
         {/* Social links */}
-        <div className='flex-grow flex flex-row gap-2'>
+        <div className='grow flex flex-row gap-2'>
           <FooterIcon icon={faTwitter} href='https://twitter.com/OpenNBS' />
           <FooterIcon icon={faYoutube} href='https://youtube.com/@OpenNBS' />
           <FooterIcon icon={faGithub} href='https://github.com/OpenNBS' />
@@ -39,7 +39,7 @@ export function Footer() {
           />
         </div>
 
-        <div className='flex-shrink'>
+        <div className='shrink'>
           <p>
             © {new Date().getFullYear()}{' '}
             <Link href='https://opennbs.org/' className='hover:underline'>
@@ -48,7 +48,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className='flex-grow flex justify-end'>
+        <div className='grow flex justify-end'>
           <Link href='/terms' className='hover:underline'>
             Terms
           </Link>

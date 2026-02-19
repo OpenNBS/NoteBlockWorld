@@ -1,4 +1,4 @@
-import { getKeyText, instrumentColors, isDarkColor } from './utils';
+import { getKeyText, instrumentColors, isDarkColor } from './utils.js';
 
 describe('instrumentColors', () => {
   it('should contain 16 color codes', () => {

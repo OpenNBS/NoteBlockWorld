@@ -8,6 +8,7 @@ import {
   Headers,
   HttpException,
   HttpStatus,
+  Inject,
   Logger,
   Param,
   Patch,
@@ -65,7 +66,9 @@ export class SongController {
   };
 
   constructor(
+    @Inject(SongService)
     public readonly songService: SongService,
+    @Inject(FileService)
     public readonly fileService: FileService,
   ) {}
 
@@ -129,7 +132,7 @@ export class SongController {
       [SongSortType.NOTE_COUNT, 'stats.noteCount'],
     ]);
 
-    const sortField = sortFieldMap.get(query.sort) ?? 'createdAt';
+    const sortField = sortFieldMap.get(query.sort ?? SongSortType.RECENT);
     const isDescending = query.order ? query.order === 'desc' : true;
 
     // Build PageQueryDTO with the sort field
@@ -318,37 +321,15 @@ export class SongController {
   ): Promise<void> {
     user = validateUser(user);
 
-    try {
-      // Get file directly from S3/MinIO and proxy it to avoid CORS issues
-      // This bypasses presigned URLs and CORS entirely
-      const { buffer, filename } = await this.songService.getSongFileBuffer(
-        id,
-        user,
-        src,
-        false,
-      );
+    // TODO: no longer used
+    res.set({
+      'Content-Disposition': 'attachment; filename="song.nbs"',
+      // Expose the Content-Disposition header to the client
+      'Access-Control-Expose-Headers': 'Content-Disposition',
+    });
 
-      // Set headers and send file
-      res.set({
-        'Content-Type': 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${filename.replace(
-          /[/"]/g,
-          '_',
-        )}"`,
-        'Access-Control-Expose-Headers': 'Content-Disposition',
-      });
-
-      res.send(Buffer.from(buffer));
-    } catch (error) {
-      this.logger.error('Error downloading song file:', error);
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      throw new HttpException(
-        'An error occurred while retrieving the song file',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const url = await this.songService.getSongDownloadUrl(id, user, src, false);
+    res.redirect(HttpStatus.FOUND, url);
   }
 
   @Get('/:id/open')

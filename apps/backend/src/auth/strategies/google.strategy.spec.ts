@@ -44,7 +44,7 @@ describe('GoogleStrategy', () => {
     it('should throw an error if Google config is missing', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
-      expect(() => new GoogleStrategy(configService)).toThrowError(
+      expect(() => new GoogleStrategy(configService)).toThrow(
         'OAuth2Strategy requires a clientID option',
       );
     });

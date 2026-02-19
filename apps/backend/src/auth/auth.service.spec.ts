@@ -192,7 +192,7 @@ describe('AuthService', () => {
       const refreshToken = 'refresh-token';
 
       spyOn(jwtService, 'signAsync').mockImplementation(
-        (payload, options: any) => {
+        (payload: any, options: any) => {
           if (options.secret === 'test-jwt-secret') {
             return Promise.resolve(accessToken);
           } else if (options.secret === 'test-jwt-refresh-secret') {
@@ -253,6 +253,7 @@ describe('AuthService', () => {
       expect(res.cookie).toHaveBeenCalledWith('token', 'access-token', {
         domain: '.test.com',
         maxAge: 3600000,
+        path: '/',
       });
 
       expect(res.cookie).toHaveBeenCalledWith(
@@ -261,6 +262,7 @@ describe('AuthService', () => {
         {
           domain: '.test.com',
           maxAge: 3600000,
+          path: '/',
         },
       );
 

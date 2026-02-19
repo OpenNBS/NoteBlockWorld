@@ -7,7 +7,7 @@ import { PostType, getPostData } from '@web/lib/posts';
 import { CustomMarkdown } from '@web/modules/shared/components/CustomMarkdown';
 
 type HelpPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
@@ -34,8 +34,8 @@ export async function generateMetadata({
   };
 }
 
-const HelpPost = ({ params }: HelpPageProps) => {
-  const { id } = params;
+const HelpPost = async ({ params }: HelpPageProps) => {
+  const { id } = await params;
   let post: PostType;
 
   try {
@@ -46,7 +46,7 @@ const HelpPost = ({ params }: HelpPageProps) => {
 
   return (
     <>
-      <article className='max-w-screen-md mx-auto mb-36'>
+      <article className='max-w-(--breakpoint-md) mx-auto mb-36'>
         <Link
           href='/help'
           className='text-zinc-500 hover:text-zinc-400 text-sm'

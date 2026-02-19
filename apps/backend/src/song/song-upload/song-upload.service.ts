@@ -22,7 +22,7 @@ import {
   injectSongFileMetadata,
   obfuscateAndPackSong,
 } from '@nbw/song';
-import { drawToImage } from '@nbw/thumbnail';
+import { drawToImage } from '@nbw/thumbnail/node';
 import { FileService } from '@server/file/file.service';
 import { UserService } from '@server/user/user.service';
 

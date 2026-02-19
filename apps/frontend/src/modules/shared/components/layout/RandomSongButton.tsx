@@ -4,7 +4,7 @@ import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
 
-import { PageDto, SongPreviewDto } from '@nbw/database';
+import type { PageDto, SongPreviewDto } from '@nbw/database';
 import axios from '@web/lib/axios';
 
 import { MusicalNote } from './MusicalNote';

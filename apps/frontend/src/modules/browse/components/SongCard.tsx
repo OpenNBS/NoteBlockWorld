@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import { SongPreviewDtoType } from '@nbw/database';
+import type { SongPreviewDtoType } from '@nbw/database';
 import { formatDuration, formatTimeAgo } from '@web/modules/shared/util/format';
 
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
@@ -17,7 +17,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
       <div className='relative'>
         {!song ? (
           <Skeleton
-            className='w-full h-full rounded-lg aspect-[5/3] object-cover'
+            className='w-full h-full rounded-lg aspect-5/3 object-cover'
             containerClassName='block leading-none'
           />
         ) : (
@@ -33,9 +33,9 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
       </div>
 
       {/* Song info */}
-      <div className='flex flex-row justify-between px-4 pt-0.5 text-pretty flex-grow'>
+      <div className='flex flex-row justify-between px-4 pt-0.5 text-pretty grow'>
         {/* Song title */}
-        <h3 className='text-md font-semibold leading-tight w-full h-10 flex-grow line-clamp-2'>
+        <h3 className='text-md font-semibold leading-tight w-full h-10 grow line-clamp-2'>
           {song?.title || <Skeleton count={2} />}
         </h3>
       </div>
@@ -51,7 +51,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
           )}
         </p>
         {/* Play icon & count */}
-        <div className='text-md flex items-center gap-1 flex-shrink'>
+        <div className='text-md flex items-center gap-1 shrink'>
           {!song ? (
             <Skeleton className='min-w-16' />
           ) : (

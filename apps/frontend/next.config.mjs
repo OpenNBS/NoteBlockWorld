@@ -4,6 +4,8 @@ import createMDX from '@next/mdx';
 
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  // Externalize packages that use Node.js built-in modules for server components
+  serverExternalPackages: ['@nbw/database', '@nbw/config'],
   // See: https://github.com/Automattic/node-canvas/issues/867#issuecomment-1925284985
   webpack: (config, { isServer }) => {
     config.externals.push({
@@ -12,8 +14,9 @@ const nextConfig = {
 
     // Prevent @nbw/thumbnail from being bundled on the server
     // It uses HTMLCanvasElement which is not available in Node.js
+    // Also externalize backend packages that use Node.js modules
     if (isServer) {
-      config.externals.push('@nbw/thumbnail');
+      config.externals.push('@nbw/thumbnail', '@nbw/database');
     }
 
     return config;

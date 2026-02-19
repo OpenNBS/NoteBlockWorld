@@ -43,7 +43,7 @@ describe('GithubStrategy', () => {
     it('should throw an error if GitHub config is missing', () => {
       jest.spyOn(configService, 'getOrThrow').mockReturnValueOnce(null);
 
-      expect(() => new GithubStrategy(configService)).toThrowError(
+      expect(() => new GithubStrategy(configService)).toThrow(
         'OAuth2Strategy requires a clientID option',
       );
     });
