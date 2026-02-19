@@ -253,6 +253,7 @@ describe('AuthService', () => {
       expect(res.cookie).toHaveBeenCalledWith('token', 'access-token', {
         domain: '.test.com',
         maxAge: 3600000,
+        path: '/',
       });
 
       expect(res.cookie).toHaveBeenCalledWith(
@@ -261,6 +262,7 @@ describe('AuthService', () => {
         {
           domain: '.test.com',
           maxAge: 3600000,
+          path: '/',
         },
       );
 
