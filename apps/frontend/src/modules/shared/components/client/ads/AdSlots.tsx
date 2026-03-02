@@ -2,7 +2,6 @@
 
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@web/lib/utils';
@@ -172,11 +171,6 @@ const AdTemplate = ({
   ) : (
     <div className={cn(className, isHidden ? hiddenClassName : '')}>
       <InfoText />
-      <Script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`}
-        crossOrigin='anonymous'
-      />
       {!isHidden && (
         <>
           <ins
