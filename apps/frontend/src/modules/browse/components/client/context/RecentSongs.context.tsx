@@ -7,7 +7,7 @@ import type { PageDto, SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 interface RecentSongsState {
-  recentSongs: (SongPreviewDtoType | null)[];
+  recentSongs: (SongPreviewDtoType | null | undefined)[];
   recentError: string;
   isLoading: boolean;
   hasMore: boolean;
@@ -28,6 +28,20 @@ type RecentSongsStore = RecentSongsState & RecentSongsActions;
 
 const adCount = 1;
 const pageSize = 12;
+const fetchCount = pageSize - adCount;
+
+function injectAdSlots(
+  songs: SongPreviewDtoType[],
+): Array<SongPreviewDtoType | undefined> {
+  const songsWithAds: Array<SongPreviewDtoType | undefined> = [...songs];
+
+  for (let i = 0; i < adCount; i++) {
+    const adPosition = Math.floor(Math.random() * (songsWithAds.length + 1));
+    songsWithAds.splice(adPosition, 0, undefined);
+  }
+
+  return songsWithAds;
+}
 
 export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
   // Initial state
@@ -65,8 +79,6 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      const fetchCount = pageSize - adCount;
-
       const params: Record<string, any> = {
         page,
         limit: fetchCount, // TODO: fix constants
@@ -83,20 +95,15 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
         { params },
       );
 
-      const newSongs: Array<SongPreviewDtoType | undefined> =
-        response.data.content;
-
-      for (let i = 0; i < adCount; i++) {
-        const adPosition = Math.floor(Math.random() * newSongs.length) + 1;
-        newSongs.splice(adPosition, 0, undefined);
-      }
+      const fetchedSongs = response.data.content;
+      const newSongs = injectAdSlots(fetchedSongs);
 
       set((state) => ({
         recentSongs: [
           ...state.recentSongs.filter((song) => song !== null),
-          ...response.data.content,
+          ...newSongs,
         ],
-        hasMore: response.data.content.length >= fetchCount,
+        hasMore: fetchedSongs.length >= fetchCount,
         recentError: '',
       }));
     } catch (error) {
@@ -113,7 +120,7 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
     set({
       selectedCategory: category,
       page: 1,
-      recentSongs: Array(12).fill(null),
+      recentSongs: Array(pageSize).fill(null),
       hasMore: true,
     });
   },
@@ -126,7 +133,7 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
     }
 
     set({
-      recentSongs: [...recentSongs, ...Array(12).fill(null)],
+      recentSongs: [...recentSongs, ...Array(pageSize).fill(null)],
       page: get().page + 1,
     });
   },
