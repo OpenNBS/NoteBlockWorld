@@ -10,7 +10,7 @@ async function fetchRecentSongs() {
     const response = await axiosInstance.get<PageDto<SongPreviewDto>>('/song', {
       params: {
         page: 1, // TODO: fix constants
-        limit: 16, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
+        limit: 11, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
         sort: 'recent',
         order: 'desc',
       },
