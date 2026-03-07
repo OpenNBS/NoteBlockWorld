@@ -37,16 +37,13 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
   hasMore: true,
   selectedCategory: '',
   categories: {},
-  page: 0,
+  page: 1,
 
   // Actions
   initialize: (initialRecentSongs) => {
-    // If no initial songs, set page to 1 to trigger fetch
-    // Otherwise, keep page at 0 since we already have the first page of data
-    const initialPage = initialRecentSongs.length === 0 ? 1 : 0;
     set({
-      recentSongs: initialRecentSongs,
-      page: initialPage,
+      recentSongs: injectAdSlots(initialRecentSongs),
+      page: 1,
       hasMore: true,
       recentError: '',
     });
@@ -146,7 +143,7 @@ export const useRecentSongsPageLoader = () => {
   );
 
   useEffect(() => {
-    if (page === 0) return;
+    if (page === 1) return; // Skip fetching page 1 as it's already loaded initially
     fetchRecentSongs();
   }, [page, selectedCategory, fetchRecentSongs]);
 };
