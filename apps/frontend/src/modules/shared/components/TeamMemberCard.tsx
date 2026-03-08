@@ -15,7 +15,7 @@ export const TeamMemberCard = ({
   children: string;
 }) => {
   return (
-    <div className='flex flex-row gap-8 items-center'>
+    <div className='flex flex-col md:flex-row gap-2 md:gap-8 items-start'>
       <picture className='w-full max-w-fit'>
         <Image
           src={`/img/authors/${img}`}
@@ -45,7 +45,7 @@ export const TeamMemberCard = ({
 
 export const Team = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className='flex flex-col gap-8 mt-10 mx-8 mb-16'>
+    <section className='flex flex-col gap-8 mt-10 mx-0 md:mx-8 mb-16'>
       {children}
     </section>
   );
