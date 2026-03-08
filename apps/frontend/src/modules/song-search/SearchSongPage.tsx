@@ -6,6 +6,7 @@ import {
   faArrowDownZA,
   faEllipsis,
   faFilter,
+  faShuffle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
@@ -504,6 +505,9 @@ export const SearchSongPage = () => {
 
   /* Use 19/91 button if sorting by a numeric value, otherwise use AZ/ZA */
   const orderIcon = useMemo(() => {
+    if (sort === SongSortType.RANDOM) {
+      return faShuffle;
+    }
     if (sort === SongSortType.TITLE) {
       return order === SongOrderType.ASC ? faArrowDownAZ : faArrowDownZA;
     } else {
@@ -566,6 +570,7 @@ export const SearchSongPage = () => {
                 >
                   <option value={SongSortType.RECENT}>Recent</option>
                   <option value={SongSortType.PLAY_COUNT}>Popular</option>
+                  <option value={SongSortType.RANDOM}>Random</option>
                   <option value={SongSortType.TITLE}>Title</option>
                   <option value={SongSortType.DURATION}>Duration</option>
                   <option value={SongSortType.NOTE_COUNT}>Note count</option>
