@@ -561,7 +561,7 @@ export const SearchSongPage = () => {
                 <select
                   value={sort}
                   onChange={(e) => handleSortChange(e.target.value)}
-                  disabled={loading}
+                  disabled={loading || songs.length === 0}
                   className='h-10 w-48 rounded-md bg-zinc-900 border-2 border-zinc-600 hover:enabled:border-zinc-500 disabled:opacity-50 focus:border-blue-500 focus:outline-hidden px-1.5 text-sm transition-colors'
                 >
                   <option value={SongSortType.RECENT}>Recent</option>
@@ -576,7 +576,7 @@ export const SearchSongPage = () => {
               <button
                 className='bg-zinc-700 hover:enabled:bg-zinc-600 disabled:opacity-50 h-10 w-10 rounded-md flex items-center justify-center transition-colors enabled:cursor-pointer'
                 onClick={handleOrderChange}
-                disabled={loading}
+                disabled={loading || songs.length === 0}
                 aria-label={
                   order === SongOrderType.ASC
                     ? 'Sort ascending'
