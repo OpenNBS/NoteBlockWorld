@@ -13,9 +13,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 export function SignInButton() {
   return (
     <Link href='/login'>
-      <div className='text-nowrap flex justify-between items-center gap-2 md:px-1 md:border border-blue-500 text-white md:text-blue-500 h-8 rounded-full hover:border-blue-400 hover:text-blue-400 transition-colors duration-150'>
+      <div className='text-nowrap flex justify-between items-center gap-2 md:px-0.5 md:border border-blue-500 text-white md:text-blue-500 h-8 rounded-full hover:border-blue-400 hover:text-blue-400 transition-colors duration-150'>
         <div className='h-8 p-1 md:h-6 md:p-0'>
-          <FontAwesomeIcon icon={faUserCircle} className='h-full!' />
+          <FontAwesomeIcon icon={faUserCircle} className='h-full! text-xl' />
         </div>
         <span className='text-sm mr-2 font-semibold hidden md:block'>
           Sign in
