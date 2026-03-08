@@ -159,8 +159,8 @@ const SearchHeader = ({
   const isSearch = useMemo(() => query !== '', [query]);
 
   const title = useMemo(() => {
-    if (loading) return '';
     if (isSearch) {
+      if (loading) return '';
       // TODO: implement this with proper variable substitution for translations
       if (totalResults != 1) {
         return `${totalResults.toLocaleString('en-UK')} results for "${query}"`;
