@@ -35,7 +35,7 @@ export function Footer() {
           {/* <FooterIcon icon={faEnvelope} href='mailto:opennbs@gmail.com' /> */}
           <FooterIcon
             icon={faHeart}
-            href='https://opencollective.com/OpenNBS/donate/profile'
+            href='https://opencollective.com/OpenNBS/donate'
           />
         </div>
 

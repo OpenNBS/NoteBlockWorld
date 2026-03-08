@@ -71,7 +71,7 @@ export const WelcomeBanner = () => {
           </Link>
           {' • '}
           <Link
-            href='https://opencollective.com/opennbs/donate/profile'
+            href='https://opencollective.com/opennbs/donate'
             className='text-blue-400 hover:text-blue-300'
           >
             Donate

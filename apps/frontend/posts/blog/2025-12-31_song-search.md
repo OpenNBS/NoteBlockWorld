@@ -40,7 +40,7 @@ You can expect these features to start rolling out in the next few months. Stay 
 
 This year couldn't have been more amazing. We've reached over **two thousand songs** uploaded to Note Block World, and held our **second community-wide [collaboration event](http://localhost:3000/blog/maestro's-musical-masterpieces)** with the creators of [M.A.E.S.T.R.O.](https://noteblock.world/blog/maestro), which had over **30 submissions** spanning **over 90 minutes of music!** And there was even time for a bonus feature before closing off this year! 🎁
 
-Thank you to everyone who visited the website, shared music with their friends, submitted their own creations, or even [donated](https://opencollective.com/opennbs/donate/profile) to help us keep the website running. **Our community is at the core of everything we do, and the reason why we're excited to keep working on cool things everyday!**
+Thank you to everyone who visited the website, shared music with their friends, submitted their own creations, or even [donated](https://opencollective.com/opennbs/donate) to help us keep the website running. **Our community is at the core of everything we do, and the reason why we're excited to keep working on cool things everyday!**
 
 We wish everyone an **incredible 2026**, full of achievements and amazing moments. We'll certainly work hard to make sure it is a wonderful year for Note Block World — especially as it will mark **Note Block Studio's 15th Anniversary!** Stay tuned for the many cool things we're planning to celebrate this remarkable moment in the history of note blocks.
 
