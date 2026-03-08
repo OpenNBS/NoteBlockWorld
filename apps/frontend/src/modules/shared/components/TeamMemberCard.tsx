@@ -21,7 +21,7 @@ export const TeamMemberCard = ({
           src={`/img/authors/${img}`}
           width={96}
           height={96}
-          className='rounded-full w-24 h-24'
+          className='rounded-full aspect-square'
           quality={100}
           alt={''}
         />
