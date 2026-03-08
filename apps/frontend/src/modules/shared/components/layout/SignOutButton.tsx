@@ -30,7 +30,7 @@ export function UploadButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Link href='/upload'>
-          <div className='group h-9 w-9 p-1'>
+          <div className='group h-9.5 w-9.5 p-1'>
             <FontAwesomeIcon
               icon={faCloudUpload}
               className='h-full! w-full! text-white group-hover:text-zinc-400 transition-all duration-150 group-hover:-translate-y-0.5'
@@ -49,7 +49,7 @@ export function SettingsButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className='group h-8 w-8 p-1 cursor-pointer'>
+        <div className='group h-8.5 w-8.5 p-1 cursor-pointer'>
           <FontAwesomeIcon
             icon={faCog}
             className='h-full! w-full! text-white group-hover:text-zinc-400 transition-all duration-150 group-hover:rotate-30'
