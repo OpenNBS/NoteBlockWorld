@@ -507,8 +507,7 @@ export const SearchSongPage = () => {
   const orderIcon = useMemo(() => {
     if (sort === SongSortType.RANDOM) {
       return faShuffle;
-    }
-    if (sort === SongSortType.TITLE) {
+    } else if (sort === SongSortType.TITLE) {
       return order === SongOrderType.ASC ? faArrowDownAZ : faArrowDownZA;
     } else {
       return order === SongOrderType.ASC ? faArrowDown19 : faArrowDown91;
