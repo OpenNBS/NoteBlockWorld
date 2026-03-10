@@ -87,7 +87,7 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
-        {(recentSongs || []).map((song, i) =>
+        {recentSongs.map((song, i) =>
           // TODO: currently null = skeleton, undefined = ad slot. There must be a more robust system to indicate this.
           song === undefined ? (
             <SongCardAdSlot key={i} />

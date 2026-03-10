@@ -41,7 +41,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
       </div>
       <div className='flex flex-row justify-between items-center gap-4 px-4'>
         {/* Song author */}
-        <p className='text-sm text-zinc-400 flex-1'>
+        <p className='text-sm text-zinc-400 flex-1 text-pretty leading-tight'>
           {!song ? (
             <Skeleton />
           ) : (

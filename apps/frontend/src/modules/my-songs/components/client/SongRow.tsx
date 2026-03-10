@@ -58,7 +58,7 @@ export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
               >
                 <FontAwesomeIcon
                   icon={faCirclePlay}
-                  className='text-white w-12 h-12'
+                  className='text-white text-4xl'
                 />
               </Link>
             </>

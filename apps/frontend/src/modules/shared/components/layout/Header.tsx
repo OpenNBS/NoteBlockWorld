@@ -59,7 +59,12 @@ export async function Header() {
 
         {/* Info pages */}
         <div className='flex flex-1 justify-center gap-1 h-8 text-center'>
-          <BlockTab href='/' icon={faMusic} label='Songs' color='purple' />
+          <BlockTab
+            href='/search'
+            icon={faMusic}
+            label='Songs'
+            color='purple'
+          />
           <BlockTab
             href='/help'
             icon={faQuestionCircle}

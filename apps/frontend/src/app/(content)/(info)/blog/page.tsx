@@ -41,7 +41,7 @@ const BlogPageComponent = ({ posts }: { posts: PostType[] }) => {
             href={`/blog/${post.id}`}
             className='w-full h-full p-4 rounded-md bg-zinc-800/50 hover:bg-zinc-700/80 transition-all duration-200'
           >
-            <article key={i} className='flex flex-col'>
+            <article key={i} className='flex flex-col h-full'>
               <Image
                 src={post.image || '/img/post.png'}
                 width={480}
