@@ -44,7 +44,7 @@ export function SettingsMenu() {
               external
             />
             <UserMenuLink
-              href='https://opencollective.com/opennbs/donate/profile'
+              href='https://opencollective.com/opennbs/donate'
               icon={faHeart}
               label='Donate'
               external

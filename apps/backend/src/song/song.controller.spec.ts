@@ -10,11 +10,7 @@ import {
   SongSortType,
   FeaturedSongsDto,
 } from '@nbw/database';
-import {
-  BadRequestException,
-  HttpStatus,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
@@ -151,18 +147,6 @@ describe('SongController', () => {
       expect(result).toBeInstanceOf(PageDto);
       expect(result.content).toEqual(songList);
       expect(songService.getRandomSongs).toHaveBeenCalledWith(5, 'electronic');
-    });
-
-    it('should throw error for invalid random limit', async () => {
-      const query: SongListQueryDTO = {
-        page: 1,
-        limit: 15,
-        sort: SongSortType.RANDOM,
-      };
-
-      await expect(songController.getSongList(query)).rejects.toThrow(
-        BadRequestException,
-      );
     });
 
     it('should handle recent sort', async () => {

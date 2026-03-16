@@ -112,7 +112,7 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
         arrowPadding={10}
       >
         <PopoverArrow className='fill-zinc-600' />
-        <div className='min-w-56 max-w-64'>
+        <div className='min-w-60 max-w-60'>
           {/* User */}
           <div className='flex flex-row gap-2 items-center p-4 pb-3'>
             <div className='h-8 w-8 aspect-square'>
@@ -124,79 +124,72 @@ export const UserMenu = ({ userData }: { userData: LoggedUserData }) => {
                 className='rounded-full'
               />
             </div>
-            <div className='shrink min-w-0 flex flex-col leading-tight'>
-              <div className='flex justify-start items-center gap-2'>
-                {!isEditingUsername ? (
-                  <>
-                    <h4 className='truncate font-semibold w-[155px] py-px'>
-                      {currentUsername}
-                    </h4>
-                    <button onClick={() => setIsEditingUsername(true)}>
+            <div className='flex flex-col leading-tight w-full'>
+              {!isEditingUsername ? (
+                <div className='flex justify-start items-center gap-2'>
+                  <h4 className='grow truncate font-semibold py-px'>
+                    {currentUsername}
+                  </h4>
+                  <button onClick={() => setIsEditingUsername(true)}>
+                    <FontAwesomeIcon
+                      icon={faPencil}
+                      size='sm'
+                      className='text-zinc-400 hover:text-zinc-200'
+                    />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className='flex justify-start items-center'
+                  >
+                    <input
+                      className='w-0 flex-1 font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
+                      defaultValue={currentUsername}
+                      {...register('username', {
+                        required: 'Username is required',
+                        pattern: {
+                          value: USER_CONSTANTS.ALLOWED_REGEXP,
+                          message:
+                            'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
+                        },
+                        maxLength: {
+                          value: USER_CONSTANTS.USERNAME_MAX_LENGTH,
+                          message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`,
+                        },
+                        minLength: {
+                          value: USER_CONSTANTS.USERNAME_MIN_LENGTH,
+                          message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`,
+                        },
+                      })}
+                    />
+                    <button disabled={isSubmitting} type='submit'>
                       <FontAwesomeIcon
-                        icon={faPencil}
-                        size='sm'
-                        className='text-zinc-400 hover:text-zinc-200'
+                        icon={faCheck}
+                        className='ml-1 px-0 text-zinc-400 hover:text-green-500 text-lg'
                       />
                     </button>
-                  </>
-                ) : (
-                  <>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      <input
-                        className='w-[calc(12rem-55.5px)] font-semibold bg-transparent border border-zinc-400 rounded-md px-1'
-                        defaultValue={currentUsername}
-                        {...register('username', {
-                          required: 'Username is required',
-                          pattern: {
-                            value: USER_CONSTANTS.ALLOWED_REGEXP,
-                            message:
-                              'Your username may only contain these characters: A-Z a-z 0-9 - _ .',
-                          },
-                          maxLength: {
-                            value: USER_CONSTANTS.USERNAME_MAX_LENGTH,
-                            message: `The username must have up to ${USER_CONSTANTS.USERNAME_MAX_LENGTH} characters`,
-                          },
-                          minLength: {
-                            value: USER_CONSTANTS.USERNAME_MIN_LENGTH,
-                            message: `The username must have at least ${USER_CONSTANTS.USERNAME_MIN_LENGTH} characters`,
-                          },
-                        })}
+                    <button onClick={() => setIsEditingUsername(false)}>
+                      <FontAwesomeIcon
+                        icon={faClose}
+                        className='text-zinc-400 hover:text-red-500 text-lg'
                       />
-                      <button
-                        className='ml-1'
-                        disabled={isSubmitting}
-                        type='submit'
-                      >
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size='lg'
-                          className='text-zinc-400 hover:text-green-500'
-                        />
-                      </button>
-                      <button
-                        className='ml-1'
-                        onClick={() => setIsEditingUsername(false)}
-                      >
-                        <FontAwesomeIcon
-                          icon={faClose}
-                          size='lg'
-                          className='text-zinc-400 hover:text-red-500'
-                        />
-                      </button>
-                    </form>
-                  </>
-                )}
-              </div>
+                    </button>
+                  </form>
+                </>
+              )}
+
               <p className='text-zinc-300 text-xs truncate'>{userData.email}</p>
             </div>
           </div>
           {error && (
-            <p className='text-xs text-red-400 px-4 pb-2 max-w-60 leading-tight'>
+            <p className='text-xs text-red-400 px-4 pb-2 leading-tight'>
               {error}
             </p>
           )}
           {isEditingUsername && (
-            <p className='text-xs text-zinc-500 px-4 pb-2 max-w-60 leading-tight'>
+            <p className='text-xs text-zinc-500 px-4 pb-2 leading-tight'>
               NOTE: Your existing song files will{' '}
               <strong className='font-black'>not</strong> be updated. Make an
               edit to each song&apos;s title or description to refresh them!

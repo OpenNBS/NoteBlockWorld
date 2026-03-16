@@ -51,7 +51,7 @@ export const useMySongsStore = create<MySongsStore>((set, get) => ({
   page: null,
   totalSongs: 0,
   totalPages: 0,
-  currentPage: 0,
+  currentPage: 1,
   pageSize: MY_SONGS.PAGE_SIZE,
   isLoading: true,
   error: null,
@@ -203,10 +203,15 @@ export const useMySongsStore = create<MySongsStore>((set, get) => ({
 export const useMySongsPageLoader = () => {
   const currentPage = useMySongsStore((state) => state.currentPage);
   const loadPage = useMySongsStore((state) => state.loadPage);
+  const loadedSongs = useMySongsStore((state) => state.loadedSongs);
 
   useEffect(() => {
+    // Skip loading if the page is already loaded from initial data
+    if (currentPage in loadedSongs) {
+      return;
+    }
     loadPage();
-  }, [currentPage, loadPage]);
+  }, [currentPage, loadPage, loadedSongs]);
 };
 
 // Legacy hook name for backward compatibility
@@ -227,7 +232,7 @@ export const MySongProvider = ({
   InitialsongsFolder = {},
   children,
   totalPagesInit = 0,
-  currentPageInit = 0,
+  currentPageInit = 1,
   pageSizeInit = MY_SONGS.PAGE_SIZE,
 }: MySongProviderProps) => {
   const initialize = useMySongsStore((state) => state.initialize);

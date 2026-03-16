@@ -105,11 +105,6 @@ export class SongController {
   ): Promise<PageDto<SongPreviewDto>> {
     // Handle random sort
     if (query.sort === SongSortType.RANDOM) {
-      if (query.limit && (query.limit < 1 || query.limit > 10)) {
-        throw new BadRequestException(
-          'Limit must be between 1 and 10 for random sort',
-        );
-      }
       const data = await this.songService.getRandomSongs(
         query.limit ?? 1,
         query.category,
