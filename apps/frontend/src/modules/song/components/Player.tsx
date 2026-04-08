@@ -2,10 +2,9 @@
 
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PianoRollView, Player, Viewer } from '@opennbs/nbsvis';
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 
-import { getSongOpenUrl } from '../util/downloadSong';
+import { useSongPlayer } from './client/context/SongPlayer.context';
 
 const RENDER_WIDTH = 1280;
 const RENDER_HEIGHT = 768;
@@ -19,79 +18,26 @@ export const PlayerComponent = ({
 }) => {
   const viewportRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isCancelledRef = useRef(false);
-  const viewerRef = useRef<Viewer | null>(null);
-  const playerRef = useRef<Player | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadingPhase, setLoadingPhase] = useState('Preparing player...');
-  const [error, setError] = useState<string | null>(null);
+  const {
+    registerMount,
+    loadSong,
+    togglePlayback,
+    isLoading,
+    loadingPhase,
+    error,
+  } = useSongPlayer();
 
-  const loadSong = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      setLoadingPhase('Preparing player...');
-
-      if (!containerRef.current) {
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => resolve()),
-        );
-      }
-
-      if (!containerRef.current) {
-        throw new Error('Player container not ready');
-      }
-
-      if (isCancelledRef.current || !containerRef.current) return;
-
-      if (!viewerRef.current || !playerRef.current) {
-        setLoadingPhase('Initializing viewer...');
-        const viewer = new Viewer(containerRef.current);
-
-        await viewer.init();
-        await viewer.setView(new PianoRollView());
-
-        // Render at a fixed internal resolution; CSS transform scales it to fit.
-        viewer.resize(RENDER_WIDTH, RENDER_HEIGHT);
-
-        if (isCancelledRef.current) return;
-
-        const player = new Player(viewer, {
-          audioEngine: {
-            urlBase: `${window.location.origin}/`,
-          },
-        });
-
-        viewerRef.current = viewer;
-        playerRef.current = player;
-      }
-
-      if (!playerRef.current) {
-        throw new Error('Player initialization failed');
-      }
-
-      setLoadingPhase('Loading song data...');
-
-      const songUrl = await getSongOpenUrl({ publicId: song.publicId });
-      await Promise.resolve(playerRef.current.loadSong(songUrl));
-    } catch (err) {
-      if (!isCancelledRef.current) {
-        setError(err instanceof Error ? err.message : 'Failed to load song');
-      }
-    } finally {
-      if (!isCancelledRef.current) setIsLoading(false);
-    }
-  }, [song.publicId]);
+  const mountRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef.current = node;
+      registerMount(node);
+    },
+    [registerMount],
+  );
 
   useEffect(() => {
-    isCancelledRef.current = false;
-
-    loadSong();
-
-    return () => {
-      isCancelledRef.current = true;
-    };
-  }, [loadSong]);
+    loadSong(song.publicId);
+  }, [loadSong, song.publicId]);
 
   useEffect(() => {
     if (!viewportRef.current || !containerRef.current) return;
@@ -143,7 +89,7 @@ export const PlayerComponent = ({
         }}
       >
         <div
-          ref={containerRef}
+          ref={mountRef}
           style={{
             position: 'absolute',
             left: '50%',
@@ -175,7 +121,7 @@ export const PlayerComponent = ({
       <button
         type='button'
         onClick={() => {
-          playerRef.current?.togglePlayback();
+          togglePlayback();
         }}
         style={{
           position: 'absolute',

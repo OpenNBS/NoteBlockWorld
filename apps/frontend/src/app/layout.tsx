@@ -14,6 +14,7 @@ import { WebSite, WithContext } from 'schema-dts';
 import DetectAdBlock from '../modules/shared/components/client/ads/DetectAdBlock';
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
+import { SongPlayerProvider } from '../modules/song/components/client/context/SongPlayer.context';
 
 // Pre-import FontAwesome CSS to avoid FOUC
 // See: https://fontawesome.com/docs/web/use-with/react/use-with#nextjs
@@ -120,9 +121,11 @@ export default function RootLayout({
             baseColor='rgb(39 39 42)'
             highlightColor='rgb(63 63 70)'
           >
-            <TooltipProvider delayDuration={0} skipDelayDuration={0}>
-              <NuqsAdapter>{children}</NuqsAdapter>
-            </TooltipProvider>
+            <SongPlayerProvider>
+              <TooltipProvider delayDuration={0} skipDelayDuration={0}>
+                <NuqsAdapter>{children}</NuqsAdapter>
+              </TooltipProvider>
+            </SongPlayerProvider>
           </SkeletonTheme>
           <DetectAdBlock />
         </body>
