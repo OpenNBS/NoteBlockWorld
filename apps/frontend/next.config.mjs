@@ -4,6 +4,23 @@ import createMDX from '@next/mdx';
 
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+        ],
+      },
+    ];
+  },
   // Externalize packages that use Node.js built-in modules for server components
   serverExternalPackages: ['@nbw/database', '@nbw/config'],
   // See: https://github.com/Automattic/node-canvas/issues/867#issuecomment-1925284985
