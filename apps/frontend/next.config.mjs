@@ -36,6 +36,13 @@ const nextConfig = {
       config.externals.push('@nbw/thumbnail', '@nbw/database');
     }
 
+    // Handle audio assets from @opennbs/nbsvis as static files
+    config.module.rules.push({
+      test: /\.(ogg|mp3|wav)$/i,
+      include: /node_modules[\\/]@opennbs[\\/]nbsvis[\\/]/,
+      type: 'asset/resource',
+    });
+
     return config;
   },
   images: {
