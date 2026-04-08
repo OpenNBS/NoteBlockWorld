@@ -14,6 +14,7 @@ import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import { formatTimeAgo } from '@web/modules/shared/util/format';
 
 import { LicenseInfo } from './client/LicenseInfo';
+import { PlayerComponent } from './Player';
 import { SongDetails } from './SongDetails';
 import {
   DownloadSongButton,
@@ -84,16 +85,20 @@ export async function SongPage({ id }: { id: string }) {
         <div className='col-span-full lg:col-span-5 flex flex-col gap-4'>
           {/* Song thumbnail */}
           {/* TODO: implement loading https://github.com/vercel/next.js/discussions/50617 */}
-          <picture className='bg-zinc-800 aspect-5/3 rounded-xl'>
+          <div className='relative bg-zinc-800 aspect-5/3 rounded-xl overflow-hidden'>
             <Image
               unoptimized={isLocalhost}
               alt='Song thumbnail'
-              width={1280}
-              height={720}
               src={song.thumbnailUrl}
-              className='w-full h-full rounded-xl'
+              fill
+              className='object-cover'
             />
-          </picture>
+            <div className='absolute inset-0'>
+              <PlayerComponent song={song}>
+                <></>
+              </PlayerComponent>
+            </div>
+          </div>
 
           <div className='text-xl font-bold inline'>
             <h1 className='inline'>{song.title}</h1>
