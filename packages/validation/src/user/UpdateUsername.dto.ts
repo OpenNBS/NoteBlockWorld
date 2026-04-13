@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { USER_CONSTANTS } from '@nbw/config';
+import { USER_CONSTANTS } from '../config-shim.js';
 
 export const updateUsernameDtoSchema = z.object({
   username: z

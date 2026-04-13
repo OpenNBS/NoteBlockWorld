@@ -20,8 +20,9 @@ export const songListQueryDTOSchema = z.object({
   order: z.nativeEnum(SongOrderType).optional().default(SongOrderType.DESC),
   category: z.string().optional(),
   uploader: z.string().optional(),
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(10),
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
 });
 
-export type SongListQueryDTO = z.infer<typeof songListQueryDTOSchema>;
+export type SongListQueryDTO = z.output<typeof songListQueryDTOSchema>;
+export type SongListQueryInput = z.input<typeof songListQueryDTOSchema>;

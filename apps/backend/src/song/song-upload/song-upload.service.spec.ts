@@ -1,11 +1,7 @@
 import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 import type { UserDocument } from '@nbw/database';
-import {
-  SongDocument,
-  Song as SongEntity,
-  ThumbnailData,
-  UploadSongDto,
-} from '@nbw/database';
+import { SongDocument, Song as SongEntity } from '@nbw/database';
+import type { ThumbnailData, UploadSongDto } from '@nbw/validation';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, jest, mock, spyOn } from 'bun:test';
