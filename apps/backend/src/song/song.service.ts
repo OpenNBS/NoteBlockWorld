@@ -10,21 +10,30 @@ import { Model } from 'mongoose';
 
 import { BROWSER_SONGS } from '@nbw/config';
 import {
-  UserDocument,
-  PageQueryDTO,
   Song as SongEntity,
-  SongPageDto,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
   type SongWithUser,
+  UserDocument,
 } from '@nbw/database';
+import {
+  pageQueryDTOSchema,
+  type PageQueryInput,
+  type SongPageDto,
+  type SongPreviewDto,
+  type SongViewDto,
+  type UploadSongDto,
+  type UploadSongResponseDto,
+} from '@nbw/validation';
 import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
-import { removeExtraSpaces } from './song.util';
+import {
+  removeExtraSpaces,
+  songPreviewFromSongDocumentWithUser,
+  songViewDtoFromSongDocument,
+  uploadSongDtoFromSongDocument,
+  uploadSongResponseDtoFromSongWithUser,
+} from './song.util';
 
 @Injectable()
 export class SongService {
@@ -82,7 +91,7 @@ export class SongService {
     // Save song document
     await songDocument.save();
 
-    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
+    return uploadSongResponseDtoFromSongWithUser(populatedSong);
   }
 
   public async deleteSong(
@@ -112,7 +121,7 @@ export class SongService {
 
     await this.songWebhookService.deleteSongWebhook(populatedSong);
 
-    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
+    return uploadSongResponseDtoFromSongWithUser(populatedSong);
   }
 
   public async patchSong(
@@ -171,20 +180,19 @@ export class SongService {
       'username profileImage -_id',
     )) as unknown as SongWithUser;
 
-    const webhookMessageId = await this.songWebhookService.syncSongWebhook(
+    foundSong.webhookMessageId = await this.songWebhookService.syncSongWebhook(
       populatedSong,
     );
-
-    foundSong.webhookMessageId = webhookMessageId;
 
     // Save song document
     await foundSong.save();
 
-    return UploadSongResponseDto.fromSongWithUserDocument(populatedSong);
+    return uploadSongResponseDtoFromSongWithUser(populatedSong);
   }
 
-  public async getSongByPage(query: PageQueryDTO): Promise<SongPreviewDto[]> {
-    const { page, limit, sort, order } = query;
+  public async getSongByPage(query: PageQueryInput): Promise<SongPreviewDto[]> {
+    const q = pageQueryDTOSchema.parse(query);
+    const { page, limit, sort, order } = q;
 
     if (!page || !limit || !sort) {
       throw new HttpException(
@@ -205,17 +213,18 @@ export class SongService {
       .populate('uploader', 'username publicName profileImage -_id')
       .exec()) as unknown as SongWithUser[];
 
-    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+    return songs.map((song) => songPreviewFromSongDocumentWithUser(song));
   }
 
   public async querySongs(
-    query: PageQueryDTO,
+    query: PageQueryInput,
     q?: string,
     category?: string,
   ): Promise<SongPageDto> {
-    const page = parseInt(query.page?.toString() ?? '1');
-    const limit = parseInt(query.limit?.toString() ?? '10');
-    const descending = query.order ?? true;
+    const parsed = pageQueryDTOSchema.parse(query);
+    const page = parsed.page;
+    const limit = parsed.limit ?? 10;
+    const descending = parsed.order ?? true;
 
     const allowedSorts = new Set([
       'createdAt',
@@ -224,8 +233,8 @@ export class SongService {
       'stats.duration',
       'stats.noteCount',
     ]);
-    const sortField = allowedSorts.has(query.sort ?? '')
-      ? (query.sort as string)
+    const sortField = allowedSorts.has(parsed.sort ?? '')
+      ? (parsed.sort as string)
       : 'createdAt';
 
     const mongoQuery: any = {
@@ -246,14 +255,13 @@ export class SongService {
 
       // Build Google-like search: all words must appear across any of the fields
       if (terms.length > 0) {
-        const andClauses = terms.map((word) => ({
+        mongoQuery.$and = terms.map((word) => ({
           $or: [
             { title: { $regex: word, $options: 'i' } },
             { originalAuthor: { $regex: word, $options: 'i' } },
             { description: { $regex: word, $options: 'i' } },
           ],
         }));
-        mongoQuery.$and = andClauses;
       }
     }
 
@@ -271,9 +279,7 @@ export class SongService {
     ]);
 
     return {
-      content: songs.map((song) =>
-        SongPreviewDto.fromSongDocumentWithUser(song),
-      ),
+      content: songs.map((song) => songPreviewFromSongDocumentWithUser(song)),
       page,
       limit,
       total,
@@ -339,7 +345,9 @@ export class SongService {
       'username profileImage -_id',
     );
 
-    return SongViewDto.fromSongDocument(populatedSong);
+    return songViewDtoFromSongDocument(
+      populatedSong as unknown as SongWithUser,
+    );
   }
 
   // TODO: service should not handle HTTP -> https://www.reddit.com/r/node/comments/uoicw1/should_i_return_status_code_from_service_layer/
@@ -397,13 +405,14 @@ export class SongService {
     query,
     user,
   }: {
-    query: PageQueryDTO;
+    query: PageQueryInput;
     user: UserDocument;
   }): Promise<SongPageDto> {
-    const page = parseInt(query.page?.toString() ?? '1');
-    const limit = parseInt(query.limit?.toString() ?? '10');
-    const order = query.order ? query.order : false;
-    const sort = query.sort ? query.sort : 'recent';
+    const q = pageQueryDTOSchema.parse(query);
+    const page = q.page;
+    const limit = q.limit ?? 10;
+    const order = q.order ?? false;
+    const sort = q.sort ?? 'recent';
 
     const songData = (await this.songModel
       .find({
@@ -421,7 +430,7 @@ export class SongService {
 
     return {
       content: songData.map((song) =>
-        SongPreviewDto.fromSongDocumentWithUser(song),
+        songPreviewFromSongDocumentWithUser(song),
       ),
       page: page,
       limit: limit,
@@ -445,7 +454,7 @@ export class SongService {
       throw new HttpException('Song not found', HttpStatus.UNAUTHORIZED);
     }
 
-    return UploadSongDto.fromSongDocument(foundSong);
+    return uploadSongDtoFromSongDocument(foundSong);
   }
 
   public async getCategories(): Promise<Record<string, number>> {
@@ -511,6 +520,6 @@ export class SongService {
       select: 'username profileImage -_id',
     });
 
-    return songs.map((song) => SongPreviewDto.fromSongDocumentWithUser(song));
+    return songs.map((song) => songPreviewFromSongDocumentWithUser(song));
   }
 }

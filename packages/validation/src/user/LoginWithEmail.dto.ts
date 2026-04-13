@@ -5,3 +5,8 @@ export const loginWithEmailDtoSchema = z.object({
 });
 
 export type LoginWithEmailDto = z.infer<typeof loginWithEmailDtoSchema>;
+
+/** @deprecated Use loginWithEmailDtoSchema */
+export const loginDtoSchema = loginWithEmailDtoSchema;
+/** @deprecated Use LoginWithEmailDto */
+export type LoginDto = LoginWithEmailDto;

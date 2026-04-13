@@ -1,6 +1,5 @@
+import type { DiscordStrategyConfig } from '@nbw/validation';
 import { VerifyFunction } from 'passport-oauth2';
-
-import { DiscordStrategyConfig } from './DiscordStrategyConfig';
 import DiscordStrategy from './Strategy';
 import { DiscordPermissionScope, Profile } from './types';
 
@@ -42,15 +41,14 @@ describe('DiscordStrategy', () => {
       prompt: 'consent',
     };
 
-    await expect(strategy['validateConfig'](config)).resolves.toBeUndefined();
+    expect(() => strategy['validateConfig'](config)).not.toThrow();
   });
 
   it('should make API request', async () => {
-    const mockGet = jest.fn((url, accessToken, callback) => {
-      callback(null, JSON.stringify({ id: '123' }));
+    strategy['_oauth2'].get = jest.fn((url, accessToken, callback) => {
+      // oauth2 `dataCallback` typings omit `null`; runtime passes null on success.
+      callback(null as never, JSON.stringify({ id: '123' }));
     });
-
-    strategy['_oauth2'].get = mockGet;
 
     const result = await strategy['makeApiRequest']<{ id: string }>(
       'https://discord.com/api/users/@me',

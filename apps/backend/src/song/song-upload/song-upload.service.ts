@@ -10,20 +10,18 @@ import { Types } from 'mongoose';
 
 import {
   CURRENT_SONG_SCHEMA_VERSION,
-  SongDocument,
   Song as SongEntity,
-  SongStats,
-  ThumbnailData,
-  UploadSongDto,
-  UserDocument,
+  SongDocument,
+  type UserDocument,
 } from '@nbw/database';
+import type { SongStats, ThumbnailData, UploadSongDto } from '@nbw/validation';
 import {
-  NoteQuadTree,
-  SongStatsGenerator,
-  UnsupportedNbsVersionError,
   injectSongFileMetadata,
   loadNbsFromBuffer,
+  NoteQuadTree,
   obfuscateAndPackSong,
+  SongStatsGenerator,
+  UnsupportedNbsVersionError,
 } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail/node';
 import { FileService } from '@server/file/file.service';
@@ -128,11 +126,9 @@ export class SongUploadService {
       songStats.instrumentNoteCounts.length -
       songStats.firstCustomInstrumentIndex;
 
-    const paddedInstruments = body.customInstruments.concat(
+    song.customInstruments = body.customInstruments.concat(
       Array(customInstrumentCount - body.customInstruments.length).fill(''),
     );
-
-    song.customInstruments = paddedInstruments;
     song.thumbnailData = body.thumbnailData;
     song.thumbnailUrl = thumbUrl;
     song.nbsFileUrl = fileKey; // s3File.Location;
@@ -195,7 +191,7 @@ export class SongUploadService {
     );
 
     // Create song document
-    const song = await this.generateSongDocument(
+    return await this.generateSongDocument(
       user,
       publicId,
       body,
@@ -205,8 +201,6 @@ export class SongUploadService {
       songStats,
       file,
     );
-
-    return song;
   }
 
   public async processSongPatch(
@@ -321,13 +315,7 @@ export class SongUploadService {
 
     this.validateCustomInstruments(soundsArray, validSoundsSubset);
 
-    const packedSongBuffer = await obfuscateAndPackSong(
-      nbsSong,
-      soundsArray,
-      soundsMapping,
-    );
-
-    return packedSongBuffer;
+    return await obfuscateAndPackSong(nbsSong, soundsArray, soundsMapping);
   }
 
   private validateCustomInstruments(

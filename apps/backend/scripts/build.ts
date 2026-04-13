@@ -51,9 +51,6 @@ const build = async () => {
   await Bun.$`rm -rf dist`;
 
   const optionalRequirePackages = [
-    'class-transformer',
-    'class-transformer/storage',
-    'class-validator',
     '@nestjs/microservices',
     '@nestjs/websockets',
     '@fastify/static',
@@ -76,8 +73,11 @@ const build = async () => {
       }),
       '@nbw/config',
       '@nbw/database',
+      '@nbw/validation',
       '@nbw/song',
       '@nbw/sounds',
+      // @nestjs/swagger → @nestjs/mapped-types requires class-transformer metadata storage; bundler mis-resolves subpaths
+      'class-transformer',
     ],
     splitting: true,
   });

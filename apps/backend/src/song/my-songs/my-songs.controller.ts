@@ -2,9 +2,10 @@ import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { PageQueryDTO, SongPageDto } from '@nbw/database';
 import type { UserDocument } from '@nbw/database';
+import type { SongPageDto } from '@nbw/validation';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+import { PageQueryDto } from '@server/zod-dto';
 
 import { SongService } from '../song.service';
 
@@ -24,7 +25,7 @@ export class MySongsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt-refresh'))
   public async getMySongsPage(
-    @Query() query: PageQueryDTO,
+    @Query() query: PageQueryDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongPageDto> {
     user = validateUser(user);

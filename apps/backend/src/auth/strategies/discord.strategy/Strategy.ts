@@ -1,6 +1,8 @@
 import { Logger } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
+import {
+  discordStrategyConfigSchema,
+  type DiscordStrategyConfig,
+} from '@nbw/validation';
 import {
   InternalOAuthError,
   Strategy as OAuth2Strategy,
@@ -8,8 +10,6 @@ import {
   VerifyCallback,
   VerifyFunction,
 } from 'passport-oauth2';
-
-import { DiscordStrategyConfig } from './DiscordStrategyConfig';
 import {
   Profile,
   ProfileConnection,
@@ -47,20 +47,19 @@ export default class Strategy extends OAuth2Strategy {
     );
 
     this.validateConfig(options);
-    this.scope = options.scope;
+    this.scope = options.scope as ScopeType;
     this.scopeDelay = options.scopeDelay ?? 0;
     this.fetchScopeEnabled = options.fetchScope ?? true;
     this._oauth2.useAuthorizationHeaderforGET(true);
     this.prompt = options.prompt;
   }
 
-  private async validateConfig(config: DiscordStrategyConfig): Promise<void> {
+  private validateConfig(config: DiscordStrategyConfig): void {
     try {
-      const validatedConfig = plainToClass(DiscordStrategyConfig, config);
-      await validateOrReject(validatedConfig);
-    } catch (errors) {
-      this.logger.error(errors);
-      throw new Error(`Configuration validation failed: ${errors}`);
+      discordStrategyConfigSchema.parse(config);
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(`Configuration validation failed: ${String(error)}`);
     }
   }
 

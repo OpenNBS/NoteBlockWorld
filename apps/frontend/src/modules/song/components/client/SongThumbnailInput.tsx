@@ -11,7 +11,7 @@ import {
 } from '@web/modules/shared/components/tooltip';
 
 import { useSongProvider } from './context/Song.context';
-import { EditSongFormInput, UploadSongFormInput } from './SongForm.zod';
+import { EditSongFormInput, UploadSongFormInput } from '@nbw/validation';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 
 const formatZoomLevel = (zoomLevel: number) => {

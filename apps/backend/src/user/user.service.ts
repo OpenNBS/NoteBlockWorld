@@ -1,16 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 
-import { CreateUser, PageQueryDTO, User, UserDocument } from '@nbw/database';
+import { User, UserDocument } from '@nbw/database';
+import {
+  type CreateUser,
+  createUserSchema,
+  pageQueryDTOSchema,
+  type PageQueryInput,
+} from '@nbw/validation';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   public async create(user_registered: CreateUser) {
-    await validate(user_registered);
+    createUserSchema.parse(user_registered);
     const user = await this.userModel.create(user_registered);
     user.username = user_registered.username;
     user.email = user_registered.email;
@@ -48,46 +53,40 @@ export class UserService {
       email.split('@')[0],
     );
 
-    const user = await this.userModel.create({
+    return await this.userModel.create({
       email: email,
       username: emailPrefixUsername,
       publicName: emailPrefixUsername,
     });
-
-    return user;
   }
 
   public async findByEmail(email: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ email }).exec();
-
-    return user;
+    return await this.userModel.findOne({ email }).exec();
   }
 
   public async findByID(objectID: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findById(objectID).exec();
-
-    return user;
+    return await this.userModel.findById(objectID).exec();
   }
 
   public async findByPublicName(
     publicName: string,
   ): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ publicName });
-
-    return user;
+    return await this.userModel.findOne({ publicName });
   }
 
   public async findByUsername(username: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ username });
-
-    return user;
+    return await this.userModel.findOne({ username });
   }
 
-  public async getUserPaginated(query: PageQueryDTO) {
-    const { page = 1, limit = 10, sort = 'createdAt', order = 'asc' } = query;
+  public async getUserPaginated(query: PageQueryInput) {
+    const q = pageQueryDTOSchema.parse(query);
+    const page = q.page;
+    const limit = q.limit ?? 10;
+    const sort = q.sort;
+    const descending = q.order ?? false;
 
     const skip = (page - 1) * limit;
-    const sortOrder = order === 'asc' ? 1 : -1;
+    const sortOrder = descending ? -1 : 1;
 
     const users = await this.userModel
       .find({})
@@ -106,12 +105,7 @@ export class UserService {
   }
 
   public async getHydratedUser(user: UserDocument) {
-    const hydratedUser = await this.userModel
-      .findById(user._id)
-      .populate('songs')
-      .exec();
-
-    return hydratedUser;
+    return await this.userModel.findById(user._id).populate('songs').exec();
   }
 
   public async usernameExists(username: string) {

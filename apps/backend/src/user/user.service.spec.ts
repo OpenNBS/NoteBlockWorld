@@ -1,8 +1,9 @@
-import { CreateUser, PageQueryDTO, User, UserDocument } from '@nbw/database';
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+
+import { User, UserDocument } from '@nbw/database';
+import { type CreateUser, type PageQueryInput } from '@nbw/validation';
 
 import { UserService } from './user.service';
 
@@ -45,7 +46,7 @@ describe('UserService', () => {
       const createUserDto: CreateUser = {
         username: 'testuser',
         email: 'test@example.com',
-        profileImage: 'testimage.png',
+        profileImage: 'https://example.com/testimage.png',
       };
 
       const user = {
@@ -97,7 +98,12 @@ describe('UserService', () => {
 
   describe('getUserPaginated', () => {
     it('should return paginated users', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: PageQueryInput = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: false,
+      };
       const users = [{ username: 'testuser' }] as UserDocument[];
 
       const usersPage = {
