@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-import { SongStats, ThumbnailData } from '@nbw/validation';
 import type {
-  SongViewUploader,
   CategoryType,
   LicenseType,
+  SongStats,
+  SongViewUploader,
+  ThumbnailData,
   VisibilityType,
 } from '@nbw/validation';
 

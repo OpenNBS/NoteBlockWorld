@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { TIMESPANS } from '@nbw/config';
+import { TIMESPANS } from '../config-shim.js';
 
 export const pageQueryDTOSchema = z.object({
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional(),
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
   sort: z.string().optional().default('createdAt'),
   order: z
     .union([z.boolean(), z.string().transform((val) => val === 'true')])
@@ -13,4 +13,7 @@ export const pageQueryDTOSchema = z.object({
   timespan: z.enum(TIMESPANS as unknown as [string, ...string[]]).optional(),
 });
 
-export type PageQueryDTO = z.infer<typeof pageQueryDTOSchema>;
+/** Parsed query (defaults applied). */
+export type PageQueryDTO = z.output<typeof pageQueryDTOSchema>;
+/** Raw query / pre-parse shape (e.g. Nest `@Query()`). */
+export type PageQueryInput = z.input<typeof pageQueryDTOSchema>;
