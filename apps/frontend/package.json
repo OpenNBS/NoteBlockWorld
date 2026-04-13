@@ -18,6 +18,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@nbw/config": "workspace:*",
+    "@nbw/validation": "workspace:*",
     "@nbw/database": "workspace:*",
     "@nbw/song": "workspace:*",
     "@nbw/thumbnail": "workspace:*",

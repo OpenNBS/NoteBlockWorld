@@ -1,4 +1,4 @@
-import { TIMESPANS, UPLOAD_CONSTANTS } from '@nbw/config';
+import { TIMESPANS, UPLOAD_CONSTANTS } from '../config-shim.js';
 
 import type { CustomInstrumentData } from './CustomInstrumentData.dto';
 import type { FeaturedSongsDto } from './FeaturedSongsDto.dto';

@@ -1,9 +1,10 @@
 import type { UserDocument } from '@nbw/database';
-import { PageQueryDTO, SongPageDto } from '@nbw/database';
+import { type PageQueryInput, type SongPageDto } from '@nbw/validation';
 import { HttpException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import type { PageQueryDto } from '../../zod-dto';
 import { SongService } from '../song.service';
 import { MySongsController } from './my-songs.controller';
 
@@ -39,7 +40,7 @@ describe('MySongsController', () => {
 
   describe('getMySongsPage', () => {
     it('should return a list of songs uploaded by the current authenticated user', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: PageQueryInput = { page: 1, limit: 10 };
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
 
       const songPageDto: SongPageDto = {
@@ -51,31 +52,34 @@ describe('MySongsController', () => {
 
       mockSongService.getMySongsPage.mockResolvedValueOnce(songPageDto);
 
-      const result = await controller.getMySongsPage(query, user);
+      const result = await controller.getMySongsPage(
+        query as PageQueryDto,
+        user,
+      );
 
       expect(result).toEqual(songPageDto);
       expect(songService.getMySongsPage).toHaveBeenCalledWith({ query, user });
     });
 
     it('should handle thrown an exception if userDocument is null', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: PageQueryInput = { page: 1, limit: 10 };
       const user = null;
 
-      await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
-        HttpException,
-      );
+      await expect(
+        controller.getMySongsPage(query as PageQueryDto, user),
+      ).rejects.toThrow(HttpException);
     });
 
     it('should handle exceptions', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: PageQueryInput = { page: 1, limit: 10 };
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
       const error = new Error('Test error');
 
       mockSongService.getMySongsPage.mockRejectedValueOnce(error);
 
-      await expect(controller.getMySongsPage(query, user)).rejects.toThrow(
-        'Test error',
-      );
+      await expect(
+        controller.getMySongsPage(query as PageQueryDto, user),
+      ).rejects.toThrow('Test error');
     });
   });
 });

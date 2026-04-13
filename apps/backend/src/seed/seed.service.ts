@@ -9,14 +9,13 @@ import {
 } from '@nestjs/common';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import {
+import { SongDocument, type UserDocument } from '@nbw/database';
+import type {
   CategoryType,
   LicenseType,
-  SongDocument,
   UploadSongDto,
-  UserDocument,
   VisibilityType,
-} from '@nbw/database';
+} from '@nbw/validation';
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
 

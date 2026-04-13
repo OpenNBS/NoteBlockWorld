@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { UPLOAD_CONSTANTS } from '@nbw/config';
+import { UPLOAD_CONSTANTS } from '../config-shim.js';
 
 import { thumbnailDataSchema } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './types';
