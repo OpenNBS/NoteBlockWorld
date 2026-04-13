@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
@@ -13,15 +12,15 @@ import {
 import toaster from 'react-hot-toast';
 import { undefined as zodUndefined } from 'zod';
 
-import type { UploadSongDto } from '@nbw/database';
 import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
-import axiosInstance from '@web/lib/axios';
-import { getTokenLocal } from '@web/lib/axios/token.utils';
+import type { UploadSongDto } from '@nbw/validation';
 import {
   EditSongFormInput,
   EditSongFormOutput,
   editSongFormSchema,
-} from '@web/modules/song/components/client/SongForm.zod';
+} from '@nbw/validation';
+import axiosInstance from '@web/lib/axios';
+import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 export type useEditSongProviderType = {
   formMethods: UseFormReturn<EditSongFormInput>;

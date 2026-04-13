@@ -7,18 +7,20 @@ import {
   Inject,
   Patch,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 import type { UserDocument } from '@nbw/database';
-import {
-  GetUser,
-  PageQueryDTO,
-  UpdateUsernameDto,
-  UserDto,
-} from '@nbw/database';
+import type { UserDto } from '@nbw/validation';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
+import {
+  UpdateUsernameBodyDto,
+  userIndexQuerySchema,
+  type UserIndexQueryDto,
+} from '../zod-dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -31,7 +33,13 @@ export class UserController {
   @Get()
   @ApiTags('user')
   @ApiBearerAuth()
-  async getUser(@Query() query: GetUser) {
+  @UsePipes(new ZodValidationPipe(userIndexQuerySchema))
+  async getUserIndex(@Query() query: UserIndexQueryDto) {
+    if (query.mode === 'paginated') {
+      const { mode: _mode, ...pageQuery } = query;
+      return await this.userService.getUserPaginated(pageQuery);
+    }
+
     const { email, id, username } = query;
 
     if (email) {
@@ -53,13 +61,6 @@ export class UserController {
       'You must provide an email or an id',
       HttpStatus.BAD_REQUEST,
     );
-  }
-
-  @Get()
-  @ApiTags('user')
-  @ApiBearerAuth()
-  async getUserPaginated(@Query() query: PageQueryDTO) {
-    return await this.userService.getUserPaginated(query);
   }
 
   @Get('me')
@@ -106,7 +107,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update the username' })
   async updateUsername(
     @GetRequestToken() user: UserDocument | null,
-    @Body() body: UpdateUsernameDto,
+    @Body() body: UpdateUsernameBodyDto,
   ) {
     user = validateUser(user);
     let { username } = body;
@@ -128,6 +129,11 @@ export class UserController {
 
     await user.save();
 
-    return UserDto.fromEntity(user);
+    const dto: UserDto = {
+      username: user.username,
+      publicName: user.publicName,
+      email: user.email,
+    };
+    return dto;
   }
 }
