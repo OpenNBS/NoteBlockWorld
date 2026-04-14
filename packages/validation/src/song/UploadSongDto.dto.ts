@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { jsonStringField } from '../common/jsonStringField.js';
 import { UPLOAD_CONSTANTS } from '../config-shim.js';
 
 import { thumbnailDataSchema } from './ThumbnailData.dto';
@@ -31,23 +32,11 @@ export const uploadSongDtoSchema = z.object({
     categories as [string, ...string[]],
   ) as z.ZodType<CategoryType>,
   thumbnailData: z
-    .union([
-      thumbnailDataSchema,
-      z
-        .string()
-        .transform((val) => JSON.parse(val))
-        .pipe(thumbnailDataSchema),
-    ])
+    .union([thumbnailDataSchema, jsonStringField(thumbnailDataSchema)])
     .pipe(thumbnailDataSchema),
   license: z.enum(licenses as [string, ...string[]]) as z.ZodType<LicenseType>,
   customInstruments: z
-    .union([
-      z.array(z.string()),
-      z
-        .string()
-        .transform((val) => JSON.parse(val))
-        .pipe(z.array(z.string())),
-    ])
+    .union([z.array(z.string()), jsonStringField(z.array(z.string()))])
     .pipe(z.array(z.string()).max(UPLOAD_CONSTANTS.customInstruments.maxCount)),
 });
 
