@@ -16,13 +16,12 @@ export enum SongOrderType {
 
 export const songListQueryDTOSchema = z.object({
   q: z.string().optional(),
-  sort: z.nativeEnum(SongSortType).optional().default(SongSortType.RECENT),
-  order: z.nativeEnum(SongOrderType).optional().default(SongOrderType.DESC),
+  sort: z.enum(SongSortType).optional().default(SongSortType.RECENT),
+  order: z.enum(SongOrderType).optional().default(SongOrderType.DESC),
   category: z.string().optional(),
   uploader: z.string().optional(),
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(10),
 });
 
-export type SongListQueryDTO = z.output<typeof songListQueryDTOSchema>;
 export type SongListQueryInput = z.input<typeof songListQueryDTOSchema>;

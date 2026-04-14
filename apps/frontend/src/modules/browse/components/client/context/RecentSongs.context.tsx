@@ -3,11 +3,11 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 
-import type { PageDto, SongPreviewDtoType } from '@nbw/database';
+import type { PageDto, SongPreviewDto } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 interface RecentSongsState {
-  recentSongs: (SongPreviewDtoType | null | undefined)[];
+  recentSongs: (SongPreviewDto | null | undefined)[];
   recentError: string;
   isLoading: boolean;
   hasMore: boolean;
@@ -17,7 +17,7 @@ interface RecentSongsState {
 }
 
 interface RecentSongsActions {
-  initialize: (initialRecentSongs: SongPreviewDtoType[]) => void;
+  initialize: (initialRecentSongs: SongPreviewDto[]) => void;
   setSelectedCategory: (category: string) => void;
   increasePageRecent: () => Promise<void>;
   fetchRecentSongs: () => Promise<void>;
@@ -31,9 +31,9 @@ const pageSize = 12;
 const fetchCount = pageSize - adCount;
 
 function injectAdSlots(
-  songs: SongPreviewDtoType[],
-): Array<SongPreviewDtoType | undefined> {
-  const songsWithAds: Array<SongPreviewDtoType | undefined> = [...songs];
+  songs: SongPreviewDto[],
+): Array<SongPreviewDto | undefined> {
+  const songsWithAds: Array<SongPreviewDto | undefined> = [...songs];
 
   for (let i = 0; i < adCount; i++) {
     const adPosition = Math.floor(Math.random() * (songsWithAds.length + 1));
@@ -60,7 +60,7 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => {
         params.category = selectedCategory;
       }
 
-      const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
+      const response = await axiosInstance.get<PageDto<SongPreviewDto>>(
         '/song',
         { params },
       );
@@ -167,7 +167,7 @@ export const useRecentSongsProvider = () => {
 // Provider component for initialization (now just a wrapper)
 type RecentSongsProviderProps = {
   children: React.ReactNode;
-  initialRecentSongs: SongPreviewDtoType[];
+  initialRecentSongs: SongPreviewDto[];
 };
 
 export function RecentSongsProvider({

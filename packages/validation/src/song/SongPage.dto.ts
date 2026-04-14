@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { songPreviewDtoSchema } from './SongPreview.dto';
+import { songPreviewDtoSchema } from './SongPreview.dto.js';
 
 export const songPageDtoSchema = z.object({
   content: z.array(songPreviewDtoSchema),
@@ -10,3 +10,6 @@ export const songPageDtoSchema = z.object({
 });
 
 export type SongPageDto = z.infer<typeof songPageDtoSchema>;
+
+/** Client-side cache of loaded pages keyed by page number. */
+export type SongsFolder = Record<number, SongPageDto>;

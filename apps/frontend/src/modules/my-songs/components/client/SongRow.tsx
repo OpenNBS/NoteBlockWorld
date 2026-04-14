@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import type { SongPreviewDtoType } from '@nbw/database';
+import type { SongPreviewDto } from '@nbw/database';
 import SongThumbnail from '@web/modules/shared/components/layout/SongThumbnail';
 import { formatDuration } from '@web/modules/shared/util/format';
 
@@ -20,7 +20,7 @@ import {
 
 import { useMySongsProvider } from './context/MySongs.context';
 
-export const SongRow = ({ song }: { song?: SongPreviewDtoType | null }) => {
+export const SongRow = ({ song }: { song?: SongPreviewDto | null }) => {
   const { setIsDeleteDialogOpen, setSongToDelete } = useMySongsProvider();
 
   const onDeleteClicked = () => {

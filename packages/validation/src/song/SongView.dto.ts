@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
-import { songStatsSchema } from './SongStats';
-import type { CategoryType, LicenseType, VisibilityType } from './types';
+import { songStatsSchema } from './SongStats.js';
+import type {
+  CategoryType,
+  LicenseType,
+  VisibilityType,
+} from './uploadMeta.js';
 
 export const songViewUploaderSchema = z.object({
   username: z.string(),
@@ -14,7 +18,7 @@ export const songViewDtoSchema = z.object({
   publicId: z.string().min(1),
   createdAt: z.date(),
   uploader: songViewUploaderSchema,
-  thumbnailUrl: z.string().url(),
+  thumbnailUrl: z.url(),
   playCount: z.number().int().min(0),
   downloadCount: z.number().int().min(0),
   likeCount: z.number().int().min(0),

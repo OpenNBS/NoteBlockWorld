@@ -4,5 +4,3 @@ import { z } from 'zod';
 export const songFileQueryDTOSchema = z.object({
   src: z.string(),
 });
-
-export type SongFileQueryDTO = z.output<typeof songFileQueryDTOSchema>;

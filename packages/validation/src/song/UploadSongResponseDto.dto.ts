@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-import { songViewUploaderSchema } from './SongView.dto';
+import { songViewUploaderSchema } from './SongView.dto.js';
 
 export const uploadSongResponseDtoSchema = z.object({
   publicId: z.string().min(1),
   title: z.string().min(1).max(128),
   uploader: songViewUploaderSchema,
-  thumbnailUrl: z.string().url(),
+  thumbnailUrl: z.url(),
   duration: z.number().min(0),
   noteCount: z.number().int().min(0),
 });

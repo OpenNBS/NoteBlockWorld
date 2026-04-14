@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
-import type { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/database';
 import axios from '@web/lib/axios';
 import { SongPage } from '@web/modules/song/components/SongPage';
 
@@ -28,7 +28,7 @@ export async function generateMetadata({
   }
 
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${id}`, {
+    const response = await axios.get<SongViewDto>(`/song/${id}`, {
       headers,
     });
 
