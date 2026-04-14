@@ -1,11 +1,7 @@
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
-import type {
-  PageDto,
-  SongPreviewDtoType,
-  SongViewDtoType,
-} from '@nbw/database';
+import type { PageDto, SongPreviewDto, SongViewDto } from '@nbw/database';
 import axios from '@web/lib/axios';
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
@@ -24,7 +20,7 @@ import {
 } from './SongPageButtons';
 
 export async function SongPage({ id }: { id: string }) {
-  let song: SongViewDtoType;
+  let song: SongViewDto;
 
   // get 'token' cookie from headers
   const cookieStore = await cookies();
@@ -37,7 +33,7 @@ export async function SongPage({ id }: { id: string }) {
   }
 
   try {
-    const response = await axios.get<SongViewDtoType>(`/song/${id}`, {
+    const response = await axios.get<SongViewDto>(`/song/${id}`, {
       headers,
     });
 
@@ -46,10 +42,10 @@ export async function SongPage({ id }: { id: string }) {
     return <ErrorBox message='An error occurred while retrieving the song' />;
   }
 
-  let suggestions: SongPreviewDtoType[] = [];
+  let suggestions: SongPreviewDto[] = [];
 
   try {
-    const response = await axios.get<PageDto<SongPreviewDtoType>>(`/song`, {
+    const response = await axios.get<PageDto<SongPreviewDto>>(`/song`, {
       params: {
         sort: 'random',
         limit: 4,
