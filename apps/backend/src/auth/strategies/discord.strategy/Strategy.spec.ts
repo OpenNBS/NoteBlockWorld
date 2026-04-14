@@ -1,5 +1,7 @@
-import type { DiscordStrategyConfig } from '@nbw/validation';
 import { VerifyFunction } from 'passport-oauth2';
+
+import type { DiscordStrategyConfig } from '@nbw/validation';
+
 import DiscordStrategy from './Strategy';
 import { DiscordPermissionScope, Profile } from './types';
 

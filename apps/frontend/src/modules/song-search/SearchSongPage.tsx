@@ -17,7 +17,7 @@ import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongPreviewDtoType } from '@nbw/database';
+import { SongPreviewDto } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
@@ -64,7 +64,7 @@ const PLACEHOLDER_COUNT = 12;
 const makePlaceholders = () =>
   Array.from({ length: PLACEHOLDER_COUNT }, () => null);
 interface SongSearchState {
-  songs: Array<SongPreviewDtoType | null>;
+  songs: Array<SongPreviewDto | null>;
   loading: boolean;
   hasMore: boolean;
   currentPage: number;
@@ -104,7 +104,7 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
       }
 
       try {
-        const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
+        const response = await axiosInstance.get<PageDto<SongPreviewDto>>(
           '/song',
           { params: { ...params, page: pageNum } },
         );
@@ -387,7 +387,7 @@ const NoResults = () => (
   </div>
 );
 interface SearchResultsProps {
-  songs: Array<SongPreviewDtoType | null>;
+  songs: Array<SongPreviewDto | null>;
   loading: boolean;
   hasMore: boolean;
   onLoadMore: () => void;

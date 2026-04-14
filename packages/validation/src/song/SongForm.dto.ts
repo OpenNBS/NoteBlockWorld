@@ -79,14 +79,7 @@ export const editSongFormSchema = SongFormSchema.extend({
   id: z.string(),
 });
 
-export type ThumbnailDataFormInput = z.input<
-  typeof songFormThumbnailDataSchema
->;
 export type UploadSongFormInput = z.input<typeof uploadSongFormSchema>;
 export type EditSongFormInput = z.input<typeof editSongFormSchema>;
-
-export type ThumbnailDataFormOutput = z.infer<
-  typeof songFormThumbnailDataSchema
->;
 export type UploadSongFormOutput = z.output<typeof uploadSongFormSchema>;
 export type EditSongFormOutput = z.output<typeof editSongFormSchema>;
