@@ -1,6 +1,7 @@
 export * from './auth/DiscordStrategyConfig.dto';
 export * from './config/EnvironmentVariables.dto';
 
+export * from './common/jsonStringField';
 export * from './common/Page.dto';
 export * from './common/PageQuery.dto';
 export * from './common/types';
