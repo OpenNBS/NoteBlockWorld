@@ -1,10 +1,15 @@
 import { z } from 'zod';
 
-import { jsonStringField } from '../common/jsonStringField.js';
+import { jsonStringField } from '@nbw/validation/src';
+
 import { UPLOAD_CONSTANTS } from '../config-shim.js';
 
-import { thumbnailDataSchema } from './ThumbnailData.dto';
-import type { CategoryType, LicenseType, VisibilityType } from './types';
+import { thumbnailDataSchema } from './ThumbnailData.dto.js';
+import type {
+  CategoryType,
+  LicenseType,
+  VisibilityType,
+} from './uploadMeta.js';
 
 const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
   string[]

@@ -4,7 +4,6 @@ export * from './config/EnvironmentVariables.dto';
 export * from './common/jsonStringField';
 export * from './common/Page.dto';
 export * from './common/PageQuery.dto';
-export * from './common/types';
 
 export * from './song/CustomInstrumentData.dto';
 export * from './song/FeaturedSongsDto.dto';
@@ -19,7 +18,7 @@ export * from './song/SongView.dto';
 export * from './song/ThumbnailData.dto';
 export * from './song/UploadSongDto.dto';
 export * from './song/UploadSongResponseDto.dto';
-export * from './song/types';
+export * from './song/uploadMeta';
 
 export * from './user/CreateUser.dto';
 export * from './user/GetUser.dto';
