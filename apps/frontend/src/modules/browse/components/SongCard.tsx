@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import type { SongPreviewDtoType } from '@nbw/database';
+import type { SongPreviewDto } from '@nbw/database';
 import { formatDuration, formatTimeAgo } from '@web/modules/shared/util/format';
 
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
 
-const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
+const SongDataDisplay = ({ song }: { song: SongPreviewDto | null }) => {
   return (
     <div className='flex flex-col gap-2 pb-2 h-full'>
       {/* Song image */}
@@ -66,7 +66,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
   );
 };
 
-const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
+const SongCard = ({ song }: { song: SongPreviewDto | null }) => {
   return !song ? (
     <SongDataDisplay song={song} />
   ) : (

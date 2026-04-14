@@ -14,12 +14,3 @@ export const thumbnailDataSchema = z.object({
 });
 
 export type ThumbnailData = z.infer<typeof thumbnailDataSchema>;
-
-export const getThumbnailDataExample = (): ThumbnailData => {
-  return {
-    zoomLevel: 3,
-    startTick: 0,
-    startLayer: 0,
-    backgroundColor: '#F0F0F0',
-  };
-};

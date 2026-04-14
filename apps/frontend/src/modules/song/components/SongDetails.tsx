@@ -2,14 +2,14 @@ import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import type { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/database';
 import {
   formatDuration,
   formatTimeSpent,
 } from '@web/modules/shared/util/format';
 
 type SongDetailsProps = {
-  song: SongViewDtoType;
+  song: SongViewDto;
 };
 
 const SongDetailsRow = ({ children }: { children: React.ReactNode }) => {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/database';
 import { DownloadPopupAdSlot } from '@web/modules/shared/components/client/ads/AdSlots';
 import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
@@ -13,7 +13,7 @@ export default function DownloadSongModal({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  song: SongViewDtoType;
+  song: SongViewDto;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 
