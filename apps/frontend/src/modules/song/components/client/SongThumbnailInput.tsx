@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS } from '@nbw/config';
+import { EditSongFormInput, UploadSongFormInput } from '@nbw/validation';
 import { cn } from '@web/lib/utils';
 import { Slider } from '@web/modules/shared/components/client/FormElements';
 import {
@@ -11,7 +12,6 @@ import {
 } from '@web/modules/shared/components/tooltip';
 
 import { useSongProvider } from './context/Song.context';
-import { EditSongFormInput, UploadSongFormInput } from '@nbw/validation';
 import { ThumbnailRendererCanvas } from './ThumbnailRenderer';
 
 const formatZoomLevel = (zoomLevel: number) => {
