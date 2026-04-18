@@ -13,13 +13,13 @@ import { create } from 'zustand';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
-import axiosInstance from '@web/lib/axios';
-import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 import {
   UploadSongFormInput,
   UploadSongFormOutput,
   uploadSongFormSchema,
 } from '@nbw/validation';
+import axiosInstance from '@web/lib/axios';
+import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 
 import UploadCompleteModal from '../UploadCompleteModal';
 
