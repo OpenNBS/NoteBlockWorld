@@ -6,7 +6,6 @@ import { UseFormReturn } from 'react-hook-form';
 import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 import { NoteQuadTree } from '@nbw/song';
 import { drawNotesOffscreen, swap } from '@nbw/thumbnail/browser';
-
 import { UploadSongFormInput } from '@nbw/validation';
 
 type ThumbnailRendererCanvasProps = {

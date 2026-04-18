@@ -7,6 +7,8 @@ import { useCallback, useEffect, useState } from 'react';
 import type { PublicProfileDto } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
+import { Button } from '@web/modules/shared/components/ui/button';
+import { Input } from '@web/modules/shared/components/ui/input';
 
 type ProfilePublicNameEditorProps = {
   profile: PublicProfileDto;
@@ -66,12 +68,12 @@ export function ProfilePublicNameEditor({
     <div className='min-w-0'>
       <div className='flex items-center gap-2'>
         {isEditing ? (
-          <input
+          <Input
             type='text'
             value={publicName}
             onChange={(e) => setPublicName(e.target.value)}
             maxLength={100}
-            className='flex-1 min-w-0 text-2xl font-bold text-zinc-100 bg-zinc-900 border border-zinc-600 rounded-lg px-2 py-1'
+            className='flex-1 min-w-0 text-2xl font-bold text-zinc-100 h-auto py-1 border-zinc-600 bg-zinc-900'
             aria-label='Display name'
           />
         ) : (
@@ -80,34 +82,40 @@ export function ProfilePublicNameEditor({
           </h1>
         )}
         {!isEditing && (
-          <button
+          <Button
             type='button'
+            variant='ghost'
+            size='icon'
             onClick={() => setIsEditing(true)}
-            className='text-zinc-500 hover:text-zinc-300 p-1 rounded shrink-0'
+            className='shrink-0 text-zinc-500 hover:bg-transparent hover:text-zinc-300'
             aria-label='Edit display name'
           >
-            <Pencil className='w-5 h-5' />
-          </button>
+            <Pencil className='h-5 w-5' />
+          </Button>
         )}
         {isEditing && (
           <div className='flex gap-1 shrink-0'>
-            <button
+            <Button
               type='button'
+              variant='ghost'
+              size='icon'
               onClick={cancel}
-              className='text-zinc-500 hover:text-zinc-300 p-1 rounded'
+              className='text-zinc-500 hover:bg-transparent hover:text-zinc-300'
               aria-label='Cancel'
             >
-              <X className='w-5 h-5' />
-            </button>
-            <button
+              <X className='h-5 w-5' />
+            </Button>
+            <Button
               type='button'
+              variant='ghost'
+              size='icon'
               onClick={() => void save()}
               disabled={saving || publicName.trim().length === 0}
-              className='text-zinc-500 hover:text-zinc-300 p-1 rounded disabled:opacity-50'
+              className='text-zinc-500 hover:bg-transparent hover:text-zinc-300 disabled:opacity-50'
               aria-label='Save'
             >
-              <Check className='w-5 h-5' />
-            </button>
+              <Check className='h-5 w-5' />
+            </Button>
           </div>
         )}
       </div>
