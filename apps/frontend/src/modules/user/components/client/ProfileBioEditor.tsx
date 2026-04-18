@@ -10,6 +10,10 @@ import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 import { type SocialLinks } from '@web/modules/auth/types/User';
 import { ProfileBioMarkdown } from '@web/modules/shared/components/ProfileBioMarkdown';
+import { Button } from '@web/modules/shared/components/ui/button';
+import { Input } from '@web/modules/shared/components/ui/input';
+import { Label } from '@web/modules/shared/components/ui/label';
+import { Textarea } from '@web/modules/shared/components/ui/textarea';
 
 import { socialKeys, SOCIAL_LINK_ICONS } from './socialKeys';
 
@@ -41,6 +45,9 @@ function cleanSocialLinks(links: SocialLinks): SocialLinks {
   }
   return out;
 }
+
+const fieldInputClass =
+  'border-zinc-600 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500';
 
 export function ProfileBioEditor({ profile, isOwner }: ProfileBioEditorProps) {
   const router = useRouter();
@@ -99,34 +106,40 @@ export function ProfileBioEditor({ profile, isOwner }: ProfileBioEditorProps) {
       <div className='flex items-start justify-between gap-2'>
         <h2 className='text-lg font-semibold text-zinc-200'>About</h2>
         {isOwner && !isEditing && (
-          <button
+          <Button
             type='button'
+            variant='ghost'
+            size='icon'
             onClick={() => setIsEditing(true)}
-            className='text-zinc-500 hover:text-zinc-300 p-1 rounded'
+            className='text-zinc-500 hover:bg-transparent hover:text-zinc-300'
             aria-label='Edit profile'
           >
-            <Pencil className='w-5 h-5' />
-          </button>
+            <Pencil className='h-5 w-5' />
+          </Button>
         )}
         {isOwner && isEditing && (
           <div className='flex gap-1'>
-            <button
+            <Button
               type='button'
+              variant='ghost'
+              size='icon'
               onClick={cancel}
-              className='text-zinc-500 hover:text-zinc-300 p-1 rounded'
+              className='text-zinc-500 hover:bg-transparent hover:text-zinc-300'
               aria-label='Cancel'
             >
-              <X className='w-5 h-5' />
-            </button>
-            <button
+              <X className='h-5 w-5' />
+            </Button>
+            <Button
               type='button'
+              variant='ghost'
+              size='icon'
               onClick={() => void save()}
               disabled={saving}
-              className='text-zinc-500 hover:text-zinc-300 p-1 rounded disabled:opacity-50'
+              className='text-zinc-500 hover:bg-transparent hover:text-zinc-300 disabled:opacity-50'
               aria-label='Save'
             >
-              <Check className='w-5 h-5' />
-            </button>
+              <Check className='h-5 w-5' />
+            </Button>
           </div>
         )}
       </div>
@@ -135,25 +148,30 @@ export function ProfileBioEditor({ profile, isOwner }: ProfileBioEditorProps) {
 
       {isEditing ? (
         <div className='mt-3 flex flex-col gap-4'>
-          <textarea
+          <Textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={12}
-            className='w-full rounded-lg border border-zinc-600 bg-zinc-950 p-3 text-zinc-100 font-mono text-sm'
+            className={`font-mono text-sm min-h-48 ${fieldInputClass}`}
           />
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
             {socialKeys.map((key) => {
               const Icon = SOCIAL_LINK_ICONS[key];
+              const id = `profile-social-${key}`;
               return (
-                <label key={key} className='flex flex-col gap-1 text-sm'>
-                  <span className='text-zinc-400 flex items-center gap-2 capitalize'>
+                <div key={key} className='flex flex-col gap-1 text-sm'>
+                  <Label
+                    htmlFor={id}
+                    className='text-zinc-400 flex items-center gap-2 capitalize font-normal'
+                  >
                     <Icon
                       className='w-4 h-4 shrink-0 text-zinc-500'
                       aria-hidden
                     />
                     {key}
-                  </span>
-                  <input
+                  </Label>
+                  <Input
+                    id={id}
                     type='url'
                     value={socialLinks[key] ?? ''}
                     onChange={(e) =>
@@ -162,10 +180,10 @@ export function ProfileBioEditor({ profile, isOwner }: ProfileBioEditorProps) {
                         [key]: e.target.value,
                       }))
                     }
-                    className='rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-zinc-100'
+                    className={`h-8 px-2 py-1 text-sm ${fieldInputClass}`}
                     placeholder='https://'
                   />
-                </label>
+                </div>
               );
             })}
           </div>
