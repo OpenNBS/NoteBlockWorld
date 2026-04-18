@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
-import { pageQueryDTOSchema } from '@nbw/validation/src';
+import { pageQueryDTOSchema } from '../common/PageQuery.dto.js';
 
-pageQueryDTOSchema.extend({
+export const songSearchQueryDTOSchema = pageQueryDTOSchema.extend({
   q: z.string().optional().default(''),
 });
+
+export type SongSearchQueryInput = z.input<typeof songSearchQueryDTOSchema>;
