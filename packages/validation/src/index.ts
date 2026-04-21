@@ -12,6 +12,7 @@ export * from './song/SongListQuery.dto';
 export * from './song/SongPage.dto';
 export * from './song/SongFileQuery.dto';
 export * from './song/SongSearchQuery.dto';
+export * from './song/SongSearchParams.dto';
 export * from './song/SongPreview.dto';
 export * from './song/SongStats';
 export * from './song/SongView.dto';
