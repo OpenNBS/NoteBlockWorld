@@ -24,7 +24,6 @@ import {
   type UploadSongResponseDto,
 } from '@nbw/validation';
 import { FileService } from '@server/file/file.service';
-import { UserService } from '@server/user/user.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
@@ -52,9 +51,6 @@ export class SongService {
 
     @Inject(SongWebhookService)
     private songWebhookService: SongWebhookService,
-
-    @Inject(UserService)
-    private userService: UserService,
   ) {}
 
   public async getSongById(publicId: string) {
@@ -229,7 +225,6 @@ export class SongService {
     query: PageQueryInput,
     q?: string,
     category?: string,
-    uploaderUsername?: string,
   ): Promise<SongPageDto> {
     const parsed = pageQueryDTOSchema.parse(query);
     const page = parsed.page;
@@ -250,19 +245,6 @@ export class SongService {
     const mongoQuery: any = {
       visibility: 'public',
     };
-
-    if (uploaderUsername) {
-      const uploader = await this.userService.findByUsername(uploaderUsername);
-      if (!uploader) {
-        return {
-          content: [],
-          page,
-          limit,
-          total: 0,
-        };
-      }
-      mongoQuery.uploader = uploader._id;
-    }
 
     // Add category filter if provided
     if (category) {
@@ -365,7 +347,7 @@ export class SongService {
 
     const populatedSong = await foundSong.populate(
       'uploader',
-      'username profileImage',
+      'username profileImage -_id',
     );
 
     return songViewDtoFromSongDocument(
