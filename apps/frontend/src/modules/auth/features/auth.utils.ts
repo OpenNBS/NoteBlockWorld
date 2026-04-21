@@ -33,22 +33,6 @@ export const checkLogin = async () => {
   }
 };
 
-/** Returns the logged-in user id from the session cookie, or null if absent/invalid. */
-export async function getViewerUserId(): Promise<string | null> {
-  const token = await getTokenServer();
-  if (!token?.value) return null;
-  try {
-    const res = await axiosInstance.get('/user/me', {
-      headers: {
-        authorization: `Bearer ${token.value}`,
-      },
-    });
-    return (res.data as LoggedUserData).id;
-  } catch {
-    return null;
-  }
-}
-
 export const getUserData = async (): Promise<LoggedUserData | never> => {
   // get token from cookies
   const token = await getTokenServer();

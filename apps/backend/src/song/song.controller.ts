@@ -145,12 +145,11 @@ export class SongController {
       order: isDescending ? 'desc' : 'asc',
     };
 
-    // Query songs with optional search, category, and uploader filters
+    // Query songs with optional search and category filters
     const result = await this.songService.querySongs(
       pageQuery,
       query.q,
       query.category,
-      query.uploader,
     );
 
     return {

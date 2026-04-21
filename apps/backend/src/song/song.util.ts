@@ -58,16 +58,11 @@ export function uploadSongResponseDtoFromSongWithUser(
 }
 
 export function songViewDtoFromSongDocument(song: SongWithUser): SongViewDto {
-  const uploaderDoc = song.uploader as SongWithUser['uploader'] & {
-    _id?: { toString(): string };
-  };
-  const uploaderId = uploaderDoc._id?.toString() ?? '';
-
   return {
     publicId: song.publicId,
     createdAt: song.createdAt,
     uploader: {
-      id: uploaderId,
+      id: song.uploader.id,
       username: song.uploader.username,
       profileImage: song.uploader.profileImage,
     },
