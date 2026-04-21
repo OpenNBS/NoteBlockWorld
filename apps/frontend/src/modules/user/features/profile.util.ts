@@ -3,6 +3,7 @@ import type {
   PublicProfileDto,
   SongPreviewDto,
 } from '@nbw/validation';
+
 import axiosInstance from '@web/lib/axios';
 
 /** Profile URL uses normalized `username` (same rules as account username). */
