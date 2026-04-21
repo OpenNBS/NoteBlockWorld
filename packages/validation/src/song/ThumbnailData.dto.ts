@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { THUMBNAIL_CONSTANTS } from '../config-shim.js';
+import { THUMBNAIL_CONSTANTS } from '@nbw/config';
 
 export const thumbnailDataSchema = z.object({
   zoomLevel: z
