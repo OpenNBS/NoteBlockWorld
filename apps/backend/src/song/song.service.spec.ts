@@ -539,7 +539,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: true,
+        order: 'asc' as const,
       };
 
       const songList: SongWithUser[] = [];
@@ -572,7 +572,12 @@ describe('SongService', () => {
     });
 
     it('should throw an error if the query is invalid', async () => {
-      const query = { page: -1, limit: 10, sort: 'createdAt', order: true };
+      const query = {
+        page: -1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc' as const,
+      };
 
       await expect(service.getSongByPage(query as any)).rejects.toThrow();
     });
@@ -842,7 +847,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: true,
+        order: 'asc' as const,
       };
 
       const user: UserDocument = { _id: 'test-user-id' } as UserDocument;
@@ -989,7 +994,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'stats.duration',
-        order: false,
+        order: 'asc' as const,
       };
       const category = 'pop';
       const songList: SongWithUser[] = [];
@@ -1047,7 +1052,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: true,
+        order: 'desc' as const,
       };
       const songList: SongWithUser[] = [];
 
@@ -1077,7 +1082,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'playCount',
-        order: false,
+        order: 'asc' as const,
       };
       const searchTerm = 'test song';
       const category = 'rock';
@@ -1121,7 +1126,7 @@ describe('SongService', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: true,
+        order: 'desc' as const,
       };
       const uploaderId = new mongoose.Types.ObjectId();
       mockUserService.findByUsername.mockResolvedValue({
@@ -1151,7 +1156,12 @@ describe('SongService', () => {
     });
 
     it('should return empty page when uploader username not found', async () => {
-      const query = { page: 1, limit: 10, sort: 'createdAt', order: true };
+      const query = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'desc' as const,
+      };
       mockUserService.findByUsername.mockResolvedValue(null);
 
       const result = await service.querySongs(
