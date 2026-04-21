@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import { jsonStringField } from '@nbw/validation/src';
+
+import { jsonStringField } from '../common/jsonStringField';
 
 import { thumbnailDataSchema } from './ThumbnailData.dto';
 import type { CategoryType, LicenseType, VisibilityType } from './uploadMeta';
