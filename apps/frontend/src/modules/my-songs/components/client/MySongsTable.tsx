@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
 import { MY_SONGS } from '@nbw/config';
-import type { SongPageDto, SongPreviewDto } from '@nbw/database';
+import type { SongPageDto, SongPreviewDto } from '@nbw/validation';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
 import {

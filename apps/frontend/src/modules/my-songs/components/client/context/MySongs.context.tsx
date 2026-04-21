@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { create } from 'zustand';
 
 import { MY_SONGS } from '@nbw/config';
-import type { SongPageDto, SongPreviewDto, SongsFolder } from '@nbw/database';
+import type { SongPageDto, SongPreviewDto, SongsFolder } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
