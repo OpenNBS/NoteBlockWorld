@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { songViewUploaderSchema } from './SongView.dto.js';
+import { songViewUploaderSchema } from './SongView.dto';
 
 export const uploadSongResponseDtoSchema = z.object({
   publicId: z.string().min(1),

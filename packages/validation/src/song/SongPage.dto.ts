@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { songPreviewDtoSchema } from './SongPreview.dto.js';
+import { songPreviewDtoSchema } from './SongPreview.dto';
 
 export const songPageDtoSchema = z.object({
   content: z.array(songPreviewDtoSchema),
