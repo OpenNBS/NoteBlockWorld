@@ -6,8 +6,8 @@ import { User, UserDocument } from '@nbw/database';
 import {
   type CreateUser,
   createUserSchema,
-  pageQueryDTOSchema,
-  type PageQueryInput,
+  userIndexQuerySchema,
+  type UserIndexPageQueryInput,
 } from '@nbw/validation';
 
 @Injectable()
@@ -78,23 +78,29 @@ export class UserService {
     return await this.userModel.findOne({ username });
   }
 
-  public async getUserPaginated(query: PageQueryInput) {
-    const q = pageQueryDTOSchema.parse(query);
+  public async getUserPaginated(query: UserIndexPageQueryInput) {
+    const q = userIndexQuerySchema.parse(query);
     const page = q.page;
     const limit = q.limit ?? 10;
     const sort = q.sort;
     const normalizedOrder = q.order === 'asc';
+    const { email, id, username } = q;
 
     const skip = (page - 1) * limit;
     const sortOrder = normalizedOrder ? 1 : -1;
+    const mongoQuery: Record<string, string> = {};
+
+    if (email) mongoQuery.email = email;
+    if (id) mongoQuery._id = id;
+    if (username) mongoQuery.username = username;
 
     const users = await this.userModel
-      .find({})
+      .find(mongoQuery)
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit);
 
-    const total = await this.userModel.countDocuments();
+    const total = await this.userModel.countDocuments(mongoQuery);
 
     return {
       users,
