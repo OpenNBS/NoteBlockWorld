@@ -1,5 +1,5 @@
 import { MY_SONGS } from '@nbw/config';
-import type { SongPageDto, SongsFolder } from '@nbw/database';
+import type { SongPageDto, SongsFolder } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 
 import { getTokenServer } from '../../auth/features/auth.utils';
