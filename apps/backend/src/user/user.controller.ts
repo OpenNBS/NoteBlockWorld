@@ -7,20 +7,14 @@ import {
   Inject,
   Patch,
   Query,
-  UsePipes,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ZodValidationPipe } from 'nestjs-zod';
 
 import type { UserDocument } from '@nbw/database';
-import type { UserDto } from '@nbw/validation';
+import type { UserDto, UserIndexPageQueryInput } from '@nbw/validation';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
-import {
-  UpdateUsernameBodyDto,
-  userIndexQuerySchema,
-  type UserIndexQueryDto,
-} from '../zod-dto';
+import { UpdateUsernameBodyDto, UserIndexQueryDto } from '../zod-dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -33,33 +27,9 @@ export class UserController {
   @Get()
   @ApiTags('user')
   @ApiBearerAuth()
-  @UsePipes(new ZodValidationPipe(userIndexQuerySchema))
   async getUserIndex(@Query() query: UserIndexQueryDto) {
-    if (query.mode === 'paginated') {
-      const { mode: _mode, ...pageQuery } = query;
-      return await this.userService.getUserPaginated(pageQuery);
-    }
-
-    const { email, id, username } = query;
-
-    if (email) {
-      return await this.userService.findByEmail(email);
-    }
-
-    if (id) {
-      return await this.userService.findByID(id);
-    }
-
-    if (username) {
-      throw new HttpException(
-        'Username is not supported yet',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    throw new HttpException(
-      'You must provide an email or an id',
-      HttpStatus.BAD_REQUEST,
+    return await this.userService.getUserPaginated(
+      query as UserIndexPageQueryInput,
     );
   }
 

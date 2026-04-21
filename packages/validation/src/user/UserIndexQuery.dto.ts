@@ -2,38 +2,23 @@ import { z } from 'zod';
 
 import {
   pageQueryDTOSchema,
-  type PageQueryDTO,
+  type PageQueryInput,
 } from '../common/PageQuery.dto.js';
-import { getUserSchema, type GetUser } from './GetUser.dto.js';
-
-const nonEmptyLookupValue = (v: unknown): boolean =>
-  typeof v === 'string' && v.trim().length > 0;
+import { getUserSchema } from './GetUser.dto.js';
 
 /**
- * `GET /user` query: either lookup by email/id/username, or paginated user list.
- * Non-empty `email`, `id`, or `username` selects lookup mode; otherwise pagination.
+ * `GET /user` query: always paginated, optionally filtered by email/id/username.
  */
-export const userIndexQuerySchema = z
-  .any()
-  .transform((data): UserIndexQuery => {
-    const raw =
-      data !== null && typeof data === 'object'
-        ? (data as Record<string, unknown>)
-        : {};
+export const userIndexQuerySchema = pageQueryDTOSchema.extend({
+  email: getUserSchema.shape.email.optional(),
+  id: getUserSchema.shape.id.optional(),
+  username: getUserSchema.shape.username.optional(),
+});
 
-    if (
-      nonEmptyLookupValue(raw.email) ||
-      nonEmptyLookupValue(raw.id) ||
-      nonEmptyLookupValue(raw.username)
-    ) {
-      const parsed = getUserSchema.parse(raw);
-      return { mode: 'lookup', ...parsed };
-    }
-
-    const paginated = pageQueryDTOSchema.parse(raw);
-    return { mode: 'paginated', ...paginated };
-  });
-
-export type UserIndexQuery =
-  | ({ mode: 'lookup' } & GetUser)
-  | ({ mode: 'paginated' } & PageQueryDTO);
+export type UserIndexQuery = z.output<typeof userIndexQuerySchema>;
+export type UserIndexQueryInput = z.input<typeof userIndexQuerySchema>;
+export type UserIndexPageQueryInput = PageQueryInput & {
+  email?: string;
+  id?: string;
+  username?: string;
+};
