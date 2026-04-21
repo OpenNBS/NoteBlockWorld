@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 
-import type { VisibilityType } from './uploadMeta.js';
+import type { VisibilityType } from './uploadMeta';
 
 const songPreviewUploaderSchema = z.object({
   username: z.string(),

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SongOrderType, SongSortType } from './SongListQuery.dto.js';
+import { SongOrderType, SongSortType } from './SongListQuery.dto';
 
 export const songSearchParamsSchema = z.object({
   q: z.string().optional(),

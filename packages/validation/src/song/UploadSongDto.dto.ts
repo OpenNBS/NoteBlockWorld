@@ -1,15 +1,10 @@
 import { z } from 'zod';
 
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { jsonStringField } from '@nbw/validation/src';
 
-import { UPLOAD_CONSTANTS } from '@nbw/config';
-
-import { thumbnailDataSchema } from './ThumbnailData.dto.js';
-import type {
-  CategoryType,
-  LicenseType,
-  VisibilityType,
-} from './uploadMeta.js';
+import { thumbnailDataSchema } from './ThumbnailData.dto';
+import type { CategoryType, LicenseType, VisibilityType } from './uploadMeta';
 
 const visibility = Object.keys(UPLOAD_CONSTANTS.visibility) as Readonly<
   string[]
