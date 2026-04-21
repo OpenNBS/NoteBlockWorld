@@ -11,5 +11,5 @@ export { UserIdParamDto } from './user-id.param.dto';
 export { UploadSongBodyDto } from './upload-song.body.dto';
 export {
   userIndexQuerySchema,
-  type UserIndexQueryDto,
+  UserIndexQueryDto,
 } from './user-index.query.dto';
