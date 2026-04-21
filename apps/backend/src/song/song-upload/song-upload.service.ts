@@ -13,7 +13,6 @@ import {
   SongDocument,
   type UserDocument,
 } from '@nbw/database';
-import type { SongStats, ThumbnailData, UploadSongDto } from '@nbw/validation';
 import {
   injectSongFileMetadata,
   NoteQuadTree,
@@ -21,6 +20,7 @@ import {
   SongStatsGenerator,
 } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail/node';
+import type { SongStats, ThumbnailData, UploadSongDto } from '@nbw/validation';
 import { FileService } from '@server/file/file.service';
 import { UserService } from '@server/user/user.service';
 
@@ -187,7 +187,7 @@ export class SongUploadService {
     );
 
     // Create song document
-    return await this.generateSongDocument(
+    const song = await this.generateSongDocument(
       user,
       publicId,
       body,
@@ -197,6 +197,8 @@ export class SongUploadService {
       songStats,
       file,
     );
+
+    return song;
   }
 
   public async processSongPatch(
