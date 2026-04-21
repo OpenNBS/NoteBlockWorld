@@ -7,7 +7,6 @@ import { SongDocument, Song as SongEntity, SongWithUser } from '@nbw/database';
 import type { UserDocument } from '@nbw/database';
 import type { SongStats, UploadSongDto } from '@nbw/validation';
 import { FileService } from '@server/file/file.service';
-import { UserService } from '@server/user/user.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
@@ -36,10 +35,6 @@ const mockSongWebhookService = {
   updateSongWebhook: jest.fn(),
   deleteSongWebhook: jest.fn(),
   syncSongWebhook: jest.fn(),
-};
-
-const mockUserService = {
-  findByUsername: jest.fn(),
 };
 
 const mockSongModel = {
@@ -80,10 +75,6 @@ describe('SongService', () => {
         {
           provide: SongUploadService,
           useValue: mockSongUploadService,
-        },
-        {
-          provide: UserService,
-          useValue: mockUserService,
         },
       ],
     }).compile();
@@ -1010,12 +1001,7 @@ describe('SongService', () => {
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
       jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
-      const result = await service.querySongs(
-        query,
-        undefined,
-        category,
-        undefined,
-      );
+      const result = await service.querySongs(query, undefined, category);
 
       expect(result.content).toEqual(
         songList.map((song) => songPreviewFromSongDocumentWithUser(song)),
@@ -1067,7 +1053,7 @@ describe('SongService', () => {
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
       jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
-      const result = await service.querySongs(query, undefined, undefined);
+      const result = await service.querySongs(query);
 
       expect(songModel.find).toHaveBeenCalledWith({ visibility: 'public' });
       expect(mockFind.sort).toHaveBeenCalledWith({ createdAt: -1 });
@@ -1099,12 +1085,7 @@ describe('SongService', () => {
       jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
       jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
 
-      const result = await service.querySongs(
-        query,
-        searchTerm,
-        category,
-        undefined,
-      );
+      const result = await service.querySongs(query, searchTerm, category);
 
       expect(result.content).toEqual(
         songList.map((song) => songPreviewFromSongDocumentWithUser(song)),
@@ -1119,61 +1100,6 @@ describe('SongService', () => {
       );
 
       expect(mockFind.sort).toHaveBeenCalledWith({ playCount: 1 });
-    });
-
-    it('should filter by uploader username', async () => {
-      const query = {
-        page: 1,
-        limit: 10,
-        sort: 'createdAt',
-        order: 'desc' as const,
-      };
-      const uploaderId = new mongoose.Types.ObjectId();
-      mockUserService.findByUsername.mockResolvedValue({
-        _id: uploaderId,
-        username: 'artist',
-      });
-
-      const songList: SongWithUser[] = [];
-      const mockFind = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        populate: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(songList),
-      };
-
-      jest.spyOn(songModel, 'find').mockReturnValue(mockFind as any);
-      jest.spyOn(songModel, 'countDocuments').mockResolvedValue(0);
-
-      await service.querySongs(query, undefined, undefined, 'artist');
-
-      expect(mockUserService.findByUsername).toHaveBeenCalledWith('artist');
-      expect(songModel.find).toHaveBeenCalledWith({
-        visibility: 'public',
-        uploader: uploaderId,
-      });
-    });
-
-    it('should return empty page when uploader username not found', async () => {
-      const query = {
-        page: 1,
-        limit: 10,
-        sort: 'createdAt',
-        order: 'desc' as const,
-      };
-      mockUserService.findByUsername.mockResolvedValue(null);
-
-      const result = await service.querySongs(
-        query,
-        undefined,
-        undefined,
-        'nobody',
-      );
-
-      expect(result.content).toEqual([]);
-      expect(result.total).toBe(0);
-      expect(songModel.find).not.toHaveBeenCalled();
     });
   });
 
