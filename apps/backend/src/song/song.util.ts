@@ -37,10 +37,16 @@ export const generateSongId = () => {
 export function uploadSongResponseDtoFromSongWithUser(
   song: SongWithUser,
 ): UploadSongResponseDto {
+  const uploaderDoc = song.uploader as SongWithUser['uploader'] & {
+    _id?: { toString(): string };
+  };
+  const uploaderId = uploaderDoc._id?.toString() ?? '';
+
   return {
     publicId: song.publicId,
     title: song.title,
     uploader: {
+      id: uploaderId,
       username: song.uploader.username,
       profileImage: song.uploader.profileImage,
     },

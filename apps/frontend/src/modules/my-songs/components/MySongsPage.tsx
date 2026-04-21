@@ -21,7 +21,7 @@ async function fetchSongsPage(
         page: page + 1,
         limit: pageSize,
         sort: 'createdAt',
-        order: false,
+        order: 'desc',
       },
     })
     .then((res) => {

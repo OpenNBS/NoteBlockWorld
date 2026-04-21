@@ -83,10 +83,10 @@ export class UserService {
     const page = q.page;
     const limit = q.limit ?? 10;
     const sort = q.sort;
-    const descending = q.order ?? false;
+    const normalizedOrder = q.order === 'asc';
 
     const skip = (page - 1) * limit;
-    const sortOrder = descending ? -1 : 1;
+    const sortOrder = normalizedOrder ? 1 : -1;
 
     const users = await this.userModel
       .find({})

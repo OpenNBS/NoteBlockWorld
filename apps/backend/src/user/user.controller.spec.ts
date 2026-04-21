@@ -96,7 +96,7 @@ describe('UserController', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: false,
+        order: 'asc',
       } satisfies UserIndexQuery;
       const paginatedUsers = { users: [], total: 0, page: 1, limit: 10 };
 
@@ -109,7 +109,7 @@ describe('UserController', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: false,
+        order: 'asc',
       });
     });
   });

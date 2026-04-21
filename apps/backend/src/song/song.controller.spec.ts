@@ -183,8 +183,9 @@ describe('SongController', () => {
           page: 1,
           limit: 10,
           sort: 'createdAt',
-          order: true,
+          order: 'desc',
         }),
+        undefined,
         undefined,
         undefined,
       );
@@ -217,10 +218,11 @@ describe('SongController', () => {
           page: 1,
           limit: 10,
           sort: 'createdAt',
-          order: true,
+          order: 'desc',
         }),
         undefined,
         'pop',
+        undefined,
       );
     });
 
@@ -641,7 +643,7 @@ describe('SongController', () => {
         page: 1,
         limit: 10,
         sort: 'playCount',
-        order: false,
+        order: 'asc',
       };
       const q = 'trending';
       const songList: SongPreviewDto[] = Array(10)

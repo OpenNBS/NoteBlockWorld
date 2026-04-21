@@ -196,7 +196,8 @@ export class SongService {
 
   public async getSongByPage(query: PageQueryInput): Promise<SongPreviewDto[]> {
     const q = pageQueryDTOSchema.parse(query);
-    const { page, limit, sort, order } = q;
+    const { page, limit, sort } = q;
+    const ascendingOrder = q.order === 'asc';
 
     if (!page || !limit || !sort) {
       throw new HttpException(
@@ -210,7 +211,7 @@ export class SongService {
         visibility: 'public',
       })
       .sort({
-        [sort]: order ? 1 : -1,
+        [sort]: ascendingOrder ? 1 : -1,
       })
       .skip(page * limit - limit)
       .limit(limit)
@@ -229,7 +230,7 @@ export class SongService {
     const parsed = pageQueryDTOSchema.parse(query);
     const page = parsed.page;
     const limit = parsed.limit ?? 10;
-    const descending = parsed.order ?? true;
+    const ascendingOrder = parsed.order === 'asc';
 
     const allowedSorts = new Set([
       'createdAt',
@@ -283,7 +284,7 @@ export class SongService {
       }
     }
 
-    const sortOrder = descending ? -1 : 1;
+    const sortOrder = ascendingOrder ? 1 : -1;
 
     const [songs, total] = await Promise.all([
       this.songModel
@@ -429,7 +430,7 @@ export class SongService {
     const q = pageQueryDTOSchema.parse(query);
     const page = q.page;
     const limit = q.limit ?? 10;
-    const order = q.order ?? false;
+    const ascendingOrder = q.order === 'asc';
     const sort = q.sort ?? 'recent';
 
     const songData = (await this.songModel
@@ -437,7 +438,7 @@ export class SongService {
         uploader: user._id,
       })
       .sort({
-        [sort]: order ? 1 : -1,
+        [sort]: ascendingOrder ? 1 : -1,
       })
       .skip(limit * (page - 1))
       .limit(limit)) as unknown as SongWithUser[];
