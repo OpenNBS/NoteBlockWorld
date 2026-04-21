@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { jsonStringField } from '@nbw/validation/src';
 
-import { UPLOAD_CONSTANTS } from '../config-shim.js';
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 
 import { thumbnailDataSchema } from './ThumbnailData.dto.js';
 import type {

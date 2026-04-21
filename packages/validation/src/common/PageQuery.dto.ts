@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { TIMESPANS } from '../config-shim.js';
+import { TIMESPANS } from '@nbw/config';
 
 export const pageQueryDTOSchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),

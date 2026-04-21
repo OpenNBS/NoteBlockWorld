@@ -1,4 +1,4 @@
-import { TIMESPANS, UPLOAD_CONSTANTS } from '../config-shim.js';
+import { TIMESPANS, UPLOAD_CONSTANTS } from '@nbw/config';
 
 /** Keys of the upload visibility / category / license maps from config. */
 export type VisibilityType = keyof typeof UPLOAD_CONSTANTS.visibility;

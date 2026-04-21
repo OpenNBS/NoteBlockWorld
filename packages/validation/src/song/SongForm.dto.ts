@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '../config-shim.js';
+import { THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
 
 /** Form defaults for thumbnail editor (API uses strict `ThumbnailData.dto`). */
 export const songFormThumbnailDataSchema = z.object({
