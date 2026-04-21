@@ -23,6 +23,7 @@ export * from './song/uploadMeta';
 
 export * from './user/CreateUser.dto';
 export * from './user/GetUser.dto';
+export * from './user/Profile.dto';
 export * from './user/UserIndexQuery.dto';
 export * from './user/LoginWithEmail.dto';
 export * from './user/NewEmailUser.dto';

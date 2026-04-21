@@ -4,6 +4,8 @@ import { songStatsSchema } from './SongStats';
 import type { CategoryType, LicenseType, VisibilityType } from './uploadMeta';
 
 export const songViewUploaderSchema = z.object({
+  /** MongoDB user id (for profile links). */
+  id: z.string().min(1),
   username: z.string(),
   profileImage: z.string(),
 });

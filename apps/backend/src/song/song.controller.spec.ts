@@ -187,6 +187,7 @@ describe('SongController', () => {
         }),
         undefined,
         undefined,
+        undefined,
       );
     });
 
@@ -221,6 +222,7 @@ describe('SongController', () => {
         }),
         undefined,
         'pop',
+        undefined,
       );
     });
 
