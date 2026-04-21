@@ -11,6 +11,9 @@ import { cleanupOpenApiDoc } from 'nestjs-zod';
 const ZOD_UNWRAP_ROOT = 'x-nestjs_zod-unwrap-root' as const;
 
 function stripInvalidZodMarkersFromParameters(doc: OpenAPIObject) {
+  // `cleanupOpenApiDoc` keeps this zod marker valid inside schema objects, but when it leaks
+  // into operation parameters Swagger UI/OpenAPI validators flag the document as invalid.
+  // We remove it here so generated docs remain standards-compliant and render reliably.
   const paths = doc.paths;
   if (!paths) return;
   for (const pathItem of Object.values(paths)) {
