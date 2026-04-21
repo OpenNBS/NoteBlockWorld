@@ -119,7 +119,6 @@
         "@nbw/config": "workspace:*",
         "@nbw/song": "workspace:*",
         "@nbw/thumbnail": "workspace:*",
-        "@nbw/validation": "workspace:*",
         "@next/mdx": "^16.0.8",
         "@next/third-parties": "^16.0.8",
         "@radix-ui/react-dialog": "^1.1.15",
@@ -251,7 +250,6 @@
       "name": "@nbw/validation",
       "dependencies": {
         "@nbw/config": "workspace:*",
-        "mongoose": "^9.0.1",
         "ms": "^2.1.3",
         "zod": "^4.1.13",
         "zod-validation-error": "^5.0.0",
