@@ -17,7 +17,7 @@ import type {
   toJSON: {
     virtuals: true,
     transform: (doc, ret) => {
-      delete ret._id;
+      delete (ret as { _id?: unknown })._id;
     },
   },
 })

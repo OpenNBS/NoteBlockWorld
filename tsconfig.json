@@ -11,6 +11,7 @@
   },
   "files": [],
   "references": [
+    { "path": "apps/admin" },
     { "path": "apps/frontend" },
     { "path": "apps/backend" },
     { "path": "packages/configs" },

@@ -1,0 +1,38 @@
+{
+  "name": "@nbw/admin",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "NODE_ENV=production bun run scripts/build.ts",
+    "dev": "bun run build && bun --watch run src/index.ts",
+    "start": "bun run dist/server/index.js",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.946.0",
+    "@aws-sdk/s3-request-presigner": "^3.946.0",
+    "@nbw/config": "workspace:*",
+    "@nbw/database": "workspace:*",
+    "@nbw/validation": "workspace:*",
+    "@radix-ui/react-slot": "^1.2.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.556.0",
+    "mongoose": "^9.0.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/bun": "^1.3.4",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  }
+}
