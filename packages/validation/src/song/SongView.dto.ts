@@ -1,11 +1,7 @@
 import { z } from 'zod';
 
-import { songStatsSchema } from './SongStats.js';
-import type {
-  CategoryType,
-  LicenseType,
-  VisibilityType,
-} from './uploadMeta.js';
+import { songStatsSchema } from './SongStats';
+import type { CategoryType, LicenseType, VisibilityType } from './uploadMeta';
 
 export const songViewUploaderSchema = z.object({
   username: z.string(),

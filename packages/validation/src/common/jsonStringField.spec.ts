@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 
 import { z } from 'zod';
 
-import { jsonStringField } from './jsonStringField.js';
+import { jsonStringField } from './jsonStringField';
 
 describe('jsonStringField', () => {
   it('parses a valid JSON string and validates against the inner schema', () => {
