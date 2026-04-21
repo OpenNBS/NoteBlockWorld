@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
-import type { SongPreviewDto } from '@nbw/database';
+import type { SongPreviewDto } from '@nbw/validation';
 import { formatDuration, formatTimeAgo } from '@web/modules/shared/util/format';
 
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
