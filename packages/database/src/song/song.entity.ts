@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type {
   CategoryType,
   LicenseType,
@@ -73,13 +74,25 @@ export class Song {
   @Prop({ type: Boolean, required: true, default: true })
   allowDownload: boolean;
 
-  @Prop({ type: String, required: true })
+  @Prop({
+    type: String,
+    required: true,
+    maxlength: UPLOAD_CONSTANTS.title.maxLength,
+  })
   title: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({
+    type: String,
+    required: false,
+    maxlength: UPLOAD_CONSTANTS.originalAuthor.maxLength,
+  })
   originalAuthor: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({
+    type: String,
+    required: false,
+    maxlength: UPLOAD_CONSTANTS.description.maxLength,
+  })
   description: string;
 
   // SONG FILE ATTRIBUTES (Populated from NBS file - immutable)
