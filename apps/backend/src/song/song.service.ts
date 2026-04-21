@@ -30,6 +30,7 @@ import { SongUploadService } from './song-upload/song-upload.service';
 import { SongWebhookService } from './song-webhook/song-webhook.service';
 import {
   removeExtraSpaces,
+  type SongPreviewSource,
   songPreviewFromSongDocumentWithUser,
   songViewDtoFromSongDocument,
   uploadSongDtoFromSongDocument,
@@ -206,7 +207,7 @@ export class SongService {
       );
     }
 
-    const songs = (await this.songModel
+    const songs = await this.songModel
       .find({
         visibility: 'public',
       })
@@ -215,8 +216,11 @@ export class SongService {
       })
       .skip(page * limit - limit)
       .limit(limit)
-      .populate('uploader', 'username publicName profileImage -_id')
-      .exec()) as unknown as SongWithUser[];
+      .populate<{ uploader: SongPreviewSource['uploader'] }>(
+        'uploader',
+        'username publicName profileImage -_id',
+      )
+      .exec();
 
     return songs.map((song) => songPreviewFromSongDocumentWithUser(song));
   }
