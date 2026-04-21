@@ -3,8 +3,9 @@ import { z } from 'zod';
 import {
   pageQueryDTOSchema,
   type PageQueryInput,
-} from '../common/PageQuery.dto.js';
-import { getUserSchema } from './GetUser.dto.js';
+} from '../common/PageQuery.dto';
+
+import { getUserSchema } from './GetUser.dto';
 
 /**
  * `GET /user` query: always paginated, optionally filtered by email/id/username.
