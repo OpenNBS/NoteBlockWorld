@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import type { LicenseType } from '@nbw/database';
+import type { LicenseType } from '@nbw/validation';
 import { ErrorBalloon } from '@web/modules/shared/components/client/ErrorBalloon';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 import {
