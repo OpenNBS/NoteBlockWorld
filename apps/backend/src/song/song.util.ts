@@ -4,6 +4,7 @@ import { UPLOAD_CONSTANTS } from '@nbw/config';
 import { Song as SongEntity, SongWithUser } from '@nbw/database';
 import type {
   SongPreviewDto,
+  VisibilityType,
   SongViewDto,
   UploadSongDto,
   UploadSongResponseDto,
@@ -103,7 +104,7 @@ export function uploadSongDtoFromSongDocument(song: SongEntity): UploadSongDto {
 }
 
 export function songPreviewFromSongDocumentWithUser(
-  song: SongWithUser,
+  song: SongPreviewSource,
 ): SongPreviewDto {
   const description =
     song.description?.trim() && song.description.trim().length > 0
@@ -128,6 +129,26 @@ export function songPreviewFromSongDocumentWithUser(
     visibility: song.visibility,
   };
 }
+
+export type SongPreviewSource = {
+  publicId: string;
+  uploader: {
+    username: string;
+    profileImage: string;
+  };
+  title: string;
+  description: string;
+  originalAuthor: string;
+  stats: {
+    duration: number;
+    noteCount: number;
+  };
+  thumbnailUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
+  playCount: number;
+  visibility: VisibilityType;
+};
 
 export function getUploadDiscordEmbed({
   title,
