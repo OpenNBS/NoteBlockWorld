@@ -14,7 +14,8 @@ import type { UserDocument } from '@nbw/database';
 import type { UserDto, UserIndexPageQueryInput } from '@nbw/validation';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
 
-import { UpdateUsernameBodyDto, UserIndexQueryDto } from '../zod-dto';
+import { UpdateUsernameBodyDto } from '../zod-dto';
+
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -27,10 +28,8 @@ export class UserController {
   @Get()
   @ApiTags('user')
   @ApiBearerAuth()
-  async getUserIndex(@Query() query: UserIndexQueryDto) {
-    return await this.userService.getUserPaginated(
-      query as UserIndexPageQueryInput,
-    );
+  async getUserIndex(@Query() query: UserIndexPageQueryInput) {
+    return await this.userService.getUserPaginated(query);
   }
 
   @Get('me')
