@@ -102,7 +102,7 @@ describe('UserService', () => {
         page: 1,
         limit: 10,
         sort: 'createdAt',
-        order: false,
+        order: 'asc',
       };
       const users = [{ username: 'testuser' }] as UserDocument[];
 

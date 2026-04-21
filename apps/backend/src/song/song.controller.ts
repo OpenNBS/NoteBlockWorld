@@ -142,7 +142,7 @@ export class SongController {
       page: query.page,
       limit: query.limit,
       sort: sortField ?? 'createdAt',
-      order: isDescending,
+      order: isDescending ? 'desc' : 'asc',
     };
 
     // Query songs with optional search, category, and uploader filters
@@ -274,7 +274,7 @@ export class SongController {
       page: result.page,
       limit: result.limit,
       total: result.total,
-      order: pageQuery.order ?? true,
+      order: String(pageQuery.order ?? 'desc') === 'desc',
     };
   }
 
