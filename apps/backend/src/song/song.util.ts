@@ -106,11 +106,6 @@ export function uploadSongDtoFromSongDocument(song: SongEntity): UploadSongDto {
 export function songPreviewFromSongDocumentWithUser(
   song: SongPreviewSource,
 ): SongPreviewDto {
-  const description =
-    song.description?.trim() && song.description.trim().length > 0
-      ? song.description
-      : ' ';
-
   return {
     publicId: song.publicId,
     uploader: {
@@ -118,7 +113,7 @@ export function songPreviewFromSongDocumentWithUser(
       profileImage: song.uploader.profileImage,
     },
     title: song.title,
-    description,
+    description: song.description ?? '',
     originalAuthor: song.originalAuthor ?? '',
     duration: song.stats.duration,
     noteCount: song.stats.noteCount,

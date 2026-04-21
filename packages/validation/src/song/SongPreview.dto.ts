@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { UPLOAD_CONSTANTS } from '@nbw/config';
+
 import type { VisibilityType } from './uploadMeta.js';
 
 const songPreviewUploaderSchema = z.object({
@@ -10,9 +12,9 @@ const songPreviewUploaderSchema = z.object({
 export const songPreviewDtoSchema = z.object({
   publicId: z.string().min(1),
   uploader: songPreviewUploaderSchema,
-  title: z.string().min(1).max(128),
-  description: z.string().min(1),
-  originalAuthor: z.string().min(1).max(64),
+  title: z.string().min(1).max(UPLOAD_CONSTANTS.title.maxLength),
+  description: z.string().max(UPLOAD_CONSTANTS.description.maxLength),
+  originalAuthor: z.string().max(UPLOAD_CONSTANTS.originalAuthor.maxLength),
   duration: z.number().min(0),
   noteCount: z.number().int().min(0),
   thumbnailUrl: z.url(),
