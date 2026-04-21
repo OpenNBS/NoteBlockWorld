@@ -17,7 +17,7 @@ import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
 import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongPreviewDto } from '@nbw/database';
+import type { SongPreviewDto } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
@@ -45,8 +45,8 @@ interface PageDto<T> {
   limit: number;
   total: number;
 }
-// TODO: importing these enums from '@nbw/database' is causing issues.
-// They shouldn't be redefined here.
+// TODO: import these enums from shared validation package.
+// They should not be redefined locally.
 enum SongSortType {
   RECENT = 'recent',
   RANDOM = 'random',

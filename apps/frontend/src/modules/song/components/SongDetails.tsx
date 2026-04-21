@@ -2,7 +2,7 @@ import { faCheck, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
-import type { SongViewDto } from '@nbw/database';
+import type { SongViewDto } from '@nbw/validation';
 import {
   formatDuration,
   formatTimeSpent,

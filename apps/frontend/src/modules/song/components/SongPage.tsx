@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
-import type { PageDto, SongPreviewDto, SongViewDto } from '@nbw/database';
+import type { PageDto, SongPreviewDto, SongViewDto } from '@nbw/validation';
 import axios from '@web/lib/axios';
 import SongCard from '@web/modules/browse/components/SongCard';
 import SongCardGroup from '@web/modules/browse/components/SongCardGroup';

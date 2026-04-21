@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import type { UploadSongDto } from '@nbw/database';
+import type { UploadSongDto } from '@nbw/validation';
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 import { SongForm } from '@web/modules/song/components/client/SongForm';
 

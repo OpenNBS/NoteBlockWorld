@@ -1,4 +1,4 @@
-import type { UploadSongDto } from '@nbw/database';
+import type { UploadSongDto } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import {
   getTokenServer,

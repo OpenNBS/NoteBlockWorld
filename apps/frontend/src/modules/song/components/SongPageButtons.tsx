@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { SongViewDto } from '@nbw/database';
+import type { SongViewDto } from '@nbw/validation';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 import {
