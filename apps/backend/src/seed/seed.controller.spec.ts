@@ -1,13 +1,14 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { SeedController } from './seed.controller';
-import { SeedService } from './seed.service';
 import {
   DEFAULT_SEED_DATA_TIME_CAP,
   DEFAULT_SEED_FAKER,
   SEED_USER_COUNT_MAX,
-} from './seed.types';
+} from '@nbw/config';
+
+import { SeedController } from './seed.controller';
+import { SeedService } from './seed.service';
 
 describe('SeedController', () => {
   let controller: SeedController;

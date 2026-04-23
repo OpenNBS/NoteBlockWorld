@@ -2,7 +2,14 @@ import { Instrument, Note, Song } from '@encode42/nbs.js';
 import { faker } from '@faker-js/faker';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { UPLOAD_CONSTANTS } from '@nbw/config';
+import {
+  DEFAULT_SEED_DATA_TIME_CAP,
+  DEFAULT_SEED_FAKER,
+  SEED_USER_COUNT_MAX,
+  SEED_USER_COUNT_MIN,
+  type SeedDevOptions,
+  UPLOAD_CONSTANTS,
+} from '@nbw/config';
 import { SongDocument, type UserDocument } from '@nbw/database';
 import type {
   CategoryType,
@@ -12,14 +19,6 @@ import type {
 } from '@nbw/validation';
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
-
-import {
-  DEFAULT_SEED_DATA_TIME_CAP,
-  DEFAULT_SEED_FAKER,
-  SEED_USER_COUNT_MAX,
-  SEED_USER_COUNT_MIN,
-  type SeedDevOptions,
-} from './seed.types';
 
 @Injectable()
 export class SeedService {

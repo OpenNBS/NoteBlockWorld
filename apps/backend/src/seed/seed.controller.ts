@@ -7,14 +7,15 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { SeedService } from './seed.service';
 import {
   DEFAULT_SEED_DATA_TIME_CAP,
   DEFAULT_SEED_FAKER,
   SEED_USER_COUNT_MAX,
   SEED_USER_COUNT_MIN,
   type SeedDevOptions,
-} from './seed.types';
+} from '@nbw/config';
+
+import { SeedService } from './seed.service';
 
 @Controller('seed')
 @ApiTags('seed')

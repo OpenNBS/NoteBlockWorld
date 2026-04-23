@@ -3,7 +3,7 @@ export const DEFAULT_SEED_FAKER = 42_424_242;
 
 /**
  * Upper bound for random `createdAt` values so seed runs are reproducible
- * (avoid `new Date()` which moves every run).
+ * (avoid `new Date()` which moves every run). Shared with Cypress for clock alignment.
  */
 export const DEFAULT_SEED_DATA_TIME_CAP = new Date('2025-06-15T12:00:00.000Z');
 
@@ -22,3 +22,7 @@ export type SeedDevOptions = {
   /** How many users to create (clamped to 1–500, default 100). */
   userCount?: number;
 };
+
+/** Milliseconds for `cy.clock`: one day after {@link DEFAULT_SEED_DATA_TIME_CAP}. */
+export const SEED_E2E_BROWSER_CLOCK_MS =
+  DEFAULT_SEED_DATA_TIME_CAP.getTime() + 24 * 60 * 60 * 1000;

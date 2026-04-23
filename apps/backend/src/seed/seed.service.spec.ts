@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { DEFAULT_SEED_FAKER } from '@nbw/config';
 import type { UserDocument } from '@nbw/database';
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
 
 import { SeedService } from './seed.service';
-import { DEFAULT_SEED_FAKER } from './seed.types';
 
 describe('SeedService', () => {
   let service: SeedService;

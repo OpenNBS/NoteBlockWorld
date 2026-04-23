@@ -1,0 +1,22 @@
+{
+  "name": "@nbw/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cypress end-to-end tests for NoteBlockWorld",
+  "license": "ISC",
+  "scripts": {
+    "postinstall": "cypress install",
+    "build": "exit 0",
+    "start": "exit 0",
+    "dev": "exit 0",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
+  },
+  "dependencies": {
+    "@nbw/config": "workspace:*"
+  },
+  "devDependencies": {
+    "cypress": "^14.3.0",
+    "typescript": "^5.9.2"
+  }
+}
