@@ -185,6 +185,33 @@ describe('AuthService', () => {
     });
   });
 
+  describe('issueSessionTokensForUser', () => {
+    it('should delegate to createJwtPayload with user fields', async () => {
+      const user = {
+        _id: { toString: () => 'oid-1' },
+        email: 'e@e.com',
+        username: 'user1',
+      } as unknown as UserDocument;
+
+      spyOn(authService as any, 'createJwtPayload').mockResolvedValueOnce({
+        access_token: 'a',
+        refresh_token: 'r',
+      });
+
+      const tokens = await authService.issueSessionTokensForUser(user);
+
+      expect(tokens).toEqual({
+        access_token: 'a',
+        refresh_token: 'r',
+      });
+      expect((authService as any).createJwtPayload).toHaveBeenCalledWith({
+        id: 'oid-1',
+        email: 'e@e.com',
+        username: 'user1',
+      });
+    });
+  });
+
   describe('createJwtPayload', () => {
     it('should create access and refresh tokens', async () => {
       const payload = { id: 'user-id', username: 'testuser' };

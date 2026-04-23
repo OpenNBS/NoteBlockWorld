@@ -1,19 +1,33 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   Get,
+  Headers,
+  HttpCode,
   HttpException,
   HttpStatus,
   Inject,
   Logger,
+  NotFoundException,
   Post,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Throttle } from '@nestjs/throttler';
+import {
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
+
+import { E2E_AUTH_HEADER } from '@nbw/config';
+import { UserService } from '@server/user/user.service';
 
 import { AuthService } from './auth.service';
 import { MagicLinkEmailStrategy } from './strategies/magicLinkEmail.strategy';
@@ -27,6 +41,9 @@ export class AuthController {
     private readonly authService: AuthService,
     @Inject(MagicLinkEmailStrategy)
     private readonly magicLinkEmailStrategy: MagicLinkEmailStrategy,
+    @Inject(UserService)
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Throttle({
@@ -117,6 +134,50 @@ export class AuthController {
   @UseGuards(AuthGuard('discord'))
   public discordRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.discordLogin(req, res);
+  }
+
+  /**
+   * Development-only: mint JWT pair for an existing user so Cypress can `setCookie`
+   * without UI login. Disabled unless `NODE_ENV === 'development'` and
+   * `E2E_AUTH_SECRET` is non-empty; wrong/missing secret returns 404 to avoid
+   * advertising the route.
+   */
+  @Post('e2e/session')
+  @HttpCode(200)
+  @SkipThrottle()
+  @ApiExcludeEndpoint()
+  public async e2eSession(
+    @Headers(E2E_AUTH_HEADER) secret: string | undefined,
+    @Body() body: { email?: string; userId?: string },
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    const nodeEnv = this.configService.get<string>('NODE_ENV');
+    const expectedSecret = this.configService.get<string>('E2E_AUTH_SECRET');
+    if (
+      nodeEnv !== 'development' ||
+      !expectedSecret ||
+      expectedSecret.length === 0
+    ) {
+      throw new NotFoundException();
+    }
+    if (!secret || secret !== expectedSecret) {
+      throw new NotFoundException();
+    }
+
+    const email = body?.email?.trim();
+    const userId = body?.userId?.trim();
+    if ((email ? 1 : 0) + (userId ? 1 : 0) !== 1) {
+      throw new BadRequestException('Provide exactly one of email or userId');
+    }
+
+    const user = email
+      ? await this.userService.findByEmail(email)
+      : await this.userService.findByID(userId!);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return this.authService.issueSessionTokensForUser(user);
   }
 
   @Get('verify')

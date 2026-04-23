@@ -169,6 +169,17 @@ export class AuthService {
     return this.GenTokenRedirect(user, res);
   }
 
+  /** Mint access + refresh JWTs for an existing user (same payload shape as OAuth callbacks). */
+  public issueSessionTokensForUser(
+    user_registered: UserDocument,
+  ): Promise<Tokens> {
+    return this.createJwtPayload({
+      id: user_registered._id.toString(),
+      email: user_registered.email,
+      username: user_registered.username,
+    });
+  }
+
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync<TokenPayload>(payload, {
