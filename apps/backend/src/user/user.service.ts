@@ -26,9 +26,26 @@ export class UserService {
 
   public async update(user: UserDocument): Promise<UserDocument> {
     try {
-      return (await this.userModel.findByIdAndUpdate(user._id, user, {
-        new: true, // return the updated document
-      })) as UserDocument;
+      const plain = user.toObject({ flattenMaps: true }) as Record<
+        string,
+        unknown
+      >;
+      const id = plain._id;
+      delete plain._id;
+      delete plain.__v;
+      if (plain.socialLinks && typeof plain.socialLinks === 'object') {
+        const sl = { ...(plain.socialLinks as Record<string, unknown>) };
+        delete sl._id;
+        plain.socialLinks = sl;
+      }
+
+      return (await this.userModel.findByIdAndUpdate(
+        id,
+        { $set: plain },
+        {
+          new: true,
+        },
+      )) as UserDocument;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
