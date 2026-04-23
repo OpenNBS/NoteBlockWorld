@@ -67,6 +67,7 @@
     "format": "prettier --write .",
     "cy:open": "cd apps/e2e && bun run cy:open",
     "test:cy": "cd apps/e2e && bun run cy:run",
+    "cy:baseline": "cd apps/e2e && bun run cy:baseline",
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },

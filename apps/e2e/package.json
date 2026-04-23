@@ -10,7 +10,8 @@
     "start": "exit 0",
     "dev": "exit 0",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "cy:baseline": "cypress run --spec cypress/e2e/snapshots/pages.cy.ts"
   },
   "dependencies": {
     "@nbw/config": "workspace:*"
