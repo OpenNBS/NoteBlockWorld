@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 
+import { BROWSER_SONGS } from '@nbw/config';
 import type { FeaturedSongsDto, PageDto, SongPreviewDto } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 import { HomePageProvider } from '@web/modules/browse/components/client/context/HomePage.context';
@@ -9,8 +10,8 @@ async function fetchRecentSongs() {
   try {
     const response = await axiosInstance.get<PageDto<SongPreviewDto>>('/song', {
       params: {
-        page: 1, // TODO: fix constants
-        limit: 11, // TODO: change 'limit' parameter to 'skip' and load 12 songs initially, then load 8 more songs on each pagination
+        page: 1,
+        limit: BROWSER_SONGS.recentFetchCount,
         sort: 'recent',
         order: 'desc',
       },

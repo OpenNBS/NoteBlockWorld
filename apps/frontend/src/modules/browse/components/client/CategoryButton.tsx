@@ -1,4 +1,6 @@
 'use client';
+import { useEffect } from 'react';
+
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { CategoryType } from '@nbw/database';
 import {
@@ -9,7 +11,7 @@ import {
   CarouselPreviousSmall,
 } from '@web/modules/shared/components/client/Carousel';
 
-import { useRecentSongsProvider } from './context/RecentSongs.context';
+import { useRecentSongsStore } from './context/RecentSongs.context';
 
 type CategoryButtonProps = {
   children: React.ReactNode;
@@ -20,8 +22,21 @@ type CategoryButtonProps = {
 };
 
 export const CategoryButtonGroup = () => {
-  const { categories, setSelectedCategory, selectedCategory } =
-    useRecentSongsProvider();
+  const categories = useRecentSongsStore((state) => state.categories);
+  const fetchCategories = useRecentSongsStore((state) => state.fetchCategories);
+  const setSelectedCategory = useRecentSongsStore(
+    (state) => state.setSelectedCategory,
+  );
+  const selectedCategory = useRecentSongsStore(
+    (state) => state.selectedCategory,
+  );
+  const categoryCount = Object.keys(categories).length;
+
+  useEffect(() => {
+    if (categoryCount === 0) {
+      void fetchCategories();
+    }
+  }, [categoryCount, fetchCategories]);
 
   return (
     <Carousel
