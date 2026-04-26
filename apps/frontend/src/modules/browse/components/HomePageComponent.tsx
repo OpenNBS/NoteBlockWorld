@@ -19,21 +19,19 @@ import { WelcomeBanner } from '../WelcomeBanner';
 
 import { CategoryButtonGroup } from './client/CategoryButton';
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
-import {
-  useRecentSongsProvider,
-  useRecentSongsCategoriesLoader,
-} from './client/context/RecentSongs.context';
+import { useRecentSongsStore } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
-  // Initialize sync hooks for proper effect handling
-  useRecentSongsCategoriesLoader();
-
   const { featuredSongsPage, timespan } = useFeaturedSongsProvider();
-  const { recentSongs, increasePageRecent, hasMore } = useRecentSongsProvider();
+  const recentItems = useRecentSongsStore((state) => state.recentItems);
+  const increasePageRecent = useRecentSongsStore(
+    (state) => state.increasePageRecent,
+  );
+  const hasMore = useRecentSongsStore((state) => state.hasMore);
   return (
     <>
       {/* Welcome banner/Hero */}
@@ -85,14 +83,17 @@ export const HomePageComponent = () => {
       </div>
       <div className='h-6' />
       <SongCardGroup data-test='recent-songs'>
-        {recentSongs.map((song, i) =>
-          // TODO: currently null = skeleton, undefined = ad slot. There must be a more robust system to indicate this.
-          song === undefined ? (
-            <SongCardAdSlot key={i} />
-          ) : (
-            <SongCard key={i} song={song} />
-          ),
-        )}
+        {recentItems.map((item, i) => {
+          if (item.type === 'ad') {
+            return <SongCardAdSlot key={i} />;
+          }
+
+          if (item.type === 'loading') {
+            return <SongCard key={i} song={null} />;
+          }
+
+          return <SongCard key={i} song={item.data} />;
+        })}
       </SongCardGroup>
       <div className='flex flex-col w-full justify-between items-center mt-4'>
         {hasMore ? (

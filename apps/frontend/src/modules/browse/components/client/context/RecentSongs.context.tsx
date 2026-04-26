@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
-import { create } from 'zustand';
+import { createContext, useContext, useRef } from 'react';
+import { createStore, useStore } from 'zustand';
 
+import { BROWSER_SONGS } from '@nbw/config';
 import type { PageDto, SongPreviewDtoType } from '@nbw/database';
 import axiosInstance from '@web/lib/axios';
 
 interface RecentSongsState {
-  recentSongs: (SongPreviewDtoType | null | undefined)[];
+  recentItems: FeedItem[];
   recentError: string;
   isLoading: boolean;
   hasMore: boolean;
@@ -17,154 +18,184 @@ interface RecentSongsState {
 }
 
 interface RecentSongsActions {
-  initialize: (initialRecentSongs: SongPreviewDtoType[]) => void;
   setSelectedCategory: (category: string) => void;
   increasePageRecent: () => Promise<void>;
-  fetchRecentSongs: () => Promise<void>;
+  fetchRecentSongs: (targetPage?: number) => Promise<boolean>;
   fetchCategories: () => Promise<void>;
 }
 
-type RecentSongsStore = RecentSongsState & RecentSongsActions;
+export type RecentSongsStore = RecentSongsState & RecentSongsActions;
 
-const adCount = 1;
-const pageSize = 12;
-const fetchCount = pageSize - adCount;
+export const AD_COUNT = BROWSER_SONGS.recentAdCount;
+export const PAGE_SIZE = BROWSER_SONGS.recentPageSize;
+export const FETCH_COUNT = BROWSER_SONGS.recentFetchCount;
 
-function injectAdSlots(
-  songs: SongPreviewDtoType[],
-): Array<SongPreviewDtoType | undefined> {
-  const songsWithAds: Array<SongPreviewDtoType | undefined> = [...songs];
+export type FeedItem =
+  | { type: 'song'; data: SongPreviewDtoType }
+  | { type: 'ad' }
+  | { type: 'loading' };
 
-  for (let i = 0; i < adCount; i++) {
-    const adPosition = Math.floor(Math.random() * (songsWithAds.length + 1));
-    songsWithAds.splice(adPosition, 0, undefined);
-  }
-
-  return songsWithAds;
+function createLoadingItems(count: number): FeedItem[] {
+  return Array.from({ length: count }, () => ({ type: 'loading' as const }));
 }
 
-export const useRecentSongsStore = create<RecentSongsStore>((set, get) => {
-  const fetchRecentSongs = async () => {
-    const { page, selectedCategory } = get();
-    set({ isLoading: true });
+function injectAdSlots(songs: SongPreviewDtoType[], page: number): FeedItem[] {
+  const songItems: FeedItem[] = songs.map((song) => ({
+    type: 'song',
+    data: song,
+  }));
 
-    try {
-      const params: Record<string, any> = {
-        page,
-        limit: fetchCount, // TODO: fix constants
-        sort: 'recent',
-        order: 'desc',
-      };
+  if (AD_COUNT <= 0) {
+    return songItems;
+  }
 
-      if (selectedCategory) {
-        params.category = selectedCategory;
+  const result: FeedItem[] = [...songItems];
+
+  for (let i = 0; i < AD_COUNT; i++) {
+    const insertionIndex = (page * 7 + i * 13) % (result.length + 1);
+    result.splice(insertionIndex, 0, { type: 'ad' });
+  }
+
+  return result;
+}
+const createRecentSongsStore = (initialRecentSongs: SongPreviewDtoType[]) => {
+  let fetchController: AbortController | null = null;
+
+  return createStore<RecentSongsStore>((set, get) => {
+    const fetchRecentSongs = async (targetPage?: number) => {
+      if (fetchController) {
+        fetchController.abort();
       }
 
-      const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
-        '/song',
-        { params },
-      );
+      const controller = new AbortController();
+      fetchController = controller;
+      const pageToFetch = targetPage ?? get().page;
+      const { selectedCategory } = get();
+      set({ isLoading: true });
 
-      const fetchedSongs = response.data.content;
-      const newSongs = injectAdSlots(fetchedSongs);
-
-      set((state) => ({
-        recentSongs: [
-          ...state.recentSongs.filter((song) => song !== null),
-          ...newSongs,
-        ],
-        hasMore: fetchedSongs.length >= fetchCount,
-        recentError: '',
-      }));
-    } catch (error) {
-      set((state) => ({
-        recentSongs: state.recentSongs.filter((song) => song !== null),
-        recentError: 'Error loading recent songs',
-      }));
-    } finally {
-      set({ isLoading: false });
-    }
-  };
-
-  return {
-    // Initial state
-    recentSongs: [],
-    recentError: '',
-    isLoading: false,
-    hasMore: true,
-    selectedCategory: '',
-    categories: {},
-    page: 1, // Start from page 1 since it's loaded server-side
-
-    // Actions
-    initialize: (initialRecentSongs) => {
-      set({
-        recentSongs: injectAdSlots(initialRecentSongs),
-        page: 1,
-        hasMore: true,
-        recentError: '',
-      });
-    },
-
-    fetchCategories: async () => {
       try {
-        const response = await axiosInstance.get<Record<string, number>>(
-          '/song/categories',
+        const params: Record<string, unknown> = {
+          page: pageToFetch,
+          limit: FETCH_COUNT,
+          sort: 'recent',
+          order: 'desc',
+        };
+
+        if (selectedCategory) {
+          params.category = selectedCategory;
+        }
+
+        const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
+          '/song',
+          { params, signal: controller.signal },
         );
-        set({ categories: response.data });
+        const fetchedSongs = response.data.content;
+        const newSongs = injectAdSlots(fetchedSongs, pageToFetch);
+
+        set((state) => ({
+          recentItems: [
+            ...state.recentItems.filter((item) => item.type !== 'loading'),
+            ...newSongs,
+          ],
+          hasMore: fetchedSongs.length >= FETCH_COUNT,
+          recentError: '',
+          page: pageToFetch,
+        }));
+
+        return true;
       } catch (error) {
-        set({ categories: {} });
+        if (controller.signal.aborted) {
+          return false;
+        }
+
+        set((state) => ({
+          recentItems: state.recentItems.filter(
+            (item) => item.type !== 'loading',
+          ),
+          recentError: 'Error loading recent songs',
+        }));
+        return false;
+      } finally {
+        if (fetchController === controller) {
+          fetchController = null;
+          set({ isLoading: false });
+        }
       }
-    },
+    };
 
-    fetchRecentSongs: fetchRecentSongs,
+    return {
+      recentItems: injectAdSlots(initialRecentSongs, 1),
+      recentError: '',
+      isLoading: false,
+      hasMore: initialRecentSongs.length >= FETCH_COUNT,
+      selectedCategory: '',
+      categories: {},
+      page: 1,
 
-    setSelectedCategory: (category) => {
-      set({
-        selectedCategory: category,
-        page: 1, // Fetch from the first page when category changes
-        recentSongs: Array(pageSize).fill(null),
-        hasMore: true,
-      });
-      fetchRecentSongs();
-    },
+      fetchCategories: async () => {
+        try {
+          const response = await axiosInstance.get<Record<string, number>>(
+            '/song/categories',
+          );
+          set({ categories: response.data });
+        } catch (error) {
+          set({ categories: {} });
+        }
+      },
 
-    increasePageRecent: async () => {
-      const { isLoading, recentError, hasMore, recentSongs } = get();
+      fetchRecentSongs,
 
-      if (isLoading || recentError || !hasMore) {
-        return;
-      }
+      setSelectedCategory: (category) => {
+        set({
+          selectedCategory: category,
+          page: 1,
+          recentItems: createLoadingItems(FETCH_COUNT),
+          hasMore: true,
+          recentError: '',
+        });
+        void fetchRecentSongs(1);
+      },
 
-      set({
-        recentSongs: [...recentSongs, ...Array(pageSize).fill(null)],
-        page: get().page + 1,
-      });
-      fetchRecentSongs();
-    },
-  };
-});
+      increasePageRecent: async () => {
+        const { isLoading, recentError, hasMore, recentItems, page } = get();
 
-// Hook to fetch categories on mount
-export const useRecentSongsCategoriesLoader = () => {
-  const fetchCategories = useRecentSongsStore((state) => state.fetchCategories);
+        if (isLoading || recentError || !hasMore) {
+          return;
+        }
 
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+        const nextPage = page + 1;
+        set({
+          recentItems: [...recentItems, ...createLoadingItems(FETCH_COUNT)],
+        });
+
+        const didLoad = await fetchRecentSongs(nextPage);
+        if (!didLoad) {
+          set((state) => ({
+            recentItems: state.recentItems.filter(
+              (item) => item.type !== 'loading',
+            ),
+          }));
+        }
+      },
+    };
+  });
 };
 
-// Legacy hook name for backward compatibility
-export const useRecentSongsProvider = () => {
-  const store = useRecentSongsStore();
-  // Ensure recentSongs is always an array
-  return {
-    ...store,
-    recentSongs: store.recentSongs || [],
-  };
-};
+type RecentSongsStoreApi = ReturnType<typeof createRecentSongsStore>;
+const RecentSongsStoreContext = createContext<RecentSongsStoreApi | null>(null);
 
-// Provider component for initialization (now just a wrapper)
+export function useRecentSongsStore<T>(
+  selector: (state: RecentSongsStore) => T,
+): T {
+  const store = useContext(RecentSongsStoreContext);
+  if (!store) {
+    throw new Error(
+      'useRecentSongsStore must be used within RecentSongsProvider',
+    );
+  }
+  return useStore(store, selector);
+}
+
 type RecentSongsProviderProps = {
   children: React.ReactNode;
   initialRecentSongs: SongPreviewDtoType[];
@@ -174,11 +205,15 @@ export function RecentSongsProvider({
   children,
   initialRecentSongs,
 }: RecentSongsProviderProps) {
-  const initialize = useRecentSongsStore((state) => state.initialize);
+  const storeRef = useRef<RecentSongsStoreApi | null>(null);
 
-  useEffect(() => {
-    initialize(initialRecentSongs);
-  }, [initialRecentSongs, initialize]);
+  if (!storeRef.current) {
+    storeRef.current = createRecentSongsStore(initialRecentSongs);
+  }
 
-  return <>{children}</>;
+  return (
+    <RecentSongsStoreContext.Provider value={storeRef.current}>
+      {children}
+    </RecentSongsStoreContext.Provider>
+  );
 }

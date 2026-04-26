@@ -128,6 +128,9 @@ export const MY_SONGS = {
 export const BROWSER_SONGS = {
   featuredPageSize: 10,
   paddedFeaturedPageSize: 5,
+  recentAdCount: 2,
+  recentPageSize: 12,
+  recentFetchCount: 10,
 } as const;
 
 export const SEARCH_FEATURES: Record<string, string> = {
