@@ -43,38 +43,8 @@ function injectAdSlots(
   return songsWithAds;
 }
 
-export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
-  // Initial state
-  recentSongs: [],
-  recentError: '',
-  isLoading: false,
-  hasMore: true,
-  selectedCategory: '',
-  categories: {},
-  page: 1,
-
-  // Actions
-  initialize: (initialRecentSongs) => {
-    set({
-      recentSongs: injectAdSlots(initialRecentSongs),
-      page: 1,
-      hasMore: true,
-      recentError: '',
-    });
-  },
-
-  fetchCategories: async () => {
-    try {
-      const response = await axiosInstance.get<Record<string, number>>(
-        '/song/categories',
-      );
-      set({ categories: response.data });
-    } catch (error) {
-      set({ categories: {} });
-    }
-  },
-
-  fetchRecentSongs: async () => {
+export const useRecentSongsStore = create<RecentSongsStore>((set, get) => {
+  const fetchRecentSongs = async () => {
     const { page, selectedCategory } = get();
     set({ isLoading: true });
 
@@ -114,46 +84,66 @@ export const useRecentSongsStore = create<RecentSongsStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
-  },
+  };
 
-  setSelectedCategory: (category) => {
-    set({
-      selectedCategory: category,
-      page: 1,
-      recentSongs: Array(pageSize).fill(null),
-      hasMore: true,
-    });
-  },
+  return {
+    // Initial state
+    recentSongs: [],
+    recentError: '',
+    isLoading: false,
+    hasMore: true,
+    selectedCategory: '',
+    categories: {},
+    page: 1, // Start from page 1 since it's loaded server-side
 
-  increasePageRecent: async () => {
-    const { isLoading, recentError, hasMore, recentSongs } = get();
+    // Actions
+    initialize: (initialRecentSongs) => {
+      set({
+        recentSongs: injectAdSlots(initialRecentSongs),
+        page: 1,
+        hasMore: true,
+        recentError: '',
+      });
+    },
 
-    if (isLoading || recentError || !hasMore) {
-      return;
-    }
+    fetchCategories: async () => {
+      try {
+        const response = await axiosInstance.get<Record<string, number>>(
+          '/song/categories',
+        );
+        set({ categories: response.data });
+      } catch (error) {
+        set({ categories: {} });
+      }
+    },
 
-    set({
-      recentSongs: [...recentSongs, ...Array(pageSize).fill(null)],
-      page: get().page + 1,
-    });
-  },
-}));
+    fetchRecentSongs: fetchRecentSongs,
 
-// Hook to sync page changes with fetchRecentSongs
-export const useRecentSongsPageLoader = () => {
-  const page = useRecentSongsStore((state) => state.page);
-  const selectedCategory = useRecentSongsStore(
-    (state) => state.selectedCategory,
-  );
-  const fetchRecentSongs = useRecentSongsStore(
-    (state) => state.fetchRecentSongs,
-  );
+    setSelectedCategory: (category) => {
+      set({
+        selectedCategory: category,
+        page: 1, // Fetch from the first page when category changes
+        recentSongs: Array(pageSize).fill(null),
+        hasMore: true,
+      });
+      fetchRecentSongs();
+    },
 
-  useEffect(() => {
-    if (page === 1) return; // Skip fetching page 1 as it's already loaded initially
-    fetchRecentSongs();
-  }, [page, selectedCategory, fetchRecentSongs]);
-};
+    increasePageRecent: async () => {
+      const { isLoading, recentError, hasMore, recentSongs } = get();
+
+      if (isLoading || recentError || !hasMore) {
+        return;
+      }
+
+      set({
+        recentSongs: [...recentSongs, ...Array(pageSize).fill(null)],
+        page: get().page + 1,
+      });
+      fetchRecentSongs();
+    },
+  };
+});
 
 // Hook to fetch categories on mount
 export const useRecentSongsCategoriesLoader = () => {
