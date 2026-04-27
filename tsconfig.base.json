@@ -47,7 +47,7 @@
     // ==============================
 
     // Required for libraries relying on legacy decorators and runtime metadata
-    // (e.g. class-validator).
+    // (e.g. Nest/Mongoose decorators).
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }

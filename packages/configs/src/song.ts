@@ -130,6 +130,11 @@ export const BROWSER_SONGS = {
   paddedFeaturedPageSize: 5,
 } as const;
 
+export const SEARCH_SONGS = {
+  pageSize: 12,
+  placeholderCount: 12,
+} as const;
+
 export const SEARCH_FEATURES: Record<string, string> = {
   'CC License': 'CCLicense',
   Downloadable: 'Downloadable',

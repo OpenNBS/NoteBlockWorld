@@ -11,13 +11,10 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import type { UserDocument } from '@nbw/database';
-import {
-  GetUser,
-  PageQueryDTO,
-  UpdateUsernameDto,
-  UserDto,
-} from '@nbw/database';
+import type { UserDto, UserIndexPageQueryInput } from '@nbw/validation';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+
+import { UpdateUsernameBodyDto } from '../zod-dto';
 
 import { UserService } from './user.service';
 
@@ -31,34 +28,7 @@ export class UserController {
   @Get()
   @ApiTags('user')
   @ApiBearerAuth()
-  async getUser(@Query() query: GetUser) {
-    const { email, id, username } = query;
-
-    if (email) {
-      return await this.userService.findByEmail(email);
-    }
-
-    if (id) {
-      return await this.userService.findByID(id);
-    }
-
-    if (username) {
-      throw new HttpException(
-        'Username is not supported yet',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    throw new HttpException(
-      'You must provide an email or an id',
-      HttpStatus.BAD_REQUEST,
-    );
-  }
-
-  @Get()
-  @ApiTags('user')
-  @ApiBearerAuth()
-  async getUserPaginated(@Query() query: PageQueryDTO) {
+  async getUserIndex(@Query() query: UserIndexPageQueryInput) {
     return await this.userService.getUserPaginated(query);
   }
 
@@ -106,7 +76,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update the username' })
   async updateUsername(
     @GetRequestToken() user: UserDocument | null,
-    @Body() body: UpdateUsernameDto,
+    @Body() body: UpdateUsernameBodyDto,
   ) {
     user = validateUser(user);
     let { username } = body;
@@ -128,6 +98,11 @@ export class UserController {
 
     await user.save();
 
-    return UserDto.fromEntity(user);
+    const dto: UserDto = {
+      username: user.username,
+      publicName: user.publicName,
+      email: user.email,
+    };
+    return dto;
   }
 }

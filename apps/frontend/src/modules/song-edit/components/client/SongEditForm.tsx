@@ -2,14 +2,14 @@
 
 import { useEffect } from 'react';
 
-import type { UploadSongDtoType } from '@nbw/database';
+import type { UploadSongDto } from '@nbw/validation';
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 import { SongForm } from '@web/modules/song/components/client/SongForm';
 
 import { useEditSongProviderType } from './context/EditSong.context';
 
 type SongEditFormProps = {
-  songData: UploadSongDtoType;
+  songData: UploadSongDto;
   songId: string;
   username: string;
 };

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 
 import { TIMESPANS } from '@nbw/config';
-import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/database';
+import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/validation';
 
 type TimespanType = (typeof TIMESPANS)[number];
 
