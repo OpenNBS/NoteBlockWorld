@@ -1,12 +1,8 @@
-import type { UserDocument } from '@nbw/database';
-import {
-  GetUser,
-  PageQueryDTO,
-  UpdateUsernameDto,
-  UserDto,
-} from '@nbw/database';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+
+import type { UserDocument } from '@nbw/database';
+import type { UpdateUsernameDto, UserIndexQuery } from '@nbw/validation';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -42,64 +38,72 @@ describe('UserController', () => {
     expect(userController).toBeDefined();
   });
 
-  describe('getUser', () => {
-    it('should return user data by email', async () => {
-      const query: GetUser = {
+  describe('getUserIndex', () => {
+    it('should return paginated users filtered by email', async () => {
+      const query = {
         email: 'test@email.com',
-      };
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+      } satisfies UserIndexQuery;
+      const usersPage = { users: [{ email: 'test@email.com' }], total: 1 };
 
-      const user = { email: 'test@email.com' };
+      mockUserService.getUserPaginated.mockResolvedValueOnce(usersPage);
 
-      mockUserService.findByEmail.mockResolvedValueOnce(user);
+      const result = await userController.getUserIndex(query);
 
-      const result = await userController.getUser(query);
-
-      expect(result).toEqual(user);
-      expect(userService.findByEmail).toHaveBeenCalledWith(query.email);
+      expect(result).toEqual(usersPage);
+      expect(userService.getUserPaginated).toHaveBeenCalledWith(query);
     });
 
-    it('should return user data by ID', async () => {
-      const query: GetUser = {
+    it('should return paginated users filtered by id', async () => {
+      const query = {
         id: 'test-id',
-      };
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+      } satisfies UserIndexQuery;
+      const usersPage = { users: [{ _id: 'test-id' }], total: 1 };
 
-      const user = { _id: 'test-id' };
+      mockUserService.getUserPaginated.mockResolvedValueOnce(usersPage);
 
-      mockUserService.findByID.mockResolvedValueOnce(user);
+      const result = await userController.getUserIndex(query);
 
-      const result = await userController.getUser(query);
-
-      expect(result).toEqual(user);
-      expect(userService.findByID).toHaveBeenCalledWith(query.id);
+      expect(result).toEqual(usersPage);
+      expect(userService.getUserPaginated).toHaveBeenCalledWith(query);
     });
 
-    it('should throw an error if username is provided', async () => {
-      const query: GetUser = {
+    it('should return paginated users filtered by username', async () => {
+      const query = {
         username: 'test-username',
-      };
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+      } satisfies UserIndexQuery;
+      const usersPage = { users: [{ username: 'test-username' }], total: 1 };
 
-      await expect(userController.getUser(query)).rejects.toThrow(
-        HttpException,
-      );
+      mockUserService.getUserPaginated.mockResolvedValueOnce(usersPage);
+
+      const result = await userController.getUserIndex(query);
+      expect(result).toEqual(usersPage);
+      expect(userService.getUserPaginated).toHaveBeenCalledWith(query);
     });
 
-    it('should throw an error if neither email nor ID is provided', async () => {
-      const query: GetUser = {};
-
-      await expect(userController.getUser(query)).rejects.toThrow(
-        HttpException,
-      );
-    });
-  });
-
-  describe('getUserPaginated', () => {
     it('should return paginated user data', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+      } satisfies UserIndexQuery;
       const paginatedUsers = { users: [], total: 0, page: 1, limit: 10 };
 
       mockUserService.getUserPaginated.mockResolvedValueOnce(paginatedUsers);
 
-      const result = await userController.getUserPaginated(query);
+      const result = await userController.getUserIndex(query);
 
       expect(result).toEqual(paginatedUsers);
       expect(userService.getUserPaginated).toHaveBeenCalledWith(query);
@@ -243,6 +247,8 @@ describe('UserController', () => {
       const user: UserDocument = {
         _id: 'test-user-id',
         username: 'olduser',
+        publicName: 'old',
+        email: 'old@example.com',
         save: jest.fn().mockResolvedValue(true),
       } as unknown as UserDocument;
       const body: UpdateUsernameDto = { username: 'newuser' };
@@ -250,13 +256,6 @@ describe('UserController', () => {
 
       mockUserService.normalizeUsername.mockReturnValue(normalizedUsername);
       mockUserService.usernameExists.mockResolvedValue(false);
-
-      // Mock UserDto.fromEntity
-      jest.spyOn(UserDto, 'fromEntity').mockReturnValue({
-        username: normalizedUsername,
-        publicName: user.publicName,
-        email: user.email,
-      });
 
       const result = await userController.updateUsername(user, body);
 

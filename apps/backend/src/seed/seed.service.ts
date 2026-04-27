@@ -1,22 +1,22 @@
 import { Instrument, Note, Song } from '@encode42/nbs.js';
 import { faker } from '@faker-js/faker';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { UPLOAD_CONSTANTS } from '@nbw/config';
 import {
+  DEFAULT_SEED_DATA_TIME_CAP,
+  DEFAULT_SEED_FAKER,
+  SEED_USER_COUNT_MAX,
+  SEED_USER_COUNT_MIN,
+  type SeedDevOptions,
+  UPLOAD_CONSTANTS,
+} from '@nbw/config';
+import { SongDocument, type UserDocument } from '@nbw/database';
+import type {
   CategoryType,
   LicenseType,
-  SongDocument,
   UploadSongDto,
-  UserDocument,
   VisibilityType,
-} from '@nbw/database';
+} from '@nbw/validation';
 import { SongService } from '@server/song/song.service';
 import { UserService } from '@server/user/user.service';
 
@@ -24,9 +24,6 @@ import { UserService } from '@server/user/user.service';
 export class SeedService {
   public readonly logger = new Logger(SeedService.name);
   constructor(
-    @Inject('NODE_ENV')
-    private readonly NODE_ENV: string,
-
     @Inject(UserService)
     private readonly userService: UserService,
 
@@ -34,37 +31,47 @@ export class SeedService {
     private readonly songService: SongService,
   ) {}
 
-  public async seedDev() {
-    if (this.NODE_ENV !== 'development') {
-      this.logger.error('Seeding is only allowed in development mode');
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
+  public async seedDev(options: SeedDevOptions = {}) {
+    const fakerSeed = options.fakerSeed ?? DEFAULT_SEED_FAKER;
+    const createdAtUpper = options.createdAtUpper ?? DEFAULT_SEED_DATA_TIME_CAP;
+    const userCount = clampInt(
+      options.userCount ?? 100,
+      SEED_USER_COUNT_MIN,
+      SEED_USER_COUNT_MAX,
+    );
 
-    const createdUsers = await this.seedUsers();
+    faker.seed(fakerSeed);
+    this.logger.log(
+      `Seeding with fakerSeed=${fakerSeed}, userCount=${userCount}, createdAtUpper=${createdAtUpper.toISOString()}`,
+    );
+
+    const createdUsers = await this.seedUsers(userCount, createdAtUpper);
     this.logger.log(`Created ${createdUsers.length} users`);
-    const createdSongs = await this.seedSongs(createdUsers);
+    const createdSongs = await this.seedSongs(createdUsers, createdAtUpper);
     this.logger.log(`Created ${createdSongs.length} songs`);
   }
 
-  private async seedUsers() {
+  private async seedUsers(userCount: number, createdAtUpper: Date) {
     const createdUsers: UserDocument[] = [];
+    const createdAtLower = new Date(2020, 0, 1);
 
-    for (let i = 0; i < 100; i++) {
-      const user = await this.userService.createWithEmail(
-        faker.internet.email(),
-      );
+    for (let i = 0; i < userCount; i++) {
+      const email = deterministicSeedEmail(i);
+      const user = await this.userService.createWithEmail(email);
 
       //change user creation date
       (user as any).createdAt = this.generateRandomDate(
-        new Date(2020, 0, 1),
-        new Date(),
+        createdAtLower,
+        createdAtUpper,
       );
 
       user.loginCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
       user.playCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
       user.description = faker.lorem.paragraph();
 
-      user.socialLinks = {
+      // Plain object only: deleting keys on a Mongoose subdocument can leave `{ _id }` and break
+      // `findByIdAndUpdate` with "circular reference in the update value".
+      const socialLinksDraft: Record<string, string> = {
         youtube: faker.internet.url(),
         x: faker.internet.url(),
         discord: faker.internet.url(),
@@ -81,10 +88,10 @@ export class SeedService {
         telegram: faker.internet.url(),
         tiktok: faker.internet.url(),
       };
-
-      // remove some social links randomly to simulate users not having all of them or having none
-      for (const key in Object.keys(user.socialLinks))
-        if (faker.datatype.boolean()) delete (user.socialLinks as any)[key];
+      for (const key of Object.keys(socialLinksDraft)) {
+        if (faker.datatype.boolean()) delete socialLinksDraft[key];
+      }
+      user.socialLinks = socialLinksDraft as UserDocument['socialLinks'];
 
       createdUsers.push(await this.userService.update(user));
     }
@@ -92,7 +99,7 @@ export class SeedService {
     return createdUsers;
   }
 
-  private async seedSongs(users: UserDocument[]) {
+  private async seedSongs(users: UserDocument[], createdAtUpper: Date) {
     const songs: SongDocument[] = [];
     const licenses = Object.keys(UPLOAD_CONSTANTS.licenses);
     const categories = Object.keys(UPLOAD_CONSTANTS.categories);
@@ -147,7 +154,7 @@ export class SeedService {
         //change song creation date
         (song as any).createdAt = this.generateRandomDate(
           new Date(2020, 0, 1),
-          new Date(),
+          createdAtUpper,
         );
 
         song.playCount = faker.helpers.rangeToNumber({ min: 0, max: 1000 });
@@ -332,4 +339,13 @@ export class SeedService {
       }),
     );
   }
+}
+
+function clampInt(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, Math.trunc(value)));
+}
+
+/** Stable, unique emails so re-runs with an empty DB always hit the same addresses. */
+function deterministicSeedEmail(index: number): string {
+  return `nbw-seed-${String(index).padStart(4, '0')}@seed.noteblockworld.test`;
 }

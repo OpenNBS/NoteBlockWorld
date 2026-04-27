@@ -21,22 +21,37 @@ You'll need the following installed on your machine:
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
-We provide a `docker-compose-dev.yml` file that sets up:
+We provide [`docker-compose.yml`](docker-compose.yml) at the repository root. It defines:
 
-- A MongoDB instance
-- A local mail server (`maildev`)
-- An S3-compatible storage (`minio`)
-- A MinIO client
+- **MongoDB**
+- **MailDev** (SMTP + web UI for local email)
+- **MinIO** (S3-compatible storage)
+- A **MinIO client** job (profile `minio-init`) that creates buckets and CORS—**not** started by a plain `docker compose up`
 
-To start the services, run the following in the root directory:
+Start dependencies from the repo root in one of these ways:
+
+**Recommended** (waits for MongoDB and MinIO to be healthy, then runs bucket setup):
 
 ```bash
-docker-compose -f docker-compose.yml up -d
+bun run docker:up
 ```
 
-> Remove the `-d` flag if you'd like to see container logs in your terminal.
+**Manual** (then create buckets once; uploads will fail with `NoSuchBucket` until you do):
 
-You can find authentication details in the [`docker-compose.yml`](docker-compose.yml) file.
+```bash
+docker compose up -d
+bun run docker:minio-init
+```
+
+To tear down volumes and start clean (still runs MinIO init after `up --wait`):
+
+```bash
+bun run docker:reset:fresh
+```
+
+> Drop `-d` on `docker compose up -d` if you prefer logs attached to your terminal.
+
+Ports and default credentials (Mongo, MinIO, MailDev) are in [`docker-compose.yml`](docker-compose.yml). Match the MinIO bucket names and keys in your backend `.env` (see the example block under **Environment Variables** below).
 
 ---
 

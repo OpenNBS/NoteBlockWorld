@@ -4,8 +4,8 @@ import axios from 'axios';
 import type { CookieOptions, Request, Response } from 'express';
 import ms from 'ms';
 
-import { CreateUser } from '@nbw/database';
 import type { UserDocument } from '@nbw/database';
+import { createUserSchema } from '@nbw/validation';
 import { UserService } from '@server/user/user.service';
 
 import { DiscordUser } from './types/discordProfile';
@@ -90,10 +90,9 @@ export class AuthService {
 
   private async createNewUser(user: Profile) {
     const { username, email, profileImage } = user;
-    const baseUsername = username;
-    const newUsername = await this.userService.generateUsername(baseUsername);
+    const newUsername = await this.userService.generateUsername(username);
 
-    const newUser = new CreateUser({
+    const newUser = createUserSchema.parse({
       username: newUsername,
       email: email,
       profileImage: profileImage,
@@ -170,6 +169,17 @@ export class AuthService {
     return this.GenTokenRedirect(user, res);
   }
 
+  /** Mint access + refresh JWTs for an existing user (same payload shape as OAuth callbacks). */
+  public issueSessionTokensForUser(
+    user_registered: UserDocument,
+  ): Promise<Tokens> {
+    return this.createJwtPayload({
+      id: user_registered._id.toString(),
+      email: user_registered.email,
+      username: user_registered.username,
+    });
+  }
+
   public async createJwtPayload(payload: TokenPayload): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync<TokenPayload>(payload, {
@@ -220,8 +230,6 @@ export class AuthService {
       return null;
     }
 
-    const user = await this.userService.findByID(decoded.id);
-
-    return user;
+    return await this.userService.findByID(decoded.id);
   }
 }

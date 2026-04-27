@@ -19,7 +19,7 @@ import {
   UploadSongFormInput,
   UploadSongFormOutput,
   uploadSongFormSchema,
-} from '@web/modules/song/components/client/SongForm.zod';
+} from '@nbw/validation';
 
 import UploadCompleteModal from '../UploadCompleteModal';
 
