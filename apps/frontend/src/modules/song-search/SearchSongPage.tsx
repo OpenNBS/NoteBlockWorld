@@ -16,8 +16,18 @@ import { useEffect, useMemo, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { create } from 'zustand';
 
-import { UPLOAD_CONSTANTS, SEARCH_FEATURES, INSTRUMENTS } from '@nbw/config';
-import { SongPreviewDtoType } from '@nbw/database';
+import {
+  INSTRUMENTS,
+  SEARCH_FEATURES,
+  SEARCH_SONGS,
+  UPLOAD_CONSTANTS,
+} from '@nbw/config';
+import type {
+  SongPageDto,
+  SongPreviewDto,
+  SongSearchParams,
+} from '@nbw/validation';
+import { SongOrderType, SongSortType } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import LoadMoreButton from '@web/modules/browse/components/client/LoadMoreButton';
 import SongCard from '@web/modules/browse/components/SongCard';
@@ -25,54 +35,19 @@ import SongCardGroup from '@web/modules/browse/components/SongCardGroup';
 import { DualRangeSlider } from '@web/modules/shared/components/ui/dualRangeSlider';
 import MultipleSelector from '@web/modules/shared/components/ui/multipleSelectorProps';
 
-interface SearchParams {
-  q?: string;
-  sort?: string;
-  order?: string;
-  category?: string;
-  uploader?: string;
-  limit?: number;
-  noteCountMin?: number;
-  noteCountMax?: number;
-  durationMin?: number;
-  durationMax?: number;
-  features?: string;
-  instruments?: string;
-}
-interface PageDto<T> {
-  content: T[];
-  page: number;
-  limit: number;
-  total: number;
-}
-// TODO: importing these enums from '@nbw/database' is causing issues.
-// They shouldn't be redefined here.
-enum SongSortType {
-  RECENT = 'recent',
-  RANDOM = 'random',
-  PLAY_COUNT = 'playCount',
-  TITLE = 'title',
-  DURATION = 'duration',
-  NOTE_COUNT = 'noteCount',
-}
-enum SongOrderType {
-  ASC = 'asc',
-  DESC = 'desc',
-}
-// TODO: refactor with PAGE_SIZE constant
-const PLACEHOLDER_COUNT = 12;
+const PLACEHOLDER_COUNT = SEARCH_SONGS.placeholderCount;
 const makePlaceholders = () =>
   Array.from({ length: PLACEHOLDER_COUNT }, () => null);
 interface SongSearchState {
-  songs: Array<SongPreviewDtoType | null>;
+  songs: Array<SongPreviewDto | null>;
   loading: boolean;
   hasMore: boolean;
   currentPage: number;
   totalResults: number;
 }
 interface SongSearchActions {
-  searchSongs: (params: SearchParams, pageNum: number) => Promise<void>;
-  loadMore: (params: SearchParams) => Promise<void>;
+  searchSongs: (params: SongSearchParams, pageNum: number) => Promise<void>;
+  loadMore: (params: SongSearchParams) => Promise<void>;
 }
 const initialState: SongSearchState = {
   songs: [],
@@ -104,13 +79,12 @@ export const useSongSearchStore = create<SongSearchState & SongSearchActions>(
       }
 
       try {
-        const response = await axiosInstance.get<PageDto<SongPreviewDtoType>>(
-          '/song',
-          { params: { ...params, page: pageNum } },
-        );
+        const response = await axiosInstance.get<SongPageDto>('/song', {
+          params: { ...params, page: pageNum },
+        });
 
         const { content, total } = response.data;
-        const limit = params.limit || 12;
+        const limit = params.limit || SEARCH_SONGS.pageSize;
 
         set((state) => ({
           // Remove placeholders and add the new results
@@ -387,7 +361,7 @@ const NoResults = () => (
   </div>
 );
 interface SearchResultsProps {
-  songs: Array<SongPreviewDtoType | null>;
+  songs: Array<SongPreviewDto | null>;
   loading: boolean;
   hasMore: boolean;
   onLoadMore: () => void;
@@ -423,7 +397,7 @@ export const SearchSongPage = () => {
     category: parseAsString.withDefault(''),
     uploader: parseAsString.withDefault(''),
     page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(12),
+    limit: parseAsInteger.withDefault(SEARCH_SONGS.pageSize),
     noteCountMin: parseAsInteger,
     noteCountMax: parseAsInteger,
     durationMin: parseAsInteger,
@@ -454,12 +428,22 @@ export const SearchSongPage = () => {
     useSongSearchStore();
 
   const [showFilters, setShowFilters] = useState(false);
+  const normalizedSort = Object.values(SongSortType).includes(
+    sort as SongSortType,
+  )
+    ? (sort as SongSortType)
+    : undefined;
+  const normalizedOrder = Object.values(SongOrderType).includes(
+    order as SongOrderType,
+  )
+    ? (order as SongOrderType)
+    : undefined;
 
   useEffect(() => {
-    const params: SearchParams = {
+    const params: SongSearchParams = {
       q: query,
-      sort,
-      order,
+      sort: normalizedSort,
+      order: normalizedOrder,
       category,
       uploader,
       limit,
@@ -474,8 +458,8 @@ export const SearchSongPage = () => {
     searchSongs(params, initialPage);
   }, [
     query,
-    sort,
-    order,
+    normalizedSort,
+    normalizedOrder,
     category,
     uploader,
     initialPage,

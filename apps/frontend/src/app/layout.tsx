@@ -98,8 +98,10 @@ export default function RootLayout({
           />
           <meta name='theme-color' content='#3295ff' />
         </head>
+        {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) mutate <body> attrs before hydrate */}
         <body
           className={`${lato.className} dark bg-zinc-900 text-white h-full`}
+          suppressHydrationWarning
         >
           <NextTopLoader
             showSpinner={false}

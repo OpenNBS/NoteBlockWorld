@@ -1,5 +1,5 @@
 import { MY_SONGS } from '@nbw/config';
-import type { SongPageDtoType, SongsFolder } from '@nbw/database';
+import type { SongPageDto, SongsFolder } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 
 import { getTokenServer } from '../../auth/features/auth.utils';
@@ -11,7 +11,7 @@ async function fetchSongsPage(
   page: number,
   pageSize: number,
   token: string,
-): Promise<SongPageDtoType> {
+): Promise<SongPageDto> {
   const response = await axiosInstance
     .get('/my-songs', {
       headers: {
@@ -21,7 +21,7 @@ async function fetchSongsPage(
         page: page + 1,
         limit: pageSize,
         sort: 'createdAt',
-        order: false,
+        order: 'desc',
       },
     })
     .then((res) => {
