@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/validation';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 import {
@@ -38,7 +38,7 @@ const VisibilityBadge = () => {
   );
 };
 
-const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
+const UploaderBadge = ({ user }: { user: SongViewDto['uploader'] }) => {
   return (
     <div className='flex flex-row items-center gap-3'>
       <Image
@@ -218,7 +218,7 @@ const showOpenFailedToast = () => {
   );
 };
 
-const DownloadSongButton = ({ song }: { song: SongViewDtoType }) => {
+const DownloadSongButton = ({ song }: { song: SongViewDto }) => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   return (

@@ -278,6 +278,7 @@ describe('AuthService', () => {
         profileImage: 'http://example.com/photo.jpg',
       };
 
+      mockUserService.generateUsername.mockResolvedValue('testuser');
       mockUserService.findByEmail.mockResolvedValue(null);
       mockUserService.create.mockResolvedValue({ id: 'new-user-id' });
 

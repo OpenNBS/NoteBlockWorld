@@ -4,17 +4,21 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
+      "@admin/*": ["apps/admin/src/server/*"],
+      "@admin-web/*": ["apps/admin/src/web/*"],
       "@web/*": ["apps/frontend/src/*"],
       "@server/*": ["apps/backend/src/*"]
     }
   },
   "references": [
+    { "path": "apps/admin" },
     { "path": "apps/frontend" },
     { "path": "apps/backend" },
     { "path": "packages/configs" },
     { "path": "packages/database" },
     { "path": "packages/song" },
     { "path": "packages/sounds" },
-    { "path": "packages/thumbnail" }
+    { "path": "packages/thumbnail" },
+    { "path": "packages/validation" }
   ]
 }

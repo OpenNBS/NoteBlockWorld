@@ -1,13 +1,14 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 import { AuthModule } from './auth/auth.module';
-import { validate } from './config/EnvironmentVariables';
+import { validateEnv } from '@nbw/validation';
 import { EmailLoginModule } from './email-login/email-login.module';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './lib/parseToken';
@@ -21,7 +22,7 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.test', '.env.development', '.env.production'],
-      validate,
+      validate: validateEnv,
     }),
     //DatabaseModule,
     MongooseModule.forRootAsync({
@@ -82,6 +83,10 @@ import { UserModule } from './user/user.module';
   controllers: [],
   providers: [
     ParseTokenPipe,
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
