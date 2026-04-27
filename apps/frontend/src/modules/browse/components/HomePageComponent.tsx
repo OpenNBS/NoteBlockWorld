@@ -21,7 +21,6 @@ import { CategoryButtonGroup } from './client/CategoryButton';
 import { useFeaturedSongsProvider } from './client/context/FeaturedSongs.context';
 import {
   useRecentSongsProvider,
-  useRecentSongsPageLoader,
   useRecentSongsCategoriesLoader,
 } from './client/context/RecentSongs.context';
 import LoadMoreButton from './client/LoadMoreButton';
@@ -31,7 +30,6 @@ import SongCardGroup from './SongCardGroup';
 
 export const HomePageComponent = () => {
   // Initialize sync hooks for proper effect handling
-  useRecentSongsPageLoader();
   useRecentSongsCategoriesLoader();
 
   const { featuredSongsPage, timespan } = useFeaturedSongsProvider();
