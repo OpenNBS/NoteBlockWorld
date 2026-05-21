@@ -53,7 +53,7 @@ export const EventBanner = () => {
         <p className='uppercase text-md font-bold tracking-wider text-yellow-300 mb-1 w-fit'>
           <FontAwesomeIcon icon={faExclamationCircle} />{' '}
           {timeLeft === 0 ? (
-            'The event is over!'
+            'Almost over!'
           ) : (
             <>Ends in {formatTime(timeLeft)}</>
           )}
