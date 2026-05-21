@@ -14,15 +14,55 @@ const isEventSubmission = (
   description: string | undefined,
 ) => containsEventTag(title) || containsEventTag(description);
 
+export const EVENT_REGION_TAGS = [
+  '[Patched Plateaus]',
+  '[Textured Tropics]',
+  '[Welded Woodlands]',
+] as const;
+
+export type EventRegionTag = (typeof EVENT_REGION_TAGS)[number];
+
+const appendRegionTag = (description: string, tag: EventRegionTag): string => {
+  if (description.includes(tag)) {
+    return description;
+  }
+
+  let updated = description;
+  for (const regionTag of EVENT_REGION_TAGS) {
+    if (regionTag !== tag && updated.includes(regionTag)) {
+      updated = updated.replace(regionTag, '');
+    }
+  }
+
+  updated = updated.replace(/\n{3,}/g, '\n\n').trimEnd();
+  const separator = updated.length > 0 ? '\n' : '';
+
+  return `${updated}${separator}${tag}`;
+};
+
 type EventSubmissionInfoProps = {
   title?: string;
   description?: string;
+  disabled?: boolean;
+  onDescriptionChange: (description: string) => void;
 };
 
 export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
   title,
   description,
+  disabled = false,
+  onDescriptionChange,
 }) => {
+  const appendRegion = (tag: EventRegionTag) => {
+    if (disabled) {
+      return;
+    }
+
+    const next = appendRegionTag(description ?? '', tag);
+    if (next !== description) {
+      onDescriptionChange(next);
+    }
+  };
   if (!isEventSubmission(title, description)) {
     return null;
   }
@@ -63,9 +103,39 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
             Include in the description which region you&apos;re submitting your
             song to be played in:
             <ul className='list-none list-outside font-bold pl-5 mt-1 space-y-0.5'>
-              <li className='text-green-400'>🌱 [Patched Plateaus]</li>
-              <li className='text-amber-400'>🍂 [Textured Tropics]</li>
-              <li className='text-blue-400'>🏭 [Welded Woodlands]</li>
+              <li>
+                🌱{' '}
+                <button
+                  type='button'
+                  disabled={disabled}
+                  className='text-green-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
+                  onClick={() => appendRegion('[Patched Plateaus]')}
+                >
+                  [Patched Plateaus]
+                </button>
+              </li>
+              <li>
+                🍂{' '}
+                <button
+                  type='button'
+                  disabled={disabled}
+                  className='text-amber-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
+                  onClick={() => appendRegion('[Textured Tropics]')}
+                >
+                  [Textured Tropics]
+                </button>
+              </li>
+              <li>
+                🏭{' '}
+                <button
+                  type='button'
+                  disabled={disabled}
+                  className='text-blue-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
+                  onClick={() => appendRegion('[Welded Woodlands]')}
+                >
+                  [Welded Woodlands]
+                </button>
+              </li>
             </ul>
           </li>
           <li>

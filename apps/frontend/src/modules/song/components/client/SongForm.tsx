@@ -126,7 +126,17 @@ export const SongForm: React.FC<SongFormProps> = ({
               errorMessage={errors.description?.message}
               {...register('description')}
             />
-            <EventSubmissionInfo title={title} description={description} />
+            <EventSubmissionInfo
+              title={title}
+              description={description}
+              disabled={isLocked}
+              onDescriptionChange={(value) => {
+                formMethods.setValue('description', value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+            />
           </div>
 
           {/* Author */}
