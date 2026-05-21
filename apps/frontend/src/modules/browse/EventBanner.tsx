@@ -73,7 +73,14 @@ export const EventBanner = () => {
           >
             blog post
           </Link>{' '}
-          to learn more.
+          to learn more, or{' '}
+          <Link
+            href='/search?q=%23summit26'
+            className='text-blue-300 hover:text-blue-200'
+          >
+            browse the entries
+          </Link>{' '}
+          submitted so far.
         </p>
       </div>
     </div>
