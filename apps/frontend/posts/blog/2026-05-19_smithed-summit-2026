@@ -1,0 +1,96 @@
+---
+title: 'Submit your songs to Smithed Summit 2026!'
+date: '2026-05-19'
+author: 'encode42'
+authorImage: 'encode42.png'
+image: '/img/blog/summit26/banner.png'
+tags: ['events']
+---
+
+It's time for our third major community event! The in-game Minecraft data pack convention, [**Smithed Summit 2026**](https://smithed.net/summit), is coming this summer! We'll be holding a **booth** and a **live performance** at the event, and, just like last time, we're opening submissions for note block songs to be played on the server, around the convention grounds, to all attendees.
+
+Our goal is to include as many submissions as possible. No matter your skill level or experience creating note block music, everybody is welcome! Use this jam as an opportunity to **try new things**, and as motivation to experiment with interesting techniques. We encourage everybody to embrace their unique creativity to create original note block compositions or stylized covers. After all, we've got three great "prompts" to pique your imagination this time around.
+
+Your songs will be played in-game through our data pack playback system, so **it's highly recommended to account for network lag!** A song that's too intense could exaggerate network stutters, or worse, overwhelm a player's bandwidth, resulting in worse playback. We have guidelines on intensity in the _Limits_ section below.
+
+## 🔮 Themes
+
+The Summit convention will be split up into three regions:
+
+### 🌿 Patched Plateaus
+
+Colorful rolling plains with green grass and fields of flowers!
+
+![Patched Plateaus - a colorful rolling plains with green grass and fields of flowers. Keywords that describe this region: city, colorful, modern, playful.](/img/blog/summit26/patched-plateaus.webp)
+
+### 🍂 Textured Tropics
+
+A dense tropical jungle with towering baobab trees and bamboo shoots!
+![Textured Tropics - a dense tropical jungle with towering baobab trees and bamboo shoots. Keywords that describe this region: tropical, warm, thrilling, vacation.](/img/blog/summit26/textured-tropics.webp)
+
+### 🏭 Welded Woodlands
+
+A snowy, autumnal forest with aging industrial infrastructure!
+![Welded Woodlands - a snowy, autumnal forest with aging industrial infrastructure. Keywords that describe this region: industrial, cold, serious, suspenseful.](/img/blog/summit26/welded-woodlands.webp)
+
+> _The images above are a courtesy of Smithed._
+
+**For a more detailed look into each region, check the [Summit announcement video](https://youtu.be/Ud33t4ZwmwI) for a fly-through of the world map!**
+
+## 🕛 Deadline
+
+Submissions will be cut off on **June 16th, 2026**. You must submit your songs before then, but we can manually accept submissions up to **July 1st, 2026** on a case-by-case basis.
+
+## ✅ What's allowed?
+
+- Original note block songs (recommended, regardless of experience).
+- Covers of existing songs, only if they have been created with the themes below in mind.
+- **Traditional note block covers are discouraged, as songs should be relevant to their respective region themes!**
+- Although we cannot prevent you from submitting songs created before the jam, we encourage using this as an opportunity to try something new!
+
+## ❎ Limits
+
+- Songs should be simple with a **max. average polyphony of 128 sounds**, and an **absolute max. of 200 sounds** playing at once.
+  - You can check this in Note Block Studio by going to `Settings` → `Playback` tab → `Show number of active sounds`, and closely watching the sound count indicator located at the bottom of the window while your song plays.
+- Usage of the Tempo Changer or Sound Stopper special instruments will **not** be functional.
+- Each participant can submit as few or many songs as they'd like, with one for each region being a good stretch goal.
+- Each submission must be relevant to one of the three region themes.
+- Custom sounds must utilize the path from the **Import sounds from Minecraft** feature:
+  - Go to `Settings` → `Import sounds from Minecraft`, and make sure to select custom sounds from the `minecraft` directory after importing them from your Minecraft installation.
+  - This is the only way to ensure your custom sounds will work in-game!
+
+## ❔ Notes
+
+- Song tempo will be quantized to 20 ticks per second.
+  - This means that songs with any tempo different than 20 ticks per second will have their note playback times rounded to the nearest 20th of a second.
+- There is no song length requirement or limit. Go wild!
+- Note and layer panning (stereo) will be functional, but relative to a specific point (speakers placed throughout the world).
+- Fine pitch adjustment will be functional.
+- You can use use note blocks outside of the vanilla two-octave range (up to six octaves!)
+- You can use custom sounds from vanilla Minecraft (also up to six octaves!)
+- Your submission **does not** need to be vanilla-compatible! As long as it abides by the above limitations, it is valid.
+- Sooner especially does not equal better! You have an entire month to work on submissions; use this time to your advantage.
+
+## 📝 Submissions
+
+Once your song has been finished, and you're ready to submit it for the event, upload it to [Note Block World](https://noteblock.world) with the `#summit26` tag in the song title or description.
+
+The description of your song **must include**:
+
+- Your Minecraft username (so we can credit you in the event server)
+- Which region you're submitting your song to be played in:
+  - `[Patched Plateaus]`
+  - `[Textured Tropics]`
+  - `[Welded Woodlands]`
+
+Just like any other song uploaded to Note Block World, **you keep all rights to your submission!** However, we (and Smithed) hold the right to play submissions on the event server and distribute the converted data pack.
+
+**We'll credit you by your username in Note Block World.** If you'd like to change it, you can do so by clicking your user icon in the top right corner of the page. Make sure to do this by the end of the submission period!
+
+In case you're not interested in uploading the songs to Note Block World, manual submissions can be handled on a case-by-case basis. In that case, join our [Discord](https://discord.gg/note-block-world-608692895179997252) and reach out to us in the event's channel!
+
+---
+
+We can't wait to see what you all come up with!
+
+If you have any questions about the event, feel free to [get in touch](/contact). We hope to see you at the event, and we look forward to hearing your amazing creations in-game! 🎵
