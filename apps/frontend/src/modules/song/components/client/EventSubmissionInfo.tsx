@@ -62,10 +62,10 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
           <li>
             Include in the description which region you&apos;re submitting your
             song to be played in:
-            <ul className='list-disc list-outside font-bold pl-5 mt-1 space-y-0.5'>
-              <li>[Patched Plateaus]</li>
-              <li>[Textured Tropics]</li>
-              <li>[Welded Woodlands]</li>
+            <ul className='list-none list-outside font-bold pl-5 mt-1 space-y-0.5'>
+              <li className='text-green-400'>🌱 [Patched Plateaus]</li>
+              <li className='text-amber-400'>🍂 [Textured Tropics]</li>
+              <li className='text-blue-400'>🏭 [Welded Woodlands]</li>
             </ul>
           </li>
           <li>
