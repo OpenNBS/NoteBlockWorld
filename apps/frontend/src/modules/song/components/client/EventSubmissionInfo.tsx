@@ -66,6 +66,9 @@ const findRegionTag = (
   return null;
 };
 
+const needsLeadingSpace = (text: string, index: number) =>
+  index > 0 && !/\s/.test(text[index - 1] ?? '');
+
 const applyRegionTag = (
   description: string,
   tag: EventRegionTag,
@@ -83,12 +86,14 @@ const applyRegionTag = (
     return { value, cursor: existing.index + tag.length };
   }
 
+  const prefix = needsLeadingSpace(description, selectionStart) ? ' ' : '';
+  const insertion = `${prefix}${tag}`;
   const value =
     description.slice(0, selectionStart) +
-    tag +
+    insertion +
     description.slice(selectionEnd);
 
-  return { value, cursor: selectionStart + tag.length };
+  return { value, cursor: selectionStart + insertion.length };
 };
 
 type EventSubmissionInfoProps = {
