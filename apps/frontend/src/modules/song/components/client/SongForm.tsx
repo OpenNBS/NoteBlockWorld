@@ -23,6 +23,7 @@ import {
 } from '@web/modules/shared/components/client/FormElements';
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 
+import { EventSubmissionInfo } from './EventSubmissionInfo';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 
@@ -43,6 +44,9 @@ export const SongForm: React.FC<SongFormProps> = ({
     useSongProviderData;
 
   const router = useRouter();
+
+  const title = formMethods.watch('title');
+  const description = formMethods.watch('description');
 
   return (
     <>
@@ -122,6 +126,7 @@ export const SongForm: React.FC<SongFormProps> = ({
               errorMessage={errors.description?.message}
               {...register('description')}
             />
+            <EventSubmissionInfo title={title} description={description} />
           </div>
 
           {/* Author */}
