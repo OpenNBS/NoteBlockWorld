@@ -61,7 +61,7 @@ export const EventBanner = () => {
         <p>
           Submit your songs to be played at{' '}
           <Link
-            href='https://www.youtube.com/watch?v=G78AnHpIw5w'
+            href='https://smithed.net/summit'
             className='text-blue-300 hover:text-blue-200 font-bold'
           >
             Smithed Summit
