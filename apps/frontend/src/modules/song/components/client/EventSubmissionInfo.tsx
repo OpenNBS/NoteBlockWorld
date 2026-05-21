@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import { cn } from '@web/lib/utils';
+
 const EVENT_TAG = '#summit26';
 
 const containsEventTag = (text: string | undefined) =>
@@ -21,6 +23,35 @@ export const EVENT_REGION_TAGS = [
 ] as const;
 
 export type EventRegionTag = (typeof EVENT_REGION_TAGS)[number];
+
+const EVENT_REGIONS: {
+  tag: EventRegionTag;
+  emoji: string;
+  label: string;
+  pillClass: string;
+}[] = [
+  {
+    tag: '[Patched Plateaus]',
+    emoji: '🌱',
+    label: 'Patched Plateaus',
+    pillClass:
+      'border-green-500/50 bg-green-900/50 text-green-300 enabled:hover:bg-green-900/70',
+  },
+  {
+    tag: '[Textured Tropics]',
+    emoji: '🍂',
+    label: 'Textured Tropics',
+    pillClass:
+      'border-amber-500/50 bg-amber-900/50 text-amber-300 enabled:hover:bg-amber-900/70',
+  },
+  {
+    tag: '[Welded Woodlands]',
+    emoji: '🏭',
+    label: 'Welded Woodlands',
+    pillClass:
+      'border-blue-500/50 bg-blue-900/50 text-blue-200 enabled:hover:bg-blue-900/70',
+  },
+];
 
 const appendRegionTag = (description: string, tag: EventRegionTag): string => {
   if (description.includes(tag)) {
@@ -102,41 +133,28 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
           <li>
             Include in the description which region you&apos;re submitting your
             song to be played in:
-            <ul className='list-none list-outside font-bold pl-5 mt-1 space-y-0.5'>
-              <li>
-                🌱{' '}
-                <button
-                  type='button'
-                  disabled={disabled}
-                  className='text-green-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
-                  onClick={() => appendRegion('[Patched Plateaus]')}
-                >
-                  [Patched Plateaus]
-                </button>
-              </li>
-              <li>
-                🍂{' '}
-                <button
-                  type='button'
-                  disabled={disabled}
-                  className='text-amber-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
-                  onClick={() => appendRegion('[Textured Tropics]')}
-                >
-                  [Textured Tropics]
-                </button>
-              </li>
-              <li>
-                🏭{' '}
-                <button
-                  type='button'
-                  disabled={disabled}
-                  className='text-blue-400 enabled:hover:underline enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60'
-                  onClick={() => appendRegion('[Welded Woodlands]')}
-                >
-                  [Welded Woodlands]
-                </button>
-              </li>
-            </ul>
+            <div className='flex flex-wrap gap-2 mt-2 pl-0 font-bold'>
+              {EVENT_REGIONS.map((region) => {
+                const isSelected = (description ?? '').includes(region.tag);
+
+                return (
+                  <button
+                    key={region.tag}
+                    type='button'
+                    disabled={disabled}
+                    className={cn(
+                      'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs whitespace-nowrap transition-colors enabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60',
+                      region.pillClass,
+                      isSelected && 'ring-2 ring-white/40',
+                    )}
+                    onClick={() => appendRegion(region.tag)}
+                  >
+                    <span aria-hidden>{region.emoji}</span>
+                    {region.label}
+                  </button>
+                );
+              })}
+            </div>
           </li>
           <li>
             You will be credited by the name shown in the Author field below.
