@@ -150,7 +150,7 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
         <p>
           You&apos;re submitting an entry to{' '}
           <span className='font-bold'>Smithed Summit 2026</span>! By uploading
-          this song, you agree to:{' '}
+          this song, you agree to the following:{' '}
         </p>
         <ul className='list-disc list-outside pl-5 mt-2 space-y-1'>
           <li>
@@ -170,9 +170,9 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
             .
           </li>
           <li>
-            Include in the description which region you&apos;re submitting your
-            song to be played in:
-            <div className='flex flex-wrap gap-2 mt-2 pl-0 font-bold'>
+            In the description, specify which region your song should be played
+            in:
+            <div className='flex flex-wrap gap-2 my-2 pl-0 font-bold'>
               {EVENT_REGIONS.map((region) => {
                 const isSelected = (description ?? '').includes(region.tag);
 
@@ -197,13 +197,13 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
             </div>
           </li>
           <li>
-            You will be credited by the name shown in the Author field below.
-            You can edit it by clicking your user icon in the top right corner
-            of the page.
+            You will be credited using the name shown in the Author field below.
+            To change it, click your user icon in the top-right corner of the
+            page.
           </li>
           <li>
-            You allow us and Smithed to play your submission on the event&apos;s
-            server and distribute the converted data pack.
+            You grant us and Smithed permission to play your submission on the
+            event&apos;s server and distribute the converted data pack.
           </li>
         </ul>
       </div>
