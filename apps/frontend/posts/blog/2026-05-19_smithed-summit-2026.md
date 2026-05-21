@@ -35,7 +35,9 @@ A snowy, autumnal forest with aging industrial infrastructure!
 
 > _The images above are a courtesy of Smithed._
 
-**For a more detailed look into each region, check the [Summit announcement video](https://youtu.be/Ud33t4ZwmwI) for a fly-through of the world map!**
+For a more detailed look into each region, check the [Summit announcement video](https://youtu.be/Ud33t4ZwmwI) for a fly-through of the world map!
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Ud33t4ZwmwI?si=FkkFQOtE1Ls9imQZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## 🕛 Deadline
 
