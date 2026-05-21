@@ -2,7 +2,7 @@ import { faExternalLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { type RefObject } from 'react';
 
 import { cn } from '@web/lib/utils';
 
@@ -53,27 +53,48 @@ const EVENT_REGIONS: {
   },
 ];
 
-const appendRegionTag = (description: string, tag: EventRegionTag): string => {
-  if (description.includes(tag)) {
-    return description;
-  }
-
-  let updated = description;
+const findRegionTag = (
+  description: string,
+): { index: number; tag: EventRegionTag } | null => {
   for (const regionTag of EVENT_REGION_TAGS) {
-    if (regionTag !== tag && updated.includes(regionTag)) {
-      updated = updated.replace(regionTag, '');
+    const index = description.indexOf(regionTag);
+    if (index !== -1) {
+      return { index, tag: regionTag };
     }
   }
 
-  updated = updated.replace(/\n{3,}/g, '\n\n').trimEnd();
-  const separator = updated.length > 0 ? '\n' : '';
+  return null;
+};
 
-  return `${updated}${separator}${tag}`;
+const applyRegionTag = (
+  description: string,
+  tag: EventRegionTag,
+  selectionStart: number,
+  selectionEnd: number,
+): { value: string; cursor: number } => {
+  const existing = findRegionTag(description);
+
+  if (existing) {
+    const value =
+      description.slice(0, existing.index) +
+      tag +
+      description.slice(existing.index + existing.tag.length);
+
+    return { value, cursor: existing.index + tag.length };
+  }
+
+  const value =
+    description.slice(0, selectionStart) +
+    tag +
+    description.slice(selectionEnd);
+
+  return { value, cursor: selectionStart + tag.length };
 };
 
 type EventSubmissionInfoProps = {
   title?: string;
   description?: string;
+  descriptionRef: RefObject<HTMLTextAreaElement | null>;
   disabled?: boolean;
   onDescriptionChange: (description: string) => void;
 };
@@ -81,18 +102,36 @@ type EventSubmissionInfoProps = {
 export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
   title,
   description,
+  descriptionRef,
   disabled = false,
   onDescriptionChange,
 }) => {
-  const appendRegion = (tag: EventRegionTag) => {
+  const applyRegion = (tag: EventRegionTag) => {
     if (disabled) {
       return;
     }
 
-    const next = appendRegionTag(description ?? '', tag);
-    if (next !== description) {
-      onDescriptionChange(next);
+    const textarea = descriptionRef.current;
+    const current = description ?? '';
+    const selectionStart = textarea?.selectionStart ?? current.length;
+    const selectionEnd = textarea?.selectionEnd ?? selectionStart;
+    const { value, cursor } = applyRegionTag(
+      current,
+      tag,
+      selectionStart,
+      selectionEnd,
+    );
+
+    if (value === current) {
+      return;
     }
+
+    onDescriptionChange(value);
+
+    requestAnimationFrame(() => {
+      textarea?.focus();
+      textarea?.setSelectionRange(cursor, cursor);
+    });
   };
   if (!isEventSubmission(title, description)) {
     return null;
@@ -147,7 +186,8 @@ export const EventSubmissionInfo: React.FC<EventSubmissionInfoProps> = ({
                       region.pillClass,
                       isSelected && 'ring-2 ring-white/40',
                     )}
-                    onClick={() => appendRegion(region.tag)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => applyRegion(region.tag)}
                   >
                     <span aria-hidden>{region.emoji}</span>
                     {region.label}
