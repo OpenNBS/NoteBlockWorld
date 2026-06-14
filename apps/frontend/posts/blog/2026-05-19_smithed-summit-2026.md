@@ -21,7 +21,7 @@ The Summit convention will be split up into three regions:
 
 Colorful rolling plains with green grass and fields of flowers!
 
-![Patched Plateaus - a colorful rolling plains with green grass and fields of flowers. Keywords that describe this region: city, colorful, modern, playful.](/img/blog/summit26/patched-plateaus.webp)
+![Patched Plateaus - colorful rolling plains with green grass and fields of flowers. Keywords that describe this region: city, colorful, modern, playful.](/img/blog/summit26/patched-plateaus.webp)
 
 ### 🍂 Textured Tropics
 
