@@ -27,16 +27,16 @@ export const EventBanner = () => {
     const seconds = totalSeconds % 60;
 
     if (days > 0) {
-      return `${String(days).padStart(2, '0')} days`;
+      return `${days} day${days > 1 ? 's' : ''}`;
     }
-    return `${String(days).padStart(2, '0')}d ${String(hours).padStart(
-      2,
-      '0',
-    )}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const hoursString = String(hours).padStart(2, '0');
+    const minutesString = String(minutes).padStart(2, '0');
+    const secondsString = String(seconds).padStart(2, '0');
+    return `${hoursString}:${minutesString}:${secondsString}`;
   };
 
   return (
-    <div className='flex flex-row mx-auto w-fit h-32 justify-between items-center text-pretty gap-6 py-4 px-2 sm:px-8 text-md rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-linear-to-br from-15% from-blue-800/50 via-blue-900/50 to-85% to-blue-900/50 relative'>
+    <div className='flex flex-row mx-auto w-fit min-h-32 justify-between items-center text-pretty gap-6 p-4 sm:px-8 text-md rounded-xl mb-10 bg-top backdrop-filter backdrop-blur-lg bg-linear-to-br from-15% from-blue-800/50 via-blue-900/50 to-85% to-blue-900/50 relative'>
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-50 brightness-[0.3]'
         style={{

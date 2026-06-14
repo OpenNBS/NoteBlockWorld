@@ -21,7 +21,7 @@ The Summit convention will be split up into three regions:
 
 Colorful rolling plains with green grass and fields of flowers!
 
-![Patched Plateaus - a colorful rolling plains with green grass and fields of flowers. Keywords that describe this region: city, colorful, modern, playful.](/img/blog/summit26/patched-plateaus.webp)
+![Patched Plateaus - colorful rolling plains with green grass and fields of flowers. Keywords that describe this region: city, colorful, modern, playful.](/img/blog/summit26/patched-plateaus.webp)
 
 ### 🍂 Textured Tropics
 
@@ -68,7 +68,7 @@ Submissions will be cut off on **June 16th, 2026**. You must submit your songs b
 - There is no song length requirement or limit. Go wild!
 - Note and layer panning (stereo) will be functional, but relative to a specific point (speakers placed throughout the world).
 - Fine pitch adjustment will be functional.
-- You can use use note blocks outside of the vanilla two-octave range (up to six octaves!)
+- You can use note blocks outside of the vanilla two-octave range (up to six octaves!)
 - You can use custom sounds from vanilla Minecraft (also up to six octaves!)
 - Your submission **does not** need to be vanilla-compatible! As long as it abides by the above limitations, it is valid.
 - Sooner especially does not equal better! You have an entire month to work on submissions; use this time to your advantage.
@@ -85,11 +85,24 @@ The description of your song **must include**:
   - `[Textured Tropics]`
   - `[Welded Woodlands]`
 
+Adding the event tag will show a popup that helps you add the necessary information to your song:
+
+![Event submission info popup](/img/blog/summit26/submission-info.png)
+
 Just like any other song uploaded to Note Block World, **you keep all rights to your submission!** However, we (and Smithed) hold the right to play submissions on the event server and distribute the converted data pack.
 
 **We'll credit you by your username in Note Block World.** If you'd like to change it, you can do so by clicking your user icon in the top right corner of the page. Make sure to do this by the end of the submission period!
 
 In case you're not interested in uploading the songs to Note Block World, manual submissions can be handled on a case-by-case basis. In that case, join our [Discord](https://discord.gg/note-block-world-608692895179997252) and reach out to us in the event's channel!
+
+## 🎨 Optional features
+
+If you'd like to be extra creative, you can add a special thumbnail or cover art to your submission. This is **optional**, and should only be done if you have extra time. The music comes first!
+
+- If your submission features a special thumbnail for Note Block World, let us know and it will be featured in our booth!
+- If you design cover art within the limits of vanilla paintings (16x16 pixels for 1x1 blocks, and optional 32x32 for 2x2), we'll find a place for it within our booth!
+
+You can submit your thumbnail or cover art by joining our [Discord](https://discord.gg/note-block-world-608692895179997252) server and reaching out to us in the event's channel!
 
 ---
 
