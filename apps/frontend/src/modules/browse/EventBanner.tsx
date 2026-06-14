@@ -29,10 +29,10 @@ export const EventBanner = () => {
     if (days > 0) {
       return `${days} day${days > 1 ? 's' : ''}`;
     }
-    return `${String(days).padStart(2, '0')}d ${String(hours).padStart(
-      2,
-      '0',
-    )}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const hoursString = String(hours).padStart(2, '0');
+    const minutesString = String(minutes).padStart(2, '0');
+    const secondsString = String(seconds).padStart(2, '0');
+    return `${hoursString}:${minutesString}:${secondsString}`;
   };
 
   return (
