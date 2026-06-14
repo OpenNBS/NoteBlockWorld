@@ -1,5 +1,6 @@
 import { Instrument, Layer, Note, Song } from '@encode42/nbs.js';
 
+import { seedOutputBuiltinInstruments } from './nbsCompat';
 import { getInstrumentNoteCounts, getTempoChangerInstrumentIds } from './util';
 
 export class SongObfuscator {
@@ -20,6 +21,9 @@ export class SongObfuscator {
   private generateObfuscatedSong(): Song {
     const song = this.song;
     const output = new Song();
+
+    // TODO: TEMP: preserve v5/v6 format until nbs.js writes v6 from `new Song()`.
+    seedOutputBuiltinInstruments(song, output);
 
     // ✅ Clear work stats
     // ✅ Copy: title, author, description, loop info, time signature

@@ -1,3 +1,4 @@
+export * from './nbsCompat';
 export * from './injectMetadata';
 export * from './notes';
 export * from './obfuscate';
