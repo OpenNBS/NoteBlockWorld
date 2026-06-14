@@ -95,6 +95,15 @@ Just like any other song uploaded to Note Block World, **you keep all rights to 
 
 In case you're not interested in uploading the songs to Note Block World, manual submissions can be handled on a case-by-case basis. In that case, join our [Discord](https://discord.gg/note-block-world-608692895179997252) and reach out to us in the event's channel!
 
+## 🎨 Optional features
+
+If you'd like to be extra creative, you can add a special thumbnail or cover art to your submission. This is **optional**, and should only be done if you have extra time. The music comes first!
+
+- If your submission features a special thumbnail for Note Block World, let us know and it will be featured in our booth!
+- If you design cover art within the limits of vanilla paintings (16x16 pixels for 1x1 blocks, and optional 32x32 for 2x2), we'll find a place for it within our booth!
+
+You can submit your thumbnail or cover art by joining our [Discord](https://discord.gg/note-block-world-608692895179997252) server and reaching out to us in the event's channel!
+
 ---
 
 We can't wait to see what you all come up with!
