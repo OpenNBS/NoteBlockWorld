@@ -27,7 +27,7 @@ export const EventBanner = () => {
     const seconds = totalSeconds % 60;
 
     if (days > 0) {
-      return `${String(days).padStart(2, '0')} days`;
+      return `${days} day${days > 1 ? 's' : ''}`;
     }
     return `${String(days).padStart(2, '0')}d ${String(hours).padStart(
       2,
