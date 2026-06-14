@@ -85,6 +85,10 @@ The description of your song **must include**:
   - `[Textured Tropics]`
   - `[Welded Woodlands]`
 
+Adding the event tag will show a popup that helps you add the necessary information to your song:
+
+![Event submission info popup](/img/blog/summit26/submission-info.png)
+
 Just like any other song uploaded to Note Block World, **you keep all rights to your submission!** However, we (and Smithed) hold the right to play submissions on the event server and distribute the converted data pack.
 
 **We'll credit you by your username in Note Block World.** If you'd like to change it, you can do so by clicking your user icon in the top right corner of the page. Make sure to do this by the end of the submission period!
