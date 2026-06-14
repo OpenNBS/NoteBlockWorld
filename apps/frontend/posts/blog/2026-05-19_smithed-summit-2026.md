@@ -68,7 +68,7 @@ Submissions will be cut off on **June 16th, 2026**. You must submit your songs b
 - There is no song length requirement or limit. Go wild!
 - Note and layer panning (stereo) will be functional, but relative to a specific point (speakers placed throughout the world).
 - Fine pitch adjustment will be functional.
-- You can use use note blocks outside of the vanilla two-octave range (up to six octaves!)
+- You can use note blocks outside of the vanilla two-octave range (up to six octaves!)
 - You can use custom sounds from vanilla Minecraft (also up to six octaves!)
 - Your submission **does not** need to be vanilla-compatible! As long as it abides by the above limitations, it is valid.
 - Sooner especially does not equal better! You have an entire month to work on submissions; use this time to your advantage.
