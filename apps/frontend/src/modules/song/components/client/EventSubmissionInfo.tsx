@@ -32,7 +32,7 @@ const EVENT_REGIONS: {
 }[] = [
   {
     tag: '[Patched Plateaus]',
-    emoji: '🌱',
+    emoji: '🌿',
     label: 'Patched Plateaus',
     pillClass:
       'border-green-500/50 bg-green-900/50 text-green-300 enabled:hover:bg-green-900/70',
