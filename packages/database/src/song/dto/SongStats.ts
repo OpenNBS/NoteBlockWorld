@@ -56,8 +56,8 @@ export class SongStats {
   nbsVersion: number;
 
   @IsInt()
+  @IsIn([16, 20])
   defaultInstrumentCount: number;
-
   @IsInt()
   outOfRangeNoteCount: number;
 
