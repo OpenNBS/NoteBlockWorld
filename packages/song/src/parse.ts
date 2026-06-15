@@ -41,6 +41,7 @@ export async function parseSongFromBuffer(
     arrayBuffer: buffer,
     notes: quadTree,
     instruments: getInstruments(song, vanillaSoundList),
+    defaultInstrumentCount: song.instruments.firstCustomIndex,
   };
 }
 

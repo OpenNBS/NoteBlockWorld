@@ -10,6 +10,7 @@ export type SongFileType = {
   arrayBuffer: ArrayBuffer;
   notes: NoteQuadTree;
   instruments: InstrumentArray;
+  defaultInstrumentCount: number;
 };
 
 export type InstrumentArray = Instrument[];
