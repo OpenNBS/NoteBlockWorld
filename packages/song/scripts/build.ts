@@ -17,6 +17,8 @@ async function buildNode() {
     entrypoints: [join(packageRoot, 'src', 'index.ts')],
     outdir: join(packageRoot, 'dist'),
     target: 'node',
+    // Keep a single @encode42/nbs.js instance for consumers (e.g. backend instanceof checks).
+    external: ['@encode42/nbs.js'],
   });
 
   if (!result.success) {
