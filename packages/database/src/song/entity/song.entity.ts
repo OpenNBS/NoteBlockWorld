@@ -17,6 +17,9 @@ import type { CategoryType, LicenseType, VisibilityType } from '../dto/types';
   },
 })
 export class Song {
+  @Prop({ type: Number, required: true, default: 0 })
+  schemaVersion: number;
+
   @Prop({ type: String, required: true, unique: true })
   publicId: string;
 
