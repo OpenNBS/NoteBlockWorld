@@ -363,6 +363,7 @@ export class SongUploadService {
 
     const thumbBuffer = await drawToImage({
       notes: quadTree,
+      defaultInstrumentCount: nbsSong.instruments.firstCustomIndex,
       startTick: startTick,
       startLayer: startLayer,
       zoomLevel: zoomLevel,
