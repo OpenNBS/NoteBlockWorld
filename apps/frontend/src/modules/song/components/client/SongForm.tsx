@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { UPLOAD_CONSTANTS } from '@nbw/config';
 import type { LicenseType } from '@nbw/database';
@@ -23,6 +23,7 @@ import {
 } from '@web/modules/shared/components/client/FormElements';
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 
+import { EventSubmissionInfo } from './EventSubmissionInfo';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 
@@ -43,6 +44,13 @@ export const SongForm: React.FC<SongFormProps> = ({
     useSongProviderData;
 
   const router = useRouter();
+
+  const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
+  const { ref: descriptionRegisterRef, ...descriptionRegister } =
+    register('description');
+
+  const title = formMethods.watch('title');
+  const description = formMethods.watch('description');
 
   return (
     <>
@@ -120,7 +128,23 @@ export const SongForm: React.FC<SongFormProps> = ({
               isLoading={isLoading}
               disabled={isLocked}
               errorMessage={errors.description?.message}
-              {...register('description')}
+              ref={(el) => {
+                descriptionRegisterRef(el);
+                descriptionRef.current = el;
+              }}
+              {...descriptionRegister}
+            />
+            <EventSubmissionInfo
+              title={title}
+              description={description}
+              descriptionRef={descriptionRef}
+              disabled={isLocked}
+              onDescriptionChange={(value) => {
+                formMethods.setValue('description', value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
             />
           </div>
 

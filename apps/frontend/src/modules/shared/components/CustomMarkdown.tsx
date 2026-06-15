@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import type { JSX } from 'react';
 import Markdown, { ExtraProps } from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+
+const YOUTUBE_EMBED_PREFIX = 'https://www.youtube.com/embed/';
 
 export const CustomMarkdown = ({
   MarkdownContent,
@@ -9,6 +12,7 @@ export const CustomMarkdown = ({
 }) => {
   return (
     <Markdown
+      rehypePlugins={[rehypeRaw]}
       components={{
         p,
         h1,
@@ -26,6 +30,7 @@ export const CustomMarkdown = ({
         code,
         a,
         img,
+        iframe,
       }}
     >
       {MarkdownContent}
@@ -135,6 +140,33 @@ const img = ({
   );
 };
 
+const iframe = ({
+  node,
+  src = '',
+  title = 'Embedded video',
+  ...props
+}: JSX.IntrinsicElements['iframe'] & ExtraProps) => {
+  if (!src.startsWith(YOUTUBE_EMBED_PREFIX)) {
+    return null;
+  }
+
+  const { ref, frameBorder, ...rest } = props;
+
+  return (
+    <div className='relative my-8 w-full aspect-video rounded-lg overflow-hidden'>
+      <iframe
+        {...rest}
+        src={src}
+        title={title}
+        className='absolute inset-0 h-full w-full'
+        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+        referrerPolicy='strict-origin-when-cross-origin'
+        allowFullScreen
+      />
+    </div>
+  );
+};
+
 export {
   p,
   h1,
@@ -152,4 +184,5 @@ export {
   code,
   a,
   img,
+  iframe,
 };

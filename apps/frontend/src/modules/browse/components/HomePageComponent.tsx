@@ -15,6 +15,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../shared/components/client/Carousel';
+import { EventBanner } from '../EventBanner';
 import { WelcomeBanner } from '../WelcomeBanner';
 
 import { CategoryButtonGroup } from './client/CategoryButton';
@@ -38,7 +39,7 @@ export const HomePageComponent = () => {
     <>
       {/* Welcome banner/Hero */}
       <WelcomeBanner />
-      {/* <EventBanner /> */}
+      <EventBanner />
 
       {/* FEATURED SONGS */}
       {featuredSongsPage.length > 0 && (
