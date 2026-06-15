@@ -102,8 +102,10 @@ export class SongStatsGenerator {
     let customInstrumentNoteCount = 0;
     let incompatibleNoteCount = 0;
 
+    // At least one slot per default instrument (16 for v5, 20 for v6).
+    const minInstrumentSlots = this.song.instruments.firstCustomIndex;
     const instrumentNoteCounts = Array(
-      this.song.instruments.loaded.length,
+      Math.max(minInstrumentSlots, this.song.instruments.loaded.length),
     ).fill(0);
 
     for (const [layerId, layer] of this.song.layers.entries()) {

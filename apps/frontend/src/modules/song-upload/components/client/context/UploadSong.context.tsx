@@ -12,7 +12,11 @@ import { toast } from 'react-hot-toast';
 import { create } from 'zustand';
 
 import { BG_COLORS, THUMBNAIL_CONSTANTS, UPLOAD_CONSTANTS } from '@nbw/config';
-import { parseSongFromBuffer, type SongFileType } from '@nbw/song';
+import {
+  parseSongFromBuffer,
+  UnsupportedNbsVersionError,
+  type SongFileType,
+} from '@nbw/song';
 import axiosInstance from '@web/lib/axios';
 import { InvalidTokenError, getTokenLocal } from '@web/lib/axios/token.utils';
 import {
@@ -250,7 +254,15 @@ export const UploadSongProvider = ({
       parsedSong = await parseSongFromBuffer(await file.arrayBuffer());
     } catch (e) {
       console.error('Error parsing song file', e);
-      toast.error('Invalid song file! Please try again with a different song.');
+      if (e instanceof UnsupportedNbsVersionError) {
+        toast.error(
+          'Unsupported NBS version! Please save this file in an older version.',
+        );
+      } else {
+        toast.error(
+          'Invalid song file! Please try again with a different song.',
+        );
+      }
       setSong(null);
       return;
     }

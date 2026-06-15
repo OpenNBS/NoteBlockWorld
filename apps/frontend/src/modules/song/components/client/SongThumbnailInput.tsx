@@ -149,13 +149,12 @@ export const SongThumbnailInput: React.FC<SongThumbnailInputProps> = ({
 }: SongThumbnailInputProps) => {
   const { song, formMethods } = useSongProvider(type);
 
-  const [notes, maxTick, maxLayer] = useMemo(() => {
-    if (!song) return [null, 0, 0];
-    const notes = song.notes;
+  const [maxTick, maxLayer] = useMemo(() => {
+    if (!song) return [0, 0];
     const maxTick = song.length;
     const maxLayer = song.height;
 
-    return [notes, maxTick, maxLayer];
+    return [maxTick, maxLayer];
   }, [song]);
 
   return (
@@ -167,8 +166,8 @@ export const SongThumbnailInput: React.FC<SongThumbnailInputProps> = ({
         maxLayer={maxLayer}
       />
 
-      {song && notes && (
-        <ThumbnailRendererCanvas notes={notes} formMethods={formMethods} />
+      {song && (
+        <ThumbnailRendererCanvas song={song} formMethods={formMethods} />
       )}
 
       {/* Background Color */}

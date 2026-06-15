@@ -1,5 +1,6 @@
-import { Song, fromArrayBuffer } from '@encode42/nbs.js';
+import type { Song } from '@encode42/nbs.js';
 
+import { loadNbsFromBuffer } from './nbsCompat';
 import { NoteQuadTree } from './notes';
 import type { InstrumentArray, SongFileType } from './types';
 import { getInstrumentNoteCounts } from './util';
@@ -20,7 +21,7 @@ async function getVanillaSoundList() {
 export async function parseSongFromBuffer(
   buffer: ArrayBuffer,
 ): Promise<SongFileType> {
-  const song = fromArrayBuffer(buffer);
+  const song = loadNbsFromBuffer(buffer);
 
   if (song.length === 0) {
     throw new Error('Invalid song');
@@ -40,6 +41,7 @@ export async function parseSongFromBuffer(
     arrayBuffer: buffer,
     notes: quadTree,
     instruments: getInstruments(song, vanillaSoundList),
+    defaultInstrumentCount: song.instruments.firstCustomIndex,
   };
 }
 

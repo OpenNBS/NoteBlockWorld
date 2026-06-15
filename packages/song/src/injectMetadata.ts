@@ -1,6 +1,7 @@
 import { Song } from '@encode42/nbs.js';
 import unidecode from 'unidecode';
 
+/** Expects a song from {@link loadNbsFromBuffer} (normalized v5/v6 instrument layout). */
 export function injectSongFileMetadata(
   nbsSong: Song,
   title: string,

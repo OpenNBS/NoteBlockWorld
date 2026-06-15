@@ -1,4 +1,4 @@
-import { Song, fromArrayBuffer, toArrayBuffer } from '@encode42/nbs.js';
+import { Song, toArrayBuffer } from '@encode42/nbs.js';
 import {
   HttpException,
   HttpStatus,
@@ -19,7 +19,9 @@ import {
 import {
   NoteQuadTree,
   SongStatsGenerator,
+  UnsupportedNbsVersionError,
   injectSongFileMetadata,
+  loadNbsFromBuffer,
   obfuscateAndPackSong,
 } from '@nbw/song';
 import { drawToImage } from '@nbw/thumbnail/node';
@@ -361,6 +363,7 @@ export class SongUploadService {
 
     const thumbBuffer = await drawToImage({
       notes: quadTree,
+      defaultInstrumentCount: nbsSong.instruments.firstCustomIndex,
       startTick: startTick,
       startLayer: startLayer,
       zoomLevel: zoomLevel,
@@ -439,7 +442,24 @@ export class SongUploadService {
   }
 
   public getSongObject(loadedArrayBuffer: ArrayBuffer): Song {
-    const nbsSong = fromArrayBuffer(loadedArrayBuffer);
+    let nbsSong: Song;
+
+    try {
+      nbsSong = loadNbsFromBuffer(loadedArrayBuffer);
+    } catch (error) {
+      if (error instanceof UnsupportedNbsVersionError) {
+        throw new HttpException(
+          {
+            error: {
+              file: error.message,
+            },
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      throw error;
+    }
 
     // If the above operation fails, it will return an empty song
     if (nbsSong.length === 0) {
