@@ -1,5 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 
+import { getNbsFormatVersion } from './nbsCompat';
 import type { SongStatsType } from './types';
 import { getTempoChangerInstrumentIds } from './util';
 
@@ -49,6 +50,8 @@ export class SongStatsGenerator {
       );
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
+    const nbsVersion = getNbsFormatVersion(this.song);
+    const defaultInstrumentCount = this.song.instruments.firstCustomIndex;
 
     const compatible = incompatibleNoteCount === 0;
 
@@ -67,6 +70,8 @@ export class SongStatsGenerator {
       vanillaInstrumentCount,
       customInstrumentCount,
       firstCustomInstrumentIndex,
+      nbsVersion,
+      defaultInstrumentCount,
       instrumentNoteCounts,
       customInstrumentNoteCount,
       outOfRangeNoteCount,

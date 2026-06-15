@@ -46,6 +46,8 @@ export type SongStatsType = {
   vanillaInstrumentCount: number;
   customInstrumentCount: number;
   firstCustomInstrumentIndex: number;
+  nbsVersion: number;
+  defaultInstrumentCount: number;
   outOfRangeNoteCount: number;
   detunedNoteCount: number;
   customInstrumentNoteCount: number;

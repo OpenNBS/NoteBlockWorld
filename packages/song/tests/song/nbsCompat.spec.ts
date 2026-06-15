@@ -60,6 +60,8 @@ describe('nbsCompat', () => {
 
     assert(stats.instrumentNoteCounts.length >= 16);
     assert.strictEqual(stats.firstCustomInstrumentIndex, 16);
+    assert.strictEqual(stats.nbsVersion, 5);
+    assert.strictEqual(stats.defaultInstrumentCount, 16);
   });
 
   it('normalizes v6 built-in instruments at indices 16–19', () => {
@@ -80,6 +82,8 @@ describe('nbsCompat', () => {
 
     assert(stats.instrumentNoteCounts.length >= 20);
     assert.strictEqual(stats.firstCustomInstrumentIndex, 20);
+    assert.strictEqual(stats.nbsVersion, 6);
+    assert.strictEqual(stats.defaultInstrumentCount, 20);
     assert.strictEqual(stats.instrumentNoteCounts[16], 1);
     assert.strictEqual(stats.instrumentNoteCounts[19], 1);
     assert.strictEqual(stats.instrumentNoteCounts[20], 1);
