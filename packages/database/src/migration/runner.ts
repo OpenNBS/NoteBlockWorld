@@ -26,11 +26,22 @@ export function migrateDocument<TDoc extends SchemaVersionedDocument>(
   doc: TDoc,
 ): TDoc {
   let result = doc;
-  const pending = getPendingMigrations(registry, doc);
+  const originalSchemaVersion = getDocumentSchemaVersion(doc);
 
-  for (const migration of pending) {
-    result = migration.apply(result);
-    result.schemaVersion = migration.version;
+  for (const migration of registry.migrations) {
+    if (
+      originalSchemaVersion < migration.version ||
+      migration.needsMigration(result)
+    ) {
+      result = migration.apply(result);
+
+      // Never downgrade schemaVersion if an older migration is applied via needsMigration().
+      result.schemaVersion = Math.max(
+        getDocumentSchemaVersion(result),
+        originalSchemaVersion,
+        migration.version,
+      );
+    }
   }
 
   return result;

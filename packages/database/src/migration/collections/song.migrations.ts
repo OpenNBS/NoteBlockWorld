@@ -18,7 +18,6 @@ function songNeedsMigration1(doc: SongMigrationDoc): boolean {
 function applySongMigration1(doc: SongMigrationDoc): SongMigrationDoc {
   return {
     ...doc,
-    schemaVersion: 1,
     stats: {
       ...doc.stats,
       nbsVersion: doc.stats?.nbsVersion ?? 5,
