@@ -58,6 +58,7 @@ export class SongStats {
   @IsInt()
   @IsIn([16, 20])
   defaultInstrumentCount: number;
+
   @IsInt()
   outOfRangeNoteCount: number;
 
