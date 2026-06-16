@@ -9,6 +9,7 @@ import {
 import { Types } from 'mongoose';
 
 import {
+  CURRENT_SONG_SCHEMA_VERSION,
   SongDocument,
   Song as SongEntity,
   SongStats,
@@ -111,6 +112,7 @@ export class SongUploadService {
     file: Express.Multer.File,
   ): Promise<SongEntity> {
     const song = new SongEntity();
+    song.schemaVersion = CURRENT_SONG_SCHEMA_VERSION;
     song.uploader = await this.validateUploader(user);
     song.publicId = publicId;
     song.title = removeExtraSpaces(body.title);

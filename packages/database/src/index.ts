@@ -15,6 +15,8 @@ export * from './song/dto/UploadSongResponseDto.dto';
 export * from './song/dto/types';
 export * from './song/entity/song.entity';
 
+export * from './migration';
+
 export * from './user/dto/CreateUser.dto';
 export * from './user/dto/GetUser.dto';
 export * from './user/dto/Login.dto copy';

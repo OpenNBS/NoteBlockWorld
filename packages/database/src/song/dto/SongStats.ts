@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsIn,
   IsInt,
   IsNumber,
   IsString,
@@ -49,6 +50,14 @@ export class SongStats {
 
   @IsInt()
   firstCustomInstrumentIndex: number;
+
+  @IsInt()
+  @IsIn([5, 6])
+  nbsVersion: number;
+
+  @IsInt()
+  @IsIn([16, 20])
+  defaultInstrumentCount: number;
 
   @IsInt()
   outOfRangeNoteCount: number;

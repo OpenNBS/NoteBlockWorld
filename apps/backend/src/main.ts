@@ -5,6 +5,7 @@ import * as express from 'express';
 import { AppModule } from './app.module';
 import { initializeSwagger } from './lib/initializeSwagger';
 import { ParseTokenPipe } from './lib/parseToken';
+import { MigrationService } from './migration/migration.service';
 
 const logger: Logger = new Logger('main.ts');
 
@@ -46,6 +47,10 @@ async function bootstrap() {
   });
 
   app.use('/v1', express.static('public'));
+
+  const migrationService = app.get(MigrationService);
+  const migrationResults = await migrationService.runAllPendingMigrations();
+  logger.log(`Migrations complete: ${JSON.stringify(migrationResults)}`);
 
   const port = process.env.PORT || '4000';
 
