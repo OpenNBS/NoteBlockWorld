@@ -7,6 +7,10 @@ image: '/img/blog/summit26/banner.png'
 tags: ['events']
 ---
 
+**Update (2026-06-17):** We've just added support for songs that use the four new [**trumpet**](https://minecraft.wiki/w/Java_Edition_26.1#Blocks_2) instruments added to Minecraft 26.1! To be fair to everyone, the submission deadline has been extended to **June 23rd**.
+
+---
+
 It's time for our third major community event! The in-game Minecraft data pack convention, [**Smithed Summit 2026**](https://smithed.net/summit), is coming this summer! We'll be holding a **booth** and a **live performance** at the event, and, just like last time, we're opening submissions for note block songs to be played on the server, around the convention grounds, to all attendees.
 
 Our goal is to include as many submissions as possible. No matter your skill level or experience creating note block music, everybody is welcome! Use this jam as an opportunity to **try new things**, and as motivation to experiment with interesting techniques. We encourage everybody to embrace their unique creativity to create original note block compositions or stylized covers. After all, we've got three great "prompts" to pique your imagination this time around.
@@ -41,7 +45,7 @@ For a more detailed look into each region, check the [Summit announcement video]
 
 ## 🕛 Deadline
 
-Submissions will be cut off on **June 16th, 2026**. You must submit your songs before then, but we can manually accept submissions up to **July 1st, 2026** on a case-by-case basis.
+Submissions will be cut off on ~~June 16th~~ **June 23th, 2026**. You must submit your songs before then, but we can manually accept submissions up to **July 1st, 2026** on a case-by-case basis.
 
 ## ✅ What's allowed?
 

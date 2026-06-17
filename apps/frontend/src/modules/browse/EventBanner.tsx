@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const EventBanner = () => {
-  const targetDate = Date.UTC(2026, 5, 16, 17, 0, 0); // June is 5 (0-indexed)
+  const targetDate = Date.UTC(2026, 5, 24, 12, 0, 0); // June is 5 (0-indexed)
 
   const [timeLeft, setTimeLeft] = useState(() =>
     Math.max(0, targetDate - Date.now()),
