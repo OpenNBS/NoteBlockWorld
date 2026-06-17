@@ -18,7 +18,7 @@ describe('migration runner', () => {
       schemaVersion: CURRENT_SONG_SCHEMA_VERSION,
       stats: {
         nbsVersion: 5,
-        defaultInstrumentCount: 16,
+        firstCustomInstrumentIndex: 16,
       },
     };
 
@@ -38,7 +38,6 @@ describe('migration runner', () => {
 
     expect(migrated.schemaVersion).toBe(1);
     expect(migrated.stats.nbsVersion).toBe(5);
-    expect(migrated.stats.defaultInstrumentCount).toBe(16);
     expect(migrated.stats.noteCount).toBe(10);
   });
 
@@ -46,7 +45,7 @@ describe('migration runner', () => {
     const doc = {
       stats: {
         nbsVersion: 5,
-        defaultInstrumentCount: 16,
+        firstCustomInstrumentIndex: 16,
       },
     };
 
@@ -54,7 +53,6 @@ describe('migration runner', () => {
 
     expect(migrated.schemaVersion).toBe(1);
     expect(migrated.stats.nbsVersion).toBe(5);
-    expect(migrated.stats.defaultInstrumentCount).toBe(16);
   });
 
   it('builds a pending query with schema and field guards', () => {
@@ -65,7 +63,6 @@ describe('migration runner', () => {
         { schemaVersion: { $exists: false } },
         { schemaVersion: { $lt: CURRENT_SONG_SCHEMA_VERSION } },
         { 'stats.nbsVersion': { $exists: false } },
-        { 'stats.defaultInstrumentCount': { $exists: false } },
       ],
     });
   });

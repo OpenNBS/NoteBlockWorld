@@ -51,7 +51,6 @@ export class SongStatsGenerator {
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
     const nbsVersion = getNbsFormatVersion(this.song);
-    const defaultInstrumentCount = this.song.instruments.firstCustomIndex;
 
     const compatible = incompatibleNoteCount === 0;
 
@@ -71,7 +70,6 @@ export class SongStatsGenerator {
       customInstrumentCount,
       firstCustomInstrumentIndex,
       nbsVersion,
-      defaultInstrumentCount,
       instrumentNoteCounts,
       customInstrumentNoteCount,
       outOfRangeNoteCount,

@@ -8,11 +8,7 @@ type SongMigrationDoc = Pick<Song, 'schemaVersion' | 'stats'>;
 function songNeedsMigration1(doc: SongMigrationDoc): boolean {
   const schemaVersion = doc.schemaVersion ?? 0;
 
-  return (
-    schemaVersion < 1 ||
-    doc.stats?.nbsVersion == null ||
-    doc.stats?.defaultInstrumentCount == null
-  );
+  return schemaVersion < 1 || doc.stats?.nbsVersion == null;
 }
 
 function applySongMigration1(doc: SongMigrationDoc): SongMigrationDoc {
@@ -21,7 +17,6 @@ function applySongMigration1(doc: SongMigrationDoc): SongMigrationDoc {
     stats: {
       ...doc.stats,
       nbsVersion: doc.stats?.nbsVersion ?? 5,
-      defaultInstrumentCount: doc.stats?.defaultInstrumentCount ?? 16,
     },
   };
 }
@@ -42,5 +37,4 @@ export const SONG_MIGRATION_REGISTRY: MigrationRegistry<SongMigrationDoc> = {
 
 export const SONG_PENDING_QUERY_CLAUSES = [
   { 'stats.nbsVersion': { $exists: false } },
-  { 'stats.defaultInstrumentCount': { $exists: false } },
 ];

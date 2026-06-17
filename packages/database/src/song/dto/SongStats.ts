@@ -49,15 +49,12 @@ export class SongStats {
   customInstrumentCount: number;
 
   @IsInt()
+  @IsIn([16, 20])
   firstCustomInstrumentIndex: number;
 
   @IsInt()
   @IsIn([5, 6])
   nbsVersion: number;
-
-  @IsInt()
-  @IsIn([16, 20])
-  defaultInstrumentCount: number;
 
   @IsInt()
   outOfRangeNoteCount: number;
