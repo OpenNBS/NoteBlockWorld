@@ -12,6 +12,7 @@ import { EmailLoginModule } from './email-login/email-login.module';
 import { FileModule } from './file/file.module';
 import { ParseTokenPipe } from './lib/parseToken';
 import { MailingModule } from './mailing/mailing.module';
+import { MigrationModule } from './migration/migration.module';
 import { SeedModule } from './seed/seed.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
@@ -78,6 +79,7 @@ import { UserModule } from './user/user.module';
     SeedModule.forRoot(),
     EmailLoginModule,
     MailingModule,
+    MigrationModule,
   ],
   controllers: [],
   providers: [

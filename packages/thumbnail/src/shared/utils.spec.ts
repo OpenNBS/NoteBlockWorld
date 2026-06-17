@@ -1,8 +1,8 @@
 import { getKeyText, instrumentColors, isDarkColor } from './utils.js';
 
 describe('instrumentColors', () => {
-  it('should contain 16 color codes', () => {
-    expect(instrumentColors).toHaveLength(16);
+  it('should contain 20 color codes', () => {
+    expect(instrumentColors).toHaveLength(20);
 
     instrumentColors.forEach((color) => {
       expect(color).toMatch(/^#[0-9a-f]{6}$/);

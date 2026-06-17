@@ -10,6 +10,7 @@ export type SongFileType = {
   arrayBuffer: ArrayBuffer;
   notes: NoteQuadTree;
   instruments: InstrumentArray;
+  defaultInstrumentCount: number;
 };
 
 export type InstrumentArray = Instrument[];
@@ -45,6 +46,7 @@ export type SongStatsType = {
   vanillaInstrumentCount: number;
   customInstrumentCount: number;
   firstCustomInstrumentIndex: number;
+  nbsVersion: number;
   outOfRangeNoteCount: number;
   detunedNoteCount: number;
   customInstrumentNoteCount: number;

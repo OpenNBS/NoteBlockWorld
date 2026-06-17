@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { JSX } from 'react';
 import Markdown, { ExtraProps } from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 const YOUTUBE_EMBED_PREFIX = 'https://www.youtube.com/embed/';
 
@@ -12,6 +13,7 @@ export const CustomMarkdown = ({
 }) => {
   return (
     <Markdown
+      remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw]}
       components={{
         p,
@@ -31,6 +33,7 @@ export const CustomMarkdown = ({
         a,
         img,
         iframe,
+        del,
       }}
     >
       {MarkdownContent}
@@ -167,6 +170,10 @@ const iframe = ({
   );
 };
 
+const del = ({ node, ...props }: JSX.IntrinsicElements['del'] & ExtraProps) => {
+  return <del {...props} className='text-zinc-400' />;
+};
+
 export {
   p,
   h1,
@@ -185,4 +192,5 @@ export {
   a,
   img,
   iframe,
+  del,
 };

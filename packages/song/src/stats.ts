@@ -1,5 +1,6 @@
 import { Song } from '@encode42/nbs.js';
 
+import { getNbsFormatVersion } from './nbsCompat';
 import type { SongStatsType } from './types';
 import { getTempoChangerInstrumentIds } from './util';
 
@@ -49,6 +50,7 @@ export class SongStatsGenerator {
       );
 
     const firstCustomInstrumentIndex = this.getFirstCustomInstrumentIndex();
+    const nbsVersion = getNbsFormatVersion(this.song);
 
     const compatible = incompatibleNoteCount === 0;
 
@@ -67,6 +69,7 @@ export class SongStatsGenerator {
       vanillaInstrumentCount,
       customInstrumentCount,
       firstCustomInstrumentIndex,
+      nbsVersion,
       instrumentNoteCounts,
       customInstrumentNoteCount,
       outOfRangeNoteCount,
@@ -102,8 +105,10 @@ export class SongStatsGenerator {
     let customInstrumentNoteCount = 0;
     let incompatibleNoteCount = 0;
 
+    // At least one slot per default instrument (16 for v5, 20 for v6).
+    const minInstrumentSlots = this.song.instruments.firstCustomIndex;
     const instrumentNoteCounts = Array(
-      this.song.instruments.loaded.length,
+      Math.max(minInstrumentSlots, this.song.instruments.loaded.length),
     ).fill(0);
 
     for (const [layerId, layer] of this.song.layers.entries()) {

@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { THUMBNAIL_CONSTANTS } from '@nbw/config';
-import { NoteQuadTree } from '@nbw/song';
+import { SongFileType } from '@nbw/song';
 import { drawNotesOffscreen, swap } from '@nbw/thumbnail/browser';
 
 import { UploadSongFormInput } from './SongForm.zod';
 
 type ThumbnailRendererCanvasProps = {
-  notes: NoteQuadTree;
+  song: SongFileType;
   formMethods: UseFormReturn<UploadSongFormInput>;
 };
 
 export const ThumbnailRendererCanvas = ({
-  notes,
+  song,
   formMethods,
 }: ThumbnailRendererCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,6 +30,9 @@ export const ThumbnailRendererCanvas = ({
       'thumbnailData.backgroundColor',
     ],
   );
+
+  const notes = song.notes;
+  const defaultInstrumentCount = song.defaultInstrumentCount;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -61,6 +64,7 @@ export const ThumbnailRendererCanvas = ({
       try {
         const output = (await drawNotesOffscreen({
           notes,
+          defaultInstrumentCount,
           startTick: startTick ?? THUMBNAIL_CONSTANTS.startTick.default,
           startLayer: startLayer ?? THUMBNAIL_CONSTANTS.startLayer.default,
           zoomLevel: zoomLevel ?? THUMBNAIL_CONSTANTS.zoomLevel.default,
@@ -78,7 +82,7 @@ export const ThumbnailRendererCanvas = ({
         setLoading(false);
       }
     });
-  }, [notes, startTick, startLayer, zoomLevel, backgroundColor]);
+  }, [startTick, startLayer, zoomLevel, backgroundColor]);
 
   return (
     <div className='relative w-full'>

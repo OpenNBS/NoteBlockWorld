@@ -386,9 +386,12 @@ describe('SongUploadService', () => {
 
       const buffer = songTest.toArrayBuffer();
 
-      const song = songUploadService.getSongObject(buffer); //TODO: For some reason the song is always empty
+      const song = songUploadService.getSongObject(buffer);
 
       expect(song).toBeInstanceOf(Song);
+      expect(song.meta.name).toBe('Cool Test Song');
+      expect(song.length).toBe(16);
+      expect(song.layers).toHaveLength(3);
     });
 
     it('should throw an error if the array buffer is invalid', () => {

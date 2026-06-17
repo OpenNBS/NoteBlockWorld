@@ -9,6 +9,7 @@ export async function drawNotes(
 ) {
   const {
     notes,
+    defaultInstrumentCount,
     startTick,
     startLayer,
     zoomLevel,
@@ -78,7 +79,8 @@ export async function drawNotes(
     // Calculate position
     const x = (note.tick - startTick) * 8 * zoomFactor;
     const y = (note.layer - startLayer) * 8 * zoomFactor;
-    const overlayColor = instrumentColors[note.instrument % 16] ?? '#FF00FF';
+    const overlayColor =
+      instrumentColors[note.instrument % defaultInstrumentCount] ?? '#FF00FF';
 
     if (!loadedNoteBlockImage) {
       throw new Error('Note block image not loaded');

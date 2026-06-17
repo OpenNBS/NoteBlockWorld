@@ -52,6 +52,7 @@ describe('SongStatsGenerator', () => {
     assert(stats.vanillaInstrumentCount === 5);
     assert(stats.customInstrumentCount === 0);
     assert(stats.firstCustomInstrumentIndex === 16);
+    assert(stats.nbsVersion === 5);
     assert(stats.customInstrumentNoteCount === 0);
     assert(stats.outOfRangeNoteCount === 0);
     assert(stats.detunedNoteCount === 0);

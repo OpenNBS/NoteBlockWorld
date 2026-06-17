@@ -22,6 +22,10 @@ export const instrumentColors = [
   '#19be19',
   '#be1957',
   '#575757',
+  '#d26b50',
+  '#c38969',
+  '#78a07a',
+  '#5ca087',
 ];
 
 const tintedImages: Record<string, DrawingCanvas> = {};

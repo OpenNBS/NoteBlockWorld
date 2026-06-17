@@ -1,20 +1,19 @@
-import type { UserDocument } from '@nbw/database';
+import { HttpException } from '@nestjs/common';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test, TestingModule } from '@nestjs/testing';
+import mongoose, { Model } from 'mongoose';
+
 import {
   SongDocument,
   Song as SongEntity,
   SongPreviewDto,
-  SongSchema,
   SongStats,
   SongViewDto,
   SongWithUser,
   UploadSongDto,
   UploadSongResponseDto,
 } from '@nbw/database';
-import { HttpException } from '@nestjs/common';
-import { getModelToken } from '@nestjs/mongoose';
-import { Test, TestingModule } from '@nestjs/testing';
-import mongoose, { Model } from 'mongoose';
-
+import type { UserDocument } from '@nbw/database';
 import { FileService } from '@server/file/file.service';
 
 import { SongUploadService } from './song-upload/song-upload.service';
@@ -132,7 +131,8 @@ describe('SongService', () => {
           minutesSpent: 10,
           vanillaInstrumentCount: 10,
           customInstrumentCount: 0,
-          firstCustomInstrumentIndex: 0,
+          firstCustomInstrumentIndex: 16,
+          nbsVersion: 5,
           outOfRangeNoteCount: 0,
           detunedNoteCount: 0,
           customInstrumentNoteCount: 0,
@@ -350,7 +350,8 @@ describe('SongService', () => {
           minutesSpent: 10,
           vanillaInstrumentCount: 10,
           customInstrumentCount: 0,
-          firstCustomInstrumentIndex: 0,
+          firstCustomInstrumentIndex: 16,
+          nbsVersion: 5,
           outOfRangeNoteCount: 0,
           detunedNoteCount: 0,
           customInstrumentNoteCount: 0,
