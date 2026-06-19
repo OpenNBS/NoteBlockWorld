@@ -1,5 +1,7 @@
+import { isProductionAppEnv } from '@web/lib/appEnv';
+
 const GoogleAdSense = ({ pId }: { pId?: string }) => {
-  if (process.env.NODE_ENV !== 'production' || !pId) {
+  if (!isProductionAppEnv() || !pId) {
     return null;
   }
 

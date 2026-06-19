@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
 
+import { isProductionAppEnv } from '@web/lib/appEnv';
+
 export default function robots(): MetadataRoute.Robots {
-  // Check if the current deployment is Production
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = isProductionAppEnv();
 
   if (isProd) {
     return {
