@@ -2,7 +2,12 @@ import createMDX from '@next/mdx';
 
 /** @type {import('next').NextConfig} */
 
+const appEnv = process.env.APP_ENV ?? 'local';
+
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_APP_ENV: appEnv,
+  },
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   // Externalize packages that use Node.js built-in modules for server components
   serverExternalPackages: ['@nbw/database', '@nbw/config'],
