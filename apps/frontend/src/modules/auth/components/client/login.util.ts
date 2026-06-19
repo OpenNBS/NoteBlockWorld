@@ -2,6 +2,8 @@
 //import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+import { isLocalAppEnv } from '@web/lib/appEnv';
+
 export function deleteAuthCookies() {
   // delete cookie
   const cookiesToBeDeleted = ['refresh_token', 'token'];
@@ -9,7 +11,7 @@ export function deleteAuthCookies() {
   cookiesToBeDeleted.forEach((cookie) => {
     if (!document) return;
 
-    if (process.env.NODE_ENV === 'development') {
+    if (isLocalAppEnv()) {
       document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/`;
     } else {
       document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${process.env.NEXT_PUBLIC_APP_DOMAIN}`;

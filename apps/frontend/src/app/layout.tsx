@@ -13,6 +13,7 @@ import { WebSite, WithContext } from 'schema-dts';
 
 import DetectAdBlock from '../modules/shared/components/client/ads/DetectAdBlock';
 import GoogleAdSense from '../modules/shared/components/GoogleAdSense';
+import { isProductionAppEnv } from '@web/lib/appEnv';
 import { TooltipProvider } from '../modules/shared/components/tooltip';
 
 // Pre-import FontAwesome CSS to avoid FOUC
@@ -126,10 +127,9 @@ export default function RootLayout({
           </SkeletonTheme>
           <DetectAdBlock />
         </body>
-        {process.env.NODE_ENV === 'production' &&
-          process.env.NEXT_PUBLIC_GA_ID && (
-            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-          )}
+        {isProductionAppEnv() && process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </html>
     </ReCaptchaProvider>
   );

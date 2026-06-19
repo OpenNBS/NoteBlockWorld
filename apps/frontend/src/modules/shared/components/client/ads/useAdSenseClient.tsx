@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 
+import { isProductionAppEnv } from '@web/lib/appEnv';
+
 const useAdSenseClient = () => {
   const pubId = useMemo(() => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (!isProductionAppEnv()) {
       return null;
     }
 
