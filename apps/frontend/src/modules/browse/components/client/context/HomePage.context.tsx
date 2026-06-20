@@ -2,27 +2,8 @@
 
 import type { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
 
-import {
-  FeaturedSongsProvider,
-  useFeaturedSongsStore,
-} from './FeaturedSongs.context';
-import {
-  RecentSongsProvider,
-  useRecentSongsStore,
-} from './RecentSongs.context';
-
-/**
- * Composed hook that provides access to both FeaturedSongs and RecentSongs stores
- */
-export function useHomePageStore() {
-  const featuredSongs = useFeaturedSongsStore();
-  const recentSongs = useRecentSongsStore();
-
-  return {
-    featuredSongs,
-    recentSongs,
-  };
-}
+import { FeaturedSongsProvider } from './FeaturedSongs.context';
+import { RecentSongsProvider } from './RecentSongs.context';
 
 export function HomePageProvider({
   children,
@@ -40,9 +21,4 @@ export function HomePageProvider({
       </FeaturedSongsProvider>
     </RecentSongsProvider>
   );
-}
-
-// Legacy hook name for backward compatibility
-export function useHomePageProvider() {
-  return useHomePageStore();
 }
