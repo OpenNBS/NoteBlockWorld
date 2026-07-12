@@ -7,6 +7,8 @@ image: '/img/blog/summit26/banner.png'
 tags: ['events']
 ---
 
+**Update (2026-07-01):** The submission period has ended. Thank you so much to everyone who participated! Stay tuned to our blog for more information on the upcoming event.
+
 **Update (2026-06-17):** We've just added support for songs that use the four new [**trumpet**](https://minecraft.wiki/w/Java_Edition_26.1#Blocks_2) instruments added to Minecraft 26.1! To be fair to everyone, the submission deadline has been extended to **June 23rd**.
 
 ---

@@ -23,7 +23,6 @@ import {
 } from '@web/modules/shared/components/client/FormElements';
 import { useSongProvider } from '@web/modules/song/components/client/context/Song.context';
 
-import { EventSubmissionInfo } from './EventSubmissionInfo';
 import InstrumentPicker from './InstrumentPicker';
 import { SongThumbnailInput } from './SongThumbnailInput';
 
@@ -134,7 +133,7 @@ export const SongForm: React.FC<SongFormProps> = ({
               }}
               {...descriptionRegister}
             />
-            <EventSubmissionInfo
+            {/* <EventSubmissionInfo
               title={title}
               description={description}
               descriptionRef={descriptionRef}
@@ -145,7 +144,7 @@ export const SongForm: React.FC<SongFormProps> = ({
                   shouldValidate: true,
                 });
               }}
-            />
+            /> */}
           </div>
 
           {/* Author */}
