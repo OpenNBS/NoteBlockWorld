@@ -27,6 +27,7 @@ import LoadMoreButton from './client/LoadMoreButton';
 import { TimespanButtonGroup } from './client/TimespanButton';
 import SongCard from './SongCard';
 import SongCardGroup from './SongCardGroup';
+import { SurveyBanner } from '../SurveyBanner';
 
 export const HomePageComponent = () => {
   // Initialize sync hooks for proper effect handling
@@ -39,6 +40,7 @@ export const HomePageComponent = () => {
       {/* Welcome banner/Hero */}
       <WelcomeBanner />
       {/* <EventBanner /> */}
+      <SurveyBanner />
 
       {/* FEATURED SONGS */}
       {featuredSongsPage.length > 0 && (

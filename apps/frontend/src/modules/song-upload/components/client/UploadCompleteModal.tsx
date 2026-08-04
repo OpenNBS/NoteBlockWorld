@@ -2,6 +2,7 @@ import JSConfetti from 'js-confetti';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { MiniSurveyBanner } from '@web/modules/browse/SurveyBanner';
 import GenericModal from '@web/modules/shared/components/client/GenericModal';
 
 export default function UploadCompleteModal({
@@ -70,6 +71,8 @@ export default function UploadCompleteModal({
           {isCopied ? 'Copied!' : 'Copy'}
         </button>
       </div>
+
+      <MiniSurveyBanner permanent={true} />
 
       <div className='flex items-center justify-between gap-4 mt-6'>
         <button
