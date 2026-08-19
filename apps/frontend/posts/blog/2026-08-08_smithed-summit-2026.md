@@ -7,9 +7,9 @@ image: '/img/blog/summit-26/cover.png'
 tags: ['events']
 ---
 
-Hey everyone! **Smithed Summit 2026**, the world's largest Minecraft data pack convention, has just started! Just like last Summit, Note Block World will be at the event, alongside **70+ community projects**!
+Hey everyone! **Smithed Summit 2026**, the world's largest Minecraft data pack convention, has just started! Just like last Summit, Note Block World will be at the event, alongside **70+ community projects!**
 
-From **August 8th to 22nd**, you'll be able to:
+From **August 8th–22nd, 2026**, you'll be able to:
 
 - find showcase booths;
 - attend in-game talks, panels and events;
@@ -17,13 +17,13 @@ From **August 8th to 22nd**, you'll be able to:
 - meet hundreds of players and skilled creators; and
 - explore a thriving world jam-packed with secrets to uncover!
 
-All of us have spent **thousands of hours** preparing this event, so we hope to see you there!
+All of us vendors have spent **thousands of hours** preparing this event, so we hope to see you there!
 
-Read on to discover some of the things you'll be able to find and do at the event:
+Read on to discover some of the things you'll be able to find at the event:
 
 ### 🎪 OpenNBS booth
 
-In the **Textured Tropics**, you'll be able to find the boots showcasing each of our projects: **Note Block Studio** and **Note Block World**.
+The **Textured Tropics** hosts our booth, two joint buildings which showcase each of our projects: **Note Block Studio** and **Note Block World**.
 
 There, you'll be able to find custom artwork made by the note block community; learn more about the history of each project; and uncover secrets! 🎧
 
@@ -35,9 +35,9 @@ Why not stop for some coffee and delicacies at our cozy _Note Block Café_? ☕
 
 ### 🎶 Music by the Note Block World community
 
-All the music tracks you hear around the event have been composed by **30+ artists** and submitted to Note Block World as part of our [Summit Jam](/blog/summit-jam-2026)!
+All the **52 music tracks** you hear around Summit's thriving world have been composed by **27 artists** and submitted to Note Block World as part of our [Summit Jam](/blog/summit-jam-2026)!
 
-This time, we have a unique set of tracks playing in each region of Summit's thriving world: the **Patched Plateaus**, the **Textured Tropics**, and the **Welded Woodlands**.
+This time, we have a unique set of tracks playing in each region of the island: the **Patched Plateaus**, the **Textured Tropics**, and the **Welded Woodlands**.
 
 Look for the **music speakers** placed throughout the world! Follow the music, feel the beat, and dance to the rhythm with other visitors! Can you hear **all of the tracks** in each region?
 
@@ -45,7 +45,7 @@ Look for the **music speakers** placed throughout the world! Follow the music, f
 
 ### 🌐 Note Block World monuments
 
-In each of the regions, you can find our **regional globe monuments** with credits to all the amazing note block artists who crafted the event's soundtrack!
+In each of the regions, you will find our **regional globe monuments** with credits to all the amazing note block artists who crafted the event's soundtrack!
 
 ![Three globe monuments: a stone sphere, a yellow moon-like globe, and a steel wireframe globe over a fountain.](/img/blog/summit-26/globe-monuments.png)
 
@@ -74,13 +74,13 @@ Don't miss the opportunity to watch this never-before-seen performance live!
 
 ### ...and much, much more!
 
-All of that is just the beginning! There's so much to explore we cannot cover it all here. So, what are you waiting for? **Go attend the event now!** ✨
+All of that is just the beginning! There's so much to explore we cannot cover it all here. So, what are you waiting for? **Go attend Smithed Summit now!** ✨
 
 ![Bouncing music speaker in front of a Summit convention hall with a large SUMMIT sign.](/img/blog/summit-26/speaker-plateaus.png)
 
 ## How to attend?
 
-Follow these steps to attend the event:
+Follow these steps to join the event:
 
 ### 🎮 Minecraft version and IP
 
@@ -88,17 +88,17 @@ The Summit server will be live at `summit.smithed.net` on **Minecraft: Java Edit
 
 ### 🔧 Suggested mods
 
-Although vanilla clients are fully supported, the Summit teams recommends using this [custom modpack](https://modrinth.com/modpack/smithed-summit-26) for the best experience, **especially** if you plan to join from a weaker computer.
+Although vanilla clients are fully supported, the Summit team recommends using this [custom modpack](https://modrinth.com/modpack/smithed-summit-26) for the best experience, **especially** if you're planning to join from a weaker computer.
 
 If you are using the Modrinth app to play, you can join using Summit's [server project](https://modrinth.com/server/smithed-summit).
 
 ### 📅 Schedule
 
-Throughout the event, the Summit team will be holding many events, including informative panel presentations, play sessions, meet & greets, and more.
+Throughout the convention, the Summit team will be hosting many events, including informative panel presentations, play sessions, meet & greets, and more.
 
 To view the full schedule and learn more about the event, visit [smithed.net/summit](https://smithed.net/summit)!
 
-All presentations will be streamed live to Summit's [YouTube channel](youtube.com/@SmithedMC), so, don't worry if you can't make it!
+All presentations will be streamed live to the Smithed [YouTube channel](youtube.com/@SmithedMC) so you can watch them whenever you want!
 
 ![OpenNBS booth at night, with a glowing moon monument, lit Note Block Studio and Note Block World buildings, and a starry sky.](/img/blog/summit-26/booth-exterior-nighttime.png)
 
@@ -117,7 +117,7 @@ Figurigamma - Technical staff sheet:
 
 - [erora](https://erora.live/): Music composition
 - [Vizeon](https://www.youtube.com/@OverlordVizeon): Note block arrangement
-- [Azagwen](https://azagwen.art/): Animation
+- [Azagwen](https://azagwen.art/): Performance animation
 - [FetchBot](https://x.com/FetchBot1): Blockbench plugin development
 - [Bentroen](https://youtube.com/@Bentroen_): Playback system development
 - [rx97](https://github.com/rx-dev): Playback system optimization
