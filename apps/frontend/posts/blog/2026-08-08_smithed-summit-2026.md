@@ -66,7 +66,7 @@ After the performance, we'll dive into the technical details of how the show was
 We'll be holding **two exhibitions** of the show:
 
 - 1st exhibition: **Aug 15th 2026, 9:00 PM UTC**
-- 2nd exhibition: **Aug 21st 2026, 1:00 AM UTC**
+- 2nd exhibition: **Aug 22nd 2026, 1:00 AM UTC**
 
 Don't miss the opportunity to watch this never-before-seen performance live!
 
