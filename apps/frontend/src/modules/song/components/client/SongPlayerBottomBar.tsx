@@ -1,24 +1,56 @@
 'use client';
 
-import { faExpand, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronUp,
+  faCirclePause,
+  faCirclePlay,
+  faClose,
+  faRepeat,
+  faVolumeHigh,
+  faVolumeXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
+import { cn } from '@web/lib/utils';
+import { Slider } from '@web/modules/shared/components/ui/slider';
 import { formatDuration } from '@web/modules/shared/util/format';
 
 import { useSongPlayer } from './context/SongPlayer.context';
 
 const RENDER_WIDTH = 1280;
 const RENDER_HEIGHT = 768;
+const PLAYER_BAR_HEIGHT_VAR = '--song-player-bar-height';
+
+const clearPlayerBarHeight = () => {
+  document.documentElement.style.removeProperty(PLAYER_BAR_HEIGHT_VAR);
+};
 
 export function SongPlayerBottomBar() {
   const router = useRouter();
+  const barRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isScrubbingRef = useRef(false);
+  const [tick, setTick] = useState(0);
+  const [lengthTicks, setLengthTicks] = useState(0);
   const {
     registerDockMount,
     togglePlayback,
+    seek,
+    subscribeToSeek,
+    isLooping,
+    toggleLoop,
+    volume,
+    setVolume,
+    stopPlayback,
     isLoading,
     loadingPhase,
     error,
@@ -28,6 +60,10 @@ export function SongPlayerBottomBar() {
   } = useSongPlayer();
 
   const isVisible = !!currentSong && !isSongRoute;
+  const duration = currentSong?.stats.duration ?? 0;
+  const progress =
+    lengthTicks > 0 ? Math.min(1, Math.max(0, tick / lengthTicks)) : 0;
+  const currentTime = duration * progress;
 
   const applyScale = useCallback(() => {
     if (!viewportRef.current || !containerRef.current) return;
@@ -56,8 +92,34 @@ export function SongPlayerBottomBar() {
     [applyScale, registerDockMount],
   );
 
+  useLayoutEffect(() => {
+    if (!isVisible) {
+      clearPlayerBarHeight();
+      return;
+    }
+
+    const node = barRef.current;
+    if (!node) return;
+
+    const syncHeight = () => {
+      document.documentElement.style.setProperty(
+        PLAYER_BAR_HEIGHT_VAR,
+        `${node.getBoundingClientRect().height}px`,
+      );
+    };
+
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+      clearPlayerBarHeight();
+    };
+  }, [isVisible]);
+
   useEffect(() => {
-    if (!isVisible || !viewportRef.current || !containerRef.current) return;
+    if (!viewportRef.current || !containerRef.current) return;
 
     applyScale();
 
@@ -73,22 +135,94 @@ export function SongPlayerBottomBar() {
   }, [applyScale, isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return;
-
     requestAnimationFrame(() => {
       applyScale();
     });
   }, [applyScale, currentSong?.publicId, isVisible]);
 
+  useEffect(() => {
+    setTick(0);
+    setLengthTicks(0);
+
+    return subscribeToSeek((event) => {
+      if (isScrubbingRef.current) return;
+      setTick(event.tick);
+      setLengthTicks(event.totalLength);
+    });
+  }, [currentSong?.publicId, subscribeToSeek]);
+
+  const expandSong = () => {
+    if (!currentSong) return;
+    router.push(`/song/${currentSong.publicId}`);
+  };
+
   return (
     <div
+      ref={barRef}
       aria-hidden={!isVisible}
-      className={`sticky bottom-0 left-0 z-10 w-[calc(100vw-16px)] flex justify-center items-center bg-zinc-900/70 backdrop-blur-md border-t border-zinc-700 py-3 ${
-        isVisible ? '' : 'hidden'
-      }`}
+      className={cn(
+        'fixed bottom-0 left-0 z-10 w-full flex justify-center items-center bg-zinc-900/90 backdrop-blur-md border-t border-zinc-700',
+        isVisible ? '' : 'invisible pointer-events-none',
+      )}
     >
-      <div className='w-full max-w-(--breakpoint-xl) px-6 sm:px-10 flex items-center gap-3'>
-        <div className='relative w-44 max-w-[38vw] aspect-5/3 rounded-lg overflow-hidden bg-zinc-800'>
+      <div className='w-full max-w-(--breakpoint-xl) px-3 sm:px-6 h-14 flex items-center gap-3'>
+        <button
+          type='button'
+          onClick={() => togglePlayback()}
+          className='text-white text-3xl hover:scale-105 transition-transform shrink-0'
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+          title={isPlaying ? 'Pause' : 'Play'}
+        >
+          <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay} />
+        </button>
+
+        <button
+          type='button'
+          onClick={() => toggleLoop()}
+          className={cn(
+            'h-8 w-8 shrink-0 text-zinc-400 hover:text-zinc-100 transition-colors',
+            isLooping && 'text-blue-400 hover:text-blue-300',
+          )}
+          aria-label={isLooping ? 'Disable loop' : 'Enable loop'}
+          aria-pressed={isLooping}
+          title={isLooping ? 'Loop on' : 'Loop off'}
+        >
+          <FontAwesomeIcon icon={faRepeat} className='text-sm' />
+        </button>
+
+        <span className='text-xs tabular-nums text-zinc-400 w-10 text-right shrink-0'>
+          {formatDuration(currentTime)}
+        </span>
+
+        <Slider
+          min={0}
+          max={lengthTicks > 0 ? lengthTicks : 1}
+          step={1}
+          value={[lengthTicks > 0 ? tick : 0]}
+          disabled={!currentSong || lengthTicks <= 0}
+          onValueChange={(value) => {
+            isScrubbingRef.current = true;
+            setTick(value[0] ?? 0);
+          }}
+          onValueCommit={(value) => {
+            seek(value[0] ?? 0);
+            isScrubbingRef.current = false;
+          }}
+          className='min-w-16 flex-1'
+          aria-label='Playback progress'
+        />
+
+        <span className='text-xs tabular-nums text-zinc-400 w-10 shrink-0'>
+          {formatDuration(duration)}
+        </span>
+
+        <button
+          type='button'
+          onClick={expandSong}
+          className='relative h-10 w-16 sm:w-20 shrink-0 rounded overflow-hidden bg-zinc-800'
+          aria-label='Open song page'
+          title='Open song'
+        >
           <div ref={viewportRef} className='absolute inset-0 overflow-hidden'>
             <div
               ref={mountRef}
@@ -104,53 +238,83 @@ export function SongPlayerBottomBar() {
               }}
             />
           </div>
-        </div>
+        </button>
 
-        <div className='min-w-0 grow'>
-          <div className='text-sm font-semibold text-zinc-100 truncate'>
+        <button
+          type='button'
+          onClick={expandSong}
+          className='min-w-0 max-w-48 hidden sm:flex flex-col items-start text-left hover:underline'
+        >
+          <span className='text-sm font-semibold text-zinc-100 truncate w-full'>
             {currentSong?.title ?? ''}
-          </div>
-          <div className='text-xs text-zinc-400 truncate'>
+          </span>
+          <span className='text-xs text-zinc-400 truncate w-full'>
             {currentSong
-              ? `${currentSong.uploader.username} · ${formatDuration(
-                  currentSong.stats.duration,
-                )}`
+              ? currentSong.originalAuthor || currentSong.uploader.username
               : ''}
+          </span>
+        </button>
+
+        {isLoading ? (
+          <span className='text-xs text-zinc-400 truncate hidden md:inline'>
+            {loadingPhase}
+          </span>
+        ) : null}
+        {error ? (
+          <span className='text-xs text-red-300 truncate hidden md:inline'>
+            {error}
+          </span>
+        ) : null}
+
+        <div className='ml-auto flex items-center gap-1 shrink-0'>
+          <div className='relative group'>
+            <button
+              type='button'
+              onClick={() => setVolume(volume > 0 ? 0 : 1)}
+              className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+              aria-label={volume === 0 ? 'Unmute' : 'Mute'}
+              title='Volume'
+            >
+              <FontAwesomeIcon
+                icon={volume === 0 ? faVolumeXmark : faVolumeHigh}
+                className='text-sm'
+              />
+            </button>
+            <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
+              <div className='h-24 px-2 py-3 rounded-md bg-zinc-800 border border-zinc-700'>
+                <Slider
+                  orientation='vertical'
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={[volume]}
+                  onValueChange={(value) => setVolume(value[0] ?? 0)}
+                  aria-label='Volume'
+                />
+              </div>
+            </div>
           </div>
-          {isLoading ? (
-            <div className='text-xs text-zinc-400 mt-1'>{loadingPhase}</div>
-          ) : null}
-          {error ? (
-            <div className='text-xs text-red-300 mt-1'>{error}</div>
-          ) : null}
+
+          <button
+            type='button'
+            onClick={expandSong}
+            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+            aria-label='Open song page'
+            title='Open song'
+          >
+            <FontAwesomeIcon icon={faChevronUp} className='text-sm' />
+          </button>
+
+          <button
+            type='button'
+            onClick={() => stopPlayback()}
+            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+            aria-label='Stop playback'
+            title='Close player'
+          >
+            <FontAwesomeIcon icon={faClose} className='text-sm' />
+          </button>
         </div>
-
-        <button
-          type='button'
-          onClick={() => {
-            togglePlayback();
-          }}
-          className='h-9 w-9 rounded-full border border-zinc-600 text-zinc-100 hover:bg-zinc-800 transition-colors'
-          aria-label={isPlaying ? 'Pause' : 'Play'}
-          title={isPlaying ? 'Pause' : 'Play'}
-        >
-          <FontAwesomeIcon
-            icon={isPlaying ? faPause : faPlay}
-            className='text-xs'
-          />
-        </button>
-
-        <button
-          type='button'
-          onClick={() => {
-            if (!currentSong) return;
-            router.push(`/song/${currentSong.publicId}`);
-          }}
-          className='inline-flex items-center gap-2 h-9 rounded-md border border-zinc-600 px-3 text-sm text-zinc-100 hover:bg-zinc-800 transition-colors'
-        >
-          <FontAwesomeIcon icon={faExpand} className='text-xs' />
-          Expand
-        </button>
       </div>
     </div>
   );

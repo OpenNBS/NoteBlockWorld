@@ -16,6 +16,10 @@ import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
 
 import { getSongOpenUrl } from '../../../util/downloadSong';
 
+type NbsPlayer = Player & {
+  setVolume?: (volume: number) => void;
+};
+
 const RENDER_WIDTH = 1280;
 const RENDER_HEIGHT = 768;
 
@@ -49,6 +53,11 @@ export const previewToPlayingSong = (
   stats: { duration: song.duration },
 });
 
+export type SeekEvent = {
+  tick: number;
+  totalLength: number;
+};
+
 type SongPlayerContextType = {
   registerPageMount: (node: HTMLDivElement | null) => void;
   registerDockMount: (node: HTMLDivElement | null) => void;
@@ -57,6 +66,13 @@ type SongPlayerContextType = {
   play: () => void;
   pause: () => void;
   togglePlayback: () => boolean;
+  seek: (tick: number) => void;
+  subscribeToSeek: (handler: (event: SeekEvent) => void) => () => void;
+  isLooping: boolean;
+  toggleLoop: () => void;
+  volume: number;
+  setVolume: (volume: number) => void;
+  stopPlayback: () => void;
   isLoading: boolean;
   loadingPhase: string;
   error: string | null;
@@ -87,6 +103,11 @@ export const SongPlayerProvider = ({
   const [currentSong, setCurrentSong] = useState<PlayingSong | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const isPlayingRef = useRef(false);
+  const [isLooping, setIsLooping] = useState(false);
+  const isLoopingRef = useRef(false);
+  const [volume, setVolumeState] = useState(1);
+  const volumeRef = useRef(1);
+  const seekListenersRef = useRef(new Set<(event: SeekEvent) => void>());
 
   const isSongRoute = useMemo(() => {
     if (!pathname || !currentSong) return false;
@@ -179,6 +200,62 @@ export const SongPlayerProvider = ({
     return true;
   }, [pause, play]);
 
+  const applyPlayerSettings = useCallback((player: Player) => {
+    try {
+      player.loop = isLoopingRef.current;
+    } catch {
+      // Audio engine may not be initialized yet
+    }
+    try {
+      (player as NbsPlayer).setVolume?.(volumeRef.current);
+    } catch {
+      // Volume API is not available until nbsvis exposes it
+    }
+  }, []);
+
+  const seek = useCallback((tick: number) => {
+    playerRef.current?.seek(tick);
+  }, []);
+
+  const subscribeToSeek = useCallback((handler: (event: SeekEvent) => void) => {
+    seekListenersRef.current.add(handler);
+    return () => {
+      seekListenersRef.current.delete(handler);
+    };
+  }, []);
+
+  const toggleLoop = useCallback(() => {
+    const next = !isLoopingRef.current;
+    isLoopingRef.current = next;
+    setIsLooping(next);
+    try {
+      if (playerRef.current) {
+        playerRef.current.loop = next;
+      }
+    } catch {
+      // Audio engine may not be initialized yet
+    }
+  }, []);
+
+  const setVolume = useCallback((nextVolume: number) => {
+    const next = Math.min(1, Math.max(0, nextVolume));
+    volumeRef.current = next;
+    setVolumeState(next);
+    (playerRef.current as NbsPlayer | null)?.setVolume?.(next);
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    try {
+      playerRef.current?.stop();
+    } catch {
+      // Ignore stop errors (e.g. if no song loaded)
+    }
+    setPlayingState(false);
+    currentSongPublicIdRef.current = null;
+    setCurrentSong(null);
+    setError(null);
+  }, [setPlayingState]);
+
   const loadSong = useCallback(
     async (song: PlayingSong, options?: LoadSongOptions) => {
       const publicId = song.publicId;
@@ -228,6 +305,9 @@ export const SongPlayerProvider = ({
           playerRef.current = player;
           player.on('ended', () => setPlayingState(false));
           player.on('stop', () => setPlayingState(false));
+          player.on('seek', (event) => {
+            seekListenersRef.current.forEach((handler) => handler(event));
+          });
         } else {
           syncViewerMount();
         }
@@ -248,6 +328,7 @@ export const SongPlayerProvider = ({
         const songUrl = await getSongOpenUrl({ publicId });
         await Promise.resolve(playerRef.current.loadSong(songUrl));
         loadedSongPublicIdRef.current = publicId;
+        applyPlayerSettings(playerRef.current);
         didLoad = true;
       } catch (err) {
         if (!isCancelledRef.current) {
@@ -270,7 +351,13 @@ export const SongPlayerProvider = ({
         }
       }
     },
-    [getPreferredMount, setActiveSong, setPlayingState, syncViewerMount],
+    [
+      applyPlayerSettings,
+      getPreferredMount,
+      setActiveSong,
+      setPlayingState,
+      syncViewerMount,
+    ],
   );
 
   const playSong = useCallback(
@@ -315,6 +402,13 @@ export const SongPlayerProvider = ({
       play,
       pause,
       togglePlayback,
+      seek,
+      subscribeToSeek,
+      isLooping,
+      toggleLoop,
+      volume,
+      setVolume,
+      stopPlayback,
       isLoading,
       loadingPhase,
       error,
@@ -326,6 +420,7 @@ export const SongPlayerProvider = ({
       currentSong,
       error,
       isLoading,
+      isLooping,
       isPlaying,
       isSongRoute,
       loadSong,
@@ -335,7 +430,13 @@ export const SongPlayerProvider = ({
       playSong,
       registerDockMount,
       registerPageMount,
+      seek,
+      setVolume,
+      stopPlayback,
+      subscribeToSeek,
+      toggleLoop,
       togglePlayback,
+      volume,
     ],
   );
 
