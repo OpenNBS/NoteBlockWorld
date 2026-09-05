@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const EventBanner = () => {
-  const targetDate = Date.UTC(2026, 5, 24, 12, 0, 0); // June is 5 (0-indexed)
+  const targetDate = Date.UTC(2026, 7, 22, 22, 0, 0); // August is 7 (0-indexed)
 
   const [timeLeft, setTimeLeft] = useState(() =>
     Math.max(0, targetDate - Date.now()),
@@ -40,11 +40,11 @@ export const EventBanner = () => {
       <div
         className='absolute h-full w-full top-0 left-0 z-[-1] rounded-xl opacity-50 brightness-[0.3]'
         style={{
-          backgroundImage: "url('/img/event/summit26-banner.png')",
+          backgroundImage: "url('/img/blog/summit-26/speaker-plateaus.png')",
           backgroundSize: 'cover',
           //backgroundAttachment: 'fixed',
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: '0% 100%',
+          backgroundPosition: '0% 75%',
         }}
       ></div>
       <Image src='/img/event/summit-icon.png' alt='' width={72} height={72} />
@@ -59,28 +59,22 @@ export const EventBanner = () => {
           )}
         </p>
         <p>
-          Submit your songs to be played at{' '}
+          Attend{' '}
           <Link
             href='https://smithed.net/summit'
             className='text-blue-300 hover:text-blue-200 font-bold'
           >
             Smithed Summit
           </Link>
-          , the one and only Minecraft data pack convention! Read our{' '}
+          , the world&apos;s largest Minecraft data pack convention — with music
+          by the Note Block World community! Read our{' '}
           <Link
             href='/blog/smithed-summit-2026'
             className='text-blue-300 hover:text-blue-200'
           >
             blog post
           </Link>{' '}
-          to learn more, or{' '}
-          <Link
-            href='/search?q=%23summit26'
-            className='text-blue-300 hover:text-blue-200'
-          >
-            browse the entries
-          </Link>{' '}
-          submitted so far.
+          to learn more.
         </p>
       </div>
     </div>

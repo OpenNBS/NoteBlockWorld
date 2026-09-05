@@ -1,3 +1,5 @@
+import { MiniSurveyBanner } from '@web/modules/browse/SurveyBanner';
+
 import { SideRailAdSlot } from '../client/ads/AdSlots';
 import { CookieBanner } from '../client/CookieBanner';
 
@@ -18,6 +20,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
         <div className='flex flex-row justify-around w-full pt-24 pb-10'>
           <SideRailAdSlot />
           <main className='flex-1 w-full max-w-(--breakpoint-xl) px-6 sm:px-10 mb-8'>
+            <MiniSurveyBanner permanent={false} />
             {children}
           </main>
           <SideRailAdSlot />

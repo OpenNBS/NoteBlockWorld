@@ -39,7 +39,8 @@ export const HomePageComponent = () => {
     <>
       {/* Welcome banner/Hero */}
       <WelcomeBanner />
-      <EventBanner />
+      {/* <EventBanner /> */}
+      {/* <SurveyBanner /> */}
 
       {/* FEATURED SONGS */}
       {featuredSongsPage.length > 0 && (
