@@ -1,4 +1,5 @@
 import { MiniSurveyBanner } from '@web/modules/browse/SurveyBanner';
+import { SongPlayerBottomBar } from '@web/modules/song/components/client/SongPlayerBottomBar';
 
 import { SideRailAdSlot } from '../client/ads/AdSlots';
 import { CookieBanner } from '../client/CookieBanner';
@@ -27,6 +28,7 @@ async function Layout({ children }: TNavbarLayoutProps) {
         </div>
         {/* Footer */}
         <Footer />
+        <SongPlayerBottomBar />
         <CookieBanner />
       </div>
     </>
