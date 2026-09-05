@@ -7,6 +7,10 @@ image: '/img/blog/summit-26/cover.png'
 tags: ['events']
 ---
 
+**Update (2026-09-01):** Smithed Summit 2026 is now over! Keep an eye out in our blog to find our post-event recap.
+
+---
+
 Hey everyone! **Smithed Summit 2026**, the world's largest Minecraft data pack convention, has just started! Just like last Summit, Note Block World will be at the event, alongside **70+ community projects!**
 
 From **August 8th–22nd, 2026**, you'll be able to:
