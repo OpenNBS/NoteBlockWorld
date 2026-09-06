@@ -165,64 +165,9 @@ export function SongPlayerBottomBar() {
         isVisible ? '' : 'invisible pointer-events-none',
       )}
     >
-      <div className='w-full max-w-(--breakpoint-xl) px-3 sm:px-6 h-14 flex items-center gap-3'>
-        <button
-          type='button'
-          onClick={() => togglePlayback()}
-          className='text-white text-3xl hover:scale-105 transition-transform shrink-0'
-          aria-label={isPlaying ? 'Pause' : 'Play'}
-          title={isPlaying ? 'Pause' : 'Play'}
-        >
-          <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay} />
-        </button>
-
-        <button
-          type='button'
-          onClick={() => toggleLoop()}
-          className={cn(
-            'h-8 w-8 shrink-0 text-zinc-400 hover:text-zinc-100 transition-colors',
-            isLooping && 'text-blue-400 hover:text-blue-300',
-          )}
-          aria-label={isLooping ? 'Disable loop' : 'Enable loop'}
-          aria-pressed={isLooping}
-          title={isLooping ? 'Loop on' : 'Loop off'}
-        >
-          <FontAwesomeIcon icon={faRepeat} className='text-sm' />
-        </button>
-
-        <span className='text-xs tabular-nums text-zinc-400 w-10 text-right shrink-0'>
-          {formatDuration(currentTime)}
-        </span>
-
-        <Slider
-          min={0}
-          max={lengthTicks > 0 ? lengthTicks : 1}
-          step={1}
-          value={[lengthTicks > 0 ? tick : 0]}
-          disabled={!currentSong || lengthTicks <= 0}
-          onValueChange={(value) => {
-            isScrubbingRef.current = true;
-            setTick(value[0] ?? 0);
-          }}
-          onValueCommit={(value) => {
-            seek(value[0] ?? 0);
-            isScrubbingRef.current = false;
-          }}
-          className='min-w-16 flex-1'
-          aria-label='Playback progress'
-        />
-
-        <span className='text-xs tabular-nums text-zinc-400 w-10 shrink-0'>
-          {formatDuration(duration)}
-        </span>
-
-        <button
-          type='button'
-          onClick={expandSong}
-          className='relative h-10 w-16 sm:w-20 shrink-0 rounded overflow-hidden bg-zinc-800'
-          aria-label='Open song page'
-          title='Open song'
-        >
+      <div className='w-full max-w-(--breakpoint-xl) px-3 sm:px-6 h-24 flex items-center gap-3'>
+        {/* Miniplayer */}
+        <div className='relative h-20 shrink-0 rounded-md overflow-hidden aspect-5/3'>
           <div ref={viewportRef} className='absolute inset-0 overflow-hidden'>
             <div
               ref={mountRef}
@@ -238,23 +183,30 @@ export function SongPlayerBottomBar() {
               }}
             />
           </div>
-        </button>
+          <button
+            type='button'
+            onClick={expandSong}
+            className='absolute inset-0'
+            aria-label='Open song page'
+            title='Open song'
+          />
+        </div>
 
+        {/* Song title and artist */}
         <button
           type='button'
           onClick={expandSong}
-          className='min-w-0 max-w-48 hidden sm:flex flex-col items-start text-left hover:underline'
+          className='min-w-0 max-w-48 hidden sm:flex flex-col text-left group'
         >
-          <span className='text-sm font-semibold text-zinc-100 truncate w-full'>
+          <span className='text-md font-semibold text-zinc-100 truncate w-full group-hover:underline'>
             {currentSong?.title ?? ''}
           </span>
-          <span className='text-xs text-zinc-400 truncate w-full'>
-            {currentSong
-              ? currentSong.originalAuthor || currentSong.uploader.username
-              : ''}
+          <span className='text-sm text-zinc-400 truncate w-full group-hover:underline'>
+            {currentSong ? currentSong.uploader.username : ''}
           </span>
         </button>
 
+        {/* Loading/error message display */}
         {isLoading ? (
           <span className='text-xs text-zinc-400 truncate hidden md:inline'>
             {loadingPhase}
@@ -266,7 +218,63 @@ export function SongPlayerBottomBar() {
           </span>
         ) : null}
 
-        <div className='ml-auto flex items-center gap-1 shrink-0'>
+        {/* Play/Pause button */}
+        <button
+          type='button'
+          onClick={() => togglePlayback()}
+          className='text-zinc-200 hover:text-zinc-100 text-3xl hover:scale-110 transition-transform shrink-0'
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+          title={isPlaying ? 'Pause' : 'Play'}
+        >
+          <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay} />
+        </button>
+
+        {/* Loop button */}
+        <button
+          type='button'
+          onClick={() => toggleLoop()}
+          className={cn(
+            'h-8 w-8 shrink-0 text-zinc-400 hover:text-zinc-100 transition-colors',
+            isLooping && 'text-blue-400 hover:text-blue-300',
+          )}
+          aria-label={isLooping ? 'Disable loop' : 'Enable loop'}
+          aria-pressed={isLooping}
+          title={isLooping ? 'Loop on' : 'Loop off'}
+        >
+          <FontAwesomeIcon icon={faRepeat} className='text-lg' />
+        </button>
+
+        <div className='grid flex-1 self-stretch grid-rows-[1fr_auto_1fr] min-w-0 gap-1'>
+          {/* Playback progress */}
+          <Slider
+            min={0}
+            max={lengthTicks > 0 ? lengthTicks : 1}
+            step={1}
+            value={[lengthTicks > 0 ? tick : 0]}
+            disabled={!currentSong || lengthTicks <= 0}
+            onValueChange={(value) => {
+              isScrubbingRef.current = true;
+              setTick(value[0] ?? 0);
+            }}
+            onValueCommit={(value) => {
+              seek(value[0] ?? 0);
+              isScrubbingRef.current = false;
+            }}
+            className='min-w-16 w-full row-2'
+            aria-label='Playback progress'
+          />
+
+          {/* Current time */}
+          <div className='row-3 self-start justify-self-start text-sm tabular-nums text-zinc-400 w-fit'>
+            <span className='font-semibold'>{`${formatDuration(
+              currentTime,
+            )}`}</span>
+            {` / ${formatDuration(duration)}`}
+          </div>
+        </div>
+
+        <div className='flex items-center gap-1 shrink-0'>
+          {/* Volume button */}
           <div className='relative group'>
             <button
               type='button'
@@ -277,11 +285,11 @@ export function SongPlayerBottomBar() {
             >
               <FontAwesomeIcon
                 icon={volume === 0 ? faVolumeXmark : faVolumeHigh}
-                className='text-sm'
+                className='text-lg'
               />
             </button>
             <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
-              <div className='h-24 px-2 py-3 rounded-md bg-zinc-800 border border-zinc-700'>
+              <div className='h-32 px-4 py-3 rounded-md bg-zinc-700 drop-shadow-md'>
                 <Slider
                   orientation='vertical'
                   min={0}
@@ -290,11 +298,13 @@ export function SongPlayerBottomBar() {
                   value={[volume]}
                   onValueChange={(value) => setVolume(value[0] ?? 0)}
                   aria-label='Volume'
+                  className=''
                 />
               </div>
             </div>
           </div>
 
+          {/* Expand button (open song page) */}
           <button
             type='button'
             onClick={expandSong}
@@ -302,17 +312,18 @@ export function SongPlayerBottomBar() {
             aria-label='Open song page'
             title='Open song'
           >
-            <FontAwesomeIcon icon={faChevronUp} className='text-sm' />
+            <FontAwesomeIcon icon={faChevronUp} className='text-lg' />
           </button>
 
+          {/* Stop button (close player) */}
           <button
             type='button'
             onClick={() => stopPlayback()}
-            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+            className='absolute top-4 right-4 h-4 w-4 text-zinc-400 hover:text-zinc-100 transition-colors'
             aria-label='Stop playback'
             title='Close player'
           >
-            <FontAwesomeIcon icon={faClose} className='text-sm' />
+            <FontAwesomeIcon icon={faClose} className='text-lg' />
           </button>
         </div>
       </div>
