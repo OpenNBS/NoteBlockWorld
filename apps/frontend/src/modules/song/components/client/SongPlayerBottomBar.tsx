@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@web/lib/utils';
+import { MarqueeText } from '@web/modules/shared/components/client/MarqueeText';
 import { Slider } from '@web/modules/shared/components/ui/slider';
 import { formatDuration } from '@web/modules/shared/util/format';
 
@@ -166,11 +167,11 @@ export function SongPlayerBottomBar() {
         <button
           type='button'
           onClick={expandSong}
-          className='min-w-0 max-w-48 hidden sm:flex flex-col text-left group'
+          className='w-48 shrink-0 hidden sm:flex flex-col text-left group'
         >
-          <span className='text-md font-semibold text-zinc-100 truncate w-full group-hover:underline'>
+          <MarqueeText className='text-md font-semibold text-zinc-100 group-hover:underline'>
             {currentSong?.title ?? ''}
-          </span>
+          </MarqueeText>
           <span className='text-sm text-zinc-400 truncate w-full group-hover:underline'>
             {currentSong ? currentSong.uploader.username : ''}
           </span>

@@ -72,6 +72,31 @@ body {
 
 /************** Animations **************/
 
+@keyframes marquee {
+  0%,
+  18% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee var(--marquee-duration, 8s) linear infinite;
+}
+
+@utility marquee-fade {
+  --marquee-mask-left-alpha: 1;
+  mask-image: linear-gradient(
+    to right,
+    rgb(0 0 0 / var(--marquee-mask-left-alpha)) 0,
+    black 8px,
+    black calc(100% - 16px),
+    transparent
+  );
+}
+
 @keyframes bounce2 {
   25% {
     transform-origin: center bottom;
