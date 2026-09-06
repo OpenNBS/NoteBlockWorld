@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  faCircleNotch,
   faCirclePause,
   faCirclePlay,
   faPlay,
@@ -84,6 +85,7 @@ const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
 
   const isCurrent = currentSong?.publicId === song.publicId;
   const showPause = isCurrent && isPlaying;
+  const showLoading = isCurrent && isLoading;
 
   const handlePlay = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -107,16 +109,30 @@ const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
       >
         <button
           type='button'
-          disabled={isCurrent && isLoading}
+          disabled={showLoading}
           onClick={handlePlay}
           className={cn(
-            'pointer-events-none group-hover:pointer-events-auto text-white text-6xl hover:scale-110 transition-transform duration-200 disabled:opacity-60',
+            'pointer-events-none group-hover:pointer-events-auto text-white text-6xl transition-transform duration-200',
             isCurrent && 'pointer-events-auto',
+            !showLoading && 'hover:scale-110',
           )}
-          aria-label={showPause ? 'Pause song' : 'Play song'}
-          title={showPause ? 'Pause' : 'Play'}
+          aria-label={
+            showLoading
+              ? 'Loading song'
+              : showPause
+              ? 'Pause song'
+              : 'Play song'
+          }
+          title={showLoading ? 'Loading' : showPause ? 'Pause' : 'Play'}
         >
-          <FontAwesomeIcon icon={showPause ? faCirclePause : faCirclePlay} />
+          {showLoading ? (
+            <FontAwesomeIcon
+              icon={faCircleNotch}
+              className='animate-spin text-zinc-400'
+            />
+          ) : (
+            <FontAwesomeIcon icon={showPause ? faCirclePause : faCirclePlay} />
+          )}
         </button>
       </div>
     </div>
