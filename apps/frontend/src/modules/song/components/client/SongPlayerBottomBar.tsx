@@ -7,6 +7,7 @@ import {
   faClose,
   faRepeat,
   faVolumeHigh,
+  faVolumeLow,
   faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -117,6 +118,12 @@ export function SongPlayerBottomBar() {
   const expandSong = () => {
     if (!currentSong) return;
     router.push(`/song/${currentSong.publicId}`);
+  };
+
+  const getVolumeIcon = (volume: number) => {
+    if (volume === 0) return faVolumeXmark;
+    if (volume <= 0.33) return faVolumeLow;
+    return faVolumeHigh;
   };
 
   return (
@@ -247,7 +254,7 @@ export function SongPlayerBottomBar() {
               title='Volume'
             >
               <FontAwesomeIcon
-                icon={volume === 0 ? faVolumeXmark : faVolumeHigh}
+                icon={getVolumeIcon(volume)}
                 className='text-lg'
               />
             </button>
