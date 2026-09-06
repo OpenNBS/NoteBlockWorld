@@ -11,13 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@web/lib/utils';
 import { Slider } from '@web/modules/shared/components/ui/slider';
@@ -27,11 +21,6 @@ import { useSongPlayer } from './context/SongPlayer.context';
 
 const RENDER_WIDTH = 1280;
 const RENDER_HEIGHT = 768;
-const PLAYER_BAR_HEIGHT_VAR = '--song-player-bar-height';
-
-const clearPlayerBarHeight = () => {
-  document.documentElement.style.removeProperty(PLAYER_BAR_HEIGHT_VAR);
-};
 
 export function SongPlayerBottomBar() {
   const router = useRouter();
@@ -91,32 +80,6 @@ export function SongPlayerBottomBar() {
     },
     [applyScale, registerDockMount],
   );
-
-  useLayoutEffect(() => {
-    if (!isVisible) {
-      clearPlayerBarHeight();
-      return;
-    }
-
-    const node = barRef.current;
-    if (!node) return;
-
-    const syncHeight = () => {
-      document.documentElement.style.setProperty(
-        PLAYER_BAR_HEIGHT_VAR,
-        `${node.getBoundingClientRect().height}px`,
-      );
-    };
-
-    syncHeight();
-    const observer = new ResizeObserver(syncHeight);
-    observer.observe(node);
-
-    return () => {
-      observer.disconnect();
-      clearPlayerBarHeight();
-    };
-  }, [isVisible]);
 
   useEffect(() => {
     if (!viewportRef.current || !containerRef.current) return;
