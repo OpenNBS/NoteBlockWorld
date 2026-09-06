@@ -42,9 +42,6 @@ export function SongPlayerBottomBar() {
     volume,
     setVolume,
     stopPlayback,
-    isLoading,
-    loadingPhase,
-    error,
     currentSong,
     isPlaying,
     isSongRoute,
@@ -176,18 +173,6 @@ export function SongPlayerBottomBar() {
             {currentSong ? currentSong.uploader.username : ''}
           </span>
         </button>
-
-        {/* Loading/error message display */}
-        {isLoading ? (
-          <span className='text-xs text-zinc-400 truncate hidden md:inline'>
-            {loadingPhase}
-          </span>
-        ) : null}
-        {error ? (
-          <span className='text-xs text-red-300 truncate hidden md:inline'>
-            {error}
-          </span>
-        ) : null}
 
         {/* Play/Pause button */}
         <button
