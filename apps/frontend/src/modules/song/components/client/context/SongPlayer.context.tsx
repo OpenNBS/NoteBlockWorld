@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import toast from 'react-hot-toast';
 
 import type { SongPreviewDtoType, SongViewDtoType } from '@nbw/database';
 
@@ -333,6 +334,10 @@ export const SongPlayerProvider = ({
       } catch (err) {
         if (!isCancelledRef.current) {
           setError(err instanceof Error ? err.message : 'Failed to load song');
+          toast.error(
+            "Hm, we couldn't load this song. Please try again later!",
+          );
+          console.error(err);
         }
       } finally {
         loadingSongPublicIdRef.current = null;
