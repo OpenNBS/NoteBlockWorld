@@ -185,7 +185,7 @@ export function SongPlayerBottomBar() {
         <button
           type='button'
           onClick={() => togglePlayback()}
-          className='text-zinc-200 hover:text-zinc-100 text-3xl hover:scale-110 transition-transform shrink-0'
+          className='text-zinc-200 hover:text-zinc-100 text-4xl hover:scale-110 active:scale-95 transition-all shrink-0'
           aria-label={isPlaying ? 'Pause' : 'Play'}
           title={isPlaying ? 'Pause' : 'Play'}
         >
@@ -197,7 +197,7 @@ export function SongPlayerBottomBar() {
           type='button'
           onClick={() => toggleLoop()}
           className={cn(
-            'h-8 w-8 shrink-0 text-zinc-400 hover:text-zinc-100 transition-colors',
+            'h-8 w-8 shrink-0 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all',
             isLooping && 'text-blue-400 hover:text-blue-300',
           )}
           aria-label={isLooping ? 'Disable loop' : 'Enable loop'}
@@ -242,7 +242,7 @@ export function SongPlayerBottomBar() {
             <button
               type='button'
               onClick={() => setVolume(volume > 0 ? 0 : 1)}
-              className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+              className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
               aria-label={volume === 0 ? 'Unmute' : 'Mute'}
               title='Volume'
             >
@@ -271,7 +271,7 @@ export function SongPlayerBottomBar() {
           <button
             type='button'
             onClick={expandSong}
-            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 transition-colors'
+            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
             aria-label='Open song page'
             title='Open song'
           >
