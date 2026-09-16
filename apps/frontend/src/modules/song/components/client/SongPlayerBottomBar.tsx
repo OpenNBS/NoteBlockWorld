@@ -7,8 +7,10 @@ import {
   faClose,
   faRepeat,
   faVolumeHigh,
+  faVolume,
   faVolumeLow,
   faVolumeXmark,
+  faVolumeOff,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
@@ -118,9 +120,11 @@ export function SongPlayerBottomBar() {
     router.push(`/song/${currentSong.publicId}`);
   };
 
-  const getVolumeIcon = (volume: number) => {
-    if (volume === 0) return faVolumeXmark;
-    if (volume <= 0.33) return faVolumeLow;
+  const getVolumeIcon = (volume: number | 'mute') => {
+    if (volume === 'mute' || volume === 0) return faVolumeXmark;
+    if (volume <= 0.33) return faVolumeOff;
+    if (volume <= 0.67) return faVolumeLow;
+    if (volume <= 0.95) return faVolume;
     return faVolumeHigh;
   };
 
