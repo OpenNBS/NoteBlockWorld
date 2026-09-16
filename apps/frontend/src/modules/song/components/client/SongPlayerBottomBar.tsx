@@ -229,34 +229,29 @@ export function SongPlayerBottomBar() {
           </div>
         </div>
 
-        <div className='flex items-center gap-1 shrink-0'>
-          {/* Volume button */}
-          <div className='relative group'>
-            <button
-              type='button'
-              onClick={() => setVolume(volume > 0 ? 0 : 1)}
-              className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
-              aria-label={volume === 0 ? 'Unmute' : 'Mute'}
-              title='Volume'
-            >
-              <FontAwesomeIcon
-                icon={getVolumeIcon(volume)}
-                className='text-lg'
+        {/* Volume button */}
+        <div className='relative group'>
+          <button
+            type='button'
+            onClick={() => setVolume(volume > 0 ? 0 : 1)}
+            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
+            aria-label={volume === 0 ? 'Unmute' : 'Mute'}
+            title='Volume'
+          >
+            <FontAwesomeIcon icon={getVolumeIcon(volume)} className='text-lg' />
+          </button>
+          <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
+            <div className='h-32 px-4 py-3 rounded-md bg-zinc-700 drop-shadow-md'>
+              <Slider
+                orientation='vertical'
+                min={0}
+                max={1}
+                step={0.01}
+                value={[volume]}
+                onValueChange={(value) => setVolume(value[0] ?? 0)}
+                aria-label='Volume'
+                className=''
               />
-            </button>
-            <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
-              <div className='h-32 px-4 py-3 rounded-md bg-zinc-700 drop-shadow-md'>
-                <Slider
-                  orientation='vertical'
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  value={[volume]}
-                  onValueChange={(value) => setVolume(value[0] ?? 0)}
-                  aria-label='Volume'
-                  className=''
-                />
-              </div>
             </div>
           </div>
 
