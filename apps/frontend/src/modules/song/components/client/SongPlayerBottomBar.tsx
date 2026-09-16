@@ -139,7 +139,7 @@ export function SongPlayerBottomBar() {
     >
       <div className='w-full max-w-(--breakpoint-xl) px-3 sm:px-6 h-24 flex items-center gap-3'>
         {/* Miniplayer */}
-        <div className='relative h-20 shrink-0 rounded-md overflow-hidden aspect-5/3'>
+        <div className='hidden sm:block relative h-20 shrink-0 rounded-md overflow-hidden aspect-5/3'>
           <div ref={viewportRef} className='absolute inset-0 overflow-hidden'>
             <div
               ref={mountRef}
@@ -168,7 +168,7 @@ export function SongPlayerBottomBar() {
         <button
           type='button'
           onClick={expandSong}
-          className='w-48 shrink-0 hidden sm:flex flex-col text-left group'
+          className='w-48 shrink-0 hidden lg:flex flex-col text-left group'
         >
           <MarqueeText className='text-md font-semibold text-zinc-100 group-hover:underline'>
             {currentSong?.title ?? ''}
@@ -204,7 +204,16 @@ export function SongPlayerBottomBar() {
           <FontAwesomeIcon icon={faRepeat} className='text-xl' />
         </button>
 
-        <div className='grid flex-1 self-stretch grid-rows-[1fr_auto_1fr] min-w-0 gap-1'>
+        <div className='grid flex-1 grid-rows-[1fr_auto_1fr] min-w-0  gap-1'>
+          <div className='row-1 flex lg:hidden items-center justify-between gap-2'>
+            <span className=' text-sm font-semibold text-zinc-200 truncate flex-1 max-w-fit'>
+              {currentSong?.title ?? ''}
+            </span>
+            <span className='text-sm text-zinc-400 max-w-32 truncate min-w-fit shrink-0'>
+              {currentSong ? currentSong.uploader.username : ''}
+            </span>
+          </div>
+
           {/* Playback progress */}
           <Slider
             min={0}
