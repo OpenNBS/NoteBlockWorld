@@ -201,7 +201,7 @@ export function SongPlayerBottomBar() {
           aria-pressed={isLooping}
           title={isLooping ? 'Loop on' : 'Loop off'}
         >
-          <FontAwesomeIcon icon={faRepeat} className='text-lg' />
+          <FontAwesomeIcon icon={faRepeat} className='text-xl' />
         </button>
 
         <div className='grid flex-1 self-stretch grid-rows-[1fr_auto_1fr] min-w-0 gap-1'>
@@ -267,7 +267,7 @@ export function SongPlayerBottomBar() {
             aria-label='Open song page'
             title='Open song'
           >
-            <FontAwesomeIcon icon={faChevronUp} className='text-lg' />
+            <FontAwesomeIcon icon={faChevronUp} className='text-xl' />
           </button>
 
           {/* Stop button (close player) */}
@@ -278,7 +278,7 @@ export function SongPlayerBottomBar() {
             aria-label='Stop playback'
             title='Close player'
           >
-            <FontAwesomeIcon icon={faClose} className='text-lg' />
+            <FontAwesomeIcon icon={faClose} className='text-xl' />
           </button>
         </div>
       </div>
