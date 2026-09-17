@@ -1,12 +1,22 @@
 'use client';
 
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleNotch,
+  faCirclePause,
+  faCirclePlay,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
 import type { SongPreviewDtoType } from '@nbw/database';
+import { cn } from '@web/lib/utils';
 import { formatDuration, formatTimeAgo } from '@web/modules/shared/util/format';
+import {
+  previewToPlayingSong,
+  useSongPlayer,
+} from '@web/modules/song/components/client/context/SongPlayer.context';
 
 import SongThumbnail from '../../shared/components/layout/SongThumbnail';
 
@@ -23,7 +33,7 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
         ) : (
           <>
             <SongThumbnail src={song.thumbnailUrl} />
-            <div className='absolute bottom-0 right-0 m-1 px-1 py-0.5 bg-zinc-800 rounded-md'>
+            <div className='absolute bottom-0 right-0 m-1 px-1 py-0.5 bg-zinc-900/50 rounded-md backdrop-blur-md'>
               <span className='text-white font-semibold'>
                 {formatDuration(song.duration)}
               </span>
@@ -67,17 +77,65 @@ const SongDataDisplay = ({ song }: { song: SongPreviewDtoType | null }) => {
 };
 
 const SongCard = ({ song }: { song: SongPreviewDtoType | null }) => {
-  return !song ? (
-    <SongDataDisplay song={song} />
-  ) : (
-    <Link href={`/song/${song.publicId}`} className='h-full max-h-fit'>
-      <div
-        className='bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full transition-all duration-200'
-        style={{ backfaceVisibility: 'hidden' }}
-      >
+  const { playSong, currentSong, isPlaying, isLoading } = useSongPlayer();
+
+  if (!song) {
+    return <SongDataDisplay song={song} />;
+  }
+
+  const isCurrent = currentSong?.publicId === song.publicId;
+  const showPause = isCurrent && isPlaying;
+  const showLoading = isCurrent && isLoading;
+
+  const handlePlay = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    void playSong(previewToPlayingSong(song));
+  };
+
+  return (
+    <div
+      className='group relative bg-zinc-800 hover:scale-105 hover:bg-zinc-700 rounded-lg cursor-pointer w-full h-full max-h-fit transition-all duration-200'
+      style={{ backfaceVisibility: 'hidden' }}
+    >
+      <Link href={`/song/${song.publicId}`} className='block h-full max-h-fit'>
         <SongDataDisplay song={song} />
+      </Link>
+      <div
+        className={cn(
+          'absolute top-0 left-0 w-full aspect-5/3 rounded-lg bg-black flex items-center justify-center pointer-events-none transition-all duration-200',
+          isCurrent ? 'opacity-40' : 'opacity-0 group-hover:opacity-40',
+        )}
+      >
+        <button
+          type='button'
+          disabled={showLoading}
+          onClick={handlePlay}
+          className={cn(
+            'pointer-events-none group-hover:pointer-events-auto text-white text-6xl transition-transform duration-200',
+            isCurrent && 'pointer-events-auto',
+            !showLoading && 'hover:scale-110',
+          )}
+          aria-label={
+            showLoading
+              ? 'Loading song'
+              : showPause
+              ? 'Pause song'
+              : 'Play song'
+          }
+          title={showLoading ? 'Loading' : showPause ? 'Pause' : 'Play'}
+        >
+          {showLoading ? (
+            <FontAwesomeIcon
+              icon={faCircleNotch}
+              className='animate-spin text-zinc-400'
+            />
+          ) : (
+            <FontAwesomeIcon icon={showPause ? faCirclePause : faCirclePlay} />
+          )}
+        </button>
       </div>
-    </Link>
+    </div>
   );
 };
 
