@@ -267,29 +267,29 @@ export function SongPlayerBottomBar() {
               />
             </div>
           </div>
-
-          {/* Expand button (open song page) */}
-          <button
-            type='button'
-            onClick={expandSong}
-            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
-            aria-label='Open song page'
-            title='Open song'
-          >
-            <FontAwesomeIcon icon={faChevronUp} className='text-xl' />
-          </button>
-
-          {/* Stop button (close player) */}
-          <button
-            type='button'
-            onClick={() => stopPlayback()}
-            className='absolute top-4 right-4 h-4 w-4 text-zinc-400 hover:text-zinc-100 transition-colors'
-            aria-label='Stop playback'
-            title='Close player'
-          >
-            <FontAwesomeIcon icon={faClose} className='text-xl' />
-          </button>
         </div>
+
+        {/* Expand button (open song page) */}
+        <button
+          type='button'
+          onClick={expandSong}
+          className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
+          aria-label='Open song page'
+          title='Open song'
+        >
+          <FontAwesomeIcon icon={faChevronUp} className='text-xl' />
+        </button>
+
+        {/* Stop button (close player) */}
+        <button
+          type='button'
+          onClick={() => stopPlayback()}
+          className='absolute top-4 right-4 h-4 w-4 text-zinc-400 hover:text-zinc-100 transition-colors'
+          aria-label='Stop playback'
+          title='Close player'
+        >
+          <FontAwesomeIcon icon={faClose} className='text-xl' />
+        </button>
       </div>
     </div>
   );
