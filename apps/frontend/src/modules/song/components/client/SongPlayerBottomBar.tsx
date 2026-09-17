@@ -6,11 +6,6 @@ import {
   faCirclePlay,
   faClose,
   faRepeat,
-  faVolumeHigh,
-  faVolume,
-  faVolumeLow,
-  faVolumeXmark,
-  faVolumeOff,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
@@ -22,6 +17,7 @@ import { Slider } from '@web/modules/shared/components/ui/slider';
 import { formatDuration } from '@web/modules/shared/util/format';
 
 import { useSongPlayer } from './context/SongPlayer.context';
+import { VolumeButton } from './VolumeButton';
 
 const RENDER_WIDTH = 1280;
 const RENDER_HEIGHT = 768;
@@ -41,8 +37,6 @@ export function SongPlayerBottomBar() {
     subscribeToSeek,
     isLooping,
     toggleLoop,
-    volume,
-    setVolume,
     stopPlayback,
     currentSong,
     isPlaying,
@@ -118,14 +112,6 @@ export function SongPlayerBottomBar() {
   const expandSong = () => {
     if (!currentSong) return;
     router.push(`/song/${currentSong.publicId}`);
-  };
-
-  const getVolumeIcon = (volume: number | 'mute') => {
-    if (volume === 'mute' || volume === 0) return faVolumeXmark;
-    if (volume <= 0.33) return faVolumeOff;
-    if (volume <= 0.67) return faVolumeLow;
-    if (volume <= 0.95) return faVolume;
-    return faVolumeHigh;
   };
 
   return (
@@ -243,31 +229,7 @@ export function SongPlayerBottomBar() {
         </div>
 
         {/* Volume button */}
-        <div className='relative group'>
-          <button
-            type='button'
-            onClick={() => setVolume(volume > 0 ? 0 : 1)}
-            className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
-            aria-label={volume === 0 ? 'Unmute' : 'Mute'}
-            title='Volume'
-          >
-            <FontAwesomeIcon icon={getVolumeIcon(volume)} className='text-lg' />
-          </button>
-          <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
-            <div className='h-32 px-4 py-3 rounded-md bg-zinc-700 drop-shadow-md'>
-              <Slider
-                orientation='vertical'
-                min={0}
-                max={1}
-                step={0.01}
-                value={[volume]}
-                onValueChange={(value) => setVolume(value[0] ?? 0)}
-                aria-label='Volume'
-                className=''
-              />
-            </div>
-          </div>
-        </div>
+        <VolumeButton />
 
         {/* Expand button (open song page) */}
         <button
