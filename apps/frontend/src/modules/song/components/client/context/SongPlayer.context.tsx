@@ -72,7 +72,8 @@ type SongPlayerContextType = {
   isLooping: boolean;
   toggleLoop: () => void;
   volume: number;
-  setVolume: (volume: number) => void;
+  setVolume: (volume: number, options?: { rememberAudible?: boolean }) => void;
+  toggleMute: () => void;
   stopPlayback: () => void;
   isLoading: boolean;
   loadingPhase: string;
@@ -108,6 +109,7 @@ export const SongPlayerProvider = ({
   const isLoopingRef = useRef(false);
   const [volume, setVolumeState] = useState(1);
   const volumeRef = useRef(1);
+  const lastAudibleVolumeRef = useRef(1);
   const seekListenersRef = useRef(new Set<(event: SeekEvent) => void>());
 
   const isSongRoute = useMemo(() => {
@@ -238,12 +240,28 @@ export const SongPlayerProvider = ({
     }
   }, []);
 
-  const setVolume = useCallback((nextVolume: number) => {
-    const next = Math.min(1, Math.max(0, nextVolume));
-    volumeRef.current = next;
-    setVolumeState(next);
-    (playerRef.current as NbsPlayer | null)?.setVolume?.(next);
-  }, []);
+  const setVolume = useCallback(
+    (nextVolume: number, options?: { rememberAudible?: boolean }) => {
+      const next = Math.min(1, Math.max(0, nextVolume));
+      const shouldRemember = options?.rememberAudible ?? true;
+      if (next > 0 && shouldRemember) {
+        lastAudibleVolumeRef.current = next;
+      }
+      volumeRef.current = next;
+      setVolumeState(next);
+      (playerRef.current as NbsPlayer | null)?.setVolume?.(next);
+    },
+    [],
+  );
+
+  const toggleMute = useCallback(() => {
+    if (volumeRef.current > 0) {
+      lastAudibleVolumeRef.current = volumeRef.current;
+      setVolume(0, { rememberAudible: false });
+      return;
+    }
+    setVolume(lastAudibleVolumeRef.current || 1);
+  }, [setVolume]);
 
   const stopPlayback = useCallback(() => {
     try {
@@ -413,6 +431,7 @@ export const SongPlayerProvider = ({
       toggleLoop,
       volume,
       setVolume,
+      toggleMute,
       stopPlayback,
       isLoading,
       loadingPhase,
@@ -440,6 +459,7 @@ export const SongPlayerProvider = ({
       stopPlayback,
       subscribeToSeek,
       toggleLoop,
+      toggleMute,
       togglePlayback,
       volume,
     ],
