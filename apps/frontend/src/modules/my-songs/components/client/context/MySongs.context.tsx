@@ -5,17 +5,13 @@ import { toast } from 'react-hot-toast';
 import { create } from 'zustand';
 
 import { MY_SONGS } from '@nbw/config';
-import type {
-  SongPageDtoType,
-  SongPreviewDtoType,
-  SongsFolder,
-} from '@nbw/database';
+import type { SongPageDto, SongPreviewDto, SongsFolder } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 interface MySongsState {
   loadedSongs: SongsFolder;
-  page: SongPageDtoType | null;
+  page: SongPageDto | null;
   totalSongs: number;
   totalPages: number;
   currentPage: number;
@@ -23,7 +19,7 @@ interface MySongsState {
   isLoading: boolean;
   error: string | null;
   isDeleteDialogOpen: boolean;
-  songToDelete: SongPreviewDtoType | null;
+  songToDelete: SongPreviewDto | null;
 }
 
 interface MySongsActions {
@@ -39,7 +35,7 @@ interface MySongsActions {
   nextpage: () => void;
   prevpage: () => void;
   setIsDeleteDialogOpen: (isOpen: boolean) => void;
-  setSongToDelete: (song: SongPreviewDtoType) => void;
+  setSongToDelete: (song: SongPreviewDto) => void;
   deleteSong: () => Promise<void>;
 }
 
@@ -95,7 +91,7 @@ export const useMySongsStore = create<MySongsStore>((set, get) => ({
         },
       });
 
-      const data = response.data as SongPageDtoType;
+      const data = response.data as SongPageDto;
 
       // TODO: total, page and pageSize are stored in every page, when it should be stored in the folder (what matters is 'content')
       set((state) => ({

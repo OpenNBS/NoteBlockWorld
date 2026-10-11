@@ -1,12 +1,10 @@
 import type { RawBodyRequest } from '@nestjs/common';
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Headers,
-  HttpException,
   HttpStatus,
   Inject,
   Logger,
@@ -35,22 +33,32 @@ import {
 import type { Response } from 'express';
 
 import { BROWSER_SONGS, TIMESPANS, UPLOAD_CONSTANTS } from '@nbw/config';
+import type { SongWithUser, UserDocument } from '@nbw/database';
 import {
-  PageQueryDTO,
-  SongPreviewDto,
-  SongViewDto,
-  UploadSongDto,
-  UploadSongResponseDto,
-  PageDto,
-  SongListQueryDTO,
+  createFeaturedSongsDto,
+  type FeaturedSongsDto,
+  type PageDto,
+  type PageQueryInput,
+  type SongPreviewDto,
   SongSortType,
-  FeaturedSongsDto,
-} from '@nbw/database';
-import type { SongWithUser, TimespanType, UserDocument } from '@nbw/database';
+  type SongViewDto,
+  type TimespanType,
+  type UploadSongDto,
+  type UploadSongResponseDto,
+} from '@nbw/validation';
 import { FileService } from '@server/file/file.service';
 import { GetRequestToken, validateUser } from '@server/lib/GetRequestUser';
+import {
+  SongFileQueryDto,
+  SongIdParamDto,
+  SongListQueryDto,
+  SongOpenHeadersDto,
+  SongSearchQueryDto,
+  UploadSongBodyDto,
+} from '@server/zod-dto';
 
 import { SongService } from './song.service';
+import { songPreviewFromSongDocumentWithUser } from './song.util';
 
 @Controller('song')
 @ApiTags('song')
@@ -94,14 +102,13 @@ export class SongController {
   @ApiResponse({
     status: 200,
     description: 'Success. Returns paginated list of song previews.',
-    type: PageDto<SongPreviewDto>,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request. Invalid query parameters.',
   })
   public async getSongList(
-    @Query() query: SongListQueryDTO,
+    @Query() query: SongListQueryDto,
   ): Promise<PageDto<SongPreviewDto>> {
     // Handle random sort
     if (query.sort === SongSortType.RANDOM) {
@@ -110,12 +117,13 @@ export class SongController {
         query.category,
       );
 
-      return new PageDto<SongPreviewDto>({
+      return {
         content: data,
         page: query.page,
         limit: query.limit,
         total: data.length,
-      });
+        order: true,
+      };
     }
 
     // Map sort types to MongoDB field paths
@@ -130,27 +138,28 @@ export class SongController {
     const sortField = sortFieldMap.get(query.sort ?? SongSortType.RECENT);
     const isDescending = query.order ? query.order === 'desc' : true;
 
-    // Build PageQueryDTO with the sort field
-    const pageQuery = new PageQueryDTO({
+    const pageQuery: PageQueryInput = {
       page: query.page,
       limit: query.limit,
-      sort: sortField,
-      order: isDescending,
-    });
+      sort: sortField ?? 'createdAt',
+      order: isDescending ? 'desc' : 'asc',
+    };
 
-    // Query songs with optional search and category filters
+    // Query songs with optional search, category, and uploader filters
     const result = await this.songService.querySongs(
       pageQuery,
       query.q,
       query.category,
+      query.uploader,
     );
 
-    return new PageDto<SongPreviewDto>({
+    return {
       content: result.content,
       page: query.page,
       limit: query.limit,
       total: result.total,
-    });
+      order: isDescending,
+    };
   }
 
   @Get('/featured')
@@ -164,7 +173,6 @@ export class SongController {
   @ApiResponse({
     status: 200,
     description: 'Success. Returns featured songs data.',
-    type: FeaturedSongsDto,
   })
   public async getFeaturedSongs(): Promise<FeaturedSongsDto> {
     const now = new Date(Date.now());
@@ -209,25 +217,25 @@ export class SongController {
       songs[timespan as TimespanType] = songPage;
     }
 
-    const featuredSongs = FeaturedSongsDto.create();
+    const featuredSongs = createFeaturedSongsDto();
 
     featuredSongs.hour = songs.hour.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
     featuredSongs.day = songs.day.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
     featuredSongs.week = songs.week.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
     featuredSongs.month = songs.month.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
     featuredSongs.year = songs.year.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
     featuredSongs.all = songs.all.map((song) =>
-      SongPreviewDto.fromSongDocumentWithUser(song),
+      songPreviewFromSongDocumentWithUser(song),
     );
 
     return featuredSongs;
@@ -257,25 +265,26 @@ export class SongController {
     summary: 'Search songs by keywords with pagination and sorting',
   })
   public async searchSongs(
-    @Query() query: PageQueryDTO,
-    @Query('q') q: string,
+    @Query() query: SongSearchQueryDto,
   ): Promise<PageDto<SongPreviewDto>> {
-    const result = await this.songService.querySongs(query, q ?? '');
-    return new PageDto<SongPreviewDto>({
+    const { q: searchQ, ...pageQuery } = query;
+    const result = await this.songService.querySongs(pageQuery, searchQ ?? '');
+    return {
       content: result.content,
-      page: query.page,
-      limit: query.limit,
+      page: result.page,
+      limit: result.limit,
       total: result.total,
-    });
+      order: String(pageQuery.order ?? 'desc') === 'desc',
+    };
   }
 
   @Get('/:id')
   @ApiOperation({ summary: 'Get song info by ID' })
   public async getSong(
-    @Param('id') id: string,
+    @Param() params: SongIdParamDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<SongViewDto> {
-    return await this.songService.getSong(id, user);
+    return await this.songService.getSong(params.id, user);
   }
 
   @Get('/:id/edit')
@@ -283,38 +292,40 @@ export class SongController {
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   public async getEditSong(
-    @Param('id') id: string,
+    @Param() params: SongIdParamDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongDto> {
     user = validateUser(user);
-    return await this.songService.getSongEdit(id, user);
+    return await this.songService.getSongEdit(params.id, user);
   }
 
   @Patch('/:id/edit')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Edit song info by ID' })
-  @ApiBody({ description: 'Upload Song', type: UploadSongResponseDto })
+  @ApiBody({ description: 'Upload Song' })
   public async patchSong(
-    @Param('id') id: string,
+    @Param() params: SongIdParamDto,
     @Req() req: RawBodyRequest<Request>,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
     user = validateUser(user);
     //TODO: Fix this weird type casting and raw body access
     const body = req.body as unknown as UploadSongDto;
-    return await this.songService.patchSong(id, body, user);
+    return await this.songService.patchSong(params.id, body, user);
   }
 
   @Get('/:id/download')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongFile(
-    @Param('id') id: string,
-    @Query('src') src: string,
+    @Param() params: SongIdParamDto,
+    @Query() query: SongFileQueryDto,
     @GetRequestToken() user: UserDocument | null,
     @Res() res: Response,
   ): Promise<void> {
     user = validateUser(user);
+    const { src } = query;
+    const { id } = params;
 
     // TODO: no longer used
     res.set({
@@ -330,22 +341,17 @@ export class SongController {
   @Get('/:id/open')
   @ApiOperation({ summary: 'Get song .nbs file' })
   public async getSongOpenUrl(
-    @Param('id') id: string,
+    @Param() params: SongIdParamDto,
     @GetRequestToken() user: UserDocument | null,
-    @Headers('src') src: string,
+    @Headers() headers: SongOpenHeadersDto,
   ): Promise<string> {
+    const { src } = headers;
+    const { id } = params;
     if (src != 'downloadButton') {
       throw new UnauthorizedException('Invalid source');
     }
 
-    const url = await this.songService.getSongDownloadUrl(
-      id,
-      user,
-      'open',
-      true,
-    );
-
-    return url;
+    return await this.songService.getSongDownloadUrl(id, user, 'open', true);
   }
 
   @Delete('/:id')
@@ -353,25 +359,25 @@ export class SongController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a song' })
   public async deleteSong(
-    @Param('id') id: string,
+    @Param() params: SongIdParamDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<void> {
     user = validateUser(user);
-    await this.songService.deleteSong(id, user);
+    await this.songService.deleteSong(params.id, user);
   }
 
   @Post('/')
   @UseGuards(AuthGuard('jwt-refresh'))
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ description: 'Upload Song', type: UploadSongResponseDto })
+  @ApiBody({ description: 'Upload Song' })
   @UseInterceptors(FileInterceptor('file', SongController.multerConfig))
   @ApiOperation({
     summary: 'Upload a .nbs file and send the song data, creating a new song',
   })
   public async createSong(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: UploadSongDto,
+    @Body() body: UploadSongBodyDto,
     @GetRequestToken() user: UserDocument | null,
   ): Promise<UploadSongResponseDto> {
     user = validateUser(user);

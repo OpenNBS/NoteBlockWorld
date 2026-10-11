@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Skeleton from 'react-loading-skeleton';
 
 import { MY_SONGS } from '@nbw/config';
-import type { SongPageDtoType, SongPreviewDtoType } from '@nbw/database';
+import type { SongPageDto, SongPreviewDto } from '@nbw/validation';
 import { ErrorBox } from '@web/modules/shared/components/client/ErrorBox';
 
 import {
@@ -45,14 +45,14 @@ const SongRows = ({
   page,
   pageSize,
 }: {
-  page: SongPageDtoType | null;
+  page: SongPageDto | null;
   pageSize: number;
 }) => {
   const maxPage = MY_SONGS.PAGE_SIZE;
 
   const content = !page
     ? Array(pageSize).fill(null)
-    : (page.content as SongPreviewDtoType[]);
+    : (page.content as SongPreviewDto[]);
 
   return (
     <>

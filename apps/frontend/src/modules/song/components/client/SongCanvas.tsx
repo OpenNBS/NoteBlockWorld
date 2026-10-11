@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 
-import type { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/validation';
 import axios from '@web/lib/axios';
 
-export const SongCanvas = ({ song }: { song: SongViewDtoType }) => {
+export const SongCanvas = ({ song }: { song: SongViewDto }) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const wasmModuleRef = useRef<any>(null);
   let scriptTag: HTMLScriptElement | null = null;

@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { SongViewDtoType } from '@nbw/database';
+import type { SongViewDto } from '@nbw/validation';
 import { getTokenLocal } from '@web/lib/axios/token.utils';
 
 import {
@@ -38,9 +38,15 @@ const VisibilityBadge = () => {
   );
 };
 
-const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
+const UploaderBadge = ({ user }: { user: SongViewDto['uploader'] }) => {
+  const profileHref = `/user/${encodeURIComponent(user.username)}`;
+
   return (
-    <div className='flex flex-row items-center gap-3'>
+    <Link
+      href={profileHref}
+      aria-label={`View ${user.username}'s profile`}
+      className='flex flex-row items-center gap-3 rounded-md outline-offset-2 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900'
+    >
       <Image
         width={32}
         height={32}
@@ -52,7 +58,7 @@ const UploaderBadge = ({ user }: { user: SongViewDtoType['uploader'] }) => {
         <p className='font-bold text-white'>{user.username}</p>
         {/* <p className='text-sm text-zinc-400'>410 followers</p> */}
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -218,7 +224,7 @@ const showOpenFailedToast = () => {
   );
 };
 
-const DownloadSongButton = ({ song }: { song: SongViewDtoType }) => {
+const DownloadSongButton = ({ song }: { song: SongViewDto }) => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   return (
