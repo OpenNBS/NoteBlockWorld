@@ -14,7 +14,14 @@ export const songStatsSchema = z.object({
   minutesSpent: z.number(),
   vanillaInstrumentCount: z.number().int(),
   customInstrumentCount: z.number().int(),
-  firstCustomInstrumentIndex: z.number().int(),
+  firstCustomInstrumentIndex: z
+    .number()
+    .int()
+    .refine((v) => v === 16 || v === 20, { message: 'Must be 16 or 20' }),
+  nbsVersion: z
+    .number()
+    .int()
+    .refine((v) => v === 5 || v === 6, { message: 'Must be 5 or 6' }),
   outOfRangeNoteCount: z.number().int(),
   detunedNoteCount: z.number().int(),
   customInstrumentNoteCount: z.number().int(),

@@ -1,4 +1,4 @@
-import type { Song } from '../../song/entity/song.entity';
+import type { Song } from '../../song/song.entity';
 import type { MigrationRegistry } from '../types';
 
 export const CURRENT_SONG_SCHEMA_VERSION = 1;
