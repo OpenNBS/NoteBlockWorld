@@ -10,10 +10,32 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=noteblockworldpassword
       - MONGO_INITDB_DATABASE=noteblockworld
       - MONGO_INITDB_ROOT_USERNAME=noteblockworlduser
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mongosh',
+          '-u',
+          'noteblockworlduser',
+          '-p',
+          'noteblockworldpassword',
+          '--authenticationDatabase',
+          'admin',
+          '--eval',
+          "db.adminCommand('ping').ok",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
 
   maildev:
     container_name: noteblockworld-maildev-dev
     image: maildev/maildev
+    # Image HEALTHCHECK can report unhealthy and block `compose up --wait`, so
+    # `docker:minio-init` never runs and MinIO buckets are never created.
+    healthcheck:
+      disable: true
     ports:
       - '1080:1080' # Web Interface
       - '1025:1025' # SMTP Server
@@ -35,15 +57,25 @@ services:
       - MINIO_ROOT_PASSWORD=minioadmin
     volumes:
       - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     # You can access the MinIO web interface at http://localhost:9000
     # You can access the MinIO console at http://localhost:9001
 
+  # One-shot: exits 0 after buckets/CORS. Not part of `up --wait` (that waits for long-running services).
   mc:
     container_name: minio-client
+    profiles:
+      - minio-init
     image: minio/mc
     entrypoint: ['/bin/sh', '-c']
     depends_on:
-      - minio
+      minio:
+        condition: service_healthy
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
