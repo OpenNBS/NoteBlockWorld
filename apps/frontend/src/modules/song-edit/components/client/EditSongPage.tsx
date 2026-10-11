@@ -1,4 +1,4 @@
-import type { UploadSongDtoType } from '@nbw/database';
+import type { UploadSongDto } from '@nbw/validation';
 import axiosInstance from '@web/lib/axios';
 import {
   getTokenServer,
@@ -13,7 +13,7 @@ import {
 
 import { SongEditForm } from './SongEditForm';
 
-async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
+async function fetchSong({ id }: { id: string }): Promise<UploadSongDto> {
   // get token from cookies
   const token = await getTokenServer();
   // if token is not null, redirect to home page
@@ -31,7 +31,7 @@ async function fetchSong({ id }: { id: string }): Promise<UploadSongDtoType> {
 
     const data = await response.data;
 
-    return data as UploadSongDtoType;
+    return data as UploadSongDto;
   } catch (error: unknown) {
     throw new Error('Failed to fetch song data');
   }

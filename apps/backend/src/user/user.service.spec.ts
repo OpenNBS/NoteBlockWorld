@@ -1,8 +1,9 @@
-import { CreateUser, PageQueryDTO, User, UserDocument } from '@nbw/database';
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+
+import { User, UserDocument } from '@nbw/database';
+import { type CreateUser, type UserIndexPageQueryInput } from '@nbw/validation';
 
 import { UserService } from './user.service';
 
@@ -45,7 +46,7 @@ describe('UserService', () => {
       const createUserDto: CreateUser = {
         username: 'testuser',
         email: 'test@example.com',
-        profileImage: 'testimage.png',
+        profileImage: 'https://example.com/testimage.png',
       };
 
       const user = {
@@ -97,7 +98,12 @@ describe('UserService', () => {
 
   describe('getUserPaginated', () => {
     it('should return paginated users', async () => {
-      const query: PageQueryDTO = { page: 1, limit: 10 };
+      const query: UserIndexPageQueryInput = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+      };
       const users = [{ username: 'testuser' }] as UserDocument[];
 
       const usersPage = {
@@ -120,6 +126,34 @@ describe('UserService', () => {
 
       expect(result).toEqual(usersPage);
       expect(userModel.find).toHaveBeenCalledWith({});
+    });
+
+    it('should apply email filter when provided', async () => {
+      const query: UserIndexPageQueryInput = {
+        page: 1,
+        limit: 10,
+        sort: 'createdAt',
+        order: 'asc',
+        email: 'test@example.com',
+      };
+      const users = [{ email: 'test@example.com' }] as UserDocument[];
+
+      const mockFind = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockResolvedValue(users),
+      };
+
+      jest.spyOn(userModel, 'find').mockReturnValue(mockFind as any);
+      jest.spyOn(userModel, 'countDocuments').mockResolvedValue(1);
+
+      const result = await service.getUserPaginated(query);
+
+      expect(result.users).toEqual(users);
+      expect(userModel.find).toHaveBeenCalledWith({ email: query.email });
+      expect(userModel.countDocuments).toHaveBeenCalledWith({
+        email: query.email,
+      });
     });
   });
 

@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.base.json",
   // Root build orchestrator.
   // This file does NOT compile code - only defines project references for `tsc -b`.
   // Real projects live in /apps and /packages and extend tsconfig.base.json.
@@ -16,6 +17,7 @@
     { "path": "packages/database" },
     { "path": "packages/song" },
     { "path": "packages/sounds" },
-    { "path": "packages/thumbnail" }
+    { "path": "packages/thumbnail" },
+    { "path": "packages/validation" }
   ]
 }

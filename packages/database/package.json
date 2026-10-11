@@ -9,10 +9,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./types": {
-      "import": "./dist/song/dto/types.js",
-      "types": "./dist/song/dto/types.d.ts"
     }
   },
   "scripts": {
@@ -32,10 +28,9 @@
     "@nestjs/common": "^11.1.9",
     "@nestjs/mongoose": "^10.1.0",
     "@nestjs/swagger": "^11.2.3",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.3",
     "mongoose": "^9.0.1",
-    "@nbw/config": "workspace:*"
+    "@nbw/config": "workspace:*",
+    "@nbw/validation": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -1,6 +1,6 @@
 'use client';
 
-import type { FeaturedSongsDtoType, SongPreviewDtoType } from '@nbw/database';
+import type { FeaturedSongsDto, SongPreviewDto } from '@nbw/validation';
 
 import {
   FeaturedSongsProvider,
@@ -30,8 +30,8 @@ export function HomePageProvider({
   initialFeaturedSongs,
 }: {
   children: React.ReactNode;
-  initialRecentSongs: SongPreviewDtoType[];
-  initialFeaturedSongs: FeaturedSongsDtoType;
+  initialRecentSongs: SongPreviewDto[];
+  initialFeaturedSongs: FeaturedSongsDto;
 }) {
   return (
     <RecentSongsProvider initialRecentSongs={initialRecentSongs}>

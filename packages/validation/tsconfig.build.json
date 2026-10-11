@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Unlike other packages where we use a bundler to output JS,
+    // this package uses tsc for its build step.
+    // We must disable the default 'composite' config to output JS.
+    "composite": false,
+    "declaration": false,
+    "emitDeclarationOnly": false,
+
+    // ESM output: matches package.json "type": "module" and works in Next.js browser bundles.
+    // CommonJS dist was evaluated as ESM in the client, causing "exports is not defined".
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2021",
+
+    "esModuleInterop": true,
+
+    // Allow ES imports
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}

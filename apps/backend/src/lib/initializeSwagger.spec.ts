@@ -4,6 +4,10 @@ import { beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { initializeSwagger } from './initializeSwagger';
 
+mock.module('nestjs-zod', () => ({
+  cleanupOpenApiDoc: (doc: unknown) => doc,
+}));
+
 mock.module('@nestjs/swagger', () => ({
   DocumentBuilder: jest.fn().mockImplementation(() => ({
     setTitle: jest.fn().mockReturnThis(),
