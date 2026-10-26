@@ -9,6 +9,23 @@ const nextConfig = {
     NEXT_PUBLIC_APP_ENV: appEnv,
   },
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+        ],
+      },
+    ];
+  },
   // Externalize packages that use Node.js built-in modules for server components
   serverExternalPackages: ['@nbw/database', '@nbw/config'],
   // See: https://github.com/Automattic/node-canvas/issues/867#issuecomment-1925284985
@@ -23,6 +40,13 @@ const nextConfig = {
     if (isServer) {
       config.externals.push('@nbw/thumbnail', '@nbw/database');
     }
+
+    // Handle audio assets from @opennbs/nbsvis as static files
+    config.module.rules.push({
+      test: /\.(ogg|mp3|wav)$/i,
+      include: /node_modules[\\/]@opennbs[\\/]nbsvis[\\/]/,
+      type: 'asset/resource',
+    });
 
     return config;
   },

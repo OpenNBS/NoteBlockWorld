@@ -12,15 +12,17 @@ const Slider = React.forwardRef<
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
-      'group relative flex w-full touch-none select-none items-center transition-colors',
+      'group relative flex touch-none select-none items-center transition-colors',
+      'data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row',
+      'data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:justify-center',
       className,
     )}
     {...props}
   >
-    <SliderPrimitive.Track className='relative h-2 w-full grow overflow-hidden rounded-full bg-zinc-600'>
-      <SliderPrimitive.Range className='absolute h-full bg-blue-500 group-hover:bg-blue-600 group-active:bg-blue-400' />
+    <SliderPrimitive.Track className='relative grow cursor-pointer overflow-hidden rounded-full bg-zinc-600 data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'>
+      <SliderPrimitive.Range className='absolute bg-blue-500 group-hover:bg-blue-400 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full' />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className='block h-4 w-4 rounded-full bg-blue-500 group-hover:bg-blue-600 group-active:bg-blue-400 shadow focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50' />
+    <SliderPrimitive.Thumb className='block h-3.5 w-3.5 rounded-full bg-white opacity-0 shadow group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50' />
   </SliderPrimitive.Root>
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;

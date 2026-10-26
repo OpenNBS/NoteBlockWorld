@@ -64,3 +64,19 @@ export const openSongInNBS = async (song: { publicId: string }) => {
       toast.error('Failed to open song in NBS');
     });
 };
+
+export const getSongOpenUrl = async (song: { publicId: string }) => {
+  try {
+    const response = await axios.get<string>(`/song/${song.publicId}/open`, {
+      headers: {
+        src: 'downloadButton',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch song URL', error);
+    toast.error('Failed to fetch song URL');
+    throw error;
+  }
+};
