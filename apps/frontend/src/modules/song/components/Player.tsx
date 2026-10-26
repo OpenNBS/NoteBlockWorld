@@ -64,7 +64,7 @@ export const PlayerComponent = ({
     void loadSong(song);
     // Only load when this page's song changes. Reloading on loadSong identity
     // would overwrite a different song started from a card.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // TODO: eslint-disable-next-line react-hooks/exhaustive-deps -> definition for rule not found
   }, [song.publicId]);
 
   useEffect(() => {
