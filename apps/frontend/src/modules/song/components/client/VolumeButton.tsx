@@ -1,3 +1,5 @@
+'use client';
+
 import {
   faVolume,
   faVolumeOff,
@@ -6,21 +8,24 @@ import {
   faVolumeHigh,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useId, useState } from 'react';
 
+import { cn } from '@web/lib/utils';
 import { Slider } from '@web/modules/shared/components/ui/slider';
 
 import { useSongPlayer } from './context/SongPlayer.context';
 
-/** 
-A button that allows the user to adjust the volume of the currently playing song.
-Behavior:
-- Hovering over the button will show a popup slider to adjust the volume.
-- Clicking the button while not muted will enable the mute state, also triggerable by dragging the slider to 0.
-- Clicking the button while muted will restore the volume to the last non-muted volume (either
-the slider's value when the button was clicked, or the value before it was dragged to 0).
-*/
+/**
+ * Mute toggle + hover/focus popup slider for the song player.
+ *
+ * - Hover or focus reveals the slider (kept in the DOM so the thumb is focusable).
+ * - Click mutes / unmutes; slider drag to 0 also mutes with restore-on-unmute.
+ * - Tab from the mute button into the slider, then use arrow keys to change volume.
+ */
 export const VolumeButton = () => {
   const { volume, setVolume, toggleMute } = useSongPlayer();
+  const sliderId = useId();
+  const [isOpen, setIsOpen] = useState(false);
 
   const getVolumeIcon = (volume: number | 'mute') => {
     if (volume === 'mute' || volume === 0) return faVolumeXmark;
@@ -30,18 +35,47 @@ export const VolumeButton = () => {
     return faVolumeHigh;
   };
 
+  const volumePercent = Math.round(volume * 100);
+
   return (
-    <div className='relative group'>
+    <div
+      className='relative'
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={(event) => {
+        if (!event.currentTarget.contains(document.activeElement)) {
+          setIsOpen(false);
+        }
+      }}
+      onFocusCapture={() => setIsOpen(true)}
+      onBlurCapture={(event) => {
+        const next = event.relatedTarget;
+        if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
+          setIsOpen(false);
+        }
+      }}
+    >
       <button
         type='button'
         onClick={() => toggleMute()}
         className='h-8 w-8 text-zinc-400 hover:text-zinc-100 hover:scale-110 active:scale-95 transition-all'
         aria-label={volume === 0 ? 'Unmute' : 'Mute'}
+        aria-expanded={isOpen}
+        aria-controls={sliderId}
         title='Volume'
       >
         <FontAwesomeIcon icon={getVolumeIcon(volume)} className='text-lg' />
       </button>
-      <div className='absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 hidden group-hover:flex group-focus-within:flex flex-col items-center'>
+      <div
+        id={sliderId}
+        inert={!isOpen ? true : undefined}
+        aria-hidden={!isOpen}
+        className={cn(
+          'absolute bottom-full left-1/2 -translate-x-1/2 pb-3 pt-2 px-2 flex flex-col items-center transition-opacity',
+          isOpen
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none',
+        )}
+      >
         <div className='h-32 px-4 py-3 rounded-md bg-zinc-700 drop-shadow-md'>
           <Slider
             orientation='vertical'
@@ -65,7 +99,8 @@ export const VolumeButton = () => {
               setVolume(next, { rememberAudible: next > 0 });
             }}
             aria-label='Volume'
-            className=''
+            aria-valuetext={`${volumePercent}%`}
+            className='h-full'
           />
         </div>
       </div>
