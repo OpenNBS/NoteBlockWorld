@@ -136,10 +136,19 @@ const img = ({
   node,
   alt,
   src = '',
+  loading = 'lazy',
+  decoding = 'async',
   ...props
 }: JSX.IntrinsicElements['img'] & ExtraProps) => {
   return (
-    <img {...props} alt={alt} src={src} className='my-8 mx-auto rounded-lg' />
+    <img
+      {...props}
+      alt={alt}
+      src={src}
+      loading={loading}
+      decoding={decoding}
+      className='my-8 mx-auto rounded-lg'
+    />
   );
 };
 
